@@ -28,3 +28,4 @@ message("Compiler:	${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 # Enable tests
 enable_testing()
 
+add_subdirectory(Refureku)

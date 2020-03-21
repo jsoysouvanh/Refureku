@@ -52,17 +52,17 @@ before_script:
 
 
 script:
-#  - mkdir -p Build
-#  - cd Build
-#
-#  # Debug test
-#  - cmake ..
-#  - cmake --build . --config Debug -- VERBOSE=1
-#  - ctest -C Debug -V
-#
-#  # Release test
-#  - cmake --build . --config Release -- VERBOSE=1
-#  - ctest -C Release -V
+  - mkdir -p Build
+  - cd Build
+
+  # Debug test
+  - cmake ..
+  - cmake --build . --config Debug -- VERBOSE=1
+  - ctest -C Debug -V
+
+  # Release test
+  - cmake --build . --config Release -- VERBOSE=1
+  - ctest -C Release -V
 
 
 branches:
