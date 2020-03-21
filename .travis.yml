@@ -1,0 +1,80 @@
+language: cpp
+
+os: linux
+dist: bionic
+
+jobs:
+  include:
+   # clang 7
+   - env: CC=clang-7 CXX=clang++-7
+     addons: { apt: { packages: ["clang-7", "libc++-7-dev", "libc++abi-7-dev"] } }
+
+   # clang 8
+   - env: CC=clang-8 CXX=clang++-8
+     addons: { apt: { packages: ["clang-8", "libc++-8-dev", "libc++abi-8-dev"] } }
+
+   # clang 9
+   - env: CC=clang-9 CXX=clang++-9
+     addons: { apt: { packages: ["clang-9", "libc++-9-dev", "libc++abi-9-dev"] } }
+
+   # GCC 8
+   - env: CC=gcc-8 CXX=g++-8
+     addons: { apt: { packages: ["g++-8"] } }
+
+   # GCC 9
+   - env: CC=gcc-9 CXX=g++-9
+     addons: { apt: { packages: ["g++-9"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+
+pre-install:
+ - ${CC} --version
+ - ${CXX} --version
+
+install:
+  # All the dependencies are installed in ${HOME}/deps/
+  - DEPS_DIR="${HOME}/deps"
+  - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
+
+  # Install Cmake 3.13.5
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.5-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+    else
+      brew install cmake || brew upgrade cmake
+    fi
+  - cmake --version
+
+
+before_script:
+  # Go back to the root of the project
+  - cd "${TRAVIS_BUILD_DIR}"
+
+
+script:
+#  - mkdir -p Build
+#  - cd Build
+#
+#  # Debug test
+#  - cmake ..
+#  - cmake --build . --config Debug -- VERBOSE=1
+#  - ctest -C Debug -V
+#
+#  # Release test
+#  - cmake --build . --config Release -- VERBOSE=1
+#  - ctest -C Release -V
+
+
+branches:
+  only:
+  - master
+  - dev
+
+
+notifications:
+  email: false
+  slack:
+    rooms:
+      - secure: CLRHaJsDizMiqeWJDXTHGhG/U5glgQf6gFRlecyTorBBMNm56+9lVFO1qaLv36YbqN7waOt0clB1F7WrO0rOStpya0RQLptxL9IXcZTGtsDsT6qav8CA6Hai3KtganbHrmcmscO1U3GGzk9rvwpmUJq26ExvDOKBrMj3JLt3aNeB6+H37qTOiM1hFjf8YzE4PiduMig8X2vWd65r9SHHB5MgfDoWO3m45xncGJ/v7aZ5Q9e/1sHNSoMuDdSA1qj/mRuWmtrRuTyrpx5W2vHTGdyLG1EQ2wStDuECv4l7euQZGdwbwWLKuvuyJbuCoPYthYUo1Hl7dtYIJanoVChmrXPiNDB5quwxflU3dfFrFw+0quwki5Xz9exAxsvr0r7vk1cyAz5tAJhlZ0VeKSdIjqeh1NC1bjFKnppXGhoIzDJyp7u5LrP+6BlRA0Qc4ea6wTLM1/94nwYBgh0HeLs0PHMuzNzQMH8fZj6JCQ667HW/XDuQmHfhGY8WPZowsyE09Q+FlhXnFeynmP3ZbGTVjCtIclvjRbT8gojUzFuBBgzbLGuzTwWQl5EBTcr4EUKOVM6H1Lo1nd9WXTanXc4mgMfIXxmMkn910lRwkBYa6O67vG0iuUrTrcCm9PWG03M19JPI+wTutrRbIMo0zO3vDeG0+snrQWpuU1Ph/70sW9k=
+    on_success: always
+    on_failure: always
