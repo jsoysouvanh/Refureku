@@ -47,9 +47,7 @@ int main(int argc, char** argv)
 			/** class Class(CodeTemplate[Refureku]) MyClass {}; */
 			fileGenerator.codeTemplateMainComplexPropertyName = "CodeTemplate";
 
-			/**
-			*	class Class() MyClass {};
-			*/
+			/**	class Class() MyClass {}; */
 			fileGenerator.setDefaultClassTemplate("Refureku"); 
 
 			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, false);

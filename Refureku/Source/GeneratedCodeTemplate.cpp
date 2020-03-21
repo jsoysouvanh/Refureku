@@ -9,5 +9,7 @@ void GeneratedCodeTemplate::undefMacros(kodgen::GeneratedFile& generatedFile, st
 
 void GeneratedCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) const noexcept
 {
+	generatedFile.writeLine("#include \"CustomRefurekuMacros.h\"");
+
 	generatedFile.writeLine("/* This is a test */");
 }

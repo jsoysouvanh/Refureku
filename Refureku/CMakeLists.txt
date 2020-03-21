@@ -26,3 +26,5 @@ target_include_directories(${RefurekuTarget} PRIVATE Include)
 set(KodgenLibrary Kodgen_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
 
 target_link_libraries(${RefurekuTarget} PRIVATE ${KodgenLibrary})
+
+add_subdirectory(Example)
