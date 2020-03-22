@@ -8,6 +8,8 @@ project(RefurekuUsageExample)
 
 set(RefurekuDemoTarget RefurekuDemo)
 add_executable(${RefurekuDemoTarget}
+					Source/ExampleClass.cpp
+
 					Source/main.cpp
 				)
 

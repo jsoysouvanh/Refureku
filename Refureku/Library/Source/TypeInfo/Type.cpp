@@ -1,20 +1,17 @@
 #include "TypeInfo/Type.h"
 
-namespace refureku
+using namespace refureku;
+
+Method const* Type::getMethod(std::string methodName) const noexcept
 {
-	class Type
-	{
-		private:
+	decltype(methodLookupTable)::const_iterator it = methodLookupTable.find(std::move(methodName));
 
-		protected:
+	return (it != methodLookupTable.cend()) ? it->second : nullptr;
+}
 
-		public:
-			Type()				= default;
-			Type(Type const&)	= default;
-			Type(Type&&)		= delete;
-			virtual ~Type()		= default;
+StaticMethod const* Type::getStaticMethod(std::string methodName) const noexcept
+{
+	decltype(staticMethodLookupTable)::const_iterator it = staticMethodLookupTable.find(std::move(methodName));
 
-			Type& operator=(Type const&)	= default;
-			Type& operator=(Type&&)			= default;
-	};
+	return (it != staticMethodLookupTable.cend()) ? it->second : nullptr;
 }

@@ -10,21 +10,28 @@ FileParser::FileParser() noexcept:
 	//We abort parsing if we encounter a single error during parsing
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 
+	kodgen::PropertyParsingSettings& pps = parsingSettings.propertyParsingSettings;
+
 	//Ignore and remove space character before collecting properties
-	parsingSettings.propertyParsingSettings.ignoredCharacters = {' '};
+	pps.ignoredCharacters = {' '};
 
 	//Each property will be separated with a , (and potentially some spaces as they are ignored)
-	parsingSettings.propertyParsingSettings.propertySeparator = ',';
+	pps.propertySeparator = ',';
 
 	//Subproperties are surrounded by []
-	parsingSettings.propertyParsingSettings.subPropertyEnclosers[0] = '[';
-	parsingSettings.propertyParsingSettings.subPropertyEnclosers[1] = ']';
+	pps.subPropertyEnclosers[0] = '[';
+	pps.subPropertyEnclosers[1] = ']';
 
 	//Each subproperty will be separated with a , (and potentially some spaces as they are ignored)
-	parsingSettings.propertyParsingSettings.subPropertySeparator = ',';
+	pps.subPropertySeparator = ',';
 
-	//Define the Refureku specific properties
-	//None.
+	//Define the Refureku property macros
+	pps.classPropertyRules.macroName		= "RFKClass";
+	pps.structPropertyRules.macroName		= "RFKStruct";
+	pps.fieldPropertyRules.macroName		= "RFKField";
+	pps.methodPropertyRules.macroName		= "RFKMethod";
+	pps.enumPropertyRules.macroName			= "RFKEnum";
+	pps.enumValuePropertyRules.macroName	= "RFKEnumVal";
 }
 
 void FileParser::preParse(fs::path const& parseFile) noexcept
