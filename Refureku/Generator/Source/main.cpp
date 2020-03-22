@@ -1,10 +1,10 @@
 #include <iostream>
 
 #include <Misc/Filesystem.h>
-#include <CodeGen/FileGenerator.h>
 
 #include "FileParser.h"
 #include "GeneratedCodeTemplate.h"
+#include "FileGenerator.h"
 
 void parseAndGenerate(fs::path workingDirectory)
 {
@@ -14,7 +14,7 @@ void parseAndGenerate(fs::path workingDirectory)
 	fs::path generatedDirectory	= includeDirectory / "Generated";
 
 	refureku::FileParser	parser;
-	kodgen::FileGenerator	fileGenerator;
+	refureku::FileGenerator	fileGenerator;
 
 	//Parse WorkingDir/...
 	fileGenerator.includedDirectories.emplace(includeDirectory.string());

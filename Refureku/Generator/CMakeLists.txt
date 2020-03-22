@@ -10,6 +10,7 @@ set(RefurekuGeneratorTarget RefurekuGenerator_${CMAKE_CXX_COMPILER_ARCHITECTURE_
 add_executable(${RefurekuGeneratorTarget}
 				Source/FileParser.cpp
 				Source/GeneratedCodeTemplate.cpp
+				Source/FileGenerator.cpp
 
 				Source/main.cpp
 				)

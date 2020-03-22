@@ -25,6 +25,8 @@ namespace refureku
 			bool	isFinal			: 1;
 			bool	isConst			: 1;
 
+			//TODO accessSpecifier
+
 			~MethodBase() noexcept;
 	};
 }
