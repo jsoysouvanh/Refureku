@@ -6,5 +6,7 @@ int main()
 {
 	std::cout << "RefurekuDemo" << std::endl;
 
+	ExampleClass exampleClass;
+
 	return EXIT_SUCCESS;
 }
