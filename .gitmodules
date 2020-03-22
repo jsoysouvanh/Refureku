@@ -1,0 +1,3 @@
+[submodule "Refureku/Generator/Submodules"]
+	path = Refureku/Generator/Submodules
+	url = https://github.com/Angelysse/Kodgen.git

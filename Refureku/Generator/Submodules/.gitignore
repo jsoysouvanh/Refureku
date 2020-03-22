@@ -1,0 +1,31 @@
+#Folders
+Build/
+Bin/
+Binaries/
+Lib/
+Logs/
+Generated/
+enc_temp_folder/
+
+#logs
+*.bsc
+*.htm
+
+# Binaries
+*.exe
+*.iobj
+*.ipdb
+*.pdb
+*.ilk
+*.dmp
+
+# Visual Studio Files
+*.suo
+*.csproj.user
+*.vbproj.user
+*.user
+*.vcxproj.filters
+*.vcxproj.user
+ipch
+*sdf
+\.vs/
