@@ -4,7 +4,7 @@ void StaticMethod::invoke(Args&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
 	#if REFUREKU_DEBUG
 
-	//TODO Security check throw exception
+	//TODO Security check throw exception (inherit from std::runtime_error)
 
 	#endif
 
@@ -16,7 +16,7 @@ ReturnType StaticMethod::invoke(Args&&... arguments) const noexcept(REFUREKU_REL
 {
 	#if REFUREKU_DEBUG
 
-	//TODO Security check
+	//TODO Security check throw exception (inherit from std::runtime_error)
 
 	#endif
 
@@ -26,7 +26,7 @@ ReturnType StaticMethod::invoke(Args&&... arguments) const noexcept(REFUREKU_REL
 template <typename... Args>
 void StaticMethod::safeInvoke(Args&&... arguments) const
 {
-	//TODO Security check
+	//TODO Security check throw exception (inherit from std::runtime_error)
 
 	(*static_cast<NonMemberFunction<void(Args...)>*>(_internalMethod))(std::forward<Args>(arguments)...);
 }
@@ -34,7 +34,7 @@ void StaticMethod::safeInvoke(Args&&... arguments) const
 template <typename ReturnType, typename... Args>
 ReturnType StaticMethod::safeInvoke(Args&&... arguments) const
 {
-	//TODO Security check
+	//TODO Security check throw exception (inherit from std::runtime_error)
 
 	return (*static_cast<NonMemberFunction<ReturnType(Args...)>*>(_internalMethod))(std::forward<Args>(arguments)...);
 }
