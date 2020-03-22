@@ -79,6 +79,9 @@ void MethodParser::setupMethod(CXCursor const& methodCursor, MethodInfo& methodI
 
 	assert(methodType.kind == CXTypeKind::CXType_FunctionProto);
 
+	//Define prototype
+	methodInfo.prototype = Helpers::getString(clang_getTypeSpelling(methodType));
+
 	//Define return type
 	methodInfo.returnType =	TypeInfo(clang_getResultType(methodType));
 

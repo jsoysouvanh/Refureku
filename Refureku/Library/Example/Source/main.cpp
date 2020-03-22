@@ -99,10 +99,10 @@ void staticMethods()
 	refureku::StaticMethod const* staticMethod3 = exampleClassType.getStaticMethod("staticMethod3");
 	if (staticMethod3 != nullptr)
 	{
-		staticMethod3->invoke(std::string("coucou"));
-		staticMethod3->safeInvoke(std::string("coucou"));
-		std::cout << staticMethod3->invoke<int>(std::string("coucou")) << std::endl;
-		std::cout << staticMethod3->safeInvoke<int>(std::string("coucou")) << std::endl;
+		staticMethod3->invoke("coucou");
+		staticMethod3->safeInvoke("coucou");
+		std::cout << staticMethod3->invoke<int>("coucou") << std::endl;
+		std::cout << staticMethod3->safeInvoke<int>("coucou") << std::endl;
 	}
 }
 

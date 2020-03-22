@@ -43,9 +43,13 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 
 void GeneratedCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
 {
-	//Restore default public
-	//generatedFile.writeMacro("SomeMacro",
-	//							"public:");
+	//std::string mainMacroName	 = "RFRK" + structInfo.name + "_GENERATED";
+
+	//std::string getTypeMacroName = generateGetTypeMacro(generatedFile, structInfo);
+
+	//generatedFile.writeMacro(std::move(mainMacroName),
+	//						 std::move(getTypeMacroName),
+	//						 "public:");
 }
 
 void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
@@ -80,7 +84,6 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 								"	}"
 							 );
 
-
 	return getTypeMacroName;
 }
 
@@ -97,11 +100,17 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 			if (method.qualifiers.isStatic)
 			{
 				//Fill static method table lookup
-				generatedFile.writeLine("//	type.staticMethodLookupTable.emplace(\"" + method.name + "\", refureku::StaticMethod(new refureku::NonMemberFunction<void()>(&ExampleClass::staticMethod1)));\t\\ ");
+				generatedFile.writeLine("	type.staticMethodLookupTable.emplace(\"" + method.name + "\", refureku::StaticMethod(new refureku::NonMemberFunction<" + method.prototype + ">(& " + info.name + "::" + method.name + ")));\t\\");
 			}
 			else
 			{
+				//Remove const from method prototype if any
+				std::string methodProto(method.prototype);
+				if (methodProto.back() == 't')	//If proto ends with a t, it should be the cons't'
+					methodProto.resize(methodProto.size() - 5u);	//5 is the size of "const"
+
 				//Fill method table lookup
+				generatedFile.writeLine("	type.methodLookupTable.emplace(\"" + method.name + "\", refureku::Method(new refureku::MemberFunction<" + info.name + ", " + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
 			}
 		}
 	}

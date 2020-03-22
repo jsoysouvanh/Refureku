@@ -39,7 +39,7 @@ int ExampleClass::staticMethod2()
 	return 2;
 }
 
-int ExampleClass::staticMethod3(std::string param)
+int ExampleClass::staticMethod3(char const* param)
 {
 	std::cout << "ExampleClass::staticMethod3(" << param << ")" << std::endl;
 

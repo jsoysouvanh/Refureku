@@ -27,6 +27,9 @@ namespace kodgen
 
 			}								qualifiers;
 
+			/** Prototype of this method as a string */
+			std::string						prototype;
+
 			TypeInfo						returnType;
 			std::vector<MethodParamInfo>	parameters;
 
