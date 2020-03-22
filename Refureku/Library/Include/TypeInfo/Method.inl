@@ -3,8 +3,6 @@ template <typename... Args>
 void Method::invoke(void* caller, Args&&... arguments) const noexcept
 {
 	//TODO Security check
-
-
 }
 
 /**

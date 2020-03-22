@@ -12,7 +12,7 @@ namespace refureku
 	class Type
 	{
 		protected:
-		//TODO extend parent class
+			//TODO extend parent class
 
 		public:
 			/**
@@ -21,23 +21,23 @@ namespace refureku
 			*
 			*	i.e. const volatile ExampleNamespace::ExampleClass *const*&
 			*/
-			std::string	fullName;
+			std::string										fullName;
 
 			/**
 			*	The canonical full name is the full name simplified by unwinding
 			*	all aliases / typedefs
 			*/
-			std::string	canonicalFullName;
+			std::string										canonicalFullName;
 
 			/**
 			*	All tagged methods contained in this type
 			*/
-			std::unordered_map<std::string, Method*>		methodLookupTable;
+			std::unordered_map<std::string, Method>			methodLookupTable;
 
 			/**
 			*	All tagged static methods contained in this type
 			*/
-			std::unordered_map<std::string, StaticMethod*>	staticMethodLookupTable;
+			std::unordered_map<std::string, StaticMethod>	staticMethodLookupTable;
 
 			Type()				= default;
 			Type(Type const&)	= default;

@@ -1,29 +1,40 @@
 
 template <typename... Args>
-void StaticMethod::invoke(Args&&... arguments) const noexcept
+void StaticMethod::invoke(Args&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
-	//TODO Security check
+	#if REFUREKU_DEBUG
 
+	//TODO Security check throw exception
 
+	#endif
+
+	(*static_cast<NonMemberFunction<void(Args...)>*>(_internalMethod))(std::forward<Args>(arguments)...);
 }
 
-/**
-*	Invoke the method with the provided arguments if the return type and argument types match this method prototype
-*/
 template <typename ReturnType, typename... Args>
-ReturnType StaticMethod::invoke(Args&&... arguments) const noexcept
+ReturnType StaticMethod::invoke(Args&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
-	//TODO
+	#if REFUREKU_DEBUG
+
+	//TODO Security check
+
+	#endif
+
+	return (*static_cast<NonMemberFunction<ReturnType(Args...)>*>(_internalMethod))(std::forward<Args>(arguments)...);
 }
 
 template <typename... Args>
-void StaticMethod::safeInvoke(Args&&... arguments) const noexcept
+void StaticMethod::safeInvoke(Args&&... arguments) const
 {
-	//TODO
+	//TODO Security check
+
+	(*static_cast<NonMemberFunction<void(Args...)>*>(_internalMethod))(std::forward<Args>(arguments)...);
 }
 
 template <typename ReturnType, typename... Args>
-ReturnType StaticMethod::safeInvoke(Args&&... arguments) const noexcept
+ReturnType StaticMethod::safeInvoke(Args&&... arguments) const
 {
-	//TODO
+	//TODO Security check
+
+	return (*static_cast<NonMemberFunction<ReturnType(Args...)>*>(_internalMethod))(std::forward<Args>(arguments)...);
 }
