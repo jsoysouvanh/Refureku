@@ -6,9 +6,9 @@ class RFKClass() ExampleClass
 {
 	private:
 
-	protected:
+//	protected:
 
-	public:
+//	public:
 		RFKField()
 		int		someInt		= 42;
 		
@@ -36,10 +36,36 @@ class RFKClass() ExampleClass
 		RFKMethod()
 		static	int	staticMethod3(char const* param);
 
+	public:
 		ExampleClass()						= default;
 		ExampleClass(ExampleClass const&)	= default;
 		ExampleClass(ExampleClass&&)		= default;
 		~ExampleClass()						= default;
+
+		//GENERATED
+
+		//static refureku::Type const& staticGetType() noexcept	
+		//{	
+		//	static bool				initialized = false;	
+		//	static refureku::Type	type;	
+		//	
+		//	if (!initialized)	
+		//	{	
+		//		//RFRKExampleClass_GenerateMethodsMetadata
+
+		//		type.methodsLookupTable.emplace("method1", std::vector<refureku::Method>());
+		//		type.methodsLookupTable["method1"].emplace_back(refureku::Method(new refureku::MemberFunction<ExampleClass, void ()>(& ExampleClass::method1)));
+
+		//		initialized = true;	
+		//	}	
+		//		
+		//	return type;	
+		//}	
+		//	
+		//refureku::Type const& getType() const noexcept	
+		//{	
+		//	return ExampleClass::staticGetType();	
+		//}
 
 		RFRKExampleClass_GENERATED
 };

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "TypeInfo/Field.h"
 #include "TypeInfo/Method.h"
@@ -21,23 +22,23 @@ namespace refureku
 			*
 			*	i.e. const volatile ExampleNamespace::ExampleClass *const*&
 			*/
-			std::string										fullName;
+			std::string													fullName;
 
 			/**
 			*	The canonical full name is the full name simplified by unwinding
 			*	all aliases / typedefs
 			*/
-			std::string										canonicalFullName;
+			std::string													canonicalFullName;
 
 			/**
 			*	All tagged methods contained in this type
 			*/
-			std::unordered_map<std::string, Method>			methodLookupTable;
+			std::unordered_map<std::string, std::vector<Method>>		methodsLookupTable;
 
 			/**
 			*	All tagged static methods contained in this type
 			*/
-			std::unordered_map<std::string, StaticMethod>	staticMethodLookupTable;
+			std::unordered_map<std::string, std::vector<StaticMethod>>	staticMethodsLookupTable;
 
 			Type()				= default;
 			Type(Type const&)	= default;

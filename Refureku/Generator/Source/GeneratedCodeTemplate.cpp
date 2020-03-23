@@ -1,5 +1,6 @@
 #include "GeneratedCodeTemplate.h"
 
+#include <unordered_set>
 #include <cassert>
 
 using namespace refureku;
@@ -93,24 +94,43 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
+	//Keep track of what we add so that we save some checks in the metadata
+	std::unordered_set<std::string>				nonStaticMethods;
+	std::unordered_set<std::string>				staticMethods;
+	std::unordered_set<std::string>::iterator	it;
+
 	for (auto& [accessSpecifier, methods] : info.methods)
 	{
 		for (kodgen::MethodInfo const& method : methods)
 		{
 			if (method.qualifiers.isStatic)
 			{
+				//Check if we have to emplace a new vector
+				if ((it = staticMethods.find(method.name)) == staticMethods.end())
+				{
+					staticMethods.emplace(method.name);
+					generatedFile.writeLine("	type.staticMethodsLookupTable.emplace(\"" + method.name + "\", std::vector<refureku::StaticMethod>());\t\\");
+				}
+
 				//Fill static method table lookup
-				generatedFile.writeLine("	type.staticMethodLookupTable.emplace(\"" + method.name + "\", refureku::StaticMethod(new refureku::NonMemberFunction<" + method.prototype + ">(& " + info.name + "::" + method.name + ")));\t\\");
+				generatedFile.writeLine("	type.staticMethodsLookupTable[\"" + method.name + "\"].emplace_back(refureku::StaticMethod(new refureku::NonMemberFunction<" + method.prototype + ">(& " + info.name + "::" + method.name + ")));\t\\");
 			}
 			else
 			{
+				//Check if we have to emplace a new vector
+				if ((it = nonStaticMethods.find(method.name)) == nonStaticMethods.end())
+				{
+					nonStaticMethods.emplace(method.name);
+					generatedFile.writeLine("	type.methodsLookupTable.emplace(\"" + method.name + "\", std::vector<refureku::Method>());\t\\");
+				}
+
 				//Remove const from method prototype if any
 				std::string methodProto(method.prototype);
 				if (methodProto.back() == 't')	//If proto ends with a t, it should be the cons't'
 					methodProto.resize(methodProto.size() - 5u);	//5 is the size of "const"
 
 				//Fill method table lookup
-				generatedFile.writeLine("	type.methodLookupTable.emplace(\"" + method.name + "\", refureku::Method(new refureku::MemberFunction<" + info.name + ", " + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
+				generatedFile.writeLine("	type.methodsLookupTable[\"" + method.name + "\"].emplace_back(refureku::Method(new refureku::MemberFunction<" + info.name + ", " + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
 			}
 		}
 	}

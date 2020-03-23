@@ -4,14 +4,14 @@ using namespace refureku;
 
 Method const* Type::getMethod(std::string methodName) const noexcept
 {
-	decltype(methodLookupTable)::const_iterator it = methodLookupTable.find(std::move(methodName));
+	decltype(methodsLookupTable)::const_iterator it = methodsLookupTable.find(std::move(methodName));
 
-	return (it != methodLookupTable.cend()) ? &it->second : nullptr;
+	return (it != methodsLookupTable.cend()) ? &it->second.front() : nullptr;
 }
 
 StaticMethod const* Type::getStaticMethod(std::string methodName) const noexcept
 {
-	decltype(staticMethodLookupTable)::const_iterator it = staticMethodLookupTable.find(std::move(methodName));
+	decltype(staticMethodsLookupTable)::const_iterator it = staticMethodsLookupTable.find(std::move(methodName));
 
-	return (it != staticMethodLookupTable.cend()) ? &it->second : nullptr;
+	return (it != staticMethodsLookupTable.cend()) ? &it->second.front() : nullptr;
 }
