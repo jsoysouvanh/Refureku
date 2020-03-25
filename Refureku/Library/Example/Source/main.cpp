@@ -4,6 +4,9 @@
 #include "ExampleClass.h"
 
 #include "Utility/MemberFunction.h"
+#include "Utility/TypeTraits.h"
+
+using namespace exnamespace;
 
 void nonStaticMethods()
 {
@@ -108,10 +111,26 @@ void staticMethods()
 
 int main()
 {
-	std::cout << "RefurekuDemo" << std::endl;
+	//refureku::Type const& type = ExampleClass::staticGetType();
+	//
+	//std::cout << type.name << std::endl;
+	//std::cout << type.id << std::endl;
 
-	nonStaticMethods();
-	staticMethods();
+	//nonStaticMethods();
+	//staticMethods();
+
+	//std::cout <<  << std::endl;
+
+	//refureku::Type const& type = TestClass::staticGetType();
+
+	refureku::Type const& type = ExampleClass::staticGetType();
+
+	//refureku::Method const* method = type.getMethod("hey", "void(int)const");
+
+	for (refureku::Type::Parent const& parent : type.parents)
+	{
+		std::cout << (int)parent.access << " -> " << parent.type.name << std::endl;
+	}
 
 	return EXIT_SUCCESS;
 }

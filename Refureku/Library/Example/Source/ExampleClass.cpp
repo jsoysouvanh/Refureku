@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstdint>
 
+using namespace exnamespace;
+
 void ExampleClass::method1()
 {
 	std::cout << "ExampleClass::method1(): " << someInt-- << " > " << someInt << std::endl;

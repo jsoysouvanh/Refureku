@@ -3,6 +3,8 @@
 #include <unordered_set>
 #include <cassert>
 
+#include "Misc/FundamentalTypes.h"
+
 using namespace refureku;
 
 void GeneratedCodeTemplate::undefMacros(kodgen::GeneratedFile& generatedFile, std::string const& generatedMacroName) const noexcept
@@ -37,7 +39,7 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 
 	std::string getTypeMacroName = generateGetTypeMacro(generatedFile, classInfo);
 
-	generatedFile.writeMacro(std::move(mainMacroName),
+	generatedFile.writeMacro(	std::move(mainMacroName),
 								std::move(getTypeMacroName),
 								"private:");
 }
@@ -62,6 +64,7 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 {
 	std::string getTypeMacroName					= "RFRK" + info.name + "_GetTypeMacro";
 	std::string generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
+	std::string generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
 
 	generatedFile.writeMacro(std::string(getTypeMacroName),
 								"public:",
@@ -72,7 +75,13 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 								"	",
 								"		if (!initialized)",
 								"		{",
+								"			type.name		= \"" + info.name + "\";",
+								"			type.id			= " + std::to_string(std::hash<std::string>()(info.name)) + ";",
+								"			type.category	= static_cast<refureku::Type::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + ");",
+								"",
+								"			" + std::move(generatedParentsMetadataMacroName),
 								"			" + std::move(generatedMethodsMetadataMacroName),
+								"",
 								"			initialized = true;",
 								"		}",
 								"	",
@@ -138,4 +147,33 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	generatedFile.writeLine("");
 
 	return macroName;
+}
+
+std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+{
+	if (!info.parents.empty())
+	{
+		std::string macroName = "RFRK" + info.name + "_GenerateParentsMetadata";
+
+		generatedFile.writeLine("#define " + macroName + "\t\\");
+
+		generatedFile.writeLine("	type.parents.reserve(" + std::to_string(info.parents.at(kodgen::EAccessSpecifier::Private).size() +
+								info.parents.at(kodgen::EAccessSpecifier::Protected).size() +
+								info.parents.at(kodgen::EAccessSpecifier::Public).size()) + ");	\t\\");
+
+		for (auto& [access, parents] : info.parents)
+		{
+			for (auto& parent : parents)
+			{
+				generatedFile.writeLine("	type.addToParentsIfPossible<" + parent.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(access)) + "));\t\\");
+			}
+		}
+
+		generatedFile.writeLine("");
+
+		return macroName;
+	}
+	
+	//No parents, don't bother generate a macro
+	return std::string();
 }

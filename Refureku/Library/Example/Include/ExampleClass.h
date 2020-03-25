@@ -2,41 +2,45 @@
 
 #include "Generated/ExampleClass.refureku.h"
 
-class RFKClass() ExampleClass
+namespace exnamespace
 {
-	private:
+	class RFKClass() ParentClass
+	{
+		RFRKParentClass_GENERATED
+	};
 
-//	protected:
+	class RFKClass() ExampleClass : public ParentClass
+	{
+		private:
 
-//	public:
-		RFKField()
-		int		someInt		= 42;
-		
-		RFKField()
-		float	someFloat	= 42.42f;
+			RFKField()
+			int		someInt		= 42;
 
-		RFKMethod()
-		void	method1();
+			RFKField()
+			float	someFloat	= 42.42f;
 
-		RFKMethod()
-		void	method2() const;
+			RFKMethod()
+			void	method1();
 
-		RFKMethod()
-		int		method3();
+			RFKMethod()
+			void	method2() const;
 
-		RFKMethod()
-		int		method4(void* ptr);
+			RFKMethod()
+			int		method3();
 
-		RFKMethod()
-		static void	staticMethod1();
+			RFKMethod()
+			int		method4(void* ptr);
 
-		RFKMethod()
-		static	int	staticMethod2();
+			RFKMethod()
+			static void	staticMethod1();
 
-		RFKMethod()
-		static	int	staticMethod3(char const* param);
+			RFKMethod()
+			static	int	staticMethod2();
 
-	public:
+			RFKMethod()
+			static	int	staticMethod3(char const* param);
+
+		public:
 		ExampleClass()						= default;
 		ExampleClass(ExampleClass const&)	= default;
 		ExampleClass(ExampleClass&&)		= default;
@@ -68,4 +72,5 @@ class RFKClass() ExampleClass
 		//}
 
 		RFRKExampleClass_GENERATED
-};
+	};
+}
