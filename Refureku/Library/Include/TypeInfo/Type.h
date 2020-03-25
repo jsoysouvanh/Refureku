@@ -66,7 +66,7 @@ namespace refureku
 			ECategory													category;
 
 			/**
-			*	Parent types
+			*	Direct parent types. This list includes ONLY reflected parents
 			*	TODO: Move to Struct
 			*/
 			std::vector<Parent>											parents;
@@ -99,6 +99,11 @@ namespace refureku
 
 			//TODO templated staticGetMethod with provided prototype
 			//TODO not templated staticGetMethod with provided prototype
+
+			/**
+			*	Return true if this type inherits from the provided type, else false.
+			*/
+			bool inheritsFrom(Type const& otherType)					const	noexcept;
 
 			/**
 			*	Add the type T to this type's parents if possible
