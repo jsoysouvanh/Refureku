@@ -2,26 +2,24 @@
 
 #include "Generated/ExampleClass.refureku.h"
 
-#include <iostream>
-
 namespace exnamespace
 {
-	//class RFKClass() ParentParentParentClass
-	//{
-	//	RFKParentParentParentClass_GENERATED
-	//};
+	class RFKClass() ParentParentParentClass
+	{
+		RFKParentParentParentClass_GENERATED
+	};
 
-	//class RFKClass() ParentParentClass : private ParentParentParentClass
-	//{
-	//	RFKParentParentClass_GENERATED
-	//};
+	class RFKClass() ParentParentClass : private ParentParentParentClass
+	{
+		RFKParentParentClass_GENERATED
+	};
 
-	//class RFKClass() ParentClass : protected ParentParentClass
-	//{
-	//	RFKParentClass_GENERATED
-	//};
+	class RFKClass() ParentClass : protected ParentParentClass
+	{
+		RFKParentClass_GENERATED
+	};
 
-	class RFKClass() ExampleClass
+	class RFKClass() ExampleClass : public ParentClass
 	{
 		public:
 			RFKField()
@@ -29,6 +27,9 @@ namespace exnamespace
 
 			RFKField()
 			float	someFloat	= 42.42f;
+
+			RFKMethod()
+			int		method4(void* ptr);
 
 			RFKMethod()
 			void	method1();
@@ -40,24 +41,20 @@ namespace exnamespace
 			int		method3();
 
 			RFKMethod()
-			int		method4(void* ptr);
-
-			RFKMethod()
-			static void	staticMethod1();
+			static	int	staticMethod3(char const* param);
 
 			RFKMethod()
 			static	int	staticMethod2();
 
 			RFKMethod()
-			static	int	staticMethod3(char const* param);
+			static void	staticMethod1();
 
 		public:
 			RFKMethod()
-			ExampleClass(){ std::cout << "Call ExampleClass()" << std::endl; };
-			ExampleClass(int i){ std::cout << "Call ExampleClass(int " << i << ")" << std::endl; };
-			ExampleClass(ExampleClass const&){ std::cout << "Call ExampleClass(ExampleClass const&)" << std::endl; };
-			ExampleClass(ExampleClass&&) noexcept{ std::cout << "Call ExampleClass(ExampleClass&&)" << std::endl; };
-			~ExampleClass()	= default;
+			ExampleClass()						= default;
+			ExampleClass(ExampleClass const&)	= default;
+			ExampleClass(ExampleClass&&)		= default;
+			~ExampleClass()						= default;
 
 		//GENERATED
 

@@ -2,6 +2,7 @@
 
 #include <unordered_set>
 #include <cassert>
+#include <algorithm>
 
 #include "Misc/FundamentalTypes.h"
 
