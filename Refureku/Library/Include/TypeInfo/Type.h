@@ -15,9 +15,6 @@ namespace refureku
 {
 	class Type
 	{
-		protected:
-			//TODO extend parent class
-
 		public:
 			enum class ECategory : uint8
 			{
@@ -36,20 +33,6 @@ namespace refureku
 				Type const&			type;
 			};
 
-			///**
-			//*	The full name represents the type name, containing all its qualifiers
-			//*	such as const, volatile or nested info (namespace, outer class)
-			//*
-			//*	i.e. const volatile ExampleNamespace::ExampleClass *const*&
-			//*/
-			//std::string												fullName;
-
-			///**
-			//*	The canonical full name is the full name simplified by unwinding
-			//*	all aliases / typedefs
-			//*/
-			//std::string												canonicalFullName;
-
 			/**
 			*	Type name
 			*/
@@ -58,44 +41,45 @@ namespace refureku
 			/**
 			*	Unique id qualifying this type
 			*/
-			uint64														id;
+			uint64														id			= 0u;
 
 			/**
 			*	Category of this type
 			*/
-			ECategory													category;
+			ECategory													category	= ECategory::Undefined;
 
 			/**
 			*	Direct parent types. This list includes ONLY reflected parents
 			*	TODO: Move to Struct
 			*/
-			std::vector<Parent>											parents;
+			std::vector<Parent>											directParents;
 
 			/**
 			*	All tagged methods contained in this type
 			*	TODO: Move to Struct
 			*/
-			std::unordered_map<std::string, std::vector<Method>>		methodsLookupTable;
+			std::vector<Method>											methods;
 
 			/**
 			*	All tagged static methods contained in this type
 			*	TODO: Move to Struct
 			*/
-			std::unordered_map<std::string, std::vector<StaticMethod>>	staticMethodsLookupTable;
+			std::vector<StaticMethod>										staticMethods;
 
-			Type()				= default;
-			Type(Type const&)	= delete;
-			Type(Type&&)		= delete;
-			~Type()				= default;
+			Type(std::string&& newName, uint64 newId, ECategory newCategory)	noexcept;
+			Type(Type const&)													= delete;
+			Type(Type&&)														= delete;
+			~Type()																= default;
 
 			/**
 			*	
 			*/
-			Method const*		getMethod(std::string methodName)		const	noexcept;
+			Method const*		getMethod(std::string const& methodName, std::string const& prototype = "")			const	noexcept;
 
+			//TODO
 			//Method const*		getMethod(std::string methodName, )
 
-			StaticMethod const*	getStaticMethod(std::string methodName)	const	noexcept;
+			StaticMethod const*	getStaticMethod(std::string const& methodName, std::string const& prototype = "")	const	noexcept;
 
 			//TODO templated staticGetMethod with provided prototype
 			//TODO not templated staticGetMethod with provided prototype
@@ -103,13 +87,55 @@ namespace refureku
 			/**
 			*	Return true if this type inherits from the provided type, else false.
 			*/
-			bool inheritsFrom(Type const& otherType)					const	noexcept;
+			bool inheritsFrom(Type const& otherType)																const	noexcept;
 
 			/**
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
-			void addToParentsIfPossible(EAccessSpecifier inheritanceAccess)		noexcept;
+			void addToParentsIfPossible(EAccessSpecifier inheritanceAccess)								noexcept;
+
+			template <typename T>
+			void addRequiredMethods()											noexcept
+			{
+				//Instantiate method, make sure it's static
+				if constexpr (generated::implements___RFKinstantiate<T, T*()>::value)
+				{
+					if constexpr (!std::is_member_function_pointer<decltype(&T::__RFKinstantiate)>::value)
+					{
+						//std::cout << "Added default instantiate()" << std::endl;
+						//TODO rework method container as a vector
+						//TODO emplace &T::__RFKinstantiate
+					}
+				}
+				else
+				{
+					//std::cout << "Failed to add default instantiate()" << std::endl;
+				}
+			}
+
+			/*
+			TODO:
+			template <typename T>
+			void addInstantiationMethod() noexcept
+			{
+
+			}
+			*/
+
+			/**  */
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType* makeInstance(ArgTypes&&... args) const noexcept
+			{
+				//TODO: replace by complicated name
+				//Get right instantiate according to ReturnType & ArgTypes
+				StaticMethod const* instantiator = getStaticMethod("instantiate");
+
+				if (instantiator != nullptr)
+					return instantiator->invoke<ReturnType*>(std::forward<ArgTypes>(args)...);
+				else
+					return nullptr;
+			}
 
 			Type& operator=(Type const&)	= default;
 			Type& operator=(Type&&)			= default;

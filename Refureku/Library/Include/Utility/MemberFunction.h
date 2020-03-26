@@ -40,7 +40,7 @@ namespace refureku
 				_constFunction{function}
 			{}
 
-			virtual ~MemberFunction() = default;
+			~MemberFunction() = default;
 
 			void setCaller(void* caller) noexcept
 			{

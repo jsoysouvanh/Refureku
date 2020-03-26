@@ -123,14 +123,30 @@ int main()
 
 	//refureku::Type const& type = TestClass::staticGetType();
 
-	refureku::Type const& type = ExampleClass::staticGetType();
-
 	//refureku::Method const* method = type.getMethod("hey", "void(int)const");
 
-	for (refureku::Type::Parent const& parent : type.parents)
-	{
-		std::cout << (int)parent.access << " -> " << parent.type.name << std::endl;
-	}
+	//Test test({ 1, 2, 3 });
+	//
+	//refureku::Type const& type = ExampleClass::staticGetType();
+
+	//std::cout << "Name: " << type.name << std::endl;
+	//std::cout << "Id: " << type.id << std::endl;
+	//std::cout << "Category: " << (int)type.category << std::endl;
+
+	//refureku::StaticMethod testMethod = refureku::StaticMethod(new refureku::NonMemberFunction<ExampleClass*()>(&ExampleClass::instantiate));
+
+	//testMethod.invoke<ExampleClass*>();
+	//testMethod.invoke<ExampleClass*>(42);
+
+	refureku::Type const& exampleType = ExampleClass::staticGetType();
+	//refureku::Type const& parentType = ParentClass::staticGetType();
+	//
+	//ParentParentParentClass* instance = exampleType.makeInstance<ParentParentParentClass>();
+
+	//if (instance != nullptr)
+	//	std::cout << reinterpret_cast<ExampleClass*>(instance)->someInt << std::endl;
+	//else
+	//	std::cout << "RIP" << std::endl;
 
 	return EXIT_SUCCESS;
 }

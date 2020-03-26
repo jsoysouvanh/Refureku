@@ -38,6 +38,8 @@ namespace kodgen
 			MethodInfo(MethodInfo const&)										= default;
 			MethodInfo(MethodInfo&&)											= default;
 			~MethodInfo()														= default;
+
+			std::string getPrototype(bool removeQualifiers = false, bool removeSpaces = false) const noexcept;
 	};
 
 	std::ostream& operator<<(std::ostream& out_stream, MethodInfo const& methodInfo) noexcept;

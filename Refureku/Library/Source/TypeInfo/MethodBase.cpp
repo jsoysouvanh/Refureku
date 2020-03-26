@@ -2,8 +2,11 @@
 
 using namespace refureku;
 
-MethodBase::MethodBase(ICallable* internalMethod) noexcept:
-	_internalMethod{internalMethod}
+MethodBase::MethodBase(std::string&& methodName, uint64 methodId, EAccessSpecifier accessSpecifier, ICallable* internalMethod) noexcept:
+	_id{std::forward<uint64>(methodId)},
+	_internalMethod{internalMethod},
+	name{std::forward<std::string>(methodName)},
+	access{std::forward<EAccessSpecifier>(accessSpecifier)}
 {}
 
 MethodBase::MethodBase(MethodBase&& other) noexcept:

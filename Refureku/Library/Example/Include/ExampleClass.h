@@ -2,17 +2,28 @@
 
 #include "Generated/ExampleClass.refureku.h"
 
+#include <iostream>
+
 namespace exnamespace
 {
-	class RFKClass() ParentClass
+	class RFKClass() ParentParentParentClass
 	{
-		RFRKParentClass_GENERATED
+		RFKParentParentParentClass_GENERATED
+	};
+
+	class RFKClass() ParentParentClass : private ParentParentParentClass
+	{
+		RFKParentParentClass_GENERATED
+	};
+
+	class RFKClass() ParentClass : protected ParentParentClass
+	{
+		RFKParentClass_GENERATED
 	};
 
 	class RFKClass() ExampleClass : public ParentClass
 	{
-		private:
-
+		public:
 			RFKField()
 			int		someInt		= 42;
 
@@ -41,24 +52,26 @@ namespace exnamespace
 			static	int	staticMethod3(char const* param);
 
 		public:
-		ExampleClass()						= default;
-		ExampleClass(ExampleClass const&)	= default;
-		ExampleClass(ExampleClass&&)		= default;
-		~ExampleClass()						= default;
+			RFKMethod()
+			ExampleClass(){ std::cout << "Call ExampleClass()" << std::endl; };
+			ExampleClass(int i){ std::cout << "Call ExampleClass(int " << i << ")" << std::endl; };
+			ExampleClass(ExampleClass const&){ std::cout << "Call ExampleClass(ExampleClass const&)" << std::endl; };
+			ExampleClass(ExampleClass&&) noexcept{ std::cout << "Call ExampleClass(ExampleClass&&)" << std::endl; };
+			~ExampleClass()						= default;
 
 		//GENERATED
 
 		//static refureku::Type const& staticGetType() noexcept	
 		//{	
 		//	static bool				initialized = false;	
-		//	static refureku::Type	type;	
+		//	static refureku::Type	type("ExampleClass", 6613751926088865067, static_cast<refureku::Type::ECategory>(0));	
 		//	
 		//	if (!initialized)	
 		//	{	
 		//		//RFRKExampleClass_GenerateMethodsMetadata
 
-		//		type.methodsLookupTable.emplace("method1", std::vector<refureku::Method>());
-		//		type.methodsLookupTable["method1"].emplace_back(refureku::Method(new refureku::MemberFunction<ExampleClass, void ()>(& ExampleClass::method1)));
+		//		//type.methods.emplace_back(new refureku::Method("method1", 42, static_cast<refureku::EAccessSpecifier>(0), &type, new refureku::MemberFunction<ExampleClass, void ()>(& ExampleClass::method1)));
+		//		//type.staticMethods.emplace_back(new refureku::StaticMethod("method1", 42, static_cast<refureku::EAccessSpecifier>(0), new refureku::MemberFunction<ExampleClass, void ()>(& ExampleClass::method1)));
 
 		//		initialized = true;	
 		//	}	
@@ -71,6 +84,29 @@ namespace exnamespace
 		//	return ExampleClass::staticGetType();	
 		//}
 
-		RFRKExampleClass_GENERATED
+		//template <typename... ArgTypes>
+		//static ExampleClass* instantiate(ArgTypes... args) noexcept
+		//{
+		//	return new ExampleClass(std::forward<ArgTypes>(args)...);
+		//}
+		static ExampleClass* __RFKinstantiate() noexcept
+		{
+			//std::cout << "Use this instantiate" << std::endl;
+			return new ExampleClass();
+		}
+
+		RFKExampleClass_GENERATED
 	};
 }
+
+class Test
+{
+	std::vector<int>	ints;
+
+	public:
+		Test() = delete;
+		
+		Test(std::vector<int>&& _ints) noexcept:
+			ints{ints}
+		{}
+};

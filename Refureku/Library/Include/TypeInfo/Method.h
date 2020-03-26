@@ -1,12 +1,17 @@
 #pragma once
 
+#include <string>
+
 #include "Config.h"
 
+#include "Misc/FundamentalTypes.h"
 #include "TypeInfo/MethodBase.h"
 #include "Utility/MemberFunction.h"
 
 namespace refureku
 {
+	class Type;	//Forward declaration
+
 	class Method : public MethodBase
 	{
 		private:
@@ -19,11 +24,18 @@ namespace refureku
 			ReturnType	internalInvoke(void const* caller, Args&&... arguments)	const	noexcept;
 
 		public:
-			Method()							= delete;
-			Method(ICallable* internalMethod)	noexcept;
-			Method(Method const&)				= default;
-			Method(Method&&)					noexcept;
-			~Method()							= default;
+			/** Class declaring this method */
+			Type const* ownerType;
+
+			Method()																= default;
+			Method(std::string&&	methodName,
+				   uint64			methodId		= 0u,
+				   EAccessSpecifier	accessSpecifier	= EAccessSpecifier::Undefined,
+				   Type const*		methodOwnerType	= nullptr,
+				   ICallable*		internalMethod	= nullptr)						noexcept;
+			Method(Method const&)													= default;
+			Method(Method&&)														= default;
+			~Method()																= default;
 
 			/**
 			*	Invoke the method on the caller with the provided arguments if argument types match this method prototype

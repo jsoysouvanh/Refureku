@@ -9,6 +9,10 @@ namespace refureku
 	class GeneratedCodeTemplate : public kodgen::GeneratedCodeTemplate
 	{
 		private:
+			static constexpr char const*	_internalMacroPrefix = "__RFK";
+			static constexpr char const*	_externalMacroPrefix = "RFK";
+			static std::hash<std::string>	_stringHasher;
+
 			void			undefMacros(kodgen::GeneratedFile& generatedFile, std::string const& generatedMacroName)				const	noexcept;
 
 			void			generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo)		const	noexcept;

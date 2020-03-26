@@ -5,6 +5,6 @@ namespace refureku
 	class ICallable
 	{
 		public:
-			virtual ~ICallable() = default;
+			~ICallable() = default;
 	};
 }

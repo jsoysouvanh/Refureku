@@ -16,7 +16,7 @@ namespace refureku
 		private:
 			using FunctionPrototype = ReturnType (*)(ArgTypes...);
 
-			FunctionPrototype	_function;
+			FunctionPrototype	_function = nullptr;
 
 		public:
 			NonMemberFunction() = delete;
@@ -25,7 +25,12 @@ namespace refureku
 				_function{function}
 			{}
 
-			virtual ~NonMemberFunction() = default;
+			template <typename Functor>
+			NonMemberFunction(Functor f) noexcept:
+				_function{reinterpret_cast<FunctionPrototype>(f)}
+			{}
+
+			~NonMemberFunction() = default;
 
 			ReturnType operator()(ArgTypes&&... args) const noexcept
 			{

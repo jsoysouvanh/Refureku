@@ -7,6 +7,8 @@
 
 using namespace refureku;
 
+std::hash<std::string> GeneratedCodeTemplate::_stringHasher;
+
 void GeneratedCodeTemplate::undefMacros(kodgen::GeneratedFile& generatedFile, std::string const& generatedMacroName) const noexcept
 {
 	//TODO
@@ -35,11 +37,12 @@ void GeneratedCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, k
 
 void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
 {
-	std::string mainMacroName	 = "RFRK" + classInfo.name + "_GENERATED";
+	std::string mainMacroName	 = _externalMacroPrefix + classInfo.name + "_GENERATED";
 
 	std::string getTypeMacroName = generateGetTypeMacro(generatedFile, classInfo);
 
 	generatedFile.writeMacro(	std::move(mainMacroName),
+								 "friend refureku::Type;",
 								std::move(getTypeMacroName),
 								"private:");
 }
@@ -62,7 +65,7 @@ void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFil
 
 std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string getTypeMacroName					= "RFRK" + info.name + "_GetTypeMacro";
+	std::string getTypeMacroName					= _internalMacroPrefix + info.name + "_GetTypeMacro";
 	std::string generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
 	std::string generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
 
@@ -71,14 +74,12 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 								"	static refureku::Type const& staticGetType() noexcept",
 								"	{",
 								"		static bool				initialized = false;",
-								"		static refureku::Type	type;",
+								"		static refureku::Type	type(\"" + info.name + "\", "
+																		+ std::to_string(_stringHasher(info.name)) + ", "
+																		+ "static_cast<refureku::Type::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "));",
 								"	",
 								"		if (!initialized)",
 								"		{",
-								"			type.name		= \"" + info.name + "\";",
-								"			type.id			= " + std::to_string(std::hash<std::string>()(info.name)) + ";",
-								"			type.category	= static_cast<refureku::Type::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + ");",
-								"",
 								"			" + std::move(generatedParentsMetadataMacroName),
 								"			" + std::move(generatedMethodsMetadataMacroName),
 								"",
@@ -99,7 +100,7 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 
 std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = "RFRK" + info.name + "_GenerateMethodsMetadata";
+	std::string macroName = _internalMacroPrefix + info.name + "_GenerateMethodsMetadata";
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
@@ -108,40 +109,34 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	std::unordered_set<std::string>				staticMethods;
 	std::unordered_set<std::string>::iterator	it;
 
+	generatedFile.writeLine("	type.addRequiredMethods<" + info.name + ">(); \t\\");
+
+
+
 	for (auto& [accessSpecifier, methods] : info.methods)
 	{
 		for (kodgen::MethodInfo const& method : methods)
 		{
+			//Remove qualifiers from method prototype if any (const, noexcept...)
+			std::string methodProto = method.getPrototype(true);
+
 			if (method.qualifiers.isStatic)
 			{
-				//Check if we have to emplace a new vector
-				if ((it = staticMethods.find(method.name)) == staticMethods.end())
-				{
-					staticMethods.emplace(method.name);
-					generatedFile.writeLine("	type.staticMethodsLookupTable.emplace(\"" + method.name + "\", std::vector<refureku::StaticMethod>());\t\\");
-				}
-
-				//Fill static method table lookup
-				generatedFile.writeLine("	type.staticMethodsLookupTable[\"" + method.name + "\"].emplace_back(refureku::StaticMethod(new refureku::NonMemberFunction<" + method.prototype + ">(& " + info.name + "::" + method.name + ")));\t\\");
+				generatedFile.writeLine("	type.staticMethods.emplace_back(refureku::StaticMethod(\"" + method.name + "\", " +
+										std::to_string(_stringHasher(info.name + method.name + method.getPrototype(true, true))) +
+										", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(accessSpecifier)) + ")" +
+										", new refureku::NonMemberFunction<" + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
 			}
 			else
 			{
-				//Check if we have to emplace a new vector
-				if ((it = nonStaticMethods.find(method.name)) == nonStaticMethods.end())
-				{
-					nonStaticMethods.emplace(method.name);
-					generatedFile.writeLine("	type.methodsLookupTable.emplace(\"" + method.name + "\", std::vector<refureku::Method>());\t\\");
-				}
-
-				//Remove const from method prototype if any
-				std::string methodProto(method.prototype);
-				if (methodProto.back() == 't')	//If proto ends with a t, it should be the cons't'
-					methodProto.resize(methodProto.size() - 5u);	//5 is the size of "const"
-
-				//Fill method table lookup
-				generatedFile.writeLine("	type.methodsLookupTable[\"" + method.name + "\"].emplace_back(refureku::Method(new refureku::MemberFunction<" + info.name + ", " + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
+				generatedFile.writeLine("	type.methods.emplace_back(refureku::Method(\"" + method.name + "\", " +
+										std::to_string(_stringHasher(info.name + method.name + method.getPrototype(true, true))) +
+										", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(accessSpecifier)) + ")" +
+										", &type, new refureku::MemberFunction<" + info.name + ", " + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
 			}
 		}
+		
+		//TODO: resize + sort by name + proto
 	}
 
 	generatedFile.writeLine("");
@@ -153,11 +148,11 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 {
 	if (!info.parents.empty())
 	{
-		std::string macroName = "RFRK" + info.name + "_GenerateParentsMetadata";
+		std::string macroName = _internalMacroPrefix + info.name + "_GenerateParentsMetadata";
 
 		generatedFile.writeLine("#define " + macroName + "\t\\");
 
-		generatedFile.writeLine("	type.parents.reserve(" + std::to_string(info.parents.at(kodgen::EAccessSpecifier::Private).size() +
+		generatedFile.writeLine("	type.directParents.reserve(" + std::to_string(info.parents.at(kodgen::EAccessSpecifier::Private).size() +
 								info.parents.at(kodgen::EAccessSpecifier::Protected).size() +
 								info.parents.at(kodgen::EAccessSpecifier::Public).size()) + ");	\t\\");
 

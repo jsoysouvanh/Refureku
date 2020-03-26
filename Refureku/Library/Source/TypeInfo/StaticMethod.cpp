@@ -4,10 +4,10 @@
 
 using namespace refureku;
 
-StaticMethod::StaticMethod(ICallable* internalMethod) noexcept:
-	MethodBase(internalMethod)
+StaticMethod::StaticMethod(std::string&& methodName, uint64 methodId, EAccessSpecifier accessSpecifier, ICallable* internalMethod) noexcept:
+	MethodBase(std::forward<std::string>(methodName), std::forward<uint64>(methodId), std::forward<EAccessSpecifier>(accessSpecifier), internalMethod)
 {}
 
-StaticMethod::StaticMethod(StaticMethod&& other) noexcept:
-	MethodBase(std::forward<StaticMethod>(other))
-{}
+//StaticMethod::StaticMethod(StaticMethod&& other) noexcept:
+//	MethodBase(std::forward<StaticMethod>(other))
+//{}
