@@ -23,12 +23,6 @@ namespace refureku
 				ConstFunctionPrototype	_constFunction;
 			};
 
-			union
-			{
-				CallerType*				_caller			= nullptr;
-				CallerType const*		_constCaller;
-			};
-
 		public:
 			MemberFunction() = delete;
 
@@ -42,25 +36,9 @@ namespace refureku
 
 			~MemberFunction() = default;
 
-			void setCaller(void* caller) noexcept
+			ReturnType operator()(void const* caller, ArgTypes&&... args) const noexcept
 			{
-				_caller = static_cast<CallerType*>(caller);
+				return (static_cast<CallerType const*>(caller)->*_constFunction)(std::forward<ArgTypes>(args)...);
 			}
-
-			void setCaller(void const* caller) noexcept
-			{
-				_constCaller = static_cast<CallerType const*>(caller);
-			}
-
-			ReturnType operator()(ArgTypes&&... args) const noexcept
-			{
-				return (_caller->*_function)(std::forward<ArgTypes>(args)...);
-			}
-
-			//ReturnType operator()(ArgTypes&&... args) const noexcept
-			//{
-			//	return (_constCaller->*_constFunction)(std::forward<ArgTypes>(args)...);
-			//	//return (callerInstance.*_constFunction)(std::forward<ArgTypes>(args)...);
-			//}
 	};
 }

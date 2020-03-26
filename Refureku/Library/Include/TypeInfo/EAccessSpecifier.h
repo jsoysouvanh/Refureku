@@ -6,10 +6,10 @@ namespace refureku
 {
 	enum class EAccessSpecifier : uint8
 	{
-		Undefined = 0,
+		Undefined	= 0,
 
-		Public,
-		Protected,
-		Private
+		Public		= 1,
+		Protected	= 2,
+		Private		= 3
 	};
 }

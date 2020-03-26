@@ -22,6 +22,13 @@ int ExampleClass::method3()
 	return 42;
 }
 
+float ExampleClass::method3(int i) noexcept
+{
+	std::cout << "ExampleClass::method3(): " << i << std::endl;
+
+	return 3.14;
+}
+
 int ExampleClass::method4(void* ptr)
 {
 	std::cout << "ExampleClass::method4(void* ptr): " << ptr << std::endl;
@@ -46,4 +53,9 @@ int ExampleClass::staticMethod3(char const* param)
 	std::cout << "ExampleClass::staticMethod3(" << param << ")" << std::endl;
 
 	return 3;
+}
+
+float ExampleClass::staticMethod3(int param) noexcept
+{
+	return 69.1;
 }

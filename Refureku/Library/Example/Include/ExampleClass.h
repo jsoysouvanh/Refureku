@@ -34,6 +34,7 @@ namespace exnamespace
 			RFKMethod()
 			void	method1();
 
+		protected:
 			RFKMethod()
 			void	method2() const;
 
@@ -41,13 +42,20 @@ namespace exnamespace
 			int		method3();
 
 			RFKMethod()
-			static	int	staticMethod3(char const* param);
+			static	int		staticMethod3(char const* param);
 
+		private:
 			RFKMethod()
 			static	int	staticMethod2();
 
 			RFKMethod()
 			static void	staticMethod1();
+
+			RFKMethod()
+			static	float	staticMethod3(int param) noexcept;
+
+			RFKMethod()
+			float	method3(int i) noexcept;
 
 		public:
 			RFKMethod()
@@ -64,20 +72,12 @@ namespace exnamespace
 		//	static refureku::Type	type("ExampleClass", 6613751926088865067, static_cast<refureku::Type::ECategory>(0));	
 		//	
 		//	if (!initialized)	
-		//	{	
-		//		//RFRKExampleClass_GenerateMethodsMetadata
+		//	{
+		//		//std::shared_ptr<refureku::MemberFunction<ExampleClass, int()>>(new refureku::MemberFunction<ExampleClass, int()>(&ExampleClass::method3));
+		//		//std::shared_ptr<refureku::MemberFunction<ExampleClass, float(int)>>(new refureku::MemberFunction<ExampleClass, float(int)>(&ExampleClass::method3));
 
-		//		//type.methods.emplace_back(new refureku::Method("method1", 42, static_cast<refureku::EAccessSpecifier>(0), &type, new refureku::MemberFunction<ExampleClass, void ()>(& ExampleClass::method1)));
-		//		//type.staticMethods.emplace_back(new refureku::StaticMethod("method1", 42, static_cast<refureku::EAccessSpecifier>(0), new refureku::MemberFunction<ExampleClass, void ()>(& ExampleClass::method1)));
-
-		//		type.staticMethods.emplace_back(refureku::StaticMethod("staticMethod1", 16119251974439751062, static_cast<refureku::EAccessSpecifier>(2), std::make_shared<refureku::NonMemberFunction<void ()>>(& ExampleClass::staticMethod1)));
-
-		//		type.methods.emplace_back(
-		//			refureku::Method("method4",
-		//								533724703896504614,
-		//								static_cast<refureku::EAccessSpecifier>(2),
-		//								&type,
-		//			std::make_shared<refureku::MemberFunction<ExampleClass, int (void *)>>(& ExampleClass::method4)));
+		//		//std::make_shared<refureku::MemberFunction<ExampleClass, int()>>(&ExampleClass::method3);
+		//		//std::make_shared<refureku::MemberFunction<ExampleClass, float(int)>>(&ExampleClass::method3);
 
 		//		initialized = true;	
 		//	}	

@@ -116,26 +116,32 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	sortMethods(info.methods, nonStaticMethods, staticMethods);
 
 	//Fill the target type method vectors using sorted methods we just computed
+	//Reserve only the memory we need
+	generatedFile.writeLine("	type.staticMethods.reserve(" + std::to_string(staticMethods.size()) + ");\t\\");
+	
 	for (kodgen::MethodInfo const* method : staticMethods)
 	{
-		generatedFile.writeLine("	type.staticMethods.emplace_back(refureku::StaticMethod(\"" + method->name + "\", " +
+		std::string functionType = "refureku::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">";
+
+		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + method->name + "\", " +
 								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
 								", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", std::make_shared<refureku::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">>(& " + info.name + "::" + method->name + ")));\t\\");
+								", std::shared_ptr<" + functionType + ">(new " + std::move(functionType) + "(& " + info.name + "::" + method->name + ")));\t\\");
 	}
 
-	generatedFile.writeLine("	type.staticMethods.shrink_to_fit();\t\\");
+	//Reserve only the memory we need
+	generatedFile.writeLine("	type.methods.reserve(" + std::to_string(nonStaticMethods.size()) + ");\t\\");
 
 	for (kodgen::MethodInfo const* method : nonStaticMethods)
 	{
-		generatedFile.writeLine("	type.methods.emplace_back(refureku::Method(\"" + method->name + "\", " +
+		std::string memberFunctionType = "refureku::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">";
+
+		generatedFile.writeLine("	type.methods.emplace_back(\"" + method->name + "\", " +
 								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
 								", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", &type, std::make_shared<refureku::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">>(& " + info.name + "::" + method->name + ")));\t\\");
+								", &type, std::shared_ptr<" + memberFunctionType + ">(new " + std::move(memberFunctionType) + "(& " + info.name + "::" + method->name + ")));\t\\");
 	}
 	
-	generatedFile.writeLine("	type.methods.shrink_to_fit();\t\\");
-
 	generatedFile.writeLine("");
 
 	return macroName;

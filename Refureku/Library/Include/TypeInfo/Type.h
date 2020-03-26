@@ -74,12 +74,14 @@ namespace refureku
 			/**
 			*	
 			*/
-			Method const*		getMethod(std::string const& methodName)		const	noexcept;
+			Method const*						getMethod(std::string const& methodName)		const	noexcept;
+			std::vector<Method const*>			getMethods(std::string const& methodName)		const	noexcept;
 
-			//TODO
-			//Method const*		getMethod(std::string methodName, )
-
-			StaticMethod const*	getStaticMethod(std::string const& methodName)	const	noexcept;
+			/**
+			*
+			*/
+			StaticMethod const*					getStaticMethod(std::string const& methodName)	const	noexcept;
+			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName)	const	noexcept;
 
 			//TODO templated staticGetMethod with provided prototype
 			//TODO not templated staticGetMethod with provided prototype

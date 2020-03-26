@@ -2,10 +2,7 @@
 template <typename ReturnType, typename... Args>
 ReturnType Method::internalInvoke(void const* caller, Args&&... arguments) const noexcept
 {
-	std::shared_ptr<MemberFunction<DummyClass, ReturnType(Args...)>> method = std::static_pointer_cast<MemberFunction<DummyClass, ReturnType(Args...)>>(_internalMethod);
-	method->setCaller(caller);
-
-	return method->operator()(std::forward<Args>(arguments)...);
+	return std::static_pointer_cast<MemberFunction<DummyClass, ReturnType(Args...)>>(_internalMethod)->operator()(caller, std::forward<Args>(arguments)...);
 }
 
 template <typename... Args>
