@@ -105,39 +105,35 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
 	//Keep track of what we add so that we save some checks in the metadata
-	std::unordered_set<std::string>				nonStaticMethods;
-	std::unordered_set<std::string>				staticMethods;
-	std::unordered_set<std::string>::iterator	it;
+	std::vector<kodgen::MethodInfo const*>	nonStaticMethods;
+	std::vector<kodgen::MethodInfo const*>	staticMethods;
 
+	//Add required methods (instantiate....)
 	generatedFile.writeLine("	type.addRequiredMethods<" + info.name + ">(); \t\\");
 
+	//Sort methods so that it doesn't have to be done in the target program
+	sortMethods(info.methods, nonStaticMethods, staticMethods);
 
-
-	for (auto& [accessSpecifier, methods] : info.methods)
+	//Fill the target type method vectors using sorted methods we just computed
+	for (kodgen::MethodInfo const* method : staticMethods)
 	{
-		for (kodgen::MethodInfo const& method : methods)
-		{
-			//Remove qualifiers from method prototype if any (const, noexcept...)
-			std::string methodProto = method.getPrototype(true);
-
-			if (method.qualifiers.isStatic)
-			{
-				generatedFile.writeLine("	type.staticMethods.emplace_back(refureku::StaticMethod(\"" + method.name + "\", " +
-										std::to_string(_stringHasher(info.name + method.name + method.getPrototype(true, true))) +
-										", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(accessSpecifier)) + ")" +
-										", new refureku::NonMemberFunction<" + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
-			}
-			else
-			{
-				generatedFile.writeLine("	type.methods.emplace_back(refureku::Method(\"" + method.name + "\", " +
-										std::to_string(_stringHasher(info.name + method.name + method.getPrototype(true, true))) +
-										", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(accessSpecifier)) + ")" +
-										", &type, new refureku::MemberFunction<" + info.name + ", " + std::move(methodProto) + ">(& " + info.name + "::" + method.name + ")));\t\\");
-			}
-		}
-		
-		//TODO: resize + sort by name + proto
+		generatedFile.writeLine("	type.staticMethods.emplace_back(refureku::StaticMethod(\"" + method->name + "\", " +
+								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
+								", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
+								", std::make_shared<refureku::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">>(& " + info.name + "::" + method->name + ")));\t\\");
 	}
+
+	generatedFile.writeLine("	type.staticMethods.shrink_to_fit();\t\\");
+
+	for (kodgen::MethodInfo const* method : nonStaticMethods)
+	{
+		generatedFile.writeLine("	type.methods.emplace_back(refureku::Method(\"" + method->name + "\", " +
+								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
+								", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
+								", &type, std::make_shared<refureku::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">>(& " + info.name + "::" + method->name + ")));\t\\");
+	}
+	
+	generatedFile.writeLine("	type.methods.shrink_to_fit();\t\\");
 
 	generatedFile.writeLine("");
 
@@ -152,16 +148,11 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 
 		generatedFile.writeLine("#define " + macroName + "\t\\");
 
-		generatedFile.writeLine("	type.directParents.reserve(" + std::to_string(info.parents.at(kodgen::EAccessSpecifier::Private).size() +
-								info.parents.at(kodgen::EAccessSpecifier::Protected).size() +
-								info.parents.at(kodgen::EAccessSpecifier::Public).size()) + ");	\t\\");
+		generatedFile.writeLine("	type.directParents.reserve(" + std::to_string(info.parents.size()) + ");\t\\");
 
-		for (auto& [access, parents] : info.parents)
+		for (kodgen::StructClassInfo::ParentInfo parent : info.parents)
 		{
-			for (auto& parent : parents)
-			{
-				generatedFile.writeLine("	type.addToParentsIfPossible<" + parent.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(access)) + "));\t\\");
-			}
+			generatedFile.writeLine("	type.addToParentsIfPossible<" + parent.type.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
 		}
 
 		generatedFile.writeLine("");
@@ -171,4 +162,25 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 	
 	//No parents, don't bother generate a macro
 	return std::string();
+}
+
+void GeneratedCodeTemplate::sortMethods(std::vector<kodgen::MethodInfo> const& allMethods, std::vector<kodgen::MethodInfo const*>& out_methods, std::vector<kodgen::MethodInfo const*>& out_staticMethods) const noexcept
+{
+	out_methods.clear();
+	out_staticMethods.clear();
+
+	for (kodgen::MethodInfo const& method : allMethods)
+	{
+		if (method.qualifiers.isStatic)
+		{
+			out_staticMethods.emplace_back(&method);
+		}
+		else
+		{
+			out_methods.emplace_back(&method);
+		}
+	}
+
+	std::sort(out_methods.begin(), out_methods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
+	std::sort(out_staticMethods.begin(), out_staticMethods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include "Config.h"
 
@@ -14,18 +15,18 @@ namespace refureku
 	{
 		protected:
 			/** Unique identifier for this method -> OwnerName+MethodName+Prototype */
-			uint64		_id					= 0u;
+			uint64						_id				= 0u;
 
 			/** Handle pointing to the actual method */
-			ICallable*	_internalMethod		= nullptr;	//TODO: replace using a shared_ptr
+			std::shared_ptr<ICallable>	_internalMethod;
 
 
-			MethodBase()							= default;
-			MethodBase(std::string&& methodName, 
-					   uint64 methodId,
-					   EAccessSpecifier accessSpecifier,
-					   ICallable* internalMethod)	noexcept;
-			MethodBase(MethodBase&&)				noexcept;
+			MethodBase()											= default;
+			MethodBase(std::string&&				methodName, 
+					   uint64						methodId,
+					   EAccessSpecifier				accessSpecifier,
+					   std::shared_ptr<ICallable>&&	internalMethod)	noexcept;
+			//MethodBase(MethodBase&&)				noexcept;
 
 		public:
 			/** Name of this method */
@@ -42,6 +43,6 @@ namespace refureku
 			bool	isFinal			: 1;
 			bool	isConst			: 1;
 
-			~MethodBase() noexcept;
+			~MethodBase() = default;
 	};
 }

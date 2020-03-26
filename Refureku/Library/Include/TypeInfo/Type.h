@@ -36,35 +36,35 @@ namespace refureku
 			/**
 			*	Type name
 			*/
-			std::string													name;
+			std::string					name;
 
 			/**
 			*	Unique id qualifying this type
 			*/
-			uint64														id			= 0u;
+			uint64						id			= 0u;
 
 			/**
 			*	Category of this type
 			*/
-			ECategory													category	= ECategory::Undefined;
+			ECategory					category	= ECategory::Undefined;
 
 			/**
 			*	Direct parent types. This list includes ONLY reflected parents
 			*	TODO: Move to Struct
 			*/
-			std::vector<Parent>											directParents;
+			std::vector<Parent>			directParents;
 
 			/**
 			*	All tagged methods contained in this type
 			*	TODO: Move to Struct
 			*/
-			std::vector<Method>											methods;
+			std::vector<Method>			methods;
 
 			/**
 			*	All tagged static methods contained in this type
 			*	TODO: Move to Struct
 			*/
-			std::vector<StaticMethod>										staticMethods;
+			std::vector<StaticMethod>	staticMethods;
 
 			Type(std::string&& newName, uint64 newId, ECategory newCategory)	noexcept;
 			Type(Type const&)													= delete;
@@ -74,12 +74,12 @@ namespace refureku
 			/**
 			*	
 			*/
-			Method const*		getMethod(std::string const& methodName, std::string const& prototype = "")			const	noexcept;
+			Method const*		getMethod(std::string const& methodName)		const	noexcept;
 
 			//TODO
 			//Method const*		getMethod(std::string methodName, )
 
-			StaticMethod const*	getStaticMethod(std::string const& methodName, std::string const& prototype = "")	const	noexcept;
+			StaticMethod const*	getStaticMethod(std::string const& methodName)	const	noexcept;
 
 			//TODO templated staticGetMethod with provided prototype
 			//TODO not templated staticGetMethod with provided prototype
@@ -93,10 +93,10 @@ namespace refureku
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
-			void addToParentsIfPossible(EAccessSpecifier inheritanceAccess)								noexcept;
+			void addToParentsIfPossible(EAccessSpecifier inheritanceAccess)													noexcept;
 
 			template <typename T>
-			void addRequiredMethods()											noexcept
+			void addRequiredMethods()																						noexcept
 			{
 				//Instantiate method, make sure it's static
 				if constexpr (generated::implements___RFKinstantiate<T, T*()>::value)

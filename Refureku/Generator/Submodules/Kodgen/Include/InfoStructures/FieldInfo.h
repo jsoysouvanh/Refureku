@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Misc/EAccessSpecifier.h"
 #include "InfoStructures/EntityInfo.h"
 #include "InfoStructures/TypeInfo.h"
 
@@ -15,7 +16,9 @@ namespace kodgen
 
 			}			qualifiers;
 
-			TypeInfo	type;
+			TypeInfo			type;
+			EAccessSpecifier	accessSpecifier;
+
 
 			FieldInfo()															= default;
 			FieldInfo(std::string&& entityName, PropertyGroup&& propertyGroup)	noexcept;

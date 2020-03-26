@@ -81,6 +81,9 @@ void staticMethods()
 	ExampleClass			exampleClass;
 	refureku::Type const&	exampleClassType = ExampleClass::staticGetType();
 
+	for (refureku::StaticMethod const& staticMethod : exampleClassType.staticMethods)
+		std::cout << "here: " << staticMethod.name << std::endl;
+
 	refureku::StaticMethod const* staticMethod1 = exampleClassType.getStaticMethod("staticMethod1");
 	if (staticMethod1 != nullptr)
 	{
@@ -89,7 +92,7 @@ void staticMethods()
 		staticMethod1->invoke<void>();
 		staticMethod1->safeInvoke<void>();
 	}
-
+	
 	refureku::StaticMethod const* staticMethod2 = exampleClassType.getStaticMethod("staticMethod2");
 	if (staticMethod2 != nullptr)
 	{
@@ -111,32 +114,14 @@ void staticMethods()
 
 int main()
 {
-	//refureku::Type const& type = ExampleClass::staticGetType();
-	//
-	//std::cout << type.name << std::endl;
-	//std::cout << type.id << std::endl;
+	nonStaticMethods();
+	staticMethods();
 
-	//nonStaticMethods();
-	//staticMethods();
-
-	//std::cout <<  << std::endl;
-
-	//refureku::Type const& type = TestClass::staticGetType();
-
-	//refureku::Method const* method = type.getMethod("hey", "void(int)const");
-
-	//Test test({ 1, 2, 3 });
-	//
 	//refureku::Type const& type = ExampleClass::staticGetType();
 
 	//std::cout << "Name: " << type.name << std::endl;
 	//std::cout << "Id: " << type.id << std::endl;
 	//std::cout << "Category: " << (int)type.category << std::endl;
-
-	//refureku::StaticMethod testMethod = refureku::StaticMethod(new refureku::NonMemberFunction<ExampleClass*()>(&ExampleClass::instantiate));
-
-	//testMethod.invoke<ExampleClass*>();
-	//testMethod.invoke<ExampleClass*>(42);
 
 	refureku::Type const& exampleType = ExampleClass::staticGetType();
 	//refureku::Type const& parentType = ParentClass::staticGetType();

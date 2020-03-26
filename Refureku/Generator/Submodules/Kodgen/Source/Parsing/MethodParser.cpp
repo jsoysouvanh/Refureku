@@ -23,15 +23,15 @@ CXChildVisitResult MethodParser::parse(CXCursor const& cursor, ParsingInfo& pars
 	switch (clang_getCursorKind(cursor))
 	{
 		case CXCursorKind::CXCursor_CXXFinalAttr:
-			parsingInfo.currentStructOrClass->methods.at(parsingInfo.accessSpecifier).back().qualifiers.isFinal = true;
+			parsingInfo.currentStructOrClass->methods.back().qualifiers.isFinal = true;
 			break;
 
 		case CXCursorKind::CXCursor_CXXOverrideAttr:
-			parsingInfo.currentStructOrClass->methods.at(parsingInfo.accessSpecifier).back().qualifiers.isOverride = true;
+			parsingInfo.currentStructOrClass->methods.back().qualifiers.isOverride = true;
 			break;
 
 		case CXCursorKind::CXCursor_ParmDecl:
-			parsingInfo.currentStructOrClass->methods.at(parsingInfo.accessSpecifier).back().parameters.emplace_back(MethodParamInfo{ TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor)) });
+			parsingInfo.currentStructOrClass->methods.back().parameters.emplace_back(MethodParamInfo{ TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor)) });
 			break;
 
 		default:
@@ -48,8 +48,10 @@ CXChildVisitResult MethodParser::setAsCurrentEntityIfValid(CXCursor const& metho
 	{
 		if (parsingInfo.currentStructOrClass.has_value())
 		{
-			MethodInfo& methodInfo = parsingInfo.currentStructOrClass->methods.at(parsingInfo.accessSpecifier).emplace_back(MethodInfo(Helpers::getString(clang_getCursorDisplayName(getCurrentCursor())), std::move(*propertyGroup)));
+
+			MethodInfo& methodInfo = parsingInfo.currentStructOrClass->methods.emplace_back(MethodInfo(Helpers::getString(clang_getCursorDisplayName(getCurrentCursor())), std::move(*propertyGroup)));
 			setupMethod(getCurrentCursor(), methodInfo);
+			methodInfo.accessSpecifier = parsingInfo.accessSpecifier;
 
 			return CXChildVisitResult::CXChildVisit_Recurse;
 		}

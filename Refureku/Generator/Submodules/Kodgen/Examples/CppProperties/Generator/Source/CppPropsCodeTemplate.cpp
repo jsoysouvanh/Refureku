@@ -22,22 +22,19 @@ void CppPropsCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, ko
 
 	kodgen::StructClassInfo const& classInfo = static_cast<kodgen::StructClassInfo const&>(entityInfo);
 
-	for (auto& [accessSpecifier, fields] : classInfo.fields)
+	for (kodgen::FieldInfo const& fieldInfo : classInfo.fields)
 	{
-		for (kodgen::FieldInfo const& fieldInfo : fields)
+		for (kodgen::ComplexProperty const& complexProp : fieldInfo.properties.complexProperties)
 		{
-			for (kodgen::ComplexProperty const& complexProp : fieldInfo.properties.complexProperties)
+			//Getter
+			if (complexProp.name == GetterPropName)
 			{
-				//Getter
-				if (complexProp.name == GetterPropName)
-				{
-					generatedFile.writeLine(generateGetter(fieldInfo, complexProp) + "	\\");
-				}
-				//Setter
-				else if (complexProp.name == SetterPropName)
-				{
-					generatedFile.writeLine(generateSetter(fieldInfo, complexProp) + "	\\");
-				}
+				generatedFile.writeLine(generateGetter(fieldInfo, complexProp) + "	\\");
+			}
+			//Setter
+			else if (complexProp.name == SetterPropName)
+			{
+				generatedFile.writeLine(generateSetter(fieldInfo, complexProp) + "	\\");
 			}
 		}
 	}

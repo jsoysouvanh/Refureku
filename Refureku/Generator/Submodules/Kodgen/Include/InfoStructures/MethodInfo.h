@@ -5,6 +5,7 @@
 
 #include "Misc/FundamentalTypes.h"
 
+#include "Misc/EAccessSpecifier.h"
 #include "InfoStructures/EntityInfo.h"
 #include "InfoStructures/TypeInfo.h"
 #include "InfoStructures/MethodParamInfo.h"
@@ -26,6 +27,8 @@ namespace kodgen
 				bool isConst		: 1;
 
 			}								qualifiers;
+
+			EAccessSpecifier				accessSpecifier;
 
 			/** Prototype of this method as a string */
 			std::string						prototype;

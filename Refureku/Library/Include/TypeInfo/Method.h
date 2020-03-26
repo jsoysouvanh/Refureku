@@ -28,20 +28,14 @@ namespace refureku
 			Type const* ownerType;
 
 			Method()																= default;
-			Method(std::string&&	methodName,
-				   uint64			methodId		= 0u,
-				   EAccessSpecifier	accessSpecifier	= EAccessSpecifier::Undefined,
-				   Type const*		methodOwnerType	= nullptr,
-				   ICallable*		internalMethod	= nullptr)						noexcept;
+			Method(std::string&&				methodName,
+				   uint64						methodId		= 0u,
+				   EAccessSpecifier				accessSpecifier	= EAccessSpecifier::Undefined,
+				   Type const*					methodOwnerType	= nullptr,
+				   std::shared_ptr<ICallable>&&	internalMethod	= nullptr)			noexcept;
 			Method(Method const&)													= default;
 			Method(Method&&)														= default;
 			~Method()																= default;
-
-			/**
-			*	Invoke the method on the caller with the provided arguments if argument types match this method prototype
-			*/
-			template <typename... Args>
-			void		invoke(void* caller, Args&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	Overload with const caller for
@@ -51,12 +45,6 @@ namespace refureku
 			void		invoke(void const* caller, Args&&... arguments)		const noexcept(REFUREKU_RELEASE);
 
 			/**
-			*	Invoke the method on the caller with the provided arguments if the return type and argument types match this method prototype
-			*/
-			template <typename ReturnType, typename... Args>
-			ReturnType	invoke(void* caller, Args&&... arguments)			const noexcept(REFUREKU_RELEASE);
-
-			/**
 			*	Overload with const caller for
 			*		ReturnType invoke(void* caller, Args&&... arguments) method
 			*/
@@ -64,23 +52,11 @@ namespace refureku
 			ReturnType	invoke(void const* caller, Args&&... arguments)		const noexcept(REFUREKU_RELEASE);
 
 			/**
-			*	TODO
-			*/
-			template <typename... Args>
-			void		safeInvoke(void* caller, Args&&... arguments)		const;
-
-			/**
 			*	Overload with const caller for
 			*		void safeInvoke(void* caller, Args&&... arguments) method
 			*/
 			template <typename... Args>
 			void		safeInvoke(void const* caller, Args&&... arguments)	const;
-
-			/**
-			*	TODO
-			*/
-			template <typename ReturnType, typename... Args>
-			ReturnType	safeInvoke(void* caller, Args&&... arguments)		const;
 
 			/**
 			*	Overload with const caller for

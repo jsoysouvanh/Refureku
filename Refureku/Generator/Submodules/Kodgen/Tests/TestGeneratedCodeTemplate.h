@@ -18,47 +18,32 @@ namespace kodgen
 					generatedFile.writeLine("is Final: " + std::to_string(static_cast<StructClassInfo const&>(entityInfo).qualifiers.isFinal));
 
 					generatedFile.writeLine("Base classes");
-					for (std::pair<EAccessSpecifier, std::vector<TypeInfo>> const baseClassIt : static_cast<StructClassInfo const&>(entityInfo).parents)
+					for (StructClassInfo::ParentInfo const& baseClass : static_cast<StructClassInfo const&>(entityInfo).parents)
 					{
-						generatedFile.writeLine(toString(baseClassIt.first));
-
-						for (TypeInfo const& baseClass : baseClassIt.second)
-						{
-							generatedFile.writeLine(baseClass.getName(true, true) + " -> " + baseClass.getCanonicalName(true, true));
-						}
+						generatedFile.writeLine(baseClass.type.getName(true, true) + " -> " + baseClass.type.getCanonicalName(true, true));
 					}
 
 					generatedFile.writeLine("Fields");
-					for (std::pair<EAccessSpecifier, std::vector<FieldInfo>> const fieldIt : static_cast<StructClassInfo const&>(entityInfo).fields)
+					for (FieldInfo const& field : static_cast<StructClassInfo const&>(entityInfo).fields)
 					{
-						generatedFile.writeLine(toString(fieldIt.first));
-
-						for (FieldInfo const& field : fieldIt.second)
-						{
-							generatedFile.writeLine(field.type.getName(true, true) + " -> " + field.type.getCanonicalName(true, true) + " " + field.name);
-						}
+						generatedFile.writeLine(field.type.getName(true, true) + " -> " + field.type.getCanonicalName(true, true) + " " + field.name);
 					}
 
 					generatedFile.writeLine("Methods");
-					for (std::pair<EAccessSpecifier, std::vector<MethodInfo>> const methodIt : static_cast<StructClassInfo const&>(entityInfo).methods)
+					for (MethodInfo const& method : static_cast<StructClassInfo const&>(entityInfo).methods)
 					{
-						generatedFile.writeLine(toString(methodIt.first));
+						std::string methodAsString;
 
-						for (MethodInfo const& method : methodIt.second)
+						methodAsString += method.name + "(";
+
+						for (MethodParamInfo parameter : method.parameters)
 						{
-							std::string methodAsString;
-
-							methodAsString += method.name + "(";
-
-							for (MethodParamInfo parameter : method.parameters)
-							{
-								methodAsString += parameter.type.getName(true, true) + " -> " + parameter.type.getCanonicalName(true, true) + " " + parameter.name + ", ";
-							}
-
-							methodAsString += ")";
-
-							generatedFile.writeLine(methodAsString);
+							methodAsString += parameter.type.getName(true, true) + " -> " + parameter.type.getCanonicalName(true, true) + " " + parameter.name + ", ";
 						}
+
+						methodAsString += ")";
+
+						generatedFile.writeLine(methodAsString);
 					}
 
 					generatedFile.writeLine("*/");

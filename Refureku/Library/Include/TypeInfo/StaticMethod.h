@@ -8,14 +8,14 @@ namespace refureku
 	class StaticMethod : public MethodBase
 	{
 		public:
-			StaticMethod()										= default;
-			StaticMethod(std::string&&		methodName,
-						 uint64				methodId			= 0u,
-						 EAccessSpecifier	accessSpecifier		= EAccessSpecifier::Undefined,
-						 ICallable*			internalMethod		= nullptr)						noexcept;
-			StaticMethod(StaticMethod const&)													= default;
-			StaticMethod(StaticMethod&&)														= default;
-			~StaticMethod()																		= default;
+			StaticMethod()																			= default;
+			StaticMethod(std::string&&					methodName,
+						 uint64							methodId		= 0u,
+						 EAccessSpecifier				accessSpecifier	= EAccessSpecifier::Undefined,
+						 std::shared_ptr<ICallable>&&	internalMethod	= nullptr)					noexcept;
+			StaticMethod(StaticMethod const&)														= default;
+			StaticMethod(StaticMethod&&)															= default;
+			~StaticMethod()																			= default;
 
 			/**
 			*
