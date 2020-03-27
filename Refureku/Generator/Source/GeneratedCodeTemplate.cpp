@@ -45,6 +45,8 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 
 	generatedFile.writeMacro(std::move(mainMacroName),
 								"friend refureku::Type;",
+								"friend refureku::Struct;",
+								"friend refureku::Class;",
 								"private:",
 									std::move(defaultInstantiateMacro),
 								"protected:",
@@ -75,11 +77,13 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 	std::string generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
 	std::string generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
 
+	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "refureku::Struct" : "refureku::Class";
+	
 	generatedFile.writeMacro(std::string(getTypeMacroName),
-								"	static refureku::Type const& staticGetType() noexcept",
+								"	static " + returnedType + " const& staticGetType() noexcept",
 								"	{",
 								"		static bool				initialized = false;",
-								"		static refureku::Type	type(\"" + info.name + "\", "
+								"		static " + returnedType + " type(\"" + info.name + "\", "
 																		+ std::to_string(_stringHasher(info.name)) + "u, "
 																		+ "static_cast<refureku::Type::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "));",
 								"	",
@@ -94,7 +98,7 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 								"		return type;",
 								"	}",
 								"	",
-								"	refureku::Type const& getType() const noexcept",
+								"	" + returnedType + " const& getType() const noexcept",
 								"	{",
 								"		return " + info.name + "::staticGetType();",
 								"	}"

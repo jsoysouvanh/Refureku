@@ -7,7 +7,7 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResu
 	//Always call base class
 	kodgen::FileGenerator::writeHeader(file, parsingResult);
 
-	file.writeLine("#include \"TypeInfo/Type.h\"\n");
+	file.writeLine("#include \"TypeInfo/Class.h\"\n");
 }
 
 void FileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept

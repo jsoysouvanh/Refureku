@@ -12,8 +12,6 @@ namespace exnamespace
 	class RFKClass() ParentParentClass : private ParentParentParentClass
 	{
 		RFKParentParentClass_GENERATED
-
-		ParentParentClass() = delete;
 	};
 
 	class RFKClass() ParentClass : protected ParentParentClass
