@@ -147,7 +147,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 								", &type, std::shared_ptr<" + memberFunctionType + ">(new " + std::move(memberFunctionType) + "(& " + info.name + "::" + method->name + ")));\t\\");
 	}
 	
-	//Add required methods (instantiate....)	exnamespace::ExampleClass*()
+	//Add required methods (instantiate....)
 	generatedFile.writeLine("	type.__RFKaddRequiredMethods<" + info.name + ">(\"" + info.name + "*()\"); \t\\");
 
 	generatedFile.writeLine("");

@@ -121,8 +121,23 @@ void staticMethods()
 	}
 }
 
+class A { public: int x; };
+class B : public A
+{
+	virtual void f()
+	{}
+};
+
 int main()
 {
+	B	b;
+	B*	bPtr = &b;
+	A*	aPtr = bPtr;
+
+	&A::x;
+
+	//std::cout << bPtr << std::endl;
+
 	//nonStaticMethods();
 	//staticMethods();
 

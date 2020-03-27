@@ -44,11 +44,11 @@ namespace refureku
 			ECategory	category	= ECategory::Undefined;
 
 			Archetype(std::string&& newName, uint64 newId, ECategory newCategory)	noexcept;
-			Archetype(Archetype const&)												= default;
+			Archetype(Archetype const&)												= delete;
 			Archetype(Archetype&&)													= default;
 			~Archetype()															= default;
 
-			Archetype& operator=(Archetype const&)	= default;
+			Archetype& operator=(Archetype const&)	= delete;
 			Archetype& operator=(Archetype&&)		= default;
 	};
 

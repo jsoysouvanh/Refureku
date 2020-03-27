@@ -32,7 +32,7 @@ namespace refureku
 			std::vector<StaticMethod>	staticMethods;
 
 			Struct(std::string&& newName, uint64 newId, ECategory newCategory)	noexcept;
-			Struct(Struct const&)												= default;
+			Struct(Struct const&)												= delete;
 			Struct(Struct&&)													= default;
 			~Struct()															= default;
 
@@ -71,7 +71,7 @@ namespace refureku
 			template <typename ReturnType, typename... ArgTypes>
 			void __RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, refureku::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept;
 
-			Struct& operator=(Struct const&)	= default;
+			Struct& operator=(Struct const&)	= delete;
 			Struct& operator=(Struct&&)			= default;
 	};
 
