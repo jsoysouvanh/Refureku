@@ -14,7 +14,7 @@
 
 namespace refureku
 {
-	class Type
+	class Archetype
 	{
 		public:
 			enum class ECategory : uint8
@@ -43,14 +43,14 @@ namespace refureku
 			*/
 			ECategory	category	= ECategory::Undefined;
 
-			Type(std::string&& newName, uint64 newId, ECategory newCategory)	noexcept;
-			Type(Type const&)													= default;
-			Type(Type&&)														= default;
-			~Type()																= default;
+			Archetype(std::string&& newName, uint64 newId, ECategory newCategory)	noexcept;
+			Archetype(Archetype const&)												= default;
+			Archetype(Archetype&&)													= default;
+			~Archetype()															= default;
 
-			Type& operator=(Type const&)	= default;
-			Type& operator=(Type&&)			= default;
+			Archetype& operator=(Archetype const&)	= default;
+			Archetype& operator=(Archetype&&)		= default;
 	};
 
-	#include "TypeInfo/Type.inl"
+	#include "TypeInfo/Archetype.inl"
 }

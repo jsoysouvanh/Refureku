@@ -40,11 +40,11 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 {
 	std::string mainMacroName			= _externalMacroPrefix + classInfo.name + "_GENERATED";
 
-	std::string getTypeMacroName		= generateGetTypeMacro(generatedFile, classInfo);
+	std::string getTypeMacroName		= generateGetArchetypeMacro(generatedFile, classInfo);
 	std::string defaultInstantiateMacro	= generateDefaultInstantiateMacro(generatedFile, classInfo);
 
 	generatedFile.writeMacro(std::move(mainMacroName),
-								"friend refureku::Type;",
+								"friend refureku::Archetype;",
 								"friend refureku::Struct;",
 								"friend refureku::Class;",
 								"private:",
@@ -71,7 +71,7 @@ void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFil
 
 }
 
-std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string getTypeMacroName					= _internalMacroPrefix + info.name + "_GetTypeMacro";
 	std::string generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
@@ -80,12 +80,12 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "refureku::Struct" : "refureku::Class";
 	
 	generatedFile.writeMacro(std::string(getTypeMacroName),
-								"	static " + returnedType + " const& staticGetType() noexcept",
+								"	static " + returnedType + " const& staticGetArchetype() noexcept",
 								"	{",
 								"		static bool				initialized = false;",
 								"		static " + returnedType + " type(\"" + info.name + "\", "
 																		+ std::to_string(_stringHasher(info.name)) + "u, "
-																		+ "static_cast<refureku::Type::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "));",
+																		+ "static_cast<refureku::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "));",
 								"	",
 								"		if (!initialized)",
 								"		{",
@@ -98,9 +98,9 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 								"		return type;",
 								"	}",
 								"	",
-								"	" + returnedType + " const& getType() const noexcept",
+								"	" + returnedType + " const& getArchetype() const noexcept",
 								"	{",
-								"		return " + info.name + "::staticGetType();",
+								"		return " + info.name + "::staticGetArchetype();",
 								"	}"
 							 );
 

@@ -2,7 +2,7 @@
 template <typename T>
 void Struct::__RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess) noexcept
 {
-	if constexpr (refureku::generated::implements_staticGetType<T, refureku::Type const&()>::value)
+	if constexpr (refureku::generated::implements_staticGetType<T, refureku::Archetype const&()>::value)
 	{
 		directParents.emplace_back(refureku::Struct::Parent{ inheritanceAccess, T::staticGetType() });
 	}

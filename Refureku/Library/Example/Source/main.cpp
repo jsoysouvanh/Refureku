@@ -12,7 +12,7 @@ void nonStaticMethods()
 {
 	ExampleClass			exampleClass;
 	ExampleClass const		constExampleClass;
-	refureku::Class const&	exampleClassType = ExampleClass::staticGetType();
+	refureku::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
 
 	//Non const method which returns void without arguments
 	refureku::Method const* method1 = exampleClassType.getMethod("method1");
@@ -85,7 +85,7 @@ void nonStaticMethods()
 void staticMethods()
 {
 	ExampleClass			exampleClass;
-	refureku::Class const&	exampleClassType = ExampleClass::staticGetType();
+	refureku::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
 
 	refureku::StaticMethod const* staticMethod1 = exampleClassType.getStaticMethod("staticMethod1");
 	if (staticMethod1 != nullptr)
@@ -126,7 +126,7 @@ int main()
 	//nonStaticMethods();
 	//staticMethods();
 
-	refureku::Class const& type = ExampleClass::staticGetType();
+	refureku::Class const& type = ExampleClass::staticGetArchetype();
 
 	ExampleClass* ex = type.makeInstance<ExampleClass>();
 

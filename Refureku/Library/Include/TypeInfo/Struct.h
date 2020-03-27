@@ -1,10 +1,10 @@
 #pragma once
 
-#include "TypeInfo/Type.h"
+#include "TypeInfo/Archetype.h"
 
 namespace refureku
 {
-	class Struct : public Type
+	class Struct : public Archetype
 	{
 		public:
 			struct Parent
@@ -54,7 +54,7 @@ namespace refureku
 			/**
 			*	Return true if this type inherits from the provided type, else false.
 			*/
-			bool inheritsFrom(Type const& otherType)											const	noexcept;
+			bool inheritsFrom(Archetype const& otherType)										const	noexcept;
 
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstance(ArgTypes&&... args)										const	noexcept;

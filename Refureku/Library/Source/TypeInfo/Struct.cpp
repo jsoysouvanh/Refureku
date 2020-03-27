@@ -3,7 +3,7 @@
 using namespace refureku;
 
 Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory) noexcept:
-	Type(std::forward<std::string>(newName), std::forward<uint64>(newId), std::forward<ECategory>(newCategory))
+	Archetype(std::forward<std::string>(newName), std::forward<uint64>(newId), std::forward<ECategory>(newCategory))
 {
 }
 
@@ -49,7 +49,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	return result;
 }
 
-bool Struct::inheritsFrom(Type const& otherType) const noexcept
+bool Struct::inheritsFrom(Archetype const& otherType) const noexcept
 {
 	for (Parent const& parent : directParents)
 	{

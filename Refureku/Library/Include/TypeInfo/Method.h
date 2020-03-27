@@ -10,7 +10,7 @@
 
 namespace refureku
 {
-	class Type;	//Forward declaration
+	class Archetype;	//Forward declaration
 
 	class Method : public MethodBase
 	{
@@ -25,13 +25,13 @@ namespace refureku
 
 		public:
 			/** Class declaring this method */
-			Type const* ownerType;
+		Archetype const* ownerType;
 
 			Method()																= default;
 			Method(std::string&&				methodName,
 				   uint64						methodId		= 0u,
 				   EAccessSpecifier				accessSpecifier	= EAccessSpecifier::Undefined,
-				   Type const*					methodOwnerType	= nullptr,
+				   Archetype const*				methodOwnerType	= nullptr,
 				   std::shared_ptr<ICallable>&&	internalMethod	= nullptr)			noexcept;
 			Method(Method const&)													= default;
 			Method(Method&&)														= default;
