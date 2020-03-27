@@ -25,8 +25,10 @@ namespace refureku
 										std::vector<kodgen::MethodInfo const*>& out_methods,
 										std::vector<kodgen::MethodInfo const*>& out_staticMethods)											const	noexcept;
 
+
 			/** Return generated macro name */
 			std::string		generateGetTypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)					const	noexcept;
+			std::string		generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::string		generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)			const	noexcept;
 			std::string		generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)			const	noexcept;
 

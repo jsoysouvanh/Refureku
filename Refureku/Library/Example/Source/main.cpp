@@ -10,9 +10,9 @@ using namespace exnamespace;
 
 void nonStaticMethods()
 {
-	ExampleClass			exampleClass;
-	ExampleClass const		constExampleClass;
-	refureku::Type const&	exampleClassType = ExampleClass::staticGetType();
+	//ExampleClass			exampleClass;
+	//ExampleClass const	constExampleClass;
+	//refureku::Type const&	exampleClassType = ExampleClass::staticGetType();
 
 	// Non const method which returns void without arguments
 	//refureku::Method const* method1 = exampleClassType.getMethod("method1");
@@ -75,17 +75,17 @@ void nonStaticMethods()
 	//	std::cout << method4->safeInvoke<int>(&constExampleClass, nullptr) << std::endl;
 	//}
 
-	std::vector<refureku::Method const*> methods3 = exampleClassType.getMethods("method3");
+	/*std::vector<refureku::Method const*> methods3 = exampleClassType.getMethods("method3");
 	for (auto method : methods3)
 	{
 		std::cout << method->name << " -> " << (refureku::int32)method->access << std::endl;
-	}
+	}*/
 }
 
 void staticMethods()
 {
-	ExampleClass			exampleClass;
-	refureku::Type const&	exampleClassType = ExampleClass::staticGetType();
+	//ExampleClass			exampleClass;
+	//refureku::Type const&	exampleClassType = ExampleClass::staticGetType();
 
 	//refureku::StaticMethod const* staticMethod1 = exampleClassType.getStaticMethod("staticMethod1");
 	//if (staticMethod1 != nullptr)
@@ -114,17 +114,17 @@ void staticMethods()
 	//	std::cout << staticMethod3->safeInvoke<int>("coucou") << std::endl;
 	//}
 
-	std::vector<refureku::StaticMethod const*> staticMethods3 = exampleClassType.getStaticMethods("staticMethod3");
-	for (auto method : staticMethods3)
-	{
-		std::cout << method->name << " -> " << (refureku::int32)method->access << std::endl;
-	}
+	//std::vector<refureku::StaticMethod const*> staticMethods3 = exampleClassType.getStaticMethods("staticMethod3");
+	//for (auto method : staticMethods3)
+	//{
+	//	std::cout << method->name << " -> " << (refureku::int32)method->access << std::endl;
+	//}
 }
 
 int main()
 {
-	nonStaticMethods();
-	staticMethods();
+	//nonStaticMethods();
+	//staticMethods();
 
 	//refureku::Type const& type = ExampleClass::staticGetType();
 
@@ -133,14 +133,15 @@ int main()
 	//std::cout << "Category: " << (int)type.category << std::endl;
 
 	refureku::Type const& exampleType = ExampleClass::staticGetType();
-	//refureku::Type const& parentType = ParentClass::staticGetType();
-	//
-	//ParentParentParentClass* instance = exampleType.makeInstance<ParentParentParentClass>();
+	////refureku::Type const& parentType = ParentClass::staticGetType();
 
-	//if (instance != nullptr)
-	//	std::cout << reinterpret_cast<ExampleClass*>(instance)->someInt << std::endl;
-	//else
-	//	std::cout << "RIP" << std::endl;
+	////ParentParentParentClass* instance = exampleType.makeInstance<ParentParentParentClass>();
+	ParentParentClass* instance = ParentParentClass::staticGetType().makeInstance<ParentParentClass>(1, 2, 3, 4, 5);
+
+	if (instance != nullptr)
+		std::cout << reinterpret_cast<ExampleClass*>(instance)->someInt << std::endl;
+	else
+		std::cout << "RIP" << std::endl;
 
 	return EXIT_SUCCESS;
 }

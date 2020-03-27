@@ -12,6 +12,8 @@ namespace exnamespace
 	class RFKClass() ParentParentClass : private ParentParentParentClass
 	{
 		RFKParentParentClass_GENERATED
+
+		ParentParentClass() = delete;
 	};
 
 	class RFKClass() ParentClass : protected ParentParentClass
@@ -23,42 +25,48 @@ namespace exnamespace
 	{
 		public:
 			RFKField()
-			int		someInt		= 42;
+			int				someInt		= 42;
 
 			RFKField()
-			float	someFloat	= 42.42f;
+			float			someFloat	= 42.42f;
 
 			RFKMethod()
-			int		method4(void* ptr);
+			int				method4(void* ptr);
 
 			RFKMethod()
-			void	method1();
+			void			method1();
 
 		protected:
 			RFKMethod()
-			void	method2() const;
+			void			method2() const;
 
 			RFKMethod()
-			int		method3();
+			int				method3();
 
 			RFKMethod()
 			static	int		staticMethod3(char const* param);
 
+			RFKMethod()
+				static void	_hi() noexcept
+			{};
+
+			RFKMethod()
+			static void aaa() noexcept {};
+
 		private:
 			RFKMethod()
-			static	int	staticMethod2();
+			static	int		staticMethod2();
 
 			RFKMethod()
-			static void	staticMethod1();
+			static void		staticMethod1();
 
 			RFKMethod()
-			static	float	staticMethod3(int param) noexcept;
+			static	float	staticMethod3(int param)	noexcept;
 
 			RFKMethod()
-			float	method3(int i) noexcept;
+			float			method3(int i)				noexcept;
 
 		public:
-			RFKMethod()
 			ExampleClass()						= default;
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
@@ -79,6 +87,10 @@ namespace exnamespace
 		//		//std::make_shared<refureku::MemberFunction<ExampleClass, int()>>(&ExampleClass::method3);
 		//		//std::make_shared<refureku::MemberFunction<ExampleClass, float(int)>>(&ExampleClass::method3);
 
+		//		//type.
+		//		//type.addInstantiationMethod<ExampleClass>("allo", 13, refureku::EAccessSpecifier::Private, &ExampleClass::__RFKinstantiate);
+		//		type.addInstantiationMethod<ExampleClass>("allo", 13, refureku::EAccessSpecifier::Private, &ExampleClass::__RFKinstantiate);
+
 		//		initialized = true;	
 		//	}	
 		//		
@@ -89,17 +101,6 @@ namespace exnamespace
 		//{	
 		//	return ExampleClass::staticGetType();	
 		//}
-
-		//template <typename... ArgTypes>
-		//static ExampleClass* instantiate(ArgTypes... args) noexcept
-		//{
-		//	return new ExampleClass(std::forward<ArgTypes>(args)...);
-		//}
-		static ExampleClass* __RFKinstantiate() noexcept
-		{
-			//std::cout << "Use this instantiate" << std::endl;
-			return new ExampleClass();
-		}
 
 		RFKExampleClass_GENERATED
 	};

@@ -38,13 +38,18 @@ void GeneratedCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, k
 
 void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
 {
-	std::string mainMacroName	 = _externalMacroPrefix + classInfo.name + "_GENERATED";
+	std::string mainMacroName			= _externalMacroPrefix + classInfo.name + "_GENERATED";
 
-	std::string getTypeMacroName = generateGetTypeMacro(generatedFile, classInfo);
+	std::string getTypeMacroName		= generateGetTypeMacro(generatedFile, classInfo);
+	std::string defaultInstantiateMacro	= generateDefaultInstantiateMacro(generatedFile, classInfo);
 
-	generatedFile.writeMacro(	std::move(mainMacroName),
-								 "friend refureku::Type;",
-								std::move(getTypeMacroName),
+	generatedFile.writeMacro(std::move(mainMacroName),
+								"friend refureku::Type;",
+								"private:",
+									std::move(defaultInstantiateMacro),
+								"protected:",
+								"public:",
+									std::move(getTypeMacroName),
 								"private:");
 }
 
@@ -71,12 +76,11 @@ std::string GeneratedCodeTemplate::generateGetTypeMacro(kodgen::GeneratedFile& g
 	std::string generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
 
 	generatedFile.writeMacro(std::string(getTypeMacroName),
-								"public:",
 								"	static refureku::Type const& staticGetType() noexcept",
 								"	{",
 								"		static bool				initialized = false;",
 								"		static refureku::Type	type(\"" + info.name + "\", "
-																		+ std::to_string(_stringHasher(info.name)) + ", "
+																		+ std::to_string(_stringHasher(info.name)) + "u, "
 																		+ "static_cast<refureku::Type::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "));",
 								"	",
 								"		if (!initialized)",
@@ -109,9 +113,6 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	std::vector<kodgen::MethodInfo const*>	nonStaticMethods;
 	std::vector<kodgen::MethodInfo const*>	staticMethods;
 
-	//Add required methods (instantiate....)
-	generatedFile.writeLine("	type.addRequiredMethods<" + info.name + ">(); \t\\");
-
 	//Sort methods so that it doesn't have to be done in the target program
 	sortMethods(info.methods, nonStaticMethods, staticMethods);
 
@@ -125,7 +126,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + method->name + "\", " +
 								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
-								", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
+								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
 								", std::shared_ptr<" + functionType + ">(new " + std::move(functionType) + "(& " + info.name + "::" + method->name + ")));\t\\");
 	}
 
@@ -138,10 +139,13 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 		generatedFile.writeLine("	type.methods.emplace_back(\"" + method->name + "\", " +
 								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
-								", static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
+								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
 								", &type, std::shared_ptr<" + memberFunctionType + ">(new " + std::move(memberFunctionType) + "(& " + info.name + "::" + method->name + ")));\t\\");
 	}
 	
+	//Add required methods (instantiate....)	exnamespace::ExampleClass*()
+	generatedFile.writeLine("	type.__RFKaddRequiredMethods<" + info.name + ">(\"" + info.name + "*()\"); \t\\");
+
 	generatedFile.writeLine("");
 
 	return macroName;
@@ -159,7 +163,7 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 
 		for (kodgen::StructClassInfo::ParentInfo parent : info.parents)
 		{
-			generatedFile.writeLine("	type.addToParentsIfPossible<" + parent.type.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
+			generatedFile.writeLine("	type.__RFKaddToParentsIfPossible<" + parent.type.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
 		}
 
 		generatedFile.writeLine("");
@@ -190,4 +194,21 @@ void GeneratedCodeTemplate::sortMethods(std::vector<kodgen::MethodInfo> const& a
 
 	std::sort(out_methods.begin(), out_methods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
 	std::sort(out_staticMethods.begin(), out_staticMethods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
+}
+
+std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+{
+	std::string macroName = _internalMacroPrefix + info.name + "_DefaultInstantiateMacro";
+
+	generatedFile.writeMacro(std::string(macroName),
+								"template <typename T>",
+								"static T* __RFKinstantiate() noexcept",
+								"{",
+								"	if constexpr (std::is_default_constructible<T>::value)",
+								"		return new T();",
+								"	else",
+								"		return nullptr;",
+								"}");
+
+	return macroName;
 }

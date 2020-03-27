@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
 #include <vector>
+#include <algorithm>
 
 #include "Misc/FundamentalTypes.h"
 #include "TypeInfo/Field.h"
@@ -91,53 +91,20 @@ namespace refureku
 			*/
 			bool inheritsFrom(Type const& otherType)																const	noexcept;
 
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType* makeInstance(ArgTypes&&... args)															const	noexcept;
+
 			/**
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
-			void addToParentsIfPossible(EAccessSpecifier inheritanceAccess)													noexcept;
+			void __RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess)											noexcept;
 
 			template <typename T>
-			void addRequiredMethods()																						noexcept
-			{
-				//Instantiate method, make sure it's static
-				if constexpr (generated::implements___RFKinstantiate<T, T*()>::value)
-				{
-					if constexpr (!std::is_member_function_pointer<decltype(&T::__RFKinstantiate)>::value)
-					{
-						//std::cout << "Added default instantiate()" << std::endl;
-						//TODO rework method container as a vector
-						//TODO emplace &T::__RFKinstantiate
-					}
-				}
-				else
-				{
-					//std::cout << "Failed to add default instantiate()" << std::endl;
-				}
-			}
+			void __RFKaddRequiredMethods(std::string&& instantiatePrototype)												noexcept;
 
-			/*
-			TODO:
-			template <typename T>
-			void addInstantiationMethod() noexcept
-			{
-
-			}
-			*/
-
-			/**  */
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType* makeInstance(ArgTypes&&... args) const noexcept
-			{
-				//TODO: replace by complicated name
-				//Get right instantiate according to ReturnType & ArgTypes
-				StaticMethod const* instantiator = getStaticMethod("instantiate");
-
-				if (instantiator != nullptr)
-					return instantiator->invoke<ReturnType*>(std::forward<ArgTypes>(args)...);
-				else
-					return nullptr;
-			}
+			void __RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, refureku::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept;
 
 			Type& operator=(Type const&)	= default;
 			Type& operator=(Type&&)			= default;
