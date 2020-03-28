@@ -31,10 +31,10 @@ namespace refureku
 			*/
 			std::vector<StaticMethod>	staticMethods;
 
-			Struct(std::string&& newName, uint64 newId, ECategory newCategory)	noexcept;
-			Struct(Struct const&)												= delete;
-			Struct(Struct&&)													= default;
-			~Struct()															= default;
+			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
+			Struct(Struct const&)																		= delete;
+			Struct(Struct&&)																			= default;
+			~Struct()																					= default;
 
 			/**
 			*	

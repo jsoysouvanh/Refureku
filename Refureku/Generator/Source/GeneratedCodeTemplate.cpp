@@ -84,8 +84,9 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 								"	{",
 								"		static bool				initialized = false;",
 								"		static " + returnedType + " type(\"" + info.name + "\", "
-																		+ std::to_string(_stringHasher(info.name)) + "u, "
-																		+ "static_cast<refureku::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "));",
+																		+ std::to_string(_stringHasher(info.id)) + "u, "
+																		+ "static_cast<refureku::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
+																		+ "sizeof(" + info.name + "));",
 								"	",
 								"		if (!initialized)",
 								"		{",
@@ -124,14 +125,18 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	//Reserve only the memory we need
 	generatedFile.writeLine("	type.staticMethods.reserve(" + std::to_string(staticMethods.size()) + ");\t\\");
 	
+	std::string functionType;
+	std::string methodName;
+
 	for (kodgen::MethodInfo const* method : staticMethods)
 	{
-		std::string functionType = "refureku::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">";
+		functionType = "refureku::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">";
+		methodName = method->getName();
 
-		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + method->name + "\", " +
-								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
+		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + methodName + "\", " +
+								std::to_string(_stringHasher(method->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", std::shared_ptr<" + functionType + ">(new " + std::move(functionType) + "(& " + info.name + "::" + method->name + ")));\t\\");
+								", std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
 	}
 
 	//Reserve only the memory we need
@@ -139,12 +144,13 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 	for (kodgen::MethodInfo const* method : nonStaticMethods)
 	{
-		std::string memberFunctionType = "refureku::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">";
+		functionType = "refureku::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">";
+		methodName = method->getName();
 
-		generatedFile.writeLine("	type.methods.emplace_back(\"" + method->name + "\", " +
-								std::to_string(_stringHasher(info.name + method->name + method->getPrototype(true, true))) +
+		generatedFile.writeLine("	type.methods.emplace_back(\"" + methodName + "\", " +
+								std::to_string(_stringHasher(method->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", &type, std::shared_ptr<" + memberFunctionType + ">(new " + std::move(memberFunctionType) + "(& " + info.name + "::" + method->name + ")));\t\\");
+								", &type, std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
 	}
 	
 	//Add required methods (instantiate....)

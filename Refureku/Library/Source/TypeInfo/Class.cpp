@@ -2,7 +2,7 @@
 
 using namespace refureku;
 
-Class::Class(std::string&& newName, uint64 newId, ECategory newCategory) noexcept:
-	Struct(std::forward<std::string>(newName), std::forward<uint64>(newId), std::forward<ECategory>(newCategory))
+Class::Class(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
+	Struct(std::forward<std::string>(newName), newId, newCategory, newMemorySize)
 {
 }

@@ -71,7 +71,8 @@ CXChildVisitResult ClassParser::setAsCurrentEntityIfValid(CXCursor const& classA
 {
 	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(classAnnotationCursor, parsingInfo))
 	{
-		parsingInfo.currentStructOrClass.emplace(StructClassInfo(Helpers::getString(clang_getCursorDisplayName(getCurrentCursor())), std::move(*propertyGroup), std::move(_structOrClass)));
+		parsingInfo.currentStructOrClass.emplace(StructClassInfo(getCurrentCursor(), std::move(*propertyGroup), std::move(_structOrClass)));
+		initClassInfos(parsingInfo.currentStructOrClass.value());
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
@@ -89,6 +90,17 @@ CXChildVisitResult ClassParser::setAsCurrentEntityIfValid(CXCursor const& classA
 			return parsingInfo.parsingSettings.shouldAbortParsingOnFirstError ? CXChildVisitResult::CXChildVisit_Break : CXChildVisitResult::CXChildVisit_Continue;
 		}
 	}
+}
+
+void ClassParser::initClassInfos(StructClassInfo& toInit) const noexcept
+{
+	CXType		classType	= clang_getCursorType(getCurrentCursor());
+	std::string fullName	= Helpers::getString(clang_getTypeSpelling(classType));
+
+	size_t namespacePos = fullName.find_last_of("::");
+
+	if (namespacePos != std::string::npos)
+		toInit.nameSpace = std::string(fullName.cbegin(), fullName.cbegin() + namespacePos - 1);
 }
 
 opt::optional<PropertyGroup> ClassParser::isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo) noexcept

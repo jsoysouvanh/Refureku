@@ -2,7 +2,7 @@
 
 using namespace kodgen;
 
-EnumValueInfo::EnumValueInfo(std::string&& entityName, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(std::forward<std::string>(entityName), std::forward<PropertyGroup>(propertyGroup), EType::EnumValue)
+EnumValueInfo::EnumValueInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EType::EnumValue)
 {
 }

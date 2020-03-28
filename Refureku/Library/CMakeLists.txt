@@ -6,6 +6,7 @@ project(RefurekuLibrary)
 set(RefurekuLibraryTarget Refureku_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
 add_library(${RefurekuLibraryTarget}
 				STATIC
+					Source/TypeInfo/Entity.cpp
 					Source/TypeInfo/Archetype.cpp
 					Source/TypeInfo/Struct.cpp
 					Source/TypeInfo/Class.cpp

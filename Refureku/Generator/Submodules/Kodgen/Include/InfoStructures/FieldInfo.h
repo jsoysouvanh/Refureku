@@ -18,10 +18,10 @@ namespace kodgen
 
 			TypeInfo			type;
 			EAccessSpecifier	accessSpecifier;
-
+			int64				memoryOffset;
 
 			FieldInfo()															= default;
-			FieldInfo(std::string&& entityName, PropertyGroup&& propertyGroup)	noexcept;
+			FieldInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup)	noexcept;
 			FieldInfo(FieldInfo const&)											= default;
 			FieldInfo(FieldInfo&&)												= default;
 			~FieldInfo()														= default;

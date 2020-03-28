@@ -23,14 +23,25 @@ CXChildVisitResult FieldParser::setAsCurrentEntityIfValid(CXCursor const& fieldA
 	{
 		if (parsingInfo.currentStructOrClass.has_value())
 		{
-			FieldInfo& field = parsingInfo.currentStructOrClass->fields.emplace_back(FieldInfo(Helpers::getString(clang_getCursorDisplayName(getCurrentCursor())), std::move(*propertyGroup)));
+			FieldInfo& field = parsingInfo.currentStructOrClass->fields.emplace_back(FieldInfo(getCurrentCursor(), std::move(*propertyGroup)));
 			
 			field.accessSpecifier = parsingInfo.accessSpecifier;
 			field.type = TypeInfo(clang_getCursorType(getCurrentCursor()));
 			field.qualifiers.isStatic = (clang_getCursorKind(getCurrentCursor()) == CXCursorKind::CXCursor_VarDecl);
 
 			if (!field.qualifiers.isStatic)
+			{
 				field.qualifiers.isMutable = clang_CXXField_isMutable(getCurrentCursor());
+
+				field.memoryOffset = clang_Cursor_getOffsetOfField(getCurrentCursor());
+
+				// assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_Invalid);	<- Assert here on travis for some reasons...
+				assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_Incomplete);
+				assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_Dependent);
+				assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_InvalidFieldName);
+
+				field.memoryOffset /= 8;	//From bits to bytes
+			}
 
 			assert(!(field.type.qualifiers.isConst && field.qualifiers.isStatic));	//Field can't be const and static
 

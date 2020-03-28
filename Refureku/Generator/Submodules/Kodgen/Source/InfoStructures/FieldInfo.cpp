@@ -2,9 +2,11 @@
 
 using namespace kodgen;
 
-FieldInfo::FieldInfo(std::string&& entityName, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(std::forward<std::string>(entityName), std::forward<PropertyGroup>(propertyGroup), EType::Field),
-	qualifiers{false, false}
+FieldInfo::FieldInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EType::Field),
+	qualifiers{false, false},
+	accessSpecifier{EAccessSpecifier::Invalid},
+	memoryOffset{0}
 {
 }
 

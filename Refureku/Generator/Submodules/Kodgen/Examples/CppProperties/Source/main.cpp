@@ -5,8 +5,8 @@
 
 int main()
 {
-	SomeNamespace::SomeClass					someClass;
-	SomeNamespace::SomeClass::SomeNestedClass	someNestedClass;
+	SomeNamespace::np1::SomeClass					someClass;
+	SomeNamespace::np1::SomeClass::SomeNestedClass	someNestedClass;
 
 	std::cout << someClass.get_someChar()				<< std::endl;
 	std::cout << *someClass.get_someFloat()				<< std::endl;

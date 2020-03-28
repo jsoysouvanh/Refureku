@@ -6,33 +6,36 @@
 
 namespace SomeNamespace
 {
-	class KGClass() SomeClass
+	namespace np1
 	{
-		public:
-			class SomeNestedClass{};
+		class KGClass() SomeClass
+		{
+			public:
+				class SomeNestedClass{};
 
-		private:
-			KGField(Get[explicit], Set[])
-			int													_someInt				= 2;
+			private:
+				KGField(Get[explicit], Set[])
+				int					_someInt				= 2;
 
-			KGField(Get[const, *], Set[])
-			float												_someFloat				= 3.14f;
+				KGField(Get[const, *], Set[])
+				float				_someFloat				= 3.14f;
 
-			KGField(Get[])
-			char const											_someChar				= '*';
+				KGField(Get[])
+				char const			_someChar				= '*';
 
-			KGField(Get[const, &], Set[])
-			unsigned long long									_someUnsignedLongLong	= 42;
+				KGField(Get[const, &], Set[])
+				unsigned long long	_someUnsignedLongLong	= 42;
 
-			KGField(Get[], Set[])
-			SomeNestedClass*									_someNestedClass		= nullptr;
+				KGField(Get[], Set[])
+				SomeNestedClass*	_someNestedClass		= nullptr;
 
-			KGField(Get[const, &], Set[])
-			std::string											_someString				= "This is a test";
-				
-		public:
-			SomeClass() = default;
+				KGField(Get[const, &], Set[])
+				std::string			_someString				= "This is a test";
 
-		SomeClass_GENERATED
-	};
+			public:
+				SomeClass() = default;
+
+			SomeClass_GENERATED
+		};
+	}
 }

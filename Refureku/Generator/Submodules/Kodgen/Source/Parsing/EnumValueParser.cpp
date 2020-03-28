@@ -35,7 +35,7 @@ CXChildVisitResult EnumValueParser::parse(CXCursor const& currentCursor, Parsing
 
 void EnumValueParser::addToCurrentEnumValue(CXCursor enumValueCursor, PropertyGroup&& pg, ParsingInfo& parsingInfo) noexcept
 {
-	EnumValueInfo& enumValueInfo = parsingInfo.currentEnum->enumValues.emplace_back(EnumValueInfo(Helpers::getString(clang_getCursorSpelling(enumValueCursor)), std::forward<PropertyGroup>(pg)));
+	EnumValueInfo& enumValueInfo = parsingInfo.currentEnum->enumValues.emplace_back(EnumValueInfo(enumValueCursor, std::forward<PropertyGroup>(pg)));
 
 	enumValueInfo.defaultValue = clang_getEnumConstantDeclValue(enumValueCursor);
 }

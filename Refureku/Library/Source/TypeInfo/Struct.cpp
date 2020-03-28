@@ -2,8 +2,8 @@
 
 using namespace refureku;
 
-Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory) noexcept:
-	Archetype(std::forward<std::string>(newName), std::forward<uint64>(newId), std::forward<ECategory>(newCategory))
+Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
+	Archetype(std::forward<std::string>(newName), newId, newCategory, newMemorySize)
 {
 }
 

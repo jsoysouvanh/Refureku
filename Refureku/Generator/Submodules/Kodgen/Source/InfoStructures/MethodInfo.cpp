@@ -5,10 +5,16 @@
 
 using namespace kodgen;
 
-MethodInfo::MethodInfo(std::string&& entityName, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(entityName.substr(0, entityName.find_first_of('(')), std::forward<PropertyGroup>(propertyGroup), EType::Method),
+MethodInfo::MethodInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EType::Method),
 	qualifiers{false, false, false, false, false, false, false, false}
 {
+}
+
+std::string MethodInfo::getName() const noexcept
+{
+	//Remove arguments (...)
+	return name.substr(0, name.find_first_of('('));
 }
 
 std::string MethodInfo::getPrototype(bool removeQualifiers, bool removeSpaces) const noexcept

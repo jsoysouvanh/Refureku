@@ -1,10 +1,13 @@
 #include "InfoStructures/EntityInfo.h"
 
+#include "Misc/Helpers.h"
+
 using namespace kodgen;
 
-EntityInfo::EntityInfo(std::string&& entityName, PropertyGroup&& propertyGroup, EType&& entityType) noexcept:
+EntityInfo::EntityInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EType&& entityType) noexcept:
 	entityType{std::forward<EType>(entityType)},
-	name{std::forward<std::string>(entityName)}, 
+	name{Helpers::getString(clang_getCursorDisplayName(cursor))},
+	id{Helpers::getString(clang_getCursorUSR(cursor))},
 	properties{std::forward<PropertyGroup>(propertyGroup)}
 {
 }

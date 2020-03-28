@@ -28,16 +28,16 @@ namespace kodgen
 				bool isFinal		: 1;
 			}								qualifiers;
 
+			std::string						nameSpace;
 			std::vector<ParentInfo>			parents;
 			std::vector<FieldInfo>			fields;
 			std::vector<MethodInfo>			methods;
 
-
-			StructClassInfo()																				noexcept;
-			StructClassInfo(std::string&& entityName, PropertyGroup&& propertyGroup, EType&& entityType)	noexcept;
-			StructClassInfo(StructClassInfo const&)															= default;
-			StructClassInfo(StructClassInfo&&)																= default;
-			~StructClassInfo()																				= default;
+			StructClassInfo()																			noexcept;
+			StructClassInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EType&& entityType)	noexcept;
+			StructClassInfo(StructClassInfo const&)														= default;
+			StructClassInfo(StructClassInfo&&)															= default;
+			~StructClassInfo()																			= default;
 	};
 
 	std::ostream& operator<<(std::ostream& out_stream, kodgen::StructClassInfo const&) noexcept;

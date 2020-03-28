@@ -49,7 +49,7 @@ CXChildVisitResult MethodParser::setAsCurrentEntityIfValid(CXCursor const& metho
 		if (parsingInfo.currentStructOrClass.has_value())
 		{
 
-			MethodInfo& methodInfo = parsingInfo.currentStructOrClass->methods.emplace_back(MethodInfo(Helpers::getString(clang_getCursorDisplayName(getCurrentCursor())), std::move(*propertyGroup)));
+			MethodInfo& methodInfo = parsingInfo.currentStructOrClass->methods.emplace_back(MethodInfo(getCurrentCursor(), std::move(*propertyGroup)));
 			setupMethod(getCurrentCursor(), methodInfo);
 			methodInfo.accessSpecifier = parsingInfo.accessSpecifier;
 

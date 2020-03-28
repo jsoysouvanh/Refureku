@@ -8,8 +8,8 @@ StructClassInfo::StructClassInfo() noexcept:
 {
 }
 
-StructClassInfo::StructClassInfo(std::string&& entityName, PropertyGroup&& propertyGroup, EType&& entityType) noexcept:
-	EntityInfo(std::forward<std::string>(entityName), std::forward<PropertyGroup>(propertyGroup), std::forward<EType>(entityType)),
+StructClassInfo::StructClassInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EType&& entityType) noexcept:
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), std::forward<EType>(entityType)),
 	qualifiers{ false }
 {
 }

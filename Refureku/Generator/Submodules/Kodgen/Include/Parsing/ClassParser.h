@@ -14,10 +14,12 @@ namespace kodgen
 	class ClassParser final : public EntityParser
 	{
 		private:
-			EntityInfo::EType		_structOrClass			= EntityInfo::EType::Count;
+			EntityInfo::EType		_structOrClass	= EntityInfo::EType::Count;
 
 			FieldParser				_fieldParser;
 			MethodParser			_methodParser;
+
+			void									initClassInfos(StructClassInfo& toInit)														const	noexcept;
 
 		protected:
 			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo)								noexcept override final;

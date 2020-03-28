@@ -14,10 +14,10 @@ namespace kodgen
 			std::string					canonicalUnderlyingType	= "";
 			std::vector<EnumValueInfo>	enumValues;
 
-			EnumInfo()															= default;
-			EnumInfo(std::string&& entityName, PropertyGroup&& propertyGroup)	noexcept;
-			EnumInfo(EnumInfo const&)											= default;
-			EnumInfo(EnumInfo&&)												= default;
-			~EnumInfo()															= default;
+			EnumInfo()														= default;
+			EnumInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup)	noexcept;
+			EnumInfo(EnumInfo const&)										= default;
+			EnumInfo(EnumInfo&&)											= default;
+			~EnumInfo()														= default;
 	};
 }

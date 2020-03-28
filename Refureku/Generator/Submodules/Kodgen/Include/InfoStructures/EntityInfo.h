@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include <clang-c/Index.h>
+
 #include "Misc/FundamentalTypes.h"
 #include "Properties/PropertyGroup.h"
 
@@ -32,10 +34,11 @@ namespace kodgen
 
 			EType			entityType	= EType::Count;
 			std::string		name		= "";
+			std::string		id			= "";
 			PropertyGroup	properties;
 
 			EntityInfo()																			= default;
-			EntityInfo(std::string&& entityName, PropertyGroup&& propertyGroup, EType&& entityType)	noexcept;
+			EntityInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EType&& entityType)	noexcept;
 			EntityInfo(EntityInfo const&)															= default;
 			EntityInfo(EntityInfo&&)																= default;
 			~EntityInfo()																			= default;
