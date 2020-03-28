@@ -21,6 +21,10 @@ namespace refureku
 			void			generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo)			const	noexcept;
 			void			generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo)					const	noexcept;
 
+			void			sortFields(std::vector<kodgen::FieldInfo> const&	allFields,
+									   std::vector<kodgen::FieldInfo const*>&	out_fields,
+									   std::vector<kodgen::FieldInfo const*>&	out_staticFields)										const	noexcept;
+
 			void			sortMethods(std::vector<kodgen::MethodInfo> const&	allMethods,
 										std::vector<kodgen::MethodInfo const*>& out_methods,
 										std::vector<kodgen::MethodInfo const*>& out_staticMethods)										const	noexcept;
@@ -29,6 +33,7 @@ namespace refureku
 			std::string		generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::string		generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)	const	noexcept;
 			std::string		generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
+			std::string		generateFieldsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::string		generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 
 		protected:

@@ -10,10 +10,12 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetype.cpp
 					Source/TypeInfo/Struct.cpp
 					Source/TypeInfo/Class.cpp
-					Source/TypeInfo/Field.cpp
-					Source/TypeInfo/MethodBase.cpp
-					Source/TypeInfo/Method.cpp
-					Source/TypeInfo/StaticMethod.cpp
+					Source/TypeInfo/Fields/FieldBase.cpp
+					Source/TypeInfo/Fields/Field.cpp
+					Source/TypeInfo/Fields/StaticField.cpp
+					Source/TypeInfo/Methods/MethodBase.cpp
+					Source/TypeInfo/Methods/Method.cpp
+					Source/TypeInfo/Methods/StaticMethod.cpp
 			)
 
 # Setup language requirements

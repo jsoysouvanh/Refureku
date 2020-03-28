@@ -23,10 +23,13 @@ namespace exnamespace
 	{
 		public:
 			RFKField()
-			int				someInt		= 42;
+			static inline int	someStaticInt = 69;
 
 			RFKField()
-			float			someFloat	= 42.42f;
+			int				someInt			= 42;
+
+			RFKField()
+			float			someFloat		= 42.42f;
 
 			RFKMethod()
 			int				method4(void* ptr);
@@ -72,32 +75,24 @@ namespace exnamespace
 
 		//GENERATED
 
-		//static refureku::Type const& staticGetType() noexcept	
+		//static refureku::Class const& staticGetType() noexcept	
 		//{	
 		//	static bool				initialized = false;	
-		//	static refureku::Type	type("ExampleClass", 6613751926088865067, static_cast<refureku::Type::ECategory>(0));	
+		//	static refureku::Class	type("ExampleClass", 6613751926088865067, static_cast<refureku::Archetype::ECategory>(0), sizeof(ExampleClass));	
 		//	
 		//	if (!initialized)	
 		//	{
-		//		//std::shared_ptr<refureku::MemberFunction<ExampleClass, int()>>(new refureku::MemberFunction<ExampleClass, int()>(&ExampleClass::method3));
-		//		//std::shared_ptr<refureku::MemberFunction<ExampleClass, float(int)>>(new refureku::MemberFunction<ExampleClass, float(int)>(&ExampleClass::method3));
+		//		//type.fields.emplace_back("aField", 42u, offsetof(ExampleClass, someInt), refureku::EAccessSpecifier::Private);
 
-		//		//std::make_shared<refureku::MemberFunction<ExampleClass, int()>>(&ExampleClass::method3);
-		//		//std::make_shared<refureku::MemberFunction<ExampleClass, float(int)>>(&ExampleClass::method3);
-
-		//		//type.
-		//		//type.addInstantiationMethod<ExampleClass>("allo", 13, refureku::EAccessSpecifier::Private, &ExampleClass::__RFKinstantiate);
-		//		type.addInstantiationMethod<ExampleClass>("allo", 13, refureku::EAccessSpecifier::Private, &ExampleClass::__RFKinstantiate);
-
-		//		initialized = true;	
+		//		initialized = true;
 		//	}	
 		//		
 		//	return type;	
 		//}	
 		//	
-		//refureku::Type const& getType() const noexcept	
+		//refureku::Class const& getType() const noexcept	
 		//{	
-		//	return ExampleClass::staticGetType();	
+		//	return ExampleClass::staticGetType();
 		//}
 
 		RFKExampleClass_GENERATED

@@ -329,6 +329,8 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 
 	if (fs::is_directory(outputDirectory))
 	{
+		std::cout << "Using CINDEX version: " << CINDEX_VERSION_STRING << std::endl;
+
 		ParsingSettings& parsingSettings = parser.getParsingSettings();
 
 		refreshPropertyRules(parsingSettings);

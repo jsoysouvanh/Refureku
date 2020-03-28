@@ -2,9 +2,9 @@
 template <typename T>
 void Struct::__RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess) noexcept
 {
-	if constexpr (refureku::generated::implements_staticGetType<T, refureku::Archetype const&()>::value)
+	if constexpr (refureku::generated::implements_staticGetArchetype<T, refureku::Struct const&()>::value)
 	{
-		directParents.emplace_back(refureku::Struct::Parent{ inheritanceAccess, T::staticGetType() });
+		directParents.emplace_back(refureku::Struct::Parent{ inheritanceAccess, T::staticGetArchetype() });
 	}
 }
 
@@ -13,6 +13,8 @@ void Struct::__RFKaddRequiredMethods(std::string&& instantiatePrototype) noexcep
 {
 	static std::hash<std::string> stringHasher;
 
+	//TODO: Don't add Default instantiate method, neither should it be generated for each reflected class
+	//Make the default implementation in base reflection class and keep a reference to all instantiation classes in a separated array
 	__RFKaddInstantiationMethod<T>(	"__RFKinstantiate",
 										stringHasher(name + "__RFKinstantiate" + instantiatePrototype),
 										refureku::EAccessSpecifier::Private,

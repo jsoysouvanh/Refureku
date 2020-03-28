@@ -2,8 +2,8 @@
 
 namespace refureku
 {
-	class Field
+	class ReflectedObject
 	{
-
+		//TODO
 	};
 }

@@ -7,6 +7,24 @@ Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint6
 {
 }
 
+Field const* Struct::getField(std::string const& fieldName) const noexcept
+{
+	//Look between [start, end]
+	auto first = std::lower_bound(fields.cbegin(), fields.cend(), Field(std::string(fieldName)),
+								  [](Field const& f1, Field const& f2){ return f1.name < f2.name; });
+
+	return (first != fields.cend() && first->name == fieldName) ? &*first : nullptr;
+}
+
+StaticField const* Struct::getStaticField(std::string const& fieldName) const noexcept
+{
+	//Look between [start, end]
+	auto first = std::lower_bound(staticFields.cbegin(), staticFields.cend(), StaticField(std::string(fieldName)),
+								  [](StaticField const& f1, StaticField const& f2){ return f1.name < f2.name; });
+
+	return (first != staticFields.cend() && first->name == fieldName) ? &*first : nullptr;
+}
+
 Method const* Struct::getMethod(std::string const& methodName) const noexcept
 {
 	//Look between [start, end]

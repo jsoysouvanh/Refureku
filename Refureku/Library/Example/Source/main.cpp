@@ -121,14 +121,36 @@ void staticMethods()
 	}
 }
 
+void nonStaticFields()
+{
+	ExampleClass			ec;
+	refureku::Class const&	type	= ExampleClass::staticGetArchetype();
+
+	std::cout << "Search field: " << "someInt" << std::endl;
+	refureku::Field const*	field	= type.getField("someInt");
+
+	if (field != nullptr)
+	{
+		std::cout << "Found address of " << field->name << " is " << field->getDataAddress(&ec) << std::endl;
+		std::cout << "Actual address is " << &ec.someInt << std::endl;
+	}
+}
+
+void staticFields()
+{
+	ExampleClass			ec;
+	refureku::Class const&	type	= ExampleClass::staticGetArchetype();
+
+	refureku::StaticField const* staticField = type.getStaticField("someStaticInt");
+	std::cout << "Static field: " << staticField->name << std::endl;
+}
+
 int main()
 {
 	//nonStaticMethods();
 	//staticMethods();
-
-	refureku::Class const& type = ExampleClass::staticGetArchetype();
-
-	ExampleClass* ex = type.makeInstance<ExampleClass>();
+	nonStaticFields();
+	//staticFields();
 
 	return EXIT_SUCCESS;
 }

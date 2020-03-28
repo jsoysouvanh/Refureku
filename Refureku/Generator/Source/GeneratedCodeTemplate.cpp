@@ -74,8 +74,9 @@ void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFil
 std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string getTypeMacroName					= _internalMacroPrefix + info.name + "_GetTypeMacro";
-	std::string generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
 	std::string generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
+	std::string generateFieldsMetadataMacroName		= generateFieldsMetadataMacro(generatedFile, info);
+	std::string generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
 
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "refureku::Struct" : "refureku::Class";
 	
@@ -91,6 +92,7 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 								"		if (!initialized)",
 								"		{",
 								"			" + std::move(generatedParentsMetadataMacroName),
+								"			" + std::move(generateFieldsMetadataMacroName),
 								"			" + std::move(generatedMethodsMetadataMacroName),
 								"",
 								"			initialized = true;",
@@ -161,6 +163,47 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	return macroName;
 }
 
+std::string GeneratedCodeTemplate::generateFieldsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+{
+	std::string macroName = _internalMacroPrefix + info.name + "_GenerateFieldsMetadata";
+
+	generatedFile.writeLine("#define " + macroName + "\t\\");
+
+	//Keep track of what we add so that we save some checks in the metadata
+	std::vector<kodgen::FieldInfo const*>	nonStaticFields;
+	std::vector<kodgen::FieldInfo const*>	staticFields;
+
+	//Sort methods so that it doesn't have to be done in the target program
+	sortFields(info.fields, nonStaticFields, staticFields);
+
+	//Fill the target type method vectors using sorted methods we just computed
+	//Reserve only the memory we need
+	generatedFile.writeLine("	type.staticFields.reserve(" + std::to_string(staticFields.size()) + ");\t\\");
+
+	for (kodgen::FieldInfo const* field : staticFields)
+	{
+		generatedFile.writeLine("	type.staticFields.emplace_back(\"" + field->name + "\", " +
+								std::to_string(_stringHasher(field->id)) +
+								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
+								"), &type, &type, &" + info.name + "::" + field->name + ");\t\\");
+	}
+
+	//Reserve only the memory we need
+	generatedFile.writeLine("	type.fields.reserve(" + std::to_string(nonStaticFields.size()) + ");\t\\");
+
+	for (kodgen::FieldInfo const* field : nonStaticFields)
+	{
+		generatedFile.writeLine("	type.fields.emplace_back(\"" + field->name + "\", " +
+								std::to_string(_stringHasher(field->id)) +
+								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
+								"), &type, &type, " + std::to_string(field->memoryOffset) + "u);\t\\");
+	}
+
+	generatedFile.writeLine("");
+
+	return macroName;
+}
+
 std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	if (!info.parents.empty())
@@ -183,6 +226,28 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 	
 	//No parents, don't bother generate a macro
 	return std::string();
+}
+
+void GeneratedCodeTemplate::sortFields(std::vector<kodgen::FieldInfo> const& allFields, std::vector<kodgen::FieldInfo const*>& out_fields, std::vector<kodgen::FieldInfo const*>& out_staticFields) const noexcept
+{
+	out_fields.clear();
+	out_staticFields.clear();
+
+	//Insert all elements first, then sort them
+	for (kodgen::FieldInfo const& field : allFields)
+	{
+		if (field.qualifiers.isStatic)
+		{
+			out_staticFields.emplace_back(&field);
+		}
+		else
+		{
+			out_fields.emplace_back(&field);
+		}
+	}
+
+	std::sort(out_fields.begin(), out_fields.end(), [](kodgen::FieldInfo const* f1, kodgen::FieldInfo const* f2) { return f1->name < f2->name; });
+	std::sort(out_staticFields.begin(), out_staticFields.end(), [](kodgen::FieldInfo const* f1, kodgen::FieldInfo const* f2) { return f1->name < f2->name; });
 }
 
 void GeneratedCodeTemplate::sortMethods(std::vector<kodgen::MethodInfo> const& allMethods, std::vector<kodgen::MethodInfo const*>& out_methods, std::vector<kodgen::MethodInfo const*>& out_staticMethods) const noexcept

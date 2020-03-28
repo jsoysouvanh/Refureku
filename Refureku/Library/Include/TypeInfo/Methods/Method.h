@@ -5,12 +5,12 @@
 #include "Config.h"
 
 #include "Misc/FundamentalTypes.h"
-#include "TypeInfo/MethodBase.h"
+#include "TypeInfo/Methods/MethodBase.h"
 #include "Utility/MemberFunction.h"
 
 namespace refureku
 {
-	class Archetype;	//Forward declaration
+	class Struct;	//Forward declaration
 
 	class Method : public MethodBase
 	{
@@ -25,13 +25,13 @@ namespace refureku
 
 		public:
 			/** Class declaring this method */
-		Archetype const* ownerType;
+			Struct const* ownerType;
 
 			Method()																= default;
 			Method(std::string&&				methodName,
 				   uint64						methodId		= 0u,
 				   EAccessSpecifier				accessSpecifier	= EAccessSpecifier::Undefined,
-				   Archetype const*				methodOwnerType	= nullptr,
+				   Struct const*				methodOwnerType	= nullptr,
 				   std::shared_ptr<ICallable>&&	internalMethod	= nullptr)			noexcept;
 			Method(Method const&)													= default;
 			Method(Method&&)														= default;
@@ -69,5 +69,5 @@ namespace refureku
 			Method& operator=(Method&&)			= default;
 	};
 
-	#include "TypeInfo/Method.inl"
+	#include "TypeInfo/Methods/Method.inl"
 }

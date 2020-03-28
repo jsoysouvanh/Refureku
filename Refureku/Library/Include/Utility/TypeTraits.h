@@ -12,14 +12,17 @@ struct implements_##MethodName<Class, Ret(Args...)>																								\
 {																																				\
 	private:																																	\
 		template<typename T>																													\
-		static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().MethodName(std::declval<Args>()...)), Ret>::type;	\
+		static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().MethodName(std::declval<Args>()...)), Ret>::value;	\
 																																				\
 		template<typename>																														\
 		static constexpr std::false_type check(...);																							\
 																																				\
 	public:																																		\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;																	\
-};
+};																																				\
+																																				\
+template <typename Class, typename Ret, typename... Args>																						\
+inline constexpr bool implements_##MethodName##_v = implements_##MethodName<Class, Ret(Args...)>::value;
 
 /**
 *	This macro generates a traits which allows to know at compile-time if a class has a public field named fieldName
@@ -30,11 +33,14 @@ struct hasField_##fieldName																									\
 {																															\
 	private:																												\
 		template <typename T>																								\
-		static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().fieldName), FieldType>::type;	\
+		static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().fieldName), FieldType>::value;	\
 																															\
 		template <typename>																									\
 		static constexpr std::false_type check(...);																		\
 																															\
 	public:																													\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;												\
-};
+};																															\
+																															\
+template <typename Class, typename FieldType>																				\
+inline constexpr bool hasField_##fieldName##_v = hasField_##fieldName_v<Class, FieldType>::value;

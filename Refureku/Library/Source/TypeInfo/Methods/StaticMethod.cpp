@@ -1,4 +1,4 @@
-#include "TypeInfo/StaticMethod.h"
+#include "TypeInfo/Methods/StaticMethod.h"
 
 #include <utility>	//std::forward
 

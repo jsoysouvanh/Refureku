@@ -1,6 +1,15 @@
 #pragma once
 
+#include <vector>
+#include <algorithm>
+
 #include "TypeInfo/Archetype.h"
+#include "TypeInfo/Fields/Field.h"
+#include "TypeInfo/Fields/StaticField.h"
+#include "TypeInfo/Methods/Method.h"
+#include "TypeInfo/Methods/StaticMethod.h"
+#include "TypeInfo/EAccessSpecifier.h"
+#include "TypeInfo/GeneratedTraits.h"
 
 namespace refureku
 {
@@ -13,28 +22,37 @@ namespace refureku
 				Struct const&		type;
 			};
 
-			/**
-			*	Direct parent types. This list includes ONLY reflected parents
-			*	TODO: Move to Struct
-			*/
+			/** Direct parent types. This list includes ONLY reflected parents */
 			std::vector<Parent>			directParents;
 
-			/**
-			*	All tagged methods contained in this type
-			*	TODO: Move to Struct
-			*/
+			/** All tagged fields contained in this struct */
+			std::vector<Field>			fields;
+
+			/** All tagged static fields contained in this struct */
+			std::vector<StaticField>	staticFields;
+
+			/** All tagged methods contained in this struct */
 			std::vector<Method>			methods;
 
-			/**
-			*	All tagged static methods contained in this type
-			*	TODO: Move to Struct
-			*/
+			/** All tagged static methods contained in this struct */
 			std::vector<StaticMethod>	staticMethods;
 
 			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
 			Struct(Struct const&)																		= delete;
 			Struct(Struct&&)																			= default;
 			~Struct()																					= default;
+
+			/**
+			*	Get the field named fieldName in this struct.
+			*	The method returns nullptr if no field named fieldName was found. 
+			*/
+			Field const*						getField(std::string const& fieldName)			const	noexcept;
+
+			/**
+			*	Get the static field named fieldName in this struct.
+			*	The method returns nullptr if no static field named fieldName was found. 
+			*/
+			StaticField const*					getStaticField(std::string const& fieldName)	const	noexcept;
 
 			/**
 			*	

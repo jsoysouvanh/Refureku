@@ -1,15 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <algorithm>
-#include <memory>
-
 #include "TypeInfo/Entity.h"
-#include "TypeInfo/Field.h"
-#include "TypeInfo/Method.h"
-#include "TypeInfo/StaticMethod.h"
-#include "TypeInfo/EAccessSpecifier.h"
-#include "TypeInfo/GeneratedTraits.h"
 
 namespace refureku
 {

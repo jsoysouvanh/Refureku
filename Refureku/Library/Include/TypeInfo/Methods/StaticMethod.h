@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TypeInfo/MethodBase.h"
+#include "TypeInfo/Methods/MethodBase.h"
 #include "Utility/NonMemberFunction.h"
 
 namespace refureku
@@ -54,5 +54,5 @@ namespace refureku
 			StaticMethod& operator=(StaticMethod&&)			= default;
 	};
 
-	#include "TypeInfo/StaticMethod.inl"
+	#include "TypeInfo/Methods/StaticMethod.inl"
 }
