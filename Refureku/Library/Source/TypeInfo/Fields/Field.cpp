@@ -1,5 +1,6 @@
 #include "TypeInfo/Fields/Field.h"
 
+#include <cstring>	//std::memcpy
 #include <utility>	//std::forward
 
 using namespace refureku;
@@ -13,4 +14,9 @@ Field::Field(std::string&& name, uint64 id, EAccessSpecifier access, Struct cons
 void* Field::getDataAddress(void* instance) const noexcept
 {
 	return reinterpret_cast<char*>(instance) + memoryOffset;
+}
+
+void Field::setData(void* instance, void const* data, uint64 dataSize) const noexcept
+{
+	std::memcpy(getDataAddress(instance), data, dataSize);
 }

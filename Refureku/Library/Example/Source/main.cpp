@@ -6,6 +6,8 @@
 #include "Utility/MemberFunction.h"
 #include "Utility/TypeTraits.h"
 
+#define EXECUTE(FunctionCall) std::cout << #FunctionCall << std::endl; FunctionCall;
+
 using namespace exnamespace;
 
 void nonStaticMethods()
@@ -123,26 +125,114 @@ void staticMethods()
 
 void nonStaticFields()
 {
-	ExampleClass			ec;
-	refureku::Class const&	type	= ExampleClass::staticGetArchetype();
+	EXECUTE(ExampleClass ec);
+	EXECUTE(refureku::Class const& type = ExampleClass::staticGetArchetype());
 
-	std::cout << "Search field: " << "someInt" << std::endl;
-	refureku::Field const*	field	= type.getField("someInt");
+	std::cout << "Instance address: " << &ec << std::endl;
+
+	EXECUTE(refureku::Field const* field = type.getField("someInt"));
 
 	if (field != nullptr)
 	{
-		std::cout << "Found address of " << field->name << " is " << field->getDataAddress(&ec) << std::endl;
+		std::cout << "Found address is  " << field->getDataAddress(&ec) << std::endl;
 		std::cout << "Actual address is " << &ec.someInt << std::endl;
+
+		EXECUTE(field->setData(&ec, 1));
+
+		std::cout << field->getData<int>(&ec) << std::endl;
+		std::cout << field->getData<int const&>(&ec) << std::endl;
+		std::cout << field->getData<int&&>(&ec) << std::endl;
+
+		EXECUTE(field->setData(&ec, 69))
+
+		std::cout << field->getData<int const&>(&ec) << std::endl;
 	}
+
+	EXECUTE(refureku::Field const* field2 = type.getField("somePtrToInt"));
+
+	if (field2 != nullptr)
+	{
+		std::cout << "Found address  is " << field2->getDataAddress(&ec) << std::endl;
+		std::cout << "Actual address is " << &ec.somePtrToInt << std::endl;
+
+		std::cout << field2->getData<int*>(&ec) << std::endl;
+		std::cout << field2->getData<int*&>(&ec) << std::endl;
+		std::cout << field2->getData<int*&&>(&ec) << std::endl;
+
+		EXECUTE(field2->setData(&ec, &ec.someInt))
+
+		std::cout << field2->getData<int*>(&ec) << " -> " << *field2->getData<int*>(&ec) << std::endl;
+	}
+
+	std::cout << std::endl << "Search field: " << "someParentClass" << std::endl;
+	refureku::Field const*	field3	= type.getField("someParentClass");
+
+	if (field3 != nullptr)
+	{
+		std::cout << "Found address is  " << field3->getDataAddress(&ec) << std::endl;
+		std::cout << "Actual address is " << &ec.someParentClass << std::endl;
+		
+		std::cout << "Original is: " << &ec.someParentClass << " -> " << ec.someParentClass << std::endl;
+
+		EXECUTE(ParentClass copy = field3->getData<ParentClass>(&ec));
+		std::cout << "Copy is:     " << &copy << " -> " << copy << std::endl;
+
+		EXECUTE(ParentClass& ref = field3->getData<ParentClass&>(&ec));
+		std::cout << "Reference is: " << &ref << " -> " << ref << std::endl;
+
+		EXECUTE(ParentClass move = field3->getData<ParentClass&&>(&ec));
+		std::cout << "Move is:     " << &move << " -> " << move << std::endl;
+	}
+
+	EXECUTE(refureku::Field const* field4 = type.getField("inexistantField"));
+
+	std::cout << "Found field address: " << field4 << std::endl;
 }
 
 void staticFields()
 {
-	ExampleClass			ec;
-	refureku::Class const&	type	= ExampleClass::staticGetArchetype();
+	EXECUTE(refureku::Class const&	type = ExampleClass::staticGetArchetype());
 
-	refureku::StaticField const* staticField = type.getStaticField("someStaticInt");
-	std::cout << "Static field: " << staticField->name << std::endl;
+	EXECUTE(refureku::StaticField const*	staticField	= type.getStaticField("someStaticInt"));
+
+	if (staticField != nullptr)
+	{
+		std::cout << "Found address is  " << staticField->getDataAddress() << std::endl;
+		std::cout << "Actual address is " << &ExampleClass::someStaticInt << std::endl;
+
+		EXECUTE(staticField->setData(1));
+
+		std::cout << staticField->getData<int>() << std::endl;
+		std::cout << staticField->getData<int const&>() << std::endl;
+		std::cout << staticField->getData<int&&>() << std::endl;
+
+		EXECUTE(staticField->setData(69))
+
+		std::cout << staticField->getData<int const&>() << std::endl;
+	}
+
+	EXECUTE(refureku::StaticField const*	staticField2	= type.getStaticField("someStaticParentClass"));
+
+	if (staticField2 != nullptr)
+	{
+		std::cout << "Found address is  " << staticField2->getDataAddress() << std::endl;
+		std::cout << "Actual address is " << &ExampleClass::someStaticParentClass << std::endl;
+
+		std::cout << "Original is: " << &ExampleClass::someStaticParentClass << " -> " << ExampleClass::someStaticParentClass << std::endl;
+		
+		EXECUTE(ParentClass copy = staticField2->getData<ParentClass>())
+		std::cout << "Copy is:     " << &copy << " -> " << copy << std::endl;
+
+		EXECUTE(ParentClass& ref = staticField2->getData<ParentClass&>())
+		std::cout << "Reference is: " << &ref << " -> " << ref << std::endl;
+
+		EXECUTE(ParentClass move = staticField2->getData<ParentClass&&>())
+		std::cout << "Move is:     " << &move << " -> " << move << std::endl;
+	}
+
+	EXECUTE(refureku::StaticField const* staticField3 = type.getStaticField("inexistantStaticField"))
+
+	std::cout << "Found field address: " << staticField3 << std::endl;
 }
 
 int main()
@@ -150,7 +240,7 @@ int main()
 	//nonStaticMethods();
 	//staticMethods();
 	nonStaticFields();
-	//staticFields();
+	staticFields();
 
 	return EXIT_SUCCESS;
 }

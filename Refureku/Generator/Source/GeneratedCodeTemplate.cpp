@@ -193,10 +193,15 @@ std::string GeneratedCodeTemplate::generateFieldsMetadataMacro(kodgen::Generated
 
 	for (kodgen::FieldInfo const* field : nonStaticFields)
 	{
+		/*generatedFile.writeLine("	type.fields.emplace_back(\"" + field->name + "\", " +
+								std::to_string(_stringHasher(field->id)) +
+								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
+								"), &type, &type, " + std::to_string(field->memoryOffset) + "u);\t\\");*/
+
 		generatedFile.writeLine("	type.fields.emplace_back(\"" + field->name + "\", " +
 								std::to_string(_stringHasher(field->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
-								"), &type, &type, " + std::to_string(field->memoryOffset) + "u);\t\\");
+								"), &type, &type, offsetof(" + info.name + ", " + field->name + ")" + ");\t\\");
 	}
 
 	generatedFile.writeLine("");

@@ -17,7 +17,17 @@ namespace exnamespace
 	class RFKClass() ParentClass : protected ParentParentClass
 	{
 		RFKParentClass_GENERATED
+
+		public:
+			uint64_t someUint = 666;
+
+			ParentClass()					= default;
+			ParentClass(ParentClass const&)	= default;
+			ParentClass(ParentClass&& o)	= default;
+
 	};
+	
+	std::ostream& operator<<(std::ostream& stream, ParentClass const& object) noexcept;
 
 	class RFKClass() ExampleClass : public ParentClass
 	{
@@ -26,7 +36,16 @@ namespace exnamespace
 			static inline int	someStaticInt = 69;
 
 			RFKField()
+			static inline ParentClass	someStaticParentClass;
+
+			RFKField()
 			int				someInt			= 42;
+
+			RFKField()
+			ParentClass		someParentClass;
+
+			RFKField()
+			int*			somePtrToInt	= nullptr;
 
 			RFKField()
 			float			someFloat		= 42.42f;
