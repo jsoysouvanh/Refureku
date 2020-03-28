@@ -138,7 +138,8 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + methodName + "\", " +
 								std::to_string(_stringHasher(method->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
+								", std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), " + 
+								std::to_string(method->qualifiers.isInline) + ");\t\\");
 	}
 
 	//Reserve only the memory we need
@@ -152,7 +153,13 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 		generatedFile.writeLine("	type.methods.emplace_back(\"" + methodName + "\", " +
 								std::to_string(_stringHasher(method->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", &type, std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
+								", std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), " +
+								std::to_string(method->qualifiers.isInline) + ", &type, " +
+								std::to_string(method->qualifiers.isVirtual) + ", " +
+								std::to_string(method->qualifiers.isPureVirtual) + ", " + 
+								std::to_string(method->qualifiers.isOverride) + ", " +
+								std::to_string(method->qualifiers.isFinal) + ", " + 
+								std::to_string(method->qualifiers.isConst) + ");\t\\");
 	}
 	
 	//Add required methods (instantiate....)
@@ -201,7 +208,7 @@ std::string GeneratedCodeTemplate::generateFieldsMetadataMacro(kodgen::Generated
 		generatedFile.writeLine("	type.fields.emplace_back(\"" + field->name + "\", " +
 								std::to_string(_stringHasher(field->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
-								"), &type, &type, offsetof(" + info.name + ", " + field->name + ")" + ");\t\\");
+								"), &type, &type, offsetof(" + info.name + ", " + field->name + ")" + ", " + std::to_string(field->qualifiers.isMutable) + ");\t\\");
 	}
 
 	generatedFile.writeLine("");

@@ -10,18 +10,20 @@ namespace refureku
 {
 	class Field : public FieldBase
 	{
-		protected:
+		public:
 			/** Memory offset in bytes of this field in its owner class */
 			uint32	memoryOffset	= 0u;
 
-		public:
+			bool	isMutable		= false;
+
 			Field()																	= delete;
 			Field(std::string&&		name,
 				  uint64			id				= 0u,
 				  EAccessSpecifier	access			= EAccessSpecifier::Undefined,
 				  Struct const*		ownerStruct		= nullptr,
 				  Struct const*		introducedBy	= nullptr,
-				  uint32			memoryOffset	= 0u)							noexcept;
+				  uint32			memoryOffset	= 0u,
+				  bool				isMutable		= false)						noexcept;
 			Field(Field const&)														= default;
 			Field(Field&&)															= default;
 			~Field()																= default;

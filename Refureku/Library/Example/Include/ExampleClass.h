@@ -18,6 +18,8 @@ namespace exnamespace
 	{
 		RFKParentClass_GENERATED
 
+
+
 		public:
 			uint64_t someUint = 666;
 
@@ -39,7 +41,7 @@ namespace exnamespace
 			static inline ParentClass	someStaticParentClass;
 
 			RFKField()
-			int				someInt			= 42;
+			mutable int		someInt			= 42;
 
 			RFKField()
 			ParentClass		someParentClass;
@@ -65,13 +67,6 @@ namespace exnamespace
 
 			RFKMethod()
 			static	int		staticMethod3(char const* param);
-
-			RFKMethod()
-				static void	_hi() noexcept
-			{};
-
-			RFKMethod()
-			static void aaa() noexcept {};
 
 		private:
 			RFKMethod()

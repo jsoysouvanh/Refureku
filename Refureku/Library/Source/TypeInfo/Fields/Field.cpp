@@ -5,9 +5,10 @@
 
 using namespace refureku;
 
-Field::Field(std::string&& name, uint64 id, EAccessSpecifier access, Struct const* ownerStruct, Struct const* introducedBy, uint32 memoryOffset) noexcept:
+Field::Field(std::string&& name, uint64 id, EAccessSpecifier access, Struct const* ownerStruct, Struct const* introducedBy, uint32 memoryOffset, bool isMutable) noexcept:
 	FieldBase(std::forward<std::string>(name), id, access, ownerStruct, introducedBy),
-	memoryOffset{memoryOffset}
+	memoryOffset{memoryOffset},
+	isMutable{isMutable}
 {
 }
 

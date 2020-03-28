@@ -12,7 +12,8 @@ namespace refureku
 			StaticMethod(std::string&&					methodName,
 						 uint64							methodId		= 0u,
 						 EAccessSpecifier				accessSpecifier	= EAccessSpecifier::Undefined,
-						 std::shared_ptr<ICallable>&&	internalMethod	= nullptr)					noexcept;
+						 std::shared_ptr<ICallable>&&	internalMethod	= nullptr,
+						 bool							isInline		= false)					noexcept;
 			StaticMethod(StaticMethod const&)														= default;
 			StaticMethod(StaticMethod&&)															= default;
 			~StaticMethod()																			= default;

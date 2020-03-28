@@ -25,17 +25,38 @@ namespace refureku
 
 		public:
 			/** Class declaring this method */
-			Struct const* ownerType;
+			Struct const*	ownerType		= nullptr;
 
-			Method()																= default;
+			/** Is this method virtual */
+			bool			isVirtual		= false;
+			
+			/** Is this method virtual pure */
+			bool			isPureVirtual	= false;
+			
+			/** Is this an overriden version of a parent method */
+			bool			isOverride		= false;
+			
+			/** Is this method final */
+			bool			isFinal			= false;
+			
+			/** Is this method const */
+			bool			isConst			= false;
+
+			Method()																			= default;
 			Method(std::string&&				methodName,
 				   uint64						methodId		= 0u,
 				   EAccessSpecifier				accessSpecifier	= EAccessSpecifier::Undefined,
+				   std::shared_ptr<ICallable>&&	internalMethod	= nullptr,
+				   bool							isInline		= false,
 				   Struct const*				methodOwnerType	= nullptr,
-				   std::shared_ptr<ICallable>&&	internalMethod	= nullptr)			noexcept;
-			Method(Method const&)													= default;
-			Method(Method&&)														= default;
-			~Method()																= default;
+				   bool							isVirtual		= false,
+				   bool							isPureVirtual	= false,
+				   bool							isOverride		= false,
+				   bool							isFinal			= false,
+				   bool							isConst			= false)						noexcept;
+			Method(Method const&)																= default;
+			Method(Method&&)																	= default;
+			~Method()																			= default;
 
 			/**
 			*	Overload with const caller for

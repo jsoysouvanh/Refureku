@@ -237,7 +237,7 @@ void staticFields()
 
 int main()
 {
-	//nonStaticMethods();
+	nonStaticMethods();
 	//staticMethods();
 	nonStaticFields();
 	staticFields();
