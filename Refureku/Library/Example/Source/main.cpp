@@ -331,7 +331,7 @@ int main()
 	//nonStaticMethods();
 	//staticMethods();
 	nonStaticFields();
-	//staticFields();
+	staticFields();
 	//inheritance();
 
 	return EXIT_SUCCESS;

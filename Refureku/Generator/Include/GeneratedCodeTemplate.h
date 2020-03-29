@@ -22,15 +22,7 @@ namespace rfk
 			void						generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo)			const	noexcept;
 			void						generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo)					const	noexcept;
 
-			void						sortFields(std::vector<kodgen::FieldInfo> const&	allFields,
-												   std::vector<kodgen::FieldInfo const*>&	out_fields,
-												   std::vector<kodgen::FieldInfo const*>&	out_staticFields)										const	noexcept;
-
-			void						sortMethods(std::vector<kodgen::MethodInfo> const&	allMethods,
-													std::vector<kodgen::MethodInfo const*>& out_methods,
-													std::vector<kodgen::MethodInfo const*>& out_staticMethods)										const	noexcept;
-
-			kodgen::uint16				computeMethodFlags(kodgen::MethodInfo const* method)														const	noexcept;
+			kodgen::uint16				computeMethodFlags(kodgen::MethodInfo const& method)														const	noexcept;
 			kodgen::uint16				computeFieldFlags(kodgen::FieldInfo const* field)															const	noexcept;
 
 			/** Return generated macro name */
@@ -40,8 +32,7 @@ namespace rfk
 			std::string					generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::array<std::string, 2>	generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::string					generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile,
-																		 kodgen::StructClassInfo const& info,
-																		 std::vector<kodgen::FieldInfo const*> nonStaticFields)						const	noexcept;
+																		 kodgen::StructClassInfo const& info)										const	noexcept;
 
 		protected:
 			virtual void	generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo)					const	noexcept override;

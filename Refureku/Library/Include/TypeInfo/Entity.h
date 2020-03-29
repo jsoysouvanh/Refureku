@@ -9,6 +9,39 @@ namespace rfk
 	class Entity
 	{
 		public:
+			/** Helper structs for hashing / equal */
+			struct NameHasher
+			{
+				size_t operator()(rfk::Entity const& entity) const
+				{
+					return std::hash<std::string>()(entity.name);
+				}
+			};
+
+			struct IdHasher
+			{
+				size_t operator()(rfk::Entity const& entity) const
+				{
+					return entity.id;
+				}
+			};
+
+			struct EqualName
+			{
+				bool operator()(rfk::Entity const& e1, rfk::Entity const& e2) const
+				{
+					return e1.name == e2.name;
+				}
+			};
+
+			struct EqualId
+			{
+				bool operator()(rfk::Entity const& e1, rfk::Entity const& e2) const
+				{
+					return e1.id == e2.id;
+				}
+			};
+
 			/** Name qualifying this entity */
 			std::string		name;
 

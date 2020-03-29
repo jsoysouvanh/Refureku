@@ -4,7 +4,7 @@ void Struct::__RFKaddToParents(EAccessSpecifier inheritanceAccess) noexcept
 {
 	if constexpr (rfk::generated::implements_staticGetArchetype<T, rfk::Struct const&()>::value)
 	{
-		directParents.emplace_back(rfk::Struct::Parent{ inheritanceAccess, T::staticGetArchetype() });
+		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, T::staticGetArchetype() });
 	}
 }
 

@@ -19,27 +19,43 @@ namespace rfk
 		public:
 			struct Parent
 			{
+				struct Hasher
+				{
+					size_t operator()(rfk::Struct::Parent const& parent) const
+					{
+						return std::hash<rfk::Struct const*>()(parent.type);
+					}
+				};
+
+				struct Equal
+				{
+					bool operator()(rfk::Struct::Parent const& p1, rfk::Struct::Parent const& p2) const
+					{
+						return p1.type == p2.type;
+					}
+				};
+
 				EAccessSpecifier	access;
 				Struct const*		type;
 			};
 
-			/** Direct parent types. This list includes ONLY reflected parents */
-			std::vector<Parent>					directParents;
+			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents */
+			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>						directParents;
 
-			/** Types inheriting from this type, regardless of their inheritance depth. This list includes ONLY reflected children */
-			std::unordered_set<Struct const*>	children;
+			/** Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children */
+			std::unordered_set<Struct const*>												children;
 
-			/** All tagged fields contained in this struct */
-			std::vector<Field>					fields;
+			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents (direct or not) */
+			std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>			fields;
 
-			/** All tagged static fields contained in this struct */
-			std::vector<StaticField>			staticFields;
+			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents (direct or not)  */
+			std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>		staticFields;
 
-			/** All tagged methods contained in this struct */
-			std::vector<Method>					methods;
+			/** All tagged methods declared in this struct */
+			std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>			methods;
 
-			/** All tagged static methods contained in this struct */
-			std::vector<StaticMethod>			staticMethods;
+			/** All tagged static methods declared in this struct */
+			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>	staticMethods;
 
 			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
 			Struct(Struct const&)																		= delete;

@@ -115,45 +115,32 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
-	//Keep track of what we add so that we save some checks in the metadata
-	std::vector<kodgen::MethodInfo const*>	nonStaticMethods;
-	std::vector<kodgen::MethodInfo const*>	staticMethods;
-
-	//Sort methods so that it doesn't have to be done in the target program
-	sortMethods(info.methods, nonStaticMethods, staticMethods);
-
-	//Fill the target type method vectors using sorted methods we just computed
-	//Reserve only the memory we need
-	generatedFile.writeLine("	type.staticMethods.reserve(" + std::to_string(staticMethods.size()) + ");\t\\");
-	
 	std::string functionType;
 	std::string methodName;
-
-	for (kodgen::MethodInfo const* method : staticMethods)
+	for (kodgen::MethodInfo const& method : info.methods)
 	{
-		functionType = "rfk::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">";
-		methodName = method->getName();
+		if (method.qualifiers.isStatic)
+		{
+			functionType = "rfk::NonMemberFunction<" + std::move(method.getPrototype(true)) + ">";
+			methodName = method.getName();
 
-		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + methodName + "\", " +
-								std::to_string(_stringHasher(method->id)) +
-								"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
-								"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
+			generatedFile.writeLine("	type.staticMethods.emplace(\"" + methodName + "\", " +
+									std::to_string(_stringHasher(method.id)) +
+									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
+									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
+		}
+		else
+		{
+			functionType = "rfk::MemberFunction<" + info.name + ", " + std::move(method.getPrototype(true)) + ">";
+			methodName = method.getName();
+
+			generatedFile.writeLine("	type.methods.emplace(\"" + methodName + "\", " +
+									std::to_string(_stringHasher(method.id)) +
+									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
+									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
+		}
 	}
 
-	//Reserve only the memory we need
-	generatedFile.writeLine("	type.methods.reserve(" + std::to_string(nonStaticMethods.size()) + ");\t\\");
-
-	for (kodgen::MethodInfo const* method : nonStaticMethods)
-	{
-		functionType = "rfk::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">";
-		methodName = method->getName();
-
-		generatedFile.writeLine("	type.methods.emplace_back(\"" + methodName + "\", " +
-								std::to_string(_stringHasher(method->id)) +
-								"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
-								"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
-	}
-	
 	//Add required methods (instantiate....)
 	generatedFile.writeLine("	type.__RFKaddRequiredMethods<" + info.name + ">(\"" + info.name + "*()\"); \t\\");
 
@@ -168,41 +155,16 @@ std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(k
 
 	generatedFile.writeLine("#define " + macroNames[0] + "\t\\");
 
-	//Keep track of what we add so that we save some checks in the metadata
-	std::vector<kodgen::FieldInfo const*>	nonStaticFields;
-	std::vector<kodgen::FieldInfo const*>	staticFields;
-
-	//Sort fields so that it doesn't have to be done in the target program
-	sortFields(info.fields, nonStaticFields, staticFields);
-
-	//Fill the target type method vectors using sorted methods we just computed
-	//Reserve only the memory we need
-	generatedFile.writeLine("	type.staticFields.reserve(" + std::to_string(staticFields.size()) + ");\t\\");
-
-	for (kodgen::FieldInfo const* field : staticFields)
-	{
-		generatedFile.writeLine("	type.staticFields.emplace_back(\"" + field->name + "\", " +
-								std::to_string(_stringHasher(field->id)) +
-								"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
-								"), &type, &type, &" + info.name + "::" + field->name + ");\t\\");
-	}
-
-	//Compute total number of fields for this type (include reflected parent fields)
-	generatedFile.writeLine("	size_t fieldsCount = " + std::to_string(nonStaticFields.size()) + "; for (rfk::Struct::Parent const& parent : type.directParents) fieldsCount += parent.type->fields.size();\t\\");
-
-	//Reserve only the memory we need
-	generatedFile.writeLine("	type.fields.reserve(fieldsCount);\t\\");
 	generatedFile.writeLine("	__RFKregisterChild<" + info.name + ">(&type);\t\\");
-	generatedFile.writeLine("	std::sort(type.fields.begin(), type.fields.end(), [](rfk::Field const& f1, rfk::Field const& f2){ return f1.name < f2.name; });\t\\");
 	generatedFile.writeLine("");
 
 	//Wrap this part in a method so that children classes can use it too
-	macroNames[1] = generateFieldHelperMethodsMacro(generatedFile, info, nonStaticFields);
+	macroNames[1] = generateFieldHelperMethodsMacro(generatedFile, info);
 
 	return macroNames;
 }
 
-std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info, std::vector<kodgen::FieldInfo const*> nonStaticFields) const noexcept
+std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string macroName = _internalPrefix + info.name + "_GenerateFieldHelperMethods";
 
@@ -233,12 +195,22 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 							 "			const_cast<rfk::Struct&>(thisArchetype).children.insert(childArchetype);\t\\",
 							 "		}\t\\");
 
-	for (kodgen::FieldInfo const* field : nonStaticFields)
+	for (kodgen::FieldInfo const& field : info.fields)
 	{
-		generatedFile.writeLine("		childArchetype->fields.emplace_back(\"" + field->name + "\", " +
-								std::to_string(_stringHasher(field->id)) +
-								"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
-								"), childArchetype, &thisArchetype, offsetof(ChildType, " + field->name + ")" + ", " + std::to_string(field->qualifiers.isMutable) + ");\t\\");
+		if (field.qualifiers.isStatic)
+		{
+			generatedFile.writeLine("		childArchetype->staticFields.emplace(\"" + field.name + "\", " +
+									std::to_string(_stringHasher(field.id)) +
+									"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field.accessSpecifier)) +
+									"), childArchetype, &thisArchetype, &" + info.name + "::" + field.name + ");\t\\");
+		}
+		else
+		{
+			generatedFile.writeLine("		childArchetype->fields.emplace(\"" + field.name + "\", " +
+									std::to_string(_stringHasher(field.id)) +
+									"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field.accessSpecifier)) +
+									"), childArchetype, &thisArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
+		}
 	}
 
 	generatedFile.writeLine("	}");
@@ -272,54 +244,11 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 	return std::string();
 }
 
-void GeneratedCodeTemplate::sortFields(std::vector<kodgen::FieldInfo> const& allFields, std::vector<kodgen::FieldInfo const*>& out_fields, std::vector<kodgen::FieldInfo const*>& out_staticFields) const noexcept
-{
-	out_fields.clear();
-	out_staticFields.clear();
-
-	//Insert all elements first, then sort them
-	for (kodgen::FieldInfo const& field : allFields)
-	{
-		if (field.qualifiers.isStatic)
-		{
-			out_staticFields.emplace_back(&field);
-		}
-		else
-		{
-			out_fields.emplace_back(&field);
-		}
-	}
-
-	std::sort(out_fields.begin(), out_fields.end(), [](kodgen::FieldInfo const* f1, kodgen::FieldInfo const* f2) { return f1->name < f2->name; });
-	std::sort(out_staticFields.begin(), out_staticFields.end(), [](kodgen::FieldInfo const* f1, kodgen::FieldInfo const* f2) { return f1->name < f2->name; });
-}
-
-void GeneratedCodeTemplate::sortMethods(std::vector<kodgen::MethodInfo> const& allMethods, std::vector<kodgen::MethodInfo const*>& out_methods, std::vector<kodgen::MethodInfo const*>& out_staticMethods) const noexcept
-{
-	out_methods.clear();
-	out_staticMethods.clear();
-
-	for (kodgen::MethodInfo const& method : allMethods)
-	{
-		if (method.qualifiers.isStatic)
-		{
-			out_staticMethods.emplace_back(&method);
-		}
-		else
-		{
-			out_methods.emplace_back(&method);
-		}
-	}
-
-	std::sort(out_methods.begin(), out_methods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
-	std::sort(out_staticMethods.begin(), out_staticMethods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
-}
-
-kodgen::uint16 GeneratedCodeTemplate::computeMethodFlags(kodgen::MethodInfo const* method) const noexcept
+kodgen::uint16 GeneratedCodeTemplate::computeMethodFlags(kodgen::MethodInfo const& method) const noexcept
 {
 	kodgen::uint16 result = 0;
 
-	switch (method->accessSpecifier)
+	switch (method.accessSpecifier)
 	{
 		case kodgen::EAccessSpecifier::Public:
 			result |= 1 << 0;
@@ -337,25 +266,25 @@ kodgen::uint16 GeneratedCodeTemplate::computeMethodFlags(kodgen::MethodInfo cons
 			break;
 	}
 
-	if (method->qualifiers.isStatic)
+	if (method.qualifiers.isStatic)
 		result |= 1 << 3;
 
-	if (method->qualifiers.isInline)
+	if (method.qualifiers.isInline)
 		result |= 1 << 4;
 
-	if (method->qualifiers.isVirtual)
+	if (method.qualifiers.isVirtual)
 		result |= 1 << 5;
 
-	if (method->qualifiers.isPureVirtual)
+	if (method.qualifiers.isPureVirtual)
 		result |= 1 << 6;
 
-	if (method->qualifiers.isOverride)
+	if (method.qualifiers.isOverride)
 		result |= 1 << 7;
 
-	if (method->qualifiers.isFinal)
+	if (method.qualifiers.isFinal)
 		result |= 1 << 8;
 
-	if (method->qualifiers.isConst)
+	if (method.qualifiers.isConst)
 		result |= 1 << 9;
 
 	return result;
