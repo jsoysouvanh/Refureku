@@ -21,7 +21,7 @@ namespace exnamespace
 	class RFKClass() ParentParentClass : public ParentParentParentClass
 	{
 		RFKField()
-		float ppFloat;
+		float ppFloat = 123456.123456f;
 
 		public:
 			ParentParentClass() noexcept {}
@@ -176,6 +176,8 @@ namespace exnamespace
 
 		//		//Get total fields count
 		//		size_t fieldsCount = 0; std::vector<rfk::Struct::Parent> currParents; std::vector<rfk::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (rfk::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }
+
+		//		size_t fieldsCount = /* MYFIELDSCOUNT */0; for (rfk::Struct::Parent const& parent : type.directParents) fieldsCount += parent.type->fields.size();
 
 		//		type.fields.reserve(fieldsCount);
 

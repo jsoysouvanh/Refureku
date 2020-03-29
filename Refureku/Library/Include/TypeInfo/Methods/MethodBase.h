@@ -28,10 +28,7 @@ namespace rfk
 		PureVirtual		= 1 << 6,
 		Override		= 1 << 7,
 		Final			= 1 << 8,
-		Const			= 1 << 9,
-
-		/** Additional search flags */
-		// TODO: MOVE THIS SearchInParents	= 1 << 10
+		Const			= 1 << 9
 	};
 
 	class MethodBase : public Entity

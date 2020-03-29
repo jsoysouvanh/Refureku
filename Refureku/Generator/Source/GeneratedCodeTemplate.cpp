@@ -188,11 +188,12 @@ std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(k
 	}
 
 	//Compute total number of fields for this type (include reflected parent fields)
-	generatedFile.writeLine("	size_t fieldsCount = 0; std::vector<rfk::Struct::Parent> currParents; std::vector<rfk::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (rfk::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }\t\\");
+	generatedFile.writeLine("	size_t fieldsCount = " + std::to_string(nonStaticFields.size()) + "; for (rfk::Struct::Parent const& parent : type.directParents) fieldsCount += parent.type->fields.size();\t\\");
 
 	//Reserve only the memory we need
 	generatedFile.writeLine("	type.fields.reserve(fieldsCount);\t\\");
-	generatedFile.writeLine("	__RFKregisterChild<" + info.name + ">(&type);");
+	generatedFile.writeLine("	__RFKregisterChild<" + info.name + ">(&type);\t\\");
+	generatedFile.writeLine("	std::sort(type.fields.begin(), type.fields.end(), [](rfk::Field const& f1, rfk::Field const& f2){ return f1.name < f2.name; });\t\\");
 	generatedFile.writeLine("");
 
 	//Wrap this part in a method so that children classes can use it too
