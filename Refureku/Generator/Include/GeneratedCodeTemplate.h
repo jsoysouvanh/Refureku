@@ -39,9 +39,10 @@ namespace refureku
 			std::string					generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::string					generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::array<std::string, 2>	generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
-			
-			/** Return generated method name */
-		
+			std::string					generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile,
+																		 kodgen::StructClassInfo const& info,
+																		 std::vector<kodgen::FieldInfo const*> nonStaticFields)						const	noexcept;
+
 		protected:
 			virtual void	generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo)					const	noexcept override;
 	};

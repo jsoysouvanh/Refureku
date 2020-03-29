@@ -47,10 +47,7 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 								"friend refureku::Archetype;",
 								"friend refureku::Struct;",
 								"friend refureku::Class;",
-								"private:",
 									std::move(defaultInstantiateMacro),
-								"protected:",
-								"public:",
 									std::move(getTypeMacroName),
 								"private:");
 }
@@ -81,30 +78,32 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "refureku::Struct" : "refureku::Class";
 	
 	generatedFile.writeMacro(std::string(getTypeMacroName),
-								"	static " + returnedType + " const& staticGetArchetype() noexcept",
-								"	{",
-								"		static bool				initialized = false;",
-								"		static " + returnedType + " type(\"" + info.name + "\", "
-																		+ std::to_string(_stringHasher(info.id)) + "u, "
-																		+ "static_cast<refureku::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
-																		+ "sizeof(" + info.name + "));",
-								"	",
-								"		if (!initialized)",
-								"		{",
-								"			" + std::move(generatedParentsMetadataMacroName),
-								"			" + std::move(generateFieldsMetadataMacroName[0]) + "();",
-								"			" + std::move(generatedMethodsMetadataMacroName),
+								std::move(generateFieldsMetadataMacroName[1]),
+								"public:",
+								"static " + returnedType + " const& staticGetArchetype() noexcept",
+								"{",
+								"	static bool				initialized = false;",
+								"	static " + returnedType + " type(\"" + info.name + "\", "
+								 									+ std::to_string(_stringHasher(info.id)) + "u, "
+								 									+ "static_cast<refureku::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
+								 									+ "sizeof(" + info.name + "));",
 								"",
-								"			initialized = true;",
-								"		}",
-								"	",
-								"		return type;",
-								"	}",
-								"	",
-								"	" + returnedType + " const& getArchetype() const noexcept",
+								"	if (!initialized)",
 								"	{",
-								"		return " + info.name + "::staticGetArchetype();",
-								"	}"
+								"		initialized = true;",
+								"",
+								"		" + std::move(generatedParentsMetadataMacroName),
+								"		" + std::move(generateFieldsMetadataMacroName[0]),
+								"		" + std::move(generatedMethodsMetadataMacroName),
+								"	}",
+								"",
+								"	return type;",
+								"}",
+								"",
+								"" + returnedType + " const& getArchetype() const noexcept",
+								"{",
+								"	return " + info.name + "::staticGetArchetype();",
+								"}"
 							 );
 
 	return getTypeMacroName;
@@ -165,8 +164,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::array<std::string, 2> macroNames = {	_internalPrefix + info.name + "_GenerateFieldsMetadata",
-												_internalPrefix + info.name + "_GenerateRegisterAndAppendMembersMethod" };
+	std::array<std::string, 2> macroNames = { _internalPrefix + info.name + "_GenerateFieldsMetadata" };
 
 	generatedFile.writeLine("#define " + macroNames[0] + "\t\\");
 
@@ -189,52 +187,63 @@ std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(k
 								"), &type, &type, &" + info.name + "::" + field->name + ");\t\\");
 	}
 
-	//Compute total number of fields for this type
-	generatedFile.writeLine("	size_t fieldsCount = 0; std::vector<refureku::Struct::Parent> currParents; std::vector<refureku::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (refureku::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }");
+	//Compute total number of fields for this type (include reflected parent fields)
+	generatedFile.writeLine("	size_t fieldsCount = 0; std::vector<refureku::Struct::Parent> currParents; std::vector<refureku::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (refureku::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }\t\\");
 
 	//Reserve only the memory we need
 	generatedFile.writeLine("	type.fields.reserve(fieldsCount);\t\\");
-	
-	//==============================================================
-	/**
-	*	TODO: REWORK HERE
-	*/
-	//Append own members to the fields collection - registerAndAppendMembers method is defined just below
-	generatedFile.writeLine("	registerAndAppendMembers<" + info.name + ">(type, type.fields);\t\\");
-
-	//==============================================================
+	generatedFile.writeLine("	__RFKregisterChild<" + info.name + ">(&type);");
+	generatedFile.writeLine("");
 
 	//Wrap this part in a method so that children classes can use it too
-	//generatedFile.writeLines("#define " + macroNames[1] + "\t\\",
-	//						 "template <typename T>	\t\\",
-	//						 "static void " + info.name + "::registerAndAppendMembers(refureku::Struct const& archetype, std::vector<refureku::Field>& fields) noexcept {\t\\");
+	macroNames[1] = generateFieldHelperMethodsMacro(generatedFile, info, nonStaticFields);
 
-	generatedFile.writeLines("#define " + macroNames[1] + "\t\\",
-							 "template <typename ChildType>\t\\",
-							 "static void __RFKregisterChild(refureku::Struct* childArchetype) noexcept\t\\",
-							 "{\t\\",
-							 "refureku::Struct const& thisArchetype = staticGetArchetype();\t\\",
-							 "//TODO: Recursive call to parents classes later here\t\\",
-							 "//Add to list of children\t\\",
-							 "if (childArchetype != &thisArchetype)\t\\",
-							 "{\t\\",
-							 "//TODO\t\\",
-							 "}\t\\");
+	return macroNames;
+}
+
+std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info, std::vector<kodgen::FieldInfo const*> nonStaticFields) const noexcept
+{
+	std::string macroName = _internalPrefix + info.name + "_GenerateFieldHelperMethods";
+
+	//Generate parent registering templated method to discard calls on non reflected parents
+	generatedFile.writeLines("#define " + macroName + "\t\\",
+							"private:\t\\",
+							 "	template <typename ParentType, typename ChildType>\t\\",
+							 "	static constexpr void __RFKrecurseRegisterChild(refureku::Struct* childArchetype)\t\\",
+							 "	{\t\\",
+							 "		if constexpr (refureku::generated::implements_staticGetArchetype<ParentType, refureku::Class const&()>::value)\t\\",
+							 "		{\t\\",
+							 "			ParentType::template __RFKregisterChild<ChildType>(childArchetype);\t\\",
+							 "		}\t\\",
+							 "	}\t\\",
+							 "public:\t\\",
+							 "	template <typename ChildType>\t\\",
+							 "	static void __RFKregisterChild(refureku::Struct* childArchetype) noexcept\t\\",
+							 "	{\t\\");
+
+	for (kodgen::StructClassInfo::ParentInfo const& parent : info.parents)
+	{
+		generatedFile.writeLine("		__RFKrecurseRegisterChild<" + parent.type.getName(true) + ", ChildType>(childArchetype);\t\\");
+	}
+
+	generatedFile.writeLines("		refureku::Struct const& thisArchetype = staticGetArchetype();\t\\",
+							 "		if (childArchetype != &thisArchetype)\t\\",
+							 "		{\t\\",
+							 "		}\t\\");
 
 	for (kodgen::FieldInfo const* field : nonStaticFields)
 	{
-		generatedFile.writeLine("	childArchetype->fields.emplace_back(\"" + field->name + "\", " +
+		generatedFile.writeLine("		childArchetype->fields.emplace_back(\"" + field->name + "\", " +
 								std::to_string(_stringHasher(field->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
 								"), childArchetype, &thisArchetype, offsetof(ChildType, " + field->name + ")" + ", " + std::to_string(field->qualifiers.isMutable) + ");\t\\");
 	}
 
-		//Add fields
-		//childArchetype->fields.emplace_back("somePtrToInt", 12635385505303968848u, static_cast<refureku::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, somePtrToInt), 0);
+	generatedFile.writeLine("	}");
 
 	generatedFile.writeLine("");
 
-	return macroNames;
+	return macroName;
 }
 
 std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept

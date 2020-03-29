@@ -1,6 +1,6 @@
 
 template <typename T>
-void Struct::__RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess) noexcept
+void Struct::__RFKaddToParents(EAccessSpecifier inheritanceAccess) noexcept
 {
 	if constexpr (refureku::generated::implements_staticGetArchetype<T, refureku::Struct const&()>::value)
 	{

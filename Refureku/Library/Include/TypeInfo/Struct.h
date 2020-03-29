@@ -90,7 +90,7 @@ namespace refureku
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
-			void __RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess)												noexcept;
+			void __RFKaddToParents(EAccessSpecifier inheritanceAccess)												noexcept;
 
 			template <typename T>
 			void __RFKaddRequiredMethods(std::string&& instantiatePrototype)										noexcept;
