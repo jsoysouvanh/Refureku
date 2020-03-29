@@ -137,9 +137,8 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + methodName + "\", " +
 								std::to_string(_stringHasher(method->id)) +
-								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), " + 
-								std::to_string(method->qualifiers.isInline) + ");\t\\");
+								"u, static_cast<refureku::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
+								"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
 	}
 
 	//Reserve only the memory we need
@@ -152,14 +151,8 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 		generatedFile.writeLine("	type.methods.emplace_back(\"" + methodName + "\", " +
 								std::to_string(_stringHasher(method->id)) +
-								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(method->accessSpecifier)) + ")" +
-								", std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), " +
-								std::to_string(method->qualifiers.isInline) + ", &type, " +
-								std::to_string(method->qualifiers.isVirtual) + ", " +
-								std::to_string(method->qualifiers.isPureVirtual) + ", " + 
-								std::to_string(method->qualifiers.isOverride) + ", " +
-								std::to_string(method->qualifiers.isFinal) + ", " + 
-								std::to_string(method->qualifiers.isConst) + ");\t\\");
+								"u, static_cast<refureku::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
+								"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
 	}
 	
 	//Add required methods (instantiate....)
@@ -200,11 +193,6 @@ std::string GeneratedCodeTemplate::generateFieldsMetadataMacro(kodgen::Generated
 
 	for (kodgen::FieldInfo const* field : nonStaticFields)
 	{
-		/*generatedFile.writeLine("	type.fields.emplace_back(\"" + field->name + "\", " +
-								std::to_string(_stringHasher(field->id)) +
-								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
-								"), &type, &type, " + std::to_string(field->memoryOffset) + "u);\t\\");*/
-
 		generatedFile.writeLine("	type.fields.emplace_back(\"" + field->name + "\", " +
 								std::to_string(_stringHasher(field->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
@@ -281,6 +269,56 @@ void GeneratedCodeTemplate::sortMethods(std::vector<kodgen::MethodInfo> const& a
 
 	std::sort(out_methods.begin(), out_methods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
 	std::sort(out_staticMethods.begin(), out_staticMethods.end(), [](kodgen::MethodInfo const* m1, kodgen::MethodInfo const* m2) { return m1->name < m2->name; });
+}
+
+kodgen::uint16 GeneratedCodeTemplate::computeMethodFlags(kodgen::MethodInfo const* method) const noexcept
+{
+	kodgen::uint16 result = 0;
+
+	switch (method->accessSpecifier)
+	{
+		case kodgen::EAccessSpecifier::Public:
+			result |= 1 << 0;
+			break;
+
+		case kodgen::EAccessSpecifier::Protected:
+			result |= 1 << 1;
+			break;
+
+		case kodgen::EAccessSpecifier::Private:
+			result |= 1 << 2;
+			break;
+
+		default:
+			break;
+	}
+
+	if (method->qualifiers.isStatic)
+		result |= 1 << 3;
+
+	if (method->qualifiers.isInline)
+		result |= 1 << 4;
+
+	if (method->qualifiers.isVirtual)
+		result |= 1 << 5;
+
+	if (method->qualifiers.isPureVirtual)
+		result |= 1 << 6;
+
+	if (method->qualifiers.isOverride)
+		result |= 1 << 7;
+
+	if (method->qualifiers.isFinal)
+		result |= 1 << 8;
+
+	if (method->qualifiers.isConst)
+		result |= 1 << 9;
+
+	return result;
+}
+kodgen::uint16 GeneratedCodeTemplate::computeFieldFlags(kodgen::FieldInfo const* field) const noexcept
+{
+	return 0;
 }
 
 std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept

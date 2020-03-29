@@ -1,10 +1,6 @@
 #include <iostream>
-#include <type_traits>
 
 #include "ExampleClass.h"
-
-#include "Utility/MemberFunction.h"
-#include "Utility/TypeTraits.h"
 
 #define EXECUTE(FunctionCall) std::cout << #FunctionCall << std::endl; FunctionCall;
 
@@ -17,7 +13,7 @@ void nonStaticMethods()
 	refureku::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
 
 	//Non const method which returns void without arguments
-	refureku::Method const* method1 = exampleClassType.getMethod("method1");
+	refureku::Method const* method1 = exampleClassType.getMethod("method1", refureku::EMethodFlags::Const | refureku::EMethodFlags::Virtual, true);
 	if (method1 != nullptr)
 	{
 		method1->invoke(&exampleClass);
@@ -32,7 +28,7 @@ void nonStaticMethods()
 		method1->safeInvoke<void>(&constExampleClass);
 	}
 
-	// Const method which returns void without arguments
+	//Const method which returns void without arguments
 	refureku::Method const* method2 = exampleClassType.getMethod("method2");
 	if (method2 != nullptr)
 	{
@@ -47,7 +43,7 @@ void nonStaticMethods()
 		method2->safeInvoke<void>(&constExampleClass);
 	}
 
-	// Non const method which returns an int without arguments
+	//Non const method which returns an int without arguments
 	refureku::Method const* method3 = exampleClassType.getMethod("method3");
 	if (method3 != nullptr)
 	{
@@ -62,7 +58,7 @@ void nonStaticMethods()
 		std::cout << method3->safeInvoke<int>(&constExampleClass) << std::endl;
 	}
 
-	// Non const method which returns an int with arguments
+	//Non const method which returns an int with arguments
 	refureku::Method const* method4 = exampleClassType.getMethod("method4");
 	if (method4 != nullptr)
 	{
@@ -77,10 +73,21 @@ void nonStaticMethods()
 		std::cout << method4->safeInvoke<int>(&constExampleClass, nullptr) << std::endl;
 	}
 
+	//Private method of a parent class
+	refureku::Method const* method5 = exampleClassType.getMethod("parentClassMethod1", refureku::EMethodFlags::Default, true);
+	if (method5 != nullptr)
+	{
+		method5->invoke(&exampleClass, nullptr);
+		method5->safeInvoke(&exampleClass, nullptr);
+
+		method5->invoke(&constExampleClass, nullptr);
+		method5->safeInvoke(&constExampleClass, nullptr);
+	}
+
 	std::vector<refureku::Method const*> methods3 = exampleClassType.getMethods("method3");
 	for (auto method : methods3)
 	{
-		std::cout << method->name << " -> " << (refureku::int32)method->access << std::endl;
+		std::cout << method->name << " -> " << (refureku::int32)method->getAccess() << std::endl;
 	}
 }
 
@@ -119,7 +126,7 @@ void staticMethods()
 	std::vector<refureku::StaticMethod const*> staticMethods3 = exampleClassType.getStaticMethods("staticMethod3");
 	for (auto method : staticMethods3)
 	{
-		std::cout << method->name << " -> " << (refureku::int32)method->access << std::endl;
+		std::cout << method->name << " -> " << (refureku::int32)method->getAccess() << std::endl;
 	}
 }
 
@@ -238,7 +245,7 @@ void staticFields()
 int main()
 {
 	nonStaticMethods();
-	//staticMethods();
+	staticMethods();
 	nonStaticFields();
 	staticFields();
 

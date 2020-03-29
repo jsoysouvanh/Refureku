@@ -5,9 +5,9 @@
 
 using namespace exnamespace;
 
-void ExampleClass::method1()
+void ExampleClass::method1() const noexcept
 {
-	std::cout << "ExampleClass::method1(): " << someInt-- << " > " << someInt << std::endl;
+	std::cout << "ExampleClass::method1() override:" << std::endl;
 }
 
 void ExampleClass::method2() const

@@ -25,49 +25,157 @@ StaticField const* Struct::getStaticField(std::string const& fieldName) const no
 	return (first != staticFields.cend() && first->name == fieldName) ? &*first : nullptr;
 }
 
-Method const* Struct::getMethod(std::string const& methodName) const noexcept
+Method const* Struct::getMethod(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
 {
-	//Look between [start, end]
-	auto first = std::lower_bound(methods.cbegin(), methods.cend(), Method(std::string(methodName)),
+	//Look between [begin, end]
+	auto it = std::lower_bound(methods.cbegin(), methods.cend(), Method(std::string(methodName)),
 								  [](Method const& m1, Method const& m2){ return m1.name < m2.name; });
 
-	return (first != methods.cend() && first->name == methodName) ? &*first : nullptr;
+	while (it != methods.cend() && it->name == methodName)
+	{
+		//We found a method which has minFlags
+		if ((it->flags & minFlags) == minFlags)
+		{
+			return &*it;
+		}
+
+		++it;
+	}
+
+	//If we reach this point, couldn't find a valid method
+	if (shouldInspectParents)
+	{
+		Method const* result = nullptr;
+
+		for (Struct::Parent const& parent : directParents)
+		{
+			result = parent.type.getMethod(methodName, minFlags, true);
+
+			if (result != nullptr)
+			{
+				return result;
+			}
+		}
+	}
+
+	return nullptr;
 }
 
-std::vector<Method const*> Struct::getMethods(std::string const& methodName) const noexcept
+std::vector<Method const*> Struct::getMethods(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
 {
-	auto range = std::equal_range(methods.cbegin(), methods.cend(), Method(std::string(methodName)),
-								  [](Method const& m1, Method const& m2){ return m1.name < m2.name; });
+	std::vector<Method const*> result;
 
-	//Translate Method const& into Method const* to avoid copies
-	std::vector<Method const*> result(std::distance(range.first, range.second));
-	std::transform(range.first, range.second, result.begin(), [](Method const& method) -> Method const* { return &method; });
+	//Look between [begin, end]
+	auto it = std::lower_bound(methods.cbegin(), methods.cend(), Method(std::string(methodName)),
+							   [](Method const& m1, Method const& m2){ return m1.name < m2.name; });
+
+	//Search until we reach the end or method name is no longer the one we are looking for
+	while (it != methods.cend() && it->name == methodName)
+	{
+		//We found a method which has minFlags
+		if ((it->flags & minFlags) == minFlags)
+		{
+			result.emplace_back(&*it);
+		}
+
+		++it;
+	}
+
+	//Search in parent too if needed
+	if (shouldInspectParents)
+	{
+		std::vector<Method const*> parentResult;
+		
+		for (Struct::Parent const& parent : directParents)
+		{
+			parentResult = parent.type.getMethods(methodName, minFlags, true);
+
+			if (!parentResult.empty())
+			{
+				result.insert(result.end(), parentResult.begin(), parentResult.end());
+			}
+		}
+	}
 
 	return result;
 }
 
-StaticMethod const* Struct::getStaticMethod(std::string const& methodName) const noexcept
+StaticMethod const* Struct::getStaticMethod(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
 {
-	//Look between [start, end]
-	auto first = std::lower_bound(staticMethods.cbegin(), staticMethods.cend(), StaticMethod(std::string(methodName)),
-								  [](StaticMethod const& m1, StaticMethod const& m2){ return m1.name < m2.name; });
+	//Look between [begin, end]
+	auto it = std::lower_bound(staticMethods.cbegin(), staticMethods.cend(), StaticMethod(std::string(methodName)),
+							   [](StaticMethod const& m1, StaticMethod const& m2){ return m1.name < m2.name; });
 
-	return (first != staticMethods.cend() && first->name == methodName) ? &*first : nullptr;
+	while (it != staticMethods.cend() && it->name == methodName)
+	{
+		//We found a static method which has minFlags
+		if ((it->flags & minFlags) == minFlags)
+		{
+			return &*it;
+		}
+
+		++it;
+	}
+
+	//If we reach this point, couldn't find a valid method
+	if (shouldInspectParents)
+	{
+		StaticMethod const* result = nullptr;
+
+		for (Struct::Parent const& parent : directParents)
+		{
+			result = parent.type.getStaticMethod(methodName, minFlags, true);
+
+			if (result != nullptr)
+			{
+				return result;
+			}
+		}
+	}
+
+	return nullptr;
 }
 
-std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& methodName) const noexcept
+std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
 {
-	auto range = std::equal_range(staticMethods.cbegin(), staticMethods.cend(), StaticMethod(std::string(methodName)),
-								  [](StaticMethod const& m1, StaticMethod const& m2){ return m1.name < m2.name; });
+	std::vector<StaticMethod const*> result;
 
-	//Translate Method const& into Method const* to avoid copies
-	std::vector<StaticMethod const*> result(std::distance(range.first, range.second));
-	std::transform(range.first, range.second, result.begin(), [](StaticMethod const& method) -> StaticMethod const* { return &method; });
+	//Look between [begin, end]
+	auto it = std::lower_bound(staticMethods.cbegin(), staticMethods.cend(), StaticMethod(std::string(methodName)),
+							   [](StaticMethod const& m1, StaticMethod const& m2){ return m1.name < m2.name; });
+
+	//Search until we reach the end or method name is no longer the one we are looking for
+	while (it != staticMethods.cend() && it->name == methodName)
+	{
+		//We found a static method which has minFlags
+		if ((it->flags & minFlags) == minFlags)
+		{
+			result.emplace_back(&*it);
+		}
+
+		++it;
+	}
+
+	//Search in parent too if needed
+	if (shouldInspectParents)
+	{
+		std::vector<StaticMethod const*> parentResult;
+
+		for (Struct::Parent const& parent : directParents)
+		{
+			parentResult = parent.type.getStaticMethods(methodName, minFlags, true);
+
+			if (!parentResult.empty())
+			{
+				result.insert(result.end(), parentResult.begin(), parentResult.end());
+			}
+		}
+	}
 
 	return result;
 }
 
-bool Struct::inheritsFrom(Archetype const& otherType) const noexcept
+bool Struct::inheritsFrom(Struct const& otherType) const noexcept
 {
 	for (Parent const& parent : directParents)
 	{

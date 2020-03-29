@@ -42,21 +42,15 @@ namespace refureku
 			/** Is this method const */
 			bool			isConst			= false;
 
-			Method()																			= default;
+			Method()																		= default;
 			Method(std::string&&				methodName,
 				   uint64						methodId		= 0u,
-				   EAccessSpecifier				accessSpecifier	= EAccessSpecifier::Undefined,
+				   EMethodFlags					flags			= EMethodFlags::Default,
 				   std::shared_ptr<ICallable>&&	internalMethod	= nullptr,
-				   bool							isInline		= false,
-				   Struct const*				methodOwnerType	= nullptr,
-				   bool							isVirtual		= false,
-				   bool							isPureVirtual	= false,
-				   bool							isOverride		= false,
-				   bool							isFinal			= false,
-				   bool							isConst			= false)						noexcept;
-			Method(Method const&)																= default;
-			Method(Method&&)																	= default;
-			~Method()																			= default;
+				   Struct const*				methodOwnerType	= nullptr)					noexcept;
+			Method(Method const&)															= default;
+			Method(Method&&)																= default;
+			~Method()																		= default;
 
 			/**
 			*	Overload with const caller for

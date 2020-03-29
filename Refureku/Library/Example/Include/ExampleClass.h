@@ -16,17 +16,21 @@ namespace exnamespace
 
 	class RFKClass() ParentClass : protected ParentParentClass
 	{
-		RFKParentClass_GENERATED
-
-
+		private:
+			RFKMethod()
+			void parentClassMethod1() noexcept { };
 
 		public:
 			uint64_t someUint = 666;
+
+			RFKMethod()
+			virtual void method1() const { };
 
 			ParentClass()					= default;
 			ParentClass(ParentClass const&)	= default;
 			ParentClass(ParentClass&& o)	= default;
 
+		RFKParentClass_GENERATED
 	};
 	
 	std::ostream& operator<<(std::ostream& stream, ParentClass const& object) noexcept;
@@ -56,7 +60,7 @@ namespace exnamespace
 			int				method4(void* ptr);
 
 			RFKMethod()
-			void			method1();
+			virtual void	method1() const noexcept override;
 
 		protected:
 			RFKMethod()

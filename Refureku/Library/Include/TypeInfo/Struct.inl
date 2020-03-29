@@ -24,9 +24,11 @@ void Struct::__RFKaddRequiredMethods(std::string&& instantiatePrototype) noexcep
 template <typename ReturnType, typename... ArgTypes>
 void Struct::__RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, refureku::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept
 {
+	//TODO: Move this method in another specific array
+
 	//Insert in the sorted order vector (alphabetical order)
-	staticMethods.insert(std::lower_bound(staticMethods.cbegin(), staticMethods.cend(), StaticMethod(std::string(methodName)), [](StaticMethod const& m1, StaticMethod const& m2){ return m1.name < m2.name; }),
-						 StaticMethod(std::forward<std::string>(methodName), methodId, accessSpecifier, std::shared_ptr<refureku::NonMemberFunction<ReturnType*(ArgTypes...)>>(new refureku::NonMemberFunction<ReturnType*(ArgTypes...)>(function))));
+	//staticMethods.insert(std::lower_bound(staticMethods.cbegin(), staticMethods.cend(), StaticMethod(std::string(methodName)), [](StaticMethod const& m1, StaticMethod const& m2){ return m1.name < m2.name; }),
+	//					 StaticMethod(std::forward<std::string>(methodName), methodId, accessSpecifier, std::shared_ptr<refureku::NonMemberFunction<ReturnType*(ArgTypes...)>>(new refureku::NonMemberFunction<ReturnType*(ArgTypes...)>(function))));
 }
 
 template <typename ReturnType, typename... ArgTypes>

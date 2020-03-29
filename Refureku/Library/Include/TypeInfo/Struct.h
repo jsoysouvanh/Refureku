@@ -46,25 +46,34 @@ namespace refureku
 			*	Get the field named fieldName in this struct.
 			*	The method returns nullptr if no field named fieldName was found. 
 			*/
-			Field const*						getField(std::string const& fieldName)			const	noexcept;
+			Field const*						getField(std::string const& fieldName)						const	noexcept;
 
 			/**
 			*	Get the static field named fieldName in this struct.
 			*	The method returns nullptr if no static field named fieldName was found. 
 			*/
-			StaticField const*					getStaticField(std::string const& fieldName)	const	noexcept;
+			StaticField const*					getStaticField(std::string const& fieldName)				const	noexcept;
 
 			/**
-			*	
+			*	Get the first found method named methodName which has at least all the provided flags, nullptr if none if found.
+			*	If shouldInspectParents is set to true, the search will be extended to parents structs recursively.
 			*/
-			Method const*						getMethod(std::string const& methodName)		const	noexcept;
-			std::vector<Method const*>			getMethods(std::string const& methodName)		const	noexcept;
+			Method const*						getMethod(std::string const& methodName,
+														  uint16 minFlags = EMethodFlags::Default,
+														  bool shouldInspectParents = false)				const	noexcept;
+			std::vector<Method const*>			getMethods(std::string const& methodName,
+														   uint16 minFlags = EMethodFlags::Default,
+														   bool shouldInspectParents = false)				const	noexcept;
 
 			/**
 			*
 			*/
-			StaticMethod const*					getStaticMethod(std::string const& methodName)	const	noexcept;
-			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName)	const	noexcept;
+			StaticMethod const*					getStaticMethod(std::string const& methodName,
+																uint16 minFlags = EMethodFlags::Default,
+																bool shouldInspectParents = false)			const	noexcept;
+			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName,
+																 uint16 minFlags = EMethodFlags::Default,
+																 bool shouldInspectParents = false)			const	noexcept;
 
 			//TODO templated staticGetMethod with provided prototype
 			//TODO not templated staticGetMethod with provided prototype
@@ -72,19 +81,19 @@ namespace refureku
 			/**
 			*	Return true if this type inherits from the provided type, else false.
 			*/
-			bool inheritsFrom(Archetype const& otherType)										const	noexcept;
+			bool inheritsFrom(Struct const& otherType)														const	noexcept;
 
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType* makeInstance(ArgTypes&&... args)										const	noexcept;
+			ReturnType* makeInstance(ArgTypes&&... args)													const	noexcept;
 
 			/**
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
-			void __RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess)						noexcept;
+			void __RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess)									noexcept;
 
 			template <typename T>
-			void __RFKaddRequiredMethods(std::string&& instantiatePrototype)							noexcept;
+			void __RFKaddRequiredMethods(std::string&& instantiatePrototype)										noexcept;
 
 			template <typename ReturnType, typename... ArgTypes>
 			void __RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, refureku::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept;

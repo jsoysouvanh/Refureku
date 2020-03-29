@@ -186,6 +186,6 @@ void ClassParser::addToParents(CXCursor cursor, ParsingInfo& parsingInfo) const 
 
 	if (parsingInfo.currentStructOrClass.has_value())
 	{
-		parsingInfo.currentStructOrClass->parents.emplace_back(StructClassInfo::ParentInfo{ static_cast<EAccessSpecifier>(1 << clang_getCXXAccessSpecifier(cursor)), TypeInfo(clang_getCursorType(cursor)) });
+		parsingInfo.currentStructOrClass->parents.emplace_back(StructClassInfo::ParentInfo{ static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor)), TypeInfo(clang_getCursorType(cursor)) });
 	}
 }
