@@ -13,6 +13,11 @@ namespace exnamespace
 			ParentParentParentClass() noexcept {}
 	};
 
+	class RFKClass() OtherClass
+	{
+		RFKOtherClass_GENERATED
+	};
+
 	class RFKClass() ParentParentClass : public ParentParentParentClass
 	{
 		RFKField()
@@ -65,7 +70,15 @@ namespace exnamespace
 	
 	std::ostream& operator<<(std::ostream& stream, ParentClass const& object) noexcept;
 
-	class RFKClass() ExampleClass : public ParentClass
+	class RFKClass() ParentClass2
+	{
+		RFKField()
+		char p2Char = '*';
+
+		RFKParentClass2_GENERATED
+	};
+
+	class RFKClass() ExampleClass : public ParentClass, public ParentClass2
 	{
 		public:
 			RFKField()
@@ -141,6 +154,7 @@ namespace exnamespace
 
 		//	if (childArchetype != &thisArchetype)
 		//	{
+		//		const_cast<rfk::Struct&>(thisArchetype).children.insert(childArchetype);
 		//	}
 		//	
 		//	childArchetype->fields.emplace_back("someFloat", 6118336768142618682u, static_cast<rfk::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, someFloat), 0);

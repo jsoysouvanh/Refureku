@@ -187,3 +187,8 @@ bool Struct::inheritsFrom(Struct const& otherType) const noexcept
 
 	return false;
 }
+
+bool Struct::isBaseOf(Struct const& otherType) const noexcept
+{
+	return &otherType == this || children.find(&otherType) != children.cend();
+}

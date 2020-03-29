@@ -229,6 +229,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 	generatedFile.writeLines("		rfk::Struct const& thisArchetype = staticGetArchetype();\t\\",
 							 "		if (childArchetype != &thisArchetype)\t\\",
 							 "		{\t\\",
+							 "			const_cast<rfk::Struct&>(thisArchetype).children.insert(childArchetype);\t\\",
 							 "		}\t\\");
 
 	for (kodgen::FieldInfo const* field : nonStaticFields)

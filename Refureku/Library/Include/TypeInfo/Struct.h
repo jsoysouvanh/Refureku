@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_set>
 #include <algorithm>
 
 #include "TypeInfo/Archetype.h"
@@ -23,19 +24,22 @@ namespace rfk
 			};
 
 			/** Direct parent types. This list includes ONLY reflected parents */
-			std::vector<Parent>			directParents;
+			std::vector<Parent>					directParents;
+
+			/** Types inheriting from this type, regardless of their inheritance depth. This list includes ONLY reflected children */
+			std::unordered_set<Struct const*>	children;
 
 			/** All tagged fields contained in this struct */
-			std::vector<Field>			fields;
+			std::vector<Field>					fields;
 
 			/** All tagged static fields contained in this struct */
-			std::vector<StaticField>	staticFields;
+			std::vector<StaticField>			staticFields;
 
 			/** All tagged methods contained in this struct */
-			std::vector<Method>			methods;
+			std::vector<Method>					methods;
 
 			/** All tagged static methods contained in this struct */
-			std::vector<StaticMethod>	staticMethods;
+			std::vector<StaticMethod>			staticMethods;
 
 			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
 			Struct(Struct const&)																		= delete;
@@ -82,6 +86,11 @@ namespace rfk
 			*	Return true if this type inherits from the provided type, else false.
 			*/
 			bool inheritsFrom(Struct const& otherType)														const	noexcept;
+			
+			/**
+			*	Return true if this type is a parent (direct or not) of the provided type, else false.
+			*/
+			bool isBaseOf(Struct const& otherType)															const	noexcept;
 
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstance(ArgTypes&&... args)													const	noexcept;

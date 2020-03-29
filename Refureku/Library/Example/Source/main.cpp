@@ -3,6 +3,7 @@
 #include "ExampleClass.h"
 
 #define EXECUTE(FunctionCall) std::cout << #FunctionCall << std::endl; FunctionCall;
+#define EXECUTE_RESULT(FunctionCall) std::cout << #FunctionCall << " --> " << FunctionCall << std::endl;
 
 using namespace exnamespace;
 
@@ -242,28 +243,85 @@ void staticFields()
 	std::cout << "Found field address: " << staticField3 << std::endl;
 }
 
+void inheritance()
+{
+	//rfk::Class const& pppClass = ParentParentParentClass::staticGetArchetype(); //Not reflected type, so can't call staticGetArchetype();
+	EXECUTE(rfk::Class const& ppClass = ParentParentClass::staticGetArchetype());
+	EXECUTE(rfk::Class const& pClass  = ParentClass::staticGetArchetype());
+	EXECUTE(rfk::Class const& p2Class = ParentClass2::staticGetArchetype());
+	EXECUTE(rfk::Class const& exClass = ExampleClass::staticGetArchetype());
+	EXECUTE(rfk::Class const& oClass  = OtherClass::staticGetArchetype());
+
+	//IsBaseOf
+	EXECUTE_RESULT(ppClass.isBaseOf(ppClass));
+	EXECUTE_RESULT(ppClass.isBaseOf(pClass));
+	EXECUTE_RESULT(ppClass.isBaseOf(p2Class));
+	EXECUTE_RESULT(ppClass.isBaseOf(exClass));
+	EXECUTE_RESULT(ppClass.isBaseOf(oClass));
+
+	EXECUTE_RESULT(pClass.isBaseOf(ppClass));
+	EXECUTE_RESULT(pClass.isBaseOf(pClass));
+	EXECUTE_RESULT(pClass.isBaseOf(p2Class));
+	EXECUTE_RESULT(pClass.isBaseOf(exClass));
+	EXECUTE_RESULT(pClass.isBaseOf(oClass));
+
+	EXECUTE_RESULT(exClass.isBaseOf(ppClass));
+	EXECUTE_RESULT(exClass.isBaseOf(pClass));
+	EXECUTE_RESULT(exClass.isBaseOf(p2Class));
+	EXECUTE_RESULT(exClass.isBaseOf(exClass));
+	EXECUTE_RESULT(exClass.isBaseOf(oClass));
+
+	EXECUTE_RESULT(oClass.isBaseOf(ppClass));
+	EXECUTE_RESULT(oClass.isBaseOf(pClass));
+	EXECUTE_RESULT(oClass.isBaseOf(p2Class));
+	EXECUTE_RESULT(oClass.isBaseOf(exClass));
+	EXECUTE_RESULT(oClass.isBaseOf(oClass));
+
+	EXECUTE_RESULT(p2Class.isBaseOf(ppClass));
+	EXECUTE_RESULT(p2Class.isBaseOf(pClass));
+	EXECUTE_RESULT(p2Class.isBaseOf(p2Class));
+	EXECUTE_RESULT(p2Class.isBaseOf(exClass));
+	EXECUTE_RESULT(p2Class.isBaseOf(oClass));
+
+	//InheritsFrom
+	EXECUTE_RESULT(ppClass.inheritsFrom(ppClass));
+	EXECUTE_RESULT(ppClass.inheritsFrom(pClass));
+	EXECUTE_RESULT(ppClass.inheritsFrom(p2Class));
+	EXECUTE_RESULT(ppClass.inheritsFrom(exClass));
+	EXECUTE_RESULT(ppClass.inheritsFrom(oClass));
+
+	EXECUTE_RESULT(pClass.inheritsFrom(ppClass));
+	EXECUTE_RESULT(pClass.inheritsFrom(pClass));
+	EXECUTE_RESULT(pClass.inheritsFrom(p2Class));
+	EXECUTE_RESULT(pClass.inheritsFrom(exClass));
+	EXECUTE_RESULT(pClass.inheritsFrom(oClass));
+
+	EXECUTE_RESULT(exClass.inheritsFrom(ppClass));
+	EXECUTE_RESULT(exClass.inheritsFrom(pClass));
+	EXECUTE_RESULT(exClass.inheritsFrom(p2Class));
+	EXECUTE_RESULT(exClass.inheritsFrom(exClass));
+	EXECUTE_RESULT(exClass.inheritsFrom(oClass));
+
+	EXECUTE_RESULT(oClass.inheritsFrom(ppClass));
+	EXECUTE_RESULT(oClass.inheritsFrom(pClass));
+	EXECUTE_RESULT(oClass.inheritsFrom(p2Class));
+	EXECUTE_RESULT(oClass.inheritsFrom(exClass));
+	EXECUTE_RESULT(oClass.inheritsFrom(oClass));
+
+	EXECUTE_RESULT(p2Class.inheritsFrom(ppClass));
+	EXECUTE_RESULT(p2Class.inheritsFrom(pClass));
+	EXECUTE_RESULT(p2Class.inheritsFrom(p2Class));
+	EXECUTE_RESULT(p2Class.inheritsFrom(exClass));
+	EXECUTE_RESULT(p2Class.inheritsFrom(oClass));
+}
+
 int main()
 {
 	//nonStaticMethods();
 	//staticMethods();
 	//nonStaticFields();
 	//staticFields();
-
-	std::cout << std::endl;
-	rfk::Class const& ppClass = ParentParentClass::staticGetArchetype();
-
-	for (auto& field : ppClass.fields)
-		std::cout << field.name << " from " << field.introducedBy->name << " offset: " << field.memoryOffset << std::endl;
-
-	std::cout << std::endl;
-	rfk::Class const& pClass = ParentClass::staticGetArchetype();
-	for (auto& field : pClass.fields)
-		std::cout << field.name << " from " << field.introducedBy->name << " offset: " << field.memoryOffset << std::endl;
-
-	std::cout << std::endl;
-	rfk::Class const& exampleClass = ExampleClass::staticGetArchetype();
-	for (auto& field : exampleClass.fields)
-		std::cout << field.name << " from " << field.introducedBy->name << " offset: " << field.memoryOffset << std::endl;
+	inheritance();
 
 	return EXIT_SUCCESS;
 }
