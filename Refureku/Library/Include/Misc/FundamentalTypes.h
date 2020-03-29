@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace refureku
+namespace rfk
 {
 	using uint8		= uint8_t;
 	using uint16	= uint16_t;

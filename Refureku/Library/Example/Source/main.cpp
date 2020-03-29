@@ -10,10 +10,10 @@ void nonStaticMethods()
 {
 	ExampleClass			exampleClass;
 	ExampleClass const		constExampleClass;
-	refureku::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
+	rfk::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
 
 	//Non const method which returns void without arguments
-	refureku::Method const* method1 = exampleClassType.getMethod("method1", refureku::EMethodFlags::Const | refureku::EMethodFlags::Virtual, true);
+	rfk::Method const* method1 = exampleClassType.getMethod("method1", rfk::EMethodFlags::Const | rfk::EMethodFlags::Virtual, true);
 	if (method1 != nullptr)
 	{
 		method1->invoke(&exampleClass);
@@ -29,7 +29,7 @@ void nonStaticMethods()
 	}
 
 	//Const method which returns void without arguments
-	refureku::Method const* method2 = exampleClassType.getMethod("method2");
+	rfk::Method const* method2 = exampleClassType.getMethod("method2");
 	if (method2 != nullptr)
 	{
 		method2->invoke(&exampleClass);
@@ -44,7 +44,7 @@ void nonStaticMethods()
 	}
 
 	//Non const method which returns an int without arguments
-	refureku::Method const* method3 = exampleClassType.getMethod("method3");
+	rfk::Method const* method3 = exampleClassType.getMethod("method3");
 	if (method3 != nullptr)
 	{
 		method3->invoke(&exampleClass);
@@ -59,7 +59,7 @@ void nonStaticMethods()
 	}
 
 	//Non const method which returns an int with arguments
-	refureku::Method const* method4 = exampleClassType.getMethod("method4");
+	rfk::Method const* method4 = exampleClassType.getMethod("method4");
 	if (method4 != nullptr)
 	{
 		method4->invoke(&exampleClass, nullptr);
@@ -74,7 +74,7 @@ void nonStaticMethods()
 	}
 
 	//Private method of a parent class
-	refureku::Method const* method5 = exampleClassType.getMethod("parentClassMethod1", refureku::EMethodFlags::Default, true);
+	rfk::Method const* method5 = exampleClassType.getMethod("parentClassMethod1", rfk::EMethodFlags::Default, true);
 	if (method5 != nullptr)
 	{
 		method5->invoke(&exampleClass, nullptr);
@@ -84,19 +84,19 @@ void nonStaticMethods()
 		method5->safeInvoke(&constExampleClass, nullptr);
 	}
 
-	std::vector<refureku::Method const*> methods3 = exampleClassType.getMethods("method3");
+	std::vector<rfk::Method const*> methods3 = exampleClassType.getMethods("method3");
 	for (auto method : methods3)
 	{
-		std::cout << method->name << " -> " << (refureku::int32)method->getAccess() << std::endl;
+		std::cout << method->name << " -> " << (rfk::int32)method->getAccess() << std::endl;
 	}
 }
 
 void staticMethods()
 {
 	ExampleClass			exampleClass;
-	refureku::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
+	rfk::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
 
-	refureku::StaticMethod const* staticMethod1 = exampleClassType.getStaticMethod("staticMethod1");
+	rfk::StaticMethod const* staticMethod1 = exampleClassType.getStaticMethod("staticMethod1");
 	if (staticMethod1 != nullptr)
 	{
 		staticMethod1->invoke();
@@ -105,7 +105,7 @@ void staticMethods()
 		staticMethod1->safeInvoke<void>();
 	}
 	
-	refureku::StaticMethod const* staticMethod2 = exampleClassType.getStaticMethod("staticMethod2");
+	rfk::StaticMethod const* staticMethod2 = exampleClassType.getStaticMethod("staticMethod2");
 	if (staticMethod2 != nullptr)
 	{
 		staticMethod2->invoke();
@@ -114,7 +114,7 @@ void staticMethods()
 		std::cout << staticMethod2->safeInvoke<int>() << std::endl;
 	}
 
-	refureku::StaticMethod const* staticMethod3 = exampleClassType.getStaticMethod("staticMethod3");
+	rfk::StaticMethod const* staticMethod3 = exampleClassType.getStaticMethod("staticMethod3");
 	if (staticMethod3 != nullptr)
 	{
 		staticMethod3->invoke("coucou");
@@ -123,21 +123,21 @@ void staticMethods()
 		std::cout << staticMethod3->safeInvoke<int>("coucou") << std::endl;
 	}
 
-	std::vector<refureku::StaticMethod const*> staticMethods3 = exampleClassType.getStaticMethods("staticMethod3");
+	std::vector<rfk::StaticMethod const*> staticMethods3 = exampleClassType.getStaticMethods("staticMethod3");
 	for (auto method : staticMethods3)
 	{
-		std::cout << method->name << " -> " << (refureku::int32)method->getAccess() << std::endl;
+		std::cout << method->name << " -> " << (rfk::int32)method->getAccess() << std::endl;
 	}
 }
 
 void nonStaticFields()
 {
 	EXECUTE(ExampleClass ec);
-	EXECUTE(refureku::Class const& type = ExampleClass::staticGetArchetype());
+	EXECUTE(rfk::Class const& type = ExampleClass::staticGetArchetype());
 
 	std::cout << "Instance address: " << &ec << std::endl;
 
-	EXECUTE(refureku::Field const* field = type.getField("someInt"));
+	EXECUTE(rfk::Field const* field = type.getField("someInt"));
 
 	if (field != nullptr)
 	{
@@ -155,7 +155,7 @@ void nonStaticFields()
 		std::cout << field->getData<int const&>(&ec) << std::endl;
 	}
 
-	EXECUTE(refureku::Field const* field2 = type.getField("somePtrToInt"));
+	EXECUTE(rfk::Field const* field2 = type.getField("somePtrToInt"));
 
 	if (field2 != nullptr)
 	{
@@ -172,7 +172,7 @@ void nonStaticFields()
 	}
 
 	std::cout << std::endl << "Search field: " << "someParentClass" << std::endl;
-	refureku::Field const*	field3	= type.getField("someParentClass");
+	rfk::Field const*	field3	= type.getField("someParentClass");
 
 	if (field3 != nullptr)
 	{
@@ -191,16 +191,16 @@ void nonStaticFields()
 		std::cout << "Move is:     " << &move << " -> " << move << std::endl;
 	}
 
-	EXECUTE(refureku::Field const* field4 = type.getField("inexistantField"));
+	EXECUTE(rfk::Field const* field4 = type.getField("inexistantField"));
 
 	std::cout << "Found field address: " << field4 << std::endl;
 }
 
 void staticFields()
 {
-	EXECUTE(refureku::Class const&	type = ExampleClass::staticGetArchetype());
+	EXECUTE(rfk::Class const&	type = ExampleClass::staticGetArchetype());
 
-	EXECUTE(refureku::StaticField const*	staticField	= type.getStaticField("someStaticInt"));
+	EXECUTE(rfk::StaticField const*	staticField	= type.getStaticField("someStaticInt"));
 
 	if (staticField != nullptr)
 	{
@@ -218,7 +218,7 @@ void staticFields()
 		std::cout << staticField->getData<int const&>() << std::endl;
 	}
 
-	EXECUTE(refureku::StaticField const*	staticField2	= type.getStaticField("someStaticParentClass"));
+	EXECUTE(rfk::StaticField const*	staticField2	= type.getStaticField("someStaticParentClass"));
 
 	if (staticField2 != nullptr)
 	{
@@ -237,7 +237,7 @@ void staticFields()
 		std::cout << "Move is:     " << &move << " -> " << move << std::endl;
 	}
 
-	EXECUTE(refureku::StaticField const* staticField3 = type.getStaticField("inexistantStaticField"))
+	EXECUTE(rfk::StaticField const* staticField3 = type.getStaticField("inexistantStaticField"))
 
 	std::cout << "Found field address: " << staticField3 << std::endl;
 }
@@ -250,18 +250,18 @@ int main()
 	//staticFields();
 
 	std::cout << std::endl;
-	refureku::Class const& ppClass = ParentParentClass::staticGetArchetype();
+	rfk::Class const& ppClass = ParentParentClass::staticGetArchetype();
 
 	for (auto& field : ppClass.fields)
 		std::cout << field.name << " from " << field.introducedBy->name << " offset: " << field.memoryOffset << std::endl;
 
 	std::cout << std::endl;
-	refureku::Class const& pClass = ParentClass::staticGetArchetype();
+	rfk::Class const& pClass = ParentClass::staticGetArchetype();
 	for (auto& field : pClass.fields)
 		std::cout << field.name << " from " << field.introducedBy->name << " offset: " << field.memoryOffset << std::endl;
 
 	std::cout << std::endl;
-	refureku::Class const& exampleClass = ExampleClass::staticGetArchetype();
+	rfk::Class const& exampleClass = ExampleClass::staticGetArchetype();
 	for (auto& field : exampleClass.fields)
 		std::cout << field.name << " from " << field.introducedBy->name << " offset: " << field.memoryOffset << std::endl;
 

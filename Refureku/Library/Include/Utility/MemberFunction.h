@@ -4,7 +4,7 @@
 
 #include "Utility/ICallable.h"
 
-namespace refureku
+namespace rfk
 {
 	template <typename CallerType, typename FunctionPrototype>
 	class MemberFunction

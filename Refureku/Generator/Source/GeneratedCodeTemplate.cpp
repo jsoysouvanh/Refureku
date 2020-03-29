@@ -6,7 +6,7 @@
 
 #include "Misc/FundamentalTypes.h"
 
-using namespace refureku;
+using namespace rfk;
 
 std::hash<std::string> GeneratedCodeTemplate::_stringHasher;
 
@@ -44,9 +44,9 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 	std::string defaultInstantiateMacro	= generateDefaultInstantiateMacro(generatedFile, classInfo);
 
 	generatedFile.writeMacro(std::move(mainMacroName),
-								"friend refureku::Archetype;",
-								"friend refureku::Struct;",
-								"friend refureku::Class;",
+								"friend rfk::Archetype;",
+								"friend rfk::Struct;",
+								"friend rfk::Class;",
 									std::move(defaultInstantiateMacro),
 									std::move(getTypeMacroName),
 								"private:");
@@ -75,7 +75,7 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 	std::array<std::string, 2>	generateFieldsMetadataMacroName		= generateFieldsMetadataMacros(generatedFile, info);
 	std::string					generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
 
-	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "refureku::Struct" : "refureku::Class";
+	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
 	generatedFile.writeMacro(std::string(getTypeMacroName),
 								std::move(generateFieldsMetadataMacroName[1]),
@@ -85,7 +85,7 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 								"	static bool				initialized = false;",
 								"	static " + returnedType + " type(\"" + info.name + "\", "
 								 									+ std::to_string(_stringHasher(info.id)) + "u, "
-								 									+ "static_cast<refureku::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
+								 									+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
 								 									+ "sizeof(" + info.name + "));",
 								"",
 								"	if (!initialized)",
@@ -131,12 +131,12 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 	for (kodgen::MethodInfo const* method : staticMethods)
 	{
-		functionType = "refureku::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">";
+		functionType = "rfk::NonMemberFunction<" + std::move(method->getPrototype(true)) + ">";
 		methodName = method->getName();
 
 		generatedFile.writeLine("	type.staticMethods.emplace_back(\"" + methodName + "\", " +
 								std::to_string(_stringHasher(method->id)) +
-								"u, static_cast<refureku::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
+								"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 								"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
 	}
 
@@ -145,12 +145,12 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 	for (kodgen::MethodInfo const* method : nonStaticMethods)
 	{
-		functionType = "refureku::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">";
+		functionType = "rfk::MemberFunction<" + info.name + ", " + std::move(method->getPrototype(true)) + ">";
 		methodName = method->getName();
 
 		generatedFile.writeLine("	type.methods.emplace_back(\"" + methodName + "\", " +
 								std::to_string(_stringHasher(method->id)) +
-								"u, static_cast<refureku::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
+								"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 								"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
 	}
 	
@@ -183,12 +183,12 @@ std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(k
 	{
 		generatedFile.writeLine("	type.staticFields.emplace_back(\"" + field->name + "\", " +
 								std::to_string(_stringHasher(field->id)) +
-								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
+								"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
 								"), &type, &type, &" + info.name + "::" + field->name + ");\t\\");
 	}
 
 	//Compute total number of fields for this type (include reflected parent fields)
-	generatedFile.writeLine("	size_t fieldsCount = 0; std::vector<refureku::Struct::Parent> currParents; std::vector<refureku::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (refureku::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }\t\\");
+	generatedFile.writeLine("	size_t fieldsCount = 0; std::vector<rfk::Struct::Parent> currParents; std::vector<rfk::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (rfk::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }\t\\");
 
 	//Reserve only the memory we need
 	generatedFile.writeLine("	type.fields.reserve(fieldsCount);\t\\");
@@ -209,16 +209,16 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							"private:\t\\",
 							 "	template <typename ParentType, typename ChildType>\t\\",
-							 "	static constexpr void __RFKrecurseRegisterChild(refureku::Struct* childArchetype)\t\\",
+							 "	static constexpr void __RFKrecurseRegisterChild(rfk::Struct* childArchetype)\t\\",
 							 "	{\t\\",
-							 "		if constexpr (refureku::generated::implements_staticGetArchetype<ParentType, refureku::Class const&()>::value)\t\\",
+							 "		if constexpr (rfk::generated::implements_staticGetArchetype<ParentType, rfk::Class const&()>::value)\t\\",
 							 "		{\t\\",
 							 "			ParentType::template __RFKregisterChild<ChildType>(childArchetype);\t\\",
 							 "		}\t\\",
 							 "	}\t\\",
 							 "public:\t\\",
 							 "	template <typename ChildType>\t\\",
-							 "	static void __RFKregisterChild(refureku::Struct* childArchetype) noexcept\t\\",
+							 "	static void __RFKregisterChild(rfk::Struct* childArchetype) noexcept\t\\",
 							 "	{\t\\");
 
 	for (kodgen::StructClassInfo::ParentInfo const& parent : info.parents)
@@ -226,7 +226,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 		generatedFile.writeLine("		__RFKrecurseRegisterChild<" + parent.type.getName(true) + ", ChildType>(childArchetype);\t\\");
 	}
 
-	generatedFile.writeLines("		refureku::Struct const& thisArchetype = staticGetArchetype();\t\\",
+	generatedFile.writeLines("		rfk::Struct const& thisArchetype = staticGetArchetype();\t\\",
 							 "		if (childArchetype != &thisArchetype)\t\\",
 							 "		{\t\\",
 							 "		}\t\\");
@@ -235,7 +235,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 	{
 		generatedFile.writeLine("		childArchetype->fields.emplace_back(\"" + field->name + "\", " +
 								std::to_string(_stringHasher(field->id)) +
-								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
+								"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
 								"), childArchetype, &thisArchetype, offsetof(ChildType, " + field->name + ")" + ", " + std::to_string(field->qualifiers.isMutable) + ");\t\\");
 	}
 
@@ -258,7 +258,7 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 
 		for (kodgen::StructClassInfo::ParentInfo parent : info.parents)
 		{
-			generatedFile.writeLine("	type.__RFKaddToParents<" + parent.type.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
+			generatedFile.writeLine("	type.__RFKaddToParents<" + parent.type.getName(true) + ">(static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
 		}
 
 		generatedFile.writeLine("");

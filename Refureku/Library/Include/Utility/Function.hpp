@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace refureku
+namespace rfk
 {
 	template <typename T>
 	class Function;

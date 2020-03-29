@@ -4,7 +4,7 @@
 
 #include "Misc/FundamentalTypes.h"
 
-namespace refureku
+namespace rfk
 {
 	class Entity
 	{

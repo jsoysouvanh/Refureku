@@ -1,6 +1,6 @@
 #include "TypeInfo/Methods/MethodBase.h"
 
-using namespace refureku;
+using namespace rfk;
 
 MethodBase::MethodBase(std::string&& name, uint64 id, EMethodFlags flags, std::shared_ptr<ICallable>&& internalMethod) noexcept:
 	Entity(std::forward<std::string>(name), id),

@@ -9,7 +9,7 @@
 #include "TypeInfo/EAccessSpecifier.h"
 #include "Utility/ICallable.h"
 
-namespace refureku
+namespace rfk
 {
 	enum EMethodFlags : uint16
 	{

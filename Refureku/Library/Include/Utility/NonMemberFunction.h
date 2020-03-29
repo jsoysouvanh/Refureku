@@ -4,7 +4,7 @@
 
 #include "Utility/ICallable.h"
 
-namespace refureku
+namespace rfk
 {
 	template <typename FunctionPrototype>
 	class NonMemberFunction

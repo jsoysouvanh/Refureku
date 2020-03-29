@@ -2,9 +2,9 @@
 template <typename T>
 void Struct::__RFKaddToParents(EAccessSpecifier inheritanceAccess) noexcept
 {
-	if constexpr (refureku::generated::implements_staticGetArchetype<T, refureku::Struct const&()>::value)
+	if constexpr (rfk::generated::implements_staticGetArchetype<T, rfk::Struct const&()>::value)
 	{
-		directParents.emplace_back(refureku::Struct::Parent{ inheritanceAccess, T::staticGetArchetype() });
+		directParents.emplace_back(rfk::Struct::Parent{ inheritanceAccess, T::staticGetArchetype() });
 	}
 }
 
@@ -17,18 +17,18 @@ void Struct::__RFKaddRequiredMethods(std::string&& instantiatePrototype) noexcep
 	//Make the default implementation in base reflection class and keep a reference to all instantiation classes in a separated array
 	__RFKaddInstantiationMethod<T>(	"__RFKinstantiate",
 										stringHasher(name + "__RFKinstantiate" + instantiatePrototype),
-										refureku::EAccessSpecifier::Private,
+										rfk::EAccessSpecifier::Private,
 										&T::template __RFKinstantiate<T>);
 }
 
 template <typename ReturnType, typename... ArgTypes>
-void Struct::__RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, refureku::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept
+void Struct::__RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, rfk::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept
 {
 	//TODO: Move this method in another specific array
 
 	//Insert in the sorted order vector (alphabetical order)
 	//staticMethods.insert(std::lower_bound(staticMethods.cbegin(), staticMethods.cend(), StaticMethod(std::string(methodName)), [](StaticMethod const& m1, StaticMethod const& m2){ return m1.name < m2.name; }),
-	//					 StaticMethod(std::forward<std::string>(methodName), methodId, accessSpecifier, std::shared_ptr<refureku::NonMemberFunction<ReturnType*(ArgTypes...)>>(new refureku::NonMemberFunction<ReturnType*(ArgTypes...)>(function))));
+	//					 StaticMethod(std::forward<std::string>(methodName), methodId, accessSpecifier, std::shared_ptr<rfk::NonMemberFunction<ReturnType*(ArgTypes...)>>(new rfk::NonMemberFunction<ReturnType*(ArgTypes...)>(function))));
 }
 
 template <typename ReturnType, typename... ArgTypes>

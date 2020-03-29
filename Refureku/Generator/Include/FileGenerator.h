@@ -2,7 +2,7 @@
 
 #include "CodeGen/FileGenerator.h"
 
-namespace refureku
+namespace rfk
 {
 	class FileGenerator : public kodgen::FileGenerator
 	{

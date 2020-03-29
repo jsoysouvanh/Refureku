@@ -1,6 +1,6 @@
 #include "FileGenerator.h"
 
-using namespace refureku;
+using namespace rfk;
 
 void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
 {

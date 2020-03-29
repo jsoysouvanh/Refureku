@@ -2,7 +2,7 @@
 
 #include "TypeInfo/Struct.h"
 
-namespace refureku
+namespace rfk
 {
 	class Class : public Struct
 	{

@@ -8,7 +8,7 @@
 #include "TypeInfo/Methods/MethodBase.h"
 #include "Utility/MemberFunction.h"
 
-namespace refureku
+namespace rfk
 {
 	class Struct;	//Forward declaration
 

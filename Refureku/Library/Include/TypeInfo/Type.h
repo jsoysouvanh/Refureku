@@ -2,7 +2,7 @@
 
 #include "TypeInfo/Archetype.h"
 
-namespace refureku
+namespace rfk
 {
 	struct Type
 	{

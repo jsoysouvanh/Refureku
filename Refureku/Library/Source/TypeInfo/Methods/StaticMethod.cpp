@@ -2,7 +2,7 @@
 
 #include <utility>	//std::forward
 
-using namespace refureku;
+using namespace rfk;
 
 StaticMethod::StaticMethod(std::string&&				name,
 						   uint64						id,

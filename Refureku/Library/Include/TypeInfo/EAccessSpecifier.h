@@ -2,7 +2,7 @@
 
 #include "Misc/FundamentalTypes.h"
 
-namespace refureku
+namespace rfk
 {
 	enum class EAccessSpecifier : uint8
 	{

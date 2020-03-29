@@ -2,7 +2,7 @@
 
 #include <Parsing/FileParser.h>
 
-namespace refureku
+namespace rfk
 {
 	class FileParser : public kodgen::FileParser
 	{

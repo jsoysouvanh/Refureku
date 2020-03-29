@@ -2,7 +2,7 @@
 
 #include "TypeInfo/Struct.h"
 
-using namespace refureku;
+using namespace rfk;
 
 Method::Method(std::string&&				methodName,
 			   uint64						methodId,

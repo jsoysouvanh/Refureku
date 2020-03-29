@@ -2,7 +2,7 @@
 
 #include "TypeInfo/Entity.h"
 
-namespace refureku
+namespace rfk
 {
 	class Archetype : public Entity
 	{

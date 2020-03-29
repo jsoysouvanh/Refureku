@@ -11,7 +11,7 @@
 #include "TypeInfo/EAccessSpecifier.h"
 #include "TypeInfo/GeneratedTraits.h"
 
-namespace refureku
+namespace rfk
 {
 	class Struct : public Archetype
 	{
@@ -96,7 +96,7 @@ namespace refureku
 			void __RFKaddRequiredMethods(std::string&& instantiatePrototype)										noexcept;
 
 			template <typename ReturnType, typename... ArgTypes>
-			void __RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, refureku::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept;
+			void __RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, rfk::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept;
 
 			Struct& operator=(Struct const&)	= delete;
 			Struct& operator=(Struct&&)			= default;

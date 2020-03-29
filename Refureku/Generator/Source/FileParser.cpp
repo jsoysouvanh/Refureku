@@ -1,6 +1,6 @@
 #include "FileParser.h"
 
-using namespace refureku;
+using namespace rfk;
 
 FileParser::FileParser() noexcept:
 	kodgen::FileParser()

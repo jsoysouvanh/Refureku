@@ -3,7 +3,7 @@
 #include "TypeInfo/Methods/MethodBase.h"
 #include "Utility/NonMemberFunction.h"
 
-namespace refureku
+namespace rfk
 {
 	class StaticMethod : public MethodBase
 	{

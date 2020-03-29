@@ -2,7 +2,7 @@
 
 #include <utility>
 
-using namespace refureku;
+using namespace rfk;
 
 Entity::Entity(std::string&& newName, uint64 newId)	noexcept:
 	name{std::forward<std::string>(newName)},

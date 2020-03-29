@@ -1,6 +1,6 @@
 #pragma once
 
-namespace refureku
+namespace rfk
 {
 	class ReflectedObject
 	{

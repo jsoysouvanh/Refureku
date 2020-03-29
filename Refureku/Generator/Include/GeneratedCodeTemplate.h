@@ -7,7 +7,7 @@
 #include <InfoStructures/StructClassInfo.h>
 #include <InfoStructures/EnumInfo.h>
 
-namespace refureku
+namespace rfk
 {
 	class GeneratedCodeTemplate : public kodgen::GeneratedCodeTemplate
 	{

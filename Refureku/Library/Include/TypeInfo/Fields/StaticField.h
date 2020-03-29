@@ -6,7 +6,7 @@
 #include "TypeInfo/Fields/FieldBase.h"
 #include "TypeInfo/Type.h"
 
-namespace refureku
+namespace rfk
 {
 	class StaticField : public FieldBase
 	{

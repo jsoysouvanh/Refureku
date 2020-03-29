@@ -1,6 +1,6 @@
 #include "TypeInfo/Struct.h"
 
-using namespace refureku;
+using namespace rfk;
 
 Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
 	Archetype(std::forward<std::string>(newName), newId, newCategory, newMemorySize)

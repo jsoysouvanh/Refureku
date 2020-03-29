@@ -13,8 +13,8 @@ void parseAndGenerate(fs::path workingDirectory)
 	fs::path includeDirectory	= workingDirectory / "Include";
 	fs::path generatedDirectory	= includeDirectory / "Generated";
 
-	refureku::FileParser	parser;
-	refureku::FileGenerator	fileGenerator;
+	rfk::FileParser	parser;
+	rfk::FileGenerator	fileGenerator;
 
 	//Parse WorkingDir/...
 	fileGenerator.includedDirectories.emplace(includeDirectory.string());
@@ -29,10 +29,10 @@ void parseAndGenerate(fs::path workingDirectory)
 	fileGenerator.outputDirectory = generatedDirectory;
 
 	//Generated files will use .myCustomExtension.h extension
-	fileGenerator.generatedFilesExtension = ".refureku.h";
+	fileGenerator.generatedFilesExtension = ".rfk.h";
 
 	//Bind "Refureku" to the GeneratedCodeTemplate class
-	fileGenerator.addGeneratedCodeTemplate("Refureku", new refureku::GeneratedCodeTemplate());
+	fileGenerator.addGeneratedCodeTemplate("Refureku", new rfk::GeneratedCodeTemplate());
 
 	/** class Class(CodeTemplate[Refureku]) MyClass {}; */
 	fileGenerator.codeTemplateMainComplexPropertyName = "CodeTemplate";
