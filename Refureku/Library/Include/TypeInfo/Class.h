@@ -19,6 +19,15 @@ namespace refureku
 			template <typename T>
 			void __RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess) noexcept;
 
+			template <typename ParentType, typename ThisType>
+			void __RFKregisterToParent()
+			{
+				if constexpr (refureku::generated::implements_staticGetArchetype<ParentType, refureku::Class const&()>::value)
+				{
+					ParentType::__RFKregisterChild<ThisType>(this);
+				}
+			}
+
 			Class& operator=(Class const&)	= delete;
 			Class& operator=(Class&&)		= default;
 	};

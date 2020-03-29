@@ -4,6 +4,6 @@ void Class::__RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess) noex
 {
 	if constexpr (refureku::generated::implements_staticGetArchetype<T, refureku::Class const&()>::value)
 	{
-		directParents.emplace_back(refureku::Struct::Parent{ inheritanceAccess, T::staticGetArchetype() });
+		directParents.emplace_back(refureku::Struct::Parent{ inheritanceAccess, &T::staticGetArchetype() });
 	}
 }

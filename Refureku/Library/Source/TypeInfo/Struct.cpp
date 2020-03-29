@@ -49,7 +49,7 @@ Method const* Struct::getMethod(std::string const& methodName, uint16 minFlags, 
 
 		for (Struct::Parent const& parent : directParents)
 		{
-			result = parent.type.getMethod(methodName, minFlags, true);
+			result = parent.type->getMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -88,7 +88,7 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, uin
 		
 		for (Struct::Parent const& parent : directParents)
 		{
-			parentResult = parent.type.getMethods(methodName, minFlags, true);
+			parentResult = parent.type->getMethods(methodName, minFlags, true);
 
 			if (!parentResult.empty())
 			{
@@ -124,7 +124,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, uint1
 
 		for (Struct::Parent const& parent : directParents)
 		{
-			result = parent.type.getStaticMethod(methodName, minFlags, true);
+			result = parent.type->getStaticMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -163,7 +163,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 
 		for (Struct::Parent const& parent : directParents)
 		{
-			parentResult = parent.type.getStaticMethods(methodName, minFlags, true);
+			parentResult = parent.type->getStaticMethods(methodName, minFlags, true);
 
 			if (!parentResult.empty())
 			{
@@ -179,7 +179,7 @@ bool Struct::inheritsFrom(Struct const& otherType) const noexcept
 {
 	for (Parent const& parent : directParents)
 	{
-		if (&parent.type == &otherType || parent.type.inheritsFrom(otherType))
+		if (parent.type == &otherType || parent.type->inheritsFrom(otherType))
 		{
 			return true;
 		}

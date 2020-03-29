@@ -19,7 +19,7 @@ namespace refureku
 			struct Parent
 			{
 				EAccessSpecifier	access;
-				Struct const&		type;
+				Struct const*		type;
 			};
 
 			/** Direct parent types. This list includes ONLY reflected parents */
@@ -90,7 +90,7 @@ namespace refureku
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
-			void __RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess)									noexcept;
+			void __RFKaddToParentsIfPossible(EAccessSpecifier inheritanceAccess)												noexcept;
 
 			template <typename T>
 			void __RFKaddRequiredMethods(std::string&& instantiatePrototype)										noexcept;

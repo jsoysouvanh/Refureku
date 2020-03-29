@@ -242,12 +242,99 @@ void staticFields()
 	std::cout << "Found field address: " << staticField3 << std::endl;
 }
 
+struct Test;
+
+class Base
+{
+	friend Test;
+
+	private:
+		char	a[8];
+
+	public:
+		virtual ~Base() = default;
+
+		template <typename T>
+		void registerAndAppendOwnMembers()
+		{
+			std::cout << std::is_base_of_v<std::decay_t<decltype(*this)>, T> << std::endl;
+		}
+};
+
+//class Base2 : public Base
+//{
+//	friend Test;
+//
+//	private:
+//		char	b[4];
+//	
+//	public:
+//		virtual ~Base2() = default;
+//
+//		template <typename T>
+//		void appendOwnMembers(std::vector<uint32_t>& offsets, uint64_t& accumulatedSize)
+//		{
+//			std::cout << "Offset of b in " << typeid(T).raw_name() << " is " << offsetof(T, b) << std::endl;
+//		}
+//};
+//
+//class Base3 : public Base2
+//{
+//	friend Test;
+//
+//	private:
+//		char	c[8];
+//
+//	public:
+//		virtual ~Base3() = default;
+//
+//		template <typename T>
+//		void registerAndAppendOwnMembers(std::vector<uint32_t>& offsets, uint64_t& accumulatedSize)
+//		{
+//
+//
+//			std::cout << "Offset of c in " << typeid(T).raw_name() << " is " << offsetof(T, c) << std::endl;
+//		}
+//};
+
+class Derived : public Base
+{
+	friend Test;
+
+	private:
+		virtual ~Derived() = default;
+
+		template <typename T>
+		void registerAndAppendOwnMembers()
+		{
+			Base::registerAndAppendOwnMembers<Derived>();
+		}
+};
+
+struct Test
+{
+	void method()
+	{
+		Derived d;
+		d.registerAndAppendOwnMembers<Derived>();
+
+		//std::cout << "Offset of a in Derived: " << offsetof(Derived, a) << " + " << sizeof(Derived::a) << " = " << offsetof(Derived, a) + sizeof(Derived::a) << std::endl;
+		//std::cout << "Offset of b in Derived: " << offsetof(Derived, b) << " + " << sizeof(Derived::b) << " = " << offsetof(Derived, b) + sizeof(Derived::b) << std::endl;
+		//std::cout << "Offset of c in Derived: " << offsetof(Derived, c) << " + " << sizeof(Derived::c) << " = " << offsetof(Derived, c) + sizeof(Derived::c) << std::endl;
+	}
+};
+
 int main()
 {
-	nonStaticMethods();
-	staticMethods();
-	nonStaticFields();
-	staticFields();
+	//nonStaticMethods();
+	//staticMethods();
+	//nonStaticFields();
+	//staticFields();
+
+	Test t;
+	t.method();
+
+	//refureku::Class const& type = ExampleClass::staticGetArchetype();
 
 	return EXIT_SUCCESS;
 }

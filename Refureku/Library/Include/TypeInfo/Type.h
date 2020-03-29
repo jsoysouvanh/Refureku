@@ -9,7 +9,7 @@ namespace refureku
 		public:
 			Archetype const* archetype = nullptr;
 
-			/** TODO: ptrDepth, isPointer(), isReference... */
+			/** TODO: ptrDepth, isPointer(), isReference..., isArray */
 
 			Type()				= default;
 			Type(Type const&)	= default;

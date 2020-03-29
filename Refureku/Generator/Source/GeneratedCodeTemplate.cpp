@@ -38,7 +38,7 @@ void GeneratedCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, k
 
 void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
 {
-	std::string mainMacroName			= _externalMacroPrefix + classInfo.name + "_GENERATED";
+	std::string mainMacroName			= _externalPrefix + classInfo.name + "_GENERATED";
 
 	std::string getTypeMacroName		= generateGetArchetypeMacro(generatedFile, classInfo);
 	std::string defaultInstantiateMacro	= generateDefaultInstantiateMacro(generatedFile, classInfo);
@@ -73,10 +73,10 @@ void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFil
 
 std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string getTypeMacroName					= _internalMacroPrefix + info.name + "_GetTypeMacro";
-	std::string generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
-	std::string generateFieldsMetadataMacroName		= generateFieldsMetadataMacro(generatedFile, info);
-	std::string generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
+	std::string					getTypeMacroName					= _internalPrefix + info.name + "_GetTypeMacro";
+	std::string					generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
+	std::array<std::string, 2>	generateFieldsMetadataMacroName		= generateFieldsMetadataMacros(generatedFile, info);
+	std::string					generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
 
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "refureku::Struct" : "refureku::Class";
 	
@@ -92,7 +92,7 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 								"		if (!initialized)",
 								"		{",
 								"			" + std::move(generatedParentsMetadataMacroName),
-								"			" + std::move(generateFieldsMetadataMacroName),
+								"			" + std::move(generateFieldsMetadataMacroName[0]) + "();",
 								"			" + std::move(generatedMethodsMetadataMacroName),
 								"",
 								"			initialized = true;",
@@ -112,7 +112,7 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 
 std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = _internalMacroPrefix + info.name + "_GenerateMethodsMetadata";
+	std::string macroName = _internalPrefix + info.name + "_GenerateMethodsMetadata";
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
@@ -163,17 +163,18 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	return macroName;
 }
 
-std::string GeneratedCodeTemplate::generateFieldsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = _internalMacroPrefix + info.name + "_GenerateFieldsMetadata";
+	std::array<std::string, 2> macroNames = {	_internalPrefix + info.name + "_GenerateFieldsMetadata",
+												_internalPrefix + info.name + "_GenerateRegisterAndAppendMembersMethod" };
 
-	generatedFile.writeLine("#define " + macroName + "\t\\");
+	generatedFile.writeLine("#define " + macroNames[0] + "\t\\");
 
 	//Keep track of what we add so that we save some checks in the metadata
 	std::vector<kodgen::FieldInfo const*>	nonStaticFields;
 	std::vector<kodgen::FieldInfo const*>	staticFields;
 
-	//Sort methods so that it doesn't have to be done in the target program
+	//Sort fields so that it doesn't have to be done in the target program
 	sortFields(info.fields, nonStaticFields, staticFields);
 
 	//Fill the target type method vectors using sorted methods we just computed
@@ -188,27 +189,59 @@ std::string GeneratedCodeTemplate::generateFieldsMetadataMacro(kodgen::Generated
 								"), &type, &type, &" + info.name + "::" + field->name + ");\t\\");
 	}
 
+	//Compute total number of fields for this type
+	generatedFile.writeLine("	size_t fieldsCount = 0; std::vector<refureku::Struct::Parent> currParents; std::vector<refureku::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (refureku::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }");
+
 	//Reserve only the memory we need
-	generatedFile.writeLine("	type.fields.reserve(" + std::to_string(nonStaticFields.size()) + ");\t\\");
+	generatedFile.writeLine("	type.fields.reserve(fieldsCount);\t\\");
+	
+	//==============================================================
+	/**
+	*	TODO: REWORK HERE
+	*/
+	//Append own members to the fields collection - registerAndAppendMembers method is defined just below
+	generatedFile.writeLine("	registerAndAppendMembers<" + info.name + ">(type, type.fields);\t\\");
+
+	//==============================================================
+
+	//Wrap this part in a method so that children classes can use it too
+	//generatedFile.writeLines("#define " + macroNames[1] + "\t\\",
+	//						 "template <typename T>	\t\\",
+	//						 "static void " + info.name + "::registerAndAppendMembers(refureku::Struct const& archetype, std::vector<refureku::Field>& fields) noexcept {\t\\");
+
+	generatedFile.writeLines("#define " + macroNames[1] + "\t\\",
+							 "template <typename ChildType>\t\\",
+							 "static void __RFKregisterChild(refureku::Struct* childArchetype) noexcept\t\\",
+							 "{\t\\",
+							 "refureku::Struct const& thisArchetype = staticGetArchetype();\t\\",
+							 "//TODO: Recursive call to parents classes later here\t\\",
+							 "//Add to list of children\t\\",
+							 "if (childArchetype != &thisArchetype)\t\\",
+							 "{\t\\",
+							 "//TODO\t\\",
+							 "}\t\\");
 
 	for (kodgen::FieldInfo const* field : nonStaticFields)
 	{
-		generatedFile.writeLine("	type.fields.emplace_back(\"" + field->name + "\", " +
+		generatedFile.writeLine("	childArchetype->fields.emplace_back(\"" + field->name + "\", " +
 								std::to_string(_stringHasher(field->id)) +
 								"u, static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field->accessSpecifier)) +
-								"), &type, &type, offsetof(" + info.name + ", " + field->name + ")" + ", " + std::to_string(field->qualifiers.isMutable) + ");\t\\");
+								"), childArchetype, &thisArchetype, offsetof(ChildType, " + field->name + ")" + ", " + std::to_string(field->qualifiers.isMutable) + ");\t\\");
 	}
+
+		//Add fields
+		//childArchetype->fields.emplace_back("somePtrToInt", 12635385505303968848u, static_cast<refureku::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, somePtrToInt), 0);
 
 	generatedFile.writeLine("");
 
-	return macroName;
+	return macroNames;
 }
 
 std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	if (!info.parents.empty())
 	{
-		std::string macroName = _internalMacroPrefix + info.name + "_GenerateParentsMetadata";
+		std::string macroName = _internalPrefix + info.name + "_GenerateParentsMetadata";
 
 		generatedFile.writeLine("#define " + macroName + "\t\\");
 
@@ -216,7 +249,7 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 
 		for (kodgen::StructClassInfo::ParentInfo parent : info.parents)
 		{
-			generatedFile.writeLine("	type.__RFKaddToParentsIfPossible<" + parent.type.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
+			generatedFile.writeLine("	type.__RFKaddToParents<" + parent.type.getName(true) + ">(static_cast<refureku::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
 		}
 
 		generatedFile.writeLine("");
@@ -323,7 +356,7 @@ kodgen::uint16 GeneratedCodeTemplate::computeFieldFlags(kodgen::FieldInfo const*
 
 std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = _internalMacroPrefix + info.name + "_DefaultInstantiateMacro";
+	std::string macroName = _internalPrefix + info.name + "_DefaultInstantiateMacro";
 
 	generatedFile.writeMacro(std::string(macroName),
 								"template <typename T>",
