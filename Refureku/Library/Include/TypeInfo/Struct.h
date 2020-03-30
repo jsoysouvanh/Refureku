@@ -118,20 +118,11 @@ namespace rfk
 			*/
 			bool isBaseOf(Struct const& otherType)															const	noexcept;
 
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType* makeInstance(ArgTypes&&... args)													const	noexcept;
-
 			/**
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
 			void __RFKaddToParents(EAccessSpecifier inheritanceAccess)												noexcept;
-
-			template <typename T>
-			void __RFKaddRequiredMethods(std::string&& instantiatePrototype)										noexcept;
-
-			template <typename ReturnType, typename... ArgTypes>
-			void __RFKaddInstantiationMethod(std::string&& methodName, uint64 methodId, rfk::EAccessSpecifier accessSpecifier, ReturnType*(*function)(ArgTypes...)) noexcept;
 
 			Struct& operator=(Struct const&)	= delete;
 			Struct& operator=(Struct&&)			= default;

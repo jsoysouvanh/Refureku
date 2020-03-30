@@ -42,7 +42,7 @@ namespace exnamespace
 			RFKMethod()
 			virtual void method1() const { };
 
-			ParentClass()					noexcept {}
+			ParentClass()					noexcept { }
 			ParentClass(ParentClass const&)	= default;
 			ParentClass(ParentClass&& o)	= default;
 
@@ -74,6 +74,9 @@ namespace exnamespace
 	{
 		RFKField()
 		char p2Char = '*';
+
+		public:
+			ParentClass2() noexcept { }
 
 		RFKParentClass2_GENERATED
 	};
@@ -132,7 +135,7 @@ namespace exnamespace
 			float			method3(int i)				noexcept;
 
 		public:
-			ExampleClass()						noexcept {}
+			ExampleClass()						noexcept { }
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;

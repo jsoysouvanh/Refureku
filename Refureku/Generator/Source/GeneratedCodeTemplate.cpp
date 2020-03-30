@@ -42,7 +42,7 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 
 	std::string getTypeMacroName				= generateGetArchetypeMacro(generatedFile, classInfo);
 	std::string defaultInstantiateMacro			= generateDefaultInstantiateMacro(generatedFile, classInfo);
-	std::string generateRegisteringMacroName	= generateRegisteringMacro(generatedFile, classInfo);
+	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
 
 	generatedFile.writeMacro(std::move(mainMacroName),
 								"friend rfk::Archetype;",
@@ -50,7 +50,7 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 								"friend rfk::Class;",
 									std::move(defaultInstantiateMacro),
 									std::move(getTypeMacroName),
-									std::move(generateRegisteringMacroName),
+									std::move(generateRegistrationMacroName),
 								"private:");
 }
 
@@ -82,30 +82,30 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 	generatedFile.writeMacro(std::string(getTypeMacroName),
 								std::move(generateFieldsMetadataMacroName[1]),
 								"public:",
-								"static " + returnedType + " const& staticGetArchetype() noexcept",
-								"{",
-								"	static bool				initialized = false;",
-								"	static " + returnedType + " type(\"" + info.name + "\", "
-								 									+ std::to_string(_stringHasher(info.id)) + "u, "
-								 									+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
-								 									+ "sizeof(" + info.name + "));",
-								"",
-								"	if (!initialized)",
+								"	static " + returnedType + " const& staticGetArchetype() noexcept",
 								"	{",
-								"		initialized = true;",
-								"",
-								"		" + std::move(generateParentsMetadataMacroName),
-								"		" + std::move(generateFieldsMetadataMacroName[0]),
-								"		" + std::move(generateMethodsMetadataMacroName),
+								"		static bool				initialized = false;",
+								"		static " + returnedType + " type(\"" + info.name + "\", "
+																		+ std::to_string(_stringHasher(info.id)) + "u, "
+																		+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
+																		+ "sizeof(" + info.name + "));",
+								"	",
+								"		if (!initialized)",
+								"		{",
+								"			initialized = true;",
+								"	",
+								"			" + std::move(generateParentsMetadataMacroName),
+								"			" + std::move(generateFieldsMetadataMacroName[0]),
+								"			" + std::move(generateMethodsMetadataMacroName),
+								"		}",
+								"	",
+								"		return type;",
 								"	}",
-								"",
-								"	return type;",
-								"}",
-								"",
-								"" + returnedType + " const& getArchetype() const noexcept",
-								"{",
-								"	return " + info.name + "::staticGetArchetype();",
-								"}"
+								"	",
+								"	" + returnedType + " const& getArchetype() const noexcept",
+								"	{",
+								"		return " + info.name + "::staticGetArchetype();",
+								"	}"
 							 );
 
 	return getTypeMacroName;
@@ -144,7 +144,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	}
 
 	//Add required methods (instantiate....)
-	generatedFile.writeLine("	type.__RFKaddRequiredMethods<" + info.name + ">(\"" + info.name + "*()\"); \t\\");
+	generatedFile.writeLine("	type.__RFKaddRequiredMethods<" + info.name + ">();\t\\");
 
 	generatedFile.writeLine("");
 
@@ -327,19 +327,20 @@ std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::Gener
 	std::string macroName = _internalPrefix + info.name + "_DefaultInstantiateMacro";
 
 	generatedFile.writeMacro(std::string(macroName),
-								"template <typename T>",
-								"static T* __RFKinstantiate() noexcept",
-								"{",
-								"	if constexpr (std::is_default_constructible<T>::value)",
-								"		return new T();",
-								"	else",
-								"		return nullptr;",
-								"}");
+								"private:",
+								"	template <typename T>",
+								"	static void* __RFKinstantiate() noexcept",
+								"	{",
+								"		if constexpr (std::is_default_constructible_v<T>)",
+								"			return new " + info.name + "();",
+								"		else",
+								"			return nullptr;",
+								"	}");
 
 	return macroName;
 }
 
-std::string GeneratedCodeTemplate::generateRegisteringMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string macroName = _internalPrefix + info.name + "_RegisterArchetype";
 

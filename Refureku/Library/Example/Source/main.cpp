@@ -327,6 +327,23 @@ void inheritance()
 	EXECUTE_RESULT(p2Class.inheritsFrom(oClass));
 }
 
+void instantiation()
+{
+	rfk::Class const& pc	= ParentClass::staticGetArchetype();
+	rfk::Class const& pc2	= ParentClass2::staticGetArchetype();
+	rfk::Class const& ec	= ExampleClass::staticGetArchetype();
+
+	ParentClass* pcI = pc.makeInstance<ParentClass>();
+	ParentClass2* pc2I = pc2.makeInstance<ParentClass2>();
+	ExampleClass* ecI = ec.makeInstance<ExampleClass>();
+
+	std::cout << "makeInstance(): " << pcI->getArchetype().name << std::endl;
+	std::cout << "makeInstance(): " << pc2I->getArchetype().name << std::endl;
+	std::cout << "makeInstance(): " << ecI->getArchetype().name << std::endl;
+
+	rfk::Database::getArchetype("ExampleClass")->makeInstance<ExampleClass>();
+}
+
 int main()
 {
 	nonStaticMethods();
@@ -334,6 +351,7 @@ int main()
 	nonStaticFields();
 	staticFields();
 	inheritance();
+	instantiation();
 
 	return EXIT_SUCCESS;
 }
