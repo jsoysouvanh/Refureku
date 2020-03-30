@@ -38,10 +38,11 @@ void GeneratedCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, k
 
 void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
 {
-	std::string mainMacroName			= _externalPrefix + classInfo.name + "_GENERATED";
+	std::string mainMacroName					= _externalPrefix + classInfo.name + "_GENERATED";
 
-	std::string getTypeMacroName		= generateGetArchetypeMacro(generatedFile, classInfo);
-	std::string defaultInstantiateMacro	= generateDefaultInstantiateMacro(generatedFile, classInfo);
+	std::string getTypeMacroName				= generateGetArchetypeMacro(generatedFile, classInfo);
+	std::string defaultInstantiateMacro			= generateDefaultInstantiateMacro(generatedFile, classInfo);
+	std::string generateRegisteringMacroName	= generateRegisteringMacro(generatedFile, classInfo);
 
 	generatedFile.writeMacro(std::move(mainMacroName),
 								"friend rfk::Archetype;",
@@ -49,6 +50,7 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 								"friend rfk::Class;",
 									std::move(defaultInstantiateMacro),
 									std::move(getTypeMacroName),
+									std::move(generateRegisteringMacroName),
 								"private:");
 }
 
@@ -71,9 +73,9 @@ void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFil
 std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string					getTypeMacroName					= _internalPrefix + info.name + "_GetTypeMacro";
-	std::string					generatedParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
+	std::string					generateParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
 	std::array<std::string, 2>	generateFieldsMetadataMacroName		= generateFieldsMetadataMacros(generatedFile, info);
-	std::string					generatedMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
+	std::string					generateMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
 
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
@@ -92,9 +94,9 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 								"	{",
 								"		initialized = true;",
 								"",
-								"		" + std::move(generatedParentsMetadataMacroName),
+								"		" + std::move(generateParentsMetadataMacroName),
 								"		" + std::move(generateFieldsMetadataMacroName[0]),
-								"		" + std::move(generatedMethodsMetadataMacroName),
+								"		" + std::move(generateMethodsMetadataMacroName),
 								"	}",
 								"",
 								"	return type;",
@@ -333,6 +335,18 @@ std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::Gener
 								"	else",
 								"		return nullptr;",
 								"}");
+
+	return macroName;
+}
+
+std::string GeneratedCodeTemplate::generateRegisteringMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+{
+	std::string macroName = _internalPrefix + info.name + "_RegisterArchetype";
+
+	generatedFile.writeMacro(std::string(macroName),
+							 "static inline rfk::ArchetypeRegisterer reg = staticGetArchetype();");
+
+	generatedFile.writeLine("");
 
 	return macroName;
 }

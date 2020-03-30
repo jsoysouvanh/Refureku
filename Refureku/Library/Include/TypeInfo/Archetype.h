@@ -24,10 +24,13 @@ namespace rfk
 			/** Size in bytes an instance of this archetype takes in memory, bsaically what typeof(Type) returns */
 			uint64		memorySize	= 0;
 
-			Archetype(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
-			Archetype(Archetype const&)																	= delete;
-			Archetype(Archetype&&)																		= default;
-			~Archetype()																				= default;
+			Archetype(std::string&& newName,
+					  uint64		newId			= 0u,
+					  ECategory		newCategory		= ECategory::Undefined,
+					  uint64		newMemorySize	= 0u)					noexcept;
+			Archetype(Archetype const&)										= delete;
+			Archetype(Archetype&&)											= default;
+			~Archetype()													= default;
 
 			Archetype& operator=(Archetype const&)	= delete;
 			Archetype& operator=(Archetype&&)		= default;

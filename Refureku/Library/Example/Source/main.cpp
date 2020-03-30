@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ExampleClass.h"
+#include "TypeInfo/Database.h"
 
 #define EXECUTE(FunctionCall) std::cout << #FunctionCall << std::endl; FunctionCall;
 #define EXECUTE_RESULT(FunctionCall) std::cout << #FunctionCall << " --> " << FunctionCall << std::endl;
@@ -328,11 +329,11 @@ void inheritance()
 
 int main()
 {
-	//nonStaticMethods();
-	//staticMethods();
-	//nonStaticFields();
+	nonStaticMethods();
+	staticMethods();
+	nonStaticFields();
 	staticFields();
-	//inheritance();
+	inheritance();
 
 	return EXIT_SUCCESS;
 }

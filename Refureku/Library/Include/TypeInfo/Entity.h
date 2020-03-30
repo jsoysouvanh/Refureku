@@ -42,6 +42,38 @@ namespace rfk
 				}
 			};
 
+			struct PtrNameHasher
+			{
+				size_t operator()(rfk::Entity const* entity) const
+				{
+					return std::hash<std::string>()(entity->name);
+				}
+			};
+
+			struct PtrIdHasher
+			{
+				size_t operator()(rfk::Entity const* entity) const
+				{
+					return entity->id;
+				}
+			};
+
+			struct PtrEqualName
+			{
+				bool operator()(rfk::Entity const* e1, rfk::Entity const* e2) const
+				{
+					return e1->name == e2->name;
+				}
+			};
+
+			struct PtrEqualId
+			{
+				bool operator()(rfk::Entity const* e1, rfk::Entity const* e2) const
+				{
+					return e1->id == e2->id;
+				}
+			};
+
 			/** Name qualifying this entity */
 			std::string		name;
 
