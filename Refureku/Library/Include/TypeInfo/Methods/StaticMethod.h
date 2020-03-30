@@ -11,7 +11,7 @@ namespace rfk
 			StaticMethod()																			= default;
 			StaticMethod(std::string&&					name,
 						 uint64							id				= 0u,
-						 EMethodFlags					flags			= EMethodFlags::Default,
+						 EMethodFlags					flags			= EMethodFlags::Static,
 						 std::shared_ptr<ICallable>&&	internalMethod	= nullptr)					noexcept;
 			StaticMethod(StaticMethod const&)														= default;
 			StaticMethod(StaticMethod&&)															= default;

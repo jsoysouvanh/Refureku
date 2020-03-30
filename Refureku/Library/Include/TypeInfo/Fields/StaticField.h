@@ -17,7 +17,7 @@ namespace rfk
 			StaticField()																	= delete;
 			StaticField(std::string&&		name,
 						uint64				id				= 0u,
-						EAccessSpecifier	access			= EAccessSpecifier::Undefined,
+						EFieldFlags			flags			= EFieldFlags::Static,
 						Struct const*		ownerStruct		= nullptr,
 						Struct const*		introducedBy	= nullptr,
 						void*				ptrToData		= nullptr)						noexcept;

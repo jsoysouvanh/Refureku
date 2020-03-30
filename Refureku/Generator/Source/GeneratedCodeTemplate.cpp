@@ -201,14 +201,14 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 		{
 			generatedFile.writeLine("		childArchetype->staticFields.emplace(\"" + field.name + "\", " +
 									std::to_string(_stringHasher(field.id)) +
-									"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field.accessSpecifier)) +
+									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, &" + info.name + "::" + field.name + ");\t\\");
 		}
 		else
 		{
 			generatedFile.writeLine("		childArchetype->fields.emplace(\"" + field.name + "\", " +
 									std::to_string(_stringHasher(field.id)) +
-									"u, static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(field.accessSpecifier)) +
+									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
 		}
 	}
@@ -289,9 +289,35 @@ kodgen::uint16 GeneratedCodeTemplate::computeMethodFlags(kodgen::MethodInfo cons
 
 	return result;
 }
-kodgen::uint16 GeneratedCodeTemplate::computeFieldFlags(kodgen::FieldInfo const* field) const noexcept
+kodgen::uint16 GeneratedCodeTemplate::computeFieldFlags(kodgen::FieldInfo const& field) const noexcept
 {
-	return 0;
+	kodgen::uint16 result = 0;
+
+	switch (field.accessSpecifier)
+	{
+		case kodgen::EAccessSpecifier::Public:
+			result |= 1 << 0;
+			break;
+
+		case kodgen::EAccessSpecifier::Protected:
+			result |= 1 << 1;
+			break;
+
+		case kodgen::EAccessSpecifier::Private:
+			result |= 1 << 2;
+			break;
+
+		default:
+			break;
+	}
+
+	if (field.qualifiers.isStatic)
+		result |= 1 << 3;
+
+	if (field.qualifiers.isMutable)
+		result |= 1 << 4;
+
+	return result;
 }
 
 std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept

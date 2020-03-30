@@ -3,6 +3,7 @@
 #include "TypeInfo/Entity.h"
 #include "TypeInfo/EAccessSpecifier.h"
 #include "TypeInfo/Type.h"
+#include "TypeInfo/Fields/EFieldFlags.h"
 
 namespace rfk
 {
@@ -11,8 +12,8 @@ namespace rfk
 	class FieldBase : public Entity
 	{
 		public:
-			/** Accessibility of this field in its owner struct */
-			EAccessSpecifier	access = EAccessSpecifier::Undefined;
+			/** Flags describing this field */
+			EFieldFlags			flags	= EFieldFlags::Default;
 
 			/** Type of this field */
 			Type				type;
@@ -26,12 +27,15 @@ namespace rfk
 			FieldBase()																	= delete;
 			FieldBase(std::string&&		name,
 					  uint64			id				= 0u,
-					  EAccessSpecifier	access			= EAccessSpecifier::Undefined,
+					  EFieldFlags		flags			= EFieldFlags::Default,
 					  Struct const*		ownerStruct		= nullptr,
 					  Struct const*		introducedBy	= nullptr)						noexcept;
 			FieldBase(FieldBase const&)													= default;
 			FieldBase(FieldBase&&)														= default;
 			~FieldBase()																= default;
+
+			/** Get access of this field */
+			EAccessSpecifier	getAccess()		const	noexcept;
 
 			FieldBase& operator=(FieldBase const&)	= default;
 			FieldBase& operator=(FieldBase&&)		= default;

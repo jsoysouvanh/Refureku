@@ -11,43 +11,45 @@ MethodBase::MethodBase(std::string&& name, uint64 id, EMethodFlags flags, std::s
 
 EAccessSpecifier MethodBase::getAccess() const noexcept
 {
-	return	(flags & EMethodFlags::Public) ? EAccessSpecifier::Public :
-			(flags & EMethodFlags::Protected) ? EAccessSpecifier::Protected :
-			(flags & EMethodFlags::Private) ? EAccessSpecifier::Private :
+	using UnderlyingType = std::underlying_type_t<EMethodFlags>;
+
+	return	(static_cast<UnderlyingType>(flags & EMethodFlags::Public)) ? EAccessSpecifier::Public :
+			(static_cast<UnderlyingType>(flags & EMethodFlags::Protected)) ? EAccessSpecifier::Protected :
+			(static_cast<UnderlyingType>(flags & EMethodFlags::Private)) ? EAccessSpecifier::Private :
 			EAccessSpecifier::Undefined;
 }
 
 bool MethodBase::isStatic() const noexcept
 {
-	return flags & EMethodFlags::Static;
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Static);
 }
 
 bool MethodBase::isInline() const noexcept
 {
-	return flags & EMethodFlags::Inline;
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Inline);
 }
 
 bool MethodBase::isVirtual() const noexcept
 {
-	return flags & EMethodFlags::Virtual;
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Virtual);
 }
 
 bool MethodBase::isPureVirtual() const noexcept
 {
-	return flags & EMethodFlags::PureVirtual;
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::PureVirtual);
 }
 
 bool MethodBase::isOverride() const noexcept
 {
-	return flags & EMethodFlags::Override;
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Override);
 }
 
 bool MethodBase::isFinal() const noexcept
 {
-	return flags & EMethodFlags::Final;
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Final);
 }
 
 bool MethodBase::isConst() const noexcept
 {
-	return flags & EMethodFlags::Const;
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Const);
 }

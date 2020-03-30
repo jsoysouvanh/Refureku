@@ -63,36 +63,46 @@ namespace rfk
 			~Struct()																					= default;
 
 			/**
-			*	Get the field named fieldName in this struct.
+			*	Get the first field named fieldName in this struct.
 			*	The method returns nullptr if no field named fieldName was found. 
 			*/
-			Field const*						getField(std::string const& fieldName)						const	noexcept;
+			Field const*						getField(std::string const& fieldName,
+														 EFieldFlags minFlags = EFieldFlags::Default,
+														 bool shouldInspectInherited = false)				const	noexcept;
+			std::vector<Field const*>			getFields(std::string const& fieldName,
+														 EFieldFlags minFlags = EFieldFlags::Default,
+														 bool shouldInspectInherited = false)				const	noexcept;
 
 			/**
 			*	Get the static field named fieldName in this struct.
 			*	The method returns nullptr if no static field named fieldName was found. 
 			*/
-			StaticField const*					getStaticField(std::string const& fieldName)				const	noexcept;
+			StaticField const*					getStaticField(std::string const& fieldName,
+															   EFieldFlags minFlags = EFieldFlags::Default,
+															   bool shouldInspectInherited = false)			const	noexcept;
+			std::vector<StaticField const*>		getStaticFields(std::string const& fieldName,
+															   EFieldFlags minFlags = EFieldFlags::Default,
+															   bool shouldInspectInherited = false)			const	noexcept;
 
 			/**
 			*	Get the first found method named methodName which has at least all the provided flags, nullptr if none if found.
 			*	If shouldInspectParents is set to true, the search will be extended to parents structs recursively.
 			*/
 			Method const*						getMethod(std::string const& methodName,
-														  uint16 minFlags = EMethodFlags::Default,
+														  EMethodFlags minFlags = EMethodFlags::Default,
 														  bool shouldInspectParents = false)				const	noexcept;
 			std::vector<Method const*>			getMethods(std::string const& methodName,
-														   uint16 minFlags = EMethodFlags::Default,
+														   EMethodFlags minFlags = EMethodFlags::Default,
 														   bool shouldInspectParents = false)				const	noexcept;
 
 			/**
 			*
 			*/
 			StaticMethod const*					getStaticMethod(std::string const& methodName,
-																uint16 minFlags = EMethodFlags::Default,
+																EMethodFlags minFlags = EMethodFlags::Default,
 																bool shouldInspectParents = false)			const	noexcept;
 			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName,
-																 uint16 minFlags = EMethodFlags::Default,
+																 EMethodFlags minFlags = EMethodFlags::Default,
 																 bool shouldInspectParents = false)			const	noexcept;
 
 			//TODO templated staticGetMethod with provided prototype

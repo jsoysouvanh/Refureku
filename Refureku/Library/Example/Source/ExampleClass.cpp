@@ -26,7 +26,7 @@ float ExampleClass::method3(int i) noexcept
 {
 	std::cout << "ExampleClass::method3(): " << i << std::endl;
 
-	return 3.14;
+	return 3.14f;
 }
 
 int ExampleClass::method4(void* ptr)

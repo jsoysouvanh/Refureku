@@ -23,7 +23,7 @@ namespace rfk
 			void						generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo)					const	noexcept;
 
 			kodgen::uint16				computeMethodFlags(kodgen::MethodInfo const& method)														const	noexcept;
-			kodgen::uint16				computeFieldFlags(kodgen::FieldInfo const* field)															const	noexcept;
+			kodgen::uint16				computeFieldFlags(kodgen::FieldInfo const& field)															const	noexcept;
 
 			/** Return generated macro name */
 			std::string					generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;

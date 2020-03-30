@@ -1,6 +1,6 @@
 #include "TypeInfo/Methods/Method.h"
 
-#include "TypeInfo/Struct.h"
+#include <cassert>
 
 using namespace rfk;
 
@@ -12,4 +12,5 @@ Method::Method(std::string&&				methodName,
 	MethodBase(std::forward<std::string>(methodName), methodId, flags, std::forward<std::shared_ptr<ICallable>>(internalMethod)),
 	ownerType{methodOwnerType}
 {
+	assert(!static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Static));
 }

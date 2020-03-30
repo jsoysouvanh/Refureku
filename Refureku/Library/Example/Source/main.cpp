@@ -138,7 +138,7 @@ void nonStaticFields()
 
 	std::cout << "Instance address: " << &ec << std::endl;
 
-	EXECUTE(rfk::Field const* field = type.getField("someInt"));
+	EXECUTE(rfk::Field const* field = type.getField("someInt", rfk::EFieldFlags::Public | rfk::EFieldFlags::Mutable));
 
 	if (field != nullptr)
 	{
@@ -171,7 +171,7 @@ void nonStaticFields()
 
 		std::cout << field2->getData<int*>(&ec) << " -> " << *field2->getData<int*>(&ec) << std::endl;
 	}
-
+	
 	EXECUTE(rfk::Field const* field3 = type.getField("someParentClass"));
 
 	if (field3 != nullptr)
@@ -195,7 +195,7 @@ void nonStaticFields()
 
 	std::cout << "Found field address: " << field4 << std::endl;
 
-	rfk::Field const* field5 = type.getField("ppFloat");
+	rfk::Field const* field5 = type.getField("ppFloat", rfk::EFieldFlags::Private, true);
 	if (field5 != nullptr)
 	{
 		EXECUTE_RESULT(field5->getDataAddress(&ec));
@@ -330,7 +330,7 @@ int main()
 {
 	//nonStaticMethods();
 	//staticMethods();
-	nonStaticFields();
+	//nonStaticFields();
 	staticFields();
 	//inheritance();
 

@@ -7,21 +7,109 @@ Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint6
 {
 }
 
-Field const* Struct::getField(std::string const& fieldName) const noexcept
+Field const* Struct::getField(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	decltype(fields)::const_iterator first = fields.find(Field(std::string(fieldName)));
+	auto range = fields.equal_range(Field(std::string(fieldName)));
 
-	return (first != fields.cend()) ? &*first : nullptr;
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	fields variable contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->introducedBy == this)
+		{
+			//We found a field which has minFlags
+			if ((it->flags & minFlags) == minFlags)
+			{
+				return &*it;
+			}
+		}
+	}
+
+	return nullptr;
 }
 
-StaticField const* Struct::getStaticField(std::string const& fieldName) const noexcept
+std::vector<Field const*> Struct::getFields(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	decltype(staticFields)::const_iterator first = staticFields.find(StaticField(std::string(fieldName)));
+	std::vector<Field const*> result;
 
-	return (first != staticFields.cend()) ? &*first : nullptr;
+	auto range = fields.equal_range(Field(std::string(fieldName)));
+
+	//In case of full match, avoid reallocation
+	result.reserve(std::distance(range.first, range.second));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	fields variable contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->introducedBy == this)
+		{
+			//We found a field which has minFlags
+			if ((it->flags & minFlags) == minFlags)
+			{
+				result.emplace_back(&*it);
+			}
+		}
+	}
+
+	return result;
 }
 
-Method const* Struct::getMethod(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
+StaticField const* Struct::getStaticField(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	auto range = staticFields.equal_range(StaticField(std::string(fieldName)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	staticFields variable contains both this struct static fields and inherited static fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->introducedBy == this)
+		{
+			//We found a field which has minFlags
+			if ((it->flags & minFlags) == minFlags)
+			{
+				return &*it;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+std::vector<StaticField const*> Struct::getStaticFields(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	std::vector<StaticField const*> result;
+
+	auto range = staticFields.equal_range(StaticField(std::string(fieldName)));
+
+	//In case of full match, avoid reallocation
+	result.reserve(std::distance(range.first, range.second));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	staticFields variable contains both this struct static fields and inherited static fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->introducedBy == this)
+		{
+			//We found a field which has minFlags
+			if ((it->flags & minFlags) == minFlags)
+			{
+				result.emplace_back(&*it);
+			}
+		}
+	}
+
+	return result;
+}
+
+Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	auto range = methods.equal_range(Method(std::string(methodName)));
 
@@ -53,7 +141,7 @@ Method const* Struct::getMethod(std::string const& methodName, uint16 minFlags, 
 	return nullptr;
 }
 
-std::vector<Method const*> Struct::getMethods(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
+std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	std::vector<Method const*> result;
 
@@ -87,7 +175,7 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, uin
 	return result;
 }
 
-StaticMethod const* Struct::getStaticMethod(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
+StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	auto range = staticMethods.equal_range(StaticMethod(std::string(methodName)));
 
@@ -119,7 +207,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, uint1
 	return nullptr;
 }
 
-std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& methodName, uint16 minFlags, bool shouldInspectParents) const noexcept
+std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	std::vector<StaticMethod const*> result;
 

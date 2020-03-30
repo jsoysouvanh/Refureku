@@ -19,7 +19,7 @@ namespace rfk
 			Field()																	= delete;
 			Field(std::string&&		name,
 				  uint64			id				= 0u,
-				  EAccessSpecifier	access			= EAccessSpecifier::Undefined,
+				  EFieldFlags		flags			= EFieldFlags::Default,
 				  Struct const*		ownerStruct		= nullptr,
 				  Struct const*		introducedBy	= nullptr,
 				  uint32			memoryOffset	= 0u,

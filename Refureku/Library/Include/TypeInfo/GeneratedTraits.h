@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utility/TypeTraits.h"
+#include "Utility/TypeTraitsMacros.h"
 
 namespace rfk::generated
 {

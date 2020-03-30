@@ -7,7 +7,7 @@ namespace exnamespace
 	/** Non reflected class */
 	class ParentParentParentClass
 	{
-		double pppDouble;
+		double pppDouble = 0.21;
 
 		public:
 			ParentParentParentClass() noexcept {}
@@ -89,6 +89,9 @@ namespace exnamespace
 
 			RFKField()
 			mutable int		someInt			= 42;
+
+			RFKField()
+			int p2Char = 2;
 
 			RFKField()
 			ParentClass		someParentClass;
