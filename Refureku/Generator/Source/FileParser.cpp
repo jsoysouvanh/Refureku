@@ -37,7 +37,6 @@ FileParser::FileParser() noexcept:
 
 	pps.classPropertyRules.addSimplePropertyRule(__RFK_CLASS_REFLECTED);
 	pps.methodPropertyRules.addSimplePropertyRule("CustomInstantiator");
-	pps.fieldPropertyRules.addComplexPropertyRule("Test", "[1-9]");
 }
 
 void FileParser::preParse(fs::path const& parseFile) noexcept

@@ -81,7 +81,6 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
-	//TODO: move that in another method
 	bool shouldGenerateGetArchetype = std::find_if(info.properties.simpleProperties.cbegin(),
 												   info.properties.simpleProperties.cend(),
 												   [](kodgen::SimpleProperty const& p) { return p.name == __RFK_CLASS_REFLECTED; }) != info.properties.simpleProperties.cend();
@@ -136,8 +135,8 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 	if (!info.methods.empty())
 	{
-		generatedFile.writeLine("	decltype(type.methods)::iterator		methodsIt;\t\\");
-		generatedFile.writeLine("	decltype(type.staticMethods)::iterator	staticMethodsIt;\t\\");
+		generatedFile.writeLine("	std::unordered_multiset<rfk::Method, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			methodsIt;\t\\");
+		generatedFile.writeLine("	std::unordered_multiset<rfk::StaticMethod, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticMethodsIt;\t\\");
 	}
 
 	std::string functionType;
@@ -225,27 +224,45 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 		generatedFile.writeLine("		__RFKrecurseRegisterChild<" + parent.type.getName(true) + ", ChildType>(childArchetype);\t\\");
 	}
 
+	//Add a child to list of children
 	generatedFile.writeLines("		rfk::Struct const& thisArchetype = staticGetArchetype();\t\\",
 							 "		if (childArchetype != &thisArchetype)\t\\",
 							 "		{\t\\",
 							 "			const_cast<rfk::Struct&>(thisArchetype).children.insert(childArchetype);\t\\",
 							 "		}\t\\");
 
+	if (!info.fields.empty())
+	{
+		generatedFile.writeLine("		std::unordered_multiset<rfk::Field, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			fieldsIt;\t\\");
+		generatedFile.writeLine("		std::unordered_multiset<rfk::StaticField, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticFieldsIt;\t\\");
+	}
+
+	std::string properties;
 	for (kodgen::FieldInfo const& field : info.fields)
 	{
 		if (field.qualifiers.isStatic)
 		{
-			generatedFile.writeLine("		childArchetype->staticFields.emplace(\"" + field.name + "\", " +
+			generatedFile.writeLine("		staticFieldsIt = childArchetype->staticFields.emplace(\"" + field.name + "\", " +
 									std::to_string(_stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, &" + info.name + "::" + field.name + ");\t\\");
+
+			//Add properties
+			properties = fillEntityProperties(field, "	const_cast<rfk::StaticField&>(*staticFieldsIt).");
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
 		}
 		else
 		{
-			generatedFile.writeLine("		childArchetype->fields.emplace(\"" + field.name + "\", " +
+			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
 									std::to_string(_stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
+
+			//Add properties
+			properties = fillEntityProperties(field, "	const_cast<rfk::Field&>(*fieldsIt).");
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
 		}
 	}
 

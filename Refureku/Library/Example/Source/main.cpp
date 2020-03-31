@@ -10,8 +10,8 @@ using namespace exnamespace;
 
 void nonStaticMethods()
 {
-	ExampleClass			exampleClass;
-	ExampleClass const		constExampleClass;
+	ExampleClass		exampleClass;
+	ExampleClass const	constExampleClass;
 	rfk::Class const&	exampleClassType = ExampleClass::staticGetArchetype();
 
 	//Non const method which returns void without arguments
@@ -355,9 +355,25 @@ void properties()
 	
 	EXECUTE_RESULT(ec.getMethod("method4")->properties.hasProperty("CustomInstantiator"));
 
+
+	//rfk::Field const* field = ec.getField("somePtrToInt");
+
+	//for (auto& value : field->properties.simpleProperties)
+	//{
+	//	std::cout << value << std::endl;
+	//}
+
+	//for (auto& [key, value] : field->properties.complexProperties)
+	//{
+	//	std::cout << key << " --> " << value << std::endl;
+	//}
+}
+
+void reflectedObject()
+{
 	std::vector<rfk::ReflectedObject*>	objects;
 
-	objects.push_back(static_cast<rfk::ReflectedObject*>(new ExampleClass()));
+	objects.push_back(new ExampleClass());
 	objects.push_back(new ParentClass());
 	objects.push_back(new ParentParentClass());
 
@@ -369,13 +385,14 @@ void properties()
 
 int main()
 {
-	nonStaticMethods();
-	staticMethods();
-	nonStaticFields();
-	staticFields();
-	inheritance();
-	instantiation();
+	//nonStaticMethods();
+	//staticMethods();
+	//nonStaticFields();
+	//staticFields();
+	//inheritance();
+	//instantiation();
 	properties();
+	//reflectedObject();
 
 	return EXIT_SUCCESS;
 }

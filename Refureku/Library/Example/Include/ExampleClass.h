@@ -92,7 +92,7 @@ namespace exnamespace
 			RFKField()
 			static inline ParentClass	someStaticParentClass;
 
-			RFKField(Test[2, 3, 4])
+			RFKField()
 			mutable int		someInt			= 42;
 
 			RFKField()
