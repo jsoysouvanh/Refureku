@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TypeInfo/Struct.h"
+#include "TypeInfo/Archetypes/Struct.h"
 
 namespace rfk
 {
@@ -23,5 +23,5 @@ namespace rfk
 			Class& operator=(Class&&)		= default;
 	};
 
-	#include "TypeInfo/Class.inl"
+	#include "TypeInfo/Archetypes/Class.inl"
 }

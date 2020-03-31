@@ -1,4 +1,4 @@
-#include "TypeInfo/Class.h"
+#include "TypeInfo/Archetypes/Class.h"
 
 using namespace rfk;
 

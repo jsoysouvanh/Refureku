@@ -48,5 +48,5 @@ namespace rfk
 			Archetype& operator=(Archetype&&)		= default;
 	};
 
-	#include "TypeInfo/Archetype.inl"
+	#include "TypeInfo/Archetypes/Archetype.inl"
 }

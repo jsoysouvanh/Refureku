@@ -1,9 +1,12 @@
 #pragma once
 
+#include "TypeInfo/Archetypes/Archetype.h"
+
 namespace rfk
 {
 	class ReflectedObject
 	{
-		//TODO
+		public:
+			virtual	Archetype const& getArchetype()	const noexcept = 0;
 	};
 }

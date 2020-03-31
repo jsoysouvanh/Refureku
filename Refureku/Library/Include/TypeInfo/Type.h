@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TypeInfo/Archetype.h"
+#include "TypeInfo/Archetypes/Archetype.h"
 
 namespace rfk
 {

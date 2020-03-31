@@ -337,11 +337,34 @@ void instantiation()
 	ParentClass2* pc2I = pc2.makeInstance<ParentClass2>();
 	ExampleClass* ecI = ec.makeInstance<ExampleClass>();
 
+	rfk::Class const& ec2 = ecI->getArchetype();
+
 	std::cout << "makeInstance(): " << pcI->getArchetype().name << std::endl;
-	std::cout << "makeInstance(): " << pc2I->getArchetype().name << std::endl;
+	//std::cout << "makeInstance(): " << pc2I->getArchetype().name << std::endl;
 	std::cout << "makeInstance(): " << ecI->getArchetype().name << std::endl;
 
 	rfk::Database::getArchetype("ExampleClass")->makeInstance<ExampleClass>();
+}
+
+void properties()
+{
+	rfk::Class const& ec = ExampleClass::staticGetArchetype();
+
+	EXECUTE_RESULT(ec.properties.hasProperty("dynamictype"));
+	EXECUTE_RESULT(ec.properties.hasProperty("rfk::ReflectedObject"));
+	
+	EXECUTE_RESULT(ec.getMethod("method4")->properties.hasProperty("CustomInstantiator"));
+
+	std::vector<rfk::ReflectedObject*>	objects;
+
+	objects.push_back(static_cast<rfk::ReflectedObject*>(new ExampleClass()));
+	objects.push_back(new ParentClass());
+	objects.push_back(new ParentParentClass());
+
+	for (rfk::ReflectedObject* object : objects)
+	{
+		std::cout << object->getArchetype().name << std::endl;
+	}
 }
 
 int main()
@@ -352,6 +375,7 @@ int main()
 	staticFields();
 	inheritance();
 	instantiation();
+	properties();
 
 	return EXIT_SUCCESS;
 }

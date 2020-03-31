@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ReflectedObject.h"
+
 #include "Generated/ExampleClass.rfk.h"
 
 namespace exnamespace
@@ -13,12 +15,12 @@ namespace exnamespace
 			ParentParentParentClass() noexcept {}
 	};
 
-	class RFKClass() OtherClass
+	class RFKClass(rfk::ReflectedObject) OtherClass : public rfk::ReflectedObject
 	{
 		RFKOtherClass_GENERATED
 	};
 
-	class RFKClass() ParentParentClass : public ParentParentParentClass
+	class RFKClass(rfk::ReflectedObject) ParentParentClass : public ParentParentParentClass, public rfk::ReflectedObject
 	{
 		RFKField()
 		float ppFloat = 123456.123456f;
@@ -29,7 +31,7 @@ namespace exnamespace
 		RFKParentParentClass_GENERATED
 	};
 
-	class RFKClass() ParentClass : public ParentParentClass
+	class RFKClass(rfk::ReflectedObject) ParentClass : public ParentParentClass
 	{
 		private:
 			RFKMethod()
@@ -81,7 +83,7 @@ namespace exnamespace
 		RFKParentClass2_GENERATED
 	};
 
-	class RFKClass() ExampleClass : public ParentClass, public ParentClass2
+	class RFKClass(rfk::ReflectedObject) ExampleClass : public ParentClass, public ParentClass2
 	{
 		public:
 			RFKField()
@@ -90,7 +92,7 @@ namespace exnamespace
 			RFKField()
 			static inline ParentClass	someStaticParentClass;
 
-			RFKField()
+			RFKField(Test[2, 3, 4])
 			mutable int		someInt			= 42;
 
 			RFKField()
@@ -105,7 +107,7 @@ namespace exnamespace
 			RFKField()
 			float			someFloat		= 42.42f;
 
-			RFKMethod()
+			RFKMethod(CustomInstantiator)
 			int				method4(void* ptr);
 
 			RFKMethod()

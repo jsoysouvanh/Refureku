@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <algorithm>
 
-#include "TypeInfo/Archetype.h"
+#include "TypeInfo/Archetypes/Archetype.h"
 #include "TypeInfo/Fields/Field.h"
 #include "TypeInfo/Fields/StaticField.h"
 #include "TypeInfo/Methods/Method.h"
@@ -128,5 +128,5 @@ namespace rfk
 			Struct& operator=(Struct&&)			= default;
 	};
 
-	#include "TypeInfo/Struct.inl"
+	#include "TypeInfo/Archetypes/Struct.inl"
 }

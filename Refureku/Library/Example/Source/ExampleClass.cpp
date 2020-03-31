@@ -57,7 +57,7 @@ int ExampleClass::staticMethod3(char const* param)
 
 float ExampleClass::staticMethod3(int param) noexcept
 {
-	return 69.1;
+	return 69.1f;
 }
 
 std::ostream& exnamespace::operator<<(std::ostream& stream, ParentClass const& object) noexcept

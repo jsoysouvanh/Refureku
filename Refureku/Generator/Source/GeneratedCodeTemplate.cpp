@@ -5,6 +5,7 @@
 #include <algorithm>
 
 #include "Misc/FundamentalTypes.h"
+#include "Keywords.h"
 
 using namespace rfk;
 
@@ -72,13 +73,22 @@ void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFil
 
 std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string					getTypeMacroName					= _internalPrefix + info.name + "_GetTypeMacro";
-	std::string					generateParentsMetadataMacroName	= generateParentsMetadataMacro(generatedFile, info);
-	std::array<std::string, 2>	generateFieldsMetadataMacroName		= generateFieldsMetadataMacros(generatedFile, info);
-	std::string					generateMethodsMetadataMacroName	= generateMethodsMetadataMacro(generatedFile, info);
+	std::string					getTypeMacroName						= _internalPrefix + info.name + "_GetTypeMacro";
+	std::string					generateParentsMetadataMacroName		= generateParentsMetadataMacro(generatedFile, info);
+	std::array<std::string, 2>	generateFieldsMetadataMacroName			= generateFieldsMetadataMacros(generatedFile, info);
+	std::string					generateMethodsMetadataMacroName		= generateMethodsMetadataMacro(generatedFile, info);
+	std::string					generateArchetypePropertiesMacroName	= generateArchetypePropertiesMacro(generatedFile, info);
 
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
+	//TODO: move that in another method
+	bool shouldGenerateGetArchetype = std::find_if(info.properties.simpleProperties.cbegin(),
+												   info.properties.simpleProperties.cend(),
+												   [](kodgen::SimpleProperty const& p) { return p.name == __RFK_CLASS_REFLECTED; }) != info.properties.simpleProperties.cend();
+
+	std::string getArchetypeMethod = (shouldGenerateGetArchetype) ?
+		returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" : "";
+
 	generatedFile.writeMacro(std::string(getTypeMacroName),
 								std::move(generateFieldsMetadataMacroName[1]),
 								"public:",
@@ -94,6 +104,7 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 								"		{",
 								"			initialized = true;",
 								"	",
+								"			" + std::move(generateArchetypePropertiesMacroName),
 								"			" + std::move(generateParentsMetadataMacroName),
 								"			" + std::move(generateFieldsMetadataMacroName[0]),
 								"			" + std::move(generateMethodsMetadataMacroName),
@@ -102,13 +113,19 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 								"		return type;",
 								"	}",
 								"	",
-								"	" + returnedType + " const& getArchetype() const noexcept",
-								"	{",
-								"		return " + info.name + "::staticGetArchetype();",
-								"	}"
+								"	" + getArchetypeMethod
 							 );
 
 	return getTypeMacroName;
+}
+
+std::string GeneratedCodeTemplate::generateArchetypePropertiesMacro(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& info) const noexcept
+{
+	std::string macroName = _internalPrefix + info.name + "_GenerateArchetypeProperties";
+
+	generatedFile.writeMacro(std::string(macroName), fillEntityProperties(info, "type."));
+
+	return macroName;
 }
 
 std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
@@ -117,29 +134,46 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
+	if (!info.methods.empty())
+	{
+		generatedFile.writeLine("	decltype(type.methods)::iterator		methodsIt;\t\\");
+		generatedFile.writeLine("	decltype(type.staticMethods)::iterator	staticMethodsIt;\t\\");
+	}
+
 	std::string functionType;
 	std::string methodName;
+	std::string properties;
 	for (kodgen::MethodInfo const& method : info.methods)
 	{
 		if (method.qualifiers.isStatic)
 		{
-			functionType = "rfk::NonMemberFunction<" + std::move(method.getPrototype(true)) + ">";
+			functionType = "rfk::NonMemberFunction<" + method.getPrototype(true) + ">";
 			methodName = method.getName();
 
-			generatedFile.writeLine("	type.staticMethods.emplace(\"" + methodName + "\", " +
+			generatedFile.writeLine("	staticMethodsIt = type.staticMethods.emplace(\"" + methodName + "\", " +
 									std::to_string(_stringHasher(method.id)) +
 									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
+
+			//Add properties
+			properties = fillEntityProperties(method, "const_cast<rfk::StaticMethod&>(*staticMethodsIt).");
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
 		}
 		else
 		{
-			functionType = "rfk::MemberFunction<" + info.name + ", " + std::move(method.getPrototype(true)) + ">";
+			functionType = "rfk::MemberFunction<" + info.name + ", " + method.getPrototype(true) + ">";
 			methodName = method.getName();
 
-			generatedFile.writeLine("	type.methods.emplace(\"" + methodName + "\", " +
+			generatedFile.writeLine("	methodsIt = type.methods.emplace(\"" + methodName + "\", " +
 									std::to_string(_stringHasher(method.id)) +
 									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
+
+			//Add properties
+			properties = fillEntityProperties(method, "const_cast<rfk::Method&>(*methodsIt).");
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
 		}
 	}
 
@@ -350,4 +384,24 @@ std::string GeneratedCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFi
 	generatedFile.writeLine("");
 
 	return macroName;
+}
+
+std::string GeneratedCodeTemplate::fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName) const noexcept
+{
+	std::string result;
+
+	for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
+	{
+		result += entityVarName + "properties.simpleProperties.emplace(\"" + prop.name + "\"); ";
+	}
+
+	for (kodgen::ComplexProperty const& prop : info.properties.complexProperties)
+	{
+		for (std::string subProp : prop.subProperties)
+		{
+			result += entityVarName + "properties.complexProperties.emplace(\"" + prop.name + "\", \"" + subProp + "\"); ";
+		}
+	}
+
+	return result;
 }

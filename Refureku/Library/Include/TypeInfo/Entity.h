@@ -1,8 +1,10 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 
 #include "Misc/FundamentalTypes.h"
+#include "TypeInfo/PropertyGroup.h"
 
 namespace rfk
 {
@@ -80,8 +82,8 @@ namespace rfk
 			/** Program-unique ID given for this entity */
 			uint64			id;
 
-			/** */
-			//TODO: Add properties
+			/** Properties contained by this entity */
+			PropertyGroup	properties;
 
 			Entity()									= delete;
 			Entity(std::string&& newName, uint64 newId)	noexcept;

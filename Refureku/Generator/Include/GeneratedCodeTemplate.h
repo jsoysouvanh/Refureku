@@ -27,6 +27,7 @@ namespace rfk
 
 			/** Return generated macro name */
 			std::string					generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
+			std::string					generateArchetypePropertiesMacro(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& info)		const	noexcept;
 			std::string					generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)	const	noexcept;
 			std::string					generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::string					generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
@@ -34,6 +35,8 @@ namespace rfk
 			std::array<std::string, 2>	generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info)		const	noexcept;
 			std::string					generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile,
 																		 kodgen::StructClassInfo const& info)										const	noexcept;
+
+			std::string					fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName)						const	noexcept;
 
 		protected:
 			virtual void	generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo)					const	noexcept override;

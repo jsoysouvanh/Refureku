@@ -7,7 +7,7 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResu
 	//Always call base class
 	kodgen::FileGenerator::writeHeader(file, parsingResult);
 
-	file.writeLine("#include \"TypeInfo/Class.h\"");
+	file.writeLine("#include \"TypeInfo/Archetypes/Class.h\"");
 	file.writeLine("#include \"TypeInfo/Registration/ArchetypeRegisterer.h\"\n");
 }
 

@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 #include "Misc/FundamentalTypes.h"
-#include "TypeInfo/Class.h"
+#include "TypeInfo/Archetypes/Class.h"
 
 namespace rfk
 {

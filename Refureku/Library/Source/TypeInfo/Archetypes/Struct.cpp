@@ -1,4 +1,4 @@
-#include "TypeInfo/Struct.h"
+#include "TypeInfo/Archetypes/Struct.h"
 
 using namespace rfk;
 

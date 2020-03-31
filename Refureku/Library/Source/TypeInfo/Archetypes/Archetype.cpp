@@ -1,4 +1,4 @@
-#include "TypeInfo/Archetype.h"
+#include "TypeInfo/Archetypes/Archetype.h"
 
 using namespace rfk;
 
