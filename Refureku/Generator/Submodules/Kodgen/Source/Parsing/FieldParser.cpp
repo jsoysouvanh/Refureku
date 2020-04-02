@@ -43,8 +43,6 @@ CXChildVisitResult FieldParser::setAsCurrentEntityIfValid(CXCursor const& fieldA
 				field.memoryOffset /= 8;	//From bits to bytes
 			}
 
-			assert(!(field.type.qualifiers.isConst && field.qualifiers.isStatic));	//Field can't be const and static
-
 			return CXChildVisitResult::CXChildVisit_Recurse;
 		}
 		else

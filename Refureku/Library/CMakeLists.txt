@@ -17,6 +17,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Methods/MethodBase.cpp
 					Source/TypeInfo/Methods/Method.cpp
 					Source/TypeInfo/Methods/StaticMethod.cpp
+					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/Database.cpp
 			)
 

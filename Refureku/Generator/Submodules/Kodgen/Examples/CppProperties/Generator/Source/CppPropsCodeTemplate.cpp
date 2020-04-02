@@ -129,7 +129,7 @@ std::string CppPropsCodeTemplate::generateGetter(kodgen::FieldInfo const& fieldI
 std::string CppPropsCodeTemplate::generateSetter(kodgen::FieldInfo const& fieldInfo, kodgen::ComplexProperty const& complexProp) const noexcept
 {
 	//Can't generate any setter if the field is originally const qualified
-	if (fieldInfo.type.qualifiers.isConst)
+	if (fieldInfo.type.typeParts.back().descriptor & kodgen::ETypeDescriptor::Const)
 	{
 		//TODO: issue error
 		return "";
@@ -146,12 +146,16 @@ std::string CppPropsCodeTemplate::generateSetter(kodgen::FieldInfo const& fieldI
 
 	//Upper case the first field info char if applicable
 	std::string methodName = fieldInfo.name;
-	methodName.replace(0, 1, 1, static_cast<char>(std::toupper(methodName.at(0))));
+	methodName.replace(0, 1, 1, static_cast<char>(std::toupper(methodName.at(0)))); 
 	methodName.insert(0, "set");
 	methodName += "(";
 
+	
+
 	methodName += fieldInfo.type.getName();
-	methodName += ((fieldInfo.type.sizeInBytes == 0u || fieldInfo.type.sizeInBytes > 4u) && !fieldInfo.type.isPointer && !fieldInfo.type.isReference) ? " const& " : " ";
+	methodName += ((fieldInfo.type.sizeInBytes == 0u || fieldInfo.type.sizeInBytes > 4u) &&
+				   !(fieldInfo.type.typeParts.back().descriptor & kodgen::ETypeDescriptor::Ptr)	&&
+				   !(fieldInfo.type.typeParts.back().descriptor & kodgen::ETypeDescriptor::LRef)) ? " const& " : " ";
 	methodName += paramName;
 
 	methodName += ")";

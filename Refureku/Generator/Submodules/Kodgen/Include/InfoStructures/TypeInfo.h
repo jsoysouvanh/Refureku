@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Misc/FundamentalTypes.h"
+#include "InfoStructures/TypeDescriptor.h"
 
 namespace kodgen
 {
@@ -43,42 +44,22 @@ namespace kodgen
 			bool removeRestrictQualifier(std::string& typeString)				const	noexcept;
 
 		public:
-			enum class EPointerType : uint8
-			{
-				Pointer,
-				ConstPointer
-			};
-
-			struct TypeQualifiers
-			{
-				bool isConst		: 1;
-				bool isRestricted	: 1;
-				bool isVolatile		: 1;
-			}							qualifiers;
-			
 			/**
-			*	This array contains info about the "pointer depth" of the canonical type
+			*	This array contains info about each "part" of the type
 			*
-			*	If the type is SomeType *const**const*, the pointers array would be
-			*	{ Pointer, ConstPointer, Pointer, ConstPointer }	(right to left)
+			*	If the type is SomeType const *const**const*&, the array would be
+			*		{ LRef 0, Ptr 0, Const Ptr 0, Ptr 0, Const Ptr 0, Const Value 0 }	(read the type from right to left)
+			*	If the type is float[2][3], the array would be
+			*		{ CArray 2, CArray 3, Value }	/!\ Array parts ONLY are read from left to right (not right to left)
+			*	One more: if the type is int*[2][3], the array would be
+			*		{ CArray 2, CArray 3, Ptr, Value }
 			*/
-			std::vector<EPointerType>	pointers;
-
-			/**
-			*	Is this type a pointer ?
-			*	If true, you can check the pointers array for more info
-			*/
-			bool						isPointer			= false;
-
-			/**
-			*	Is this type a reference
-			*/
-			bool						isReference			= false;
+			std::vector<TypePart>	typeParts;
 
 			/**
 			*	Size of this type in bytes
 			*/
-			size_t						sizeInBytes			= 0u;
+			size_t					sizeInBytes			= 0u;
 
 			TypeInfo()						= default;
 			TypeInfo(CXType cursorType)		noexcept;

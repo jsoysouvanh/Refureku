@@ -383,6 +383,19 @@ void reflectedObject()
 	}
 }
 
+void types()
+{
+	//rfk::Type t1;
+	//t1.archetype = &ExampleClass::staticGetArchetype();
+	//t1.parts.emplace_back(rfk::Type::TypePart{ 0u, rfk::Type::ETypePart::Value, 0u });
+
+	//rfk::Type t2;
+	//t2.archetype = &ExampleClass::staticGetArchetype();
+	//t2.parts.emplace_back(rfk::Type::TypePart{ 0u, rfk::Type::ETypePart::Ptr, 0u });
+
+	std::cout << rfk::Database::getType<int&&>() << std::endl;
+}
+
 int main()
 {
 	//nonStaticMethods();
@@ -391,8 +404,9 @@ int main()
 	//staticFields();
 	//inheritance();
 	//instantiation();
-	properties();
+	//properties();
 	//reflectedObject();
+	types();
 
 	return EXIT_SUCCESS;
 }

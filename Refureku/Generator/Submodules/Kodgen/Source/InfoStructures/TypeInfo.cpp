@@ -8,7 +8,7 @@
 using namespace kodgen;
 
 TypeInfo::TypeInfo(CXType cursorType) noexcept:
-	qualifiers{false, false, false}
+	sizeInBytes{0}
 {
 	assert(cursorType.kind != CXTypeKind::CXType_Invalid);
 
@@ -37,35 +37,81 @@ void TypeInfo::initialize(CXType cursorType) noexcept
 		sizeInBytes = static_cast<size_t>(size);
 	}
 
-	isPointer	= canonicalType.kind == CXTypeKind::CXType_Pointer;
-	isReference = canonicalType.kind == CXTypeKind::CXType_LValueReference;
-
-	assert(!(isPointer && isReference));
-
-	qualifiers.isConst		= clang_isConstQualifiedType(canonicalType);
-	qualifiers.isVolatile	= clang_isVolatileQualifiedType(canonicalType);
-	qualifiers.isRestricted	= clang_isRestrictQualifiedType(canonicalType);
-
 	//Remove class or struct keyword
 	removeForwardDeclaredClassQualifier(fullName);
 
-	if (isPointer || isReference)
-	{
-		//Fill the pointers vector
-		CXType					prevType{ CXTypeKind::CXType_Invalid, { canonicalType.data } };
-		CXType					currType = canonicalType;
+	//Fill the descriptors vector
+	TypePart*	currTypePart;
+	CXType		prevType{ CXTypeKind::CXType_Invalid, { canonicalType.data } };
+	CXType		currType		= canonicalType;
+	bool		reachedValue	= false;
 
-		while (!clang_equalTypes(prevType, currType))
+	while (!reachedValue)
+	{
+		if (currType.kind == CXTypeKind::CXType_Pointer)
 		{
-			if (currType.kind == CXTypeKind::CXType_Pointer)
-			{
-				pointers.push_back(clang_isConstQualifiedType(currType) ? EPointerType::ConstPointer : EPointerType::Pointer);
-			}
+			currTypePart = &typeParts.emplace_back(TypePart{ 0u, ETypeDescriptor::Ptr, 0u });
 
 			prevType = currType;
 			currType = clang_getPointeeType(prevType);
 		}
+		else if (currType.kind == CXTypeKind::CXType_LValueReference)
+		{
+			currTypePart = &typeParts.emplace_back(TypePart{ 0u, ETypeDescriptor::LRef, 0u });
+
+			prevType = currType;
+			currType = clang_getPointeeType(prevType);
+		}
+		else if (currType.kind == CXTypeKind::CXType_RValueReference)
+		{
+			currTypePart = &typeParts.emplace_back(TypePart{ 0u, ETypeDescriptor::RRef, 0u });
+
+			prevType = currType;
+			currType = clang_getPointeeType(prevType);
+		}
+		else if (currType.kind == CXTypeKind::CXType_ConstantArray)
+		{
+			currTypePart = &typeParts.emplace_back(TypePart{ 0u, ETypeDescriptor::CArray, static_cast<uint32>(clang_getArraySize(currType)) });
+
+			prevType = currType;
+			currType = clang_getArrayElementType(prevType);
+		}
+		else	//Should be fundamental / record / enum
+		{
+			currTypePart	= &typeParts.emplace_back(TypePart{ 0u, ETypeDescriptor::Value, 0u });
+			reachedValue	= true;
+		}
+
+		TypePart& curr = *currTypePart;
+
+		if (clang_isConstQualifiedType(currType))
+			curr.descriptor = curr.descriptor | ETypeDescriptor::Const;
+		if (clang_isVolatileQualifiedType(currType))
+			curr.descriptor = curr.descriptor | ETypeDescriptor::Volatile;
+		if (clang_isRestrictQualifiedType(currType))
+			curr.descriptor = curr.descriptor | ETypeDescriptor::Restrict;
 	}
+
+	//std::cout << Helpers::getString(clang_getTypeSpelling(canonicalType)) << std::endl;
+	//for (TypePart typePart : typeParts)
+	//{
+	//	if (typePart.descriptor & ETypeDescriptor::Ptr)
+	//		std::cout << "Ptr ";
+	//	if (typePart.descriptor & ETypeDescriptor::LRef)
+	//		std::cout << "LRef ";
+	//	if (typePart.descriptor & ETypeDescriptor::RRef)
+	//		std::cout << "RRef ";
+	//	if (typePart.descriptor & ETypeDescriptor::Value)
+	//		std::cout << "Value ";
+
+	//	if (typePart.descriptor & ETypeDescriptor::Const)
+	//		std::cout << "Const ";
+
+	//	if (typePart.descriptor & ETypeDescriptor::CArray)
+	//		std::cout << "Array[" << typePart.additionalData << "] ";
+
+	//	std::cout << std::endl;
+	//}
 }
 
 void TypeInfo::removeForwardDeclaredClassQualifier(std::string& parsingStr) const noexcept
@@ -133,7 +179,7 @@ void TypeInfo::removeNamespacesAndNestedClasses(std::string& typeString) const n
 
 bool TypeInfo::removeConstQualifier(std::string& typeString) const noexcept
 {
-	if (qualifiers.isConst)
+	if (!typeParts.empty() && (typeParts.back().descriptor & ETypeDescriptor::Const))
 	{
 		size_t charIndex = typeString.rfind(_constQualifier);
 
@@ -150,7 +196,7 @@ bool TypeInfo::removeConstQualifier(std::string& typeString) const noexcept
 
 bool TypeInfo::removeVolatileQualifier(std::string& typeString) const noexcept
 {
-	if (qualifiers.isVolatile)
+	if (!typeParts.empty() && (typeParts.back().descriptor & ETypeDescriptor::Volatile))
 	{
 		size_t charIndex = typeString.rfind(_volatileQualifier);
 
@@ -167,7 +213,7 @@ bool TypeInfo::removeVolatileQualifier(std::string& typeString) const noexcept
 
 bool TypeInfo::removeRestrictQualifier(std::string& typeString) const noexcept
 {
-	if (qualifiers.isRestricted)
+	if (!typeParts.empty() && (typeParts.back().descriptor & ETypeDescriptor::Restrict))
 	{
 		size_t charIndex = typeString.rfind(_restrictQualifier);
 

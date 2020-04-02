@@ -36,7 +36,7 @@ FileParser::FileParser() noexcept:
 	pps.enumValuePropertyRules.macroName	= "RFKEnumVal";
 
 	pps.classPropertyRules.addSimplePropertyRule(__RFK_CLASS_REFLECTED);
-	pps.methodPropertyRules.addSimplePropertyRule("CustomInstantiator");
+	pps.methodPropertyRules.addSimplePropertyRule(__RFK_CLASS_CUSTOM_INSTANTIATOR);
 }
 
 void FileParser::preParse(fs::path const& parseFile) noexcept

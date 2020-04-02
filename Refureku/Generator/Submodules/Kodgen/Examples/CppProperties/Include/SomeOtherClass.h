@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "SomeClass.h"
 
 #include "Generated/SomeOtherClass.myCustomExtension.h"

@@ -96,7 +96,7 @@ namespace exnamespace
 			mutable int		someInt			= 42;
 
 			RFKField()
-			int p2Char = 2;
+			int				p2Char			= 2;
 
 			RFKField()
 			ParentClass		someParentClass;
@@ -106,6 +106,15 @@ namespace exnamespace
 
 			RFKField()
 			float			someFloat		= 42.42f;
+
+			RFKField()
+			float const*	a;
+
+			RFKField()
+			float * const	b				= nullptr;
+
+			RFKField()
+			int const*		c[2][3];
 
 			RFKMethod(CustomInstantiator)
 			int				method4(void* ptr);
@@ -203,4 +212,6 @@ namespace exnamespace
 
 		RFKExampleClass_GENERATED
 	};
+
+	//enum class RFKEnum() ExampleEnum : 
 }
