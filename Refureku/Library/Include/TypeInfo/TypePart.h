@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 #include "Misc/FundamentalTypes.h"
 #include "Utility/EnumMacros.h"
 
@@ -37,6 +39,12 @@ namespace rfk
 			/** Some additional data which might complement descriptor (for example CArray size) */
 			uint32				additionalData	= 0u;
 
+			TypePart()																		= default;
+			TypePart(uint16 padding, ETypePartDescriptor descriptor, uint32 additionalData)	noexcept;
+			TypePart(TypePart const&)														= default;
+			TypePart(TypePart&&)															= default;
+			~TypePart()																		= default;
+
 			inline bool		isPointer()			const	noexcept;
 			inline bool		isLValueReference()	const	noexcept;
 			inline bool		isRValueReference()	const	noexcept;
@@ -45,6 +53,9 @@ namespace rfk
 			inline bool		isConst()			const	noexcept;
 			inline bool		isVolatile()		const	noexcept;
 			inline uint32	getArraySize()		const	noexcept;
+
+			TypePart&	operator=(TypePart const&)	= default;
+			TypePart&	operator=(TypePart&&)		= default;
 	};
 
 	#include "TypeInfo/TypePart.inl"

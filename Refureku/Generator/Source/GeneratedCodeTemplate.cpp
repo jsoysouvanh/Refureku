@@ -137,6 +137,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	{
 		generatedFile.writeLine("	std::unordered_multiset<rfk::Method, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			methodsIt;\t\\");
 		generatedFile.writeLine("	std::unordered_multiset<rfk::StaticMethod, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticMethodsIt;\t\\");
+		generatedFile.writeLine("	rfk::MethodBase*																						currMethod = nullptr;\t\\");
 	}
 
 	std::string functionType;
@@ -154,10 +155,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
 
-			//Add properties
-			properties = fillEntityProperties(method, "const_cast<rfk::StaticMethod&>(*staticMethodsIt).");
-			if (!properties.empty())
-				generatedFile.writeLine("	" + properties + "\t\\");
+			generatedFile.writeLine("	currMethod = const_cast<rfk::StaticMethod*>(&*staticMethodsIt);\t\\");
 		}
 		else
 		{
@@ -169,10 +167,26 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
 
-			//Add properties
-			properties = fillEntityProperties(method, "const_cast<rfk::Method&>(*methodsIt).");
-			if (!properties.empty())
-				generatedFile.writeLine("	" + properties + "\t\\");
+			generatedFile.writeLine("	currMethod = const_cast<rfk::Method*>(&*methodsIt);\t\\");
+		}
+
+		//Add properties
+		properties = fillEntityProperties(method, "currMethod->");
+		if (!properties.empty())
+			generatedFile.writeLine("	" + properties + "\t\\");
+
+		//Setup return type
+		generatedFile.writeLine("	currMethod->returnType = rfk::Database::getType<" + method.returnType.getName() + ">();\t\\");
+
+		//Setup parameters
+		if (!method.parameters.empty())
+		{
+			generatedFile.writeLine("	currMethod->parameters.reserve(" + std::to_string(method.parameters.size()) + ");\t\\");
+
+			for (kodgen::MethodParamInfo const& param : method.parameters)
+			{
+				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Database::getType<" + param.type.getName() + ">());\t\\");
+			}
 		}
 	}
 

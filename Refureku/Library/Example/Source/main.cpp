@@ -385,26 +385,9 @@ void reflectedObject()
 
 void types()
 {
-	//rfk::Type t1;
-	//t1.archetype = &ExampleClass::staticGetArchetype();
-	//t1.parts.emplace_back(rfk::TypePart{ 0u, rfk::ETypePart::Value, 0u });
-
-	//rfk::Type t2;
-	//t2.archetype = &ExampleClass::staticGetArchetype();
-	//t2.parts.emplace_back(rfk::TypePart{ 0u, rfk::ETypePart::Ptr, 0u });
-	//t2.parts.emplace_back(reinterpret_cast<rfk::TypePart>(10ui64));
-
 	rfk::Type type = ExampleClass::staticGetArchetype().getField("c")->type;
 
 	std::cout << type << std::endl;
-
-	std::cout << type.removePart() << std::endl;
-
-	std::cout << type.removePart() << std::endl;
-
-	std::cout << type.removePart() << std::endl;
-
-	std::cout << type.removePart() << std::endl;
 }
 
 int main()

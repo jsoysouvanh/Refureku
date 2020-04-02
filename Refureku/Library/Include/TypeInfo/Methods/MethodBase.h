@@ -1,12 +1,15 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "Config.h"
+#include "Utility/ICallable.h"
 #include "TypeInfo/Entity.h"
 #include "TypeInfo/EAccessSpecifier.h"
 #include "TypeInfo/Methods/EMethodFlags.h"
-#include "Utility/ICallable.h"
+#include "TypeInfo/Methods/MethodParameter.h"
+#include "TypeInfo/Type.h"
 
 namespace rfk
 {
@@ -29,7 +32,13 @@ namespace rfk
 
 		public:
 			/** Flags describing this method */
-			EMethodFlags	flags	= EMethodFlags::Default;
+			EMethodFlags					flags	= EMethodFlags::Default;
+
+			/** Type returned by this method */
+			Type							returnType;
+
+			/** Parameters of this method */
+			std::vector<MethodParameter>	parameters;
 
 			~MethodBase() = default;
 

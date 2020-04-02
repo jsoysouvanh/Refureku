@@ -22,17 +22,20 @@ namespace rfk
 			Type(Type&&)		= default;
 			~Type()				= default;
 
-			inline Type&	addPart(TypePart&& newPart)	noexcept;
-			inline Type&	removePart()				noexcept;
+			template <typename... ArgTypes>
+			inline Type&	addPart(ArgTypes&&...	args)		noexcept;
 
-			inline bool		isPointer()			const	noexcept;
-			inline bool		isLValueReference()	const	noexcept;
-			inline bool		isRValueReference()	const	noexcept;
-			inline bool		isCArray()			const	noexcept;
-			inline bool		isValue()			const	noexcept;
-			inline bool		isConst()			const	noexcept;
-			inline bool		isVolatile()		const	noexcept;
-			inline uint32	getArraySize()		const	noexcept;
+			inline Type&	addPart(TypePart const&	newPart)	noexcept;
+			inline Type&	removePart()						noexcept;
+
+			inline bool		isPointer()					const	noexcept;
+			inline bool		isLValueReference()			const	noexcept;
+			inline bool		isRValueReference()			const	noexcept;
+			inline bool		isCArray()					const	noexcept;
+			inline bool		isValue()					const	noexcept;
+			inline bool		isConst()					const	noexcept;
+			inline bool		isVolatile()				const	noexcept;
+			inline uint32	getArraySize()				const	noexcept;
 
 			Type& operator=(Type const&)	= default;
 			Type& operator=(Type&&)			= default;

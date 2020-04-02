@@ -1,7 +1,15 @@
 
-inline Type& Type::addPart(TypePart&& newPart) noexcept
+template <typename... ArgTypes>
+inline Type& Type::addPart(ArgTypes&&... args) noexcept
 {
-	parts.emplace_back(std::forward<TypePart>(newPart));
+	parts.emplace_back(std::forward<ArgTypes>(args)...);
+
+	return *this;
+}
+
+inline Type& Type::addPart(TypePart const& newPart) noexcept
+{
+	parts.push_back(newPart);
 
 	return *this;
 }
