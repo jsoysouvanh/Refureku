@@ -247,6 +247,9 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, &" + info.name + "::" + field.name + ");\t\\");
 
+			//Make type
+			generatedFile.writeLine("		const_cast<rfk::StaticField&>(*staticFieldsIt).type = rfk::Database::getType<" + field.type.getName() + ">();\t\\");
+			
 			//Add properties
 			properties = fillEntityProperties(field, "	const_cast<rfk::StaticField&>(*staticFieldsIt).");
 			if (!properties.empty())
@@ -258,6 +261,9 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 									std::to_string(_stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
+
+			//Make type
+			generatedFile.writeLine("		const_cast<rfk::Field&>(*fieldsIt).type = rfk::Database::getType<" + field.type.getName() + ">();\t\\");
 
 			//Add properties
 			properties = fillEntityProperties(field, "	const_cast<rfk::Field&>(*fieldsIt).");

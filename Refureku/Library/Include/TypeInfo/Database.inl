@@ -12,7 +12,7 @@ constexpr Archetype const* Database::getArchetype() noexcept
 	{
 		if constexpr (rfk::generated::implements_staticGetArchetype<T, rfk::Class const&()>::value || rfk::generated::implements_staticGetArchetype<T, rfk::Struct const&()>::value)
 		{
-			return &T::template staticGetArchetype();
+			return &T::staticGetArchetype();
 		}
 
 		return nullptr;
@@ -31,18 +31,18 @@ constexpr Archetype const* Database::getArchetype() noexcept
 template <typename T>
 constexpr void Database::fillType(Type& out_type) noexcept
 {
-	TypePart& currPart = out_type.parts.emplace_back(TypePart{ 0u, rfk::ETypePart::Undefined, 0u });
+	TypePart& currPart = out_type.parts.emplace_back(TypePart{ 0u, rfk::ETypePartDescriptor::Undefined, 0u });
 
 	//Const
 	if constexpr (std::is_const_v<T>)
 	{
-		currPart.part = currPart.part | ETypePart::Const;
+		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::Const;
 	}
 
 	//Volatile
 	if constexpr (std::is_volatile_v<T>)
 	{
-		currPart.part = currPart.part | ETypePart::Volatile;
+		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::Volatile;
 	}
 
 	//Restrict
@@ -53,29 +53,29 @@ constexpr void Database::fillType(Type& out_type) noexcept
 
 	if constexpr (std::is_array_v<T>)
 	{
-		currPart.part = currPart.part | ETypePart::CArray;
+		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::CArray;
 		currPart.additionalData = static_cast<decltype(currPart.additionalData)>(std::extent_v<T>);
 
 		fillType<std::remove_extent_t<T>>(out_type);
 	}
 	else if constexpr (std::is_pointer_v<T>)
 	{
-		currPart.part = currPart.part | ETypePart::Ptr;
+		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::Ptr;
 		fillType<std::remove_pointer_t<T>>(out_type);
 	}
 	else if constexpr (std::is_lvalue_reference_v<T>)
 	{
-		currPart.part = currPart.part | ETypePart::LRef;
+		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::LRef;
 		fillType<std::remove_reference_t<T>>(out_type);
 	}
 	else if constexpr (std::is_rvalue_reference_v<T>)
 	{
-		currPart.part = currPart.part | ETypePart::RRef;
+		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::RRef;
 		fillType<std::remove_reference_t<T>>(out_type);
 	}
 	else
 	{
-		currPart.part = currPart.part | ETypePart::Value;
+		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::Value;
 
 		out_type.archetype = Database::getArchetype<std::decay_t<T>>();
 	}

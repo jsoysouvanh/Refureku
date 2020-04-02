@@ -48,25 +48,6 @@ namespace exnamespace
 			ParentClass(ParentClass const&)	= default;
 			ParentClass(ParentClass&& o)	= default;
 
-			//	GENERATED
-
-			//template <typename ChildType>
-			//static void __RFKregisterChild(rfk::Struct* childArchetype) noexcept
-			//{
-			//	rfk::Struct const& thisArchetype = staticGetArchetype();
-
-			//	//TODO: Recursive call to parents classes later here
-
-			//	//Add to list of children
-			//	if (childArchetype != &thisArchetype)
-			//	{
-			//		//TODO
-			//	}
-
-			//	//Add fields
-			//	childArchetype->fields.emplace_back("pInt64", 12635385505303968848u, static_cast<rfk::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, pInt64), 0);
-			//}
-
 		RFKParentClass_GENERATED
 	};
 	
@@ -153,33 +134,6 @@ namespace exnamespace
 
 		//GENERATED
 
-		//template <typename ParentType, typename ChildType>
-		//static constexpr void __RFKrecurseRegisterChild(rfk::Struct* childArchetype)
-		//{
-		//	if constexpr (rfk::generated::implements_staticGetArchetype<ParentType, rfk::Class const&()>::value)
-		//	{
-		//		ParentType::template __RFKregisterChild<ChildType>(childArchetype);
-		//	}
-		//}
-
-		//template <typename ChildType>
-		//static void __RFKregisterChild(rfk::Struct* childArchetype) noexcept
-		//{
-		//	rfk::Struct const& thisArchetype = staticGetArchetype();
-
-		//	__RFKrecurseRegisterChild<exnamespace::ParentClass, ChildType>(childArchetype);
-
-		//	if (childArchetype != &thisArchetype)
-		//	{
-		//		const_cast<rfk::Struct&>(thisArchetype).children.insert(childArchetype);
-		//	}
-		//	
-		//	childArchetype->fields.emplace_back("someFloat", 6118336768142618682u, static_cast<rfk::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, someFloat), 0);
-		//	childArchetype->fields.emplace_back("someInt", 9550625445138060657u, static_cast<rfk::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, someInt), 1);
-		//	childArchetype->fields.emplace_back("someParentClass", 9281646899607215384u, static_cast<rfk::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, someParentClass), 0);
-		//	childArchetype->fields.emplace_back("somePtrToInt", 12635385505303968848u, static_cast<rfk::EAccessSpecifier>(1), childArchetype, &thisArchetype, offsetof(ChildType, somePtrToInt), 0);
-		//}
-
 		//static rfk::Class const& staticGetArchetype() noexcept	
 		//{	
 		//	static bool				initialized = false;	
@@ -212,6 +166,4 @@ namespace exnamespace
 
 		RFKExampleClass_GENERATED
 	};
-
-	//enum class RFKEnum() ExampleEnum : 
 }

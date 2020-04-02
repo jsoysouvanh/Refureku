@@ -24,34 +24,36 @@ std::ostream& rfk::operator<<(std::ostream& stream, Type const& type) noexcept
 
 	for (rfk::TypePart part : type.parts)
 	{
-		switch (part.part)
-		{
-			stream << "\t- ";
+		stream << "\t- ";
 
-			case rfk::ETypePart::Const:
-				stream << "Const ";
-				[[fallthrough]];
-			case rfk::ETypePart::Volatile:
-				stream << "Volatile ";
-				[[fallthrough]];
-			case rfk::ETypePart::Restrict:
-				stream << "Restrict ";
-				[[fallthrough]];
-			case rfk::ETypePart::Value:
-				stream << "Value";
-				break;
-			case rfk::ETypePart::Ptr:
-				stream << "Ptr";
-				break;
-			case rfk::ETypePart::LRef:
-				stream << "LRef";
-				break;
-			case rfk::ETypePart::RRef:
-				stream << "RRef";
-				break;
-			case rfk::ETypePart::CArray:
-				stream << "CArray " << part.additionalData;
-				break;
+		if (part.isConst())
+		{
+			stream << "Const ";
+		}
+		if (part.isVolatile())
+		{
+			stream << "Volatile ";
+		}
+
+		if (part.isValue())
+		{
+			stream << "Value";
+		}
+		else if (part.isPointer())
+		{
+			stream << "Ptr";
+		}
+		else if (part.isLValueReference())
+		{
+			stream << "LVRef";
+		}
+		else if (part.isRValueReference())
+		{
+			stream << "RVRef";
+		}
+		else if (part.isCArray())
+		{
+			stream << "CArray[" << part.getArraySize() << "]";
 		}
 
 		stream << std::endl;

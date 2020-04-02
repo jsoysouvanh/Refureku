@@ -5,7 +5,7 @@
 
 namespace rfk
 {
-	enum class ETypePart : uint16
+	enum class ETypePartDescriptor : uint16
 	{
 		/** Default uninitialized value for this enum */
 		Undefined	= 0,
@@ -23,14 +23,29 @@ namespace rfk
 		Value		= 1 << 7	//Means non-ptr simple value, ex: int
 	};
 
-	GENERATE_ENUM_OPERATORS(ETypePart);
+	GENERATE_ENUM_OPERATORS(ETypePartDescriptor);
 
-	struct TypePart
+	class TypePart
 	{
-		uint16		padding			= 0u;
-
-		ETypePart	part			= ETypePart::Undefined;
+		public:
+			/** Align memory so that Type part is exactly 64 bits */
+			uint16				padding			= 0u;
 			
-		uint32		additionalData	= 0u;
+			/** Actual data describing this type part */
+			ETypePartDescriptor	descriptor		= ETypePartDescriptor::Undefined;
+			
+			/** Some additional data which might complement descriptor (for example CArray size) */
+			uint32				additionalData	= 0u;
+
+			inline bool		isPointer()			const	noexcept;
+			inline bool		isLValueReference()	const	noexcept;
+			inline bool		isRValueReference()	const	noexcept;
+			inline bool		isCArray()			const	noexcept;
+			inline bool		isValue()			const	noexcept;
+			inline bool		isConst()			const	noexcept;
+			inline bool		isVolatile()		const	noexcept;
+			inline uint32	getArraySize()		const	noexcept;
 	};
+
+	#include "TypeInfo/TypePart.inl"
 }
