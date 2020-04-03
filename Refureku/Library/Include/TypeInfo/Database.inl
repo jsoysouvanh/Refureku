@@ -4,8 +4,83 @@ constexpr Archetype const* Database::getArchetype() noexcept
 {
 	if constexpr (std::is_fundamental_v<T>)
 	{
-		//TODO
-		//Handle every fundamental type case
+		if constexpr (std::is_same_v<T, void>)
+		{
+			return &FundamentalArchetypes::getVoidArchetype();
+		}
+		else if constexpr (std::is_same_v<T, std::nullptr_t>)
+		{
+			return &FundamentalArchetypes::getNullptrArchetype();
+		}
+		else if constexpr (std::is_same_v<T, bool>)
+		{
+			return &FundamentalArchetypes::getBoolArchetype();
+		}
+		else if constexpr (std::is_same_v<T, signed char>)
+		{
+			return &FundamentalArchetypes::getSignedCharArchetype();
+		}
+		else if constexpr (std::is_same_v<T, unsigned char>)
+		{
+			return &FundamentalArchetypes::getUnsignedCharArchetype();
+		}
+		else if constexpr (std::is_same_v<T, wchar_t>)
+		{
+			return &FundamentalArchetypes::getWideCharArchetype();
+		}
+		else if constexpr (std::is_same_v<T, char16_t>)
+		{
+			return &FundamentalArchetypes::getChar16Archetype();
+		}
+		else if constexpr (std::is_same_v<T, char32_t>)
+		{
+			return &FundamentalArchetypes::getChar32Archetype();
+		}
+		else if constexpr (std::is_same_v<T, short>)
+		{
+			return &FundamentalArchetypes::getShortArchetype();
+		}
+		else if constexpr (std::is_same_v<T, unsigned short>)
+		{
+			return &FundamentalArchetypes::getUnsignedShortArchetype();
+		}
+		else if constexpr (std::is_same_v<T, int>)
+		{
+			return &FundamentalArchetypes::getIntArchetype();
+		}
+		else if constexpr (std::is_same_v<T, unsigned int>)
+		{
+			return &FundamentalArchetypes::getUnsignedIntArchetype();
+		}
+		else if constexpr (std::is_same_v<T, long>)
+		{
+			return &FundamentalArchetypes::getLongArchetype();
+		}
+		else if constexpr (std::is_same_v<T, unsigned long>)
+		{
+			return &FundamentalArchetypes::getUnsignedLongArchetype();
+		}
+		else if constexpr (std::is_same_v<T, long long>)
+		{
+			return &FundamentalArchetypes::getLongLongArchetype();
+		}
+		else if constexpr (std::is_same_v<T, unsigned long long>)
+		{
+			return &FundamentalArchetypes::getUnsignedLongLongArchetype();
+		}
+		else if constexpr (std::is_same_v<T, float>)
+		{
+			return &FundamentalArchetypes::getFloatArchetype();
+		}
+		else if constexpr (std::is_same_v<T, double>)
+		{
+			return &FundamentalArchetypes::getDoubleArchetype();
+		}
+		else if constexpr (std::is_same_v<T, long double>)
+		{
+			return &FundamentalArchetypes::getLongDoubleArchetype();
+		}
+
 		return nullptr;
 	}
 	else if constexpr (std::is_class_v<T>)

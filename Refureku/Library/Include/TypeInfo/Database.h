@@ -6,6 +6,7 @@
 
 #include "Misc/FundamentalTypes.h"
 #include "TypeInfo/Archetypes/Class.h"
+#include "TypeInfo/Archetypes/FundamentalArchetypes.h"
 
 namespace rfk
 {

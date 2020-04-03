@@ -5,7 +5,7 @@ ReturnType* Archetype::makeInstance(ArgTypes&&... args) const noexcept
 	if constexpr (sizeof...(args) == 0)
 	{
 		//No arguments, use default instantiator
-		return reinterpret_cast<ReturnType*>((*_defaultInstantiator)());
+		return (_defaultInstantiator != nullptr) ? reinterpret_cast<ReturnType*>((*_defaultInstantiator)()) : nullptr;
 	}
 	else
 	{
@@ -24,11 +24,6 @@ void Archetype::__RFKaddRequiredMethods() noexcept
 {
 	if constexpr (std::is_class_v<T>)
 	{
-		_defaultInstantiator = &T::template __RFKinstantiate<T>;
-	}
-	else
-	{
-		//Enum, fundamental types
-		_defaultInstantiator = []() -> void* { return new T(); };
+		__RFKsetDefaultInstantiationMethod(&T::template __RFKinstantiate<T>);
 	}
 }

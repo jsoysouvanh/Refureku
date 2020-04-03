@@ -8,3 +8,8 @@ Archetype::Archetype(std::string&& newName, uint64 newId, ECategory newCategory,
 	memorySize{newMemorySize}
 {
 }
+
+void Archetype::__RFKsetDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
+{
+	_defaultInstantiator = func;
+}

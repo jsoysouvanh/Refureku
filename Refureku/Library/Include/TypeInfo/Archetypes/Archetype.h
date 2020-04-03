@@ -38,11 +38,13 @@ namespace rfk
 
 			/** Make an instance of the class represented by this archetype. */
 			template <typename ReturnType = void, typename... ArgTypes>
-			ReturnType* makeInstance(ArgTypes&&... args)	const	noexcept;
+			ReturnType* makeInstance(ArgTypes&&... args)				const	noexcept;
 
 			/** Internal use */
 			template <typename T>
-			void __RFKaddRequiredMethods()							noexcept;
+			void __RFKaddRequiredMethods()										noexcept;
+
+			void __RFKsetDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
 
 			Archetype& operator=(Archetype const&)	= delete;
 			Archetype& operator=(Archetype&&)		= default;
