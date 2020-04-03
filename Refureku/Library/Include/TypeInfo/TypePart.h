@@ -14,7 +14,7 @@ namespace rfk
 
 		/** Keywords */
 		Const		= 1 << 0,	
-		Restrict	= 1 << 1,
+		//Restrict	= 1 << 1,
 		Volatile	= 1 << 2,
 
 		/** Ptr/Ref/Array */

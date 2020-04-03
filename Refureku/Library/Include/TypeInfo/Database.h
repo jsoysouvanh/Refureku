@@ -5,8 +5,9 @@
 #include <type_traits>
 
 #include "Misc/FundamentalTypes.h"
-#include "TypeInfo/Archetypes/Class.h"
 #include "TypeInfo/Archetypes/FundamentalArchetypes.h"
+#include "TypeInfo/Archetypes/Class.h"
+#include "TypeInfo/Type.h"
 
 namespace rfk
 {
@@ -22,9 +23,9 @@ namespace rfk
 			static	ArchetypesByName	_archetypesByName;
 
 			template <typename T>
-			static constexpr void	fillType(Type& out_type)						noexcept;
+			static constexpr void	fillType(Type& out_type)			noexcept;
 
-			static void				registerArchetype(Archetype const& archetype)	noexcept;
+			static void	registerArchetype(Archetype const& archetype)	noexcept;
 
 		public:
 			Database()								= delete;
@@ -33,10 +34,11 @@ namespace rfk
 			~Database()								= delete;
 
 			template <typename T>
-			static constexpr Archetype const*	getArchetype()						noexcept;
-
-			template <typename T>
 			static Type const&					getType()							noexcept;
+
+			/** Get the archetype corresponding to a type if possible, if not nullptr. */
+			template <typename T>
+			static constexpr Archetype const*	getArchetype()						noexcept;
 
 			static Archetype const*				getArchetype(std::string typeName)	noexcept;
 			static Archetype const*				getArchetype(uint64 id)				noexcept;

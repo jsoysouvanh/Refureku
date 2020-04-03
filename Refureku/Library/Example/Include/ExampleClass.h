@@ -124,13 +124,13 @@ namespace exnamespace
 			static void		staticMethod1();
 
 			RFKMethod()
-			static	float	staticMethod3(int param)	noexcept;
+			static	int		staticMethod3(int p1, int p2)	noexcept;
 
 			RFKMethod()
 			float			method3(int i)				noexcept;
 
 		public:
-			ExampleClass()						noexcept { }
+			ExampleClass()						= default; //noexcept { }
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;

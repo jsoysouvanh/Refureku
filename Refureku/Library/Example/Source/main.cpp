@@ -385,9 +385,30 @@ void reflectedObject()
 
 void types()
 {
-	rfk::Type type = ExampleClass::staticGetArchetype().getField("c")->type;
+	//rfk::Type type = ExampleClass::staticGetArchetype().getField("c")->type;
 
-	std::cout << type << std::endl;
+	//std::cout << type << std::endl;
+
+	rfk::StaticMethod const* staticMethod = ExampleClass::staticGetArchetype().getStaticMethod("staticMethod3", rfk::EMethodFlags::Private);
+
+	try
+	{
+		int&& v = staticMethod->safeInvoke<int&&, int>(1);	//<-- wrong arg
+		std::cout << v << std::endl;
+	}
+	catch (rfk::MethodError error)
+	{
+		std::cerr << error.what() << std::endl;
+	}
+
+	try
+	{
+		staticMethod->safeInvoke(1, 2);
+	}
+	catch (rfk::MethodError error)
+	{
+		std::cerr << error.what() << std::endl;
+	}
 }
 
 int main()

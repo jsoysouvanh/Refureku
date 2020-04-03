@@ -2,7 +2,62 @@
 
 #include <cstring>
 
+#include "TypeInfo/Archetypes/Archetype.h"
+
 using namespace rfk;
+
+std::string Type::toString() const noexcept
+{
+	std::string result;
+
+	if (archetype != nullptr)
+	{
+		result += "Archetype: " + archetype->name + "\n";
+	}
+	else
+	{
+		result += "Archetype: Unknown\n";
+	}
+
+	for (rfk::TypePart part : parts)
+	{
+		result += "  - ";
+
+		if (part.isConst())
+		{
+			result += "Const ";
+		}
+		if (part.isVolatile())
+		{
+			result += "Volatile ";
+		}
+
+		if (part.isValue())
+		{
+			result += "Value";
+		}
+		else if (part.isPointer())
+		{
+			result += "Ptr";
+		}
+		else if (part.isLValueReference())
+		{
+			result += "LVRef";
+		}
+		else if (part.isRValueReference())
+		{
+			result += "RVRef";
+		}
+		else if (part.isCArray())
+		{
+			result += "CArray[" + std::to_string(part.getArraySize()) + "]";
+		}
+
+		result += "\n";
+	}
+
+	return result;
+}
 
 bool Type::operator==(Type const& type) const noexcept
 {
@@ -11,53 +66,14 @@ bool Type::operator==(Type const& type) const noexcept
 			std::memcmp(parts.data(), type.parts.data(), parts.size() * sizeof(TypePart)) == 0;
 }
 
+bool Type::operator!=(Type const& type) const noexcept
+{
+	return !(*this == type);
+}
+
 std::ostream& rfk::operator<<(std::ostream& stream, Type const& type) noexcept
 {
-	if (type.archetype != nullptr)
-	{
-		std::cout << "Archetype: " << type.archetype->name << std::endl;
-	}
-	else
-	{
-		std::cout << "Archetype: Unknown" << std::endl;
-	}
-
-	for (rfk::TypePart part : type.parts)
-	{
-		stream << "\t- ";
-
-		if (part.isConst())
-		{
-			stream << "Const ";
-		}
-		if (part.isVolatile())
-		{
-			stream << "Volatile ";
-		}
-
-		if (part.isValue())
-		{
-			stream << "Value";
-		}
-		else if (part.isPointer())
-		{
-			stream << "Ptr";
-		}
-		else if (part.isLValueReference())
-		{
-			stream << "LVRef";
-		}
-		else if (part.isRValueReference())
-		{
-			stream << "RVRef";
-		}
-		else if (part.isCArray())
-		{
-			stream << "CArray[" << part.getArraySize() << "]";
-		}
-
-		stream << std::endl;
-	}
+	stream << type.toString();
 
 	return stream;
 }
