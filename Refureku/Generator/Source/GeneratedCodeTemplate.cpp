@@ -185,7 +185,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 			for (kodgen::MethodParamInfo const& param : method.parameters)
 			{
-				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Database::getType<" + param.type.getName() + ">());\t\\");
+				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type(rfk::Database::getType<" + param.type.getName() + ">()));\t\\");
 			}
 		}
 	}
@@ -249,6 +249,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 	{
 		generatedFile.writeLine("		std::unordered_multiset<rfk::Field, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			fieldsIt;\t\\");
 		generatedFile.writeLine("		std::unordered_multiset<rfk::StaticField, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticFieldsIt;\t\\");
+		generatedFile.writeLine("		rfk::FieldBase*																							currField = nullptr;\t\\");
 	}
 
 	std::string properties;
@@ -261,13 +262,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, &" + info.name + "::" + field.name + ");\t\\");
 
-			//Make type
-			generatedFile.writeLine("		const_cast<rfk::StaticField&>(*staticFieldsIt).type = rfk::Database::getType<" + field.type.getName() + ">();\t\\");
-			
-			//Add properties
-			properties = fillEntityProperties(field, "	const_cast<rfk::StaticField&>(*staticFieldsIt).");
-			if (!properties.empty())
-				generatedFile.writeLine("	" + properties + "\t\\");
+			generatedFile.writeLine("		currField = const_cast<rfk::StaticField*>(&*staticFieldsIt);\t\\");
 		}
 		else
 		{
@@ -276,14 +271,16 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
 
-			//Make type
-			generatedFile.writeLine("		const_cast<rfk::Field&>(*fieldsIt).type = rfk::Database::getType<" + field.type.getName() + ">();\t\\");
-
-			//Add properties
-			properties = fillEntityProperties(field, "	const_cast<rfk::Field&>(*fieldsIt).");
-			if (!properties.empty())
-				generatedFile.writeLine("	" + properties + "\t\\");
+			generatedFile.writeLine("		currField = const_cast<rfk::Field*>(&*fieldsIt);\t\\");
 		}
+
+		//Make type
+		generatedFile.writeLine("		currField->type = rfk::Database::getType<" + field.type.getName() + ">();\t\\");
+
+		//Add properties
+		properties = fillEntityProperties(field, "	currField->");
+		if (!properties.empty())
+			generatedFile.writeLine("	" + properties + "\t\\");
 	}
 
 	generatedFile.writeLine("	}");

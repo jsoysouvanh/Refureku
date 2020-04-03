@@ -82,11 +82,16 @@ constexpr void Database::fillType(Type& out_type) noexcept
 }
 
 template <typename T>
-Type Database::getType() noexcept
+Type const& Database::getType() noexcept
 {
-	rfk::Type result;
+	static rfk::Type	result;
+	static bool			initialized = false;
 
-	fillType<T>(result);
+	if (!initialized)
+	{
+		initialized = true;
+		fillType<T>(result);
+	}
 
 	return result;
 }

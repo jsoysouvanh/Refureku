@@ -35,7 +35,7 @@ namespace rfk
 			static constexpr Archetype const*	getArchetype()						noexcept;
 
 			template <typename T>
-			static Type							getType()							noexcept;
+			static Type const&					getType()							noexcept;
 
 			static Archetype const*				getArchetype(std::string typeName)	noexcept;
 			static Archetype const*				getArchetype(uint64 id)				noexcept;
