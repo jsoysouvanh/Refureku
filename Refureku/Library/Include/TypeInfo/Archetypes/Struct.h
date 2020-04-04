@@ -10,7 +10,7 @@
 #include "TypeInfo/Methods/Method.h"
 #include "TypeInfo/Methods/StaticMethod.h"
 #include "TypeInfo/EAccessSpecifier.h"
-#include "Utility/GeneratedTraits.h"
+#include "Utility/TypeTraits.h"
 
 namespace rfk
 {

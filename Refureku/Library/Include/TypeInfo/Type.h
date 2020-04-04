@@ -4,6 +4,7 @@
 #include <vector>
 #include <type_traits>
 
+#include "Utility/TypeTraits.h"
 #include "TypeInfo/TypePart.h"
 #include "TypeInfo/Archetypes/FundamentalArchetypes.h"
 

@@ -387,7 +387,7 @@ void types()
 
 	try
 	{
-		int&& v = staticMethod->safeInvoke<int&&, int>(1);	//<-- wrong arg
+		int v = staticMethod->safeInvoke<int, int, int>(1, 2);	//<-- wrong arg
 		std::cout << v << std::endl;
 	}
 	catch (rfk::MethodError error)

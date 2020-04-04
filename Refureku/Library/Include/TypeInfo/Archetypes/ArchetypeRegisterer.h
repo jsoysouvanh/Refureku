@@ -1,15 +1,14 @@
 #pragma once
 
-#include "TypeInfo/Archetypes/Archetype.h"
-#include "TypeInfo/Database.h"
-
 namespace rfk
 {
+	class Archetype;	//Forward declaration
+
 	class ArchetypeRegisterer
 	{
 		public:
 			ArchetypeRegisterer()							= delete;
-			ArchetypeRegisterer(Archetype const& archetype)	noexcept { Database::registerArchetype(archetype); }
+			ArchetypeRegisterer(Archetype const* archetype)	noexcept;
 			ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
 			ArchetypeRegisterer(ArchetypeRegisterer&&)		= delete;
 			~ArchetypeRegisterer()							= default;

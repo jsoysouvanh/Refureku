@@ -47,8 +47,7 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 
 	generatedFile.writeMacro(std::move(mainMacroName),
 								"friend rfk::Archetype;",
-								"friend rfk::Struct;",
-								"friend rfk::Class;",
+								"friend rfk::hasField___rfkArchetypeRegisterer<" + classInfo.name + ", rfk::ArchetypeRegisterer>;",
 									std::move(defaultInstantiateMacro),
 									std::move(getTypeMacroName),
 									std::move(generateRegistrationMacroName),
@@ -223,7 +222,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 							 "	template <typename ParentType, typename ChildType>\t\\",
 							 "	static constexpr void __RFKrecurseRegisterChild(rfk::Struct* childArchetype)\t\\",
 							 "	{\t\\",
-							 "		if constexpr (rfk::generated::implements_staticGetArchetype<ParentType, rfk::Class const&()>::value)\t\\",
+							 "		if constexpr (rfk::isReflected<ParentType>)\t\\",
 							 "		{\t\\",
 							 "			ParentType::template __RFKregisterChild<ChildType>(childArchetype);\t\\",
 							 "		}\t\\",
@@ -413,7 +412,8 @@ std::string GeneratedCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFi
 	std::string macroName = _internalPrefix + info.name + "_RegisterArchetype";
 
 	generatedFile.writeMacro(std::string(macroName),
-							 "static inline rfk::ArchetypeRegisterer reg = staticGetArchetype();");
+							 "private:",
+							 "	static inline rfk::ArchetypeRegisterer __rfkArchetypeRegisterer = &staticGetArchetype();");
 
 	generatedFile.writeLine("");
 

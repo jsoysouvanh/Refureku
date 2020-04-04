@@ -6,11 +6,15 @@ project(RefurekuLibrary)
 set(RefurekuLibraryTarget Refureku_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
 add_library(${RefurekuLibraryTarget}
 				STATIC
-					Source/TypeInfo/Entity.cpp
+					Source/TypeInfo/TypePart.cpp
+					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/PropertyGroup.cpp
+					Source/TypeInfo/Entity.cpp
+					Source/TypeInfo/Database.cpp
 					Source/TypeInfo/Archetypes/Archetype.cpp
 					Source/TypeInfo/Archetypes/Struct.cpp
 					Source/TypeInfo/Archetypes/Class.cpp
+					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
 					Source/TypeInfo/Fields/FieldBase.cpp
 					Source/TypeInfo/Fields/Field.cpp
 					Source/TypeInfo/Fields/StaticField.cpp
@@ -19,9 +23,6 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Methods/StaticMethod.cpp
 					Source/TypeInfo/Methods/MethodParameter.cpp
 					Source/TypeInfo/Methods/MethodError.cpp
-					Source/TypeInfo/Type.cpp
-					Source/TypeInfo/TypePart.cpp
-					Source/TypeInfo/Database.cpp
 			)
 
 # Setup language requirements

@@ -89,7 +89,7 @@ namespace exnamespace
 			float			someFloat		= 42.42f;
 
 			RFKField()
-			float const*	a;
+			float const*	a				= nullptr;
 
 			RFKField()
 			float * const	b				= nullptr;
@@ -169,4 +169,7 @@ namespace exnamespace
 
 		RFKExampleClass_GENERATED
 	};
+
+	class A : public ExampleClass
+	{};
 }

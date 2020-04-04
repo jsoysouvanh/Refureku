@@ -89,10 +89,10 @@ Archetype const* Type::getArchetype() noexcept
 	}
 	else if constexpr (std::is_class_v<T>)
 	{
-		/*if constexpr (rfk::generated::implements_staticGetArchetype<T, rfk::Class const&()>::value || rfk::generated::implements_staticGetArchetype<T, rfk::Struct const&()>::value)
+		if constexpr (rfk::isReflected<T>)
 		{
 			return &T::staticGetArchetype();
-		}*/
+		}
 
 		return nullptr;
 	}

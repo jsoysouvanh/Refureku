@@ -2,8 +2,8 @@
 template <typename T>
 void Struct::__RFKaddToParents(EAccessSpecifier inheritanceAccess) noexcept
 {
-	if constexpr (rfk::generated::implements_staticGetArchetype<T, rfk::Struct const&()>::value)
+	if constexpr (rfk::isReflected<T>)
 	{
-		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, T::staticGetArchetype() });
+		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, &T::staticGetArchetype() });
 	}
 }
