@@ -7,6 +7,7 @@
 #include "Utility/TypeTraits.h"
 #include "TypeInfo/TypePart.h"
 #include "TypeInfo/Archetypes/FundamentalArchetypes.h"
+#include "TypeInfo/Archetypes/Enum.h"
 
 namespace rfk
 {

@@ -13,7 +13,7 @@ namespace rfk
 		Undefined	= 0,
 
 		/** Keywords */
-		Const		= 1 << 0,	
+		Const		= 1 << 0,
 		//Restrict	= 1 << 1,
 		Volatile	= 1 << 2,
 

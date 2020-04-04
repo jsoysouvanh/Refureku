@@ -77,9 +77,8 @@ CXChildVisitResult EnumParser::setAsCurrentEntityIfValid(CXCursor const& classAn
 	{
 		EnumInfo& enumInfo = parsingInfo.currentEnum.emplace(EnumInfo(getCurrentCursor(), std::move(*propertyGroup)));
 
-		CXType underlyingType				= clang_getEnumDeclIntegerType(getCurrentCursor());
-		enumInfo.underlyingType				= Helpers::getString(clang_getTypeSpelling(underlyingType));
-		enumInfo.canonicalUnderlyingType	= Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(underlyingType)));
+		enumInfo.type			= clang_getCursorType(getCurrentCursor());
+		enumInfo.underlyingType	= clang_getEnumDeclIntegerType(getCurrentCursor());
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}

@@ -1,6 +1,5 @@
-#include "GeneratedCodeTemplate.h"
+#include "GeneratedClassCodeTemplate.h"
 
-#include <unordered_set>
 #include <cassert>
 #include <algorithm>
 
@@ -9,14 +8,7 @@
 
 using namespace rfk;
 
-std::hash<std::string> GeneratedCodeTemplate::_stringHasher;
-
-void GeneratedCodeTemplate::undefMacros(kodgen::GeneratedFile& generatedFile, std::string const& generatedMacroName) const noexcept
-{
-	//TODO
-}
-
-void GeneratedCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) const noexcept
+void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) const noexcept
 {
 	switch (entityInfo.entityType)
 	{
@@ -28,16 +20,12 @@ void GeneratedCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, k
 			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo const&>(entityInfo));
 			break;
 
-		case kodgen::EntityInfo::EType::Enum:
-			generateEnumCode(generatedFile, static_cast<kodgen::EnumInfo const&>(entityInfo));
-			break;
-
 		default:
 			assert(false);	//Should never reach this point
 	}
 }
 
-void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
+void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
 {
 	std::string mainMacroName					= _externalPrefix + classInfo.name + "_GENERATED";
 
@@ -54,7 +42,7 @@ void GeneratedCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFi
 								"private:");
 }
 
-void GeneratedCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
+void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
 {
 	//std::string mainMacroName	 = "RFRK" + structInfo.name + "_GENERATED";
 
@@ -65,12 +53,7 @@ void GeneratedCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedF
 	//						 "public:");
 }
 
-void GeneratedCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
-{
-
-}
-
-std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string					getTypeMacroName						= _internalPrefix + info.name + "_GetTypeMacro";
 	std::string					generateParentsMetadataMacroName		= generateParentsMetadataMacro(generatedFile, info);
@@ -117,7 +100,7 @@ std::string GeneratedCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFi
 	return getTypeMacroName;
 }
 
-std::string GeneratedCodeTemplate::generateArchetypePropertiesMacro(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateArchetypePropertiesMacro(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& info) const noexcept
 {
 	std::string macroName = _internalPrefix + info.name + "_GenerateArchetypeProperties";
 
@@ -126,7 +109,7 @@ std::string GeneratedCodeTemplate::generateArchetypePropertiesMacro(kodgen::Gene
 	return macroName;
 }
 
-std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string macroName = _internalPrefix + info.name + "_GenerateMethodsMetadata";
 
@@ -197,7 +180,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 	return macroName;
 }
 
-std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::array<std::string, 2> macroNames = { _internalPrefix + info.name + "_GenerateFieldsMetadata" };
 
@@ -212,7 +195,7 @@ std::array<std::string, 2> GeneratedCodeTemplate::generateFieldsMetadataMacros(k
 	return macroNames;
 }
 
-std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string macroName = _internalPrefix + info.name + "_GenerateFieldHelperMethods";
 
@@ -289,7 +272,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 	return macroName;
 }
 
-std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateParentsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	if (!info.parents.empty())
 	{
@@ -313,7 +296,7 @@ std::string GeneratedCodeTemplate::generateParentsMetadataMacro(kodgen::Generate
 	return std::string();
 }
 
-kodgen::uint16 GeneratedCodeTemplate::computeMethodFlags(kodgen::MethodInfo const& method) const noexcept
+kodgen::uint16 GeneratedClassCodeTemplate::computeMethodFlags(kodgen::MethodInfo const& method) const noexcept
 {
 	kodgen::uint16 result = 0;
 
@@ -358,7 +341,7 @@ kodgen::uint16 GeneratedCodeTemplate::computeMethodFlags(kodgen::MethodInfo cons
 
 	return result;
 }
-kodgen::uint16 GeneratedCodeTemplate::computeFieldFlags(kodgen::FieldInfo const& field) const noexcept
+kodgen::uint16 GeneratedClassCodeTemplate::computeFieldFlags(kodgen::FieldInfo const& field) const noexcept
 {
 	kodgen::uint16 result = 0;
 
@@ -389,7 +372,7 @@ kodgen::uint16 GeneratedCodeTemplate::computeFieldFlags(kodgen::FieldInfo const&
 	return result;
 }
 
-std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string macroName = _internalPrefix + info.name + "_DefaultInstantiateMacro";
 
@@ -407,7 +390,7 @@ std::string GeneratedCodeTemplate::generateDefaultInstantiateMacro(kodgen::Gener
 	return macroName;
 }
 
-std::string GeneratedCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string macroName = _internalPrefix + info.name + "_RegisterArchetype";
 
@@ -418,24 +401,4 @@ std::string GeneratedCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFi
 	generatedFile.writeLine("");
 
 	return macroName;
-}
-
-std::string GeneratedCodeTemplate::fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName) const noexcept
-{
-	std::string result;
-
-	for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
-	{
-		result += entityVarName + "properties.simpleProperties.emplace(\"" + prop.name + "\"); ";
-	}
-
-	for (kodgen::ComplexProperty const& prop : info.properties.complexProperties)
-	{
-		for (std::string subProp : prop.subProperties)
-		{
-			result += entityVarName + "properties.complexProperties.emplace(\"" + prop.name + "\", \"" + subProp + "\"); ";
-		}
-	}
-
-	return result;
 }

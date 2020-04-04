@@ -89,7 +89,7 @@ Archetype const* Type::getArchetype() noexcept
 	}
 	else if constexpr (std::is_class_v<T>)
 	{
-		if constexpr (rfk::isReflected<T>)
+		if constexpr (isReflected<T>)
 		{
 			return &T::staticGetArchetype();
 		}
@@ -98,8 +98,7 @@ Archetype const* Type::getArchetype() noexcept
 	}
 	else if constexpr (std::is_enum_v<T>)
 	{
-		//TODO
-		return nullptr;
+		return getEnum<T>();
 	}
 	else
 	{
@@ -110,7 +109,7 @@ Archetype const* Type::getArchetype() noexcept
 template <typename T>
 constexpr void Type::fillType(Type& out_type) noexcept
 {
-	TypePart& currPart = out_type.parts.emplace_back(TypePart{ 0u, rfk::ETypePartDescriptor::Undefined, 0u });
+	TypePart& currPart = out_type.parts.emplace_back(TypePart{ 0u, ETypePartDescriptor::Undefined, 0u });
 
 	//Const
 	if constexpr (std::is_const_v<T>)
@@ -157,17 +156,12 @@ constexpr void Type::fillType(Type& out_type) noexcept
 template <typename T>
 Type const& Type::getType() noexcept
 {
-	static rfk::Type	result;
-	static bool			initialized = false;
+	static Type	result;
+	static bool	initialized = false;
 	
 	if (!initialized)
 	{
 		initialized = true;
-		fillType<T>(result);
-	}
-	else
-	{
-		result = rfk::Type();
 		fillType<T>(result);
 	}
 

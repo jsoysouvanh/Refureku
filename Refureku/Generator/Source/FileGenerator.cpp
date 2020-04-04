@@ -9,6 +9,7 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResu
 
 	file.writeLine("#include \"Utility/TypeTraits.h\"");
 	file.writeLine("#include \"TypeInfo/Archetypes/Class.h\"");
+	file.writeLine("#include \"TypeInfo/Archetypes/Enum.h\"");
 	file.writeLine("#include \"TypeInfo/Archetypes/ArchetypeRegisterer.h\"\n");
 }
 

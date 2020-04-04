@@ -379,10 +379,6 @@ void reflectedObject()
 
 void types()
 {
-	//rfk::Type type = ExampleClass::staticGetArchetype().getField("c")->type;
-
-	//std::cout << type << std::endl;
-
 	rfk::StaticMethod const* staticMethod = ExampleClass::staticGetArchetype().getStaticMethod("staticMethod3", rfk::EMethodFlags::Private);
 
 	try
@@ -405,17 +401,25 @@ void types()
 	}
 }
 
+void enums()
+{
+	rfk::Enum const* e = rfk::Database::getEnum("ExampleEnum");
+
+	std::cout << e->name << " : " << e->values.size() << std::endl;
+}
+
 int main()
 {
-	nonStaticMethods();
-	staticMethods();
-	nonStaticFields();
-	staticFields();
-	inheritance();
-	instantiation();
-	properties();
-	reflectedObject();
-	types();
+	//nonStaticMethods();
+	//staticMethods();
+	//nonStaticFields();
+	//staticFields();
+	//inheritance();
+	//instantiation();
+	//properties();
+	//reflectedObject();
+	//types();
+	enums();
 
 	return EXIT_SUCCESS;
 }

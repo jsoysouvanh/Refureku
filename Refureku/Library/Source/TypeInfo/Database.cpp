@@ -45,6 +45,48 @@ Archetype const* Database::getArchetype(uint64 id) noexcept
 	return (it != _archetypesById.cend()) ? *it : nullptr;
 }
 
+Struct const* Database::getStruct(std::string structName) noexcept
+{
+	Archetype const* archetype = getArchetype(std::move(structName));
+
+	return (archetype != nullptr && archetype->category == Archetype::ECategory::Struct) ? static_cast<Struct const*>(archetype) : nullptr;
+}
+
+Struct const* Database::getStruct(uint64 id) noexcept
+{
+	Archetype const* archetype = getArchetype(id);
+
+	return (archetype != nullptr && archetype->category == Archetype::ECategory::Struct) ? static_cast<Struct const*>(archetype) : nullptr;
+}
+
+Class const* Database::getClass(std::string className) noexcept
+{
+	Archetype const* archetype = getArchetype(std::move(className));
+
+	return (archetype != nullptr && archetype->category == Archetype::ECategory::Class) ? static_cast<Class const*>(archetype) : nullptr;
+}
+
+Class const* Database::getClass(uint64 id) noexcept
+{
+	Archetype const* archetype = getArchetype(id);
+
+	return (archetype != nullptr && archetype->category == Archetype::ECategory::Class) ? static_cast<Class const*>(archetype) : nullptr;
+}
+
+Enum const* Database::getEnum(std::string enumName) noexcept
+{
+	Archetype const* archetype = getArchetype(std::move(enumName));
+
+	return (archetype != nullptr && archetype->category == Archetype::ECategory::Enum) ? static_cast<Enum const*>(archetype) : nullptr;
+}
+
+Enum const* Database::getEnum(uint64 id) noexcept
+{
+	Archetype const* archetype = getArchetype(id);
+
+	return (archetype != nullptr && archetype->category == Archetype::ECategory::Enum) ? static_cast<Enum const*>(archetype) : nullptr;
+}
+
 Database::ArchetypesById const& Database::getArchetypesById() noexcept
 {
 	return _archetypesById;

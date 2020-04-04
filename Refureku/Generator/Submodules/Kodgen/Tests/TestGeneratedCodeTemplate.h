@@ -57,7 +57,7 @@ namespace kodgen
 				case EntityInfo::EType::Enum:
 					generatedFile.writeLines(	"#define _RFRK_GENERATED_ENUM_" + entityInfo.name + " //TODO something",
 												"/*",
-												"enum class " + static_cast<EnumInfo const&>(entityInfo).name + "Reflect : " + static_cast<EnumInfo const&>(entityInfo).underlyingType,
+												"enum class " + static_cast<EnumInfo const&>(entityInfo).name + "Reflect : " + static_cast<EnumInfo const&>(entityInfo).underlyingType.getName(),
 												"{");
 
 					for (EnumValueInfo const& evi : static_cast<EnumInfo const&>(entityInfo).enumValues)

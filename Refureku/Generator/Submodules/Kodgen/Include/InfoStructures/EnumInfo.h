@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "InfoStructures/TypeInfo.h"
 #include "InfoStructures/EntityInfo.h"
 #include "InfoStructures/EnumValueInfo.h"
 
@@ -10,9 +11,10 @@ namespace kodgen
 	class EnumInfo : public EntityInfo
 	{
 		public:
-			std::string					underlyingType			= "";
-			std::string					canonicalUnderlyingType	= "";
+			TypeInfo					type;
+			TypeInfo					underlyingType;
 			std::vector<EnumValueInfo>	enumValues;
+
 
 			EnumInfo()														= default;
 			EnumInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup)	noexcept;

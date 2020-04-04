@@ -170,6 +170,13 @@ namespace exnamespace
 		RFKExampleClass_GENERATED
 	};
 
-	class A : public ExampleClass
-	{};
+	enum class RFKEnum() ExampleEnum : uint8_t
+	{
+		ExampleValue1 = 1 << 0,
+		ExampleValue2 = 1 << 1,
+		ExampleValue3 = 1 << 2,
+		ExampleValue4 = 1 << 3
+	};
 }
+
+RFKExampleEnum_GENERATED

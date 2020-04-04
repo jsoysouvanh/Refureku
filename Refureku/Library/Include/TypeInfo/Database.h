@@ -6,6 +6,7 @@
 
 #include "Misc/FundamentalTypes.h"
 #include "TypeInfo/Archetypes/Class.h"
+#include "TypeInfo/Archetypes/Enum.h"
 
 namespace rfk
 {
@@ -20,9 +21,6 @@ namespace rfk
 			static	ArchetypesById		_archetypesById;
 			static	ArchetypesByName	_archetypesByName;
 
-			/*template <typename T>
-			static constexpr void	fillType(Type& out_type)			noexcept;*/
-
 			static void	registerArchetype(Archetype const& archetype)	noexcept;
 
 		public:
@@ -31,15 +29,22 @@ namespace rfk
 			Database(Database&&)					= delete;
 			~Database()								= delete;
 
-			//template <typename T>
-			//static Type const&					getType()							noexcept;
-
+			//TODO
 			/** Get the archetype corresponding to a type if possible, if not nullptr. */
-			template <typename T>
-			static constexpr Archetype const*	getArchetype()						noexcept;
+			//template <typename T>
+			//static constexpr Archetype const*	getArchetype()						noexcept;
 
 			static Archetype const*				getArchetype(std::string typeName)	noexcept;
 			static Archetype const*				getArchetype(uint64 id)				noexcept;
+
+			static Struct const*				getStruct(std::string structName)	noexcept;
+			static Struct const*				getStruct(uint64 id)				noexcept;
+
+			static Class const*					getClass(std::string className)		noexcept;
+			static Class const*					getClass(uint64 id)					noexcept;
+
+			static Enum const*					getEnum(std::string enumName)		noexcept;
+			static Enum const*					getEnum(uint64 id)					noexcept;
 
 			static ArchetypesById const&		getArchetypesById()					noexcept;
 			static ArchetypesByName	const&		getArchetypesByName()				noexcept;

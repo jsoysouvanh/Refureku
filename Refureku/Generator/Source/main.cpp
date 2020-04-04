@@ -3,7 +3,8 @@
 #include <Misc/Filesystem.h>
 
 #include "FileParser.h"
-#include "GeneratedCodeTemplate.h"
+#include "GeneratedClassCodeTemplate.h"
+#include "GeneratedEnumCodeTemplate.h"
 #include "FileGenerator.h"
 
 void parseAndGenerate(fs::path workingDirectory)
@@ -31,14 +32,16 @@ void parseAndGenerate(fs::path workingDirectory)
 	//Generated files will use .myCustomExtension.h extension
 	fileGenerator.generatedFilesExtension = ".rfk.h";
 
-	//Bind "Refureku" to the GeneratedCodeTemplate class
-	fileGenerator.addGeneratedCodeTemplate("Refureku", new rfk::GeneratedCodeTemplate());
-
-	/** class Class(CodeTemplate[Refureku]) MyClass {}; */
+	/** class RFKClass(CodeTemplate[RefurekuClass]) MyClass {}; */
 	fileGenerator.codeTemplateMainComplexPropertyName = "CodeTemplate";
 
-	/**	class Class() MyClass {}; */
-	fileGenerator.setDefaultClassTemplate("Refureku"); 
+	//Bind name -> templates
+	fileGenerator.addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
+	fileGenerator.addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
+
+	/**	class RFKClass() MyClass {}; enum [class] RFKEnum() {}; */
+	fileGenerator.setDefaultClassTemplate("RefurekuClass"); 
+	fileGenerator.setDefaultEnumTemplate("RefurekuEnum");
 
 	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, true);	//TODO: Change this to false
 

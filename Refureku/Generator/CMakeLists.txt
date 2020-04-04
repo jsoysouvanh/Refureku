@@ -9,7 +9,9 @@ add_subdirectory(Submodules/Kodgen)
 set(RefurekuGeneratorTarget RefurekuGenerator_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
 add_executable(${RefurekuGeneratorTarget}
 				Source/FileParser.cpp
-				Source/GeneratedCodeTemplate.cpp
+				Source/GeneratedEntityCodeTemplate.cpp
+				Source/GeneratedClassCodeTemplate.cpp
+				Source/GeneratedEnumCodeTemplate.cpp
 				Source/FileGenerator.cpp
 
 				Source/main.cpp
