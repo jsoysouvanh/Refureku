@@ -5,13 +5,19 @@
 #include <type_traits>
 
 #include "TypeInfo/TypePart.h"
+#include "TypeInfo/Archetypes/FundamentalArchetypes.h"
 
 namespace rfk
 {
-	class Archetype;	//Forward declaration
-
 	class Type
 	{
+		private:
+			template <typename T>
+			static constexpr void	fillType(Type& out_type)	noexcept;
+
+			template <typename T>
+			static Archetype const* getArchetype() noexcept;
+
 		public:
 			/** Archetype of this type */
 			Archetype const*		archetype = nullptr;
@@ -23,6 +29,9 @@ namespace rfk
 			Type(Type const&)	= default;
 			Type(Type&&)		= default;
 			~Type()				= default;
+
+			template <typename T>
+			static Type const&	getType()							noexcept;
 
 			template <typename... ArgTypes>
 			inline Type&		addPart(ArgTypes&&...	args)		noexcept;

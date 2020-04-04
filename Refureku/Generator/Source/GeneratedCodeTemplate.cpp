@@ -176,7 +176,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 			generatedFile.writeLine("	" + properties + "\t\\");
 
 		//Setup return type
-		generatedFile.writeLine("	currMethod->returnType = rfk::Database::getType<" + method.returnType.getName() + ">();\t\\");
+		generatedFile.writeLine("	currMethod->returnType = rfk::Type::getType<" + method.returnType.getName() + ">();\t\\");
 
 		//Setup parameters
 		if (!method.parameters.empty())
@@ -185,7 +185,7 @@ std::string GeneratedCodeTemplate::generateMethodsMetadataMacro(kodgen::Generate
 
 			for (kodgen::MethodParamInfo const& param : method.parameters)
 			{
-				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type(rfk::Database::getType<" + param.type.getName() + ">()));\t\\");
+				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type(rfk::Type::getType<" + param.type.getName() + ">()));\t\\");
 			}
 		}
 	}
@@ -275,7 +275,7 @@ std::string GeneratedCodeTemplate::generateFieldHelperMethodsMacro(kodgen::Gener
 		}
 
 		//Make type
-		generatedFile.writeLine("		currField->type = rfk::Database::getType<" + field.type.getName() + ">();\t\\");
+		generatedFile.writeLine("		currField->type = rfk::Type::getType<" + field.type.getName() + ">();\t\\");
 
 		//Add properties
 		properties = fillEntityProperties(field, "	currField->");

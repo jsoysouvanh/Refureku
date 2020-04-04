@@ -130,7 +130,7 @@ namespace exnamespace
 			float			method3(int i)				noexcept;
 
 		public:
-			ExampleClass()						= default; //noexcept { }
+			ExampleClass()						noexcept { }
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;

@@ -27,7 +27,7 @@ void MethodBase::checkArgumentsStrict(FirstArgType&& a, OtherArgTypes&&... args)
 template <size_t Rank, typename LastArgType>
 void MethodBase::checkArgumentsStrict(LastArgType&& a) const
 {
-	Type providedType = Database::getType<LastArgType>();
+	Type providedType = Type::getType<LastArgType>();
 
 	if (providedType != parameters[Rank].type)
 	{
@@ -45,7 +45,7 @@ void MethodBase::checkArgumentsLax(ArgTypes&&... args) const
 template <typename ReturnType>
 void MethodBase::checkReturnTypeStrict() const
 {
-	Type providedType = Database::getType<ReturnType>();
+	Type providedType = Type::getType<ReturnType>();
 
 	if (providedType != returnType)
 	{

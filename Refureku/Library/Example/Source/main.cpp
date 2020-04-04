@@ -116,13 +116,20 @@ void staticMethods()
 		std::cout << staticMethod2->safeInvoke<int>() << std::endl;
 	}
 
-	rfk::StaticMethod const* staticMethod3 = exampleClassType.getStaticMethod("staticMethod3");
+	rfk::StaticMethod const* staticMethod3 = exampleClassType.getStaticMethod("staticMethod3", rfk::EMethodFlags::Protected);
 	if (staticMethod3 != nullptr)
 	{
-		staticMethod3->invoke("coucou");
-		staticMethod3->safeInvoke("coucou");
-		std::cout << staticMethod3->invoke<int>("coucou") << std::endl;
-		std::cout << staticMethod3->safeInvoke<int>("coucou") << std::endl;
+		try
+		{
+			staticMethod3->invoke("coucou");
+			staticMethod3->safeInvoke(static_cast<char const*>("coucou"));
+			std::cout << staticMethod3->invoke<int>("coucou") << std::endl;
+			std::cout << staticMethod3->safeInvoke<int>("coucou") << std::endl;
+		}
+		catch (rfk::MethodError e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
 	}
 
 	std::vector<rfk::StaticMethod const*> staticMethods3 = exampleClassType.getStaticMethods("staticMethod3");
@@ -354,19 +361,6 @@ void properties()
 	EXECUTE_RESULT(ec.properties.hasProperty("rfk::ReflectedObject"));
 	
 	EXECUTE_RESULT(ec.getMethod("method4")->properties.hasProperty("CustomInstantiator"));
-
-
-	//rfk::Field const* field = ec.getField("somePtrToInt");
-
-	//for (auto& value : field->properties.simpleProperties)
-	//{
-	//	std::cout << value << std::endl;
-	//}
-
-	//for (auto& [key, value] : field->properties.complexProperties)
-	//{
-	//	std::cout << key << " --> " << value << std::endl;
-	//}
 }
 
 void reflectedObject()
@@ -413,14 +407,14 @@ void types()
 
 int main()
 {
-	//nonStaticMethods();
-	//staticMethods();
-	//nonStaticFields();
-	//staticFields();
-	//inheritance();
-	//instantiation();
-	//properties();
-	//reflectedObject();
+	nonStaticMethods();
+	staticMethods();
+	nonStaticFields();
+	staticFields();
+	inheritance();
+	instantiation();
+	properties();
+	reflectedObject();
 	types();
 
 	return EXIT_SUCCESS;

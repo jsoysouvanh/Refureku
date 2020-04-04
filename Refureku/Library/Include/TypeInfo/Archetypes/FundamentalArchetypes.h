@@ -19,6 +19,11 @@ namespace rfk
 				return new bool();
 			}
 
+			static void* instantiateChar() noexcept
+			{
+				return new char();
+			}
+
 			static void* instantiateSignedChar() noexcept
 			{
 				return new signed char();
@@ -129,6 +134,21 @@ namespace rfk
 					initialized = true;
 
 					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateBool);
+				}
+
+				return archetype;
+			}
+
+			static Archetype const& getCharArchetype() noexcept
+			{
+				static bool			initialized = false;
+				static Archetype	archetype("char", _stringHasher("char"), Archetype::ECategory::Fundamental, sizeof(char));
+
+				if (!initialized)
+				{
+					initialized = true;
+
+					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateChar);
 				}
 
 				return archetype;
