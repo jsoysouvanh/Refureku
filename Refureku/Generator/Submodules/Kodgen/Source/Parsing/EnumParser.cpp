@@ -29,10 +29,13 @@ CXChildVisitResult EnumParser::parse(CXCursor const& currentCursor) noexcept
 		return setAsCurrentEntityIfValid(currentCursor);
 	}
 
-	switch (clang_getCursorKind(currentCursor))
+	switch (currentCursor.kind)
 	{
 		case CXCursorKind::CXCursor_EnumConstantDecl:
 			return parseEnumValue(currentCursor);
+
+		default:
+			break;
 	}
 
 	return CXChildVisitResult::CXChildVisit_Continue;
@@ -44,9 +47,10 @@ CXChildVisitResult EnumParser::parseEnumValue(CXCursor enumCursor) noexcept
 
 	_enumValueParser.startParsing(enumCursor);
 
-	clang_visitChildren(enumCursor, [](CXCursor c, CXCursor parent, CXClientData clientData)
+	clang_visitChildren(enumCursor, [](CXCursor c, CXCursor, CXClientData clientData)
 						{
 							return reinterpret_cast<EnumValueParser*>(clientData)->parse(c);
+
 						}, &_enumValueParser);
 
 	return _enumValueParser.endParsing();

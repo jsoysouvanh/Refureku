@@ -21,12 +21,12 @@ FileParser::~FileParser() noexcept
 	clang_disposeIndex(_clangIndex);
 }
 
-CXChildVisitResult FileParser::staticParseCursor(CXCursor c, CXCursor parent, CXClientData clientData) noexcept
+CXChildVisitResult FileParser::staticParseCursor(CXCursor c, CXCursor /* parent */, CXClientData clientData) noexcept
 {
 	FileParser*	parser = reinterpret_cast<FileParser*>(clientData);
 
 	//Parse the given file ONLY, ignore headers
-	if (clang_Location_isFromMainFile(clang_getCursorLocation (c)) || clang_getCursorKind(c) == CXCursorKind::CXCursor_AnnotateAttr)
+	if (clang_Location_isFromMainFile(clang_getCursorLocation (c)))
 	{
 		return parser->parseCursor(c);
 	}
@@ -50,6 +50,9 @@ CXChildVisitResult FileParser::parseCursor(CXCursor currentCursor) noexcept
 
 		case CXCursorKind::CXCursor_EnumDecl:
 			return parseEnum(currentCursor);
+
+		default:
+			break;
 	}
 
 	return CXChildVisitResult::CXChildVisit_Continue;
@@ -70,11 +73,9 @@ CXChildVisitResult FileParser::parseClass(CXCursor classCursor, bool isStruct) n
 		_classParser.startClassParsing(classCursor);
 	}
 
-	clang_visitChildren(classCursor, [](CXCursor c, CXCursor parent, CXClientData clientData)
+	clang_visitChildren(classCursor, [](CXCursor c, CXCursor, CXClientData clientData)
 						{
-							ClassParser* classParser = reinterpret_cast<ClassParser*>(clientData);
-
-							return classParser->parse(c);
+							return reinterpret_cast<ClassParser*>(clientData)->parse(c);
 
 						}, &_classParser);
 
@@ -87,11 +88,9 @@ CXChildVisitResult FileParser::parseEnum(CXCursor enumCursor) noexcept
 
 	_enumParser.startParsing(enumCursor);
 
-	clang_visitChildren(enumCursor, [](CXCursor c, CXCursor parent, CXClientData clientData)
+	clang_visitChildren(enumCursor, [](CXCursor c, CXCursor, CXClientData clientData)
 						{
-							EnumParser* enumParser = reinterpret_cast<EnumParser*>(clientData);
-
-							return enumParser->parse(c);
+							return reinterpret_cast<EnumParser*>(clientData)->parse(c);
 
 						}, &_enumParser);
 
@@ -170,9 +169,6 @@ bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noe
 			}
 			else
 			{
-				_parsingInfo.flushCurrentStructOrClass();
-				_parsingInfo.flushCurrentEnum();
-
 				isSuccess = true;
 			}
 

@@ -2,6 +2,8 @@
 
 #include "ReflectedObject.h"
 
+#include <vector>
+
 #include "Generated/ExampleClass.rfk.h"
 
 namespace namespace1
@@ -21,12 +23,12 @@ namespace namespace2
 	class RFKClass(rfk::ReflectedObject) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject
 	{
 		RFKField()
-			float ppFloat = 123456.123456f;
+		float ppFloat = 123456.123456f;
 
 		public:
-		ParentParentClass() noexcept {}
+			ParentParentClass() noexcept {}
 
-		RFKParentParentClass_GENERATED
+			RFKParentParentClass_GENERATED
 	};
 }
 

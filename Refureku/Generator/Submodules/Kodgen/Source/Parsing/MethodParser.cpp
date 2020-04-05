@@ -35,7 +35,7 @@ CXChildVisitResult MethodParser::parse(CXCursor const& cursor) noexcept
 			break;
 
 		default:
-			std::cout << "Unknown method sub cursor: " << Helpers::getString(clang_getCursorKindSpelling(clang_getCursorKind(cursor))) << std::endl;
+			//std::cout << "Unknown method sub cursor: " << Helpers::getString(clang_getCursorKindSpelling(clang_getCursorKind(cursor))) << std::endl;
 			break;
 	}
 
