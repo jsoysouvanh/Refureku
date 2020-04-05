@@ -1,47 +1,35 @@
 
-template <typename ReturnType, typename... Args>
-ReturnType Method::internalInvoke(void const* caller, Args&&... arguments) const noexcept
+template <typename ReturnType, typename... ArgTypes>
+ReturnType Method::internalInvoke(void const* caller, ArgTypes&&... arguments) const noexcept
 {
-	return std::static_pointer_cast<MemberFunction<DummyClass, ReturnType(Args...)>>(_internalMethod)->operator()(caller, std::forward<Args>(arguments)...);
+	return std::static_pointer_cast<MemberFunction<DummyClass, ReturnType(ArgTypes...)>>(_internalMethod)->operator()(caller, std::forward<ArgTypes>(arguments)...);
 }
 
-template <typename... Args>
-void Method::invoke(void const* caller, Args&&... arguments) const noexcept(REFUREKU_RELEASE)
+template <typename... ArgTypes>
+void Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept
 {
-	//#if REFUREKU_DEBUG
-
-	////TODO Security check throw exception (inherit from std::runtime_error)
-	////TODO check nullptr
-
-	//#endif
-
-	internalInvoke<void, Args...>(std::forward<void const*>(caller), std::forward<Args>(arguments)...);
+	internalInvoke<void, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }
 
-template <typename ReturnType, typename... Args>
-ReturnType Method::invoke(void const* caller, Args&&... arguments) const noexcept(REFUREKU_RELEASE)
+template <typename ReturnType, typename... ArgTypes>
+ReturnType Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept
 {
-	//#if REFUREKU_DEBUG
-
-	////TODO Security check throw exception (inherit from std::runtime_error)
-
-	//#endif
-
-	return internalInvoke<ReturnType, Args...>(std::forward<void const*>(caller), std::forward<Args>(arguments)...);
+	return internalInvoke<ReturnType, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }
 
-template <typename... Args>
-void Method::safeInvoke(void const* caller, Args&&... arguments) const
+template <typename... ArgTypes>
+void Method::safeInvoke(void const* caller, ArgTypes&&... arguments) const
 {
-	//TODO Security check throw exception (inherit from std::runtime_error)
+	checkArguments(std::forward<ArgTypes>(arguments)...);
 
-	internalInvoke<void, Args...>(std::forward<void const*>(caller), std::forward<Args>(arguments)...);
+	internalInvoke<void, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }
 
-template <typename ReturnType, typename... Args>
-ReturnType Method::safeInvoke(void const* caller, Args&&... arguments) const
+template <typename ReturnType, typename... ArgTypes>
+ReturnType Method::safeInvoke(void const* caller, ArgTypes&&... arguments) const
 {
-	//TODO Security check throw exception (inherit from std::runtime_error)
+	checkReturnType<ReturnType>();
+	checkArguments(std::forward<ArgTypes>(arguments)...);
 
-	return internalInvoke<ReturnType, Args...>(std::forward<void const*>(caller), std::forward<Args>(arguments)...);
+	return internalInvoke<ReturnType, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }

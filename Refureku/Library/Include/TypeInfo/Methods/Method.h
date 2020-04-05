@@ -57,14 +57,14 @@ namespace rfk
 			*		void invoke(void* caller, Args&&... arguments) method
 			*/
 			template <typename... Args>
-			void		invoke(void const* caller, Args&&... arguments)		const noexcept(REFUREKU_RELEASE);
+			void		invoke(void const* caller, Args&&... arguments)		const noexcept;
 
 			/**
 			*	Overload with const caller for
 			*		ReturnType invoke(void* caller, Args&&... arguments) method
 			*/
 			template <typename ReturnType, typename... Args>
-			ReturnType	invoke(void const* caller, Args&&... arguments)		const noexcept(REFUREKU_RELEASE);
+			ReturnType	invoke(void const* caller, Args&&... arguments)		const noexcept;
 
 			/**
 			*	Overload with const caller for

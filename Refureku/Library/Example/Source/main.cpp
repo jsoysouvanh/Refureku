@@ -81,11 +81,11 @@ void nonStaticMethods()
 	rfk::Method const* method5 = exampleClassType.getMethod("parentClassMethod1", rfk::EMethodFlags::Default, true);
 	if (method5 != nullptr)
 	{
-		method5->invoke(&exampleClass, nullptr);
-		method5->safeInvoke(&exampleClass, nullptr);
+		method5->invoke(&exampleClass);
+		method5->safeInvoke(&exampleClass);
 
-		method5->invoke(&constExampleClass, nullptr);
-		method5->safeInvoke(&constExampleClass, nullptr);
+		method5->invoke(&constExampleClass);
+		method5->safeInvoke(&constExampleClass);
 	}
 
 	std::vector<rfk::Method const*> methods3 = exampleClassType.getMethods("method3");

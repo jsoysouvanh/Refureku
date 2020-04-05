@@ -18,10 +18,10 @@ namespace rfk
 	{
 		private:
 			template <size_t Rank, typename FirstArgType, typename... OtherArgTypes>
-			void	checkArgumentsStrict(FirstArgType&& a, OtherArgTypes&&... args)	const;
+			void	checkArguments(FirstArgType&& a, OtherArgTypes&&... args)	const;
 
 			template <size_t Rank, typename LastArgType>
-			void	checkArgumentsStrict(LastArgType&& a)	const;
+			void	checkArguments(LastArgType&& a)								const;
 
 		protected:
 			/** Handle pointing to the actual method in memory */
@@ -36,19 +36,13 @@ namespace rfk
 			MethodBase(MethodBase&&)								= default;
 
 			template <typename... ArgTypes>
-			void checkArgumentsStrict(ArgTypes&&... args)	const;
-
-			template <typename... ArgTypes>
-			void checkArgumentsLax(ArgTypes&&... args)		const;
+			void checkArguments(ArgTypes&&... args)	const;
 
 			template <typename ReturnType>
-			void checkReturnTypeStrict()	const;
+			void checkReturnType()					const;
 
-			template <typename ReturnType>
-			void checkReturnTypeLax()		const;
-
-			MethodBase& operator=(MethodBase const&)				= default;
-			MethodBase& operator=(MethodBase&&)						= default;
+			MethodBase& operator=(MethodBase const&)	= default;
+			MethodBase& operator=(MethodBase&&)			= default;
 
 		public:
 			/** Flags describing this method */

@@ -50,6 +50,8 @@ namespace rfk
 			inline bool			isVolatile()				const	noexcept;
 			inline uint32		getArraySize()				const	noexcept;
 
+			bool				match(Type const& type)		const	noexcept;
+
 			std::string			toString()					const	noexcept;
 
 			Type& operator=(Type const&)	= default;

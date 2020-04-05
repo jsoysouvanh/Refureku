@@ -29,26 +29,26 @@ namespace rfk
 			*			StaticMethod::invoke("example");				will not work because "example" is a char const*
 			*			StaticMethod::invoke(std::string("example"));	will work
 			*/
-			template <typename... Args>
-			void		invoke(Args&&... arguments)								const	noexcept(REFUREKU_RELEASE);
+			template <typename... ArgTypes>
+			void		invoke(ArgTypes&&... arguments)		const	noexcept;
 
 			/**
 			*	TODO
 			*/
-			template <typename ReturnType, typename... Args>
-			ReturnType	invoke(Args&&... arguments)								const	noexcept(REFUREKU_RELEASE);
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	invoke(ArgTypes&&... arguments)		const	noexcept;
 
 			/**
 			*	TODO
 			*/
-			template <typename... Args>
-			void		safeInvoke(Args&&... arguments)							const;
+			template <typename... ArgTypes>
+			void		safeInvoke(ArgTypes&&... arguments)	const;
 
 			/**
 			*	TODO
 			*/
-			template <typename ReturnType, typename... Args>
-			ReturnType	safeInvoke(Args&&... arguments)							const;
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	safeInvoke(ArgTypes&&... arguments)	const;
 
 			StaticMethod& operator=(StaticMethod const&)	= default;
 			StaticMethod& operator=(StaticMethod&&)			= default;
