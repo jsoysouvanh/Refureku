@@ -104,7 +104,7 @@ namespace namespace3
 			int const*		c[2][3];
 
 			RFKMethod(CustomInstantiator)
-			unsigned long long		method4(void* ptr);
+			unsigned long long	method4(void* ptr);
 
 			RFKMethod()
 			virtual void	method1() const noexcept override;

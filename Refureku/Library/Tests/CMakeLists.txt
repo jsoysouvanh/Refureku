@@ -8,6 +8,8 @@ project(RefurekuTests)
 
 set(RefurekuTestsTarget RefurekuTests)
 add_executable(${RefurekuTestsTarget}
+					ExampleClass.cpp
+
 					RefurekuTests.cpp
 				)
 
