@@ -16,9 +16,6 @@ DataType Field::getData(void* instance) const noexcept
 	}
 }
 
-/**
-*	Set the data corresponding to this field in the provided instance
-*/
 template <typename DataType>
 void Field::setData(void* instance, DataType&& data) const noexcept
 {
@@ -34,4 +31,14 @@ void Field::setData(void* instance, DataType&& data) const noexcept
 	{
 		assert(false);	//How can we get here?
 	}
+}
+
+inline void* Field::getDataAddress(void* instance) const noexcept
+{
+	return reinterpret_cast<char*>(instance) + memoryOffset;
+}
+
+inline void Field::setData(void* instance, void const* data, uint64 dataSize) const noexcept
+{
+	std::memcpy(getDataAddress(instance), data, dataSize);
 }

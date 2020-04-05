@@ -8,7 +8,6 @@ add_library(${RefurekuLibraryTarget}
 				STATIC
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
-					Source/TypeInfo/PropertyGroup.cpp
 					Source/TypeInfo/Entity.cpp
 					Source/TypeInfo/EnumValue.cpp
 					Source/TypeInfo/Database.cpp

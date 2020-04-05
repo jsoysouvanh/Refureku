@@ -16,9 +16,6 @@ DataType StaticField::getData() const noexcept
 	}
 }
 
-/**
-*	Set the data corresponding to this field in the provided instance
-*/
 template <typename DataType>
 void StaticField::setData(DataType&& data) const noexcept
 {
@@ -34,4 +31,14 @@ void StaticField::setData(DataType&& data) const noexcept
 	{
 		assert(false);	//How can we get here?
 	}
+}
+
+inline void* StaticField::getDataAddress() const noexcept
+{
+	return dataAddress;
+}
+
+inline void StaticField::setData(void const* data, uint64 dataSize) const noexcept
+{
+	std::memcpy(getDataAddress(), data, dataSize);
 }

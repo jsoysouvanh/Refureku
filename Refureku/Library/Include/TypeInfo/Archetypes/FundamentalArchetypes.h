@@ -14,92 +14,92 @@ namespace rfk
 		private:
 			static inline std::hash<std::string>	_stringHasher;
 			
-			static void* instantiateBool() noexcept
+			inline static void* instantiateBool() noexcept
 			{
 				return new bool();
 			}
 
-			static void* instantiateChar() noexcept
+			inline static void* instantiateChar() noexcept
 			{
 				return new char();
 			}
 
-			static void* instantiateSignedChar() noexcept
+			inline static void* instantiateSignedChar() noexcept
 			{
 				return new signed char();
 			}
 
-			static void* instantiateUnsignedChar() noexcept
+			inline static void* instantiateUnsignedChar() noexcept
 			{
 				return new unsigned char();
 			}
 
-			static void* instantiateWideChar() noexcept
+			inline static void* instantiateWideChar() noexcept
 			{
 				return new wchar_t();
 			}
 
-			static void* instantiateChar16() noexcept
+			inline static void* instantiateChar16() noexcept
 			{
 				return new char16_t();
 			}
 
-			static void* instantiateChar32() noexcept
+			inline static void* instantiateChar32() noexcept
 			{
 				return new char32_t();
 			}
 
-			static void* instantiateShort() noexcept
+			inline static void* instantiateShort() noexcept
 			{
 				return new short();
 			}
 
-			static void* instantiateUnsignedShort() noexcept
+			inline static void* instantiateUnsignedShort() noexcept
 			{
 				return new unsigned short();
 			}
 
-			static void* instantiateInt() noexcept
+			inline static void* instantiateInt() noexcept
 			{
 				return new int();
 			}
 
-			static void* instantiateUnsignedInt() noexcept
+			inline static void* instantiateUnsignedInt() noexcept
 			{
 				return new unsigned int();
 			}
 
-			static void* instantiateLong() noexcept
+			inline static void* instantiateLong() noexcept
 			{
 				return new long();
 			}
 
-			static void* instantiateUnsignedLong() noexcept
+			inline static void* instantiateUnsignedLong() noexcept
 			{
 				return new unsigned long();
 			}
 
-			static void* instantiateLongLong() noexcept
+			inline static void* instantiateLongLong() noexcept
 			{
 				return new long long();
 			}
 
-			static void* instantiateUnsignedLongLong() noexcept
+			inline static void* instantiateUnsignedLongLong() noexcept
 			{
 				return new unsigned long long();
 			}
 
-			static void* instantiateFloat() noexcept
+			inline static void* instantiateFloat() noexcept
 			{
 				return new float();
 			}
 
-			static void* instantiateDouble() noexcept
+			inline static void* instantiateDouble() noexcept
 			{
 				return new double();
 			}
 
-			static void* instantiateLongDouble() noexcept
+			inline static void* instantiateLongDouble() noexcept
 			{
 				return new double();
 			}

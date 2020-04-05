@@ -29,11 +29,6 @@ namespace rfk
 			Database(Database&&)					= delete;
 			~Database()								= delete;
 
-			//TODO
-			/** Get the archetype corresponding to a type if possible, if not nullptr. */
-			//template <typename T>
-			//static constexpr Archetype const*	getArchetype()						noexcept;
-
 			static Archetype const*				getArchetype(std::string typeName)	noexcept;
 			static Archetype const*				getArchetype(uint64 id)				noexcept;
 

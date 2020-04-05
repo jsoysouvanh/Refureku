@@ -1,29 +1,29 @@
 
-template <typename... Args>
-void StaticMethod::invoke(Args&&... arguments) const noexcept
+template <typename... ArgTypes>
+void StaticMethod::invoke(ArgTypes&&... arguments) const noexcept
 {
-	std::static_pointer_cast<NonMemberFunction<void(Args...)>>(_internalMethod)->operator()(std::forward<Args>(arguments)...);
+	std::static_pointer_cast<NonMemberFunction<void(ArgTypes...)>>(_internalMethod)->operator()(std::forward<ArgTypes>(arguments)...);
 }
 
-template <typename ReturnType, typename... Args>
-ReturnType StaticMethod::invoke(Args&&... arguments) const noexcept
+template <typename ReturnType, typename... ArgTypes>
+ReturnType StaticMethod::invoke(ArgTypes&&... arguments) const noexcept
 {
-	return std::static_pointer_cast<NonMemberFunction<ReturnType(Args...)>>(_internalMethod)->operator()(std::forward<Args>(arguments)...);
+	return std::static_pointer_cast<NonMemberFunction<ReturnType(ArgTypes...)>>(_internalMethod)->operator()(std::forward<ArgTypes>(arguments)...);
 }
 
-template <typename... Args>
-void StaticMethod::safeInvoke(Args&&... arguments) const
+template <typename... ArgTypes>
+void StaticMethod::safeInvoke(ArgTypes&&... arguments) const
 {
-	checkArguments(std::forward<Args>(arguments)...);
+	checkArguments(std::forward<ArgTypes>(arguments)...);
 
-	std::static_pointer_cast<NonMemberFunction<void(Args...)>>(_internalMethod)->operator()(std::forward<Args>(arguments)...);
+	std::static_pointer_cast<NonMemberFunction<void(ArgTypes...)>>(_internalMethod)->operator()(std::forward<ArgTypes>(arguments)...);
 }
 
-template <typename ReturnType, typename... Args>
-ReturnType StaticMethod::safeInvoke(Args&&... arguments) const
+template <typename ReturnType, typename... ArgTypes>
+ReturnType StaticMethod::safeInvoke(ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
-	checkArguments(std::forward<Args>(arguments)...);
+	checkArguments(std::forward<ArgTypes>(arguments)...);
 
-	return std::static_pointer_cast<NonMemberFunction<ReturnType(Args...)>>(_internalMethod)->operator()(std::forward<Args>(arguments)...);
+	return std::static_pointer_cast<NonMemberFunction<ReturnType(ArgTypes...)>>(_internalMethod)->operator()(std::forward<ArgTypes>(arguments)...);
 }

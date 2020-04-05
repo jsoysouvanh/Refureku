@@ -2,6 +2,8 @@
 
 #include <cassert>
 #include <type_traits>
+#include <cstring>	//std::memcpy
+#include <utility>	//std::forward
 
 #include "TypeInfo/Fields/FieldBase.h"
 #include "TypeInfo/Type.h"
@@ -32,24 +34,24 @@ namespace rfk
 			*	Get the data corresponding to this field in the provided instance
 			*/
 			template <typename DataType>
-			DataType	getData(void* instance)										const noexcept;
+			DataType		getData(void* instance)										const noexcept;
 
 			/**
 			*	Set the data corresponding to this field in the provided instance
 			*	This method is not safe if you provided a wrong typed data
 			*/
 			template <typename DataType>
-			void		setData(void* instance, DataType&& data)					const noexcept;
+			void			setData(void* instance, DataType&& data)					const noexcept;
 
 			/**
 			*	Get the data address corresponding to this field in the provided instance
 			*/
-			void*		getDataAddress(void* instance)								const noexcept;
+			inline void*	getDataAddress(void* instance)								const noexcept;
 
 			/**
 			*	Copy dataSize bytes starting from data into the field in instance
 			*/
-			void		setData(void* instance, void const* data, uint64 dataSize)	const noexcept;
+			inline void		setData(void* instance, void const* data, uint64 dataSize)	const noexcept;
 
 			Field& operator=(Field const&)	= default;
 			Field& operator=(Field&&)		= default;

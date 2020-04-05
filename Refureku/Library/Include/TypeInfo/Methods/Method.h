@@ -17,11 +17,11 @@ namespace rfk
 		private:
 			class DummyClass {};
 
-			template <typename ReturnType, typename... Args>
-			ReturnType	internalInvoke(void* caller, Args&&... arguments)		const	noexcept;
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	internalInvoke(void* caller, ArgTypes&&... arguments)		const	noexcept;
 
-			template <typename ReturnType, typename... Args>
-			ReturnType	internalInvoke(void const* caller, Args&&... arguments)	const	noexcept;
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	internalInvoke(void const* caller, ArgTypes&&... arguments)	const	noexcept;
 
 		public:
 			/** Class declaring this method */
@@ -54,31 +54,31 @@ namespace rfk
 
 			/**
 			*	Overload with const caller for
-			*		void invoke(void* caller, Args&&... arguments) method
+			*		void invoke(void* caller, ArgTypes&&... arguments) method
 			*/
-			template <typename... Args>
-			void		invoke(void const* caller, Args&&... arguments)		const noexcept;
+			template <typename... ArgTypes>
+			void		invoke(void const* caller, ArgTypes&&... arguments)		const noexcept;
 
 			/**
 			*	Overload with const caller for
-			*		ReturnType invoke(void* caller, Args&&... arguments) method
+			*		ReturnType invoke(void* caller, ArgTypes&&... arguments) method
 			*/
-			template <typename ReturnType, typename... Args>
-			ReturnType	invoke(void const* caller, Args&&... arguments)		const noexcept;
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	invoke(void const* caller, ArgTypes&&... arguments)		const noexcept;
 
 			/**
 			*	Overload with const caller for
-			*		void safeInvoke(void* caller, Args&&... arguments) method
+			*		void safeInvoke(void* caller, ArgTypes&&... arguments) method
 			*/
-			template <typename... Args>
-			void		safeInvoke(void const* caller, Args&&... arguments)	const;
+			template <typename... ArgTypes>
+			void		safeInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 			/**
 			*	Overload with const caller for
-			*		ReturnType safeInvoke(void* caller, Args&&... arguments) method
+			*		ReturnType safeInvoke(void* caller, ArgTypes&&... arguments) method
 			*/
-			template <typename ReturnType, typename... Args>
-			ReturnType	safeInvoke(void const* caller, Args&&... arguments)	const;
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	safeInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 			Method& operator=(Method const&)	= default;
 			Method& operator=(Method&&)			= default;
