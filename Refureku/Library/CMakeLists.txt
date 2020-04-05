@@ -26,9 +26,6 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Methods/MethodError.cpp
 			)
 
-# Add -fms-extensions on clang to enable init_seg preprocessor instruction
-target_compile_options(${RefurekuLibraryTarget} BEFORE PUBLIC $<$<CXX_COMPILER_ID:Clang>:-fms-extensions>)
-
 # Setup language requirements
 target_compile_features(${RefurekuLibraryTarget} PUBLIC cxx_std_17)
 

@@ -56,7 +56,7 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 
 		for (kodgen::EnumValueInfo const& ev : enumInfo.enumValues)
 		{
-			generatedFile.writeLine("			valueIt = type.values.emplace(\"" + ev.name + "\", " + std::to_string(_stringHasher(ev.id)) + ", " + std::to_string(ev.defaultValue) + "u).first;\t\\");
+			generatedFile.writeLine("			valueIt = type.values.emplace(\"" + ev.name + "\", " + std::to_string(_stringHasher(ev.id)) + "u, " + std::to_string(ev.defaultValue) + "u).first;\t\\");
 
 			//Fill enum value properties
 			properties = fillEntityProperties(ev, "ev->");

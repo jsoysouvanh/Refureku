@@ -5,23 +5,23 @@
 using namespace rfk;
 
 //Init database containers BEFORE any other code so that reflected classes can register at startup
-#if defined(_MSC_VER) || defined(__clang__)
+#if defined(_MSC_VER)
 	
 #pragma init_seg(lib)
 
 Database::ArchetypesById	Database::_archetypesById;
 Database::ArchetypesByName	Database::_archetypesByName;
 
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) || defined(__clang__)
 
-Database::ArchetypesById	Database::_archetypesById	__attribute__ ((init_priority (4242)));
-Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_priority (4242)));
+Database::ArchetypesById	Database::_archetypesById	__attribute__ ((init_priority (101)));
+Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_priority (101)));
 
 #endif
 
 void Database::registerArchetype(Archetype const& archetype) noexcept
 {
-	std::cout << "Register " << archetype.name << std::endl;
+	//std::cout << "Register " << archetype.name << std::endl;
 
 	_archetypesById.emplace(&archetype);
 	_archetypesByName.emplace(&archetype);
