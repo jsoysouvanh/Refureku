@@ -14,15 +14,13 @@ namespace kodgen
 			CXCursor	_currentCursor	= clang_getNullCursor();
 
 		protected:
-			bool		_shouldCheckValidity	= false;
+			bool			_shouldCheckValidity	= false;
+			ParsingInfo*	_parsingInfo			= nullptr;
 
-			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo)							noexcept = 0;
-			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor, ParsingInfo& parsingInfo)		noexcept = 0;
+			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor)						noexcept = 0;
+			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor)	noexcept = 0;
 
-			virtual void							startParsing(CXCursor const& currentCursor)														noexcept;
-			virtual void							endParsing(ParsingInfo& parsingInfo)															noexcept;
-
-			CXCursor const&							getCurrentCursor()																		const	noexcept;
+			CXCursor const&							getCurrentCursor()											const	noexcept;
 
 		public:
 			EntityParser()						= default;
@@ -30,11 +28,14 @@ namespace kodgen
 			EntityParser(EntityParser&&)		= default;
 			virtual ~EntityParser()				= default;
 
-			virtual CXChildVisitResult	parse(CXCursor const& currentCursor, ParsingInfo& parsingInfo)			noexcept = 0;
-			virtual void				updateParsingState(CXCursor const& parent, ParsingInfo& parsingInfo)	noexcept = 0;
+			virtual void				startParsing(CXCursor const& currentCursor)	noexcept;
+			virtual CXChildVisitResult	endParsing()								noexcept;
 
-			virtual void				reset()																	noexcept;
+			virtual CXChildVisitResult	parse(CXCursor const& currentCursor)		noexcept = 0;
 
-			uint8						getParsingLevel()												const	noexcept;
+			virtual void				reset()										noexcept;
+			virtual void				setParsingInfo(ParsingInfo* info)			noexcept;
+			
+			uint8						getParsingLevel()					const	noexcept;
 	};
 }

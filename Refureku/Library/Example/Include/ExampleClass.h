@@ -4,7 +4,7 @@
 
 #include "Generated/ExampleClass.rfk.h"
 
-namespace exnamespace
+namespace namespace1
 {
 	/** Non reflected class */
 	class ParentParentParentClass
@@ -12,26 +12,32 @@ namespace exnamespace
 		double pppDouble = 0.21;
 
 		public:
-			ParentParentParentClass() noexcept {}
+		ParentParentParentClass() noexcept {}
 	};
+}
 
+namespace namespace2
+{
+	class RFKClass(rfk::ReflectedObject) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject
+	{
+		RFKField()
+			float ppFloat = 123456.123456f;
+
+		public:
+		ParentParentClass() noexcept {}
+
+		RFKParentParentClass_GENERATED
+	};
+}
+
+namespace namespace3
+{
 	class RFKClass(rfk::ReflectedObject) OtherClass : public rfk::ReflectedObject
 	{
 		RFKOtherClass_GENERATED
 	};
 
-	class RFKClass(rfk::ReflectedObject) ParentParentClass : public ParentParentParentClass, public rfk::ReflectedObject
-	{
-		RFKField()
-		float ppFloat = 123456.123456f;
-
-		public:
-			ParentParentClass() noexcept {}
-
-		RFKParentParentClass_GENERATED
-	};
-
-	class RFKClass(rfk::ReflectedObject) ParentClass : public ParentParentClass
+	class RFKClass(rfk::ReflectedObject) ParentClass : public namespace2::ParentParentClass
 	{
 		private:
 			RFKMethod()

@@ -16,79 +16,107 @@ void ClassParser::reset() noexcept
 	_structOrClass = EntityInfo::EType::Count;
 }
 
-CXChildVisitResult ClassParser::parse(CXCursor const& cursor, ParsingInfo& parsingInfo) noexcept
+void ClassParser::setParsingInfo(ParsingInfo* info) noexcept
 {
-	if (_fieldParser.getParsingLevel())
-	{
-		return _fieldParser.parse(cursor, parsingInfo);
-	}
-	else if (_methodParser.getParsingLevel())
-	{
-		return _methodParser.parse(cursor, parsingInfo);
-	}
-	else if (_shouldCheckValidity)	//Check for any annotation attribute if the flag is raised
+	EntityParser::setParsingInfo(info);
+
+	_fieldParser.setParsingInfo(info);
+	_methodParser.setParsingInfo(info);
+}
+
+CXChildVisitResult ClassParser::parse(CXCursor const& cursor) noexcept
+{
+	if (_shouldCheckValidity)	//Check for any annotation attribute if the flag is raised
 	{
 		_shouldCheckValidity = false;
-		return setAsCurrentEntityIfValid(cursor, parsingInfo);
+		return setAsCurrentEntityIfValid(cursor);
 	}
 
 	//Check for class field or method
 	switch (clang_getCursorKind(cursor))
 	{
 		case CXCursorKind::CXCursor_CXXFinalAttr:
-			if (parsingInfo.currentStructOrClass.has_value())
+			if (_parsingInfo->currentStructOrClass.has_value())
 			{
-				parsingInfo.currentStructOrClass->qualifiers.isFinal = true;
+				_parsingInfo->currentStructOrClass->qualifiers.isFinal = true;
 			}
 			break;
 
 		case CXCursorKind::CXCursor_CXXAccessSpecifier:
-			updateAccessSpecifier(cursor, parsingInfo);
+			updateAccessSpecifier(cursor);
 			break;
 
 		case CXCursorKind::CXCursor_CXXBaseSpecifier:
-			addToParents(cursor, parsingInfo);
+			addToParents(cursor, *_parsingInfo);
+			break;
+
+		case CXCursorKind::CXCursor_Constructor:
+			//TODO
 			break;
 
 		case CXCursorKind::CXCursor_VarDecl:	//For static fields
 			[[fallthrough]];
 		case CXCursorKind::CXCursor_FieldDecl:
-			_fieldParser.startParsing(cursor);
-			break;
+			return parseField(cursor);
 
 		case CXCursorKind::CXCursor_CXXMethod:
-			_methodParser.startParsing(cursor);
-			break;
-
-		default:
-			return CXChildVisitResult::CXChildVisit_Continue;
+			return parseMethod(cursor);
 	}
 
-	return CXChildVisitResult::CXChildVisit_Recurse;
+	return CXChildVisitResult::CXChildVisit_Continue;
 }
 
-CXChildVisitResult ClassParser::setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor, ParsingInfo& parsingInfo) noexcept
+CXChildVisitResult ClassParser::parseField(CXCursor fieldCursor) noexcept
 {
-	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(classAnnotationCursor, parsingInfo))
+	assert(fieldCursor.kind == CXCursorKind::CXCursor_FieldDecl || fieldCursor.kind == CXCursorKind::CXCursor_VarDecl);
+
+	_fieldParser.startParsing(fieldCursor);
+
+	clang_visitChildren(fieldCursor, [](CXCursor c, CXCursor parent, CXClientData clientData)
+						{
+							FieldParser* fieldParser = reinterpret_cast<FieldParser*>(clientData);
+
+							return fieldParser->parse(c);
+
+						}, &_fieldParser);
+
+	return _fieldParser.endParsing();
+}
+
+CXChildVisitResult ClassParser::parseMethod(CXCursor methodCursor) noexcept
+{
+	assert(methodCursor.kind == CXCursorKind::CXCursor_CXXMethod);
+
+	_methodParser.startParsing(methodCursor);
+
+	clang_visitChildren(methodCursor, [](CXCursor c, CXCursor parent, CXClientData clientData)
+						{
+							MethodParser* fieldParser = reinterpret_cast<MethodParser*>(clientData);
+
+							return fieldParser->parse(c);
+
+						}, &_methodParser);
+
+	return _methodParser.endParsing();
+}
+
+CXChildVisitResult ClassParser::setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor) noexcept
+{
+	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(classAnnotationCursor))
 	{
-		parsingInfo.currentStructOrClass.emplace(StructClassInfo(getCurrentCursor(), std::move(*propertyGroup), std::move(_structOrClass)));
-		initClassInfos(parsingInfo.currentStructOrClass.value());
+		_parsingInfo->currentStructOrClass.emplace(StructClassInfo(getCurrentCursor(), std::move(*propertyGroup), std::move(_structOrClass)));
+		initClassInfos(_parsingInfo->currentStructOrClass.value());
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
 	else
 	{
-		if (parsingInfo.propertyParser.getParsingError() == EParsingError::Count)
+		if (_parsingInfo->propertyParser.getParsingError() != EParsingError::Count)
 		{
-			endParsing(parsingInfo);
-			return CXChildVisitResult::CXChildVisit_Continue;
+			_parsingInfo->parsingResult.parsingErrors.emplace_back(ParsingError(_parsingInfo->propertyParser.getParsingError(), clang_getCursorLocation(classAnnotationCursor)));
 		}
-		else	//Fatal parsing error occured
-		{
-			parsingInfo.parsingResult.parsingErrors.emplace_back(ParsingError(parsingInfo.propertyParser.getParsingError(), clang_getCursorLocation(classAnnotationCursor)));
 
-			return parsingInfo.parsingSettings.shouldAbortParsingOnFirstError ? CXChildVisitResult::CXChildVisit_Break : CXChildVisitResult::CXChildVisit_Continue;
-		}
+		return CXChildVisitResult::CXChildVisit_Break;
 	}
 }
 
@@ -103,20 +131,20 @@ void ClassParser::initClassInfos(StructClassInfo& toInit) const noexcept
 		toInit.nameSpace = std::string(fullName.cbegin(), fullName.cbegin() + namespacePos - 1);
 }
 
-opt::optional<PropertyGroup> ClassParser::isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo) noexcept
+opt::optional<PropertyGroup> ClassParser::isEntityValid(CXCursor const& currentCursor) noexcept
 {
-	parsingInfo.propertyParser.clean();
+	_parsingInfo->propertyParser.clean();
 
 	if (clang_getCursorKind(currentCursor) == CXCursorKind::CXCursor_AnnotateAttr)
 	{
 		switch (_structOrClass)
 		{
 			case EntityInfo::EType::Class:
-				return parsingInfo.propertyParser.getClassProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
+				return _parsingInfo->propertyParser.getClassProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
 				break;
 
 			case EntityInfo::EType::Struct:
-				return parsingInfo.propertyParser.getStructProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
+				return _parsingInfo->propertyParser.getStructProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
 				break;
 
 			default:
@@ -127,57 +155,35 @@ opt::optional<PropertyGroup> ClassParser::isEntityValid(CXCursor const& currentC
 	return opt::nullopt;
 }
 
-void ClassParser::startClassParsing(CXCursor const& currentCursor, ParsingInfo& parsingInfo)	noexcept
+void ClassParser::startClassParsing(CXCursor const& currentCursor)	noexcept
 {
 	EntityParser::startParsing(currentCursor);
 
-	parsingInfo.accessSpecifier		= EAccessSpecifier::Private;
+	_parsingInfo->accessSpecifier	= EAccessSpecifier::Private;
 	_structOrClass					= EntityInfo::EType::Class;
 }
 
-void ClassParser::startStructParsing(CXCursor const& currentCursor, ParsingInfo& parsingInfo)	noexcept
+void ClassParser::startStructParsing(CXCursor const& currentCursor)	noexcept
 {
 	EntityParser::startParsing(currentCursor);
 
-	parsingInfo.accessSpecifier		= EAccessSpecifier::Public;
+	_parsingInfo->accessSpecifier	= EAccessSpecifier::Public;
 	_structOrClass					= EntityInfo::EType::Struct;
 }
 
-void ClassParser::endParsing(ParsingInfo& parsingInfo)	noexcept
+CXChildVisitResult ClassParser::endParsing()	noexcept
 {
-	EntityParser::endParsing(parsingInfo);
-
-	parsingInfo.accessSpecifier		= EAccessSpecifier::Invalid;
+	_parsingInfo->accessSpecifier	= EAccessSpecifier::Invalid;
 	_structOrClass					= EntityInfo::EType::Count;
 
-	parsingInfo.flushCurrentStructOrClass();
+	_parsingInfo->flushCurrentStructOrClass();
+
+	return EntityParser::endParsing();
 }
 
-void ClassParser::updateParsingState(CXCursor const& parent, ParsingInfo& parsingInfo) noexcept
+void ClassParser::updateAccessSpecifier(CXCursor const& cursor) const noexcept
 {
-	//Check if we're not parsing a field anymore
-	if (_fieldParser.getParsingLevel())
-	{
-		_fieldParser.updateParsingState(parent, parsingInfo);
-	}
-	//Check if we're not parsing a method anymore
-	else if (_methodParser.getParsingLevel())
-	{
-		_methodParser.updateParsingState(parent, parsingInfo);
-	}
-
-	/**
-	*	Check if we're finishing parsing a class
-	*/
-	if (clang_equalCursors(clang_getCursorSemanticParent(getCurrentCursor()), parent))
-	{
-		endParsing(parsingInfo);
-	}
-}
-
-void ClassParser::updateAccessSpecifier(CXCursor const& cursor, ParsingInfo& parsingInfo) const noexcept
-{
-	parsingInfo.accessSpecifier = static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor));
+	_parsingInfo->accessSpecifier = static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor));
 }
 
 void ClassParser::addToParents(CXCursor cursor, ParsingInfo& parsingInfo) const noexcept

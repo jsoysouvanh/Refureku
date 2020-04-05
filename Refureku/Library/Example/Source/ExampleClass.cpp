@@ -3,7 +3,9 @@
 #include <iostream>
 #include <cstdint>
 
-using namespace exnamespace;
+using namespace namespace1;
+using namespace namespace2;
+using namespace namespace3;
 
 void ExampleClass::method1() const noexcept
 {
@@ -60,7 +62,7 @@ int ExampleClass::staticMethod3(int p1, int p2) noexcept
 	return p1 + p2;
 }
 
-std::ostream& exnamespace::operator<<(std::ostream& stream, ParentClass const& object) noexcept
+std::ostream& namespace3::operator<<(std::ostream& stream, ParentClass const& object) noexcept
 {
 	stream << object.pInt64;
 

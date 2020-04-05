@@ -6,7 +6,9 @@
 #define EXECUTE(FunctionCall) std::cout << #FunctionCall << std::endl; FunctionCall;
 #define EXECUTE_RESULT(FunctionCall) std::cout << #FunctionCall << " --> " << FunctionCall << std::endl;
 
-using namespace exnamespace;
+using namespace namespace1;
+using namespace namespace2;
+using namespace namespace3;
 
 void nonStaticMethods()
 {
@@ -410,15 +412,15 @@ void enums()
 
 int main()
 {
-	//nonStaticMethods();
-	//staticMethods();
-	//nonStaticFields();
-	//staticFields();
-	//inheritance();
-	//instantiation();
-	//properties();
-	//reflectedObject();
-	//types();
+	nonStaticMethods();
+	staticMethods();
+	nonStaticFields();
+	staticFields();
+	inheritance();
+	instantiation();
+	properties();
+	reflectedObject();
+	types();
 	enums();
 
 	return EXIT_SUCCESS;

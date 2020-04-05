@@ -14,9 +14,10 @@ namespace kodgen
 		private:
 			EnumValueParser	_enumValueParser;
 
-			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo)						noexcept override final;
-			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor, ParsingInfo& parsingInfo)	noexcept override final;
-			virtual void							endParsing(ParsingInfo& parsingInfo)														noexcept override final;
+			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor)						noexcept override final;
+			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor)	noexcept override final;
+
+			CXChildVisitResult						parseEnumValue(CXCursor enumCursor)									noexcept;
 
 		public:
 			EnumParser()					= default;
@@ -24,9 +25,10 @@ namespace kodgen
 			EnumParser(EnumParser&&)		= default;
 			~EnumParser()					= default;
 
-			virtual CXChildVisitResult	parse(CXCursor const& currentCursor, ParsingInfo& parsingInfo)			noexcept override final;
-			virtual void				updateParsingState(CXCursor const& parent, ParsingInfo& parsingInfo)	noexcept override final;
-			virtual void				reset()																	noexcept override final;
+			virtual CXChildVisitResult	endParsing()							noexcept override final;
+			virtual CXChildVisitResult	parse(CXCursor const& currentCursor)	noexcept override final;
+			virtual void				reset()									noexcept override final;
+			virtual void				setParsingInfo(ParsingInfo* info)		noexcept override final;
 
 			using EntityParser::startParsing;
 	};

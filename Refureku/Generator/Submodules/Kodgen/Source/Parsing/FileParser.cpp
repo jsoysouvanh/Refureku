@@ -1,6 +1,7 @@
 #include "Parsing/FileParser.h"
 
 #include <iostream>
+#include <cassert>
 
 #include "Misc/Helpers.h"
 #include "InfoStructures/ParsingInfo.h"
@@ -10,6 +11,9 @@ using namespace kodgen;
 FileParser::FileParser() noexcept:
 	_clangIndex{clang_createIndex(0, 0)}
 {
+	//Propagate the parsing info to child parsers
+	_classParser.setParsingInfo(&_parsingInfo);
+	_enumParser.setParsingInfo(&_parsingInfo);
 }
 
 FileParser::~FileParser() noexcept
@@ -24,70 +28,74 @@ CXChildVisitResult FileParser::staticParseCursor(CXCursor c, CXCursor parent, CX
 	//Parse the given file ONLY, ignore headers
 	if (clang_Location_isFromMainFile(clang_getCursorLocation (c)) || clang_getCursorKind(c) == CXCursorKind::CXCursor_AnnotateAttr)
 	{
-		parser->updateParsingState(parent);
-
 		return parser->parseCursor(c);
 	}
 	
 	return CXChildVisitResult::CXChildVisit_Continue;
 }
 
-void FileParser::updateParsingState(CXCursor parent) noexcept
-{
-	if (_classParser.getParsingLevel())
-	{
-		_classParser.updateParsingState(parent, _parsingInfo);
-	}
-	else if (_enumParser.getParsingLevel())
-	{
-		_enumParser.updateParsingState(parent, _parsingInfo);
-	}
-}
-
 CXChildVisitResult FileParser::parseCursor(CXCursor currentCursor) noexcept
 {
-	if (_classParser.getParsingLevel())			//Currently parsing a class of struct
-	{
-		return _classParser.parse(currentCursor, _parsingInfo);
-	}
-	else if (_enumParser.getParsingLevel())		//Currently parsing an enum
-	{	
-		return _enumParser.parse(currentCursor, _parsingInfo);
-	}
-	else										//Looking for something to parse
-	{
-		return parseDefault(currentCursor);
-	}
-}
-
-CXChildVisitResult FileParser::parseDefault(CXCursor currentCursor) noexcept
-{
-	CXCursorKind cursorKind	= clang_getCursorKind(currentCursor);
-
 	//Check for namespace, class or enum
-	switch (cursorKind)
+	switch (currentCursor.kind)
 	{
 		case CXCursorKind::CXCursor_Namespace:
-			//TODO
-			break;
+			return CXChildVisitResult::CXChildVisit_Recurse;
 
 		case CXCursorKind::CXCursor_ClassDecl:
-			_classParser.startClassParsing(currentCursor, _parsingInfo);
-			break;
+			return parseClass(currentCursor, false);
 
 		case CXCursorKind::CXCursor_StructDecl:
-			_classParser.startStructParsing(currentCursor, _parsingInfo);
-			break;
+			return parseClass(currentCursor, true);
 
 		case CXCursorKind::CXCursor_EnumDecl:
-			_enumParser.startParsing(currentCursor);
-			break;
-
-		default:
-			return CXChildVisitResult::CXChildVisit_Continue; 
+			return parseEnum(currentCursor);
 	}
 
-	return CXChildVisitResult::CXChildVisit_Recurse;
+	return CXChildVisitResult::CXChildVisit_Continue;
+}
+
+CXChildVisitResult FileParser::parseClass(CXCursor classCursor, bool isStruct) noexcept
+{
+	if (isStruct)
+	{
+		assert(classCursor.kind == CXCursorKind::CXCursor_StructDecl);
+
+		_classParser.startStructParsing(classCursor);
+	}
+	else
+	{
+		assert(classCursor.kind == CXCursorKind::CXCursor_ClassDecl);
+
+		_classParser.startClassParsing(classCursor);
+	}
+
+	clang_visitChildren(classCursor, [](CXCursor c, CXCursor parent, CXClientData clientData)
+						{
+							ClassParser* classParser = reinterpret_cast<ClassParser*>(clientData);
+
+							return classParser->parse(c);
+
+						}, &_classParser);
+
+	return _classParser.endParsing();
+}
+
+CXChildVisitResult FileParser::parseEnum(CXCursor enumCursor) noexcept
+{
+	assert(enumCursor.kind == CXCursorKind::CXCursor_EnumDecl);
+
+	_enumParser.startParsing(enumCursor);
+
+	clang_visitChildren(enumCursor, [](CXCursor c, CXCursor parent, CXClientData clientData)
+						{
+							EnumParser* enumParser = reinterpret_cast<EnumParser*>(clientData);
+
+							return enumParser->parse(c);
+
+						}, &_enumParser);
+
+	return _enumParser.endParsing();
 }
 
 std::vector<char const*> FileParser::makeParseArguments() const noexcept

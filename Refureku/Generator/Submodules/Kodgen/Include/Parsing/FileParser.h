@@ -30,9 +30,9 @@ namespace kodgen
 
 			void						setupForParsing()																noexcept;
 
-			void						updateParsingState(CXCursor parent)												noexcept;
 			CXChildVisitResult			parseCursor(CXCursor currentCursor)												noexcept;
-			CXChildVisitResult			parseDefault(CXCursor currentCursor)											noexcept;
+			CXChildVisitResult			parseClass(CXCursor classCursor, bool isStruct)									noexcept;
+			CXChildVisitResult			parseEnum(CXCursor enumCursor)													noexcept;
 
 			/**
 			*	Remove all previously parsed information from the class

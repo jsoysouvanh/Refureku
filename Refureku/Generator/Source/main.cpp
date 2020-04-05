@@ -14,7 +14,7 @@ void parseAndGenerate(fs::path workingDirectory)
 	fs::path includeDirectory	= workingDirectory / "Include";
 	fs::path generatedDirectory	= includeDirectory / "Generated";
 
-	rfk::FileParser	parser;
+	rfk::FileParser		parser;
 	rfk::FileGenerator	fileGenerator;
 
 	//Parse WorkingDir/...

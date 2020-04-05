@@ -4,7 +4,7 @@
 
 using namespace kodgen;
 
-CXChildVisitResult EnumValueParser::parse(CXCursor const& currentCursor, ParsingInfo& parsingInfo) noexcept
+CXChildVisitResult EnumValueParser::parse(CXCursor const& currentCursor) noexcept
 {
 	if (_shouldCheckValidity)
 	{
@@ -13,14 +13,14 @@ CXChildVisitResult EnumValueParser::parse(CXCursor const& currentCursor, Parsing
 		switch (clang_getCursorKind(currentCursor))
 		{
 			case CXCursorKind::CXCursor_AnnotateAttr:
-				return setAsCurrentEntityIfValid(currentCursor, parsingInfo);
+				return setAsCurrentEntityIfValid(currentCursor);
 
 			case CXCursorKind::CXCursor_IntegerLiteral:
 				[[fallthrough]];
 			case CXCursorKind::CXCursor_BinaryOperator:
 				[[fallthrough]];
 			case CXCursorKind::CXCursor_UnexposedExpr:
-				addToCurrentEnumValue(getCurrentCursor(), PropertyGroup(), parsingInfo);
+				addToCurrentEnumValue(getCurrentCursor(), PropertyGroup());
 				break;
 
 			default:
@@ -33,65 +33,41 @@ CXChildVisitResult EnumValueParser::parse(CXCursor const& currentCursor, Parsing
 	return CXChildVisitResult::CXChildVisit_Continue;
 }
 
-void EnumValueParser::addToCurrentEnumValue(CXCursor enumValueCursor, PropertyGroup&& pg, ParsingInfo& parsingInfo) noexcept
+void EnumValueParser::addToCurrentEnumValue(CXCursor enumValueCursor, PropertyGroup&& pg) noexcept
 {
-	EnumValueInfo& enumValueInfo = parsingInfo.currentEnum->enumValues.emplace_back(EnumValueInfo(enumValueCursor, std::forward<PropertyGroup>(pg)));
+	EnumValueInfo& enumValueInfo = _parsingInfo->currentEnum->enumValues.emplace_back(EnumValueInfo(enumValueCursor, std::forward<PropertyGroup>(pg)));
 
 	enumValueInfo.defaultValue = clang_getEnumConstantDeclValue(enumValueCursor);
 }
 
-void EnumValueParser::updateParsingState(CXCursor const& parent, ParsingInfo& parsingInfo) noexcept
+opt::optional<PropertyGroup> EnumValueParser::isEntityValid(CXCursor const& currentCursor) noexcept
 {
-	if (!clang_equalCursors(getCurrentCursor(), parent))
-	{
-		//If the checkValidity flag is set, the current cursor is necessary true
-		if (_shouldCheckValidity)
-		{
-			addToCurrentEnumValue(getCurrentCursor(), PropertyGroup(), parsingInfo);
-		}
-
-		endParsing(parsingInfo);
-	}
-}
-
-opt::optional<PropertyGroup> EnumValueParser::isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo) noexcept
-{
-	parsingInfo.propertyParser.clean();
+	_parsingInfo->propertyParser.clean();
 
 	if (clang_getCursorKind(currentCursor) == CXCursorKind::CXCursor_AnnotateAttr)
 	{
-		return parsingInfo.propertyParser.getEnumValueProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
+		return _parsingInfo->propertyParser.getEnumValueProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
 	}
 
 	return opt::nullopt;
 }
 
-CXChildVisitResult EnumValueParser::setAsCurrentEntityIfValid(CXCursor const& annotationCursor, ParsingInfo& parsingInfo) noexcept
+CXChildVisitResult EnumValueParser::setAsCurrentEntityIfValid(CXCursor const& annotationCursor) noexcept
 {
-	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(annotationCursor, parsingInfo))
+	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(annotationCursor))
 	{
-		if (parsingInfo.currentEnum.has_value())
+		if (_parsingInfo->currentEnum.has_value())
 		{
-			addToCurrentEnumValue(getCurrentCursor(), std::move(*propertyGroup), parsingInfo);
+			addToCurrentEnumValue(getCurrentCursor(), std::move(*propertyGroup));
 
 			return CXChildVisitResult::CXChildVisit_Recurse;
 		}
-		else
-		{
-			return CXChildVisitResult::CXChildVisit_Continue;
-		}
 	}
-	else
+	else if (_parsingInfo->propertyParser.getParsingError() != EParsingError::Count)
 	{
-		if (parsingInfo.propertyParser.getParsingError() == EParsingError::Count)
-		{
-			return CXChildVisitResult::CXChildVisit_Continue;
-		}
-		else	//Fatal parsing error occured
-		{
-			parsingInfo.parsingResult.parsingErrors.emplace_back(ParsingError(parsingInfo.propertyParser.getParsingError(), clang_getCursorLocation(annotationCursor)));
-
-			return parsingInfo.parsingSettings.shouldAbortParsingOnFirstError ? CXChildVisitResult::CXChildVisit_Break : CXChildVisitResult::CXChildVisit_Continue;
-		}
+		//Fatal parsing error occured
+		_parsingInfo->parsingResult.parsingErrors.emplace_back(ParsingError(_parsingInfo->propertyParser.getParsingError(), clang_getCursorLocation(annotationCursor)));
 	}
+
+	return CXChildVisitResult::CXChildVisit_Break;
 }

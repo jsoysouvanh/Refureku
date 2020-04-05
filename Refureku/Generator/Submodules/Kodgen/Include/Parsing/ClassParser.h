@@ -19,15 +19,16 @@ namespace kodgen
 			FieldParser				_fieldParser;
 			MethodParser			_methodParser;
 
-			void									initClassInfos(StructClassInfo& toInit)														const	noexcept;
+			void				initClassInfos(StructClassInfo& toInit)	const	noexcept;
+			CXChildVisitResult	parseField(CXCursor fieldCursor)				noexcept;
+			CXChildVisitResult	parseMethod(CXCursor methodCursor)				noexcept;
 
 		protected:
-			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo)								noexcept override final;
-			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor, ParsingInfo& parsingInfo)			noexcept override final;
-			virtual void							endParsing(ParsingInfo& parsingInfo)																noexcept override final;
+			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor)								noexcept override final;
+			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor)			noexcept override final;
 			
-			void									addToParents(CXCursor cursor, ParsingInfo& parsingInfo)										const	noexcept;	
-			void									updateAccessSpecifier(CXCursor const& cursor, ParsingInfo& parsingInfo)						const	noexcept;
+			void									addToParents(CXCursor cursor, ParsingInfo& parsingInfo)				const	noexcept;	
+			void									updateAccessSpecifier(CXCursor const& cursor)						const	noexcept;
 
 		public:
 			ClassParser()					= default;
@@ -35,11 +36,12 @@ namespace kodgen
 			ClassParser(ClassParser&&)		= default;
 			~ClassParser()					= default;
 
-			virtual CXChildVisitResult	parse(CXCursor const& currentCursor, ParsingInfo& parsingInfo)							noexcept override final;
-			virtual void				updateParsingState(CXCursor const& parent, ParsingInfo& parsingInfo)					noexcept override final;
-			virtual void				reset()																					noexcept override final;
+			virtual CXChildVisitResult	endParsing()										noexcept override final;
+			virtual CXChildVisitResult	parse(CXCursor const& currentCursor)				noexcept override final;
+			virtual void				reset()												noexcept override final;
+			virtual void				setParsingInfo(ParsingInfo* info)					noexcept override final;
 
-			void						startClassParsing(CXCursor const& currentCursor, ParsingInfo& parsingInfo)				noexcept;
-			void						startStructParsing(CXCursor const& currentCursor, ParsingInfo& parsingInfo)				noexcept;
+			void						startClassParsing(CXCursor const& currentCursor)	noexcept;
+			void						startStructParsing(CXCursor const& currentCursor)	noexcept;
 	};
 }

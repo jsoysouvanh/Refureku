@@ -7,31 +7,31 @@
 
 using namespace kodgen;
 
-CXChildVisitResult MethodParser::parse(CXCursor const& cursor, ParsingInfo& parsingInfo) noexcept
+CXChildVisitResult MethodParser::parse(CXCursor const& cursor) noexcept
 {
 	//Check for any annotation attribute if the flag is raised
 	if (_shouldCheckValidity)
 	{
-		return setAsCurrentEntityIfValid(cursor, parsingInfo);
+		return setAsCurrentEntityIfValid(cursor);
 	}
 
-	if (!parsingInfo.currentStructOrClass.has_value())
+	if (!_parsingInfo->currentStructOrClass.has_value())
 	{
-		return CXChildVisitResult::CXChildVisit_Continue;
+		return CXChildVisitResult::CXChildVisit_Break;
 	}
 
 	switch (clang_getCursorKind(cursor))
 	{
 		case CXCursorKind::CXCursor_CXXFinalAttr:
-			parsingInfo.currentStructOrClass->methods.back().qualifiers.isFinal = true;
+			_parsingInfo->currentStructOrClass->methods.back().qualifiers.isFinal = true;
 			break;
 
 		case CXCursorKind::CXCursor_CXXOverrideAttr:
-			parsingInfo.currentStructOrClass->methods.back().qualifiers.isOverride = true;
+			_parsingInfo->currentStructOrClass->methods.back().qualifiers.isOverride = true;
 			break;
 
 		case CXCursorKind::CXCursor_ParmDecl:
-			parsingInfo.currentStructOrClass->methods.back().parameters.emplace_back(MethodParamInfo{ TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor)) });
+			_parsingInfo->currentStructOrClass->methods.back().parameters.emplace_back(MethodParamInfo{ TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor)) });
 			break;
 
 		default:
@@ -42,37 +42,26 @@ CXChildVisitResult MethodParser::parse(CXCursor const& cursor, ParsingInfo& pars
 	return CXChildVisitResult::CXChildVisit_Recurse;
 }
 
-CXChildVisitResult MethodParser::setAsCurrentEntityIfValid(CXCursor const& methodAnnotationCursor, ParsingInfo& parsingInfo) noexcept
+CXChildVisitResult MethodParser::setAsCurrentEntityIfValid(CXCursor const& methodAnnotationCursor) noexcept
 {
-	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(methodAnnotationCursor, parsingInfo))
+	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(methodAnnotationCursor))
 	{
-		if (parsingInfo.currentStructOrClass.has_value())
+		if (_parsingInfo->currentStructOrClass.has_value())
 		{
 
-			MethodInfo& methodInfo = parsingInfo.currentStructOrClass->methods.emplace_back(MethodInfo(getCurrentCursor(), std::move(*propertyGroup)));
+			MethodInfo& methodInfo = _parsingInfo->currentStructOrClass->methods.emplace_back(MethodInfo(getCurrentCursor(), std::move(*propertyGroup)));
 			setupMethod(getCurrentCursor(), methodInfo);
-			methodInfo.accessSpecifier = parsingInfo.accessSpecifier;
 
 			return CXChildVisitResult::CXChildVisit_Recurse;
 		}
-		else
-		{
-			return CXChildVisitResult::CXChildVisit_Continue;
-		}
 	}
-	else
+	else if (_parsingInfo->propertyParser.getParsingError() != EParsingError::Count)
 	{
-		if (parsingInfo.propertyParser.getParsingError() == EParsingError::Count)
-		{
-			return CXChildVisitResult::CXChildVisit_Continue;
-		}
-		else	//Fatal parsing error occured
-		{
-			parsingInfo.parsingResult.parsingErrors.emplace_back(ParsingError(parsingInfo.propertyParser.getParsingError(), clang_getCursorLocation(methodAnnotationCursor)));
-
-			return parsingInfo.parsingSettings.shouldAbortParsingOnFirstError ? CXChildVisitResult::CXChildVisit_Break : CXChildVisitResult::CXChildVisit_Continue;
-		}
+		//Fatal parsing error occured
+		_parsingInfo->parsingResult.parsingErrors.emplace_back(ParsingError(_parsingInfo->propertyParser.getParsingError(), clang_getCursorLocation(methodAnnotationCursor)));
 	}
+
+	return CXChildVisitResult::CXChildVisit_Break;
 }
 
 void MethodParser::setupMethod(CXCursor const& methodCursor, MethodInfo& methodInfo) noexcept
@@ -80,6 +69,9 @@ void MethodParser::setupMethod(CXCursor const& methodCursor, MethodInfo& methodI
 	CXType methodType = clang_getCursorType(methodCursor);
 
 	assert(methodType.kind == CXTypeKind::CXType_FunctionProto);
+
+	//Method access specifier
+	methodInfo.accessSpecifier = _parsingInfo->accessSpecifier;
 
 	//Define prototype
 	methodInfo.prototype = Helpers::getString(clang_getTypeSpelling(methodType));
@@ -114,23 +106,15 @@ void MethodParser::setupMethod(CXCursor const& methodCursor, MethodInfo& methodI
 	}
 }
 
-opt::optional<PropertyGroup> MethodParser::isEntityValid(CXCursor const& currentCursor, ParsingInfo& parsingInfo) noexcept
+opt::optional<PropertyGroup> MethodParser::isEntityValid(CXCursor const& currentCursor) noexcept
 {
 	_shouldCheckValidity = false;
-	parsingInfo.propertyParser.clean();
+	_parsingInfo->propertyParser.clean();
 
 	if (clang_getCursorKind(currentCursor) == CXCursorKind::CXCursor_AnnotateAttr)
 	{
-		return parsingInfo.propertyParser.getMethodProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
+		return _parsingInfo->propertyParser.getMethodProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
 	}
 
 	return opt::nullopt;
-}
-
-void MethodParser::updateParsingState(CXCursor const& parent, ParsingInfo& parsingInfo) noexcept
-{
-	if (!clang_equalCursors(getCurrentCursor(), parent))
-	{
-		endParsing(parsingInfo);
-	}
 }
