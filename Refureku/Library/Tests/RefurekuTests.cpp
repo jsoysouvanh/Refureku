@@ -7,14 +7,14 @@
 
 void classes()
 {
-	assert(rfk::Database::getClass("ParentParentParentClass") == nullptr);
-	assert(rfk::Database::getClass("ParentParentClass") != nullptr);
-	assert(rfk::Database::getClass("OtherClass") != nullptr);
-	assert(rfk::Database::getClass("ParentClass") != nullptr);
-	assert(rfk::Database::getClass("ParentClass2") != nullptr);
-	assert(rfk::Database::getClass("ExampleClass") != nullptr);
-	assert(rfk::Database::getEnum("ExampleClass") == nullptr);
-	assert(rfk::Database::getStruct("ExampleClass") == nullptr);
+	//assert(rfk::Database::getClass("ParentParentParentClass") == nullptr);
+	//assert(rfk::Database::getClass("ParentParentClass") != nullptr);
+	//assert(rfk::Database::getClass("OtherClass") != nullptr);
+	//assert(rfk::Database::getClass("ParentClass") != nullptr);
+	//assert(rfk::Database::getClass("ParentClass2") != nullptr);
+	//assert(rfk::Database::getClass("ExampleClass") != nullptr);
+	//assert(rfk::Database::getEnum("ExampleClass") == nullptr);
+	//assert(rfk::Database::getStruct("ExampleClass") == nullptr);
 }
 
 void enums()
