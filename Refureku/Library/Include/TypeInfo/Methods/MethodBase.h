@@ -27,7 +27,7 @@ namespace rfk
 			/** Handle pointing to the actual method in memory */
 			std::shared_ptr<ICallable>	_internalMethod;
 
-			MethodBase()											= default;
+			MethodBase()											= delete;
 			MethodBase(std::string&&				name, 
 					   uint64						id,
 					   EMethodFlags					flags,

@@ -8,7 +8,7 @@ namespace rfk
 	class StaticMethod : public MethodBase
 	{
 		public:
-			StaticMethod()																			= default;
+			StaticMethod()																			= delete;
 			StaticMethod(std::string&&					name,
 						 uint64							id				= 0u,
 						 EMethodFlags					flags			= EMethodFlags::Static,

@@ -9,7 +9,8 @@ ReturnType* Archetype::makeInstance(ArgTypes&&... args) const noexcept
 	}
 	else
 	{
-		//	//Get right instantiate according to ReturnType & ArgTypes
+		//TODO
+		//Get right instantiate according to ReturnType & ArgTypes
 		//	StaticMethod const* instantiator = getStaticMethod("__RFKinstantiate");	// <-- TODO search with static types getStaticMethod<ReturnType(ArgTypes...)>("__RFKinstantiate");
 
 		//	if (instantiator != nullptr)

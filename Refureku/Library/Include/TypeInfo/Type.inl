@@ -89,7 +89,7 @@ Archetype const* Type::getArchetype() noexcept
 	}
 	else if constexpr (std::is_class_v<T>)
 	{
-		if constexpr (isReflected<T>)
+		if constexpr (isReflectedClass<T>)
 		{
 			return &T::staticGetArchetype();
 		}

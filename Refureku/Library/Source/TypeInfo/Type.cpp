@@ -10,8 +10,8 @@ bool Type::match(Type const& type) const noexcept
 {
 	return (*this == type) ||																	//Strictly the same type
 
-			(isPointer() && type.archetype == &FundamentalArchetypes::getNullptrArchetype() ||	//Pointer - nullptr_t correspondance
-			archetype == &FundamentalArchetypes::getNullptrArchetype() && type.isPointer());
+			((isPointer() && type.archetype == &FundamentalArchetypes::getNullptrArchetype()) ||	//Pointer - nullptr_t correspondance
+			(archetype == &FundamentalArchetypes::getNullptrArchetype() && type.isPointer()));
 }
 
 std::string Type::toString() const noexcept

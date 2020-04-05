@@ -9,11 +9,11 @@ namespace rfk
 		public:
 			int64	value = 0;
 
-			EnumValue()												= delete;
-			EnumValue(std::string&& name, uint64 id, int64 value)	noexcept;
-			EnumValue(EnumValue const&)								= default;
-			EnumValue(EnumValue&&)									= default;
-			~EnumValue()											= default;
+			EnumValue()														= delete;
+			EnumValue(std::string&& name, uint64 id = 0u, int64 value = 0u)	noexcept;
+			EnumValue(EnumValue const&)										= default;
+			EnumValue(EnumValue&&)											= default;
+			~EnumValue()													= default;
 
 			EnumValue&	operator =(EnumValue const&)	= delete;
 			EnumValue&	operator =(EnumValue&&)			= default;

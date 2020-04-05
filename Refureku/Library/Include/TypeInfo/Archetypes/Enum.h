@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
 #include <vector>
+#include <unordered_set>
+#include <algorithm>
 
 #include "TypeInfo/Archetypes/Archetype.h"
 #include "TypeInfo/EnumValue.h"
@@ -10,7 +13,8 @@ namespace rfk
 	class Enum : public Archetype
 	{
 		public:
-			std::vector<EnumValue>	values;
+			/** Values contained in this enum */
+			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>	values;
 
 			Enum()													= delete;
 			Enum(std::string&& name, uint64 id, uint64 memorySize)	noexcept;
@@ -18,15 +22,24 @@ namespace rfk
 			Enum(Enum&&)											= default;
 			~Enum()													= default;
 
-			//TODO?
+			/** Get the EnumValue corresponding to the provided name in this enum if any, else nullptr */
+			inline EnumValue const*					getEnumValue(std::string name)  const noexcept;
+			
+			/** Get the first found EnumValue corresponding to the provided value in this enum if any, else nullptr */
+			inline EnumValue const*					getEnumValue(int64 value)		const noexcept;
+
+			/** Get all the EnumValue corresponding to the provided value in this enum */
+			inline std::vector<EnumValue const*>	getEnumValues(int64 value)		const noexcept;
 
 			Enum& operator=(Enum const&)	= delete;
 			Enum& operator=(Enum&&)			= default;
 	};
 
+	#include "TypeInfo/Archetypes/Enum.inl"
+
 	/** Base implementation of getEnum, specialized for each reflected enum */
 	template <typename T, typename = std::enable_if_t<std::is_enum_v<T>>>
-	rfk::Enum const* getEnum() noexcept
+	inline rfk::Enum const* getEnum() noexcept
 	{
 		return nullptr;
 	}

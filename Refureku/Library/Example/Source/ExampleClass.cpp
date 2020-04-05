@@ -31,11 +31,11 @@ float ExampleClass::method3(int i) noexcept
 	return 3.14f;
 }
 
-int ExampleClass::method4(void* ptr)
+unsigned long long ExampleClass::method4(void* ptr)
 {
 	std::cout << "ExampleClass::method4(void* ptr): " << ptr << std::endl;
 
-	return reinterpret_cast<std::uintptr_t>(ptr);
+	return static_cast<unsigned long long>(reinterpret_cast<std::uintptr_t>(ptr));
 }
 
 void ExampleClass::staticMethod1()

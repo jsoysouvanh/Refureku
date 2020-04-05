@@ -2,8 +2,6 @@
 
 #include "ReflectedObject.h"
 
-#include <vector>
-
 #include "Generated/ExampleClass.rfk.h"
 
 namespace namespace1
@@ -106,7 +104,7 @@ namespace namespace3
 			int const*		c[2][3];
 
 			RFKMethod(CustomInstantiator)
-			int				method4(void* ptr);
+			unsigned long long		method4(void* ptr);
 
 			RFKMethod()
 			virtual void	method1() const noexcept override;
@@ -183,7 +181,8 @@ namespace namespace3
 		ExampleValue1 = 1 << 0,
 		ExampleValue2 = 1 << 1,
 		ExampleValue3 = 1 << 2,
-		ExampleValue4 = 1 << 3
+		ExampleValue4 = 1 << 3,
+		ExampleValue5 = 1 << 3
 	};
 }
 

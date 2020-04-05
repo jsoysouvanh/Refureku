@@ -68,13 +68,13 @@ void nonStaticMethods()
 	{
 		method4->invoke(&exampleClass, nullptr);
 		method4->safeInvoke(&exampleClass, nullptr);
-		std::cout << method4->invoke<int>(&exampleClass, nullptr) << std::endl;
-		std::cout << method4->safeInvoke<int>(&exampleClass, nullptr) << std::endl;
+		std::cout << method4->invoke<unsigned long long>(&exampleClass, nullptr) << std::endl;
+		std::cout << method4->safeInvoke<unsigned long long>(&exampleClass, nullptr) << std::endl;
 
 		method4->invoke(&constExampleClass, nullptr);
 		method4->safeInvoke(&constExampleClass, nullptr);
-		std::cout << method4->invoke<int>(&constExampleClass, nullptr) << std::endl;
-		std::cout << method4->safeInvoke<int>(&constExampleClass, nullptr) << std::endl;
+		std::cout << method4->invoke<unsigned long long>(&constExampleClass, nullptr) << std::endl;
+		std::cout << method4->safeInvoke<unsigned long long>(&constExampleClass, nullptr) << std::endl;
 	}
 
 	//Private method of a parent class
@@ -408,6 +408,11 @@ void enums()
 	rfk::Enum const* e = rfk::Database::getEnum("ExampleEnum");
 
 	std::cout << e->name << " : " << e->values.size() << std::endl;
+
+	std::cout << e->getEnumValue("ExampleValue4")->value << std::endl;
+	std::cout << e->getEnumValue("ExampleValue5")->value << std::endl;
+	std::cout << e->getEnumValue("ExampleValue6") << std::endl;
+	std::cout << e->getEnumValues(1 << 3).size() << std::endl;
 }
 
 int main()

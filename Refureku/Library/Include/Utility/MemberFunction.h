@@ -36,7 +36,7 @@ namespace rfk
 
 			~MemberFunction() = default;
 
-			ReturnType operator()(void const* caller, ArgTypes&&... args) const noexcept
+			inline ReturnType operator()(void const* caller, ArgTypes&&... args) const noexcept
 			{
 				return (static_cast<CallerType const*>(caller)->*_constFunction)(std::forward<ArgTypes>(args)...);
 			}

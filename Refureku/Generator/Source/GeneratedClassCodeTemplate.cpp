@@ -75,8 +75,8 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"public:",
 								"	static " + returnedType + " const& staticGetArchetype() noexcept",
 								"	{",
-								"		static bool				initialized = false;",
-								"		static " + returnedType + " type(\"" + info.name + "\", "
+								"		static bool			initialized = false;",
+								"		static " + returnedType + "	type(\"" + info.name + "\", "
 																		+ std::to_string(_stringHasher(info.id)) + "u, "
 																		+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
 																		+ "sizeof(" + info.name + "));",
@@ -205,7 +205,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 							 "	template <typename ParentType, typename ChildType>\t\\",
 							 "	static constexpr void __RFKrecurseRegisterChild(rfk::Struct* childArchetype)\t\\",
 							 "	{\t\\",
-							 "		if constexpr (rfk::isReflected<ParentType>)\t\\",
+							 "		if constexpr (rfk::isReflectedClass<ParentType>)\t\\",
 							 "		{\t\\",
 							 "			ParentType::template __RFKregisterChild<ChildType>(childArchetype);\t\\",
 							 "		}\t\\",

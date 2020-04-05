@@ -36,28 +36,37 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 							 "	template <>\t\\",
 							 "	inline rfk::Enum const* getEnum<" + typeName + ">() noexcept\t\\",
 							 "	{\t\\",
-							 "		static rfk::Enum type(\"" + enumInfo.name + "\", " + std::to_string(_stringHasher(enumInfo.id)) + ", sizeof(" + typeName + "));\t\\");
+							 "		static bool			initialized = false;\t\\",
+							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " + std::to_string(_stringHasher(enumInfo.id)) + ", sizeof(" + typeName + "));\t\\");
 	
+	generatedFile.writeLines("		if (!initialized)\t\\",
+							 "		{\t\\",
+							 "			initialized = true;\t\\");
+
 	//Fill enum properties
 	properties = fillEntityProperties(enumInfo, "type.");
 	if (!properties.empty())
-		generatedFile.writeLine("		" + properties + "\t\\");
+		generatedFile.writeLine("			" + properties + "\t\\");
 
 	if (!enumInfo.enumValues.empty())
 	{
-		generatedFile.writeLines("		rfk::EnumValue* ev;\t\\",
-								 "		type.values.reserve(" + std::to_string(enumInfo.enumValues.size()) + ");\t\\");
+		generatedFile.writeLines("			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>::iterator	valueIt;\t\\",
+								 "			rfk::EnumValue*																	ev;\t\\",
+								 "			type.values.reserve(" + std::to_string(enumInfo.enumValues.size()) + ");\t\\");
 
 		for (kodgen::EnumValueInfo const& ev : enumInfo.enumValues)
 		{
-			generatedFile.writeLine("		ev = &type.values.emplace_back(\"" + ev.name + "\", " + std::to_string(_stringHasher(ev.id)) + ", " + std::to_string(ev.defaultValue) + "u);\t\\");
+			generatedFile.writeLine("			valueIt = type.values.emplace(\"" + ev.name + "\", " + std::to_string(_stringHasher(ev.id)) + ", " + std::to_string(ev.defaultValue) + "u).first;\t\\");
 
 			//Fill enum value properties
 			properties = fillEntityProperties(ev, "ev->");
 			if (!properties.empty())
-				generatedFile.writeLine("		" + properties + "\t\\");
+				generatedFile.writeLines("			ev = const_cast<rfk::EnumValue*>(&*valueIt);\t\\",
+										 "			" + properties + "\t\\");
 		}
 	}
+
+	generatedFile.writeLine("		}\t\\");
 
 	generatedFile.writeLines("		return &type;\t\\",
 							 "	}",

@@ -42,7 +42,7 @@ namespace rfk
 			/** Is this method const */
 			bool			isConst			= false;
 
-			Method()																		= default;
+			Method()																		= delete;
 			Method(std::string&&				methodName,
 				   uint64						methodId		= 0u,
 				   EMethodFlags					flags			= EMethodFlags::Default,

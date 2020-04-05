@@ -25,7 +25,7 @@ namespace rfk
 			/** Category of this type */
 			ECategory	category	= ECategory::Undefined;
 
-			/** Size in bytes an instance of this archetype takes in memory, bsaically what typeof(Type) returns */
+			/** Size in bytes an instance of this archetype takes in memory, basically what sizeof(Type) returns */
 			uint64		memorySize	= 0;
 
 			Archetype(std::string&& newName,
