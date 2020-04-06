@@ -6,6 +6,7 @@ Lib/
 Logs/
 Generated/
 enc_temp_folder/
+out/
 
 #Settings
 *.json
