@@ -17,6 +17,23 @@ DataType Field::getData(void* instance) const noexcept
 }
 
 template <typename DataType>
+DataType Field::getData(void const* instance) const noexcept
+{
+	if constexpr (std::is_rvalue_reference_v<DataType>)
+	{
+		return std::move(*reinterpret_cast<std::remove_reference_t<DataType> const*>(getDataAddress(instance)));
+	}
+	else if constexpr (std::is_lvalue_reference_v<DataType>)
+	{
+		return *reinterpret_cast<std::remove_reference_t<DataType> const*>(getDataAddress(instance));
+	}
+	else	//By value
+	{
+		return DataType(*reinterpret_cast<DataType const*>(getDataAddress(instance)));
+	}
+}
+
+template <typename DataType>
 void Field::setData(void* instance, DataType&& data) const noexcept
 {
 	if constexpr (std::is_rvalue_reference_v<DataType&&>)
@@ -36,6 +53,11 @@ void Field::setData(void* instance, DataType&& data) const noexcept
 inline void* Field::getDataAddress(void* instance) const noexcept
 {
 	return reinterpret_cast<char*>(instance) + memoryOffset;
+}
+
+inline void const* Field::getDataAddress(void const* instance) const noexcept
+{
+	return reinterpret_cast<char const*>(instance) + memoryOffset;
 }
 
 inline void Field::setData(void* instance, void const* data, uint64 dataSize) const noexcept

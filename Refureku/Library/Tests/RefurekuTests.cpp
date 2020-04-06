@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include "ExampleClass.h"
 
@@ -147,46 +148,184 @@ void staticMethods()
 
 void fields()
 {
-	/*namespace namespace2
-	{
-		class RFKClass(rfk::ReflectedObject) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject
-		{
-			private:
-				RFKField()
-				float ppFloat = 123456.123456f;
-		};
-	}*/
-
 	//ParentParentClass
-	//namespace2::ParentParentClass const	pp;
-	//rfk::Class const& ppc = namespace2::ParentParentClass::staticGetArchetype();
+	namespace2::ParentParentClass	pp;
+	rfk::Class const&				ppc = namespace2::ParentParentClass::staticGetArchetype();
 
-	//ppc.getField()
+	TEST(ppc.getField("pFloat") == nullptr);
+	TEST(ppc.getField("ppFloat", rfk::EFieldFlags::Public) == nullptr);
+	TEST(static_cast<int>(ppc.getField("ppFloat", rfk::EFieldFlags::Private)->getData<float>(&pp)) == 123456);
+
+	ppc.getField("ppFloat", rfk::EFieldFlags::Private)->setData(&pp, 3.14f);
+
+	TEST(static_cast<int>(ppc.getField("ppFloat", rfk::EFieldFlags::Private)->getData<float>(&pp)) == 3);
+
+	//ParentClass
+	namespace3::ParentClass	p;
+	rfk::Class const&		pc = namespace3::ParentClass::staticGetArchetype();
+
+	TEST(pc.getField("ppFloat", rfk::EFieldFlags::Private, false) == nullptr);
+	TEST(static_cast<int>(pc.getField("ppFloat", rfk::EFieldFlags::Private, true)->getData<float>(&p)) == 123456);
+
+	TEST(pc.getField("pInt64")->getData<unsigned long long>(&p) == 666u);
+	pc.getField("pInt64")->getData<unsigned long long&>(&p) = 642u;
+	TEST(pc.getField("pInt64")->getData<unsigned long long>(&p) == 642u);
+
+	//ExampleClass
+	namespace3::ExampleClass	e;
+	rfk::Class const&			ec = namespace3::ExampleClass::staticGetArchetype();
+
+	TEST(ec.getField("ppFloat", rfk::EFieldFlags::Private, false) == nullptr);
+	TEST(static_cast<int>(ec.getField("ppFloat", rfk::EFieldFlags::Private, true)->getData<float>(&e)) == 123456);
+
+	TEST(ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long>(&e) == 666u);
+	ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long&>(&e) = 642u;
+	TEST(ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long>(&e) == 642u);
+
+	TEST(ec.getField("someInt", rfk::EFieldFlags::Public | rfk::EFieldFlags::Mutable)->getData<int>(&e) == 42);
+	TEST(ec.getField("someParentClass")->getData<namespace3::ParentClass&>(&e).pInt64 == 666u);
 }
 
 void staticFields()
 {
+	//ExampleClass
+	namespace3::ExampleClass	e;
+	rfk::Class const&			ec = namespace3::ExampleClass::staticGetArchetype();
 
+	TEST(ec.getField("someStaticInt") == nullptr);
+	TEST(ec.getStaticField("someStaticInt") != nullptr);
+	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public) != nullptr);
+	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->getDataAddress() == &namespace3::ExampleClass::someStaticInt);
+	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->getData<int>() == namespace3::ExampleClass::someStaticInt);
+
+	ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->setData(2);
+
+	TEST(namespace3::ExampleClass::someStaticInt == 2);
+	TEST(ec.getStaticField("someStaticParentClass", rfk::EFieldFlags::Public)->getDataAddress() == &namespace3::ExampleClass::someStaticParentClass);
 }
 
 void inheritance()
 {
+	//rfk::Class const& pppClass = ParentParentParentClass::staticGetArchetype(); //Not reflected type, so can't call staticGetArchetype();
+	rfk::Class const& ppc	= namespace2::ParentParentClass::staticGetArchetype();
+	rfk::Class const& pc	= namespace3::ParentClass::staticGetArchetype();
+	rfk::Class const& pc2	= namespace3::ParentClass2::staticGetArchetype();
+	rfk::Class const& ec	= namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& oc	= namespace3::OtherClass::staticGetArchetype();
 
+	//IsBaseOf
+	TEST(ppc.isBaseOf(ppc));
+	TEST(ppc.isBaseOf(pc));
+	TEST(!ppc.isBaseOf(pc2));
+	TEST(ppc.isBaseOf(ec));
+	TEST(!ppc.isBaseOf(oc));
+
+	TEST(!pc.isBaseOf(ppc));
+	TEST(pc.isBaseOf(pc));
+	TEST(!pc.isBaseOf(pc2));
+	TEST(pc.isBaseOf(ec));
+	TEST(!pc.isBaseOf(oc));
+
+	TEST(!ec.isBaseOf(ppc));
+	TEST(!ec.isBaseOf(pc));
+	TEST(!ec.isBaseOf(pc2));
+	TEST(ec.isBaseOf(ec));
+	TEST(!ec.isBaseOf(oc));
+
+	TEST(!oc.isBaseOf(ppc));
+	TEST(!oc.isBaseOf(pc));
+	TEST(!oc.isBaseOf(pc2));
+	TEST(!oc.isBaseOf(ec));
+	TEST(oc.isBaseOf(oc));
+
+	TEST(!pc2.isBaseOf(ppc));
+	TEST(!pc2.isBaseOf(pc));
+	TEST(pc2.isBaseOf(pc2));
+	TEST(pc2.isBaseOf(ec));
+	TEST(!pc2.isBaseOf(oc));
+
+	//InheritsFrom
+	TEST(!ppc.inheritsFrom(ppc));
+	TEST(!ppc.inheritsFrom(pc));
+	TEST(!ppc.inheritsFrom(pc2));
+	TEST(!ppc.inheritsFrom(ec));
+	TEST(!ppc.inheritsFrom(oc));
+
+	TEST(pc.inheritsFrom(ppc));
+	TEST(!pc.inheritsFrom(pc));
+	TEST(!pc.inheritsFrom(pc2));
+	TEST(!pc.inheritsFrom(ec));
+	TEST(!pc.inheritsFrom(oc));
+
+	TEST(ec.inheritsFrom(ppc));
+	TEST(ec.inheritsFrom(pc));
+	TEST(ec.inheritsFrom(pc2));
+	TEST(!ec.inheritsFrom(ec));
+	TEST(!ec.inheritsFrom(oc));
+
+	TEST(!oc.inheritsFrom(ppc));
+	TEST(!oc.inheritsFrom(pc));
+	TEST(!oc.inheritsFrom(pc2));
+	TEST(!oc.inheritsFrom(ec));
+	TEST(!oc.inheritsFrom(oc));
+
+	TEST(!pc2.inheritsFrom(ppc));
+	TEST(!pc2.inheritsFrom(pc));
+	TEST(!pc2.inheritsFrom(pc2));
+	TEST(!pc2.inheritsFrom(ec));
+	TEST(!pc2.inheritsFrom(oc));
 }
 
 void instantiation()
 {
+	rfk::Class const& pc	= namespace3::ParentClass::staticGetArchetype();
+	rfk::Class const& pc2	= namespace3::ParentClass2::staticGetArchetype();
+	rfk::Class const& ec	= namespace3::ExampleClass::staticGetArchetype();
 
+	namespace3::ParentClass*	pcI		= pc.makeInstance<namespace3::ParentClass>();
+	namespace3::ParentClass2*	pc2I	= pc2.makeInstance<namespace3::ParentClass2>();
+	namespace3::ExampleClass*	ecI		= ec.makeInstance<namespace3::ExampleClass>();
+
+	TEST(&pcI->getArchetype() == &pc);
+	//TEST(&pc2I->getArchetype() == &pc2);	//Can't do that test because ParentClass2 is not a ReflectedObject
+	TEST(&ecI->getArchetype() == &ec);
+
+	TEST(pcI->pInt64 == 666u);
+	TEST(ecI->someInt == 42);
+
+	//This leaks :) Should clean pcI, pc2I & ecI
+	delete pcI;
+	delete pc2I;
+	delete ecI;
 }
 
 void properties()
 {
+	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
+	TEST(!ec.properties.hasProperty("rfk::reflectedobject"));
+	TEST(ec.properties.hasProperty("rfk::ReflectedObject"));
+
+	TEST(ec.getMethod("method4")->properties.hasProperty("CustomInstantiator"));
 }
 
 void dynamicTypes()
 {
+	std::vector<rfk::ReflectedObject*>	objects;
 
+	objects.push_back(new namespace3::ExampleClass());
+	objects.push_back(new namespace3::ParentClass());
+	objects.push_back(new namespace2::ParentParentClass());
+
+	TEST(objects[0]->getArchetype().name == "ExampleClass");
+	TEST(objects[1]->getArchetype().name == "ParentClass");
+	TEST(objects[2]->getArchetype().name == "ParentParentClass");
+
+	//Yummy leak
+	for (rfk::ReflectedObject* o : objects)
+	{
+		delete o;
+	}
 }
 
 int main()
