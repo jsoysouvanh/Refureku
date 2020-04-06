@@ -6,14 +6,26 @@ ReturnType Method::internalInvoke(void const* caller, ArgTypes&&... arguments) c
 }
 
 template <typename... ArgTypes>
-void Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept
+void Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
+	#if REFUREKU_DEBUG
+
+	checkArgumentsCount(std::forward<ArgTypes>(arguments)...);
+
+	#endif
+
 	internalInvoke<void, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept
+ReturnType Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
+	#if REFUREKU_DEBUG
+
+	checkArgumentsCount(std::forward<ArgTypes>(arguments)...);
+
+	#endif
+
 	return internalInvoke<ReturnType, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }
 

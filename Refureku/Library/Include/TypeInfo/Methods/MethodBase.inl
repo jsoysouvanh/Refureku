@@ -1,6 +1,6 @@
 
 template <typename... ArgTypes>
-void MethodBase::checkArguments(ArgTypes&&... args) const
+void MethodBase::checkArgumentsCount(ArgTypes&&... args) const
 {
 	size_t correctParamCount = parameters.size();
 
@@ -9,6 +9,13 @@ void MethodBase::checkArguments(ArgTypes&&... args) const
 	{
 		throw MethodError("Tried to call method " + name + " with " + std::to_string(sizeof...(args)) + " parameters but " + std::to_string(correctParamCount) + " were expected.");
 	}
+}
+
+template <typename... ArgTypes>
+void MethodBase::checkArguments(ArgTypes&&... args) const
+{
+	//Check that there is the right amount of parameters
+	checkArgumentsCount<ArgTypes...>(std::forward<ArgTypes>(args)...);
 
 	//Check that each provided param type is strictly identical to what we expect
 	if constexpr (sizeof...(ArgTypes) != 0u)

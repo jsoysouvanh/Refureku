@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include "Config.h"
-
 #include "Misc/FundamentalTypes.h"
 #include "TypeInfo/Methods/MethodBase.h"
 #include "Utility/MemberFunction.h"
@@ -57,14 +55,14 @@ namespace rfk
 			*		void invoke(void* caller, ArgTypes&&... arguments) method
 			*/
 			template <typename... ArgTypes>
-			void		invoke(void const* caller, ArgTypes&&... arguments)		const noexcept;
+			void		invoke(void const* caller, ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	Overload with const caller for
 			*		ReturnType invoke(void* caller, ArgTypes&&... arguments) method
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(void const* caller, ArgTypes&&... arguments)		const noexcept;
+			ReturnType	invoke(void const* caller, ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	Overload with const caller for

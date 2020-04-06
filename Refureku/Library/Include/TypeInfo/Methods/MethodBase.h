@@ -36,10 +36,13 @@ namespace rfk
 			MethodBase(MethodBase&&)								= default;
 
 			template <typename... ArgTypes>
-			void checkArguments(ArgTypes&&... args)	const;
+			void checkArgumentsCount(ArgTypes&&... args)	const;
+
+			template <typename... ArgTypes>
+			void checkArguments(ArgTypes&&... args)			const;
 
 			template <typename ReturnType>
-			void checkReturnType()					const;
+			void checkReturnType()							const;
 
 			MethodBase& operator=(MethodBase const&)	= default;
 			MethodBase& operator=(MethodBase&&)			= default;
