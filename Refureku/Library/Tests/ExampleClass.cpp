@@ -7,9 +7,9 @@ using namespace namespace1;
 using namespace namespace2;
 using namespace namespace3;
 
-void ExampleClass::method1() const noexcept
+int ExampleClass::method1() const noexcept
 {
-	std::cout << "ExampleClass::method1() override:" << std::endl;
+	return 2;
 }
 
 void ExampleClass::method2() const
