@@ -242,6 +242,12 @@ TODO
 ## Setup
 TODO
 
+## Cross-platform compatibility
+This library has been tested and is stable on the following configurations:
+- Windows | MSVC 2019 16.5.2
+- Linux | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
+- Linux | GCC 8.4.0, GCC 9.2.1
+
 ## License
 
 MIT License
