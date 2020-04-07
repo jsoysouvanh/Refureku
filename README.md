@@ -1,3 +1,4 @@
+
 # Refureku
 [![Build Status](https://travis-ci.com/Angelysse/Refureku.svg?branch=master)](https://travis-ci.com/Angelysse/Refureku)
 
@@ -10,7 +11,15 @@ It is basically made of two parts:
 - The actual library which contain the framwork classes to access and manipulate reflected data at runtime.
 
 ## Features
-TODO
+- Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
+- Support structs/classes with or without inheritance (multiple inheritance supported)
+- Can look for a struct/class, enum, field or method by name, with additional filtering
+- Method call with any arguments and any return type (public, protected, private, virtual, overriden, const methods callable on non const instances)
+- Field get/set any data of any type (public, protected, private)
+- Know at runtime if a reflected class inherits or is the base of another reflected class
+- Arbitrary properties (like tags) on any entity (struct, class, field, method, enum, enum value)
+- Reflection metadata is regenerated only when a file has changed
+- Can instantiate any objects just from an archetype (which is obtainable by name or id)
 
 ## Classes overview
 ### Archetype
@@ -46,6 +55,18 @@ To retrieve those archetypes, we can write the following:
 rfk::Struct const& exampleStructArchetype = ExampleStruct::staticGetArchetype();
 rfk::Class const& exampleClassArchetype = ExampleClass::staticGetArchetype();
 rfk::Enum const* exampleEnumArchetype = rfk::getEnum<ExampleEnum>();
+
+//Iterate over fields
+for (rfk::Field const& field : exampleClassArchetype.fields)
+    //Do something
+
+//Iterate over fields
+for (rfk::Method const& method : exampleClassArchetype.method)
+    //Do something
+
+//Iterate over enum values
+for (rfk::EnumValue const& enumValue : exampleEnumArchetype->values)
+    //Do something
 ```
 
 ### Field / StaticField
@@ -157,8 +178,40 @@ classArchetype->getMethod("noReturnNoParam")->invoke(classInstance);
 delete classInstance;
 
 ```
+
+## Properties
+TODO
+
 ## Customization
+### Parser
+TODO
+
+### Generator
+TODO
 
 ## Setup
+TODO
 
 ## License
+
+MIT License
+
+Copyright (c) 2020 Julien SOYSOUVANH
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
