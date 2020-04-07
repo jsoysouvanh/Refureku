@@ -7,7 +7,7 @@ Refureku is a powerful customizable C++ reflection library based on libclang.
 It allows you to retrieve information on classes/structs, fields, methods and enums at runtime.
 
 It is basically made of two parts:
-- The metadata parser and generator, which will parse C++ source code and generate metadata, which will be injected back into source code using macros. This tool can either be built as a standalone executable or embed into a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the Customization section).
+- The metadata parser and generator, which will parse C++ source code and generate metadata, which will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the Customization section).
 - The actual library which contain the framwork classes to access and manipulate reflected data at runtime.
 
 ## Features
@@ -20,6 +20,7 @@ It is basically made of two parts:
 - Arbitrary properties (like tags) on any entity (struct, class, field, method, enum, enum value)
 - Reflection metadata is regenerated only when a file has changed
 - Can instantiate any objects just from an archetype (which is obtainable by name or id)
+- Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
 
 ## Classes overview
 ### Archetype
@@ -60,7 +61,7 @@ rfk::Enum const* exampleEnumArchetype = rfk::getEnum<ExampleEnum>();
 for (rfk::Field const& field : exampleClassArchetype.fields)
     //Do something
 
-//Iterate over fields
+//Iterate over methods
 for (rfk::Method const& method : exampleClassArchetype.method)
     //Do something
 
@@ -180,7 +181,56 @@ delete classInstance;
 ```
 
 ## Properties
-TODO
+Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the Parser using regex (see the customization section), so that we know what is permitted to write and what's not. These rules also prevent uninentional syntax errors. Each property can also accept subproperties (or arguments).
+
+It could look like this:
+```cpp
+#include "Generated/Example.rfk.h"
+
+class RFKClass(CustomSimpleProperty, CustomComplexProperty[SubProp1, SubProp2])
+    ExampleClass
+{
+    RFKExampleClass_GENERATED
+};
+
+enum class RFKEnum(EnumProp) ExampleEnum
+{
+    EnumValue1 = 0,
+    EnumValue2 RFKEnumVal(EnumValueProp) = 1
+};
+
+RFKExampleEnum_GENERATED
+```
+
+And we can check properties like so:
+```cpp
+#include "Example.h"
+
+//...
+
+rfk::Class const& classArchetype = ExampleClass::staticGetArchetype();
+
+//Iterate over all simple properties
+for (std::string const& simpleProp : classArchetype.properties.simpleProperty)
+    //Do something
+
+//Iterate over all complex properties
+for (auto& [complexProp, subProp] : classArchetype.properties.complexProperties)
+    //Do something
+
+//Iterate over all subproperties of a chosen complex property
+auto range = classArchetype.properties.complexProperties.equal_range("CustomComplexProperty");
+for (auto it = range.first; it != range.second; it++)
+    //Do something
+
+//Check if an entity has a specific simple or complex property
+classArchetype.properties.hasProperty("CustomSimpleProperty");	//true
+classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp1");	//true
+classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp2");	//true
+
+```
+
+It can be really useful when you want to adapt behaviors depending on specific properties (for example, a game engine editor).
 
 ## Customization
 ### Parser
