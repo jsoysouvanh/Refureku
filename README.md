@@ -189,7 +189,7 @@ delete classInstance;
 ```
 
 ## Properties
-Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the Parser using regex (see the customization section), so that we know what is permitted to write and what's not. These rules also prevent unintentional syntax errors. Each property can also accept subproperties (or arguments).
+Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the parser using regex (see the Customization section), so that we know what is permitted to write and what's not. These rules also prevent unintentional syntax errors. Each property can also accept subproperties (or arguments).
 
 It could look like this:
 ```cpp
@@ -416,10 +416,14 @@ int main()
     {
         //Probably bad input directory
     }
+
+    return EXIT_SUCCESS;
 }
 ```
 
-## Setup
+All this process can be setup in a standalone executable which will be called before you code base is compiled (you can use CMake add_custom_target(...) and add_dependencies(...), or MSVC Build events), but as you could see, it could easily be integrated in an application as well.
+
+## Getting started
 TODO
 
 ## Cross-platform compatibility
