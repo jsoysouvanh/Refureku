@@ -84,9 +84,11 @@ int main(int argc, char** argv)
 			result = EXIT_FAILURE;
 		}
 	}
-	//Use the current directory as working directory if no argument specified
+	//Use the current working directory if no argument specified
 	else
 	{
 		parseAndGenerate(fs::current_path());
 	}
+
+	return result;
 }
