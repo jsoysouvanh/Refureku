@@ -57,52 +57,52 @@ namespace kodgen
 			/**
 			*	@brief Main (complex) property name used to specify code generator in source code
 			*/
-			std::string	codeTemplateMainComplexPropertyName = "GenTemplate";
+			std::string						codeTemplateMainComplexPropertyName = "GenTemplate";
 
 			/**
 			*	@brief Extension used for generated files
 			*/
-			std::string generatedFilesExtension = ".kodgen.h";
+			std::string						generatedFilesExtension = ".kodgen.h";
 
 			/**
 			*	@brief Path to the directory all files should be generated (and where existing ones are)
 			*	If the existed directory doesn't exist, it will be created if possible
 			*/
-			fs::path outputDirectory;
-
-			FileGenerator()		noexcept;
-			~FileGenerator()	noexcept;
+			fs::path						outputDirectory;
 
 			/**
 			*	Collection of files to parse.
 			*	These files will be parse without further check if they exist.
 			*/
-			std::unordered_set<std::string>							includedFiles;
+			std::unordered_set<std::string>	includedFiles;
 
 			/**
 			*	Collection of included directories.
 			*	All directories contained in the given directories will be recursively inspected, except if they are ignored
 			*	All files contained in any included directory will be parsed, except if they are ignored
 			*/
-			std::unordered_set<std::string>							includedDirectories;
+			std::unordered_set<std::string>	includedDirectories;
 
 			/**
 			*	Collection of ignored files.
 			*	These files will never be parsed (except if they are also part of the includedFiles collection)
 			*/
-			std::unordered_set<std::string>							ignoredFiles;
+			std::unordered_set<std::string>	ignoredFiles;
 
 			/**
 			*	Collection of ignored directories.
 			*	All directories contained in the given directories will be ignored, except if they are included
 			*	All files contained in any ignored directory will be ignored, except if they are included
 			*/
-			std::unordered_set<std::string>							ignoredDirectories;
+			std::unordered_set<std::string>	ignoredDirectories;
 
 			/**
 			*	Extensions of files which should be considered for parsing.
 			*/
-			std::unordered_set<std::string>							supportedExtensions;
+			std::unordered_set<std::string>	supportedExtensions;
+
+			FileGenerator()		noexcept;
+			~FileGenerator()	noexcept;
 
 			/**
 			*	@brief Add a new template to the list of generated code templates

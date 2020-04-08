@@ -103,7 +103,7 @@ void methods()
 		ec_method4->safeInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^
 	}
-	catch (rfk::MethodError const& e)
+	catch (rfk::MethodError const&)
 	{}
 
 	try
@@ -111,7 +111,7 @@ void methods()
 		ec_method4->safeInvoke<unsigned long long>(&e, 1);		// <- Bad argument type
 		TEST(false);	//Should not reach this line, throw here ^
 	}
-	catch (rfk::MethodError const& e)
+	catch (rfk::MethodError const&)
 	{}
 
 	//No lookup in parent classes

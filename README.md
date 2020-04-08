@@ -256,7 +256,7 @@ The parser is probably the class which you will want to change at first to modif
 //Header file, let's say CustomFileParser.h
 #pragma once
 
-#include "FileParser.h"	//Refureku/Generator/Include/FileParser.h
+#include <FileParser.h>	//Refureku/Generator/Include/FileParser.h
 
 class CustomFileParser : public rfk::FileParser
 {
@@ -265,7 +265,7 @@ class CustomFileParser : public rfk::FileParser
         void postParse(fs::path const& parseFile, kodgen::ParsingResult const& result) override;
     
     public:
-        FileParser();
+        CustomFileParser();
 };
 ```
 ```cpp
@@ -306,7 +306,7 @@ CustomFileParser::CustomFileParser():
 
 void CustomFileParser::preParse(fs::path const& parseFile)
 {
-    //Optionaly call parent implementation
+    //Optionally call parent implementation
     //rfk::preParse(parseFile);
 
     //Do whatever you want to do before a file is parsed (can be logs or whatever)
@@ -314,7 +314,7 @@ void CustomFileParser::preParse(fs::path const& parseFile)
 
 void CustomFileParser::postParse(fs::path const& parseFile, kodgen::ParsingResult const& result)
 {
-    //Optionaly call parent implementation
+    //Optionally call parent implementation
     //rfk::postParse(parseFile, result);
 
     //Do whatever you want to do after a file has been parsed (can be logs, checks or whatever)
@@ -322,10 +322,102 @@ void CustomFileParser::postParse(fs::path const& parseFile, kodgen::ParsingResul
 ```
 
 ### FileGenerator
-TODO
+The file generator handles collections of paths to files and directories to determine what should be parsed and what should not. Let's make a simple one:
+```cpp
+//Header file, CustomFileGenerator.h
+#pragma once
+
+#include <FileGenerator.h>	//Refureku/Generator/Include/FileGenerator.h
+
+class CustomFileGenerator : public rfk::FileGenerator
+{
+    protected:
+        void writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept override;
+	void writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept override;
+};
+
+    public:
+        CustomFileGenerator();
+```
+```cpp
+#include "CustomFileGenerator.h"
+
+CustomFileGenerator::CustomFileGenerator():
+    rfk::FileGenerator()
+{
+    //Generated files will use .rfk.h extension
+    generatedFilesExtension = ".customextension";
+
+    //Only parse .h and .hpp files
+    supportedExtensions.emplace(".h");
+    supportedExtensions.emplace(".hpp");
+}
+
+void CustomFileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
+{
+    //MUST CALL PARENT IMPLEMENTATION
+    rfk::FileGenerator::writeHeader(file, parsingResult);
+
+    //Write something else in the generated file header?
+    file.writeLine("/* Write some custom code here */");
+    file.writeLines("/* Write some custom code here", "on ", "as", "many", "lines as you want */");
+}
+
+void CustomFileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
+{
+    //Optionnally call parent implementation
+    //rfk::FileGenerator::writeFooter(file, parsingResult);
+}
+```
 
 ### GeneratedCodeTemplate
-TODO
+GeneratedCodeTemplate class is defining the code to generate for a given set of data. An implementation is already provided in Refureku and it should be used as it is.
+
+### Putting all 3 together
+Once you've setup the above 3 classes (actually 2, you should definitely use Refureku GeneratedCodeTemplate implementation), making everything work is pretty straight forward.
+```cpp
+#include <iostream>
+#include <filesystem>
+
+#include <GeneratedClassCodeTemplate.h>
+#include <GeneratedEnumCodeTemplate.h>
+
+#include "CustomFileParser.h"
+#include "CustomFileGenerator.h"
+
+int main()
+{
+    CustomFileParser	fileParser;
+    CustomFileGenerator	fileGenerator;
+
+    //Setup Refureku GeneratedCodeTemplates
+    fileGenerator.addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
+    fileGenerator.addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
+    fileGenerator.setDefaultClassTemplate("RefurekuClass"); 
+    fileGenerator.setDefaultEnumTemplate("RefurekuEnum");
+
+    //Setup the files / directories you want to parse and/or ignore
+    fileGenerator.includedDirectories.emplace("Path/To/A/Directory/To/Parse");
+    fileGenerator.includedFiles.emplace("Path/To/A/File/To/Parse.h");
+    fileGenerator.ignoredDirectories.emplace("Path/To/A/Directory/To/Ignore");
+    fileGenerator.ignoredFiles.emplace("Path/To/A/File/To/Ignore.h");
+    fileGenerator.outputDirectory = "Path/To/A/Directory";	//Generated files will be placed here
+
+    //Parse and generate files. false means only new/modified files will be regenerated
+    kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+
+    if (genResult.completed)
+    {
+        //Can check generation result
+        //genResult.parsingErrors contains parsing errors
+        //genResult.fileGenerationErrors contains generation errors
+    }
+    else  //Generation was aborted
+    {
+        //Probably bad input directory
+    }
+}
+```
 
 ## Setup
 TODO
