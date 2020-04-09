@@ -6,7 +6,7 @@ project(RefurekuGenerator)
 add_subdirectory(Submodules/Kodgen)
 
 # Add Refureku generator executable
-set(RefurekuGeneratorTarget RefurekuGenerator_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
+set(RefurekuGeneratorTarget RefurekuGenerator)
 add_executable(${RefurekuGeneratorTarget}
 				Source/FileParser.cpp
 				Source/GeneratedEntityCodeTemplate.cpp
@@ -23,6 +23,6 @@ target_compile_features(${RefurekuGeneratorTarget} PUBLIC cxx_std_17)
 target_include_directories(${RefurekuGeneratorTarget} PRIVATE Include)
 
 # Link to Kodgen library
-set(KodgenLibrary Kodgen_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
+set(KodgenLibrary Kodgen)
 
 target_link_libraries(${RefurekuGeneratorTarget} PRIVATE ${KodgenLibrary})

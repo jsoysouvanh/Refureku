@@ -14,7 +14,7 @@ else()	# Clang or GCC
 	add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-set(KodgenTargetLibrary Kodgen_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
+set(KodgenTargetLibrary Kodgen)
 
 add_library(${KodgenTargetLibrary}
 				STATIC

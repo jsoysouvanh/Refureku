@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13.5)
 project(RefurekuLibrary)
 
 # Add Refureku library
-set(RefurekuLibraryTarget Refureku_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
+set(RefurekuLibraryTarget Refureku)
 add_library(${RefurekuLibraryTarget}
 				STATIC
 					Source/TypeInfo/TypePart.cpp

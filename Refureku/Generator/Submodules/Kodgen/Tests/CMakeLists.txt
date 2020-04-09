@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.13.5)
 
-set(PropertyRulesTestsTarget Kodgen_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE}_PropertyRulesTests)
-set(ParsingTestsTarget Kodgen_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE}_ParsingTests)
-set(FileGeneratorTestsTarget Kodgen_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE}_FileGeneratorTests)
+set(PropertyRulesTestsTarget Kodgen_PropertyRulesTests)
+set(ParsingTestsTarget Kodgen_ParsingTests)
+set(FileGeneratorTestsTarget Kodgen_FileGeneratorTests)
 
 add_executable(${PropertyRulesTestsTarget} PropertyRulesTests.cpp)
 add_executable(${ParsingTestsTarget} ParsingTests.cpp)
