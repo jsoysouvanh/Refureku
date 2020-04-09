@@ -41,13 +41,16 @@ CXChildVisitResult EnumParser::parse(CXCursor const& currentCursor) noexcept
 	return CXChildVisitResult::CXChildVisit_Continue;
 }
 
-CXChildVisitResult EnumParser::parseEnumValue(CXCursor enumCursor) noexcept
+CXChildVisitResult EnumParser::parseEnumValue(CXCursor enumValueCursor) noexcept
 {
-	assert(enumCursor.kind == CXCursorKind::CXCursor_EnumConstantDecl);
+	assert(enumValueCursor.kind == CXCursorKind::CXCursor_EnumConstantDecl);
 
-	_enumValueParser.startParsing(enumCursor);
+	_enumValueParser.startParsing(enumValueCursor);
 
-	clang_visitChildren(enumCursor, [](CXCursor c, CXCursor, CXClientData clientData)
+	//Always add an enum value, eventhough is doesn't have the macro
+	_parsingInfo->currentEnum->enumValues.emplace_back(EnumValueInfo(enumValueCursor));
+
+	clang_visitChildren(enumValueCursor, [](CXCursor c, CXCursor, CXClientData clientData)
 						{
 							return reinterpret_cast<EnumValueParser*>(clientData)->parse(c);
 
