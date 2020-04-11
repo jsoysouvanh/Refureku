@@ -30,7 +30,7 @@ ReturnType Method::invoke(void const* caller, ArgTypes&&... arguments) const noe
 }
 
 template <typename... ArgTypes>
-void Method::safeInvoke(void const* caller, ArgTypes&&... arguments) const
+void Method::checkedInvoke(void const* caller, ArgTypes&&... arguments) const
 {
 	checkArguments(std::forward<ArgTypes>(arguments)...);
 
@@ -38,7 +38,7 @@ void Method::safeInvoke(void const* caller, ArgTypes&&... arguments) const
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Method::safeInvoke(void const* caller, ArgTypes&&... arguments) const
+ReturnType Method::checkedInvoke(void const* caller, ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
 	checkArguments(std::forward<ArgTypes>(arguments)...);

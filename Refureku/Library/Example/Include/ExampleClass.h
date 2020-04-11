@@ -140,6 +140,9 @@ namespace namespace3
 			RFKMethod()
 			float			method3(int i)				noexcept;
 
+			RFKMethod()
+			float			methodWithDefaultArgs(int i = 0, float f = 3.14f, char const* s = "test");
+
 		public:
 			ExampleClass()						noexcept { }
 			ExampleClass(ExampleClass const&)	= default;

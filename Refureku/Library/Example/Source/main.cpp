@@ -21,15 +21,15 @@ void nonStaticMethods()
 	if (method1 != nullptr)
 	{
 		method1->invoke(&exampleClass);
-		method1->safeInvoke(&exampleClass);
+		method1->checkedInvoke(&exampleClass);
 		method1->invoke<void>(&exampleClass);
-		method1->safeInvoke<void>(&exampleClass);
+		method1->checkedInvoke<void>(&exampleClass);
 
 		//Note that we can call non-const methods on const objects
 		method1->invoke(&constExampleClass);
-		method1->safeInvoke(&constExampleClass);
+		method1->checkedInvoke(&constExampleClass);
 		method1->invoke<void>(&constExampleClass);
-		method1->safeInvoke<void>(&constExampleClass);
+		method1->checkedInvoke<void>(&constExampleClass);
 	}
 
 	//Const method which returns void without arguments
@@ -37,14 +37,14 @@ void nonStaticMethods()
 	if (method2 != nullptr)
 	{
 		method2->invoke(&exampleClass);
-		method2->safeInvoke(&exampleClass);
+		method2->checkedInvoke(&exampleClass);
 		method2->invoke<void>(&exampleClass);
-		method2->safeInvoke<void>(&exampleClass);
+		method2->checkedInvoke<void>(&exampleClass);
 
 		method2->invoke(&constExampleClass);
-		method2->safeInvoke(&constExampleClass);
+		method2->checkedInvoke(&constExampleClass);
 		method2->invoke<void>(&constExampleClass);
-		method2->safeInvoke<void>(&constExampleClass);
+		method2->checkedInvoke<void>(&constExampleClass);
 	}
 
 	//Non const method which returns an int without arguments
@@ -52,14 +52,14 @@ void nonStaticMethods()
 	if (method3 != nullptr)
 	{
 		method3->invoke(&exampleClass);
-		method3->safeInvoke(&exampleClass);
+		method3->checkedInvoke(&exampleClass);
 		std::cout << method3->invoke<int>(&exampleClass) << std::endl;
-		std::cout << method3->safeInvoke<int>(&exampleClass) << std::endl;
+		std::cout << method3->checkedInvoke<int>(&exampleClass) << std::endl;
 
 		method3->invoke(&constExampleClass);
-		method3->safeInvoke(&constExampleClass);
+		method3->checkedInvoke(&constExampleClass);
 		std::cout << method3->invoke<int>(&constExampleClass) << std::endl;
-		std::cout << method3->safeInvoke<int>(&constExampleClass) << std::endl;
+		std::cout << method3->checkedInvoke<int>(&constExampleClass) << std::endl;
 	}
 
 	//Non const method which returns an int with arguments
@@ -67,14 +67,14 @@ void nonStaticMethods()
 	if (method4 != nullptr)
 	{
 		method4->invoke(&exampleClass, nullptr);
-		method4->safeInvoke(&exampleClass, nullptr);
+		method4->checkedInvoke(&exampleClass, nullptr);
 		std::cout << method4->invoke<unsigned long long>(&exampleClass, nullptr) << std::endl;
-		std::cout << method4->safeInvoke<unsigned long long>(&exampleClass, nullptr) << std::endl;
+		std::cout << method4->checkedInvoke<unsigned long long>(&exampleClass, nullptr) << std::endl;
 
 		method4->invoke(&constExampleClass, nullptr);
-		method4->safeInvoke(&constExampleClass, nullptr);
+		method4->checkedInvoke(&constExampleClass, nullptr);
 		std::cout << method4->invoke<unsigned long long>(&constExampleClass, nullptr) << std::endl;
-		std::cout << method4->safeInvoke<unsigned long long>(&constExampleClass, nullptr) << std::endl;
+		std::cout << method4->checkedInvoke<unsigned long long>(&constExampleClass, nullptr) << std::endl;
 	}
 
 	//Private method of a parent class
@@ -82,10 +82,10 @@ void nonStaticMethods()
 	if (method5 != nullptr)
 	{
 		method5->invoke(&exampleClass);
-		method5->safeInvoke(&exampleClass);
+		method5->checkedInvoke(&exampleClass);
 
 		method5->invoke(&constExampleClass);
-		method5->safeInvoke(&constExampleClass);
+		method5->checkedInvoke(&constExampleClass);
 	}
 
 	std::vector<rfk::Method const*> methods3 = exampleClassType.getMethods("method3");
@@ -104,18 +104,18 @@ void staticMethods()
 	if (staticMethod1 != nullptr)
 	{
 		staticMethod1->invoke();
-		staticMethod1->safeInvoke();
+		staticMethod1->checkedInvoke();
 		staticMethod1->invoke<void>();
-		staticMethod1->safeInvoke<void>();
+		staticMethod1->checkedInvoke<void>();
 	}
 	
 	rfk::StaticMethod const* staticMethod2 = exampleClassType.getStaticMethod("staticMethod2");
 	if (staticMethod2 != nullptr)
 	{
 		staticMethod2->invoke();
-		staticMethod2->safeInvoke();
+		staticMethod2->checkedInvoke();
 		std::cout << staticMethod2->invoke<int>() << std::endl;
-		std::cout << staticMethod2->safeInvoke<int>() << std::endl;
+		std::cout << staticMethod2->checkedInvoke<int>() << std::endl;
 	}
 
 	rfk::StaticMethod const* staticMethod3 = exampleClassType.getStaticMethod("staticMethod3", rfk::EMethodFlags::Protected);
@@ -124,9 +124,9 @@ void staticMethods()
 		try
 		{
 			staticMethod3->invoke("coucou");
-			staticMethod3->safeInvoke(static_cast<char const*>("coucou"));
+			staticMethod3->checkedInvoke(static_cast<char const*>("coucou"));
 			std::cout << staticMethod3->invoke<int>("coucou") << std::endl;
-			std::cout << staticMethod3->safeInvoke<int>("coucou") << std::endl;
+			std::cout << staticMethod3->checkedInvoke<int>("coucou") << std::endl;
 		}
 		catch (rfk::MethodError e)
 		{
@@ -385,7 +385,7 @@ void types()
 
 	try
 	{
-		int v = staticMethod->safeInvoke<int, int, int>(1, 2);	//<-- wrong arg
+		int v = staticMethod->checkedInvoke<int, int, int>(1, 2);	//<-- wrong arg
 		std::cout << v << std::endl;
 	}
 	catch (rfk::MethodError error)
@@ -395,7 +395,7 @@ void types()
 
 	try
 	{
-		staticMethod->safeInvoke(1, 2);
+		staticMethod->checkedInvoke(1, 2);
 	}
 	catch (rfk::MethodError error)
 	{

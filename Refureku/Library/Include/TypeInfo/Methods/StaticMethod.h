@@ -30,25 +30,25 @@ namespace rfk
 			*			StaticMethod::invoke(std::string("example"));	will work
 			*/
 			template <typename... ArgTypes>
-			void		invoke(ArgTypes&&... arguments)		const	noexcept(REFUREKU_RELEASE);
+			void		invoke(ArgTypes&&... arguments)			const	noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	TODO
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(ArgTypes&&... arguments)		const	noexcept(REFUREKU_RELEASE);
+			ReturnType	invoke(ArgTypes&&... arguments)			const	noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	TODO
 			*/
 			template <typename... ArgTypes>
-			void		safeInvoke(ArgTypes&&... arguments)	const;
+			void		checkedInvoke(ArgTypes&&... arguments)	const;
 
 			/**
 			*	TODO
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	safeInvoke(ArgTypes&&... arguments)	const;
+			ReturnType	checkedInvoke(ArgTypes&&... arguments)	const;
 
 			StaticMethod& operator=(StaticMethod const&)	= default;
 			StaticMethod& operator=(StaticMethod&&)			= default;

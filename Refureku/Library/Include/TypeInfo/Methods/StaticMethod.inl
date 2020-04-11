@@ -24,7 +24,7 @@ ReturnType StaticMethod::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU
 }
 
 template <typename... ArgTypes>
-void StaticMethod::safeInvoke(ArgTypes&&... arguments) const
+void StaticMethod::checkedInvoke(ArgTypes&&... arguments) const
 {
 	checkArguments(std::forward<ArgTypes>(arguments)...);
 
@@ -32,7 +32,7 @@ void StaticMethod::safeInvoke(ArgTypes&&... arguments) const
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType StaticMethod::safeInvoke(ArgTypes&&... arguments) const
+ReturnType StaticMethod::checkedInvoke(ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
 	checkArguments(std::forward<ArgTypes>(arguments)...);

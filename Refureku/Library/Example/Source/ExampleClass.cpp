@@ -31,6 +31,13 @@ float ExampleClass::method3(int i) noexcept
 	return 3.14f;
 }
 
+float ExampleClass::methodWithDefaultArgs(int i, float f, char const* s) 
+{
+	std::cout << "i = " << i << ", f = " << f << ", s = " << s << std::endl;
+
+	return f;
+}
+
 unsigned long long ExampleClass::method4(void* ptr)
 {
 	std::cout << "ExampleClass::method4(void* ptr): " << ptr << std::endl;

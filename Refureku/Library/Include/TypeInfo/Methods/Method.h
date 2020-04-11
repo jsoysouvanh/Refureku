@@ -55,28 +55,28 @@ namespace rfk
 			*		void invoke(void* caller, ArgTypes&&... arguments) method
 			*/
 			template <typename... ArgTypes>
-			void		invoke(void const* caller, ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
+			void		invoke(void const* caller, ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	Overload with const caller for
 			*		ReturnType invoke(void* caller, ArgTypes&&... arguments) method
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(void const* caller, ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
+			ReturnType	invoke(void const* caller, ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	Overload with const caller for
 			*		void safeInvoke(void* caller, ArgTypes&&... arguments) method
 			*/
 			template <typename... ArgTypes>
-			void		safeInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			void		checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 			/**
 			*	Overload with const caller for
 			*		ReturnType safeInvoke(void* caller, ArgTypes&&... arguments) method
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	safeInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			ReturnType	checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 			Method& operator=(Method const&)	= default;
 			Method& operator=(Method&&)			= default;

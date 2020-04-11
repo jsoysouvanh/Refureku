@@ -57,7 +57,7 @@ void methods()
 	pc.getMethod("parentClassMethod1")->invoke(&p);
 
 	rfk::Method const* pc_method1 = pc.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const);
-	TEST(pc_method1->safeInvoke<int>(&p) == 1);
+	TEST(pc_method1->checkedInvoke<int>(&p) == 1);
 	TEST(pc.getMethod("method1", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const) == nullptr);
 
 	//ExampleClass
@@ -100,7 +100,7 @@ void methods()
 
 	try
 	{
-		ec_method4->safeInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
+		ec_method4->checkedInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^
 	}
 	catch (rfk::MethodError const&)
@@ -108,7 +108,7 @@ void methods()
 
 	try
 	{
-		ec_method4->safeInvoke<unsigned long long>(&e, 1);		// <- Bad argument type
+		ec_method4->checkedInvoke<unsigned long long>(&e, 1);		// <- Bad argument type
 		TEST(false);	//Should not reach this line, throw here ^
 	}
 	catch (rfk::MethodError const&)
