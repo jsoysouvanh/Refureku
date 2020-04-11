@@ -59,3 +59,4 @@ struct hasField_##fieldName																							\
 	public:																											\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;										\
 };
+

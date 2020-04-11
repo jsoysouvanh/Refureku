@@ -14,3 +14,4 @@ inline EnumName operator&(EnumName flags1, EnumName flags2)														\
 																												\
 	return static_cast<EnumName>(static_cast<UnderlyingType>(flags1) & static_cast<UnderlyingType>(flags2));	\
 }
+
