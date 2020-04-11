@@ -2,6 +2,7 @@
 
 
 
+
 # Refureku
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 
@@ -426,32 +427,30 @@ int main()
 All this process can be setup in a standalone executable which will be called before you code base is compiled (you can use CMake add_custom_target(...) and add_dependencies(...), or MSVC Build events), but as you could see, it could easily be integrated in an application as well.
 
 ## Getting started
-Requirements: CMake 3.13.5+, C++17+, a compatible compiler (see Cross-platform compatibility section).
+Requirements:
+- CMake 3.15.0+
+- C++17+
+- A compatible compiler (see Cross-platform compatibility section).
 
 1. Pull the repository
 2. Update the RefurekuGenerator (Refureku/Generator/Source/main.cpp) according to your needs. You will probably want to at least change the "includeDirectory" variable in the parseAndGenerate() method.
 3. Compile the library and the generator following these steps:
 
-#### On Windows
-
 - At the root of the Refureku project, open a terminal
-- Type:   
+- Type:
 
 > \> mkdir Build   
 > \> cd Build   
-> \> cmake -G "Visual Studio 15 2017" -A x64 .\.   
+> \> cmake -G \<Generator\> -A x64 .\.
+>> Most common generators include:
+>> - Visual Studio 2017	-> cmake -G "Visual Studio 15 2017" -A x64 .\.
+>> - Makefile -> cmake -G "Unix Makefiles" -A x64 .\.
+>> - Ninja
+>> - Type cmake -G for more information
 
-- Open the generated Refureku.sln
-- Build RefurekuGenerator (Generator executable)
-- Build Refureku (Library)
+> \> cmake --build . --target RefurekuGenerator Refureku --config Release --parallel 8
 
-#### On Linux
-
-- Follow the same steps as above, but adapt the generator name, for example:
-
-> \> cmake -G "Unix Makefiles" .\.   
-
-4. Link with Refureku.lib, and don't forget to add the Refureku headers directory at Refureku/Library/Include
+4. Link with Refureku.lib, and don't forget to add the Refureku headers directory to your project included header directories (Refureku/Library/Include)
 5. Make a pre-build custom event (VS) or a custom target + dependency (CMake) to run the Generator before building your project, with your working directory as the first argument.
 6. Compile your project: the generator should run before your project is built.
 
