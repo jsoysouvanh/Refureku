@@ -303,8 +303,8 @@ void properties()
 {
 	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
-	TEST(!ec.properties.hasProperty("rfk::reflectedobject"));
-	TEST(ec.properties.hasProperty("rfk::ReflectedObject"));
+	TEST(!ec.properties.hasProperty("dynamicGetArchetype"));
+	TEST(ec.properties.hasProperty("DynamicGetArchetype"));
 
 	TEST(ec.getMethod("method4")->properties.hasProperty("CustomInstantiator"));
 }

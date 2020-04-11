@@ -25,7 +25,7 @@ namespace rfk
 		Value		= 1 << 7	//Means non-ptr simple value, ex: int
 	};
 
-	GENERATE_ENUM_OPERATORS(ETypePartDescriptor);
+	GENERATE_ENUM_OPERATORS(ETypePartDescriptor)
 
 	class TypePart
 	{

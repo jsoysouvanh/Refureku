@@ -20,5 +20,5 @@ namespace rfk
 		Mutable			= 1 << 4
 	};
 
-	GENERATE_ENUM_OPERATORS(EFieldFlags);
+	GENERATE_ENUM_OPERATORS(EFieldFlags)
 }

@@ -25,5 +25,5 @@ namespace rfk
 		Const			= 1 << 9
 	};
 
-	GENERATE_ENUM_OPERATORS(EMethodFlags);
+	GENERATE_ENUM_OPERATORS(EMethodFlags)
 }
