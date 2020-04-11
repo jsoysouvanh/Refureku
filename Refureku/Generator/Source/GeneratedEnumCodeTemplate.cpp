@@ -37,7 +37,7 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 							 "	inline rfk::Enum const* getEnum<" + typeName + ">() noexcept\t\\",
 							 "	{\t\\",
 							 "		static bool			initialized = false;\t\\",
-							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " + std::to_string(_stringHasher(enumInfo.id)) + ", sizeof(" + typeName + "));\t\\");
+							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " + std::to_string(_stringHasher(enumInfo.id)) + "u, sizeof(" + typeName + "));\t\\");
 	
 	generatedFile.writeLines("		if (!initialized)\t\\",
 							 "		{\t\\",
