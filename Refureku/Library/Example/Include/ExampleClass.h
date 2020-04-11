@@ -125,7 +125,7 @@ namespace namespace3
 			static	int		staticMethod3(char const* param);
 
 			RFKMethod()
-			static	ExampleClass const* staticMethod4(char const* param) noexcept { return nullptr; };
+			static	ExampleClass const* staticMethod4(char const*) noexcept { return nullptr; };
 
 		private:
 			RFKMethod()

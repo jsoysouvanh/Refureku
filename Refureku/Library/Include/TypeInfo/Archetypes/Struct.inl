@@ -1,6 +1,6 @@
 
 template <typename T>
-void Struct::__RFKaddToParents(EAccessSpecifier inheritanceAccess) noexcept
+void Struct::__RFKaddToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) noexcept
 {
 	if constexpr (rfk::isReflectedClass<T>)
 	{

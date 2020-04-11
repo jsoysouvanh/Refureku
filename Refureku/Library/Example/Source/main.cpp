@@ -339,14 +339,12 @@ void inheritance()
 void instantiation()
 {
 	rfk::Class const& pc	= ParentClass::staticGetArchetype();
-	rfk::Class const& pc2	= ParentClass2::staticGetArchetype();
+	//rfk::Class const& pc2	= ParentClass2::staticGetArchetype();
 	rfk::Class const& ec	= ExampleClass::staticGetArchetype();
 
 	ParentClass* pcI = pc.makeInstance<ParentClass>();
-	ParentClass2* pc2I = pc2.makeInstance<ParentClass2>();
+	//ParentClass2* pc2I = pc2.makeInstance<ParentClass2>();
 	ExampleClass* ecI = ec.makeInstance<ExampleClass>();
-
-	rfk::Class const& ec2 = ecI->getArchetype();
 
 	std::cout << "makeInstance(): " << pcI->getArchetype().name << std::endl;
 	//std::cout << "makeInstance(): " << pc2I->getArchetype().name << std::endl;

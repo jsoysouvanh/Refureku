@@ -17,12 +17,15 @@ add_executable(${RefurekuGeneratorTarget}
 				Source/main.cpp
 				)
 
+# Warning level
+if (MSVC)
+	string(REGEX REPLACE " /W3" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Remove the default flag /W3 - get /W4 propagated from Kodgen
+endif()
+
 # Setup language requirements - I don't understand why it wasn't propagated by the KodgenLibrary target.
 target_compile_features(${RefurekuGeneratorTarget} PUBLIC cxx_std_17)
 
 target_include_directories(${RefurekuGeneratorTarget} PRIVATE Include)
 
 # Link to Kodgen library
-set(KodgenLibrary Kodgen)
-
-target_link_libraries(${RefurekuGeneratorTarget} PRIVATE ${KodgenLibrary})
+target_link_libraries(${RefurekuGeneratorTarget} PRIVATE Kodgen)

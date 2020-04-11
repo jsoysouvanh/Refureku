@@ -1,6 +1,6 @@
 
 template <typename... ArgTypes>
-void MethodBase::checkArgumentsCount(ArgTypes&&... args) const
+void MethodBase::checkArgumentsCount([[maybe_unused]] ArgTypes&&... args) const
 {
 	size_t correctParamCount = parameters.size();
 
@@ -12,7 +12,7 @@ void MethodBase::checkArgumentsCount(ArgTypes&&... args) const
 }
 
 template <typename... ArgTypes>
-void MethodBase::checkArguments(ArgTypes&&... args) const
+void MethodBase::checkArguments([[maybe_unused]] ArgTypes&&... args) const
 {
 	//Check that there is the right amount of parameters
 	checkArgumentsCount<ArgTypes...>(std::forward<ArgTypes>(args)...);
@@ -32,7 +32,7 @@ void MethodBase::checkArguments(FirstArgType&& a, OtherArgTypes&&... args) const
 }
 
 template <size_t Rank, typename LastArgType>
-void MethodBase::checkArguments(LastArgType&& a) const
+void MethodBase::checkArguments(LastArgType&&) const
 {
 	Type providedType = Type::getType<LastArgType>();
 

@@ -42,7 +42,7 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 								"private:");
 }
 
-void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
+void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& /*generatedFile*/, kodgen::StructClassInfo const& /*structInfo*/) const noexcept
 {
 	//std::string mainMacroName	 = "RFRK" + structInfo.name + "_GENERATED";
 
@@ -203,7 +203,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							"private:\t\\",
 							 "	template <typename ParentType, typename ChildType>\t\\",
-							 "	static constexpr void __RFKrecurseRegisterChild(rfk::Struct* childArchetype)\t\\",
+							 "	static constexpr void __RFKrecurseRegisterChild([[maybe_unused]] rfk::Struct* childArchetype)\t\\",
 							 "	{\t\\",
 							 "		if constexpr (rfk::isReflectedClass<ParentType>)\t\\",
 							 "		{\t\\",

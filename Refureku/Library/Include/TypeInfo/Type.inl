@@ -84,8 +84,10 @@ Archetype const* Type::getArchetype() noexcept
 		{
 			return &FundamentalArchetypes::getLongDoubleArchetype();
 		}
-
-		return nullptr;
+		else
+		{
+			return nullptr;
+		}
 	}
 	else if constexpr (std::is_class_v<T>)
 	{
@@ -93,8 +95,10 @@ Archetype const* Type::getArchetype() noexcept
 		{
 			return &T::staticGetArchetype();
 		}
-
-		return nullptr;
+		else
+		{
+			return nullptr;
+		}
 	}
 	else if constexpr (std::is_enum_v<T>)
 	{

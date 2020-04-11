@@ -1,7 +1,7 @@
 
-inline EnumValue const* Enum::getEnumValue(std::string name)  const noexcept
+inline EnumValue const* Enum::getEnumValue(std::string enumValueName)  const noexcept
 {
-	decltype(values)::const_iterator it = values.find(EnumValue(std::move(name)));
+	decltype(values)::const_iterator it = values.find(EnumValue(std::move(enumValueName)));
 
 	return (it != values.cend()) ? &*it : nullptr;
 }

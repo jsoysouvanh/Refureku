@@ -26,6 +26,14 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Methods/MethodError.cpp
 			)
 
+# Setup warning level
+if (MSVC)
+	string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Remove the default flag /W3
+	target_compile_options(${RefurekuLibraryTarget} PUBLIC /W4)
+else()	# Clang or GCC
+	target_compile_options(${RefurekuLibraryTarget} PUBLIC -Wall -Wextra -Wpedantic)
+endif()
+
 # Setup language requirements
 target_compile_features(${RefurekuLibraryTarget} PUBLIC cxx_std_17)
 

@@ -7,13 +7,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY Lib/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY Lib/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .lib / .a
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY Bin/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .exe
 
-# Setup warning level
-if (MSVC)
-	add_compile_options(/W4)
-else()	# Clang or GCC
-	add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
 set(KodgenTargetLibrary Kodgen)
 
 add_library(${KodgenTargetLibrary}
@@ -52,6 +45,14 @@ add_library(${KodgenTargetLibrary}
 					Source/CodeGen/FileGenerationError.cpp
 					Source/CodeGen/GeneratedFile.cpp
 			)
+
+# Setup warning level
+if (MSVC)
+	string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Remove the default flag /W3
+	target_compile_options(${KodgenTargetLibrary} PUBLIC /W4)
+else()	# Clang or GCC
+	target_compile_options(${KodgenTargetLibrary} PUBLIC -Wall -Wextra -Wpedantic)
+endif()
 
 # Setup compilation definitions
 if (DEV)
