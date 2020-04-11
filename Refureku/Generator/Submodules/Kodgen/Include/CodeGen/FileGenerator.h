@@ -72,16 +72,16 @@ namespace kodgen
 
 			/**
 			*	Collection of files to parse.
-			*	These files will be parse without further check if they exist.
+			*	These files will be parsed without any further check if they exist.
 			*/
-			std::unordered_set<std::string>	includedFiles;
+			std::unordered_set<std::string>	toParseFiles;
 
 			/**
-			*	Collection of included directories.
+			*	Collection of directories containing files to parse.
 			*	All directories contained in the given directories will be recursively inspected, except if they are ignored
-			*	All files contained in any included directory will be parsed, except if they are ignored
+			*	All files contained in any parsed directory will be parsed, except if they are ignored or if their extension is not contained in the supportedExtensions.
 			*/
-			std::unordered_set<std::string>	includedDirectories;
+			std::unordered_set<std::string>	toParseDirectories;
 
 			/**
 			*	Collection of ignored files.

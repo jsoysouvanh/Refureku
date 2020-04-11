@@ -16,7 +16,7 @@ namespace kodgen
 	class FileParser
 	{
 		private:
-			static inline std::string const	_parsingMacro	= "KODGEN_PARSING";
+			static inline std::string const	_parsingMacro		= "KODGEN_PARSING";
 			
 			CXIndex							_clangIndex;
 			
@@ -24,9 +24,20 @@ namespace kodgen
 			EnumParser						_enumParser;
 			ParsingInfo						_parsingInfo;
 
+			//Variables used to build command line
+			std::string						_kodgenParsingMacro	= "-D" + _parsingMacro;
+			std::vector<std::string>		_projectIncludeDirs;
+			std::string						_classPropertyMacro;
+			std::string						_structPropertyMacro;
+			std::string						_fieldPropertyMacro;
+			std::string						_methodPropertyMacro;
+			std::string						_enumPropertyMacro;
+			std::string						_enumValuePropertyMacro;
+
 			static CXChildVisitResult	staticParseCursor(CXCursor c, CXCursor parent, CXClientData clientData)			noexcept;
 			
-			std::vector<char const*>	makeParseArguments()													const	noexcept;
+			void						refreshBuildCommandStrings()													noexcept;
+			std::vector<char const*>	makeParseArguments()															noexcept;
 
 			void						setupForParsing()																noexcept;
 

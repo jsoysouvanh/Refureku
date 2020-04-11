@@ -241,7 +241,7 @@ void FileGenerator::processFile(FileParser& parser, FileGenerationResult& genRes
 
 void FileGenerator::processIncludedFiles(FileParser& parser, FileGenerationResult& genResult, bool forceRegenerateAll) noexcept
 {
-	for (fs::path path : includedFiles)
+	for (fs::path path : toParseFiles)
 	{
 		if (fs::exists(path) &&
 			!fs::is_directory(path) &&
@@ -254,7 +254,7 @@ void FileGenerator::processIncludedFiles(FileParser& parser, FileGenerationResul
 
 void FileGenerator::processIncludedDirectories(FileParser& parser, FileGenerationResult& genResult, bool forceRegenerateAll) noexcept
 {
-	for (fs::path pathToIncludedDir : includedDirectories)
+	for (fs::path pathToIncludedDir : toParseDirectories)
 	{
 		if (fs::exists(pathToIncludedDir) && fs::is_directory(pathToIncludedDir))
 		{

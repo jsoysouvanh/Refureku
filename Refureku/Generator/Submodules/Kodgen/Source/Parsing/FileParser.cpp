@@ -97,17 +97,31 @@ CXChildVisitResult FileParser::parseEnum(CXCursor enumCursor) noexcept
 	return _enumParser.endParsing();
 }
 
-std::vector<char const*> FileParser::makeParseArguments() const noexcept
+void FileParser::refreshBuildCommandStrings() noexcept
 {
-	static std::string			parsingMacro("-D" + _parsingMacro);
-	static std::string			classPropertyMacro;
-	static std::string			structPropertyMacro;
-	static std::string			fieldPropertyMacro;
-	static std::string			methodPropertyMacro;
-	static std::string			enumPropertyMacro;
-	static std::string			enumValuePropertyMacro;
+	ParsingSettings const& ps = _parsingInfo.parsingSettings;
 
+	_classPropertyMacro		= "-D" + ps.propertyParsingSettings.classPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGC:\"#__VA_ARGS__)))";
+	_structPropertyMacro	= "-D" + ps.propertyParsingSettings.structPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGS:\"#__VA_ARGS__)))";
+	_fieldPropertyMacro		= "-D" + ps.propertyParsingSettings.fieldPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGF:\"#__VA_ARGS__)))";
+	_methodPropertyMacro	= "-D" + ps.propertyParsingSettings.methodPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGM:\"#__VA_ARGS__)))";
+	_enumPropertyMacro		= "-D" + ps.propertyParsingSettings.enumPropertyRules.macroName			+ "(...)=__attribute__((annotate(\"KGE:\"#__VA_ARGS__)))";
+	_enumValuePropertyMacro	= "-D" + ps.propertyParsingSettings.enumValuePropertyRules.macroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
+
+	_projectIncludeDirs.clear();
+	_projectIncludeDirs.reserve(ps.projectIncludeDirectories.size());
+
+	for (std::string const& includeDir : ps.projectIncludeDirectories)
+	{
+		_projectIncludeDirs.emplace_back("-I" + includeDir);
+	}
+}
+
+std::vector<char const*> FileParser::makeParseArguments() noexcept
+{
 	std::vector<char const*>	result;
+
+	refreshBuildCommandStrings();
 
 	/**
 	*	2 to include -xc++ & _parsingMacro
@@ -115,30 +129,28 @@ std::vector<char const*> FileParser::makeParseArguments() const noexcept
 	*	6 because we make an additional parameter per possible entity
 	*	Class, Struct, Field, Method, Enum, EnumValue
 	*/
-	result.reserve(2u + 6u);
+	result.reserve(3u + 6u + _projectIncludeDirs.size());
 
 	//Parsing C++
 	result.emplace_back("-xc++");
 
+	//Use C++17
+	result.emplace_back("-std=c++1z"); 
+
 	//Macro set when we are parsing with Kodgen
-	result.emplace_back(parsingMacro.data());
+	result.emplace_back(_kodgenParsingMacro.data());
 
-	//Refresh static entity property macros according to parsing settings
-	ParsingSettings const& parsingSettings = _parsingInfo.parsingSettings;
-
-	classPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.classPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGC:\"#__VA_ARGS__)))";
-	structPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.structPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGS:\"#__VA_ARGS__)))";
-	fieldPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.fieldPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGF:\"#__VA_ARGS__)))";
-	methodPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.methodPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGM:\"#__VA_ARGS__)))";
-	enumPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.enumPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGE:\"#__VA_ARGS__)))";
-	enumValuePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.enumValuePropertyRules.macroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
-
-	result.emplace_back(classPropertyMacro.data());
-	result.emplace_back(structPropertyMacro.data());
-	result.emplace_back(fieldPropertyMacro.data());
-	result.emplace_back(methodPropertyMacro.data());
-	result.emplace_back(enumPropertyMacro.data());
-	result.emplace_back(enumValuePropertyMacro.data());
+	result.emplace_back(_classPropertyMacro.data());
+	result.emplace_back(_structPropertyMacro.data());
+	result.emplace_back(_fieldPropertyMacro.data());
+	result.emplace_back(_methodPropertyMacro.data());
+	result.emplace_back(_enumPropertyMacro.data());
+	result.emplace_back(_enumValuePropertyMacro.data());
+	
+	for (std::string const& includeDir : _projectIncludeDirs)
+	{
+		result.emplace_back(includeDir.data());
+	}
 
 	return result;
 }
@@ -172,22 +184,22 @@ bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noe
 				isSuccess = true;
 			}
 
-			#ifndef NDEBUG
-			
-			CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
+			//#ifndef NDEBUG
+			//
+			//CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
 
-			std::cout << "DIAGNOSTICS START..." << std::endl;
-			for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
-			{
-				CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
-				std::cout << Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())) << std::endl;
-				clang_disposeDiagnostic(diagnostic);
-			}
-			std::cout << "DIAGNOSTICS END..." << std::endl;
+			//std::cout << "DIAGNOSTICS START..." << std::endl;
+			//for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
+			//{
+			//	CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
+			//	std::cout << Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())) << std::endl;
+			//	clang_disposeDiagnostic(diagnostic);
+			//}
+			//std::cout << "DIAGNOSTICS END..." << std::endl;
 
-			clang_disposeDiagnosticSet(diagnostics);
+			//clang_disposeDiagnosticSet(diagnostics);
 
-			#endif
+			//#endif
 
 			clang_disposeTranslationUnit(translationUnit);
 		}

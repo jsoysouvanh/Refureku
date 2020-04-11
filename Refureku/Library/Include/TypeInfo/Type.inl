@@ -107,7 +107,7 @@ Archetype const* Type::getArchetype() noexcept
 }
 
 template <typename T>
-constexpr void Type::fillType(Type& out_type) noexcept
+void Type::fillType(Type& out_type) noexcept
 {
 	TypePart& currPart = out_type.parts.emplace_back(TypePart{ 0u, ETypePartDescriptor::Undefined, 0u });
 

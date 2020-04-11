@@ -21,8 +21,6 @@ Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_prio
 
 void Database::registerArchetype(Archetype const& archetype) noexcept
 {
-	//std::cout << "Register " << archetype.name << std::endl;
-
 	_archetypesById.emplace(&archetype);
 	_archetypesByName.emplace(&archetype);
 }
