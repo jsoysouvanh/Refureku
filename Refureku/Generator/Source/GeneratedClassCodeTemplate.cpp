@@ -65,7 +65,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 	
 	bool shouldGenerateGetArchetype = std::find_if(info.properties.simpleProperties.cbegin(),
 												   info.properties.simpleProperties.cend(),
-												   [](kodgen::SimpleProperty const& p) { return p.name == __RFK_CLASS_REFLECTED; }) != info.properties.simpleProperties.cend();
+												   [](kodgen::SimpleProperty const& p) { return p.name == __RFK_CLASS_DYNAMIC_GET_ARCHETYPE; }) != info.properties.simpleProperties.cend();
 
 	std::string getArchetypeMethod = (shouldGenerateGetArchetype) ?
 		returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" : "";

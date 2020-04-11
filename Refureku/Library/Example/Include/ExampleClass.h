@@ -14,13 +14,13 @@ namespace namespace1
 		double pppDouble = 0.21;
 
 		public:
-		ParentParentParentClass() noexcept {}
+		ParentParentParentClass() noexcept {} 
 	};
 }
 
 namespace namespace2
 {
-	class RFKClass(rfk::ReflectedObject) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject
+	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject
 	{
 		RFKField()
 		float ppFloat = 123456.123456f;
@@ -37,12 +37,12 @@ namespace namespace2
 
 namespace namespace3
 {
-	class RFKClass(rfk::ReflectedObject) OtherClass : public rfk::ReflectedObject
+	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
 	{
 		RFKOtherClass_GENERATED
 	};
 
-	class RFKClass(rfk::ReflectedObject) ParentClass : public namespace2::ParentParentClass
+	class RFKClass(DynamicGetArchetype) ParentClass : public namespace2::ParentParentClass
 	{
 		private:
 			RFKMethod()
@@ -75,7 +75,7 @@ namespace namespace3
 		RFKParentClass2_GENERATED
 	};
 
-	class RFKClass(rfk::ReflectedObject) ExampleClass : public ParentClass, public ParentClass2
+	class RFKClass(DynamicGetArchetype) ExampleClass : public ParentClass, public ParentClass2
 	{
 		public:
 			RFKField()
