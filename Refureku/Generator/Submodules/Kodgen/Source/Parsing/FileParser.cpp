@@ -4,6 +4,7 @@
 #include <cassert>
 
 #include "Misc/Helpers.h"
+#include "Misc/DisableWarningMacros.h"
 #include "InfoStructures/ParsingInfo.h"
 
 using namespace kodgen;
@@ -21,6 +22,9 @@ FileParser::~FileParser() noexcept
 	clang_disposeIndex(_clangIndex);
 }
 
+DISABLE_WARNING_PUSH
+DISABLE_WARNING_UNSCOPED_ENUM
+
 CXChildVisitResult FileParser::staticParseCursor(CXCursor c, CXCursor /* parent */, CXClientData clientData) noexcept
 {
 	FileParser*	parser = reinterpret_cast<FileParser*>(clientData);
@@ -33,6 +37,8 @@ CXChildVisitResult FileParser::staticParseCursor(CXCursor c, CXCursor /* parent 
 	
 	return CXChildVisitResult::CXChildVisit_Continue;
 }
+
+DISABLE_WARNING_POP
 
 CXChildVisitResult FileParser::parseCursor(CXCursor currentCursor) noexcept
 {
@@ -124,7 +130,7 @@ std::vector<char const*> FileParser::makeParseArguments() noexcept
 	refreshBuildCommandStrings();
 
 	/**
-	*	2 to include -xc++ & _parsingMacro
+	*	3 to include -xc++, -sed=c++1z & _parsingMacro
 	*
 	*	6 because we make an additional parameter per possible entity
 	*	Class, Struct, Field, Method, Enum, EnumValue
@@ -184,22 +190,22 @@ bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noe
 				isSuccess = true;
 			}
 
-			//#ifndef NDEBUG
-			//
-			//CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
+			#ifdef KODGEN_DEV
+			
+			CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
 
-			//std::cout << "DIAGNOSTICS START..." << std::endl;
-			//for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
-			//{
-			//	CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
-			//	std::cout << Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())) << std::endl;
-			//	clang_disposeDiagnostic(diagnostic);
-			//}
-			//std::cout << "DIAGNOSTICS END..." << std::endl;
+			std::cout << "DIAGNOSTICS START..." << std::endl;
+			for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
+			{
+				CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
+				std::cout << Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())) << std::endl;
+				clang_disposeDiagnostic(diagnostic);
+			}
+			std::cout << "DIAGNOSTICS END..." << std::endl;
 
-			//clang_disposeDiagnosticSet(diagnostics);
+			clang_disposeDiagnosticSet(diagnostics);
 
-			//#endif
+			#endif
 
 			clang_disposeTranslationUnit(translationUnit);
 		}

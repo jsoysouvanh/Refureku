@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "ReflectedObject.h"
 
 #include "Generated/ExampleClass.rfk.h"
@@ -22,6 +24,9 @@ namespace namespace2
 	{
 		RFKField()
 		float ppFloat = 123456.123456f;
+
+		RFKField()
+		std::vector<ParentParentParentClass> vec; 
 
 		public:
 			ParentParentClass() noexcept {}
@@ -101,7 +106,7 @@ namespace namespace3
 			float * const	b				= nullptr;
 
 			RFKField()
-			int const*		c[2][3];
+			int const* c[2][3]				= {{}};
 
 			RFKMethod(CustomInstantiator)
 			unsigned long long		method4(void* ptr);

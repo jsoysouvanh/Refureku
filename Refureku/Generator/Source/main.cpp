@@ -3,8 +3,6 @@
 #include <Misc/Filesystem.h>
 
 #include "FileParser.h"
-#include "GeneratedClassCodeTemplate.h"
-#include "GeneratedEnumCodeTemplate.h"
 #include "FileGenerator.h"
 
 void parseAndGenerate(fs::path workingDirectory)
@@ -17,22 +15,14 @@ void parseAndGenerate(fs::path workingDirectory)
 	rfk::FileParser		parser;
 	rfk::FileGenerator	fileGenerator;
 
-	//Parse WorkingDir/...
+	//Parse files inside WorkingDir/Include/
 	fileGenerator.toParseDirectories.emplace(includeDirectory.string());
 
-	//Ignore generated files...
+	//Ignore generated files
 	fileGenerator.ignoredDirectories.emplace(generatedDirectory.string());
 
 	//All generated files will be located in WorkingDir/Include/Generated
 	fileGenerator.outputDirectory = generatedDirectory;
-
-	//Bind name -> templates
-	fileGenerator.addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
-	fileGenerator.addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
-
-	/**	class RFKClass() MyClass {}; enum [class] RFKEnum() {}; */
-	fileGenerator.setDefaultClassTemplate("RefurekuClass"); 
-	fileGenerator.setDefaultEnumTemplate("RefurekuEnum");
 
 	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, false);
 

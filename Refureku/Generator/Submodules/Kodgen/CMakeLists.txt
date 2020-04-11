@@ -53,6 +53,11 @@ add_library(${KodgenTargetLibrary}
 					Source/CodeGen/GeneratedFile.cpp
 			)
 
+# Setup compilation definitions
+if (DEV)
+	target_compile_definitions(${KodgenTargetLibrary} PRIVATE KODGEN_DEV=1)
+endif()
+
 # Setup compilation options
 target_compile_options(${KodgenTargetLibrary} PUBLIC $<$<CXX_COMPILER_ID:Clang>:-stdlib=libc++>)
 

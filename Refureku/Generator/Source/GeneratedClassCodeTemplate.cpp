@@ -227,11 +227,15 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 							 "			const_cast<rfk::Struct&>(thisArchetype).children.insert(childArchetype);\t\\",
 							 "		}\t\\");
 
-	if (!info.fields.empty())
+	bool hasFields = !info.fields.empty();
+
+	if (hasFields)
 	{
 		generatedFile.writeLine("		std::unordered_multiset<rfk::Field, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			fieldsIt;\t\\");
 		generatedFile.writeLine("		std::unordered_multiset<rfk::StaticField, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticFieldsIt;\t\\");
 		generatedFile.writeLine("		rfk::FieldBase*																							currField = nullptr;\t\\");
+		generatedFile.writeLines("		__RFK_DISABLE_WARNING_PUSH\t\\",
+								 "		__RFK_DISABLE_WARNING_OFFSETOF\t\\");
 	}
 
 	std::string properties;
@@ -265,8 +269,12 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 			generatedFile.writeLine("	" + properties + "\t\\");
 	}
 
-	generatedFile.writeLine("	}");
+	if (hasFields)
+	{
+		generatedFile.writeLine("		__RFK_DISABLE_WARNING_POP\t\\");
+	}
 
+	generatedFile.writeLine("	}");
 	generatedFile.writeLine("");
 
 	return macroName;

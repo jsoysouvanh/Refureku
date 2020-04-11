@@ -14,7 +14,7 @@ namespace rfk
 	{
 		public:
 			/** Memory offset in bytes of this field in its owner class */
-			uint32	memoryOffset	= 0u;
+			uint64	memoryOffset	= 0u;
 
 			bool	isMutable		= false;
 
@@ -24,7 +24,7 @@ namespace rfk
 				  EFieldFlags		flags			= EFieldFlags::Default,
 				  Struct const*		ownerStruct		= nullptr,
 				  Struct const*		introducedBy	= nullptr,
-				  uint32			memoryOffset	= 0u,
+				  uint64			memoryOffset	= 0u,
 				  bool				isMutable		= false)						noexcept;
 			Field(Field const&)														= default;
 			Field(Field&&)															= default;

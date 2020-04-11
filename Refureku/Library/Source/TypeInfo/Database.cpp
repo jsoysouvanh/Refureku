@@ -2,12 +2,19 @@
 
 #include <iostream>
 
+#include "Misc/DisableWarningMacros.h"
+
 using namespace rfk;
 
 //Init database containers BEFORE any other code so that reflected classes can register at startup
 #if defined(_MSC_VER)
-	
+
+__RFK_DISABLE_WARNING_PUSH
+__RFK_DISABLE_WARNING_INIT_SEG
+
 #pragma init_seg(lib)
+
+__RFK_DISABLE_WARNING_POP
 
 Database::ArchetypesById	Database::_archetypesById;
 Database::ArchetypesByName	Database::_archetypesByName;
@@ -16,6 +23,11 @@ Database::ArchetypesByName	Database::_archetypesByName;
 
 Database::ArchetypesById	Database::_archetypesById	__attribute__ ((init_priority (101)));
 Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_priority (101)));
+
+#else
+
+Database::ArchetypesById	Database::_archetypesById;
+Database::ArchetypesByName	Database::_archetypesByName;
 
 #endif
 

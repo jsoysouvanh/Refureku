@@ -3,6 +3,10 @@
 #include <type_traits>
 
 #include "Misc/FundamentalTypes.h"
+#include "Misc/DisableWarningMacros.h"
+
+DISABLE_WARNING_PUSH
+DISABLE_WARNING_UNSCOPED_ENUM
 
 namespace kodgen
 {
@@ -50,3 +54,5 @@ namespace kodgen
 
 	static_assert(sizeof(TypePart) == sizeof(uint64));
 }
+
+DISABLE_WARNING_POP
