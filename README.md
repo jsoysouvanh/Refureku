@@ -215,7 +215,7 @@ enum class RFKEnum(EnumProp) ExampleEnum
 RFKExampleEnum_GENERATED
 ```
 
-And we can check properties like so:
+And we can retrieve properties like so:
 ```cpp
 #include "Example.h"
 
@@ -336,7 +336,7 @@ class CustomFileGenerator : public rfk::FileGenerator
 {
     protected:
         void writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept override;
-    void writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept override;
+        void writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept override;
 };
 
     public:
@@ -348,12 +348,8 @@ class CustomFileGenerator : public rfk::FileGenerator
 CustomFileGenerator::CustomFileGenerator():
     rfk::FileGenerator()
 {
-    //Generated files will use .rfk.h extension
+    //Generated files will use .customextension extension
     generatedFilesExtension = ".customextension";
-
-    //Only parse .h and .hpp files
-    supportedExtensions.emplace(".h");
-    supportedExtensions.emplace(".hpp");
 }
 
 void CustomFileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
@@ -392,12 +388,6 @@ int main()
 {
     CustomFileParser    fileParser;
     CustomFileGenerator fileGenerator;
-
-    //Setup Refureku GeneratedCodeTemplates
-    fileGenerator.addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
-    fileGenerator.addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
-    fileGenerator.setDefaultClassTemplate("RefurekuClass"); 
-    fileGenerator.setDefaultEnumTemplate("RefurekuEnum");
 
     //Setup the files / directories you want to parse and/or ignore
     fileGenerator.includedDirectories.emplace("Path/To/A/Directory/To/Parse");
