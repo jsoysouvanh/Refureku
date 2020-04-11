@@ -10,9 +10,8 @@ namespace kodgen
 	class EnumValueParser final : public EntityParser
 	{
 		private:
-			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor)						noexcept override final;
-			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& annotationCursor)			noexcept override final;
-			void									addToCurrentEnumValue(CXCursor enumValueCursor, PropertyGroup&& pg)	noexcept;
+			virtual opt::optional<PropertyGroup>	isEntityValid(CXCursor const& currentCursor)				noexcept override final;
+			virtual CXChildVisitResult				setAsCurrentEntityIfValid(CXCursor const& annotationCursor)	noexcept override final;
 
 		public:
 			EnumValueParser()						= default;

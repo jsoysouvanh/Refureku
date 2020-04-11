@@ -18,22 +18,13 @@ void parseAndGenerate(fs::path workingDirectory)
 	rfk::FileGenerator	fileGenerator;
 
 	//Parse WorkingDir/...
-	fileGenerator.includedDirectories.emplace(includeDirectory.string());
+	fileGenerator.toParseDirectories.emplace(includeDirectory.string());
 
 	//Ignore generated files...
 	fileGenerator.ignoredDirectories.emplace(generatedDirectory.string());
 
-	//Only parse .h files
-	fileGenerator.supportedExtensions.emplace(".h");
-
 	//All generated files will be located in WorkingDir/Include/Generated
 	fileGenerator.outputDirectory = generatedDirectory;
-
-	//Generated files will use .myCustomExtension.h extension
-	fileGenerator.generatedFilesExtension = ".rfk.h";
-
-	/** class RFKClass(CodeTemplate[RefurekuClass]) MyClass {}; */
-	fileGenerator.codeTemplateMainComplexPropertyName = "CodeTemplate";
 
 	//Bind name -> templates
 	fileGenerator.addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
@@ -43,7 +34,7 @@ void parseAndGenerate(fs::path workingDirectory)
 	fileGenerator.setDefaultClassTemplate("RefurekuClass"); 
 	fileGenerator.setDefaultEnumTemplate("RefurekuEnum");
 
-	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, true);	//TODO: Change this to false
+	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, false);
 
 	if (genResult.completed)
 	{
@@ -84,9 +75,11 @@ int main(int argc, char** argv)
 			result = EXIT_FAILURE;
 		}
 	}
-	//Use the current directory as working directory if no argument specified
+	//Use the current working directory if no argument specified
 	else
 	{
 		parseAndGenerate(fs::current_path());
 	}
+
+	return result;
 }

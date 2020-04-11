@@ -15,7 +15,7 @@ namespace rfk
 	{
 		private:
 			template <typename T>
-			static constexpr void	fillType(Type& out_type)	noexcept;
+			static void				fillType(Type& out_type)	noexcept;
 
 			template <typename T>
 			static Archetype const* getArchetype() noexcept;

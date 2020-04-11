@@ -15,29 +15,12 @@ CXChildVisitResult EnumValueParser::parse(CXCursor const& currentCursor) noexcep
 			case CXCursorKind::CXCursor_AnnotateAttr:
 				return setAsCurrentEntityIfValid(currentCursor);
 
-			case CXCursorKind::CXCursor_IntegerLiteral:
-				[[fallthrough]];
-			case CXCursorKind::CXCursor_BinaryOperator:
-				[[fallthrough]];
-			case CXCursorKind::CXCursor_UnexposedExpr:
-				addToCurrentEnumValue(getCurrentCursor(), PropertyGroup());
-				break;
-
 			default:
-				return CXChildVisitResult::CXChildVisit_Continue;
+				return CXChildVisitResult::CXChildVisit_Break;
 		}
-
-		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
 
-	return CXChildVisitResult::CXChildVisit_Continue;
-}
-
-void EnumValueParser::addToCurrentEnumValue(CXCursor enumValueCursor, PropertyGroup&& pg) noexcept
-{
-	EnumValueInfo& enumValueInfo = _parsingInfo->currentEnum->enumValues.emplace_back(EnumValueInfo(enumValueCursor, std::forward<PropertyGroup>(pg)));
-
-	enumValueInfo.defaultValue = clang_getEnumConstantDeclValue(enumValueCursor);
+	return CXChildVisitResult::CXChildVisit_Break;
 }
 
 opt::optional<PropertyGroup> EnumValueParser::isEntityValid(CXCursor const& currentCursor) noexcept
@@ -58,9 +41,7 @@ CXChildVisitResult EnumValueParser::setAsCurrentEntityIfValid(CXCursor const& an
 	{
 		if (_parsingInfo->currentEnum.has_value())
 		{
-			addToCurrentEnumValue(getCurrentCursor(), std::move(*propertyGroup));
-
-			return CXChildVisitResult::CXChildVisit_Recurse;
+			_parsingInfo->currentEnum->enumValues.back().properties = std::move(*propertyGroup);
 		}
 	}
 	else if (_parsingInfo->propertyParser.getParsingError() != EParsingError::Count)

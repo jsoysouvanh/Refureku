@@ -18,7 +18,7 @@ target_link_libraries(${RefurekuTestsTarget} PRIVATE ${RefurekuLibraryTarget})
 
 # Create the command to run RefurekuGenerator
 set(RefurekuGeneratorPath ${CMAKE_BINARY_DIR}/Refureku/Generator/Bin/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})
-set(RefurekuGeneratorExeName RefurekuGenerator_${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}_${CMAKE_BUILD_TYPE})
+set(RefurekuGeneratorExeName RefurekuGenerator)
 set(RunTestGeneratorTarget RunRefurekuTestGenerator)
 
 add_custom_target(${RunTestGeneratorTarget}

@@ -1,14 +1,17 @@
 
+
+
+
 # Refureku
-[![Build Status](https://travis-ci.com/Angelysse/Refureku.svg?branch=master)](https://travis-ci.com/Angelysse/Refureku)
+[![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 
 ## Presentation
-Refureku is a powerful customizable C++ reflection library based on libclang.
+Refureku is a powerful customizable C++17 reflection library based on libclang.
 It allows you to retrieve information on classes/structs, fields, methods and enums at runtime.
 
 It is basically made of two parts:
 - The metadata parser and generator, which will parse C++ source code and generate metadata, which will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the Customization section).
-- The actual library which contain the framwork classes to access and manipulate reflected data at runtime.
+- The actual library which contain the framework classes to access and manipulate reflected data at runtime.
 
 ## Features
 - Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
@@ -30,6 +33,8 @@ The Class and Struct classes inherit from Archetype and contain additional data 
 
 Consider the following header file, let's say Example.h:
 ```cpp
+#pragma once
+
 #include "Generated/Example.rfk.h"
 
 class RFKStruct() ExampleStruct
@@ -74,6 +79,8 @@ for (rfk::EnumValue const& enumValue : exampleEnumArchetype->values)
 Field and StaticField classes handle information about a class or struct reflected field.
 Usage example:
 ```cpp
+#pragma once
+
 #include "Generated/ExampleClass.rfk.h"
 
 class RFKClass() ExampleClass
@@ -100,21 +107,23 @@ rfk::Class const& classArchetype = ExampleClass::staticGetArchetype();
 //Find a field by name - You can filter fields with other arguments
 rfk::Field const* field = classArchetype.getField("exampleInt");
 
-field->getData<int>(&instance);	//Get 0
-field->setData(&instance, 42);	//Set 42 in instance
-field->getData<int>(&instance);	//Get 42
+field->getData<int>(&instance); //Get 0
+field->setData(&instance, 42);  //Set 42 in instance
+field->getData<int>(&instance); //Get 42
 
 //Find a static field by name - You can filter static fields with other arguments
 rfk::StaticField const* staticField = classArchetype.getStaticField("exampleFloat");
 
-staticField->getData<float>();	//Get 3.14
-staticField->setData(42.42f);	//Set 42.42
-staticField->getData<float>();	//Get 42.42
+staticField->getData<float>();  //Get 3.14
+staticField->setData(42.42f);   //Set 42.42
+staticField->getData<float>();  //Get 42.42
 ```
 
 ### Method / StaticMethod
 Method and StaticMethod classes work just the same way as fields:
 ```cpp
+#pragma once
+
 #include "Generated/ExampleClass.rfk.h"
 
 class RFKClass() ExampleClass
@@ -147,13 +156,14 @@ rfk::Class const& classArchetype = ExampleClass::staticGetArchetype();
 
 //Get methods and call them
 rfk::Method const* f1 = classArchetype.getMethod("noReturnNoParam");
-f1->invoke(&instance);	//Note that we can call non const method on const instance
+f1->invoke(&instance);  //Note that we can call non const method on const instance
 
 rfk::Method const* f2 = classArchetype.getMethod("returnNoParam");
-f2->invoke<int>(&instance);	//Return 42
+f2->invoke(&instance);  //If you don't care about the return value, you can omit template
+f2->invoke<int>(&instance); //Return 42
 
 rfk::Method const* f3 = classArchetype.getMethod("returnWithParams");
-f3->invoke<int>(&instance, 21.0f, 21.0f);	//Return 42
+f3->invoke<int>(&instance, 21.0f, 21.0f);   //Return 42
 
 //It works exactly the same for static methods, but we don't need an instance
 rfk::StaticMethod const* sf1 = classArchetype.getStaticMethod("staticNoReturnNoParam");
@@ -181,10 +191,12 @@ delete classInstance;
 ```
 
 ## Properties
-Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the Parser using regex (see the customization section), so that we know what is permitted to write and what's not. These rules also prevent uninentional syntax errors. Each property can also accept subproperties (or arguments).
+Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the parser using regex (see the Customization section), so that we know what is permitted to write and what's not. These rules also prevent unintentional syntax errors. Each property can also accept subproperties (or arguments).
 
 It could look like this:
 ```cpp
+#pragma once
+
 #include "Generated/Example.rfk.h"
 
 class RFKClass(CustomSimpleProperty, CustomComplexProperty[SubProp1, SubProp2])
@@ -224,23 +236,230 @@ for (auto it = range.first; it != range.second; it++)
     //Do something
 
 //Check if an entity has a specific simple or complex property
-classArchetype.properties.hasProperty("CustomSimpleProperty");	//true
-classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp1");	//true
-classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp2");	//true
+classArchetype.properties.hasProperty("CustomSimpleProperty");  //true
+classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp1"); //true
+classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp2"); //true
 
 ```
 
 It can be really useful when you want to adapt behaviors depending on specific properties (for example, a game engine editor).
 
 ## Customization
-### Parser
-TODO
+Before talking about how to customize the code generation, let's talk a bit about how it works.   
+There are 3 main classes which make the code generation possible: the FileParser, the GeneratedCodeTemplate and the FileGenerator. When the code generation process starts, a source file is parsed by the FileParser and the retrieved data are passed to the FileGenerator. From that point, the FileGenerator will check for each parsed archetype (i.e each struct, class or enum) which GeneratedCodeTemplate to use. File are then generated by the relevant GeneratedCodeTemplate. To sum up:
+ 1. The FileParser extracts data from source file;
+ 2. The FileGenerator choses the right GeneratedCodeTemplate for a given parsed archetype;
+ 3. The GeneratedCodeTemplate generates the file & code;
 
-### Generator
-TODO
+Each of those 3 classes contain overridable methods and modifiable fields, and this is where user customization starts.
+### FileParser
+The parser is probably the class which you will want to change at first to modify the global syntax for reflection. If the default Refureku syntax is fine, you can reuse the rfk::FileParser as it is, but let's make a new one to see what we can tweak:
+```cpp
+//Header file, let's say CustomFileParser.h
+#pragma once
 
-## Setup
-TODO
+#include <FileParser.h> //Refureku/Generator/Include/FileParser.h
+
+class CustomFileParser : public rfk::FileParser
+{
+    protected:
+        void preParse(fs::path const& parseFile) override;
+        void postParse(fs::path const& parseFile, kodgen::ParsingResult const& result) override;
+    
+    public:
+        CustomFileParser();
+};
+```
+```cpp
+#include "CustomFileParser.h"
+
+CustomFileParser::CustomFileParser():
+    rfk::FileParser()
+{
+    //Let's get the settings
+    kodgen::ParsingSettings& parsingSettings = getParsingSettings();
+
+    //Whether to cancel the parsing process when an error is detected or parse until the end anyway.
+    parsingSettings.shouldAbortParsingOnFirstError = true;
+
+    //Let's play with the property settings
+    kodgen::PropertyParsingSettings& pps = parsingSettings.propertyParsingSettings;
+
+    //First of all, macro appearance !
+    pps.classPropertyRules.macroName = "CLASS"; //Source code will look like class CLASS() CustomClass {};
+    //Works the same for each propertyRule: pps.classPropertyRules, pps.fieldPropertyRules, pps.enumPropertyRules etc...
+
+    //Define how properties should be parsed
+    pps.ignoredCharacters = {' '};  //CLASS( Prop ) is the same as CLASS(Prop)
+    pps.propertySeparator = ',';    //CLASS(Prop1, Prop2)
+    pps.subPropertyEnclosers[0] = '[';  //CLASS(ComplexProp[SubProp])
+    pps.subPropertyEnclosers[1] = ']'; 
+    pps.subPropertySeparator = ','; //CLASS(ComplexProp[SubProp1, SubProp2])
+    
+    //Define valid properties for each entity type
+    //Simple property
+    pps.classPropertyRules.addSimplePropertyRule("CustomSimpleProp");   //CLASS(CustomSimpleProp)
+
+    //Complex property using regex for subprops
+    pps.classPropertyRules.addComplexPropertyRule("CustomComplexProp", "CustomSubProp");    //CLASS(CustomComplexProp[CustomSubProp])
+    pps.classPropertyRules.addComplexPropertyRule("CCP2", "CSP[1-9]");  //CLASS(CCP2[CSP1, CSP6, CSP9])
+    pps.classPropertyRules.addComplexPropertyRule("CCP3", "Option1|Option2|Option3");   //CLASS(CCP3[Option1])   CLASS(CCP3[Option2, Option3])
+}
+
+void CustomFileParser::preParse(fs::path const& parseFile)
+{
+    //Optionally call parent implementation
+    //rfk::preParse(parseFile);
+
+    //Do whatever you want to do before a file is parsed (can be logs or whatever)
+}
+
+void CustomFileParser::postParse(fs::path const& parseFile, kodgen::ParsingResult const& result)
+{
+    //Optionally call parent implementation
+    //rfk::postParse(parseFile, result);
+
+    //Do whatever you want to do after a file has been parsed (can be logs, checks or whatever)
+}
+```
+
+### FileGenerator
+The file generator handles collections of paths to files and directories to determine what should be parsed and what should not. Let's make a simple one:
+```cpp
+//Header file, CustomFileGenerator.h
+#pragma once
+
+#include <FileGenerator.h>  //Refureku/Generator/Include/FileGenerator.h
+
+class CustomFileGenerator : public rfk::FileGenerator
+{
+    protected:
+        void writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept override;
+    void writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept override;
+};
+
+    public:
+        CustomFileGenerator();
+```
+```cpp
+#include "CustomFileGenerator.h"
+
+CustomFileGenerator::CustomFileGenerator():
+    rfk::FileGenerator()
+{
+    //Generated files will use .rfk.h extension
+    generatedFilesExtension = ".customextension";
+
+    //Only parse .h and .hpp files
+    supportedExtensions.emplace(".h");
+    supportedExtensions.emplace(".hpp");
+}
+
+void CustomFileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
+{
+    //MUST CALL PARENT IMPLEMENTATION
+    rfk::FileGenerator::writeHeader(file, parsingResult);
+
+    //Write something else in the generated file header?
+    file.writeLine("/* Write some custom code here */");
+    file.writeLines("/* Write some custom code here", "on ", "as", "many", "lines as you want */");
+}
+
+void CustomFileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
+{
+    //Optionnally call parent implementation
+    //rfk::FileGenerator::writeFooter(file, parsingResult);
+}
+```
+
+### GeneratedCodeTemplate
+GeneratedCodeTemplate class is defining the code to generate for a given set of data. An implementation is already provided in Refureku and it should be used as it is.
+
+### Putting all 3 together
+Once you've setup the above 3 classes (actually 2, you should definitely use Refureku GeneratedCodeTemplate implementation), making everything work is pretty straight forward.
+```cpp
+#include <iostream>
+#include <filesystem>
+
+#include <GeneratedClassCodeTemplate.h>
+#include <GeneratedEnumCodeTemplate.h>
+
+#include "CustomFileParser.h"
+#include "CustomFileGenerator.h"
+
+int main()
+{
+    CustomFileParser    fileParser;
+    CustomFileGenerator fileGenerator;
+
+    //Setup Refureku GeneratedCodeTemplates
+    fileGenerator.addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
+    fileGenerator.addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
+    fileGenerator.setDefaultClassTemplate("RefurekuClass"); 
+    fileGenerator.setDefaultEnumTemplate("RefurekuEnum");
+
+    //Setup the files / directories you want to parse and/or ignore
+    fileGenerator.includedDirectories.emplace("Path/To/A/Directory/To/Parse");
+    fileGenerator.includedFiles.emplace("Path/To/A/File/To/Parse.h");
+    fileGenerator.ignoredDirectories.emplace("Path/To/A/Directory/To/Ignore");
+    fileGenerator.ignoredFiles.emplace("Path/To/A/File/To/Ignore.h");
+    fileGenerator.outputDirectory = "Path/To/A/Directory";  //Generated files will be placed here
+
+    //Parse and generate files. false means only new/modified files will be regenerated
+    kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+
+    if (genResult.completed)
+    {
+        //Can check generation result
+        //genResult.parsingErrors contains parsing errors
+        //genResult.fileGenerationErrors contains generation errors
+    }
+    else  //Generation was aborted
+    {
+        //Probably bad input directory
+    }
+
+    return EXIT_SUCCESS;
+}
+```
+
+All this process can be setup in a standalone executable which will be called before you code base is compiled (you can use CMake add_custom_target(...) and add_dependencies(...), or MSVC Build events), but as you could see, it could easily be integrated in an application as well.
+
+## Getting started
+Requirements: CMake 3.13.5+, C++17+, a compatible compiler (see Cross-platform compatibility section).
+
+1. Pull the repository
+2. Update the RefurekuGenerator (Refureku/Generator/Source/main.cpp) according to your needs. You will probably want to at least change the "includeDirectory" variable in the parseAndGenerate() method.
+3. Compile the library and the generator following these steps:
+
+#### On Windows
+
+- At the root of the Refureku project, open a terminal
+- Type:   
+
+> \> mkdir Build   
+> \> cd Build   
+> \> cmake -G "Visual Studio 15 2017" -A x64 .\.   
+
+- Open the generated Refureku.sln
+- Build RefurekuGenerator (Generator executable)
+- Build Refureku (Library)
+
+#### On Linux
+
+- Follow the same steps as above, but adapt the generator name, for example:
+
+> \> cmake -G "Unix Makefiles" .\.   
+
+4. Link with Refureku.lib, and don't forget to add the Refureku headers directory at Refureku/Library/Include
+5. Make a pre-build custom event (VS) or a custom target + dependency (CMake) to run the Generator before building your project, with your working directory as the first argument.
+6. Compile your project: the generator should run before your project is built.
+
+## Cross-platform compatibility
+This library has been tested and is stable with the following configurations:
+- Windows | MSVC 2019 16.5.2
+- Linux | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
+- Linux | GCC 8.4.0, GCC 9.2.1
 
 ## License
 

@@ -26,7 +26,7 @@ namespace namespace2
 		public:
 			ParentParentClass() noexcept {}
 
-			RFKParentParentClass_GENERATED
+		RFKParentParentClass_GENERATED
 	};
 }
 
@@ -140,38 +140,6 @@ namespace namespace3
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;
-
-		//GENERATED
-
-		//static rfk::Class const& staticGetArchetype() noexcept	
-		//{	
-		//	static bool				initialized = false;	
-		//	static rfk::Class	type("ExampleClass", 6613751926088865067, static_cast<rfk::Archetype::ECategory>(0), sizeof(ExampleClass));	
-		//	
-		//	if (!initialized)	
-		//	{
-		//		initialized = true;
-
-		//		__RFKExampleClass_GenerateParentsMetadata
-
-		//		//Get total fields count
-		//		size_t fieldsCount = 0; std::vector<rfk::Struct::Parent> currParents; std::vector<rfk::Struct::Parent> nextParents = type.directParents; while (!nextParents.empty()) { std::swap(currParents, nextParents); nextParents.clear(); for (rfk::Struct::Parent const& parent : currParents) { nextParents.insert(nextParents.end(), parent.type->directParents.begin(), parent.type->directParents.end()); fieldsCount += parent.type->fields.size(); } }
-
-		//		size_t fieldsCount = /* MYFIELDSCOUNT */0; for (rfk::Struct::Parent const& parent : type.directParents) fieldsCount += parent.type->fields.size();
-
-		//		type.fields.reserve(fieldsCount);
-
-		//		//Call self register child
-		//		__RFKregisterChild<ExampleClass>(&type);
-		//	}	
-		//		
-		//	return type;	
-		//}	
-		//	
-		//rfk::Class const& getArchetype() const noexcept	
-		//{	
-		//	return ExampleClass::staticGetArchetype();
-		//}
 
 		RFKExampleClass_GENERATED
 	};

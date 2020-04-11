@@ -269,7 +269,7 @@ int main()
 	fg.setDefaultClassTemplate("TestTemplate");
 
 	//Add files/directories to parse
-	fg.includedFiles.emplace(pathToFile.string());
+	fg.toParseFiles.emplace(pathToFile.string());
 
 	kodgen::FileGenerationResult fgr = fg.generateFiles(parser, true);
 

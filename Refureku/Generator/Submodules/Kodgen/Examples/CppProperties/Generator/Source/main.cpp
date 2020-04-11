@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 			kodgen::FileGenerator fileGenerator;
 
 			//Parse WorkingDir/...
-			fileGenerator.includedDirectories.emplace(includeDirectory.string());
+			fileGenerator.toParseDirectories.emplace(includeDirectory.string());
 
 			//Ignore generated files...
 			fileGenerator.ignoredDirectories.emplace(generatedDirectory.string());

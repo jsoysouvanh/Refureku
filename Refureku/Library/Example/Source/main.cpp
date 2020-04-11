@@ -409,6 +409,9 @@ void enums()
 
 	std::cout << e->name << " : " << e->values.size() << std::endl;
 
+	for (auto& enumVal : e->values)
+		std::cout << enumVal.name << " = " << enumVal.value << std::endl;
+
 	std::cout << e->getEnumValue("ExampleValue4")->value << std::endl;
 	std::cout << e->getEnumValue("ExampleValue5")->value << std::endl;
 	std::cout << e->getEnumValue("ExampleValue6") << std::endl;
