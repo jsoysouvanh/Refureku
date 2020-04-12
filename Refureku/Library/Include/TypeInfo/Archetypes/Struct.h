@@ -84,6 +84,11 @@ namespace rfk
 															   EFieldFlags minFlags = EFieldFlags::Default,
 															   bool shouldInspectInherited = false)			const	noexcept;
 
+			template <typename ReturnType, typename... ArgTypes>
+			Method const*						getMethod(std::string const& methodName,
+														  EMethodFlags minFlags = EMethodFlags::Default,
+														  bool shouldInspectParents = false)				const	noexcept;
+
 			/**
 			*	Get the first found method named methodName which has at least all the provided flags, nullptr if none if found.
 			*	If shouldInspectParents is set to true, the search will be extended to parents structs recursively.
@@ -95,6 +100,11 @@ namespace rfk
 														   EMethodFlags minFlags = EMethodFlags::Default,
 														   bool shouldInspectParents = false)				const	noexcept;
 
+			template <typename ReturnType, typename... ArgTypes>
+			StaticMethod const*					getStaticMethod(std::string const& methodName,
+																EMethodFlags minFlags = EMethodFlags::Default,
+																bool shouldInspectParents = false)			const	noexcept;
+
 			/**
 			*
 			*/
@@ -104,9 +114,6 @@ namespace rfk
 			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName,
 																 EMethodFlags minFlags = EMethodFlags::Default,
 																 bool shouldInspectParents = false)			const	noexcept;
-
-			//TODO templated staticGetMethod with provided prototype
-			//TODO not templated staticGetMethod with provided prototype
 
 			/**
 			*	Return true if this type inherits from the provided type, else false.

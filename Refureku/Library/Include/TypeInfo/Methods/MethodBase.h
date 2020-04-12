@@ -17,11 +17,26 @@ namespace rfk
 	class MethodBase : public Entity
 	{
 		private:
-			template <size_t Rank, typename FirstArgType, typename... OtherArgTypes>
-			void	checkArguments(FirstArgType&& a, OtherArgTypes&&... args)	const;
+			template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+			void	checkArguments()		const;
 
 			template <size_t Rank, typename LastArgType>
-			void	checkArguments(LastArgType&& a)								const;
+			void	checkArguments()		const;
+
+			template <typename... ArgTypes>
+			bool	hasSameArgumentsCount()	const	noexcept;
+
+			template <typename ReturnType>
+			bool	hasSameReturnType()		const	noexcept;
+
+			template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+			bool	hasSameArgumentTypes()	const	noexcept;
+
+			template <size_t Rank, typename LastArgType>
+			bool	hasSameArgumentTypes()	const	noexcept;
+
+			template <typename... ArgTypes>
+			bool	hasSameArgumentTypes()	const	noexcept;
 
 		protected:
 			/** Handle pointing to the actual method in memory */
@@ -36,13 +51,13 @@ namespace rfk
 			MethodBase(MethodBase&&)								= default;
 
 			template <typename... ArgTypes>
-			void checkArgumentsCount(ArgTypes&&... args)	const;
+			void checkArgumentsCount()	const;
 
 			template <typename... ArgTypes>
-			void checkArguments(ArgTypes&&... args)			const;
+			void checkArguments()		const;
 
 			template <typename ReturnType>
-			void checkReturnType()							const;
+			void checkReturnType()		const;
 
 			MethodBase& operator=(MethodBase const&)	= default;
 			MethodBase& operator=(MethodBase&&)			= default;
@@ -59,17 +74,26 @@ namespace rfk
 
 			~MethodBase() = default;
 
+			/**
+			*	Return true if this method has the same return type and arg types, false otherwise.
+			*/
+			template <typename ReturnType, typename... ArgTypes>
+			bool				hasSamePrototype()	const	noexcept;
+
+			template <typename... ArgTypes>
+			bool				hasSameArguments()	const	noexcept;
+
 			/** Get access of this method */
-			EAccessSpecifier	getAccess()		const	noexcept;
+			EAccessSpecifier	getAccess()			const	noexcept;
 
 			/** Getter for this methods qualifiers */
-			bool				isStatic()		const	noexcept;
-			bool				isInline()		const	noexcept;
-			bool				isVirtual()		const	noexcept;
-			bool				isPureVirtual()	const	noexcept;
-			bool				isOverride()	const	noexcept;
-			bool				isFinal()		const	noexcept;
-			bool				isConst()		const	noexcept;
+			bool				isStatic()			const	noexcept;
+			bool				isInline()			const	noexcept;
+			bool				isVirtual()			const	noexcept;
+			bool				isPureVirtual()		const	noexcept;
+			bool				isOverride()		const	noexcept;
+			bool				isFinal()			const	noexcept;
+			bool				isConst()			const	noexcept;
 	};
 
 	#include "TypeInfo/Methods/MethodBase.inl"

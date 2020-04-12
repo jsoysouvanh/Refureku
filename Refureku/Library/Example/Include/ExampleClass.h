@@ -85,34 +85,37 @@ namespace namespace3
 			static inline ParentClass	someStaticParentClass;
 
 			RFKField()
-			mutable int		someInt			= 42;
+			mutable int		someInt = 42;
 
 			RFKField()
-			int				p2Char			= 2;
+			int				p2Char = 2;
 
 			RFKField()
 			ParentClass		someParentClass;
 
 			RFKField()
-			int*			somePtrToInt	= nullptr;
+			int* somePtrToInt = nullptr;
 
 			RFKField()
-			float			someFloat		= 42.42f;
+			float			someFloat = 42.42f;
 
 			RFKField()
-			float const*	a				= nullptr;
+			float const* a = nullptr;
 
 			RFKField()
-			float * const	b				= nullptr;
+			float* const	b = nullptr;
 
 			RFKField()
-			int const* c[2][3]				= {{}};
+			int const* c[2][3] = {{}};
 
-			RFKMethod(CustomInstantiator)
+			RFKMethod()
 			unsigned long long		method4(void* ptr);
 
 			RFKMethod()
 			virtual void	method1() const noexcept override;
+
+			RFKMethod(CustomInstantiator)
+			void* customInstantiator(int i, float f) const noexcept { std::cout << "Use Custom Instantiator: " << i << ", " << f << std::endl; return new ExampleClass(); }
 
 		protected:
 			RFKMethod()

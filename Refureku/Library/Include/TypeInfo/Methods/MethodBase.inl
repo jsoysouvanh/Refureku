@@ -1,38 +1,38 @@
 
 template <typename... ArgTypes>
-void MethodBase::checkArgumentsCount([[maybe_unused]] ArgTypes&&... args) const
+void MethodBase::checkArgumentsCount() const
 {
 	size_t correctParamCount = parameters.size();
 
 	//Check the number of provided params is correct
 	if (sizeof...(ArgTypes) != correctParamCount)
 	{
-		throw MethodError("Tried to call method " + name + " with " + std::to_string(sizeof...(args)) + " parameters but " + std::to_string(correctParamCount) + " were expected.");
+		throw MethodError("Tried to call method " + name + " with " + std::to_string(sizeof...(ArgTypes)) + " parameters but " + std::to_string(correctParamCount) + " were expected.");
 	}
 }
 
 template <typename... ArgTypes>
-void MethodBase::checkArguments([[maybe_unused]] ArgTypes&&... args) const
+void MethodBase::checkArguments() const
 {
 	//Check that there is the right amount of parameters
-	checkArgumentsCount<ArgTypes...>(std::forward<ArgTypes>(args)...);
+	checkArgumentsCount<ArgTypes...>();
 
 	//Check that each provided param type is strictly identical to what we expect
 	if constexpr (sizeof...(ArgTypes) != 0u)
 	{
-		checkArguments<0>(std::forward<ArgTypes>(args)...);
+		checkArguments<0, ArgTypes...>();
 	}
 }
 
-template <size_t Rank, typename FirstArgType, typename... OtherArgTypes>
-void MethodBase::checkArguments(FirstArgType&& a, OtherArgTypes&&... args) const
+template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+void MethodBase::checkArguments() const
 {
-	checkArguments<Rank, FirstArgType>(std::forward<FirstArgType>(a));
-	checkArguments<Rank + 1, OtherArgTypes...>(std::forward<OtherArgTypes>(args)...);
+	checkArguments<Rank, FirstArgType>();
+	checkArguments<Rank + 1, SecondArgType, OtherArgTypes...>();
 }
 
 template <size_t Rank, typename LastArgType>
-void MethodBase::checkArguments(LastArgType&&) const
+void MethodBase::checkArguments() const
 {
 	Type providedType = Type::getType<LastArgType>();
 
@@ -52,4 +52,46 @@ void MethodBase::checkReturnType() const
 	{
 		throw MethodError("The specified return type is incorrect.\nProvided: \n" + providedType.toString() + "\nExpected: \n" + returnType.toString());
 	}
+}
+
+template <typename... ArgTypes>
+bool MethodBase::hasSameArgumentsCount() const noexcept
+{
+	return sizeof...(ArgTypes) == parameters.size();
+}
+
+template <typename ReturnType>
+bool MethodBase::hasSameReturnType() const noexcept
+{
+	return Type::getType<ReturnType>() == returnType;
+}
+
+template <typename... ArgTypes>
+bool MethodBase::hasSameArgumentTypes() const noexcept
+{
+	return hasSameArgumentTypes<0, ArgTypes...>();
+}
+
+template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+bool MethodBase::hasSameArgumentTypes() const noexcept
+{
+	return hasSameArgumentTypes<Rank, FirstArgType>() && hasSameArgumentTypes<Rank + 1, SecondArgType, OtherArgTypes...>();
+}
+
+template <size_t Rank, typename LastArgType>
+bool MethodBase::hasSameArgumentTypes() const noexcept
+{
+	return parameters[Rank].type == Type::getType<LastArgType>();
+}
+
+template <typename ReturnType, typename... ArgTypes>
+bool MethodBase::hasSamePrototype() const noexcept
+{
+	return hasSameArgumentsCount<ArgTypes...>() && hasSameReturnType<ReturnType>() && hasSameArgumentTypes<ArgTypes...>();
+}
+
+template <typename... ArgTypes>
+bool MethodBase::hasSameArguments() const noexcept
+{
+	return hasSameArgumentsCount<ArgTypes...>() && hasSameArgumentTypes<ArgTypes...>();
 }

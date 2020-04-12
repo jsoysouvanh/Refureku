@@ -4,7 +4,7 @@ void StaticMethod::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEA
 {
 	#if REFUREKU_DEBUG
 
-	checkArgumentsCount(std::forward<ArgTypes>(arguments)...);
+	checkArgumentsCount<ArgTypes...>();
 
 	#endif
 
@@ -16,7 +16,7 @@ ReturnType StaticMethod::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU
 {
 	#if REFUREKU_DEBUG
 
-	checkArgumentsCount(std::forward<ArgTypes>(arguments)...);
+	checkArgumentsCount<ArgTypes...>();
 
 	#endif
 
@@ -26,7 +26,7 @@ ReturnType StaticMethod::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU
 template <typename... ArgTypes>
 void StaticMethod::checkedInvoke(ArgTypes&&... arguments) const
 {
-	checkArguments(std::forward<ArgTypes>(arguments)...);
+	checkArguments<ArgTypes...>();
 
 	std::static_pointer_cast<NonMemberFunction<void(ArgTypes...)>>(_internalMethod)->operator()(std::forward<ArgTypes>(arguments)...);
 }
@@ -35,7 +35,7 @@ template <typename ReturnType, typename... ArgTypes>
 ReturnType StaticMethod::checkedInvoke(ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
-	checkArguments(std::forward<ArgTypes>(arguments)...);
+	checkArguments<ArgTypes...>();
 
 	return std::static_pointer_cast<NonMemberFunction<ReturnType(ArgTypes...)>>(_internalMethod)->operator()(std::forward<ArgTypes>(arguments)...);
 }

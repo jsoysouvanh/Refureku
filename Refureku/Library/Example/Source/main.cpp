@@ -429,5 +429,7 @@ int main()
 	types();
 	enums();
 
+	std::cout << namespace3::ExampleClass::staticGetArchetype().getMethod<void*, int, float>("customInstantiator") << std::endl;
+
 	return EXIT_SUCCESS;
 }

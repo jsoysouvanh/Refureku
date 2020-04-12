@@ -6,7 +6,7 @@ namespace rfk
 {
 	class Archetype : public Entity
 	{
-		protected:
+		private:
 			/** Pointer to the default method used to make an instance of this archetype */
 			void* (*_defaultInstantiator)()	noexcept = nullptr;
 

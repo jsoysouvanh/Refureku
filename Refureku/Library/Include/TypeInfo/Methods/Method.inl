@@ -10,7 +10,7 @@ void Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept(
 {
 	#if REFUREKU_DEBUG
 
-	checkArgumentsCount(std::forward<ArgTypes>(arguments)...);
+	checkArgumentsCount<ArgTypes...>();
 
 	#endif
 
@@ -22,7 +22,7 @@ ReturnType Method::invoke(void const* caller, ArgTypes&&... arguments) const noe
 {
 	#if REFUREKU_DEBUG
 
-	checkArgumentsCount(std::forward<ArgTypes>(arguments)...);
+	checkArgumentsCount<ArgTypes...>();
 
 	#endif
 
@@ -32,7 +32,7 @@ ReturnType Method::invoke(void const* caller, ArgTypes&&... arguments) const noe
 template <typename... ArgTypes>
 void Method::checkedInvoke(void const* caller, ArgTypes&&... arguments) const
 {
-	checkArguments(std::forward<ArgTypes>(arguments)...);
+	checkArguments<ArgTypes...>();
 
 	internalInvoke<void, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }
@@ -41,7 +41,7 @@ template <typename ReturnType, typename... ArgTypes>
 ReturnType Method::checkedInvoke(void const* caller, ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
-	checkArguments(std::forward<ArgTypes>(arguments)...);
+	checkArguments<ArgTypes...>();
 
 	return internalInvoke<ReturnType, ArgTypes...>(std::forward<void const*>(caller), std::forward<ArgTypes>(arguments)...);
 }
