@@ -7,6 +7,8 @@ using namespace namespace1;
 using namespace namespace2;
 using namespace namespace3;
 
+int ExampleStruct::staticInt = 123;
+
 int ExampleClass::method1() const noexcept
 {
 	return 2;

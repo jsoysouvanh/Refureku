@@ -24,6 +24,9 @@ void ClassParser::setParsingInfo(ParsingInfo* info) noexcept
 	_methodParser.setParsingInfo(info);
 }
 
+DISABLE_WARNING_PUSH
+DISABLE_WARNING_UNSCOPED_ENUM
+
 CXChildVisitResult ClassParser::parse(CXCursor const& cursor) noexcept
 {
 	if (_shouldCheckValidity)	//Check for any annotation attribute if the flag is raised
@@ -68,6 +71,8 @@ CXChildVisitResult ClassParser::parse(CXCursor const& cursor) noexcept
 
 	return CXChildVisitResult::CXChildVisit_Continue;
 }
+
+DISABLE_WARNING_POP
 
 CXChildVisitResult ClassParser::parseField(CXCursor fieldCursor) noexcept
 {

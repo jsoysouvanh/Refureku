@@ -42,15 +42,9 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 								"private:");
 }
 
-void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& /*generatedFile*/, kodgen::StructClassInfo const& /*structInfo*/) const noexcept
+void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
 {
-	//std::string mainMacroName	 = "RFRK" + structInfo.name + "_GENERATED";
-
-	//std::string getTypeMacroName = generateGetTypeMacro(generatedFile, structInfo);
-
-	//generatedFile.writeMacro(std::move(mainMacroName),
-	//						 std::move(getTypeMacroName),
-	//						 "public:");
+	generateClassCode(generatedFile, structInfo);
 }
 
 std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept

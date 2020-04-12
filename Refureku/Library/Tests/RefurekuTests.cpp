@@ -19,6 +19,21 @@ void classes()
 	TEST(rfk::Database::getStruct("ExampleClass") == nullptr);
 }
 
+void structs()
+{
+	TEST(rfk::Database::getStruct("ExampleStruct") != nullptr);
+	TEST(rfk::Database::getEnum("ExampleStruct") == nullptr);
+	TEST(rfk::Database::getClass("ExampleStruct") == nullptr);
+
+	ExampleStruct es;
+
+	TEST(ExampleStruct::staticGetArchetype().getStaticField("staticInt")->getData<int>() == 123);
+	TEST(ExampleStruct::staticGetArchetype().getField("i")->getData<int>(&es) == 2);
+	
+	ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->invoke();
+	ExampleStruct::staticGetArchetype().getMethod("method")->invoke(&es, 1, 42.0f);
+}
+
 void enums()
 {
 	TEST(rfk::Database::getEnum("UnexistantEnum") == nullptr);
@@ -343,6 +358,7 @@ void makeInstance()
 int main()
 {
 	classes();
+	structs();
 	enums();
 	methods();
 	staticMethods();

@@ -20,6 +20,9 @@ void EnumParser::setParsingInfo(ParsingInfo* info) noexcept
 	_enumValueParser.setParsingInfo(info);
 }
 
+DISABLE_WARNING_PUSH
+DISABLE_WARNING_UNSCOPED_ENUM
+
 CXChildVisitResult EnumParser::parse(CXCursor const& currentCursor) noexcept
 {
 	if (_shouldCheckValidity)	//Check for any annotation if the flag is raised
@@ -40,6 +43,8 @@ CXChildVisitResult EnumParser::parse(CXCursor const& currentCursor) noexcept
 
 	return CXChildVisitResult::CXChildVisit_Continue;
 }
+
+DISABLE_WARNING_POP
 
 CXChildVisitResult EnumParser::parseEnumValue(CXCursor enumValueCursor) noexcept
 {

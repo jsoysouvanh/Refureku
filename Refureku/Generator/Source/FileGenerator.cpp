@@ -21,6 +21,7 @@ FileGenerator::FileGenerator() noexcept:
 
 	/**	class RFKClass() MyClass {}; enum [class] RFKEnum() {}; */
 	setDefaultClassTemplate("RefurekuClass"); 
+	setDefaultStructTemplate("RefurekuClass");
 	setDefaultEnumTemplate("RefurekuEnum");
 }
 

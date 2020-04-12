@@ -178,3 +178,20 @@ namespace namespace3
 }
 
 RFKExampleEnum_GENERATED
+
+struct RFKStruct() ExampleStruct
+{
+	RFKField()
+	static int staticInt;
+
+	RFKField()
+	int i = 2;
+
+	RFKMethod()
+	static void staticMethod() { std::cout << "ExampleStruct::staticMethod()" << std::endl; } 
+
+	RFKMethod()
+	void method(int i, float f) { std::cout << "ExampleStruct::method(" << i << ", " << f << ")" << std::endl; }
+
+	RFKExampleStruct_GENERATED 
+};
