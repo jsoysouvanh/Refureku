@@ -11,17 +11,14 @@ ReturnType* Archetype::makeInstance([[maybe_unused]] ArgTypes&&... args) const n
 	}
 	else
 	{
-		//StaticMethod const* instantiator = getStaticMethod
+		for (StaticMethod const* instantiator : customInstantiators)
+		{
+			if (instantiator->hasSameArguments<ArgTypes...>())
+			{
+				return instantiator->invoke<ReturnType*, ArgTypes...>(std::forward<ArgTypes>(args)...);
+			}
+		}
 
-		//hasSameArguments<ArgTypes
-
-		//TODO
-		//Get right instantiate according to ReturnType & ArgTypes
-		//	StaticMethod const* instantiator = getStaticMethod("__RFKinstantiate");	// <-- TODO search with static types getStaticMethod<ReturnType(ArgTypes...)>("__RFKinstantiate");
-
-		//	if (instantiator != nullptr)
-		//		return instantiator->invoke<ReturnType*>(std::forward<ArgTypes>(args)...);
-		//	else
 		return nullptr;
 	}
 }

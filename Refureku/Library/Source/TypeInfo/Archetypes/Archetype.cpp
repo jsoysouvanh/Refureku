@@ -1,5 +1,9 @@
 #include "TypeInfo/Archetypes/Archetype.h"
 
+#include <cassert>
+
+#include "TypeInfo/Methods/StaticMethod.h"
+
 using namespace rfk;
 
 Archetype::Archetype(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
@@ -12,4 +16,12 @@ Archetype::Archetype(std::string&& newName, uint64 newId, ECategory newCategory,
 void Archetype::__RFKsetDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
 {
 	_defaultInstantiator = func;
+}
+
+void Archetype::__RFKaddCustomInstantiator(StaticMethod const* instantiator) noexcept
+{
+	assert(instantiator != nullptr && instantiator->returnType.isPointer());
+
+	//Make sure the instantiator is valid - i.e. its return type is a pointer type
+	customInstantiators.emplace_back(instantiator);
 }

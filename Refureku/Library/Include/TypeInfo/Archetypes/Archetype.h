@@ -1,14 +1,21 @@
 #pragma once
 
+#include <vector>
+
 #include "TypeInfo/Entity.h"
 
 namespace rfk
 {
+	class StaticMethod;	//Forward declaration
+
 	class Archetype : public Entity
 	{
 		private:
 			/** Pointer to the default method used to make an instance of this archetype */
-			void* (*_defaultInstantiator)()	noexcept = nullptr;
+			void*								(*_defaultInstantiator)()	noexcept = nullptr;
+
+			/** List of all custom instantiators for this archetype */
+			std::vector<StaticMethod const*>	customInstantiators;
 
 		public:
 			enum class ECategory : uint8
@@ -43,6 +50,8 @@ namespace rfk
 			/** Internal use */
 			template <typename T>
 			void __RFKaddRequiredMethods()										noexcept;
+
+			void __RFKaddCustomInstantiator(StaticMethod const* instantiator)	noexcept;
 
 			void __RFKsetDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
 
