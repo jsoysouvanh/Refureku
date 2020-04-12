@@ -13,96 +13,6 @@ namespace rfk
 	{
 		private:
 			static inline std::hash<std::string>	_stringHasher;
-			
-			inline static void* instantiateBool() noexcept
-			{
-				return new bool();
-			}
-
-			inline static void* instantiateChar() noexcept
-			{
-				return new char();
-			}
-
-			inline static void* instantiateSignedChar() noexcept
-			{
-				return new signed char();
-			}
-
-			inline static void* instantiateUnsignedChar() noexcept
-			{
-				return new unsigned char();
-			}
-
-			inline static void* instantiateWideChar() noexcept
-			{
-				return new wchar_t();
-			}
-
-			inline static void* instantiateChar16() noexcept
-			{
-				return new char16_t();
-			}
-
-			inline static void* instantiateChar32() noexcept
-			{
-				return new char32_t();
-			}
-
-			inline static void* instantiateShort() noexcept
-			{
-				return new short();
-			}
-
-			inline static void* instantiateUnsignedShort() noexcept
-			{
-				return new unsigned short();
-			}
-
-			inline static void* instantiateInt() noexcept
-			{
-				return new int();
-			}
-
-			inline static void* instantiateUnsignedInt() noexcept
-			{
-				return new unsigned int();
-			}
-
-			inline static void* instantiateLong() noexcept
-			{
-				return new long();
-			}
-
-			inline static void* instantiateUnsignedLong() noexcept
-			{
-				return new unsigned long();
-			}
-
-			inline static void* instantiateLongLong() noexcept
-			{
-				return new long long();
-			}
-
-			inline static void* instantiateUnsignedLongLong() noexcept
-			{
-				return new unsigned long long();
-			}
-
-			inline static void* instantiateFloat() noexcept
-			{
-				return new float();
-			}
-
-			inline static void* instantiateDouble() noexcept
-			{
-				return new double();
-			}
-
-			inline static void* instantiateLongDouble() noexcept
-			{
-				return new double();
-			}
 
 		public:
 			FundamentalArchetypes()								= delete;
@@ -132,8 +42,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateBool);
 				}
 
 				return archetype;
@@ -147,8 +55,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateChar);
 				}
 
 				return archetype;
@@ -162,8 +68,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateSignedChar);
 				}
 
 				return archetype;
@@ -177,8 +81,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateUnsignedChar);
 				}
 
 				return archetype;
@@ -192,8 +94,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateWideChar);
 				}
 
 				return archetype;
@@ -207,8 +107,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateChar16);
 				}
 
 				return archetype;
@@ -222,8 +120,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateChar32);
 				}
 
 				return archetype;
@@ -237,8 +133,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateShort);
 				}
 
 				return archetype;
@@ -252,8 +146,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateUnsignedShort);
 				}
 
 				return archetype;
@@ -267,8 +159,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateInt);
 				}
 
 				return archetype;
@@ -282,8 +172,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateUnsignedInt);
 				}
 
 				return archetype;
@@ -297,8 +185,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateLong);
 				}
 
 				return archetype;
@@ -312,8 +198,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateUnsignedLong);
 				}
 
 				return archetype;
@@ -327,8 +211,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateLongLong);
 				}
 
 				return archetype;
@@ -342,8 +224,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateUnsignedLongLong);
 				}
 
 				return archetype;
@@ -357,8 +237,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateFloat);
 				}
 
 				return archetype;
@@ -372,8 +250,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateDouble);
 				}
 
 				return archetype;
@@ -387,8 +263,6 @@ namespace rfk
 				if (!initialized)
 				{
 					initialized = true;
-
-					archetype.__RFKsetDefaultInstantiationMethod(&FundamentalArchetypes::instantiateLongDouble);
 				}
 
 				return archetype;

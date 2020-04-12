@@ -10,13 +10,6 @@ namespace rfk
 
 	class Archetype : public Entity
 	{
-		private:
-			/** Pointer to the default method used to make an instance of this archetype */
-			void*								(*_defaultInstantiator)()	noexcept = nullptr;
-
-			/** List of all custom instantiators for this archetype */
-			std::vector<StaticMethod const*>	customInstantiators;
-
 		public:
 			enum class ECategory : uint8
 			{
@@ -43,21 +36,7 @@ namespace rfk
 			Archetype(Archetype&&)											= default;
 			~Archetype()													= default;
 
-			/** Make an instance of the class represented by this archetype. */
-			template <typename ReturnType = void, typename... ArgTypes>
-			ReturnType* makeInstance(ArgTypes&&... args)				const	noexcept;
-
-			/** Internal use */
-			template <typename T>
-			void __RFKaddRequiredMethods()										noexcept;
-
-			void __RFKaddCustomInstantiator(StaticMethod const* instantiator)	noexcept;
-
-			void __RFKsetDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
-
 			Archetype& operator=(Archetype const&)	= delete;
 			Archetype& operator=(Archetype&&)		= default;
 	};
-
-	#include "TypeInfo/Archetypes/Archetype.inl"
 }

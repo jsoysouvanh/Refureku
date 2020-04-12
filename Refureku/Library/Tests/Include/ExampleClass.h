@@ -19,7 +19,7 @@ namespace namespace1
 
 namespace namespace2
 {
-	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject
+	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject 
 	{
 		private:
 			RFKField()
@@ -106,11 +106,14 @@ namespace namespace3
 			RFKField()
 			int const*		c[2][3];
 
-			RFKMethod(CustomInstantiator)
+			RFKMethod()
 			unsigned long long	method4(void* ptr);
 
 			RFKMethod()
 			virtual int	method1() const noexcept override final;
+
+			RFKMethod(CustomInstantiator)
+			static void*	customInstantiator(int i, float f) noexcept { return new ExampleClass(); }
 
 		protected:
 			RFKMethod()
@@ -145,6 +148,23 @@ namespace namespace3
 			~ExampleClass()						= default;
 
 		RFKExampleClass_GENERATED
+	};
+
+	class RFKClass() ExampleClass2
+	{
+		RFKMethod(CustomInstantiator)
+		static void* customInstantiator(int i) noexcept { return new ExampleClass2(i); }
+
+		ExampleClass2() = delete;
+		ExampleClass2(int i) noexcept:
+			i{i}
+		{};
+
+		public:
+			RFKField()
+			int i = 0;
+
+		RFKExampleClass2_GENERATED
 	};
 
 	enum class RFKEnum() ExampleEnum : uint8_t

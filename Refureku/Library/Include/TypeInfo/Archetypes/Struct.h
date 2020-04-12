@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_set>
 #include <algorithm>
+#include <type_traits>
 
 #include "TypeInfo/Archetypes/Archetype.h"
 #include "TypeInfo/Fields/Field.h"
@@ -16,6 +17,16 @@ namespace rfk
 {
 	class Struct : public Archetype
 	{
+		private:
+			/** Pointer to the default method used to make an instance of this archetype */
+			void*								(*_defaultInstantiator)()	noexcept = nullptr;
+
+			/** List of all custom instantiators for this archetype */
+			std::vector<StaticMethod const*>	customInstantiators;
+
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const noexcept;
+
 		public:
 			struct Parent
 			{
@@ -115,21 +126,34 @@ namespace rfk
 																 EMethodFlags minFlags = EMethodFlags::Default,
 																 bool shouldInspectParents = false)			const	noexcept;
 
+			/** Make an instance of the class represented by this archetype. */
+			template <typename ReturnType = void, typename... ArgTypes>
+			ReturnType*	makeInstance(ArgTypes&&... args)													const	noexcept;
+
 			/**
 			*	Return true if this type inherits from the provided type, else false.
 			*/
-			bool inheritsFrom(Struct const& otherType)														const	noexcept;
+			bool		inheritsFrom(Struct const& otherType)												const	noexcept;
 			
 			/**
 			*	Return true if this type is a parent (direct or not) of the provided type, else false.
 			*/
-			bool isBaseOf(Struct const& otherType)															const	noexcept;
+			bool		isBaseOf(Struct const& otherType)													const	noexcept;
 
 			/**
 			*	Add the type T to this type's parents if possible
 			*/
 			template <typename T>
-			void __RFKaddToParents(EAccessSpecifier inheritanceAccess)												noexcept;
+			void __RFKaddToParents(EAccessSpecifier inheritanceAccess)			noexcept;
+
+			
+			template <typename T>
+			void __RFKaddRequiredMethods()										noexcept;
+
+			template <typename ReturnType>
+			void __RFKaddCustomInstantiator(StaticMethod const* instantiator)	noexcept;
+
+			void __RFKsetDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
 
 			Struct& operator=(Struct const&)	= delete;
 			Struct& operator=(Struct&&)			= default;

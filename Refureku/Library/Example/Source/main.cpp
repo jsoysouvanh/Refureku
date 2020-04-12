@@ -350,7 +350,7 @@ void instantiation()
 	//std::cout << "makeInstance(): " << pc2I->getArchetype().name << std::endl;
 	std::cout << "makeInstance(): " << ecI->getArchetype().name << std::endl;
 
-	rfk::Database::getArchetype("ExampleClass")->makeInstance<ExampleClass>();
+	rfk::Database::getClass("ExampleClass")->makeInstance<ExampleClass>();
 }
 
 void properties()
@@ -418,7 +418,7 @@ void enums()
 
 int main()
 {
-	nonStaticMethods();
+	/*nonStaticMethods();
 	staticMethods();
 	nonStaticFields();
 	staticFields();
@@ -427,11 +427,13 @@ int main()
 	properties();
 	reflectedObject();
 	types();
-	enums();
+	enums();*/
 
 	//std::cout << namespace3::ExampleClass::staticGetArchetype().getMethod<void*, int, float>("customInstantiator") << std::endl;
 
-	namespace3::ExampleClass::staticGetArchetype().makeInstance(1, 3.14f);
+	ParentParentClass* ppc = namespace3::ExampleClass::staticGetArchetype().makeInstance<ParentParentClass>(1.0f);
+
+	std::cout << ppc->ppFloat << std::endl;
 
 	return EXIT_SUCCESS;
 }

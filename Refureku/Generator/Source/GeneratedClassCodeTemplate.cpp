@@ -34,7 +34,7 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
 
 	generatedFile.writeMacro(std::move(mainMacroName),
-								"friend rfk::Archetype;",
+								"friend rfk::Struct;",
 								"friend rfk::hasField___rfkArchetypeRegisterer<" + classInfo.name + ", rfk::ArchetypeRegisterer>;",
 									std::move(defaultInstantiateMacro),
 									std::move(getTypeMacroName),
@@ -136,6 +136,13 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 									std::to_string(_stringHasher(method.id)) +
 									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
+
+			//Check if this static method is a custom instantiator, in which case we should add it to the list of custom instantiators of this class
+			if (std::find_if(method.properties.simpleProperties.cbegin(), method.properties.simpleProperties.cend(), [](kodgen::SimpleProperty const& sp){ return sp.name == __RFK_CLASS_CUSTOM_INSTANTIATOR; })
+					!= method.properties.simpleProperties.cend())
+			{
+				generatedFile.writeLine("	type.__RFKaddCustomInstantiator<" + method.returnType.getCanonicalName() + ">(&*staticMethodsIt);\t\\");
+			}
 
 			generatedFile.writeLine("	currMethod = const_cast<rfk::StaticMethod*>(&*staticMethodsIt);\t\\");
 		}
@@ -390,7 +397,7 @@ std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::
 								"	static void* __RFKinstantiate() noexcept",
 								"	{",
 								"		if constexpr (std::is_default_constructible_v<T>)",
-								"			return new " + info.name + "();",
+								"			return new T();",
 								"		else",
 								"			return nullptr;",
 								"	}");

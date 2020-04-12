@@ -306,7 +306,7 @@ void properties()
 	TEST(!ec.properties.hasProperty("dynamicGetArchetype"));
 	TEST(ec.properties.hasProperty("DynamicGetArchetype"));
 
-	TEST(ec.getMethod("method4")->properties.hasProperty("CustomInstantiator"));
+	TEST(ec.getStaticMethod("customInstantiator")->properties.hasProperty("CustomInstantiator"));
 }
 
 void dynamicTypes()
@@ -328,6 +328,18 @@ void dynamicTypes()
 	}
 }
 
+void makeInstance()
+{
+	//ExampleClass has a default constructor, can call makeInstance()
+	TEST(namespace3::ExampleClass::staticGetArchetype().makeInstance() != nullptr);
+	TEST(namespace3::ExampleClass::staticGetArchetype().makeInstance(1, 3.14f) != nullptr);		//use customInstantiator method
+	TEST(namespace3::ExampleClass::staticGetArchetype().makeInstance(10.0f, 3.14f) == nullptr);
+
+	//ExampleClass2 has a deleted default constructor, makeInstance should return nullptr
+	TEST(namespace3::ExampleClass2::staticGetArchetype().makeInstance() == nullptr);
+	TEST(namespace3::ExampleClass2::staticGetArchetype().makeInstance<namespace3::ExampleClass2>(42)->i == 42);		//use customInstantiator method
+}
+
 int main()
 {
 	classes();
@@ -340,6 +352,7 @@ int main()
 	instantiation();
 	properties();
 	dynamicTypes();
+	makeInstance();
 
 	return EXIT_SUCCESS;
 }

@@ -258,3 +258,8 @@ bool Struct::isBaseOf(Struct const& otherType) const noexcept
 {
 	return &otherType == this || children.find(&otherType) != children.cend();
 }
+
+void Struct::__RFKsetDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
+{
+	_defaultInstantiator = func;
+}

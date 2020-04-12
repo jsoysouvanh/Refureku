@@ -12,16 +12,3 @@ Archetype::Archetype(std::string&& newName, uint64 newId, ECategory newCategory,
 	memorySize{newMemorySize}
 {
 }
-
-void Archetype::__RFKsetDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
-{
-	_defaultInstantiator = func;
-}
-
-void Archetype::__RFKaddCustomInstantiator(StaticMethod const* instantiator) noexcept
-{
-	assert(instantiator != nullptr && instantiator->returnType.isPointer());
-
-	//Make sure the instantiator is valid - i.e. its return type is a pointer type
-	customInstantiators.emplace_back(instantiator);
-}

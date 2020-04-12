@@ -67,8 +67,6 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 		}
 	}
 
-	generatedFile.writeLine("			type.__RFKsetDefaultInstantiationMethod(&instantiateEnum<" + typeName + ">);\t\\");
-
 	generatedFile.writeLine("		}\t\\");
 
 	generatedFile.writeLines("		return &type;\t\\",

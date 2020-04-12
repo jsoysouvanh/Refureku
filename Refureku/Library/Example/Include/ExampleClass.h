@@ -22,13 +22,13 @@ namespace namespace2
 {
 	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject
 	{
-		RFKField()
-		float ppFloat = 123456.123456f;
-
-		RFKField()
-		std::vector<ParentParentParentClass> vec; 
-
 		public:
+			RFKField()
+			float ppFloat = 123456.123456f;
+
+			RFKField()
+			std::vector<ParentParentParentClass> vec; 	
+
 			ParentParentClass() noexcept {}
 
 		RFKParentParentClass_GENERATED
@@ -103,7 +103,7 @@ namespace namespace3
 			float const* a = nullptr;
 
 			RFKField()
-			float* const	b = nullptr;
+			float* const	b = nullptr; 
 
 			RFKField()
 			int const* c[2][3] = {{}};
@@ -115,7 +115,7 @@ namespace namespace3
 			virtual void	method1() const noexcept override;
 
 			RFKMethod(CustomInstantiator)
-			void* customInstantiator(int i, float f) const noexcept { std::cout << "Use Custom Instantiator: " << i << ", " << f << std::endl; return new ExampleClass(); }
+			static void*	customInstantiator(int i, float f) noexcept { std::cout << "Use Custom Instantiator: " << i << ", " << f << std::endl; return new ExampleClass(); }
 
 		protected:
 			RFKMethod()

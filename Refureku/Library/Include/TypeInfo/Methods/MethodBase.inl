@@ -20,7 +20,7 @@ void MethodBase::checkArguments() const
 	//Check that each provided param type is strictly identical to what we expect
 	if constexpr (sizeof...(ArgTypes) != 0u)
 	{
-		checkArguments<0, ArgTypes...>();
+		checkArguments<0u, ArgTypes...>();
 	}
 }
 
@@ -69,7 +69,7 @@ bool MethodBase::hasSameReturnType() const noexcept
 template <typename... ArgTypes>
 bool MethodBase::hasSameArgumentTypes() const noexcept
 {
-	return hasSameArgumentTypes<0, ArgTypes...>();
+	return hasSameArgumentTypes<0u, ArgTypes...>();
 }
 
 template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
@@ -93,5 +93,12 @@ bool MethodBase::hasSamePrototype() const noexcept
 template <typename... ArgTypes>
 bool MethodBase::hasSameArguments() const noexcept
 {
-	return hasSameArgumentsCount<ArgTypes...>() && hasSameArgumentTypes<ArgTypes...>();
+	if constexpr (sizeof...(ArgTypes) == 0u)
+	{
+		return parameters.size() == 0u;
+	}
+	else
+	{
+		return hasSameArgumentsCount<ArgTypes...>() && hasSameArgumentTypes<ArgTypes...>();
+	}
 }
