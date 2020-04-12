@@ -16,25 +16,70 @@ __RFK_DISABLE_WARNING_INIT_SEG
 
 __RFK_DISABLE_WARNING_POP
 
-Database::ArchetypesById	Database::_archetypesById;
+Database::EntitiesById		Database::_entitiesById;
 Database::ArchetypesByName	Database::_archetypesByName;
 
 #elif defined(__GNUC__) || defined(__clang__)
 
-Database::ArchetypesById	Database::_archetypesById	__attribute__ ((init_priority (101)));
+Database::EntitiesById		Database::_entitiesById		__attribute__ ((init_priority (101)));
 Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_priority (101)));
 
 #else
 
-Database::ArchetypesById	Database::_archetypesById;
+Database::EntitiesById		Database::_entitiesById;
 Database::ArchetypesByName	Database::_archetypesByName;
 
 #endif
 
 void Database::registerArchetype(Archetype const& archetype) noexcept
 {
-	_archetypesById.emplace(&archetype);
+	registerSubEntities(archetype);
+
+	_entitiesById.emplace(&archetype);
 	_archetypesByName.emplace(&archetype);
+}
+
+void Database::registerSubEntities(Archetype const& archetype) noexcept
+{
+	switch (archetype.category)
+	{
+		case Archetype::ECategory::Struct:
+			[[fallthrough]];
+		case Archetype::ECategory::Class:
+			registerStructSubEntities(static_cast<Struct const&>(archetype));
+			break;
+
+		case Archetype::ECategory::Enum:
+			registerEnumSubEntities(static_cast<Enum const&>(archetype));
+			break;
+
+		case Archetype::ECategory::Fundamental:
+			//Nothing special to do here since a fundamental archetype doesn't own sub entities
+			break;
+
+		case Archetype::ECategory::Count:
+			[[fallthrough]];
+		case Archetype::ECategory::Undefined:
+			assert(false);	//Should never register a bad category
+			break;
+	}
+}
+
+void Database::registerStructSubEntities(Struct const& s) noexcept
+{
+	//TODO
+	
+	//s.fields
+	//s.staticFields
+	//s.methods
+	//s.staticMethods
+}
+
+void Database::registerEnumSubEntities(Enum const& e) noexcept
+{
+	//TODO
+
+	//e.values
 }
 
 Archetype const* Database::getArchetype(std::string typeName) noexcept
@@ -46,25 +91,9 @@ Archetype const* Database::getArchetype(std::string typeName) noexcept
 	return (it != _archetypesByName.cend()) ? *it : nullptr;
 }
 
-Archetype const* Database::getArchetype(uint64 id) noexcept
-{
-	Archetype searching("", id);
-
-	Database::ArchetypesById::const_iterator it = _archetypesById.find(&searching);
-
-	return (it != _archetypesById.cend()) ? *it : nullptr;
-}
-
 Struct const* Database::getStruct(std::string structName) noexcept
 {
 	Archetype const* archetype = getArchetype(std::move(structName));
-
-	return (archetype != nullptr && archetype->category == Archetype::ECategory::Struct) ? static_cast<Struct const*>(archetype) : nullptr;
-}
-
-Struct const* Database::getStruct(uint64 id) noexcept
-{
-	Archetype const* archetype = getArchetype(id);
 
 	return (archetype != nullptr && archetype->category == Archetype::ECategory::Struct) ? static_cast<Struct const*>(archetype) : nullptr;
 }
@@ -76,13 +105,6 @@ Class const* Database::getClass(std::string className) noexcept
 	return (archetype != nullptr && archetype->category == Archetype::ECategory::Class) ? static_cast<Class const*>(archetype) : nullptr;
 }
 
-Class const* Database::getClass(uint64 id) noexcept
-{
-	Archetype const* archetype = getArchetype(id);
-
-	return (archetype != nullptr && archetype->category == Archetype::ECategory::Class) ? static_cast<Class const*>(archetype) : nullptr;
-}
-
 Enum const* Database::getEnum(std::string enumName) noexcept
 {
 	Archetype const* archetype = getArchetype(std::move(enumName));
@@ -90,16 +112,18 @@ Enum const* Database::getEnum(std::string enumName) noexcept
 	return (archetype != nullptr && archetype->category == Archetype::ECategory::Enum) ? static_cast<Enum const*>(archetype) : nullptr;
 }
 
-Enum const* Database::getEnum(uint64 id) noexcept
+Entity const* Database::getEntity(uint64 id) noexcept
 {
-	Archetype const* archetype = getArchetype(id);
+	Entity searching("", id);
 
-	return (archetype != nullptr && archetype->category == Archetype::ECategory::Enum) ? static_cast<Enum const*>(archetype) : nullptr;
+	Database::EntitiesById::const_iterator it = _entitiesById.find(&searching);
+
+	return (it != _entitiesById.cend()) ? *it : nullptr;
 }
 
-Database::ArchetypesById const& Database::getArchetypesById() noexcept
+Database::EntitiesById const& Database::getEntitiesById() noexcept
 {
-	return _archetypesById;
+	return _entitiesById;
 }
 
 Database::ArchetypesByName const& Database::getArchetypesByName() noexcept

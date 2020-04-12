@@ -364,7 +364,7 @@ void CustomFileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::Parsi
 
 void CustomFileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
 {
-    //Optionnally call parent implementation
+    //Optionally call parent implementation
     //rfk::FileGenerator::writeFooter(file, parsingResult);
 }
 ```
