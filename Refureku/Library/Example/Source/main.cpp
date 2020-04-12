@@ -418,7 +418,7 @@ void enums()
 
 int main()
 {
-	/*nonStaticMethods();
+	nonStaticMethods();
 	staticMethods();
 	nonStaticFields();
 	staticFields();
@@ -427,13 +427,7 @@ int main()
 	properties();
 	reflectedObject();
 	types();
-	enums();*/
-
-	//std::cout << namespace3::ExampleClass::staticGetArchetype().getMethod<void*, int, float>("customInstantiator") << std::endl;
-
-	ParentParentClass* ppc = namespace3::ExampleClass::staticGetArchetype().makeInstance<ParentParentClass>(1.0f);
-
-	std::cout << ppc->ppFloat << std::endl;
+	enums();
 
 	return EXIT_SUCCESS;
 }

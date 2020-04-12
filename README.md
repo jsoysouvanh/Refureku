@@ -1,18 +1,17 @@
 
 
-
-
-
 # Refureku
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 
 ## Presentation
 Refureku is a powerful customizable C++17 reflection library based on libclang.
-It allows you to retrieve information on classes/structs, fields, methods and enums at runtime.
+It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
 
-It is basically made of two parts:
-- The metadata parser and generator, which will parse C++ source code and generate metadata, which will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the Customization section).
+It is separated into 2 distinct parts:
+- The metadata parser and generator, which will parse C++ source code and generate metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the Customization section).
 - The actual library which contain the framework classes to access and manipulate reflected data at runtime.
+
+To get started, see the [Getting Started](#getting-started) section
 
 ## Features
 - Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
@@ -254,7 +253,7 @@ There are 3 main classes which make the code generation possible: the FileParser
 
 Each of those 3 classes contain overridable methods and modifiable fields, and this is where user customization starts.
 ### FileParser
-The parser is probably the class which you will want to change at first to modify the global syntax for reflection. If the default Refureku syntax is fine, you can reuse the rfk::FileParser as it is, but let's make a new one to see what we can tweak:
+The parser is probably the class which you will want to change at first to modify the global syntax for reflection. If the default Refureku syntax is fine, you can reuse the rfk::FileParser as it is, but let's make a new one to see what we can change:
 ```cpp
 //Header file, let's say CustomFileParser.h
 #pragma once
@@ -373,7 +372,8 @@ void CustomFileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::Parsi
 GeneratedCodeTemplate class is defining the code to generate for a given set of data. An implementation is already provided in Refureku and it should be used as it is.
 
 ### Putting all 3 together
-Once you've setup the above 3 classes (actually 2, you should definitely use Refureku GeneratedCodeTemplate implementation), making everything work is pretty straight forward.
+Once you've setup the FileParser and the FileGenerator, making everything work is pretty straight forward.
+However, there is one more piece of information we **MUST** provide to the FileParser to make it work properly: the include directories you added to your project. Indeed, the parser needs to know where it can find the files you include or it won't be able to resolve all symbols in a translation unit. The first one you can add is the **Refureku library include directory** (Refureku/Library/Include)
 ```cpp
 #include <iostream>
 #include <filesystem>
@@ -389,6 +389,15 @@ int main()
     CustomFileParser    fileParser;
     CustomFileGenerator fileGenerator;
 
+    //-------------------------------------------------
+    //THIS PART IS MANDATORY TO MAKE THE GENERATOR WORK
+
+    fileParser.getParsingSettings().projectIncludeDirectories.emplace("Path/To/Refureku/Include/Directory");	//Refureku/Library/Include
+    fileParser.getParsingSettings().projectIncludeDirectories.emplace("Path/To/Your/Include/Directory");
+    //... Add all the include directories you added to your project
+
+    //-------------------------------------------------
+    
     //Setup the files / directories you want to parse and/or ignore
     fileGenerator.includedDirectories.emplace("Path/To/A/Directory/To/Parse");
     fileGenerator.includedFiles.emplace("Path/To/A/File/To/Parse.h");
@@ -407,7 +416,7 @@ int main()
     }
     else  //Generation was aborted
     {
-        //Probably bad input directory
+        //Probably forgot or provided a bad output directory
     }
 
     return EXIT_SUCCESS;
@@ -419,11 +428,12 @@ All this process can be setup in a standalone executable which will be called be
 ## Getting started
 Requirements:
 - CMake 3.15.0+
-- C++17+
-- A compatible compiler (see Cross-platform compatibility section).
+- A compatible compiler: MSVC 2017 / GCC8.0.0 / Clang 7.0.0 or newer.
 
 1. Pull the repository
-2. Update the RefurekuGenerator (Refureku/Generator/Source/main.cpp) according to your needs. You will probably want to at least change the "includeDirectory" variable in the parseAndGenerate() method.
+2. Update the RefurekuGenerator (Refureku/Generator/Source/main.cpp) according to your needs. You must at least:
+	- Add the Refureku include diretory as well as your project include directories as specified [here](#putting-all-3-together);
+	- Update the "mainIncludeDirectory" variable so that it is the path to your main Include directory;
 3. Compile the library and the generator following these steps:
 
 - At the root of the Refureku project, open a terminal
@@ -440,9 +450,27 @@ Requirements:
 
 > \> cmake --build . --target RefurekuGenerator Refureku --config Release --parallel 8
 
-4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project included header directories (Refureku/Library/Include)
+4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project include directories (Refureku/Library/Include)
+	-  With CMake, it would look like this:
+	```cmake
+	# Add Refureku Include directory
+	target_include_directories(YourExecutable PRIVATE Path/To/Refureku/Library/Include)
+	
+	\# Link against Refureku library
+	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
+	target_link_libraries(YourExecutable PRIVATE Refureku)
+	```
 5. Make a pre-build custom event (VS) or a custom target + dependency (CMake) to run the Generator before building your project, with your working directory as the first argument.
-6. Compile your project: the generator should run before your project is built.
+	- With CMake:
+	```cmake
+	# Run generator before compiling our own program
+	add_custom_target(RunGenerator
+			  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+			  COMMAND ThirdParty/RefurekuGenerator.exe)
+	
+	add_dependencies(YourExecutable RunGenerator)
+	```
+7. Compile your project: the generator should run before your project is built.
 
 ## Cross-platform compatibility
 This library has been tested and is stable with the following configurations:

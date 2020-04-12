@@ -9,14 +9,14 @@ void parseAndGenerate(fs::path workingDirectory)
 {
 	std::cout << "[WORKING DIRECTORY] " << workingDirectory.string() << std::endl;
 
-	fs::path includeDirectory	= workingDirectory / "Include";
-	fs::path generatedDirectory	= includeDirectory / "Generated";
+	fs::path mainIncludeDirectory	= workingDirectory / "Include";
+	fs::path generatedDirectory		= mainIncludeDirectory / "Generated";
 
 	rfk::FileParser		parser;
 	rfk::FileGenerator	fileGenerator;
 
 	//Parse files inside WorkingDir/Include/
-	fileGenerator.toParseDirectories.emplace(includeDirectory.string());
+	fileGenerator.toParseDirectories.emplace(mainIncludeDirectory.string());
 
 	//Ignore generated files
 	fileGenerator.ignoredDirectories.emplace(generatedDirectory.string());
