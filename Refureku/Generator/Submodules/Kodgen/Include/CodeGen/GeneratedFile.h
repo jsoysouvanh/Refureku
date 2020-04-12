@@ -77,6 +77,11 @@ namespace kodgen
 			void writeMacro(std::string&& macroPrototype, Lines&&... lines)			noexcept;
 
 			/**
+			*	@brief Define a macro without parameters nor value like #define MY_MACRO
+			*/
+			void writeMacro(std::string&& macroName)								noexcept;
+
+			/**
 			*	@return The path to this generated file
 			*/
 			fs::path const& getPath()										const	noexcept;

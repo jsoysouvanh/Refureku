@@ -43,4 +43,10 @@ namespace rfk
 	{
 		return nullptr;
 	}
+
+	template <typename T, typename = std::enable_if_t<std::is_enum_v<T>>>
+	void* instantiateEnum() noexcept
+	{
+		return new T();
+	}
 }

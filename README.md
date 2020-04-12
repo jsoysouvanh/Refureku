@@ -440,7 +440,7 @@ Requirements:
 
 > \> cmake --build . --target RefurekuGenerator Refureku --config Release --parallel 8
 
-4. Link with Refureku.lib, and don't forget to add the Refureku headers directory to your project included header directories (Refureku/Library/Include)
+4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project included header directories (Refureku/Library/Include)
 5. Make a pre-build custom event (VS) or a custom target + dependency (CMake) to run the Generator before building your project, with your working directory as the first argument.
 6. Compile your project: the generator should run before your project is built.
 

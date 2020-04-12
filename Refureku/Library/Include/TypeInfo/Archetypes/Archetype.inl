@@ -1,6 +1,6 @@
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType* Archetype::makeInstance(ArgTypes&&... args) const noexcept
+ReturnType* Archetype::makeInstance([[maybe_unused]] ArgTypes&&... args) const noexcept
 {
 	if constexpr (sizeof...(args) == 0)
 	{

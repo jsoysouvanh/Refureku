@@ -40,6 +40,11 @@ void GeneratedFile::expandWriteMacroLines(std::string&& line) noexcept
 	writeLine("");
 }
 
+void GeneratedFile::writeMacro(std::string&& macroName) noexcept
+{
+	writeLine("#define " + std::forward<std::string>(macroName));
+}
+
 fs::path const& GeneratedFile::getPath() const noexcept
 {
 	return _path;

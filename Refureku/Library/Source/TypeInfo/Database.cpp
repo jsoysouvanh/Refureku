@@ -67,19 +67,36 @@ void Database::registerSubEntities(Archetype const& archetype) noexcept
 
 void Database::registerStructSubEntities(Struct const& s) noexcept
 {
-	//TODO
-	
-	//s.fields
-	//s.staticFields
-	//s.methods
-	//s.staticMethods
+	//Add fields
+	for (Entity const& field : s.fields)
+	{
+		_entitiesById.emplace(&field);
+	}
+
+	for (Entity const& staticField : s.staticFields)
+	{
+		_entitiesById.emplace(&staticField);
+	}
+
+	//Add methods
+	for (Entity const& method : s.methods)
+	{
+		_entitiesById.emplace(&method);
+	}
+
+	for (Entity const& staticMethod : s.staticMethods)
+	{
+		_entitiesById.emplace(&staticMethod);
+	}
 }
 
 void Database::registerEnumSubEntities(Enum const& e) noexcept
 {
-	//TODO
-
-	//e.values
+	//Enum values
+	for (Entity const& enumValue : e.values)
+	{
+		_entitiesById.emplace(&enumValue);
+	}
 }
 
 Archetype const* Database::getArchetype(std::string typeName) noexcept
