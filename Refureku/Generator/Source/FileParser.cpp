@@ -36,6 +36,7 @@ FileParser::FileParser() noexcept:
 	pps.enumValuePropertyRules.macroName	= "RFKEnumVal";
 
 	pps.classPropertyRules.addSimplePropertyRule(__RFK_CLASS_DYNAMIC_GET_ARCHETYPE);
+	pps.structPropertyRules.addSimplePropertyRule(__RFK_CLASS_DYNAMIC_GET_ARCHETYPE);
 	pps.methodPropertyRules.addSimplePropertyRule(__RFK_CLASS_CUSTOM_INSTANTIATOR);
 }
 

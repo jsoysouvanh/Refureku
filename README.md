@@ -4,14 +4,16 @@
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 
 ## Index
-- [Presentation](#presentation)
+- [Introduction](#introduction)
 - [Features](#features)
-- [Classes Overview](#classes-overview)
+- [Framework Overview](#framework-overview)
 	- [Archetype](#archetype)
 	- [Fields](#fields)
 	- [Methods](#methods)
 	- [Database](#database)
 - [Properties](#properties)
+	- [Overview](#overview)
+	- [Builtin Properties](#builtin-properties)
 - [Customization](#customization)
 	- [FileParser](#fileparser)
 	- [FileGenerator](#filegenerator)
@@ -22,12 +24,12 @@
 - [Cross-platform compatibility](#cross-platform-compatibility)
 - [License](#license)
 
-## Presentation
+## Introduction
 Refureku is a powerful customizable C++17 reflection library based on libclang.
 It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
-- The metadata parser and generator, which will parse C++ source code and generate metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the Customization section).
+- The metadata parser and generator, which will parse C++ source code and generate metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
 - The actual library which contain the framework classes to access and manipulate reflected data at runtime.
 
 To get started now, see the [Getting Started](#getting-started) section.
@@ -41,10 +43,10 @@ To get started now, see the [Getting Started](#getting-started) section.
 - Know at runtime if a reflected class inherits or is the base of another reflected class
 - Arbitrary properties (like tags) on any entity (struct, class, field, method, enum, enum value)
 - Reflection metadata is regenerated only when a file has changed
-- Can instantiate any objects just from an archetype (which is obtainable by name or id)
+- Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
 - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
 
-## Classes overview
+## Framework overview
 ### Archetype
 An archetype is a class wich contains information about a model type, like its name for example.
 Each reflected class, struct and enum owns a unique archetype in the program. All C++ fundamental types also have their archetype.
@@ -210,7 +212,8 @@ delete classInstance;
 ```
 
 ## Properties
-Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the parser using regex (see the Customization section), so that we know what is permitted to write and what's not. These rules also prevent unintentional syntax errors. Each property can also accept subproperties (or arguments).
+### Overview
+Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the parser using regex (see the [Customization section](#customization)), so that we know what is permitted to write and what's not. These rules also prevent unintentional syntax errors. Each property can accept subproperties (or arguments).
 
 It could look like this:
 ```cpp
@@ -258,10 +261,93 @@ for (auto it = range.first; it != range.second; it++)
 classArchetype.properties.hasProperty("CustomSimpleProperty");  //true
 classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp1"); //true
 classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp2"); //true
-
 ```
 
 It can be really useful when you want to adapt behaviors depending on specific properties (for example, a game engine editor).
+
+### Builtin Properties
+- [DynamicGetArchetype](#dynamicgetarchetype-struct--class)
+- [CustomInstantiator](#custominstantiator-method)
+
+#### DynamicGetArchetype (Struct / Class)
+DynamicGetArchetype must be specified when a class or struct inherits from rfk::ReflectedObject. It allows to retrieve the archetype of a class dynamically.
+```cpp
+#include <ReflectedObject.h>
+
+#include "Generated/ExampleClass.rfk.h"
+
+class RFKClass(DynamicGetArchetype) ExampleClass : public rfk::ReflectedObject
+{
+    RFKExampleClass_GENERATED
+};
+
+struct RFKStruct(DynamicGetArchetype) ExampleStruct : public ExampleClass
+{
+    RFKExampleStruct_GENERATED
+};
+```
+```cpp
+#include "ExampleClass.h"
+
+//...
+
+rfk::ReflectedObject* ec = new ExampleClass();
+rfk::ReflectedObject* es = new ExampleStruct();
+
+std::cout << ec->getArchetype().name << std::endl;    //Prints ExampleClass
+std::cout << es->getArchetype().name << std::endl;    //Prints ExampleStruct
+```
+Note that DynamicGetArchetype must be specified eventhough ExampleStruct doesn't directly inherit from rfk::ReflectedObject.
+
+#### CustomInstantiator (Method)
+CustomInstantiator is used to provide custom ways of instantiating a struct or class through the rfk::Struct::makeInstance method. By default, we can only call this method without parameters (it will call the default constructor if it is not deleted, otherwise the method will return nullptr). Using the CustomInstantiator property, we can write the following:
+```cpp
+#include <iostream>
+
+#include "Generated/ExampleClass.rfk.h"
+
+class RFKClass() ExampleClass
+{
+    protected:
+        RFKMethod(CustomInstantiator)
+        static void* customInstantiateMethod(int i, float f)
+        {
+            std::cout << "Use customInstantiateMethod(int i, float f)" << std::endl;
+
+            return new ExampleClass(i, f);
+        }
+
+    public:
+        ExampleClass() = delete;
+        ExampleClass(int i, float f) {  }
+        
+    RFKExampleClass_GENERATED
+};
+```
+```cpp
+#include "ExampleClass.h"
+
+//...
+
+rfk::Class const& c = ExampleClass::staticGetArchetype();
+
+/**
+*    Return nullptr because ExampleClass is not default constructible.
+*    However, if we define a CustomInstantiator tagged method which takes no argument,
+*    it will be used.
+*/
+ExampleClass* instance1 = c.makeInstance<ExampleClass>();
+
+/**
+*    ExampleClass will be instantiated through customInstantiateMethod
+*/
+ExampleClass* instance2 = c.makeInstance<ExampleClass>(42, 3.14f);
+
+delete instance1;
+delete instance2;
+```
+
+Note that a CustomInstantiator tagged method **MUST** be static and return void*. If the method is not static, > the property will be ignored.
 
 ## Customization
 Before talking about how to customize the code generation, let's talk a bit about how it works.   
@@ -442,16 +528,14 @@ int main()
 All this process can be setup in a standalone executable which will be called before you code base is compiled (you can use CMake add_custom_target(...) and add_dependencies(...), or MSVC Build events), but as you could see, it could easily be integrated in an application as well.
 
 ## Getting started
-
 ### Requirements:
 - CMake 3.15.0+
 - A compatible compiler: MSVC 2017 / GCC8.0.0 / Clang 7.0.0 or newer.
 
 ### Steps
-
 1. Pull the repository
 2. Update the RefurekuGenerator (Refureku/Generator/Source/main.cpp) according to your needs. You must at least:
-	- Add your project include directories (including Refureku include diretory) as specified [here](#usage)
+	- Add your project include directories (it includes Refureku include directory) as specified [here](#usage)
 	- Update the "mainIncludeDirectory" variable so that it is the path to your main Include directory
 3. Compile the library and the generator following these steps:
 	- At the root of the Refureku project, open a terminal
@@ -489,7 +573,6 @@ All this process can be setup in a standalone executable which will be called be
 7. Compile your project: the generator should run before your project is built.
 
 ### Possible issues
-
 - If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
 	> With CMake:
 	```cmake
@@ -503,7 +586,6 @@ This library has been tested and is stable with the following configurations:
 - Linux | GCC 8.4.0, GCC 9.2.1
 
 ## License
-
 MIT License
 
 Copyright (c) 2020 Julien SOYSOUVANH
