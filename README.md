@@ -539,7 +539,6 @@ All this process can be setup in a standalone executable which will be called be
 	- Update the "mainIncludeDirectory" variable so that it is the path to your main Include directory
 3. Compile the library and the generator following these steps:
 	- At the root of the Refureku project, open a terminal
-	- Type:
 		-  mkdir Build   
 		- cd Build   
 		- cmake -G \<Generator\> -A x64 .\.
@@ -549,6 +548,9 @@ All this process can be setup in a standalone executable which will be called be
 			> - Ninja
 			> - Type cmake -G for more information
 		- cmake --build . --target RefurekuGenerator Refureku --config Release --parallel 4
+	- If you're compiling your project in debug mode, you will also need the debug version of Refureku:
+		- cmake --build . --target Refureku --config Debug --parallel 4
+	- You will find the generator in Build/Refureku/Generator/Bin/x64/Release and the Library in 
 
 4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project include directories (Refureku/Library/Include)
 	-  With CMake, it would look like this:
@@ -570,6 +572,9 @@ All this process can be setup in a standalone executable which will be called be
 	
 	add_dependencies(YourExecutable RunGenerator)
 	```
+	- With Visual Studio:
+		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe $(SolutionDir)
+6. Make sure you compile in C++17
 7. Compile your project: the generator should run before your project is built.
 
 ### Possible issues
