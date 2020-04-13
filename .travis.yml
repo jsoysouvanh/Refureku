@@ -6,12 +6,12 @@ dist: bionic
 jobs:
   include:
    # clang 7
-   - env: CC=clang-7 CXX=clang++-7
-     addons: { apt: { packages: ["clang-7", "libc++-7-dev", "libc++abi-7-dev"] } }
+#   - env: CC=clang-7 CXX=clang++-7
+#     addons: { apt: { packages: ["clang-7", "libc++-7-dev", "libc++abi-7-dev"] } }
 
    # clang 8
-   - env: CC=clang-8 CXX=clang++-8
-     addons: { apt: { packages: ["clang-8", "libc++-8-dev", "libc++abi-8-dev"] } }
+#   - env: CC=clang-8 CXX=clang++-8
+#     addons: { apt: { packages: ["clang-8", "libc++-8-dev", "libc++abi-8-dev"] } }
 
    # clang 9
    - env: CC=clang-9 CXX=clang++-9
