@@ -550,9 +550,9 @@ All this process can be setup in a standalone executable which will be called be
 		- cmake --build . --target RefurekuGenerator Refureku --config Release --parallel 4
 	- If you're compiling your project in debug mode, you will also need the debug version of Refureku:
 		- cmake --build . --target Refureku --config Debug --parallel 4
-	- You will find the generator in Build/Refureku/Generator/Bin/x64/Release and the Library in 
+	- You will find the generator binaries in Build/Refureku/Generator/Bin/x64/Release/ and the library in Build/Refureku/Library/Lib/x64/[Debug|Release]/
 
-4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project include directories (Refureku/Library/Include)
+4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project include directories (Refureku/Library/Include). Make sure to link against the Debug version of the library if you compile your project in Debug to prevent [this issue](#issue-1).
 	-  With CMake, it would look like this:
 	```cmake
 	# Add Refureku Include directory
@@ -560,9 +560,9 @@ All this process can be setup in a standalone executable which will be called be
 	
 	\# Link against Refureku library
 	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
-	target_link_libraries(YourExecutable PRIVATE Refureku)
+	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,Refureku_Debug,Refureku_Release>)
 	```
-5. Make a pre-build custom event (VS) or a custom target + dependency (CMake) to run the Generator before building your project, with your working directory as the first argument.
+5. Make the RefurekuGenerator run before compiling your project:
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
@@ -578,6 +578,7 @@ All this process can be setup in a standalone executable which will be called be
 7. Compile your project: the generator should run before your project is built.
 
 ### Possible issues
+#### Issue 1
 - If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
 	> With CMake:
 	```cmake
