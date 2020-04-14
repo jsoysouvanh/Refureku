@@ -33,7 +33,7 @@ add_executable(${CppPropertiesDemoProjectTarget}
 set(RunGeneratorTarget RunCppPropertiesGenerator)
 add_custom_target(${RunGeneratorTarget}
                     WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-                    COMMAND ./${CppPropertiesDemoProjectGeneratorTarget} ${PROJECT_SOURCE_DIR})
+                    COMMAND ${CppPropertiesDemoProjectGeneratorTarget} ${PROJECT_SOURCE_DIR})
 
 # Run the generator BEFORE building CppPropertiesDemoProjectTarget to refresh generated files
 add_dependencies(${CppPropertiesDemoProjectTarget} ${RunGeneratorTarget})
