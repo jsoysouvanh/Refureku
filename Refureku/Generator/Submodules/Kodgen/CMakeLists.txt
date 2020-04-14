@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.13.5)
 project(KodgenLibrary)
 
 # Setup output directory
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY Lib/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .dll / .so
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY Lib/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .lib / .a
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY Bin/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .exe
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Lib/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .dll / .so
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Lib/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .lib / .a
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Bin/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})	# .exe
 
 set(KodgenTargetLibrary Kodgen)
 
@@ -76,13 +76,22 @@ target_link_directories(${KodgenTargetLibrary} PUBLIC
 							Libraries/x64/Static
 							Libraries/x64/Shared)
 
-# Link to required libraries (mostly libclang dependencies)
+# Link to required libraries
 target_link_libraries(${KodgenTargetLibrary}
 						INTERFACE
-							$<$<AND:$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:stdc++fs>	#filesystem	pre Clang-9/GCC-9
 							$<$<CXX_COMPILER_ID:Clang>:c++ c++abi>
+							$<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:c++fs>	#filesystem	pre Clang-9 with clang abi
+							$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:stdc++fs>	#filesystem	pre GCC-9
 							clang
 )
+
+# Copy libclang shared library to the bin folder
+if (WIN32)
+	add_custom_command(	TARGET ${KodgenTargetLibrary} POST_BUILD
+						COMMAND ${CMAKE_COMMAND} -E copy
+						${PROJECT_SOURCE_DIR}/Libraries/x64/Shared/libclang.dll
+						${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libclang.dll)
+endif()
 
 add_subdirectory(Tests)
 add_subdirectory(Examples)

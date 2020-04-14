@@ -17,7 +17,7 @@ add_executable(${RefurekuDemoTarget}
 target_link_libraries(${RefurekuDemoTarget} PRIVATE ${RefurekuLibraryTarget})
 
 # Create the command to run RefurekuGenerator
-set(RefurekuGeneratorPath ${CMAKE_BINARY_DIR}/Refureku/Generator/Bin/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})
+set(RefurekuGeneratorPath ${CMAKE_BINARY_DIR}/Bin/${CMAKE_BUILD_TYPE}/${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})
 set(RefurekuGeneratorExeName RefurekuGenerator)
 set(RunGeneratorTarget RunRefurekuGenerator)
 
