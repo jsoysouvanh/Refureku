@@ -18,21 +18,21 @@ namespace kodgen
 		private:
 			static inline std::string const	_parsingMacro		= "KODGEN_PARSING";
 			
-			CXIndex							_clangIndex;
+			CXIndex						_clangIndex;
 			
-			ClassParser						_classParser;
-			EnumParser						_enumParser;
-			ParsingInfo						_parsingInfo;
+			ClassParser					_classParser;
+			EnumParser					_enumParser;
+			ParsingInfo					_parsingInfo;
 
 			//Variables used to build command line
-			std::string						_kodgenParsingMacro	= "-D" + _parsingMacro;
-			std::vector<std::string>		_projectIncludeDirs;
-			std::string						_classPropertyMacro;
-			std::string						_structPropertyMacro;
-			std::string						_fieldPropertyMacro;
-			std::string						_methodPropertyMacro;
-			std::string						_enumPropertyMacro;
-			std::string						_enumValuePropertyMacro;
+			std::string					_kodgenParsingMacro	= "-D" + _parsingMacro;
+			std::vector<std::string>	_projectIncludeDirs;
+			std::string					_classPropertyMacro;
+			std::string					_structPropertyMacro;
+			std::string					_fieldPropertyMacro;
+			std::string					_methodPropertyMacro;
+			std::string					_enumPropertyMacro;
+			std::string					_enumValuePropertyMacro;
 
 			static CXChildVisitResult	staticParseCursor(CXCursor c, CXCursor parent, CXClientData clientData)			noexcept;
 			
@@ -92,5 +92,14 @@ namespace kodgen
 			*	@return true if the parsing process finished without error, else false
 			*/
 			bool						parse(fs::path const& parseFile, ParsingResult& out_result)		noexcept;
+
+			/**
+			*	@brief Setup this object's parameters with the provided toml file. Unset settings remain unchanged.
+			*
+			*	@param pathToSettingsFile Path to the toml file.
+			*
+			*	@return true if a file could be loaded, else false.
+			*/
+			bool						loadSettings(fs::path const& pathToSettingsFile)				noexcept;
 	};
 }

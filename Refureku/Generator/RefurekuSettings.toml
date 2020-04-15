@@ -1,0 +1,32 @@
+
+[FileGeneratorSettings]
+
+# Generated files will use this extension
+generatedFilesExtension = ".rfk.h"
+
+# List of supported extensions
+supportedExtensions		= [".h", ".hpp"]
+
+# Generated files will be located here
+outputDirectory			= "D:/Prog/GP3/PLA/Refureku/Refureku/Library/Example/Include/Generated"
+
+# Files contained in this directories list will be parsed
+toParseDirectories		= [
+	"D:/Prog/GP3/PLA/Refureku/Refureku/Library/Example/Include"
+]
+
+# Files to parse which are not included in toParseDirectories
+toParseFiles			= []
+
+# Files contained in this directories list will be ignored
+ignoredDirectories		= [
+	"D:/Prog/GP3/PLA/Refureku/Refureku/Library/Example/Include/Generated"
+]
+
+# Files not to parse which are not included in ignoredDirectories
+ignoredFiles			= []
+
+[FileParserSettings]
+projectIncludeDirectories	= ["D:/Prog/GP3/PLA/Refureku/Refureku/Library/Include"]
+
+[FileParserSettings.Properties]

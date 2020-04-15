@@ -59,7 +59,7 @@ script:
   - cd Build
 
   # Debug test
-  - cmake ..
+  - cmake .. -DDEV=1
   - cmake --build . --config Debug -- VERBOSE=1
   - ctest -C Debug -V
 

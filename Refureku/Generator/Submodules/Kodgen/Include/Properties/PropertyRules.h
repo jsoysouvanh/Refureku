@@ -2,6 +2,7 @@
 
 #include <set>
 
+#include "Misc/Toml11.h"
 #include "Properties/SimplePropertyRule.h"
 #include "Properties/ComplexPropertyRule.h"
 
@@ -38,6 +39,8 @@ namespace kodgen
 			void clearSimplePropertyRules()																	noexcept;
 			void clearComplexPropertyRules()																noexcept;
 			void clearAllPropertyRules()																	noexcept;
+
+			void loadSettings(toml::value const& table)														noexcept;
 
 			SimplePropertyRule const*	getSimplePropertyRule(std::string const& propertyName)		const	noexcept;
 			ComplexPropertyRule const*	getComplexPropertyRule(std::string const& propertyName)		const	noexcept;

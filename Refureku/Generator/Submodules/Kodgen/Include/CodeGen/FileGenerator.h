@@ -57,49 +57,53 @@ namespace kodgen
 			/**
 			*	@brief Main (complex) property name used to specify code generator in source code
 			*/
-			std::string						codeTemplateMainComplexPropertyName = "GenTemplate";
+			std::string								codeTemplateMainComplexPropertyName	= "GenTemplate";
 
 			/**
 			*	@brief Extension used for generated files
 			*/
-			std::string						generatedFilesExtension = ".kodgen.h";
+			std::string								generatedFilesExtension				= ".kodgen.h";
 
 			/**
 			*	@brief Path to the directory all files should be generated (and where existing ones are)
 			*	If the existed directory doesn't exist, it will be created if possible
 			*/
-			fs::path						outputDirectory;
+			fs::path								outputDirectory;
 
 			/**
 			*	Collection of files to parse.
 			*	These files will be parsed without any further check if they exist.
+			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before)
 			*/
-			std::unordered_set<std::string>	toParseFiles;
+			std::unordered_set<fs::path, PathHash>	toParseFiles;
 
 			/**
 			*	Collection of directories containing files to parse.
 			*	All directories contained in the given directories will be recursively inspected, except if they are ignored
 			*	All files contained in any parsed directory will be parsed, except if they are ignored or if their extension is not contained in the supportedExtensions.
+			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before)
 			*/
-			std::unordered_set<std::string>	toParseDirectories;
+			std::unordered_set<fs::path, PathHash>	toParseDirectories;
 
 			/**
 			*	Collection of ignored files.
 			*	These files will never be parsed (except if they are also part of the includedFiles collection)
+			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before)
 			*/
-			std::unordered_set<std::string>	ignoredFiles;
+			std::unordered_set<fs::path, PathHash>	ignoredFiles;
 
 			/**
 			*	Collection of ignored directories.
 			*	All directories contained in the given directories will be ignored, except if they are included
 			*	All files contained in any ignored directory will be ignored, except if they are included
+			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before)
 			*/
-			std::unordered_set<std::string>	ignoredDirectories;
+			std::unordered_set<fs::path, PathHash>	ignoredDirectories;
 
 			/**
 			*	Extensions of files which should be considered for parsing.
 			*/
-			std::unordered_set<std::string>	supportedExtensions;
+			std::unordered_set<std::string>			supportedExtensions;
 
 			FileGenerator()		noexcept;
 			~FileGenerator()	noexcept;
@@ -156,5 +160,14 @@ namespace kodgen
 			*	@return Structure containing result report
 			*/
 			FileGenerationResult generateFiles(FileParser& parser, bool forceRegenerateAll = false)			noexcept;
+
+			/**
+			*	@brief Setup this object's parameters with the provided toml file. Unset settings remain unchanged.
+			*
+			*	@param pathToSettingsFile Path to the toml file.
+			*
+			*	@return true if a file could be loaded, else false.
+			*/
+			bool				loadSettings(fs::path const& pathToSettingsFile)							noexcept;
 	};
 }

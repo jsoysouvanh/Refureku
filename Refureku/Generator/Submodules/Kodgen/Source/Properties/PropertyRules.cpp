@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "Misc/TomlUtility.h"
+
 using namespace kodgen;
 
 PropertyRules::PropertyRules(std::string defaultMacroName):
@@ -89,4 +91,11 @@ ComplexPropertyRule const* PropertyRules::getComplexPropertyRule(std::string con
 	decltype(_complexPropertyRules)::const_iterator it = std::find_if(_complexPropertyRules.cbegin(), _complexPropertyRules.cend(), [propertyName](ComplexPropertyRule const& prop) { return prop.name == propertyName; });
 
 	return (it != _complexPropertyRules.cend()) ? &*it : nullptr;
+}
+
+void PropertyRules::loadSettings(toml::value const& table) noexcept
+{
+	TomlUtility::updateSetting(table, "macroName", macroName);
+
+	//TODO properties?
 }

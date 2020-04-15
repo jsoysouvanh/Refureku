@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
 #include <unordered_set>
 
+#include "Misc/Filesystem.h"
 #include "Properties/PropertyParsingSettings.h"
 
 namespace kodgen
@@ -22,6 +22,6 @@ namespace kodgen
 		*	It basically corresponds to the list of paths specified with the -I argument
 		*	when compiling.
 		*/
-		std::unordered_set<std::string>	projectIncludeDirectories;
+		std::unordered_set<fs::path, PathHash>	projectIncludeDirectories;
 	};
 }

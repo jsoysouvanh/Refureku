@@ -16,6 +16,7 @@ add_library(${KodgenTargetLibrary}
 					Source/Properties/ComplexProperty.cpp
 					Source/Properties/PropertyRules.cpp
 					Source/Properties/PropertyGroup.cpp
+					Source/Properties/PropertyParsingSettings.cpp
 	
 					Source/InfoStructures/EntityInfo.cpp
 					Source/InfoStructures/FieldInfo.cpp
@@ -56,7 +57,7 @@ endif()
 
 # Setup compilation definitions
 if (DEV)
-	target_compile_definitions(${KodgenTargetLibrary} PRIVATE KODGEN_DEV=1)
+	target_compile_definitions(${KodgenTargetLibrary} INTERFACE KODGEN_DEV=1)
 endif()
 
 # Setup compilation options

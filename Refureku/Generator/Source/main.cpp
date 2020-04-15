@@ -7,25 +7,37 @@
 
 void parseAndGenerate(fs::path workingDirectory)
 {
-	std::cout << "[WORKING DIRECTORY] " << workingDirectory.string() << std::endl;
-
-	fs::path mainIncludeDirectory	= workingDirectory / "Include";
-	fs::path generatedDirectory		= mainIncludeDirectory / "Generated";
-
-	rfk::FileParser		parser;
+	rfk::FileParser		fileParser;
 	rfk::FileGenerator	fileGenerator;
 
-	//Parse files inside WorkingDir/Include/
-	fileGenerator.toParseDirectories.emplace(mainIncludeDirectory.string());
+	std::cout << "[WORKING DIRECTORY] " << workingDirectory.string() << std::endl;
 
-	//Ignore generated files
-	fileGenerator.ignoredDirectories.emplace(generatedDirectory.string());
+	#ifdef KODGEN_DEV
 
-	//All generated files will be located in WorkingDir/Include/Generated
-	fileGenerator.outputDirectory = generatedDirectory;
+	fs::path includeDir		= (workingDirectory / "Include").make_preferred();
+	fs::path generatedDir	= includeDir / "Generated";
 
-	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, false);
+	fileGenerator.outputDirectory = generatedDir;
+	fileGenerator.toParseDirectories.emplace(includeDir);
+	fileGenerator.ignoredDirectories.emplace(generatedDir);
 
+	#endif
+
+	//Load settings
+	if (fileGenerator.loadSettings("RefurekuSettings.toml"))
+	{
+		std::cout << "[LOADED] FileGenerator settings." << std::endl;
+	}
+	
+	if (fileParser.loadSettings("RefurekuSettings.toml"))
+	{
+		std::cout << "[LOADED] FileParser settings." << std::endl;
+	}
+
+	//Parse
+	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+
+	//Result
 	if (genResult.completed)
 	{
 		for (kodgen::ParsingError parsingError : genResult.parsingErrors)

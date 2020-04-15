@@ -2,6 +2,8 @@
 
 #include <assert.h>
 
+#include "Misc/TomlUtility.h"
+
 using namespace kodgen;
 
 FileGenerator::FileGenerator() noexcept
@@ -329,8 +331,6 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 
 	if (fs::is_directory(outputDirectory))
 	{
-		std::cout << "Using CINDEX version: " << CINDEX_VERSION_STRING << std::endl;
-
 		ParsingSettings& parsingSettings = parser.getParsingSettings();
 
 		refreshPropertyRules(parsingSettings);
@@ -344,4 +344,38 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 	}
 
 	return genResult;
+}
+
+bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
+{
+	try
+	{
+		toml::value settings = toml::parse(pathToSettingsFile.string());
+
+		if (settings.contains("FileGeneratorSettings"))
+		{
+			toml::value const& generatorSettings = toml::find(settings, "FileGeneratorSettings");
+
+			TomlUtility::updateSetting<std::string>(generatorSettings, "codeTemplateMainComplexPropertyName", codeTemplateMainComplexPropertyName);
+			TomlUtility::updateSetting<std::string>(generatorSettings, "generatedFilesExtension", generatedFilesExtension);
+			TomlUtility::updateSetting<fs::path>(generatorSettings, "outputDirectory", outputDirectory);
+			TomlUtility::updateSetting(generatorSettings, "toParseFiles", toParseFiles);
+			TomlUtility::updateSetting(generatorSettings, "toParseDirectories", toParseDirectories);
+			TomlUtility::updateSetting(generatorSettings, "ignoredFiles", ignoredFiles);
+			TomlUtility::updateSetting(generatorSettings, "ignoredDirectories", ignoredDirectories);
+			TomlUtility::updateSetting(generatorSettings, "supportedExtensions", supportedExtensions);
+		}
+
+		return true;
+	}
+	catch (std::runtime_error const&)
+	{
+	}
+	catch (toml::syntax_error const& e)
+	{
+		std::cerr << "Syntax error in settings file." << std::endl <<
+			e.what() << std::endl;
+	}
+	
+	return false;
 }
