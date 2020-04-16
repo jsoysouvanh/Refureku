@@ -7,23 +7,23 @@ jobs:
   include:
    # clang 7
    - env: CC=clang-7 CXX=clang++-7
-     addons: { apt: { packages: ["clang-7", "libc++-7-dev", "libc++abi-7-dev"] } }
+     addons: { apt: { packages: ["clang-7", "libc++-7-dev", "libc++abi-7-dev", "ninja-build"] } }
 
    # clang 8
    - env: CC=clang-8 CXX=clang++-8
-     addons: { apt: { packages: ["clang-8", "libc++-8-dev", "libc++abi-8-dev"] } }
+     addons: { apt: { packages: ["clang-8", "libc++-8-dev", "libc++abi-8-dev", "ninja-build"] } }
 
    # clang 9
    - env: CC=clang-9 CXX=clang++-9
-     addons: { apt: { packages: ["clang-9", "libc++-9-dev", "libc++abi-9-dev"] } }
+     addons: { apt: { packages: ["clang-9", "libc++-9-dev", "libc++abi-9-dev", "ninja-build"] } }
 
    # GCC 8
    - env: CC=gcc-8 CXX=g++-8
-     addons: { apt: { packages: ["g++-8"] } }
+     addons: { apt: { packages: ["g++-8", "ninja-build"] } }
 
    # GCC 9
-   - env: CC=gcc-9 CXX=g++-9
-     addons: { apt: { packages: ["g++-9"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+#   - env: CC=gcc-9 CXX=g++-9
+#     addons: { apt: { packages: [""g++-9", "ninja-build"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
 
 pre-install:
  - ${CC} --version
@@ -34,10 +34,10 @@ install:
   - DEPS_DIR="${HOME}/deps"
   - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
 
-  # Install Cmake 3.13.5
+  # Install Cmake 3.15.0
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.5-Linux-x86_64.tar.gz"
+      CMAKE_URL="https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
     else
@@ -45,37 +45,27 @@ install:
     fi
   - cmake --version
 
-  # Install tree
-  - sudo apt-get -y install tree
-
-
 before_script:
   # Go back to the root of the project
   - cd "${TRAVIS_BUILD_DIR}"
 
-
 script:
-  - mkdir -p Build
-  - cd Build
+  # Debug build & test
+  - cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -G "Ninja" -DDEV=1
+  - cmake --build Build/Debug --config Debug --verbose
+  - cd Build/Debug && ctest -C Debug -V
 
-  # Debug test
-  - cmake .. -DDEV=1
-  - cmake --build . --config Debug -- VERBOSE=1
-  - ctest -C Debug -V
+  - cd ../..
 
-  # Release test
-  - cmake --build . --config Release -- VERBOSE=1
-  - ctest -C Release -V
-
-  - tree
-
+  # Release build & test
+  - cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja" -DDEV=1
+  - cmake --build Build/Release --config Release --verbose
+  - cd Build/Release && ctest -C Release -V
 
 branches:
   only:
   - master
   - dev
-  - libclang_rework
-
 
 notifications:
   email: false
