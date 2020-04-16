@@ -1,4 +1,3 @@
-
 [FileGeneratorSettings]
 
 # Generated files will use this extension
@@ -8,25 +7,58 @@ generatedFilesExtension = ".rfk.h"
 supportedExtensions		= [".h", ".hpp"]
 
 # Generated files will be located here
-outputDirectory			= "D:/Prog/GP3/PLA/Refureku/Refureku/Library/Example/Include/Generated"
+outputDirectory			= ""
 
-# Files contained in this directories list will be parsed
+# Files contained in the directories of this list will be parsed
 toParseDirectories		= [
-	"D:/Prog/GP3/PLA/Refureku/Refureku/Library/Example/Include"
+#	"Path/To/Directory/To/Parse"
 ]
 
-# Files to parse which are not included in toParseDirectories
+# Files to parse which are not included in any directory of toParseDirectories
 toParseFiles			= []
 
-# Files contained in this directories list will be ignored
+# Files contained in the directories of this list will be ignored
 ignoredDirectories		= [
-	"D:/Prog/GP3/PLA/Refureku/Refureku/Library/Example/Include/Generated"
+#	"Path/To/Directory/To/Ignore"
 ]
 
-# Files not to parse which are not included in ignoredDirectories
+# Files not to parse which are not included in any directory of ignoredDirectories
 ignoredFiles			= []
 
+
 [FileParserSettings]
-projectIncludeDirectories	= ["D:/Prog/GP3/PLA/Refureku/Refureku/Library/Include"]
+
+# Abort parsing on first encountered error
+shouldAbortParsingOnFirstError = true
+
+# Include directories of the project
+projectIncludeDirectories	= [
+#	Path/To/RefurekuLibrary/Include,
+#	Path/To/Your/Project/Include
+]
 
 [FileParserSettings.Properties]
+
+propertySeparator = ","
+subPropertySeparator = ","
+subPropertyStartEncloser = "["
+subPropertyEndEncloser = "]"
+ignoredCharacters = [ " " ]
+
+[FileParserSettings.Properties.Class]
+macroName = "RFKClass"
+
+[FileParserSettings.Properties.Struct]
+macroName = "RFKStruct"
+
+[FileParserSettings.Properties.Field]
+macroName = "RFKField"
+
+[FileParserSettings.Properties.Method]
+macroName = "RFKMethod"
+
+[FileParserSettings.Properties.Enum]
+macroName = "RFKEnum"
+
+[FileParserSettings.Properties.EnumValue]
+macroName = "RFKEnumVal"

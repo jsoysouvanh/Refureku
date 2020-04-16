@@ -26,3 +26,9 @@ target_include_directories(${RefurekuGeneratorTarget} PRIVATE Include)
 
 # Link to Kodgen library
 target_link_libraries(${RefurekuGeneratorTarget} PRIVATE Kodgen)
+
+# Copy the RefurekuSettings template file next to the generated binary
+add_custom_command(	TARGET ${RefurekuGeneratorTarget} PRE_BUILD
+					COMMAND ${CMAKE_COMMAND} -E copy
+					${PROJECT_SOURCE_DIR}/RefurekuSettings.toml
+					${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RefurekuSettings.toml)

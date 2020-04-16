@@ -327,7 +327,16 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 
 	//Before doing anything, make sure destination folder exists
 	if (!fs::exists(outputDirectory))
-		genResult.completed = fs::create_directories(outputDirectory);
+	{
+		try
+		{
+			genResult.completed = fs::create_directories(outputDirectory);
+		}
+		catch (fs::filesystem_error const& e)
+		{
+			std::cerr << "Output directory is invalid: " << e.what() << std::endl;
+		}
+	}
 
 	if (fs::is_directory(outputDirectory))
 	{
@@ -342,7 +351,7 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 
 		genResult.completed = true;
 	}
-
+	
 	return genResult;
 }
 

@@ -12,10 +12,13 @@ void parseAndGenerate(fs::path workingDirectory)
 
 	std::cout << "[WORKING DIRECTORY] " << workingDirectory.string() << std::endl;
 
-	#ifdef KODGEN_DEV
+	#if KODGEN_DEV
 
 	fs::path includeDir		= (workingDirectory / "Include").make_preferred();
 	fs::path generatedDir	= includeDir / "Generated";
+
+	std::cout << "IncludeDir: " << includeDir << std::endl;
+	std::cout << "generatedDir: " << generatedDir << std::endl;
 
 	fileGenerator.outputDirectory = generatedDir;
 	fileGenerator.toParseDirectories.emplace(includeDir);
@@ -33,6 +36,8 @@ void parseAndGenerate(fs::path workingDirectory)
 	{
 		std::cout << "[LOADED] FileParser settings." << std::endl;
 	}
+
+	std::cout << "Output directory: " << fileGenerator.outputDirectory << std::endl;
 
 	//Parse
 	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);

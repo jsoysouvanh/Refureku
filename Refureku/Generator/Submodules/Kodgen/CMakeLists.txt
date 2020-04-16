@@ -73,9 +73,10 @@ target_include_directories(${KodgenTargetLibrary}
 								Libraries/Include)
 
 # Setup link directories
-target_link_directories(${KodgenTargetLibrary} PUBLIC
-							Libraries/x64/Static
-							Libraries/x64/Shared)
+target_link_directories(${KodgenTargetLibrary}
+							PUBLIC
+								Libraries/x64/Static
+								Libraries/x64/Shared)
 
 # Link to required libraries
 target_link_libraries(${KodgenTargetLibrary}
