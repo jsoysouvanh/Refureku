@@ -7,7 +7,7 @@ generatedFilesExtension = ".rfk.h"
 supportedExtensions		= [".h", ".hpp"]
 
 # Generated files will be located here
-outputDirectory			= ""
+# outputDirectory			= ""
 
 # Files contained in the directories of this list will be parsed
 toParseDirectories		= [
