@@ -113,7 +113,7 @@ namespace namespace3
 			virtual int	method1() const noexcept override final;
 
 			RFKMethod(CustomInstantiator)
-			static void*	customInstantiator(int i, float f) noexcept { return new ExampleClass(); }
+			static void*	customInstantiator(int, float) noexcept { return new ExampleClass(); }
 
 		protected:
 			RFKMethod()

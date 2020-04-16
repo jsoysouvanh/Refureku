@@ -128,7 +128,7 @@ void staticMethods()
 			std::cout << staticMethod3->invoke<int>("coucou") << std::endl;
 			std::cout << staticMethod3->checkedInvoke<int>("coucou") << std::endl;
 		}
-		catch (rfk::MethodError e)
+		catch (rfk::MethodError const& e)
 		{
 			std::cerr << e.what() << std::endl;
 		}
@@ -386,7 +386,7 @@ void types()
 		int v = staticMethod->checkedInvoke<int, int, int>(1, 2);	//<-- wrong arg
 		std::cout << v << std::endl;
 	}
-	catch (rfk::MethodError error)
+	catch (rfk::MethodError const& error)
 	{
 		std::cerr << error.what() << std::endl;
 	}
@@ -395,7 +395,7 @@ void types()
 	{
 		staticMethod->checkedInvoke(1, 2);
 	}
-	catch (rfk::MethodError error)
+	catch (rfk::MethodError const& error)
 	{
 		std::cerr << error.what() << std::endl;
 	}

@@ -51,7 +51,7 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 	if (!enumInfo.enumValues.empty())
 	{
 		generatedFile.writeLines("			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>::iterator	valueIt;\t\\",
-								 "			rfk::EnumValue*																	ev;\t\\",
+								 "			[[maybe_unused]] rfk::EnumValue*												ev;\t\\",
 								 "			ev;\t\\",
 								 "			type.values.reserve(" + std::to_string(enumInfo.enumValues.size()) + ");\t\\");
 
