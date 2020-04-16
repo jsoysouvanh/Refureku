@@ -1,5 +1,6 @@
 
 
+
 # Refureku
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 
@@ -356,9 +357,101 @@ There are 3 main classes which make the code generation possible: the FileParser
  2. The FileGenerator choses the right GeneratedCodeTemplate for a given parsed archetype;
  3. The GeneratedCodeTemplate generates the file & code;
 
-Each of those 3 classes contain overridable methods and modifiable fields, and this is where user customization starts.
+Each of those 3 classes contain overridable methods and modifiable fields, and this is where user customization starts. However, it might be tedious to modify and recompile the code each time you want to update something, that's why Refureku offers 2 possibilities:
+- Customize parsing and generation properties from a TOML file. It is enough in most utilization cases and is really fast and easy to setup.
+- Handle everything from C++ to allow a full control, from data modification to methods overrides. This option is more likely to be used if you want to embed the generation system into another software like a game engine.
 
-### FileParser
+You can decide to chose either one, but you can also use both in the same time.
+
+### From a TOML file
+A template TOML file with all editable properties is provided in the repository, and will be copied next to the executable after it is built. You can specify whichever property you want and simply remove or comment the ones you don't use.
+
+#### FileParser
+```ini
+[FileParserSettings]
+# When parsing a file, the parsing process will be immediately canceled if this is true, else it will continue until the end of the file to provide full error report
+shouldAbortParsingOnFirstError = true
+
+# Paths (absolute) to the include directories of your project.
+# This MUST be specified either from C++ code or here for parsing to work properly.
+# Don't forget to include Refureku headers directory too (Refureku/Library/Include)
+projectIncludeDirectories	= [
+	Path/To/Refureku/Library/Include
+]
+
+[FileParserSettings.Properties]
+# RFKClass(Prop1, Prop2)
+propertySeparator = ","
+
+# RFKClass(Prop1[SubProp])
+subPropertyStartEncloser = "["
+subPropertyEndEncloser = "]"
+
+# RFKClass(Prop1[SubProp1, SubProp2])
+subPropertySeparator = ","
+
+# RFKClass(Prop1 [ Sub Prop 1,  SubProp2]) will be parsed as RFKClass(Prop1[SubProp1,SubProp2])
+ignoredCharacters = [ " " ]
+
+[FileParserSettings.Properties.Class]
+# Declare a reflected class like class RFKClass() {};
+macroName = "RFKClass"
+
+[FileParserSettings.Properties.Struct]
+# Declare a reflected struct like struct RFKStruct() {};
+macroName = "RFKStruct"
+
+[FileParserSettings.Properties.Field]
+# Declare a reflected field like RFKField() int myField;
+macroName = "RFKField"
+
+[FileParserSettings.Properties.Method]
+# Declare a reflected method like RFKMethod() void myMethod();
+macroName = "RFKMethod"
+
+[FileParserSettings.Properties.Enum]
+# Declare a reflected enum like enum <class> RFKEnum() MyEnum {};
+macroName = "RFKEnum"
+
+[FileParserSettings.Properties.EnumValue]
+# Declare a reflected enum value like MyEnumValue RFKEnumVal() = 1
+macroName = "RFKEnumVal"
+```
+
+#### FileGenerator
+```ini
+[FileGeneratorSettings]
+# Generated files will use this extension
+generatedFilesExtension = ".rfk.h"
+
+# .h and .hpp files will be parsed
+supportedExtensions = [".h", ".hpp"]
+
+# Generated files will be located here (this is also where the generator checks if a file has already been generated)
+# outputDirectory = ""
+
+# Files contained in the directories of this list will be parsed
+toParseDirectories = [
+	"Path/To/Directory/To/Parse"
+]
+
+# Files to parse which are not included in any directory of toParseDirectories
+toParseFiles = []
+
+# Files contained in the directories of this list will be ignored
+# You will probably ignore at least the outputDirectory if it is contained in a toParseDirectory
+ignoredDirectories = [
+	"Path/To/Directory/To/Ignore"
+]
+
+# Files not to parse which are not included in any directory of ignoredDirectories
+ignoredFiles = []
+```
+
+### From C++ code
+Editable properties from C++ code are the same than the ones accessible from the TOML file.
+
+#### FileParser
 The parser is probably the class which you will want to change at first to modify the global syntax for reflection. If the default Refureku syntax is fine, you can reuse the rfk::FileParser as it is, but let's make a new one to see what we can change:
 ```cpp
 //Header file, let's say CustomFileParser.h
@@ -429,7 +522,7 @@ void CustomFileParser::postParse(fs::path const& parseFile, kodgen::ParsingResul
 }
 ```
 
-### FileGenerator
+#### FileGenerator
 The file generator handles collections of paths to files and directories to determine what should be parsed and what should not. Let's make a simple one:
 ```cpp
 //Header file, CustomFileGenerator.h
@@ -473,7 +566,7 @@ void CustomFileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::Parsi
     //rfk::FileGenerator::writeFooter(file, parsingResult);
 }
 ```
-### Usage
+#### Usage
 Once you've setup the FileParser and the FileGenerator, making everything work is pretty straight forward.
 However, there is one more piece of information we **MUST** provide to the FileParser to make it work properly: the include directories you added to your project. Indeed, the parser needs to know where it can find the files you include or it won't be able to resolve all symbols in a translation unit. The first one you can add is the **Refureku library include directory** (Refureku/Library/Include)
 ```cpp
@@ -550,7 +643,7 @@ All this process can be setup in a standalone executable which will be called be
 		- cmake --build . --target RefurekuGenerator Refureku --config Release --parallel 4
 	- If you're compiling your project in debug mode, you will also need the debug version of Refureku:
 		- cmake --build . --target Refureku --config Debug --parallel 4
-	- You will find the generator binaries in Build/Refureku/Generator/Bin/x64/Release/ and the library in Build/Refureku/Library/Lib/x64/[Debug|Release]/
+	- You will find the generator binaries in Build/Bin/x64/Release/ and the library in Build/Lib/x64/[Debug|Release]/
 
 4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project include directories (Refureku/Library/Include). Make sure to link against the Debug version of the library if you compile your project in Debug to prevent [this issue](#issue-1).
 	-  With CMake, it would look like this:
@@ -562,7 +655,9 @@ All this process can be setup in a standalone executable which will be called be
 	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
 	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,Refureku_Debug,Refureku_Release>)
 	```
-5. Make the RefurekuGenerator run before compiling your project:
+7. Move the libclang.dll library from Build/Bin/ to 
+
+6. Make the RefurekuGenerator run before compiling your project:
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
@@ -574,8 +669,8 @@ All this process can be setup in a standalone executable which will be called be
 	```
 	- With Visual Studio:
 		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe $(SolutionDir)
-6. Make sure you compile in C++17
-7. Compile your project: the generator should run before your project is built.
+7. Make sure you compile your project in C++17+
+8. Compile your project: the generator should run before your project is built.
 
 ### Possible issues
 #### Issue 1
@@ -587,9 +682,9 @@ All this process can be setup in a standalone executable which will be called be
 
 ## Cross-platform compatibility
 This library has been tested and is stable with the following configurations:
-- Windows | MSVC 2019 16.5.2
-- Linux | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
-- Linux | GCC 8.4.0, GCC 9.2.1
+- Windows 10 | MSVC 2019 16.5.2
+- Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
+- Linux 18.04 | GCC 8.4.0, GCC 9.2.1
 
 ## License
 MIT License
