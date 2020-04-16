@@ -17,13 +17,10 @@ add_executable(${RefurekuTestsTarget}
 target_link_libraries(${RefurekuTestsTarget} PRIVATE ${RefurekuLibraryTarget})
 
 # Create the command to run RefurekuGenerator
-set(RefurekuGeneratorPath ${CMAKE_BINARY_DIR}/Bin)
 set(RefurekuGeneratorExeName RefurekuGenerator)
 set(RunTestGeneratorTarget RunRefurekuTestGenerator)
 
-add_custom_target(${RunTestGeneratorTarget}
-                    WORKING_DIRECTORY ${RefurekuGeneratorPath}
-                    COMMAND ${RefurekuGeneratorExeName} ${PROJECT_SOURCE_DIR})
+add_custom_target(${RunTestGeneratorTarget} COMMAND ${RefurekuGeneratorExeName} ${PROJECT_SOURCE_DIR})
 
 # Run the RefurekuGenerator BEFORE building the project to refresh generated files
 add_dependencies(${RefurekuTestsTarget} ${RunTestGeneratorTarget})

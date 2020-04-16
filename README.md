@@ -1,11 +1,16 @@
-
-
-
 # Refureku
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 
+Refureku is a powerful customizable C++17 reflection library based on libclang.
+It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
+
+It is separated into 2 distinct parts:
+- The metadata parser and generator, which will parse C++ source code and generate metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
+- The actual library which contain the framework classes to access and manipulate reflected data at runtime.
+
+To get started now, see the [Getting Started](#getting-started) section.
+
 ## Index
-- [Introduction](#introduction)
 - [Features](#features)
 - [Framework Overview](#framework-overview)
 	- [Archetype](#archetype)
@@ -16,24 +21,18 @@
 	- [Overview](#overview)
 	- [Builtin Properties](#builtin-properties)
 - [Customization](#customization)
-	- [FileParser](#fileparser)
-	- [FileGenerator](#filegenerator)
-	- [Usage](#usage)
+	- [From a TOML file](#from-a-toml-file)
+		- [FileParser settings](#fileparser-settings)
+		- [FileGenerator settings](#filegenerator-settings)
+	- [From C++ code](#from-c-code)
+		- [FileParser](#fileparser)
+		- [FileGenerator](#filegenerator)
+		- [Usage](#usage)
 - [Getting started](#getting-started)
 	- [Steps](#steps)
 	- [Possible issues](#possible-issues)
 - [Cross-platform compatibility](#cross-platform-compatibility)
 - [License](#license)
-
-## Introduction
-Refureku is a powerful customizable C++17 reflection library based on libclang.
-It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
-
-It is separated into 2 distinct parts:
-- The metadata parser and generator, which will parse C++ source code and generate metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
-- The actual library which contain the framework classes to access and manipulate reflected data at runtime.
-
-To get started now, see the [Getting Started](#getting-started) section.
 
 ## Features
 - Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
@@ -358,15 +357,15 @@ There are 3 main classes which make the code generation possible: the FileParser
  3. The GeneratedCodeTemplate generates the file & code;
 
 Each of those 3 classes contain overridable methods and modifiable fields, and this is where user customization starts. However, it might be tedious to modify and recompile the code each time you want to update something, that's why Refureku offers 2 possibilities:
-- Customize parsing and generation properties from a TOML file. It is enough in most utilization cases and is really fast and easy to setup.
-- Handle everything from C++ to allow a full control, from data modification to methods overrides. This option is more likely to be used if you want to embed the generation system into another software like a game engine.
+- Customize parsing and generation properties from a TOML file. It is enough in most use cases and is really fast and easy to setup.
+- Handle everything from C++ to allow a full control, from data modification to method overrides. This option is more likely to be used if you want to embed the generation system into another software like a game engine.
 
-You can decide to chose either one, but you can also use both in the same time.
+You can decide to chose either one or to combine both at the same time.
 
 ### From a TOML file
 A template TOML file with all editable properties is provided in the repository, and will be copied next to the executable after it is built. You can specify whichever property you want and simply remove or comment the ones you don't use.
 
-#### FileParser
+#### FileParser settings
 ```ini
 [FileParserSettings]
 # When parsing a file, the parsing process will be immediately canceled if this is true, else it will continue until the end of the file to provide full error report
@@ -418,7 +417,7 @@ macroName = "RFKEnum"
 macroName = "RFKEnumVal"
 ```
 
-#### FileGenerator
+#### FileGenerator settings
 ```ini
 [FileGeneratorSettings]
 # Generated files will use this extension
@@ -584,15 +583,26 @@ int main()
     CustomFileParser    fileParser;
     CustomFileGenerator fileGenerator;
 
+    //Can explicitely load settings from a toml file
+    if (fileGenerator.loadSettings("RefurekuSettings.toml"))
+    {
+        //Load success
+    }
+
+    if (fileParser.loadSettings("RefurekuSettings.toml"))
+    {
+        //Load success
+    }
+
     //-------------------------------------------------
-    //THIS PART IS MANDATORY TO MAKE THE GENERATOR WORK
+    //THIS PART IS MANDATORY TO MAKE THE GENERATOR WORK (or it must be loaded from the TOML settings file)
 
     fileParser.getParsingSettings().projectIncludeDirectories.emplace("Path/To/Refureku/Include/Directory");	//Refureku/Library/Include
     fileParser.getParsingSettings().projectIncludeDirectories.emplace("Path/To/Your/Include/Directory");
     //... Add all the include directories you added to your project
 
     //-------------------------------------------------
-    
+
     //Setup the files / directories you want to parse and/or ignore
     fileGenerator.includedDirectories.emplace("Path/To/A/Directory/To/Parse");
     fileGenerator.includedFiles.emplace("Path/To/A/File/To/Parse.h");
@@ -623,29 +633,31 @@ All this process can be setup in a standalone executable which will be called be
 ## Getting started
 ### Requirements:
 - CMake 3.15.0+
-- A compatible compiler: MSVC 2017 / GCC8.0.0 / Clang 7.0.0 or newer.
+- A compatible compiler: MSVC 2017 / GCC8.0.0 / Clang 7.0.0 or later.
 
 ### Steps
 1. Pull the repository
-2. Update the RefurekuGenerator (Refureku/Generator/Source/main.cpp) according to your needs. You must at least:
-	- Add your project include directories (it includes Refureku include directory) as specified [here](#usage)
-	- Update the "mainIncludeDirectory" variable so that it is the path to your main Include directory
-3. Compile the library and the generator following these steps:
+2. Compile the library and the generator following these steps:
 	- At the root of the Refureku project, open a terminal
-		-  mkdir Build   
-		- cd Build   
-		- cmake -G \<Generator\> -A x64 .\.
+		- cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "\<Generator\>" -A x64
 			> Most common generators include:
-			> - Visual Studio 2017	-> cmake -G "Visual Studio 15 2017" -A x64 .\.
-			> - Makefile -> cmake -G "Unix Makefiles" -A x64 .\.
+			> - Visual Studio 2017
+			> - Makefile
 			> - Ninja
 			> - Type cmake -G for more information
-		- cmake --build . --target RefurekuGenerator Refureku --config Release --parallel 4
-	- If you're compiling your project in debug mode, you will also need the debug version of Refureku:
-		- cmake --build . --target Refureku --config Debug --parallel 4
-	- You will find the generator binaries in Build/Bin/x64/Release/ and the library in Build/Lib/x64/[Debug|Release]/
-
-4. Link against Refureku.lib, and don't forget to add the Refureku headers directory to your project include directories (Refureku/Library/Include). Make sure to link against the Debug version of the library if you compile your project in Debug to prevent [this issue](#issue-1).
+		- cmake --build Build/Release --config Release --target RefurekuGenerator Refureku
+	- If you're compiling your project in debug mode, you will also probably need the debug version of Refureku:
+		- cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -G "\<Generator\>" -A x64
+		- cmake --build Build/Debug --config Debug --target Refureku
+	- You will find the generator binaries in Build/Release/Bin/ and the library in Build/[Debug|Release]/Lib/
+		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated. Make sure to move the .dll and config files next to the generator executable.
+4. Update the TOML settings file situated in Build/Release/Bin/, next to the RefurekuGenerator executable as [described here](#from-a-toml-file). You must at least specify:
+	- [FileGeneratorSettings] outputDirectory = "Path/To/An/Output/Directory"
+	- [FileGeneratorSettings] toParseDirectories = [ "Path/To/Dir/To/Parse1", ... ]
+	- [FileParserSettings] projectIncludeDirectories = [ "Path/To/Refureku/Library/Include", "Path/To/Your/Project/Include/Dir1", ... ]
+	- **If the specified outputDirectory is in a parsed directory**, you should ignore it too     
+	[FileGeneratorSettings] ignoredDirectories = [ "Path/To/An/Output/Directory" ]
+5. Add the Refureku headers directory to your project include directories (Refureku/Library/Include) and link against Refureku.lib. Make sure to use the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
 	-  With CMake, it would look like this:
 	```cmake
 	# Add Refureku Include directory
@@ -655,22 +667,16 @@ All this process can be setup in a standalone executable which will be called be
 	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
 	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,Refureku_Debug,Refureku_Release>)
 	```
-7. Move the libclang.dll library from Build/Bin/ to 
-
-6. Make the RefurekuGenerator run before compiling your project:
+7. Make the RefurekuGenerator run before compiling your project:
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
-	add_custom_target(RunGenerator
-			  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-			  COMMAND Path/To/The/Generator/RefurekuGenerator.exe)
-	
+	add_custom_target(RunGenerator COMMAND Path/To/The/RefurekuGenerator ${PROJECT_SOURCE_DIR})
 	add_dependencies(YourExecutable RunGenerator)
 	```
 	- With Visual Studio:
 		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe $(SolutionDir)
-7. Make sure you compile your project in C++17+
-8. Compile your project: the generator should run before your project is built.
+9. Compile your project: the generator should run before your project is built.
 
 ### Possible issues
 #### Issue 1
