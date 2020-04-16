@@ -1,6 +1,5 @@
 #pragma once
 
-//DEBUG
 #ifndef NDEBUG
 
 	#define REFUREKU_DEBUG		1
