@@ -1,5 +1,4 @@
 [FileGeneratorSettings]
-
 # Generated files will use this extension
 generatedFilesExtension = ".rfk.h"
 
@@ -7,11 +6,11 @@ generatedFilesExtension = ".rfk.h"
 supportedExtensions		= [".h", ".hpp"]
 
 # Generated files will be located here
-# outputDirectory			= ""
+outputDirectory			= '''Path/To/Output/Dir'''
 
 # Files contained in the directories of this list will be parsed
 toParseDirectories		= [
-#	"Path/To/Directory/To/Parse"
+#	'''Path/To/Directory/To/Parse'''
 ]
 
 # Files to parse which are not included in any directory of toParseDirectories
@@ -19,7 +18,8 @@ toParseFiles			= []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories		= [
-#	"Path/To/Directory/To/Ignore"
+#	'''Path/To/Output/Dir''',
+#	'''Path/To/Directory/To/Ignore'''
 ]
 
 # Files not to parse which are not included in any directory of ignoredDirectories
@@ -27,18 +27,16 @@ ignoredFiles			= []
 
 
 [FileParserSettings]
-
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError = true
 
 # Include directories of the project
 projectIncludeDirectories	= [
-#	Path/To/RefurekuLibrary/Include,
-#	Path/To/Your/Project/Include
+#	'''Path/To/RefurekuLibrary/Include''',
+#	'''Path/To/Your/Project/Include'''
 ]
 
 [FileParserSettings.Properties]
-
 propertySeparator = ","
 subPropertySeparator = ","
 subPropertyStartEncloser = "["

@@ -325,31 +325,38 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 {
 	FileGenerationResult genResult;
 
-	//Before doing anything, make sure destination folder exists
-	if (!fs::exists(outputDirectory))
+	if (outputDirectory.empty())
 	{
-		try
-		{
-			genResult.completed = fs::create_directories(outputDirectory);
-		}
-		catch (fs::filesystem_error const& e)
-		{
-			std::cerr << "Output directory is invalid: " << e.what() << std::endl;
-		}
+		std::cerr << "[ERROR] Output directory is empty, it must be specified for the files to be generated." << std::endl;
 	}
-
-	if (fs::is_directory(outputDirectory))
+	else
 	{
-		ParsingSettings& parsingSettings = parser.getParsingSettings();
+		//Before doing anything, make sure destination folder exists
+		if (!fs::exists(outputDirectory))
+		{
+			try
+			{
+				genResult.completed = fs::create_directories(outputDirectory);
+			}
+			catch (fs::filesystem_error const& e)
+			{
+				std::cerr << "Output directory is invalid: " << e.what() << std::endl;
+			}
+		}
 
-		refreshPropertyRules(parsingSettings);
+		if (fs::is_directory(outputDirectory))
+		{
+			ParsingSettings& parsingSettings = parser.getParsingSettings();
 
-		generateMacrosFile(parser);
+			refreshPropertyRules(parsingSettings);
 
-		processIncludedFiles(parser, genResult, forceRegenerateAll);
-		processIncludedDirectories(parser, genResult, forceRegenerateAll);
+			generateMacrosFile(parser);
 
-		genResult.completed = true;
+			processIncludedFiles(parser, genResult, forceRegenerateAll);
+			processIncludedDirectories(parser, genResult, forceRegenerateAll);
+
+			genResult.completed = true;
+		}
 	}
 	
 	return genResult;

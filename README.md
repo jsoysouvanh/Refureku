@@ -365,6 +365,8 @@ You can decide to chose either one or to combine both at the same time.
 ### From a TOML file
 A template TOML file with all editable properties is provided in the repository, and will be copied next to the executable after it is built. You can specify whichever property you want and simply remove or comment the ones you don't use.
 
+> **Note:** Paths are written between ''' '''. On Windows, you can use either / or \ as a separator for your paths.
+
 #### FileParser settings
 ```ini
 [FileParserSettings]
@@ -375,7 +377,7 @@ shouldAbortParsingOnFirstError = true
 # This MUST be specified either from C++ code or here for parsing to work properly.
 # Don't forget to include Refureku headers directory too (Refureku/Library/Include)
 projectIncludeDirectories	= [
-	Path/To/Refureku/Library/Include
+	'''Path/To/Refureku/Library/Include'''
 ]
 
 [FileParserSettings.Properties]
@@ -427,11 +429,11 @@ generatedFilesExtension = ".rfk.h"
 supportedExtensions = [".h", ".hpp"]
 
 # Generated files will be located here (this is also where the generator checks if a file has already been generated)
-# outputDirectory = ""
+outputDirectory = '''Path/To/Output/Directory'''
 
 # Files contained in the directories of this list will be parsed
 toParseDirectories = [
-	"Path/To/Directory/To/Parse"
+	'''Path/To/Directory/To/Parse'''
 ]
 
 # Files to parse which are not included in any directory of toParseDirectories
@@ -440,7 +442,7 @@ toParseFiles = []
 # Files contained in the directories of this list will be ignored
 # You will probably ignore at least the outputDirectory if it is contained in a toParseDirectory
 ignoredDirectories = [
-	"Path/To/Directory/To/Ignore"
+	'''Path/To/Output/Directory'''
 ]
 
 # Files not to parse which are not included in any directory of ignoredDirectories
@@ -650,14 +652,8 @@ All this process can be setup in a standalone executable which will be called be
 		- cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -G "\<Generator\>" -A x64
 		- cmake --build Build/Debug --config Debug --target Refureku
 	- You will find the generator binaries in Build/Release/Bin/ and the library in Build/[Debug|Release]/Lib/
-		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated. Make sure to move the .dll and config files next to the generator executable.
-4. Update the TOML settings file situated in Build/Release/Bin/, next to the RefurekuGenerator executable as [described here](#from-a-toml-file). You must at least specify:
-	- [FileGeneratorSettings] outputDirectory = "Path/To/An/Output/Directory"
-	- [FileGeneratorSettings] toParseDirectories = [ "Path/To/Dir/To/Parse1", ... ]
-	- [FileParserSettings] projectIncludeDirectories = [ "Path/To/Refureku/Library/Include", "Path/To/Your/Project/Include/Dir1", ... ]
-	- **If the specified outputDirectory is in a parsed directory**, you should ignore it too     
-	[FileGeneratorSettings] ignoredDirectories = [ "Path/To/An/Output/Directory" ]
-5. Add the Refureku headers directory to your project include directories (Refureku/Library/Include) and link against Refureku.lib. Make sure to use the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
+		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated. Make sure to move libclang.dll and RefurekuSettings.toml next to the generator executable.
+3. Add the Refureku headers directory to your project include directories (Refureku/Library/Include) and link against Refureku.lib. Make sure to use the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
 	-  With CMake, it would look like this:
 	```cmake
 	# Add Refureku Include directory
@@ -667,7 +663,13 @@ All this process can be setup in a standalone executable which will be called be
 	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
 	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,Refureku_Debug,Refureku_Release>)
 	```
-7. Make the RefurekuGenerator run before compiling your project:
+4. Update RefurekuSettings.toml situated in Build/Release/Bin/ as [described here](#from-a-toml-file). You must at least specify:
+	- [FileGeneratorSettings] outputDirectory = '''Path/To/An/Output/Directory'''
+	- [FileGeneratorSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
+	- [FileParserSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
+	- **If the specified outputDirectory is in a parsed directory**, you should ignore it too     
+	[FileGeneratorSettings] ignoredDirectories = [ '''Path/To/An/Output/Directory''' ]
+5. Make the RefurekuGenerator run before compiling your project:
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
@@ -676,7 +678,7 @@ All this process can be setup in a standalone executable which will be called be
 	```
 	- With Visual Studio:
 		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe $(SolutionDir)
-9. Compile your project: the generator should run before your project is built.
+6. Compile your project: the generator should run before your project is built.
 
 ### Possible issues
 #### Issue 1
