@@ -32,6 +32,8 @@ To get started now, see the [Getting Started](#getting-started) section.
 	- [Steps](#steps)
 	- [Possible issues](#possible-issues)
 - [Cross-platform compatibility](#cross-platform-compatibility)
+- [Planned features](#planned-features)
+- [Known issues](#known-issues)
 - [License](#license)
 
 ## Features
@@ -370,7 +372,8 @@ A template TOML file with all editable properties is provided in the repository,
 #### FileParser settings
 ```ini
 [FileParserSettings]
-# When parsing a file, the parsing process will be immediately canceled if this is true, else it will continue until the end of the file to provide full error report
+# When parsing a file, the parsing process will be immediately canceled if this is true,
+# else it will continue until the end of the file to provide full error report
 shouldAbortParsingOnFirstError = true
 
 # Paths (absolute) to the include directories of your project.
@@ -643,7 +646,7 @@ All this process can be setup in a standalone executable which will be called be
 	- At the root of the Refureku project, open a terminal
 		- cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "\<Generator\>" -A x64
 			> Most common generators include:
-			> - Visual Studio 2017
+			> - Visual Studio 15 2017
 			> - Makefile
 			> - Ninja
 			> - Type cmake -G for more information
@@ -653,7 +656,7 @@ All this process can be setup in a standalone executable which will be called be
 		- cmake --build Build/Debug --config Debug --target Refureku
 	- You will find the generator binaries in Build/Release/Bin/ and the library in Build/[Debug|Release]/Lib/
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated. Make sure to move libclang.dll and RefurekuSettings.toml next to the generator executable.
-3. Add the Refureku headers directory to your project include directories (Refureku/Library/Include) and link against Refureku.lib. Make sure to use the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
+3. In your project settings, add the Refureku headers directory to the include directories (Refureku/Library/Include) and link against Refureku.lib. Make sure to use the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
 	-  With CMake, it would look like this:
 	```cmake
 	# Add Refureku Include directory
@@ -678,7 +681,8 @@ All this process can be setup in a standalone executable which will be called be
 	```
 	- With Visual Studio:
 		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe $(SolutionDir)
-6. Compile your project: the generator should run before your project is built.
+6. Make sure you compile your project in C++17 or later.
+7. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
 
 ### Possible issues
 #### Issue 1
@@ -693,6 +697,13 @@ This library has been tested and is stable with the following configurations:
 - Windows 10 | MSVC 2019 16.5.2
 - Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
 - Linux 18.04 | GCC 8.4.0, GCC 9.2.1
+
+## Planned features
+- Add namespace variable to Archetype class
+- Add a proper logger interface to avoid raw stream use and provide a better user control
+
+## Known issues
+None at the moment
 
 ## License
 MIT License
