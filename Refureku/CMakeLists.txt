@@ -7,4 +7,3 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Bin)	# .exe
 
 add_subdirectory(Generator)
 add_subdirectory(Library)
-add_subdirectory(Examples)
