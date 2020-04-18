@@ -367,7 +367,14 @@ You can decide to chose either one or to combine both at the same time.
 ### From a TOML file
 A template TOML file with all editable properties is provided in the repository, and will be copied next to the executable after it is built. You can specify whichever property you want and simply remove or comment the ones you don't use.
 
-> **Note:** Paths are written between ''' '''. On Windows, you can use either / or \ as a separator for your paths.
+Paths must be written between ''' '''. On Windows, you can use either / or \ as a path separator. You can either use absolute paths or relative paths. Note that relative paths will be relative to the working directory.
+- In Cmake, working directory is specified in the add_custom_target call
+	```cmake
+	add_custom_target(RunGenerator
+			  WORKING_DIRECTORY Your/Working/Directory
+			  COMMAND Path/To/The/RefurekuGenerator)
+	```
+- In Visual Studio, working directory is specified in **Project > Properties > Configuration Properties > Debugging > Working Directory**
 
 #### FileParser settings
 ```ini
@@ -376,7 +383,7 @@ A template TOML file with all editable properties is provided in the repository,
 # else it will continue until the end of the file to provide full error report
 shouldAbortParsingOnFirstError = true
 
-# Paths (absolute) to the include directories of your project.
+# Paths to the include directories of your project.
 # This MUST be specified either from C++ code or here for parsing to work properly.
 # Don't forget to include Refureku headers directory too (Refureku/Library/Include)
 projectIncludeDirectories	= [
@@ -434,7 +441,7 @@ supportedExtensions = [".h", ".hpp"]
 # Generated files will be located here (this is also where the generator checks if a file has already been generated)
 outputDirectory = '''Path/To/Output/Directory'''
 
-# Files contained in the directories of this list will be parsed
+# Directories in this list will be recursively inspected and each valid file will be considered for parsing
 toParseDirectories = [
 	'''Path/To/Directory/To/Parse'''
 ]
@@ -676,7 +683,7 @@ All this process can be setup in a standalone executable which will be called be
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
-	add_custom_target(RunGenerator COMMAND Path/To/The/RefurekuGenerator)
+	add_custom_target(RunGenerator WORKING_DIRECTORY Your/Working/Directory COMMAND Path/To/The/RefurekuGenerator)
 	add_dependencies(YourExecutable RunGenerator)
 	```
 	- With Visual Studio:
