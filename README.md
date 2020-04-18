@@ -701,6 +701,7 @@ This library has been tested and is stable with the following configurations:
 ## Planned features
 - Add namespace variable to Archetype class
 - Add a proper logger interface to avoid raw stream use and provide a better user control
+- Add the possibility to add new valid properties via TOML
 
 ## Known issues
 None at the moment

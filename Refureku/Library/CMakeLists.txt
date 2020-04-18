@@ -26,12 +26,12 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Methods/MethodError.cpp
 			)
 
-# Setup warning level
+# Setup compilation flags
 if (MSVC)
-	string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Remove the default flag /W3
-	target_compile_options(${RefurekuLibraryTarget} PUBLIC /W4)
+	string(REGEX REPLACE " /W[0-4]" " /W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
+	string(REGEX REPLACE " /GR" " /GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
 else()	# Clang or GCC
-	target_compile_options(${RefurekuLibraryTarget} PUBLIC -Wall -Wextra -Wpedantic)
+	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fno-rtti)
 endif()
 
 # Setup language requirements
