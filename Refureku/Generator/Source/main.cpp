@@ -5,6 +5,30 @@
 #include "FileParser.h"
 #include "FileGenerator.h"
 
+void printGenerationResult(kodgen::FileGenerationResult const& genResult)
+{
+	if (genResult.completed)
+	{
+		std::cout << "[LOG] (Re)generated metadata for " << genResult.parsedFiles.size() << " file(s)." << std::endl;
+		std::cout << "[LOG] Metadata of " << genResult.upToDateFiles.size() << " file(s) up-to-date." << std::endl;
+
+		//Errors
+		for (kodgen::ParsingError parsingError : genResult.parsingErrors)
+		{
+			std::cerr << parsingError << std::endl;
+		}
+
+		for (kodgen::FileGenerationError fileGenError : genResult.fileGenerationErrors)
+		{
+			std::cerr << fileGenError << std::endl;
+		}
+	}
+	else
+	{
+		std::cerr << "Generation failed to complete successfully." << std::endl;
+	}
+}
+
 void parseAndGenerate(fs::path&& exePath, fs::path&& workingDirectory)
 {
 	rfk::FileParser		fileParser;
@@ -35,22 +59,7 @@ void parseAndGenerate(fs::path&& exePath, fs::path&& workingDirectory)
 		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
 
 		//Result
-		if (genResult.completed)
-		{
-			for (kodgen::ParsingError parsingError : genResult.parsingErrors)
-			{
-				std::cerr << parsingError << std::endl;
-			}
-
-			for (kodgen::FileGenerationError fileGenError : genResult.fileGenerationErrors)
-			{
-				std::cerr << fileGenError << std::endl;
-			}
-		}
-		else
-		{
-			std::cerr << "Invalid FileGenerator::outputDirectory" << std::endl;
-		}
+		printGenerationResult(genResult);
 	}
 	else
 	{

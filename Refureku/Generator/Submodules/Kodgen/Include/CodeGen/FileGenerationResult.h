@@ -30,5 +30,15 @@ namespace kodgen
 		*	List of errors which occured when attempting to generate code.
 		*/
 		std::vector<FileGenerationError>	fileGenerationErrors;
+
+		/**
+		*	List of paths to files that have been parsed and got their metadata regenerated.
+		*/
+		std::vector<fs::path>				parsedFiles;
+
+		/**
+		*	List of paths to files which metadata are up-to-date.
+		*/
+		std::vector<fs::path>				upToDateFiles;
 	};
 }

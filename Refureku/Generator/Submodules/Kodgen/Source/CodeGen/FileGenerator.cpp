@@ -32,6 +32,11 @@ void FileGenerator::updateSupportedCodeTemplateRegex() noexcept
 
 void FileGenerator::generateEntityFile(FileGenerationResult& genResult, fs::path const& filePath, ParsingResult const& parsingResult) noexcept
 {
+	/**
+	*	This constructor actually create the file in the filesystem.
+	*	We create a file even if no entity was found so that we have the file generation timestamp to avoid
+	*	parsing this file again if it hasn't changed.
+	*/
 	GeneratedFile generatedFile(makePathToGeneratedFile(filePath), filePath);
 
 	//Header
@@ -230,6 +235,8 @@ void FileGenerator::processFile(FileParser& parser, FileGenerationResult& genRes
 	//Parse file
 	ParsingResult parsingResult;
 
+	genResult.parsedFiles.push_back(pathToFile);
+
 	if (parser.parse(pathToFile, parsingResult))
 	{
 		generateEntityFile(genResult, pathToFile, parsingResult);
@@ -245,11 +252,20 @@ void FileGenerator::processIncludedFiles(FileParser& parser, FileGenerationResul
 {
 	for (fs::path path : toParseFiles)
 	{
-		if (fs::exists(path) &&
-			!fs::is_directory(path) &&
-			(forceRegenerateAll || shouldRegenerateFile(path)))
+		if (fs::exists(path) && !fs::is_directory(path))
 		{
-			processFile(parser, genResult, path);
+			if (forceRegenerateAll || shouldRegenerateFile(path))
+			{
+				processFile(parser, genResult, path);
+			}
+			else
+			{
+				genResult.upToDateFiles.push_back(path);
+			}
+		}
+		else
+		{
+			//TODO: Add FileGenerationFile invalid path
 		}
 	}
 }
@@ -272,10 +288,16 @@ void FileGenerator::processIncludedDirectories(FileParser& parser, FileGeneratio
 					if (entry.is_regular_file())
 					{
 						if (supportedExtensions.find(entryPath.extension().string()) != supportedExtensions.cend() &&
-							ignoredFiles.find(entryPath.string()) == ignoredFiles.cend() &&
-							(forceRegenerateAll || shouldRegenerateFile(entryPath)))
+							ignoredFiles.find(entryPath.string()) == ignoredFiles.cend())
 						{
-							processFile(parser, genResult, entryPath);
+							if (forceRegenerateAll || shouldRegenerateFile(entryPath))
+							{
+								processFile(parser, genResult, entryPath);
+							}
+							else
+							{
+								genResult.upToDateFiles.push_back(entryPath);
+							}
 						}
 					}
 					else if (entry.is_directory() && ignoredDirectories.find(entryPath.string()) != ignoredDirectories.cend())
@@ -334,6 +356,7 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 		//Before doing anything, make sure destination folder exists
 		if (!fs::exists(outputDirectory))
 		{
+			//Try to create them is it doesn't exist
 			try
 			{
 				genResult.completed = fs::create_directories(outputDirectory);
