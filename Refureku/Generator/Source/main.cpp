@@ -62,7 +62,7 @@ void parseAndGenerate(fs::path&& exePath)
 		std::cout << "[LOADED] FileGenerator settings." << std::endl;
 		std::cout << "[LOADED] FileParser settings." << std::endl;
 
-		#if KODGEN_DEV
+		#if RFK_DEV
 
 		// This part is for travis only
 		fs::path includeDir		= fs::current_path() / "Include";

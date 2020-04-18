@@ -56,8 +56,8 @@ else()	# Clang or GCC
 endif()
 
 # Setup compilation definitions
-if (DEV)
-	target_compile_definitions(${KodgenTargetLibrary} PUBLIC KODGEN_DEV=1)
+if (KODGEN_DEV)
+	target_compile_definitions(${KodgenTargetLibrary} PRIVATE KODGEN_DEV=1)
 endif()
 
 # Setup compilation options

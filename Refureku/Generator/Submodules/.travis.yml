@@ -22,8 +22,12 @@ jobs:
      addons: { apt: { packages: ["g++-8", "ninja-build"] } }
 
    # GCC 9
-#   - env: CC=gcc-9 CXX=g++-9
-#     addons: { apt: { packages: [""g++-9", "ninja-build"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+   - env: CC=gcc-9 CXX=g++-9
+     addons: { apt: { packages: ["g++-9", "ninja-build"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+
+   # GCC 10
+   - env: CC=gcc-10 CXX=g++-10
+     addons: { apt: { packages: ["g++-10", "ninja-build"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
 
 pre-install:
  - ${CC} --version
