@@ -1,19 +1,6 @@
 #pragma once
 
-#if defined(_MSC_VER)
-
-#define DISABLE_WARNING_PUSH					__pragma(warning(push))
-#define DISABLE_WARNING_POP						__pragma(warning(pop)) 
-#define DISABLE_WARNING(warningNumber)			__pragma(warning(disable: warningNumber))
-
-#define DISABLE_WARNING_INIT_SEG				DISABLE_WARNING(4073)
-#define DISABLE_WARNING_OFFSETOF
-#define DISABLE_WARNING_UNSCOPED_ENUM			DISABLE_WARNING(26812)
-#define DISABLE_WARNING_UNINIT_VALUE			DISABLE_WARNING(26495)
-#define DISABLE_WARNING_NOEXCEPT				DISABLE_WARNING(26439)
-#define DISABLE_WARNING_ARITHMETIC_OVERFLOW		DISABLE_WARNING(26451)
-
-#elif defined(__GNUC__) || defined(__clang__)
+#if defined(__GNUC__) || defined(__clang__)
 
 #define PRAGMATIZE(param)						_Pragma(#param)
 #define DISABLE_WARNING_PUSH					PRAGMATIZE(GCC diagnostic push)
@@ -26,6 +13,19 @@
 #define DISABLE_WARNING_UNINIT_VALUE
 #define DISABLE_WARNING_NOEXCEPT
 #define DISABLE_WARNING_ARITHMETIC_OVERFLOW
+
+#elif defined(_MSC_VER)
+
+#define DISABLE_WARNING_PUSH					__pragma(warning(push))
+#define DISABLE_WARNING_POP						__pragma(warning(pop)) 
+#define DISABLE_WARNING(warningNumber)			__pragma(warning(disable: warningNumber))
+
+#define DISABLE_WARNING_INIT_SEG				DISABLE_WARNING(4073)
+#define DISABLE_WARNING_OFFSETOF
+#define DISABLE_WARNING_UNSCOPED_ENUM			DISABLE_WARNING(26812)
+#define DISABLE_WARNING_UNINIT_VALUE			DISABLE_WARNING(26495)
+#define DISABLE_WARNING_NOEXCEPT				DISABLE_WARNING(26439)
+#define DISABLE_WARNING_ARITHMETIC_OVERFLOW		DISABLE_WARNING(26451)
 
 #else
 

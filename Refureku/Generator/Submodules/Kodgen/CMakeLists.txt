@@ -78,7 +78,6 @@ target_link_directories(${KodgenTargetLibrary}
 # Link to required libraries
 target_link_libraries(${KodgenTargetLibrary}
 						INTERFACE
-#							$<$<CXX_COMPILER_ID:Clang>:c++ c++abi>
 							$<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:stdc++fs>	#filesystem	pre Clang-9
 							$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:stdc++fs>	#filesystem	pre GCC-9
 							clang

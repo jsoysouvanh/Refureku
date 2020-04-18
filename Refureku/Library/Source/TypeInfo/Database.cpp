@@ -7,7 +7,12 @@
 using namespace rfk;
 
 //Init database containers BEFORE any other code so that reflected classes can register at startup
-#if defined(_MSC_VER)
+#if defined(__GNUC__) || defined(__clang__)
+
+Database::EntitiesById		Database::_entitiesById		__attribute__ ((init_priority (101)));
+Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_priority (101)));
+
+#elif defined(_MSC_VER)
 
 __RFK_DISABLE_WARNING_PUSH
 __RFK_DISABLE_WARNING_INIT_SEG
@@ -18,11 +23,6 @@ __RFK_DISABLE_WARNING_POP
 
 Database::EntitiesById		Database::_entitiesById;
 Database::ArchetypesByName	Database::_archetypesByName;
-
-#elif defined(__GNUC__) || defined(__clang__)
-
-Database::EntitiesById		Database::_entitiesById		__attribute__ ((init_priority (101)));
-Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_priority (101)));
 
 #else
 

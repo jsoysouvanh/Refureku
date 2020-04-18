@@ -368,7 +368,7 @@ You can decide to chose either one or to combine both at the same time.
 ### From a TOML file
 A template TOML file with all editable properties is provided in the repository, and will be copied next to the executable after it is built. You can specify whichever property you want and simply remove or comment the ones you don't use.
 
-Paths must be written between ''' '''. On Windows, you can use either / or \ as a path separator. You can either use absolute paths or relative paths. Note that relative paths will be relative to the working directory.
+Paths must be written between ''' '''. They may be absolute or relative, but note that relative paths will be relative to the working directory.
 - In Cmake, working directory is specified in the add_custom_target call
 	```cmake
 	add_custom_target(RunGenerator
@@ -377,88 +377,9 @@ Paths must be written between ''' '''. On Windows, you can use either / or \ as 
 	```
 - In Visual Studio, working directory is specified in **Project > Properties > Configuration Properties > Debugging > Working Directory**
 
-#### FileParser settings
-```ini
-[FileParserSettings]
-# When parsing a file, the parsing process will be immediately canceled if this is true,
-# else it will continue until the end of the file to provide full error report
-shouldAbortParsingOnFirstError = true
+On Windows, you can use either / or \ as a path separator.
 
-# Paths to the include directories of your project.
-# This MUST be specified either from C++ code or here for parsing to work properly.
-# Don't forget to include Refureku headers directory too (Refureku/Library/Include)
-projectIncludeDirectories	= [
-	'''Path/To/Refureku/Library/Include'''
-]
-
-[FileParserSettings.Properties]
-# RFKClass(Prop1, Prop2)
-propertySeparator = ","
-
-# RFKClass(Prop1[SubProp])
-subPropertyStartEncloser = "["
-subPropertyEndEncloser = "]"
-
-# RFKClass(Prop1[SubProp1, SubProp2])
-subPropertySeparator = ","
-
-# RFKClass(Prop1 [ Sub Prop 1,  SubProp2]) will be parsed as RFKClass(Prop1[SubProp1,SubProp2])
-ignoredCharacters = [ " " ]
-
-[FileParserSettings.Properties.Class]
-# Declare a reflected class like class RFKClass() {};
-macroName = "RFKClass"
-
-[FileParserSettings.Properties.Struct]
-# Declare a reflected struct like struct RFKStruct() {};
-macroName = "RFKStruct"
-
-[FileParserSettings.Properties.Field]
-# Declare a reflected field like RFKField() int myField;
-macroName = "RFKField"
-
-[FileParserSettings.Properties.Method]
-# Declare a reflected method like RFKMethod() void myMethod();
-macroName = "RFKMethod"
-
-[FileParserSettings.Properties.Enum]
-# Declare a reflected enum like enum <class> RFKEnum() MyEnum {};
-macroName = "RFKEnum"
-
-[FileParserSettings.Properties.EnumValue]
-# Declare a reflected enum value like MyEnumValue RFKEnumVal() = 1
-macroName = "RFKEnumVal"
-```
-
-#### FileGenerator settings
-```ini
-[FileGeneratorSettings]
-# Generated files will use this extension
-generatedFilesExtension = ".rfk.h"
-
-# .h and .hpp files will be parsed
-supportedExtensions = [".h", ".hpp"]
-
-# Generated files will be located here (this is also where the generator checks if a file has already been generated)
-outputDirectory = '''Path/To/Output/Directory'''
-
-# Directories in this list will be recursively inspected and each valid file will be considered for parsing
-toParseDirectories = [
-	'''Path/To/Directory/To/Parse'''
-]
-
-# Files to parse which are not included in any directory of toParseDirectories
-toParseFiles = []
-
-# Files contained in the directories of this list will be ignored
-# You will probably ignore at least the outputDirectory if it is contained in a toParseDirectory
-ignoredDirectories = [
-	'''Path/To/Output/Directory'''
-]
-
-# Files not to parse which are not included in any directory of ignoredDirectories
-ignoredFiles = []
-```
+As an example is always easier to understand than a long explanation, please look at the [Examples folder](https://github.com/jsoysouvanh/Refureku/tree/dev/Refureku/Examples) for an example setup with CMake and Visual Studio.
 
 ### From C++ code
 Editable properties from C++ code are the same than the ones accessible from the TOML file.
@@ -672,7 +593,7 @@ All this process can be setup in a standalone executable which will be called be
 	
 	# Link against Refureku library
 	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
-	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,Refureku_Debug,Refureku_Release>)
+	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,RefurekuDebug,RefurekuRelease>)
 	```
 4. Update RefurekuSettings.toml situated in Build/Release/Bin/ as [described here](#from-a-toml-file). You must at least specify:
 	- [FileGeneratorSettings] outputDirectory = '''Path/To/An/Output/Directory'''
@@ -712,7 +633,7 @@ This library has been tested and is stable with the following configurations:
 - Add the possibility to add new valid properties via TOML
 
 ## Known issues
-None at the moment
+- Some types are not referenced correctly when using Visual Studio 2017 (v141) platform toolset
 
 ## License
 MIT License
