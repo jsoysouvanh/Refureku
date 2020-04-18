@@ -174,8 +174,19 @@ bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noe
 	{
 		std::vector<char const*> const parseArguments = makeParseArguments();
 
+		#if KODGEN_DEV
+
+		for (char const* arg : parseArguments)
+		{
+			std::cout << arg << " ";
+		}
+
+		std::cout << std::endl;
+
+		#endif
+
 		//Parse the given file
-		CXTranslationUnit translationUnit = clang_parseTranslationUnit(_clangIndex, parseFile.string().c_str(), parseArguments.data(), static_cast<int32>(parseArguments.size()), nullptr, 0, CXTranslationUnit_SkipFunctionBodies | CXTranslationUnit_Incomplete);
+		CXTranslationUnit translationUnit = clang_parseTranslationUnit(_clangIndex, parseFile.string().c_str(), parseArguments.data(), static_cast<int32>(parseArguments.size()), nullptr, 0, CXTranslationUnit_SkipFunctionBodies | CXTranslationUnit_Incomplete | CXTranslationUnit_KeepGoing);
 
 		if (translationUnit != nullptr)
 		{
@@ -191,7 +202,7 @@ bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noe
 				isSuccess = true;
 			}
 
-			#ifdef KODGEN_DEV
+			#if KODGEN_DEV
 			
 			CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
 
