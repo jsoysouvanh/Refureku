@@ -11,8 +11,8 @@ target_compile_features(${Target} PUBLIC cxx_std_17)
 # Add Include directories
 target_include_directories(${Target}
 							PRIVATE
-								../Include	# Refureku Include dir
-								Include)	# Our project Include dir
+								../Library/Include	# Refureku Include dir
+								Include)			# Our project Include dir
 
 # Link against Refureku library
 target_link_directories(${Target} PRIVATE ThirdParty/Libs)
@@ -22,7 +22,7 @@ target_link_libraries(${Target} PRIVATE $<IF:$<CONFIG:Debug>,RefurekuDebug,Refur
 set(RunRefurekuGenerator RunRefurekuGenerator)
 
 add_custom_target(${RunRefurekuGenerator}
-					WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}		# This is CMakeLists.txt location, which is Refureku/Library/Examples
+					WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}		# This is CMakeLists.txt location, which is Refureku/Examples
 					COMMAND ThirdParty/Exe/RefurekuGenerator)	# Might need to add .exe
 
 # Run the RefurekuGenerator BEFORE building the project to refresh generated files
