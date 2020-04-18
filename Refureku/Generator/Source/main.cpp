@@ -5,6 +5,26 @@
 #include "FileParser.h"
 #include "FileGenerator.h"
 
+void printGenerationSetup(rfk::FileParser const& /*fileParser*/, rfk::FileGenerator const& fileGenerator)
+{
+	//Output dir
+	std::cout << "Output directory: " << fileGenerator.outputDirectory << std::endl;
+
+	//ToParseDirs
+	std::cout << "Parsed directories:" << std::endl;
+	for (fs::path const& path : fileGenerator.toParseDirectories)
+	{
+		std::cout << "\t" << path << std::endl;
+	}
+
+	//IgnoredDirs
+	std::cout << "Ignored directories:" << std::endl;
+	for (fs::path const& path : fileGenerator.ignoredDirectories)
+	{
+		std::cout << "\t" << path << std::endl;
+	}
+}
+
 void printGenerationResult(kodgen::FileGenerationResult const& genResult)
 {
 	if (genResult.completed)
@@ -54,6 +74,8 @@ void parseAndGenerate(fs::path&& exePath, fs::path&& workingDirectory)
 		fileGenerator.ignoredDirectories.emplace(generatedDir);
 
 		#endif
+
+		printGenerationSetup(fileParser, fileGenerator);
 
 		//Parse
 		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
