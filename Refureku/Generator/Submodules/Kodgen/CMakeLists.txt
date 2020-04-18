@@ -60,9 +60,6 @@ if (KODGEN_DEV)
 	target_compile_definitions(${KodgenTargetLibrary} PRIVATE KODGEN_DEV=1)
 endif()
 
-# Setup compilation options
-target_compile_options(${KodgenTargetLibrary} PUBLIC $<$<CXX_COMPILER_ID:Clang>:-stdlib=libc++>)
-
 # Setup language requirements
 target_compile_features(${KodgenTargetLibrary} PUBLIC cxx_std_17)
 
@@ -81,8 +78,8 @@ target_link_directories(${KodgenTargetLibrary}
 # Link to required libraries
 target_link_libraries(${KodgenTargetLibrary}
 						INTERFACE
-							$<$<CXX_COMPILER_ID:Clang>:c++ c++abi>
-							$<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:c++fs>	#filesystem	pre Clang-9 with clang abi
+#							$<$<CXX_COMPILER_ID:Clang>:c++ c++abi>
+							$<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:stdc++fs>	#filesystem	pre Clang-9
 							$<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:${CMAKE_CXX_COMPILER_VERSION},9.0>>:stdc++fs>	#filesystem	pre GCC-9
 							clang
 )
