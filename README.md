@@ -38,6 +38,7 @@ To get started now, see the [Getting Started](#getting-started) section.
 - [License](#license)
 
 ## Features
+- Easy to integrate in a software like a game engine
 - Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
 - Support structs/classes with or without inheritance (multiple inheritance supported)
 - Can look for a struct/class, enum, field or method by name, with additional filtering
@@ -45,7 +46,7 @@ To get started now, see the [Getting Started](#getting-started) section.
 - Field get/set any data of any type (public, protected, private)
 - Know at runtime if a reflected class inherits or is the base of another reflected class
 - Arbitrary properties (like tags) on any entity (struct, class, field, method, enum, enum value)
-- Reflection metadata is regenerated only when a file has changed
+- Reflection metadata is regenerated only when a file changes
 - Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
 - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
 
@@ -379,7 +380,7 @@ Paths must be written between ''' '''. They may be absolute or relative, but not
 
 On Windows, you can use either / or \ as a path separator.
 
-As an example is always easier to understand than a long explanation, please look at the [Examples folder](https://github.com/jsoysouvanh/Refureku/tree/dev/Refureku/Examples) for an example setup with CMake and Visual Studio.
+As an example is always easier to understand than a long explanation, please look at the [RefurekuSettings.toml located in the Examples folder](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/ThirdParty/Exe) for an example setup with CMake and Visual Studio.
 
 ### From C++ code
 Editable properties from C++ code are the same than the ones accessible from the TOML file.
@@ -567,9 +568,12 @@ All this process can be setup in a standalone executable which will be called be
 ## Getting started
 ### Requirements:
 - CMake 3.15.0+
-- A compatible compiler: MSVC 2017 / GCC8.0.0 / Clang 7.0.0 or later.
+- A compatible compiler: MSVC 2019 / GCC8.0.0 / Clang 7.0.0 or later.
 
 ### Steps
+If you get lost when reading the following steps, you're greatly encouraged to have a look at the [Examples folder](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples) where there is a sample project integrating Refureku.
+
+0. Pre-built binaries for Windows x64 are available in the [Examples/ThirdParty folder](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/ThirdParty). If you want to use those, you can skip to step 3
 1. Pull the repository
 2. Compile the library and the generator following these steps:
 	- At the root of the Refureku project, open a terminal
@@ -618,7 +622,7 @@ All this process can be setup in a standalone executable which will be called be
 - If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
 	> With CMake:
 	```cmake
-	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,Refureku_Debug,Refureku_Release>)
+	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,RefurekuDebug,RefurekuRelease>)
 	```
 
 ## Cross-platform compatibility
