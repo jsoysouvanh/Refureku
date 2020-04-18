@@ -29,6 +29,7 @@ To get started now, see the [Getting Started](#getting-started) section.
 		- [FileGenerator](#filegenerator)
 		- [Usage](#usage)
 - [Getting started](#getting-started)
+    - [Requirements](#requirements)
 	- [Steps](#steps)
 	- [Possible issues](#possible-issues)
 - [Cross-platform compatibility](#cross-platform-compatibility)
@@ -653,8 +654,8 @@ All this process can be setup in a standalone executable which will be called be
 	- At the root of the Refureku project, open a terminal
 		- cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "\<Generator\>" -A x64
 			> Most common generators include:
-			> - Visual Studio 15 2017
-			> - Makefile
+			> - Visual Studio 15 2017 -> cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 15 2017" -A x64
+			> - Unix Makefiles
 			> - Ninja
 			> - Type cmake -G for more information
 		- cmake --build Build/Release --config Release --target RefurekuGenerator Refureku
@@ -669,7 +670,7 @@ All this process can be setup in a standalone executable which will be called be
 	# Add Refureku Include directory
 	target_include_directories(YourExecutable PRIVATE Path/To/Refureku/Library/Include)
 	
-	\# Link against Refureku library
+	# Link against Refureku library
 	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
 	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,Refureku_Debug,Refureku_Release>)
 	```

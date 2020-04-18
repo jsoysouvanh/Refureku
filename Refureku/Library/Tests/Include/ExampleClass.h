@@ -191,7 +191,7 @@ struct RFKStruct() ExampleStruct
 	static void staticMethod() { std::cout << "ExampleStruct::staticMethod()" << std::endl; } 
 
 	RFKMethod()
-	void method(int i, float f) { std::cout << "ExampleStruct::method(" << i << ", " << f << ")" << std::endl; }
+	void method(int a, float b) { std::cout << "ExampleStruct::method(" << a << ", " << b << ")" << std::endl; }
 
 	ExampleStruct_GENERATED 
 };

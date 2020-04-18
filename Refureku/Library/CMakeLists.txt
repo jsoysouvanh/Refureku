@@ -39,5 +39,4 @@ target_compile_features(${RefurekuLibraryTarget} PUBLIC cxx_std_17)
 
 target_include_directories(${RefurekuLibraryTarget} PUBLIC Include)
 
-add_subdirectory(Example)
 add_subdirectory(Tests)

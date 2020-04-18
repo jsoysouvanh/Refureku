@@ -88,7 +88,7 @@ void parseAndGenerate(fs::path&& exePath)
 	}
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** argv)
 {
 	std::cout << "[WORKING DIRECTORY] " << fs::current_path() << std::endl;
 
