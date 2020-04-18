@@ -28,7 +28,7 @@ namespace namespace2
 		public:
 			ParentParentClass() noexcept {}
 
-			RFKParentParentClass_GENERATED
+			ParentParentClass_GENERATED
 	};
 }
 
@@ -36,7 +36,7 @@ namespace namespace3
 {
 	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
 	{
-		RFKOtherClass_GENERATED
+		OtherClass_GENERATED
 	};
 
 	class RFKClass(DynamicGetArchetype) ParentClass : public namespace2::ParentParentClass
@@ -56,7 +56,7 @@ namespace namespace3
 			ParentClass(ParentClass const&)	= default;
 			ParentClass(ParentClass&& o)	= default;
 
-		RFKParentClass_GENERATED
+		ParentClass_GENERATED
 	};
 	
 	std::ostream& operator<<(std::ostream& stream, ParentClass const& object) noexcept;
@@ -70,7 +70,7 @@ namespace namespace3
 		public:
 			ParentClass2() noexcept { }
 
-		RFKParentClass2_GENERATED
+		ParentClass2_GENERATED
 	};
 
 	class RFKClass(DynamicGetArchetype) ExampleClass : public ParentClass, public ParentClass2
@@ -147,7 +147,7 @@ namespace namespace3
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;
 
-		RFKExampleClass_GENERATED
+		ExampleClass_GENERATED
 	};
 
 	class RFKClass() ExampleClass2
@@ -164,7 +164,7 @@ namespace namespace3
 			RFKField()
 			int i = 0;
 
-		RFKExampleClass2_GENERATED
+		ExampleClass2_GENERATED
 	};
 
 	enum class RFKEnum() ExampleEnum : uint8_t
@@ -177,7 +177,7 @@ namespace namespace3
 	};
 }
 
-RFKExampleEnum_GENERATED
+ExampleEnum_GENERATED
 
 struct RFKStruct() ExampleStruct
 {
@@ -193,5 +193,5 @@ struct RFKStruct() ExampleStruct
 	RFKMethod()
 	void method(int i, float f) { std::cout << "ExampleStruct::method(" << i << ", " << f << ")" << std::endl; }
 
-	RFKExampleStruct_GENERATED 
+	ExampleStruct_GENERATED 
 };

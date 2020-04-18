@@ -9,7 +9,7 @@ namespace rfk
 	{
 		protected:
 			static constexpr char const*	_internalPrefix = "__RFK";
-			static constexpr char const*	_externalPrefix = "RFK";
+			static constexpr char const*	_externalPrefix = "";
 			static std::hash<std::string>	_stringHasher;
 
 			std::string	fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName)	const	noexcept;
