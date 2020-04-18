@@ -370,17 +370,17 @@ You can decide to chose either one or to combine both at the same time.
 A template TOML file with all editable properties is provided in the repository, and will be copied next to the executable after it is built. You can specify whichever property you want and simply remove or comment the ones you don't use.
 
 Paths must be written between ''' '''. They may be absolute or relative, but note that relative paths will be relative to the working directory.
-- In Cmake, working directory is specified in the add_custom_target call
+- In Cmake, the working directory is specified in the add_custom_target call
 	```cmake
 	add_custom_target(RunGenerator
 			  WORKING_DIRECTORY Your/Working/Directory
 			  COMMAND Path/To/The/RefurekuGenerator)
 	```
-- In Visual Studio, working directory is specified in **Project > Properties > Configuration Properties > Debugging > Working Directory**
+- In Visual Studio, the working directory is specified in **Project > Properties > Configuration Properties > Debugging > Working Directory**
 
 On Windows, you can use either / or \ as a path separator.
 
-As an example is always easier to understand than a long explanation, please look at the [RefurekuSettings.toml located in the Examples folder](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/ThirdParty/Exe) for an example setup with CMake and Visual Studio.
+As an example is always easier to understand than a long explanation, please look at the [RefurekuSettings.toml located in the Examples folder](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/ThirdParty/Exe) for an example setup with both CMake and Visual Studio.
 
 ### From C++ code
 Editable properties from C++ code are the same than the ones accessible from the TOML file.

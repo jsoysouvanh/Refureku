@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13.5)
 
 project(RefurekuIntegrationWithCMake)
 
-set(Target IntegrationWithCMake)
+set(Target RefurekuIntegrationWithCMake)
 add_executable(${Target} Source/main.cpp)
 
 # Compile in c++17

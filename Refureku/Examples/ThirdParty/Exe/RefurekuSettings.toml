@@ -6,14 +6,13 @@ generatedFilesExtension = ".rfk.h"
 supportedExtensions		= [".h", ".hpp"]
 
 # Generated files will be located here
-# The working directory is Refureku/Library/Examples,
-# so the outputDirectory will be Refureku/Library/Examples/Include/Generated
+# The working directory is Refureku/Examples,
+# so the outputDirectory will be Refureku/Examples/Include/Generated
 outputDirectory			= '''Include/Generated'''
 
 # Files contained in the directories of this list will be parsed
-# 
 toParseDirectories		= [
-	'''Include'''
+	'''Include'''	# Include is relative to Examples/, so it becomes Examples/Include/
 ]
 
 # Files to parse which are not included in any directory of toParseDirectories
@@ -21,7 +20,7 @@ toParseFiles			= []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories		= [
-	'''Include/Generated''',
+	'''Include/Generated''',	# Include/Generated is relative to Examples/, so it becomes Examples/Include/Generated/
 ]
 
 # Files not to parse which are not included in any directory of ignoredDirectories
@@ -34,8 +33,8 @@ shouldAbortParsingOnFirstError = true
 
 # Include directories of the project
 projectIncludeDirectories	= [
-	'''../Include''',	# Refureku Include directory
-	'''Include'''		# Our project Include directory
+	'''../Library/Include''',	# ../Library/Include is relative to Refureku/Examples/, so it becomes Refureku/Library/Include
+	'''Include'''				# Include is relative to Examples/, so it becomes Examples/Include/
 ]
 
 [FileParserSettings.Properties]
