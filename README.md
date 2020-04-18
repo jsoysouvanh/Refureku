@@ -676,11 +676,11 @@ All this process can be setup in a standalone executable which will be called be
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
-	add_custom_target(RunGenerator COMMAND Path/To/The/RefurekuGenerator ${PROJECT_SOURCE_DIR})
+	add_custom_target(RunGenerator COMMAND Path/To/The/RefurekuGenerator)
 	add_dependencies(YourExecutable RunGenerator)
 	```
 	- With Visual Studio:
-		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe $(SolutionDir)
+		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe
 6. Make sure you compile your project in C++17 or later.
 7. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
 

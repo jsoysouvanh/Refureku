@@ -21,7 +21,9 @@ set(RefurekuGeneratorExeName RefurekuGenerator)
 set(RunGeneratorTarget RunRefurekuGenerator)
 
 # Pass our project source directory path to the generator (first argument)
-add_custom_target(${RunGeneratorTarget} COMMAND ${RefurekuGeneratorExeName} ${PROJECT_SOURCE_DIR})
+add_custom_target(${RunGeneratorTarget}
+					WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+					COMMAND ${RefurekuGeneratorExeName})
 
 # Run the RefurekuGenerator BEFORE building the project to refresh generated files
 add_dependencies(${RefurekuDemoTarget} ${RunGeneratorTarget})

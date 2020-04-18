@@ -49,12 +49,10 @@ void printGenerationResult(kodgen::FileGenerationResult const& genResult)
 	}
 }
 
-void parseAndGenerate(fs::path&& exePath, fs::path&& workingDirectory)
+void parseAndGenerate(fs::path&& exePath)
 {
 	rfk::FileParser		fileParser;
 	rfk::FileGenerator	fileGenerator;
-
-	std::cout << "[WORKING DIRECTORY] " << workingDirectory.string() << std::endl;
 
 	fs::path pathToSettingsFile = exePath.make_preferred() / "RefurekuSettings.toml";
 
@@ -64,9 +62,10 @@ void parseAndGenerate(fs::path&& exePath, fs::path&& workingDirectory)
 		std::cout << "[LOADED] FileGenerator settings." << std::endl;
 		std::cout << "[LOADED] FileParser settings." << std::endl;
 
+		// This part is for travis only
 		#if KODGEN_DEV
 
-		fs::path includeDir		= workingDirectory.make_preferred() / "Include";
+		fs::path includeDir		= fs::current_path() / "Include";
 		fs::path generatedDir	= includeDir / "Generated";
 
 		fileGenerator.outputDirectory = generatedDir;
@@ -91,30 +90,11 @@ void parseAndGenerate(fs::path&& exePath, fs::path&& workingDirectory)
 
 int main(int argc, char** argv)
 {
-	int result = EXIT_SUCCESS;
+	std::cout << "[WORKING DIRECTORY] " << fs::current_path() << std::endl;
 
 	fs::path exeDirectory = fs::path(argv[0]).parent_path();
 
-	//Use the first argument as working directory if any
-	if (argc > 1)
-	{
-		fs::path workingDirectory	= argv[1];
+	parseAndGenerate(std::move(exeDirectory));
 
-		if (fs::is_directory(workingDirectory))
-		{
-			parseAndGenerate(std::move(exeDirectory), std::move(workingDirectory));
-		}
-		else
-		{
-			std::cerr << "Provided working directory is not a directory or doesn't exist" << std::endl;
-			result = EXIT_FAILURE;
-		}
-	}
-	//Use the current working directory if no argument specified
-	else
-	{
-		parseAndGenerate(std::move(exeDirectory), fs::current_path());
-	}
-
-	return result;
+	return EXIT_SUCCESS;
 }
