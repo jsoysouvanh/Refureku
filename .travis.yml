@@ -22,8 +22,8 @@ jobs:
      addons: { apt: { packages: ["g++-8", "ninja-build"] } }
 
    # GCC 9
-#   - env: CC=gcc-9 CXX=g++-9
-#     addons: { apt: { packages: ["g++-9", "ninja-build"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+   - env: CC=gcc-9 CXX=g++-9
+     addons: { apt: { packages: ["g++-9", "ninja-build"], sources: [ sourceline: "ppa:ubuntu-toolchain-r/test"] } }
 
 pre-install:
  - ${CC} --version
@@ -51,14 +51,14 @@ before_script:
 
 script:
   # Debug build & test
-  - cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -G "Ninja" -DDEV=1
+  - cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -G "Ninja"    # -DDEV=1
   - cmake --build Build/Debug --config Debug --verbose
   - cd Build/Debug && ctest -C Debug -V
 
   - cd ../..
 
   # Release build & test
-  - cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja" -DDEV=1
+  - cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja"    # -DDEV=1
   - cmake --build Build/Release --config Release --verbose
   - cd Build/Release && ctest -C Release -V
 
