@@ -22,13 +22,19 @@ namespace rfk
 			Enum(Enum&&)											= default;
 			~Enum()													= default;
 
-			/** Get the EnumValue corresponding to the provided name if any, else nullptr */
+			/**
+			*	\return the EnumValue corresponding to the provided name if any, else nullptr
+			*/
 			inline EnumValue const*					getEnumValue(std::string enumValueName)	const noexcept;
 			
-			/** Get the first found EnumValue corresponding to the provided value if any, else nullptr */
+			/**
+			*	\return the first found EnumValue corresponding to the provided value if any, else nullptr
+			*/
 			inline EnumValue const*					getEnumValue(int64 value)				const noexcept;
 
-			/** Get all the EnumValues corresponding to the provided value */
+			/**
+			*	\return all the EnumValues corresponding to the provided value
+			*/
 			inline std::vector<EnumValue const*>	getEnumValues(int64 value)				const noexcept;
 
 			Enum& operator=(Enum const&)	= delete;

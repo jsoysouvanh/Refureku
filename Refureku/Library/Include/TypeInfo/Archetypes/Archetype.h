@@ -11,6 +11,10 @@ namespace rfk
 	class Archetype : public Entity
 	{
 		public:
+			/**
+			*	Category of an archetype.
+			*	Actually represents the class of an archetype instance.
+			*/
 			enum class ECategory : uint8
 			{
 				Class	= 0,

@@ -637,7 +637,6 @@ This library has been tested and is stable with the following configurations:
 - Add the possibility to add new valid properties via TOML
 
 ## Known issues
-- Some types are not referenced correctly when using Visual Studio 2017 (v141) platform toolset
 
 ## License
 MIT License
