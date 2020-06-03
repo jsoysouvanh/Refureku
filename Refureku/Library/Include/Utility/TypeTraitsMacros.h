@@ -51,7 +51,7 @@ struct hasField_##fieldName																							\
 {																													\
 	private:																										\
 		template <typename T>																						\
-		static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().fieldName), FieldType>;	\
+		static constexpr auto check(T*) -> typename std::is_same<std::remove_reference_t<decltype(std::declval<T>().fieldName)>, FieldType>;	\
 																													\
 		template <typename>																							\
 		static constexpr std::false_type check(...);																\

@@ -6,7 +6,7 @@ It allows you to retrieve information on classes/structs, fields, methods, enums
 
 It is separated into 2 distinct parts:
 - The metadata parser and generator, which will parse C++ source code and generate metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
-- The actual library which contain the framework classes to access and manipulate reflected data at runtime.
+- The actual library which contains the framework classes to access and manipulate reflected data at runtime.
 
 To get started now, see the [Getting Started](#getting-started) section.
 
@@ -351,7 +351,7 @@ delete instance1;
 delete instance2;
 ```
 
-Note that a CustomInstantiator tagged method **MUST** be static and return void*. If the method is not static, > the property will be ignored.
+Note that a CustomInstantiator tagged method **MUST** be static and return void*. If the method is not static, the property will be ignored.
 
 ## Customization
 Before talking about how to customize the code generation, let's talk a bit about how it works.   
@@ -599,7 +599,7 @@ If you get lost when reading the following steps, you're greatly encouraged to h
 	target_link_directories(YourExecutable PRIVATE Path/To/Refureku/Library)
 	target_link_libraries(YourExecutable PRIVATE $<IF:$<CONFIG:Debug>,RefurekuDebug,RefurekuRelease>)
 	```
-4. Update RefurekuSettings.toml situated in Build/Release/Bin/ as [described here](#from-a-toml-file). You must at least specify:
+4. Update RefurekuSettings.toml located in Build/Release/Bin/ as [described here](#from-a-toml-file). You must at least specify:
 	- [FileGeneratorSettings] outputDirectory = '''Path/To/An/Output/Directory'''
 	- [FileGeneratorSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
 	- [FileParserSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
