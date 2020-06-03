@@ -75,24 +75,61 @@ namespace rfk
 			~MethodBase() = default;
 
 			/**
-			*	Return true if this method has the same return type and arg types, false otherwise.
+			*	\tparam ReturnType Return type to compare with
+			*	\tparam... ArgTypes Argument types to compare with
+			*
+			*	\return true if this method has the same return type as ReturnType and the same
+						parameter types as ArgTypes, else false
 			*/
 			template <typename ReturnType, typename... ArgTypes>
 			bool				hasSamePrototype()	const	noexcept;
 
+			/**
+			*	\tparam... ArgTypes Argument types to compare with
+			*
+			*	\return true if this method has the same parameter types as ArgTypes, else false
+			*/
 			template <typename... ArgTypes>
 			bool				hasSameArguments()	const	noexcept;
 
-			/** Get access of this method */
+			/**
+			*	\return Access specifier of this method in its owner struct/class.
+			*/
 			EAccessSpecifier	getAccess()			const	noexcept;
 
-			/** Getter for this methods qualifiers */
+			/**
+			*	\return true if this method is static, else false.
+			*/
 			bool				isStatic()			const	noexcept;
+
+			/**
+			*	\return true if this method is declared as inline, else false.
+			*/
 			bool				isInline()			const	noexcept;
+
+			/**
+			*	\return true if this method is virtual, else false.
+			*/
 			bool				isVirtual()			const	noexcept;
+
+			/**
+			*	\return true if this method is virtual pure, else false.
+			*/
 			bool				isPureVirtual()		const	noexcept;
+
+			/**
+			*	\return true if this method overrides a previous definition, else false.
+			*/
 			bool				isOverride()		const	noexcept;
+
+			/**
+			*	\return true if this method is marked as final, else false.
+			*/
 			bool				isFinal()			const	noexcept;
+
+			/**
+			*	\return true if this method is marked as const, else false.
+			*/
 			bool				isConst()			const	noexcept;
 	};
 

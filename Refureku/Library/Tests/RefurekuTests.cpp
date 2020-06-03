@@ -32,6 +32,20 @@ void structs()
 	
 	ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->invoke();
 	ExampleStruct::staticGetArchetype().getMethod("method")->invoke(&es, 1, 42.0f);
+
+	try
+	{
+		ExampleStruct::staticGetArchetype().getMethod<void, int, float>("method")->checkedInvoke(&es, 1, 2.0f);		//This passes
+		ExampleStruct::staticGetArchetype().getMethod<void, int, float>("method")->checkedInvoke(&es, "a", "aa");	//This throws
+	}
+	catch (rfk::MethodError const& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	TEST(ExampleStruct::staticGetArchetype().getMethod<void, int, int>("method") == nullptr);	//Bad parameter type
+	TEST(ExampleStruct::staticGetArchetype().getMethod<int, int, float>("method") == nullptr);	//Bad return type
+	TEST(ExampleStruct::staticGetArchetype().getMethod<void, int, float>("method") != nullptr);
 }
 
 void enums()
