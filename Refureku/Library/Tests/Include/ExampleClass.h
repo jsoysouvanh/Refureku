@@ -84,25 +84,28 @@ namespace namespace3
 			static inline ParentClass	someStaticParentClass;
 
 			RFKField()
-			mutable int		someInt			= 42;
+			mutable int		someInt				= 42;
 
 			RFKField()
-			int				p2Char			= 2;
+			int				p2Char				= 2;
 
 			RFKField()
 			ParentClass		someParentClass;
 
 			RFKField()
-			int*			somePtrToInt	= nullptr;
+			ParentClass*	ptrToParentClass	= nullptr;
 
 			RFKField()
-			float			someFloat		= 42.42f;
+			int*			somePtrToInt		= nullptr;
 
 			RFKField()
-			float const*	a				= nullptr;
+			float			someFloat			= 42.42f;
 
 			RFKField()
-			float * const	b				= nullptr;
+			float const*	a					= nullptr;
+
+			RFKField()
+			float * const	b					= nullptr;
 
 			RFKField()
 			int const*		c[2][3];

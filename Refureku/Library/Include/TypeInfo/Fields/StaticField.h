@@ -28,27 +28,43 @@ namespace rfk
 			~StaticField()																	= default;
 
 			/**
-			*	Get the data corresponding to this field in the provided instance
+			*	\brief Get the data corresponding to this static field.
+			*		   This method in not safe if you provide a wrong DataType.
+			*
+			*	\tparam DataType Type to retrieve from the field.
+			*		If DataType is an rvalue reference, the data is moved into the return value (so the class data is no longer safe to use).
+			*		If DataType is an lvalue reference, return a reference to the field.
+			*		If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
+			*
+			*	\return The queried data.
 			*/
 			template <typename DataType>
 			DataType		getData()									const noexcept;
 
 			/**
-			*	Set the data corresponding to this field in the provided instance
-			*	This method is not safe if you provided a wrong typed data
+			*	\brief Set the data corresponding to this static field.
+			*		   This method is not safe if you provide a wrong DataType.
+			*
+			*	\tparam DataType Type to retrieve from the field.
+			*		If DataType is an rvalue reference, the data is forwarded into the static field.
+			*		If DataType is an lvalue reference, the data is copied into the static field.
 			*/
 			template <typename DataType>
 			void			setData(DataType&& data)					const noexcept;
 
 			/**
-			*	Get the data address corresponding to this static field
-			*/
-			inline void*	getDataAddress()							const noexcept;
-
-			/**
-			*	Copy dataSize bytes starting from data into the field
+			*	\brief Copy dataSize bytes starting from data into the static field.
+			*		   This method is not safe if you provide a wrong DataType.
+			*
+			*	\param data Address of the data to copy.
+			*	\param dataSize Number of bytes to copy into the static field starting from data.
 			*/
 			inline void		setData(void const* data, uint64 dataSize)	const noexcept;
+
+			/**
+			*	\return The data address corresponding to this static field.
+			*/
+			inline void*	getDataAddress()							const noexcept;
 
 			StaticField& operator=(StaticField const&)	= default;
 			StaticField& operator=(StaticField&&)		= default;
