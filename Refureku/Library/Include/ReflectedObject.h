@@ -1,14 +1,17 @@
 #pragma once
 
-#include "TypeInfo/Archetypes/Archetype.h"
+#include "TypeInfo/Archetypes/Struct.h"
 
 namespace rfk
 {
 	class ReflectedObject
 	{
 		public:
-			virtual ~ReflectedObject() = default;
+		ReflectedObject()						= default;
+		ReflectedObject(ReflectedObject const&) = default;
+		ReflectedObject(ReflectedObject&&)		= default;
+		virtual ~ReflectedObject()				= default;
 
-			virtual	Archetype const& getArchetype()	const noexcept = 0;
+		virtual	Struct const& getArchetype()	const noexcept = 0;
 	};
 }
