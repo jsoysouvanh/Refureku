@@ -87,7 +87,15 @@ bool MethodBase::hasSameArgumentTypes() const noexcept
 template <typename ReturnType, typename... ArgTypes>
 bool MethodBase::hasSamePrototype() const noexcept
 {
-	return hasSameArgumentsCount<ArgTypes...>() && hasSameReturnType<ReturnType>() && hasSameArgumentTypes<ArgTypes...>();
+	if constexpr (sizeof...(ArgTypes) == 0u)
+	{
+		//Check only return type if there are no arguments
+		return hasSameReturnType<ReturnType>();
+	}
+	else
+	{
+		return hasSameArgumentsCount<ArgTypes...>() && hasSameReturnType<ReturnType>() && hasSameArgumentTypes<ArgTypes...>();
+	}
 }
 
 template <typename... ArgTypes>
