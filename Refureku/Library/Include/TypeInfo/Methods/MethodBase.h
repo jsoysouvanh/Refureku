@@ -10,7 +10,9 @@
 #include "TypeInfo/EAccessSpecifier.h"
 #include "TypeInfo/Methods/EMethodFlags.h"
 #include "TypeInfo/Methods/MethodParameter.h"
-#include "TypeInfo/Methods/MethodError.h"
+#include "TypeInfo/Methods/Exceptions/ArgCountMismatchException.h"
+#include "TypeInfo/Methods/Exceptions/ReturnTypeMismatchException.h"
+#include "TypeInfo/Methods/Exceptions/ArgTypeMismatchException.h"
 
 namespace rfk
 {

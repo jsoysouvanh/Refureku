@@ -38,7 +38,7 @@ void structs()
 		ExampleStruct::staticGetArchetype().getMethod<void, int, float>("method")->checkedInvoke(&es, 1, 2.0f);		//This passes
 		ExampleStruct::staticGetArchetype().getMethod<void, int, float>("method")->checkedInvoke(&es, "a", "aa");	//This throws
 	}
-	catch (rfk::MethodError const& e)
+	catch (std::exception const& e)
 	{
 		std::cout << e.what() << std::endl;
 	}
@@ -112,7 +112,7 @@ void methods()
 		ec_method3float->invoke<float>(&e);	// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^ in DEBUG only
 	}
-	catch (rfk::MethodError const& e)
+	catch (std::exception const& exception)
 	{
 		ec_method3float->invoke<float>(&e, 7);	// <- Call with correct arguments count
 	}
@@ -132,7 +132,7 @@ void methods()
 		ec_method4->checkedInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^
 	}
-	catch (rfk::MethodError const&)
+	catch (std::exception const&)
 	{}
 
 	try
@@ -140,7 +140,7 @@ void methods()
 		ec_method4->checkedInvoke<unsigned long long>(&e, 1);		// <- Bad argument type
 		TEST(false);	//Should not reach this line, throw here ^
 	}
-	catch (rfk::MethodError const&)
+	catch (std::exception const&)
 	{}
 
 	//No lookup in parent classes

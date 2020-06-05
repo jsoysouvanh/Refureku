@@ -23,8 +23,9 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Methods/Method.cpp
 					Source/TypeInfo/Methods/StaticMethod.cpp
 					Source/TypeInfo/Methods/MethodParameter.cpp
-					Source/TypeInfo/Methods/MethodError.cpp
-			)
+					Source/TypeInfo/Methods/Exceptions/ArgCountMismatchException.cpp
+					Source/TypeInfo/Methods/Exceptions/ReturnTypeMismatchException.cpp
+					Source/TypeInfo/Methods/Exceptions/ArgTypeMismatchException.cpp)
 
 # Setup compilation flags
 if (MSVC)
