@@ -565,13 +565,13 @@ All this process can be setup in a standalone executable which will be called be
 
 ## Getting started
 ### Requirements:
-- CMake 3.15.0+
+- CMake 3.15.0+ (if you build the library from source).
 - A compatible compiler: MSVC Platform Toolset v141+ / GCC8.0.0+ / Clang 7.0.0+.
 
 ### Steps
 If you get lost when reading the following steps, you're greatly encouraged to have a look at the [Examples folder](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples) where there is a sample project integrating Refureku.
 
-**Pre-built binaries for Windows x64 are available in the [Examples/ThirdParty folder](https://github.com/jsoysouvanh/Refureku/releases). If you want to use those, you can skip to step 3**
+**Pre-built binaries for Windows x64 are available [here](https://github.com/jsoysouvanh/Refureku/releases). If you want to use those, you can skip to step 3.**
 
 1. Pull the repository
 2. Compile the library and the generator following these steps:
