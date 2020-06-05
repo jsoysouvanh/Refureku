@@ -14,7 +14,7 @@ void Struct::__RFKaddToParents([[maybe_unused]] EAccessSpecifier inheritanceAcce
 	}
 }
 
-template <typename ReturnType, typename... ArgTypes>
+template <typename MethodSignature>
 Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	auto range = methods.equal_range(Method(std::string(methodName)));
@@ -22,7 +22,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && it->hasSamePrototype<ReturnType, ArgTypes...>())
+		if ((it->flags & minFlags) == minFlags && GetMethodHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}
@@ -47,7 +47,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	return nullptr;
 }
 
-template <typename ReturnType, typename... ArgTypes>
+template <typename MethodSignature>
 StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	auto range = staticMethods.equal_range(StaticMethod(std::string(methodName)));
@@ -55,7 +55,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && it->hasSamePrototype<ReturnType, ArgTypes...>())
+		if ((it->flags & minFlags) == minFlags && GetMethodHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}

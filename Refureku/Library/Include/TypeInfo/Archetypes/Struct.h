@@ -25,6 +25,28 @@ namespace rfk
 	class Struct : public Archetype
 	{
 		private:
+			template <typename T>
+			class GetMethodHelper
+			{
+				public:
+					static bool hasSamePrototype(MethodBase const&)
+					{
+						static_assert(false, "getMethod templated version must be called with a prototype like so: getMethod<void(int)>(), void being the return type and int being the only parameter type.");
+
+						return false;
+					}
+			};
+
+			template <typename ReturnType, typename... ArgTypes>
+			class GetMethodHelper<ReturnType(ArgTypes...)>
+			{
+				public:
+					static bool hasSamePrototype(MethodBase const& method)
+					{
+						return method.hasSamePrototype<ReturnType, ArgTypes...>();
+					}
+			};
+
 			/** Pointer to the default method used to make an instance of this archetype */
 			void*								(*_defaultInstantiator)()	noexcept = nullptr;
 
@@ -158,7 +180,7 @@ namespace rfk
 			*
 			*	\return The first method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			template <typename ReturnType, typename... ArgTypes>
+			template <typename MethodSignature>
 			Method const*						getMethod(std::string const& methodName,
 														  EMethodFlags minFlags = EMethodFlags::Default,
 														  bool shouldInspectParents = false)				const	noexcept;
@@ -208,7 +230,7 @@ namespace rfk
 			*
 			*	\return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			template <typename ReturnType, typename... ArgTypes>
+			template <typename MethodSignature>
 			StaticMethod const*					getStaticMethod(std::string const& methodName,
 																EMethodFlags minFlags = EMethodFlags::Default,
 																bool shouldInspectParents = false)			const	noexcept;
