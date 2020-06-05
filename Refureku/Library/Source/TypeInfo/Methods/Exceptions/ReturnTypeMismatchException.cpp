@@ -3,6 +3,6 @@
 using namespace rfk;
 
 ReturnTypeMismatchException::ReturnTypeMismatchException(std::string const& errorMessage):
-	std::exception(errorMessage.c_str())
+	std::logic_error(errorMessage)
 {
 }

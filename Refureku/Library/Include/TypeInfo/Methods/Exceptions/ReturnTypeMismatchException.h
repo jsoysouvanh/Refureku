@@ -1,11 +1,11 @@
 #pragma once
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 namespace rfk
 {
-	class ReturnTypeMismatchException : public std::exception
+	class ReturnTypeMismatchException : public std::logic_error
 	{
 		public:
 		explicit ReturnTypeMismatchException(std::string const& errorMessage);

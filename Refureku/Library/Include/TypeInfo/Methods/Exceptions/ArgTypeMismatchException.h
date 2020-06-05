@@ -1,11 +1,11 @@
 #pragma once
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 namespace rfk
 {
-	class ArgTypeMismatchException : public std::exception
+	class ArgTypeMismatchException : public std::logic_error
 	{
 		public:
 			explicit ArgTypeMismatchException(std::string const& errorMessage);
