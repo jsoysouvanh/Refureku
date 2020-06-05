@@ -5,7 +5,7 @@ Refureku is a powerful customizable C++17 reflection library based on libclang.
 It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
-- The metadata parser and generator, which will parse C++ source code and generate metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
+- The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
 - The actual library which contains the framework classes to access and manipulate reflected data at runtime.
 
 To get started now, see the [Getting Started](#getting-started) section.

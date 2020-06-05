@@ -172,8 +172,9 @@ namespace rfk
 															   bool shouldInspectInherited = false)			const	noexcept;
 
 			/**
-			*	\tparam ReturnType Return type of the searched method.
-			*	\tparam... ArgTypes Type of each argument of the searched method.
+			*	\tparam MethodSignature Signature (prototype) of the method to look for.
+			*			Example1: void example1Method(int i, float j);	-> getMethod<void(int, float)>("example1Method");
+			*			Example2: int  example2Method() const;			-> getMethod<int()>("example2Method");
 			*
 			*	\param methodName Name of the method to retrieve.
 			*	\param minFlags Requirements the queried method should fulfill.
@@ -221,8 +222,9 @@ namespace rfk
 														   bool shouldInspectParents = false)				const	noexcept;
 
 			/**
-			*	\tparam ReturnType Return type of the searched static method.
-			*	\tparam... ArgTypes Type of each argument of the searched static method.
+			*	\tparam MethodSignature Signature (prototype) of the static method to look for.
+			*			Example1: static void example1Method(int i, float j);	-> getStaticMethod<void(int, float)>("example1Method");
+			*			Example2: static int  example2Method() const;			-> getStaticMethod<int()>("example2Method");
 			*
 			*	\param methodName Name of the static method to retrieve.
 			*	\param minFlags Requirements the queried static method should fulfill.
