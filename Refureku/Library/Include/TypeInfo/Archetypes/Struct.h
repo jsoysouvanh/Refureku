@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <vector>
 #include <unordered_set>
 #include <algorithm>
@@ -31,7 +32,11 @@ namespace rfk
 				public:
 					static bool hasSamePrototype(MethodBase const&)
 					{
-						static_assert(false, "getMethod templated version must be called with a prototype like so: getMethod<void(int)>(), void being the return type and int being the only parameter type.");
+						//If the code asserts here, it means there's a call to getMethod or getStaticMethod with an invalid template.
+						//The template must be a method signature.
+						//Example1: void example1Method(int i, float j); -> getMethod<void(int, float)>("example1Method");
+						//Example2: static int example2Method();		 -> getStaticMethod<int()>("example2Method");
+						assert(false);
 
 						return false;
 					}
