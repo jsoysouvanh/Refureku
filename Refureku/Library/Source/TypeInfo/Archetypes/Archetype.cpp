@@ -7,7 +7,7 @@
 using namespace rfk;
 
 Archetype::Archetype(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
-	Entity(std::forward<std::string>(newName), newId),
+	Entity(std::forward<std::string>(newName), newId, EKind::Archetype),
 	category{newCategory},
 	memorySize{newMemorySize}
 {

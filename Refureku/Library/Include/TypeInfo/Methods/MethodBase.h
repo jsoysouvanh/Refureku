@@ -48,7 +48,7 @@ namespace rfk
 			bool	hasSameArgumentTypes()	const	noexcept;
 
 		protected:
-			/** Handle pointing to the actual method in memory */
+			/** Handle pointing to the actual method in memory. */
 			std::shared_ptr<ICallable>	_internalMethod;
 
 			MethodBase()											= delete;
@@ -72,31 +72,31 @@ namespace rfk
 			MethodBase& operator=(MethodBase&&)			= default;
 
 		public:
-			/** Flags describing this method */
+			/** Flags describing this method. */
 			EMethodFlags					flags	= EMethodFlags::Default;
 
-			/** Type returned by this method */
+			/** Type returned by this method. */
 			Type							returnType;
 
-			/** Parameters of this method */
+			/** Parameters of this method. */
 			std::vector<MethodParameter>	parameters;
 
 			~MethodBase() = default;
 
 			/**
-			*	\tparam ReturnType Return type to compare with
-			*	\tparam... ArgTypes Argument types to compare with
+			*	\tparam ReturnType Return type to compare with.
+			*	\tparam... ArgTypes Argument types to compare with.
 			*
 			*	\return true if this method has the same return type as ReturnType and the same
-						parameter types as ArgTypes, else false
+						parameter types as ArgTypes, else false.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
 			bool				hasSamePrototype()	const	noexcept;
 
 			/**
-			*	\tparam... ArgTypes Argument types to compare with
+			*	\tparam... ArgTypes Argument types to compare with.
 			*
-			*	\return true if this method has the same parameter types as ArgTypes, else false
+			*	\return true if this method has the same parameter types as ArgTypes, else false.
 			*/
 			template <typename... ArgTypes>
 			bool				hasSameArguments()	const	noexcept;

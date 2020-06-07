@@ -14,6 +14,7 @@ namespace rfk
 	class EnumValue : public Entity
 	{
 		public:
+			/** Value of this enum value. */
 			int64	value = 0;
 
 			EnumValue()														= delete;

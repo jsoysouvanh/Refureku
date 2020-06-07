@@ -20,6 +20,36 @@ namespace rfk
 	class Entity
 	{
 		public:
+			/**
+			*	Describe the kind of an entity
+			*/
+			enum class EKind : uint8
+			{
+				/**
+				*	The entity is an archetype, it can safely be cast to Archetype type.
+				*	More specific info can be retrieved from the entity by checking Archetype::category variable.
+				*/
+				Archetype = 0u,
+
+				/**
+				*	The entity is a field, it can safely be cast to FieldBase type.
+				*	More specific info can be retrieved from the entity by checking FieldBase::flags.
+				*/
+				Field,
+
+				/**
+				*	The entity is a method, it can safely be cast to MethodBase type.
+				*	More specific info can be retrieved from the entity by checking MethodBase::flags.
+				*/
+				Method,
+
+				/** The entity is an enum value, it can safely be cast to EnumValue. */
+				EnumValue,
+
+				/** This entity is... what? Should never happen... */
+				Undefined
+			};
+
 			/** Helper structs for hashing / equal */
 			struct NameHasher
 			{
@@ -86,21 +116,24 @@ namespace rfk
 			};
 
 			/** Name qualifying this entity */
-			std::string		name;
+			std::string		name		= "";
 
 			/** Program-unique ID given for this entity */
-			uint64			id;
+			uint64			id			= 0u;
+
+			/** Kind of this entity */
+			EKind			kind		= EKind::Undefined;
 
 			/** Properties contained by this entity */
 			PropertyGroup	properties;
 
-			Entity()									= delete;
-			Entity(std::string&& newName, uint64 newId)	noexcept;
-			Entity(Entity const&)						= default;
-			Entity(Entity&&)							= default;
-			~Entity()									= default;
+			Entity()																		= delete;
+			Entity(std::string&& newName, uint64 newId, EKind newKind = EKind::Undefined)	noexcept;
+			Entity(Entity const&)															= default;
+			Entity(Entity&&)																= default;
+			~Entity()																		= default;
 
-			Entity& operator=(Entity const&)			= default;
-			Entity& operator=(Entity&&)					= default;
+			Entity& operator=(Entity const&)	= default;
+			Entity& operator=(Entity&&)			= default;
 	};
 }

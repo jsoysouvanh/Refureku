@@ -24,12 +24,22 @@ namespace rfk
 			*/
 			enum class ECategory : uint8
 			{
+				/** The archetype is a class, can safely be cast to Class. */
 				Class	= 0,
+
+				/** The archetype is a struct, can safely be cast to Struct. */
 				Struct,
+
+				/** The archetype is an enum, can safely by cast to Enum. */
 				Enum,
+
+				/** The archetype is a fundamental archetype. */
 				Fundamental,
+
+				/** Undefined archetype. Should never happen? */
 				Undefined,
 
+				/** Represent the total number of values in ECategory enum. */
 				Count
 			};
 

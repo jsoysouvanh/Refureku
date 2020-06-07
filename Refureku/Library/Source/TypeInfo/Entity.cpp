@@ -4,8 +4,9 @@
 
 using namespace rfk;
 
-Entity::Entity(std::string&& newName, uint64 newId)	noexcept:
+Entity::Entity(std::string&& newName, uint64 newId, EKind kind)	noexcept:
 	name{std::forward<std::string>(newName)},
-	id{std::forward<uint64>(newId)}
+	id{newId},
+	kind{kind}
 {
 }

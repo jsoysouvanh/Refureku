@@ -8,8 +8,8 @@ using namespace rfk;
 
 bool Type::match(Type const& type) const noexcept
 {
-	return (*this == type) ||																	//Strictly the same type
-
+	return	(this == &type) ||																		//Types have the same address, don't need any further check
+			(*this == type) ||																		//Strictly the same type
 			((isPointer() && type.archetype == &FundamentalArchetypes::getNullptrArchetype()) ||	//Pointer - nullptr_t correspondance
 			(archetype == &FundamentalArchetypes::getNullptrArchetype() && type.isPointer()));
 }

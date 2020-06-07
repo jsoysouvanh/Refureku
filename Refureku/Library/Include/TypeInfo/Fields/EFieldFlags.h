@@ -22,7 +22,7 @@ namespace rfk
 		Protected		= 1 << 1,
 		Private			= 1 << 2,
 
-		/** Method qualifiers */
+		/** Field qualifiers */
 		Static			= 1 << 3,
 		Mutable			= 1 << 4
 	};

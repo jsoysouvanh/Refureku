@@ -18,6 +18,16 @@ namespace rfk
 
 	class FieldBase : public Entity
 	{
+		protected:
+			FieldBase()															= delete;
+			FieldBase(std::string&&		name,
+					  uint64			id				= 0u,
+					  EFieldFlags		flags			= EFieldFlags::Default,
+					  Struct const*		ownerStruct		= nullptr,
+					  Struct const*		introducedBy	= nullptr)				noexcept;
+			FieldBase(FieldBase const&)											= default;
+			FieldBase(FieldBase&&)												= default;
+
 		public:
 			/** Flags describing this field */
 			EFieldFlags			flags	= EFieldFlags::Default;
@@ -31,20 +41,22 @@ namespace rfk
 			/** Struct which contains the declaration of this field */
 			Struct const*		introducedBy;
 
-			FieldBase()															= delete;
-			FieldBase(std::string&&		name,
-					  uint64			id				= 0u,
-					  EFieldFlags		flags			= EFieldFlags::Default,
-					  Struct const*		ownerStruct		= nullptr,
-					  Struct const*		introducedBy	= nullptr)				noexcept;
-			FieldBase(FieldBase const&)											= default;
-			FieldBase(FieldBase&&)												= default;
-			~FieldBase()														= default;
+			~FieldBase() = default;
 
 			/**
-			*	\return The access specifier of this method in its owner struct/class.
+			*	\return The access specifier of this field in its owner struct/class.
 			*/
 			EAccessSpecifier	getAccess()		const	noexcept;
+
+			/**
+			*	\return true if this field is static, else false.
+			*/
+			bool				isStatic()		const	noexcept;
+
+			/**
+			*	\return true if this field is mutable, else false
+			*/
+			bool				isMutable()		const	noexcept;
 
 			FieldBase& operator=(FieldBase const&)	= default;
 			FieldBase& operator=(FieldBase&&)		= default;
