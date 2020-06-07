@@ -1,7 +1,7 @@
 # Refureku
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 
-Refureku is a powerful customizable C++17 reflection library based on libclang.
+Refureku is a powerful customizable C++17 runtime reflection library based on libclang.
 It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:

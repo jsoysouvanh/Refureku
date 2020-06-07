@@ -138,6 +138,12 @@ Entity const* Database::getEntity(uint64 id) noexcept
 	return (it != _entitiesById.cend()) ? *it : nullptr;
 }
 
+void Database::clear() noexcept
+{
+	_entitiesById.clear();
+	_archetypesByName.clear();
+}
+
 Database::EntitiesById const& Database::getEntitiesById() noexcept
 {
 	return _entitiesById;

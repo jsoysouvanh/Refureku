@@ -88,6 +88,11 @@ namespace rfk
 			static Entity const*				getEntity(uint64 id)				noexcept;
 
 			/**
+			*	\brief Clear the whole database of any registered entity
+			*/
+			static void							clear()								noexcept;
+
+			/**
 			*	\return The unordered_map containing all registered entities sorted by id.
 			*/
 			static EntitiesById const&			getEntitiesById()					noexcept;
