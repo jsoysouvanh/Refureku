@@ -5,42 +5,45 @@ dist: bionic
 
 jobs:
   include:
-   # clang 7
-   - env: CC=clang-7 CXX=clang++-7
-     addons: { apt: { packages: ["clang-7", "g++-8", "libstdc++-8-dev", "ninja-build"] } }
+   ## Linux bionic / clang 7
+   #- env: CC=clang-7 CXX=clang++-7
+   #  addons: { apt: { packages: ["clang-7", "g++-8", "libstdc++-8-dev", "ninja-build"] } }
+   #
+   ## Linux bionic / clang 8
+   #- env: CC=clang-8 CXX=clang++-8
+   #  addons: { apt: { packages: ["clang-8", "g++-8", "libstdc++-8-dev", "ninja-build"] } }
+   #
+   ## Linux bionic / clang 9
+   #- env: CC=clang-9 CXX=clang++-9
+   #  addons: { apt: { packages: ["clang-9", "g++-8", "libstdc++-9-dev", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+   #
+   ## Linux bionic / clang 10
+   #- env: CC=clang-10 CXX=clang++-10
+   #  addons:
+   #     apt:
+   #        sources:
+   #         - sourceline: "ppa:ubuntu-toolchain-r/test"
+   #         - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
+   #           key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
+   #        packages:
+   #         - clang-10
+   #         - libstdc++-10-dev
+   #         - ninja-build
+   #
+   ## Linux bionic / GCC 8
+   #- env: CC=gcc-8 CXX=g++-8
+   #  addons: { apt: { packages: ["g++-8", "ninja-build"] } }
+   #
+   ## Linux bionic / GCC 9
+   #- env: CC=gcc-9 CXX=g++-9
+   #  addons: { apt: { packages: ["g++-9", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+   #
+   ## Linux bionic / GCC 10
+   #- env: CC=gcc-10 CXX=g++-10
+   #  addons: { apt: { packages: ["g++-10", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
 
-   # clang 8
-   - env: CC=clang-8 CXX=clang++-8
-     addons: { apt: { packages: ["clang-8", "g++-8", "libstdc++-8-dev", "ninja-build"] } }
-
-   # clang 9
-   - env: CC=clang-9 CXX=clang++-9
-     addons: { apt: { packages: ["clang-9", "g++-8", "libstdc++-9-dev", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
-   
-   # clang 10
-   - env: CC=clang-10 CXX=clang++-10
-     addons:
-        apt:
-           sources:
-            - sourceline: "ppa:ubuntu-toolchain-r/test"
-            - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main"
-              key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
-           packages:
-            - clang-10
-            - libstdc++-10-dev
-            - ninja-build
-
-   # GCC 8
-   - env: CC=gcc-8 CXX=g++-8
-     addons: { apt: { packages: ["g++-8", "ninja-build"] } }
-
-   # GCC 9
-   - env: CC=gcc-9 CXX=g++-9
-     addons: { apt: { packages: ["g++-9", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
-
-   # GCC 10
-   - env: CC=gcc-10 CXX=g++-10
-     addons: { apt: { packages: ["g++-10", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
+   # Windows / 
+   - os: windows
 
 pre-install:
  - ${CC} --version
@@ -57,7 +60,7 @@ install:
       CMAKE_URL="https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    else
+    elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
       brew install cmake || brew upgrade cmake
     fi
   - cmake --version
@@ -68,16 +71,22 @@ before_script:
 
 script:
   # Debug build & test
-  - cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -G "Ninja" -DRFK_DEV=1
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
+        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Visual Studio 15 2017" -A x64
+    else
+        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Ninja"
+    fi
+
   - cmake --build Build/Debug --config Debug --verbose
   - cd Build/Debug && ctest -C Debug -V
 
-  - cd ../..
+#  - cd ../..
 
-  # Release build & test
-  - cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja" -DRFK_DEV=1
-  - cmake --build Build/Release --config Release --verbose
-  - cd Build/Release && ctest -C Release -V
+#  # Release build & test
+#  - cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Ninja"
+#  - cmake --build Build/Release --config Release --verbose
+#  - cd Build/Release && ctest -C Release -V
 
 branches:
   only:

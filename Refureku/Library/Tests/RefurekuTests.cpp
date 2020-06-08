@@ -113,7 +113,7 @@ void methods()
 		ec_method3float->invoke<float>(&e);	// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^ in DEBUG only
 	}
-	catch (std::exception const& exception)
+	catch (std::exception const&)
 	{
 		ec_method3float->invoke<float>(&e, 7);	// <- Call with correct arguments count
 	}

@@ -36,4 +36,4 @@ target_link_libraries(${RefurekuGeneratorTarget} PRIVATE Kodgen)
 add_custom_command(	TARGET ${RefurekuGeneratorTarget} PRE_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy
 					${PROJECT_SOURCE_DIR}/RefurekuSettings.toml
-					${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RefurekuSettings.toml)
+					$<IF:$<BOOL:${WIN32}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/RefurekuSettings.toml,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RefurekuSettings.toml>)
