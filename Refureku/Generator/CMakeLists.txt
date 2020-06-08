@@ -6,16 +6,14 @@ project(RefurekuGenerator)
 add_subdirectory(Submodules/Kodgen)
 
 # Add Refureku generator executable
-set(RefurekuGeneratorTarget RefurekuGenerator)
-add_executable(${RefurekuGeneratorTarget}
-				Source/FileParser.cpp
-				Source/GeneratedEntityCodeTemplate.cpp
-				Source/GeneratedClassCodeTemplate.cpp
-				Source/GeneratedEnumCodeTemplate.cpp
-				Source/FileGenerator.cpp
-
-				Source/main.cpp
-				)
+set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
+add_library(${RefurekuGeneratorLibTarget}
+				STATIC
+					Source/FileParser.cpp
+					Source/GeneratedEntityCodeTemplate.cpp
+					Source/GeneratedClassCodeTemplate.cpp
+					Source/GeneratedEnumCodeTemplate.cpp
+					Source/FileGenerator.cpp)
 
 # Warning level
 if (MSVC)
@@ -24,16 +22,21 @@ endif()
 
 # Setup compilation definitions
 if (RFK_DEV)
-	target_compile_definitions(${RefurekuGeneratorTarget} PRIVATE RFK_DEV=1)
+	target_compile_definitions(${RefurekuGeneratorLibTarget} PUBLIC RFK_DEV=1)
 endif()
 
-target_include_directories(${RefurekuGeneratorTarget} PRIVATE Include)
+target_include_directories(${RefurekuGeneratorLibTarget} PUBLIC Include)
 
 # Link to Kodgen library
-target_link_libraries(${RefurekuGeneratorTarget} PRIVATE Kodgen)
+target_link_libraries(${RefurekuGeneratorLibTarget} PUBLIC Kodgen)
+
+set(RefurekuGeneratorExeTarget RefurekuGenerator)
+add_executable(${RefurekuGeneratorExeTarget} Source/main.cpp)
+
+target_link_libraries(${RefurekuGeneratorExeTarget} PRIVATE ${RefurekuGeneratorLibTarget})
 
 # Copy the RefurekuSettings template file next to the generated binary
-add_custom_command(	TARGET ${RefurekuGeneratorTarget} PRE_BUILD
+add_custom_command(	TARGET ${RefurekuGeneratorExeTarget} PRE_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy
 					${PROJECT_SOURCE_DIR}/RefurekuSettings.toml
 					$<IF:$<BOOL:${WIN32}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/RefurekuSettings.toml,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RefurekuSettings.toml>)
