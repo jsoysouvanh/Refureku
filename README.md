@@ -1,52 +1,54 @@
+
 # Refureku
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
 Refureku is a powerful customizable C++17 runtime reflection library based on libclang.
 It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
-- The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
-- The actual library which contains the framework classes to access and manipulate reflected data at runtime.
+  - The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
+  - The actual library which contains the framework classes to access and manipulate reflected data at runtime.
 
 To get started now, see the [Getting Started](#getting-started) section.
 
 ## Index
 - [Features](#features)
 - [Framework Overview](#framework-overview)
-	- [Archetype](#archetype)
-	- [Fields](#fields)
-	- [Methods](#methods)
-	- [Database](#database)
+  - [Archetype](#archetype)
+    - [Fields](#fields)
+    - [Methods](#methods)
+    - [Database](#database)
 - [Properties](#properties)
-	- [Overview](#overview)
-	- [Builtin Properties](#builtin-properties)
+  - [Overview](#overview)
+  - [Builtin Properties](#builtin-properties)
 - [Customization](#customization)
-	- [From a TOML file](#from-a-toml-file)
-	- [From C++ code](#from-c-code)
-		- [FileParser](#fileparser)
-		- [FileGenerator](#filegenerator)
-		- [Usage](#usage)
+  - [From a TOML file](#from-a-toml-file)
+  - [From C++ code](#from-c-code)
+    - [FileParser](#fileparser)
+    - [FileGenerator](#filegenerator)
+    - [Usage](#usage)
 - [Getting started](#getting-started)
-    - [Requirements](#requirements)
-	- [Steps](#steps)
-	- [Possible issues](#possible-issues)
+  - [Requirements](#requirements)
+  - [Steps](#steps)
+  - [Possible issues](#possible-issues)
 - [Cross-platform compatibility](#cross-platform-compatibility)
 - [Planned features](#planned-features)
 - [Known issues](#known-issues)
 - [License](#license)
 
 ## Features
-- Easy to integrate in a software like a game engine
-- Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
-- Support structs/classes with or without inheritance (multiple inheritance supported)
-- Can look for a struct/class, enum, field or method by name, with additional filtering
-- Method call with any arguments and any return type (public, protected, private, virtual, overriden, const methods callable on non const instances)
-- Field get/set any data of any type (public, protected, private)
-- Know at runtime if a reflected class inherits or is the base of another reflected class
-- Arbitrary properties (like tags) on any entity (struct, class, field, method, enum, enum value)
-- Reflection metadata is regenerated only when a file changes
-- Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
-- Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
+  - Easy to integrate in a software like a game engine
+  - Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
+  - Support structs/classes with or without inheritance (multiple inheritance supported)
+  - Can look for a struct/class, enum, field or method by name, with additional filtering
+  - Method call with any arguments and any return type (public, protected, private, virtual, overriden, const methods callable on non const instances)
+  - Field get/set any data of any type (public, protected, private)
+  - Know at runtime if a reflected class inherits or is the base of another reflected class
+  - Arbitrary properties (like tags) on any entity (struct, class, field, method, enum, enum value)
+  - Reflection metadata is regenerated only when a file changes
+  - Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
+  - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
 
 ## Framework overview
 ### Archetype

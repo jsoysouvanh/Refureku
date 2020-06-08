@@ -299,8 +299,7 @@ bool FileParser::loadSettings(fs::path const& pathToSettingsFile) noexcept
 	}
 	catch (toml::syntax_error const& e)
 	{
-		std::cerr << "Syntax error in settings file." << std::endl <<
-			e.what() << std::endl;
+		std::cerr << "Syntax error in settings file." << std::endl << e.what() << std::endl;
 	}
 
 	return false;

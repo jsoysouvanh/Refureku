@@ -91,27 +91,6 @@ void TypeInfo::initialize(CXType cursorType) noexcept
 		if (clang_isRestrictQualifiedType(currType))
 			curr.descriptor = curr.descriptor | ETypeDescriptor::Restrict;
 	}
-
-	//std::cout << Helpers::getString(clang_getTypeSpelling(canonicalType)) << std::endl;
-	//for (TypePart typePart : typeParts)
-	//{
-	//	if (typePart.descriptor & ETypeDescriptor::Ptr)
-	//		std::cout << "Ptr ";
-	//	if (typePart.descriptor & ETypeDescriptor::LRef)
-	//		std::cout << "LRef ";
-	//	if (typePart.descriptor & ETypeDescriptor::RRef)
-	//		std::cout << "RRef ";
-	//	if (typePart.descriptor & ETypeDescriptor::Value)
-	//		std::cout << "Value ";
-
-	//	if (typePart.descriptor & ETypeDescriptor::Const)
-	//		std::cout << "Const ";
-
-	//	if (typePart.descriptor & ETypeDescriptor::CArray)
-	//		std::cout << "Array[" << typePart.additionalData << "] ";
-
-	//	std::cout << std::endl;
-	//}
 }
 
 void TypeInfo::removeForwardDeclaredClassQualifier(std::string& parsingStr) const noexcept

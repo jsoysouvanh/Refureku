@@ -150,8 +150,6 @@ std::string CppPropsCodeTemplate::generateSetter(kodgen::FieldInfo const& fieldI
 	methodName.insert(0, "set");
 	methodName += "(";
 
-	
-
 	methodName += fieldInfo.type.getName();
 	methodName += ((fieldInfo.type.sizeInBytes == 0u || fieldInfo.type.sizeInBytes > 4u) &&
 				   !(fieldInfo.type.typeParts.back().descriptor & kodgen::ETypeDescriptor::Ptr)	&&
