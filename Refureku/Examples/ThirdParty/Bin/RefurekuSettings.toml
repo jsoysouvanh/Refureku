@@ -1,0 +1,63 @@
+[FileGeneratorSettings]
+# Generated files will use this extension
+generatedFilesExtension = ".rfk.h"
+
+# List of supported extensions
+supportedExtensions		= [".h", ".hpp"]
+
+# Generated files will be located here
+# The working directory is Refureku/Examples,
+# so the outputDirectory will be Refureku/Examples/Include/Generated
+outputDirectory			= '''Include/Generated'''
+
+# Files contained in the directories of this list will be parsed
+toParseDirectories		= [
+	'''Include'''	# Include is relative to Examples/, so it becomes Examples/Include/
+]
+
+# Files to parse which are not included in any directory of toParseDirectories
+toParseFiles			= []
+
+# Files contained in the directories of this list will be ignored
+ignoredDirectories		= [
+	'''Include/Generated''',	# Include/Generated is relative to Examples/, so it becomes Examples/Include/Generated/
+]
+
+# Files not to parse which are not included in any directory of ignoredDirectories
+ignoredFiles			= []
+
+
+[FileParserSettings]
+# Abort parsing on first encountered error
+shouldAbortParsingOnFirstError = true
+
+# Include directories of the project
+projectIncludeDirectories	= [
+	'''../Library/Include''',	# ../Library/Include is relative to Refureku/Examples/, so it becomes Refureku/Library/Include
+	'''Include'''				# Include is relative to Examples/, so it becomes Examples/Include/
+]
+
+[FileParserSettings.Properties]
+propertySeparator = ","
+subPropertySeparator = ","
+subPropertyStartEncloser = "["
+subPropertyEndEncloser = "]"
+ignoredCharacters = [ " " ]
+
+[FileParserSettings.Properties.Class]
+macroName = "RFKClass"
+
+[FileParserSettings.Properties.Struct]
+macroName = "RFKStruct"
+
+[FileParserSettings.Properties.Field]
+macroName = "RFKField"
+
+[FileParserSettings.Properties.Method]
+macroName = "RFKMethod"
+
+[FileParserSettings.Properties.Enum]
+macroName = "RFKEnum"
+
+[FileParserSettings.Properties.EnumValue]
+macroName = "RFKEnumVal"

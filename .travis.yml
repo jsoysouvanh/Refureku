@@ -42,7 +42,7 @@ jobs:
    - env: CC=gcc-10 CXX=g++-10
      addons: { apt: { packages: ["g++-10", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
 
-   # Windows / 
+   # Windows / MSVC 2017
    - os: windows
 
 #   # OSX / Clang
