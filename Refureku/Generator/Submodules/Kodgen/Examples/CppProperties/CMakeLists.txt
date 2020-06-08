@@ -13,6 +13,8 @@ add_executable(${CppPropertiesDemoProjectGeneratorTarget}
 					
 					Generator/Source/main.cpp)
 
+target_compile_features(${CppPropertiesDemoProjectGeneratorTarget} PUBLIC cxx_std_17)
+
 target_include_directories(${CppPropertiesDemoProjectGeneratorTarget} PRIVATE
 							Generator/Include)
 
@@ -29,6 +31,8 @@ add_executable(${CppPropertiesDemoProjectTarget}
 					Source/SomeClass.cpp
 
 					Source/main.cpp)
+
+target_compile_features(${CppPropertiesDemoProjectTarget} PUBLIC cxx_std_17)
 
 set(RunGeneratorTarget RunCppPropertiesGenerator)
 add_custom_target(${RunGeneratorTarget}

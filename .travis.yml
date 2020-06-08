@@ -43,11 +43,18 @@ jobs:
    #  addons: { apt: { packages: ["g++-10", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
 
    # Windows / 
-   - os: windows
+   #- os: windows
 
-pre-install:
- - ${CC} --version
- - ${CXX} --version
+   # OSX / Clang
+#   - os: osx
+#     osx_image: xcode11.5
+#     addons: { homebrew: { packages: ["ninja"] } }
+
+   # OSX / GCC
+   - os: osx
+     env: CC=gcc-9 CXX=g++-9
+     addons: { homebrew: { packages: ["ninja", "gcc"] } }
+#     osx_image: xcode11.5
 
 install:
   # All the dependencies are installed in ${HOME}/deps/
@@ -60,14 +67,20 @@ install:
       CMAKE_URL="https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-      brew install cmake || brew upgrade cmake
     fi
-  - cmake --version
-
+#    elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+#      brew install cmake || brew upgrade cmake
+#    fi
+  
 before_script:
   # Go back to the root of the project
   - cd "${TRAVIS_BUILD_DIR}"
+
+  # Check versions
+  - ${CC} --version
+  - ${CXX} --version
+
+  - cmake --version
 
 script:
   # Debug build & test
@@ -75,7 +88,7 @@ script:
     if [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
         cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Visual Studio 15 2017" -A x64
     else
-        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Ninja"
+        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -DKODGEN_DEV=1 -G "Ninja"
     fi
 
   - cmake --build Build/Debug --config Debug --verbose
@@ -84,7 +97,13 @@ script:
 #  - cd ../..
 
 #  # Release build & test
-#  - cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Ninja"
+#  - |
+#    if [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
+#        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Visual Studio 15 2017" -A x64
+#    else
+#        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Ninja"
+#    fi
+#
 #  - cmake --build Build/Release --config Release --verbose
 #  - cd Build/Release && ctest -C Release -V
 

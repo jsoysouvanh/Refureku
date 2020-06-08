@@ -63,7 +63,7 @@ void parseAndGenerate(fs::path&& exePath)
 
 	fs::path pathToSettingsFile = exePath.make_preferred() / "RefurekuSettings.toml";
 
-	logger.log("Working Directory : " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
+	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//Load settings
 	if (fileGenerator.loadSettings(pathToSettingsFile) && fileParser.loadSettings(pathToSettingsFile))

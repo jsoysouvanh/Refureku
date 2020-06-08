@@ -21,9 +21,9 @@ namespace SomeNamespace
 				float				_someFloat				= 3.14f;
 
 				KGField(Get[])
-				char const			_someChar				= '*';
+				char				_someChar				= '*';
 
-				KGField(Get[const, &], Set[])
+				KGField(Get[], Set[])
 				unsigned long long	_someUnsignedLongLong	= 42;
 
 				KGField(Get[], Set[])

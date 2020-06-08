@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 
 		if (fs::is_directory(workingDirectory))
 		{
-			logger.log("WORKING DIRECTORY IS: " + workingDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
+			logger.log("Working Directory: " + workingDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
 
 			fs::path includeDirectory	= workingDirectory / "Include";
 			fs::path generatedDirectory	= includeDirectory / "Generated";
