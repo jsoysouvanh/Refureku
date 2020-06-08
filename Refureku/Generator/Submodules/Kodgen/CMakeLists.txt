@@ -89,7 +89,7 @@ if (WIN32)
 	add_custom_command(	TARGET ${KodgenTargetLibrary} POST_BUILD
 						COMMAND ${CMAKE_COMMAND} -E copy
 						${PROJECT_SOURCE_DIR}/Libraries/x64/Shared/libclang.dll
-						${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/libclang.dll)
+						$<IF:$<BOOL:${MSVC}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/libclang.dll,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libclang.dll>)
 endif()
 
 add_subdirectory(Tests)
