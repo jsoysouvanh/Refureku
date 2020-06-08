@@ -135,7 +135,6 @@ std::string CppPropsCodeTemplate::generateSetter(kodgen::FieldInfo const& fieldI
 		return "";
 	}
 
-	std::string rawReturnType	= fieldInfo.type.getName() + " ";
 	std::string paramName		= "_kodgen" + fieldInfo.name;
 	bool		isExplicit		= false;
 
