@@ -176,12 +176,13 @@ bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noe
 
 		#if KODGEN_DEV
 
-		for (char const* arg : parseArguments)
+		if (_logger != nullptr)
 		{
-			std::cout << arg << " ";
+			for (char const* arg : parseArguments)
+			{
+				_logger->log(std::string(arg) + " ", ILogger::ELogSeverity::Info);
+			}
 		}
-
-		std::cout << std::endl;
 
 		#endif
 
@@ -201,21 +202,28 @@ bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noe
 			{
 				isSuccess = true;
 			}
-
+			
 			#if KODGEN_DEV
 			
-			CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
-
-			std::cout << "DIAGNOSTICS START..." << std::endl;
-			for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
+			if (_logger != nullptr)
 			{
-				CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
-				std::cout << Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())) << std::endl;
-				clang_disposeDiagnostic(diagnostic);
-			}
-			std::cout << "DIAGNOSTICS END..." << std::endl;
+				CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
 
-			clang_disposeDiagnosticSet(diagnostics);
+				_logger->log("DIAGNOSTICS START...", ILogger::ELogSeverity::Info);
+
+				for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
+				{
+					CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
+
+					_logger->log(Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())), ILogger::ELogSeverity::Warning);
+
+					clang_disposeDiagnostic(diagnostic);
+				}
+
+				_logger->log("DIAGNOSTICS END...", ILogger::ELogSeverity::Info);
+
+				clang_disposeDiagnosticSet(diagnostics);
+			}
 
 			#endif
 
@@ -299,8 +307,16 @@ bool FileParser::loadSettings(fs::path const& pathToSettingsFile) noexcept
 	}
 	catch (toml::syntax_error const& e)
 	{
-		std::cerr << "Syntax error in settings file." << std::endl << e.what() << std::endl;
+		if (_logger != nullptr)
+		{
+			_logger->log("Syntax error in settings file.\n" + std::string(e.what()), ILogger::ELogSeverity::Error);
+		}
 	}
 
 	return false;
+}
+
+void FileParser::provideLogger(ILogger& logger) noexcept
+{
+	_logger = &logger;
 }

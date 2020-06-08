@@ -28,6 +28,8 @@ namespace kodgen
 			unsigned				getColumn()		const noexcept;
 			EParsingError			getErrorValue()	const noexcept;
 
+			std::string				toString()		const noexcept;
+
 			ParsingError& operator=(ParsingError const&)	= default;
 			ParsingError& operator=(ParsingError&&)			= default;
 	};

@@ -4,6 +4,7 @@
 
 #include "Misc/Filesystem.h"
 #include "Misc/Optional.h"
+#include "Misc/ILogger.h"
 #include "InfoStructures/ParsingInfo.h"
 #include "Parsing/ClassParser.h"
 #include "Parsing/EnumParser.h"
@@ -51,6 +52,11 @@ namespace kodgen
 			void	reset()																								noexcept;
 
 		protected:
+			/**
+			*	Logger used to issue logs from the FileParser
+			*/
+			ILogger*	_logger	= nullptr;
+
 			/**
 			*	@brief Overridable method called just before starting the parsing process of a file
 			*
@@ -101,5 +107,12 @@ namespace kodgen
 			*	@return true if a file could be loaded, else false.
 			*/
 			bool						loadSettings(fs::path const& pathToSettingsFile)				noexcept;
+
+			/**
+			*	\brief Setup the logger used by this parser.
+			*
+			*	\param logger Instance of the logger to use.
+			*/
+			void						provideLogger(ILogger& logger)									noexcept;
 	};
 }

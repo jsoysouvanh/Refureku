@@ -412,8 +412,16 @@ bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 	}
 	catch (toml::syntax_error const& e)
 	{
-		std::cerr << "Syntax error in settings file." << std::endl << e.what() << std::endl;
+		if (_logger != nullptr)
+		{
+			_logger->log("Syntax error in settings file.\n" + std::string(e.what()), ILogger::ELogSeverity::Error);
+		}
 	}
 	
 	return false;
+}
+
+void FileGenerator::provideLogger(ILogger& logger) noexcept
+{
+	_logger = &logger;
 }

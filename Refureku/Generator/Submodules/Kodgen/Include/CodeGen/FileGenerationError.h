@@ -25,6 +25,8 @@ namespace kodgen
 			std::string const&		getEntityName()				const	noexcept;
 			EFileGenerationError	getFileGenerationError()	const	noexcept;
 
+			std::string				toString()					const	noexcept;
+
 			FileGenerationError& operator=(FileGenerationError const&)	= default;
 			FileGenerationError& operator=(FileGenerationError&&)		= default;
 	};

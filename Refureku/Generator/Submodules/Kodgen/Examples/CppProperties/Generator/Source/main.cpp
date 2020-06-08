@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <Misc/Filesystem.h>
+#include <Misc/DefaultLogger.h>
 #include <CodeGen/FileGenerator.h>
 
 #include "CppPropsParser.h"
@@ -8,7 +9,8 @@
 
 int main(int argc, char** argv)
 {
-	int result = EXIT_SUCCESS;
+	kodgen::DefaultLogger	logger;
+	int						result = EXIT_SUCCESS;
 
 	if (argc > 1)
 	{
@@ -16,13 +18,17 @@ int main(int argc, char** argv)
 
 		if (fs::is_directory(workingDirectory))
 		{
-			std::cout << "WORKING DIRECTORY IS: " << workingDirectory.string() << std::endl;
+			logger.log("WORKING DIRECTORY IS: " + workingDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
 
 			fs::path includeDirectory	= workingDirectory / "Include";
 			fs::path generatedDirectory	= includeDirectory / "Generated";
 
 			CppPropsParser parser;
 			kodgen::FileGenerator fileGenerator;
+
+			//Parser and generator should log through logger
+			parser.provideLogger(logger);
+			fileGenerator.provideLogger(logger);
 
 			//Parse WorkingDir/...
 			fileGenerator.toParseDirectories.emplace(includeDirectory.string());
@@ -64,28 +70,28 @@ int main(int argc, char** argv)
 			{
 				for (kodgen::ParsingError parsingError : genResult.parsingErrors)
 				{
-					std::cerr << parsingError << std::endl;
+					logger.log(parsingError.toString(), kodgen::ILogger::ELogSeverity::Error);
 				}
 
 				for (kodgen::FileGenerationError fileGenError : genResult.fileGenerationErrors)
 				{
-					std::cerr << fileGenError << std::endl;
+					logger.log(fileGenError.toString(), kodgen::ILogger::ELogSeverity::Error);
 				}
 			}
 			else
 			{
-				std::cerr << "Invalid FileGenerator::outputDirectory" << std::endl;
+				logger.log("Invalid FileGenerator::outputDirectory", kodgen::ILogger::ELogSeverity::Error);
 			}
 		}
 		else
 		{
-			std::cerr << "Provided working directory is not a directory or doesn't exist" << std::endl;
+			logger.log("Provided working directory is not a directory or doesn't exist", kodgen::ILogger::ELogSeverity::Error);
 			result = EXIT_FAILURE;
 		}
 	}
 	else
 	{
-		std::cerr << "No working directory provided as first program argument" << std::endl;
+		logger.log("No working directory provided as first program argument", kodgen::ILogger::ELogSeverity::Error);
 		result = EXIT_FAILURE;
 	}
 

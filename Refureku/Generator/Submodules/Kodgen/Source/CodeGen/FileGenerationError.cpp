@@ -24,9 +24,14 @@ EFileGenerationError FileGenerationError::getFileGenerationError() const noexcep
 	return _fileGenError;
 }
 
+std::string FileGenerationError::toString() const noexcept
+{
+	return "Error: " + kodgen::toString(getFileGenerationError()) + ", " + getFilename() + ": " + getEntityName();
+}
+
 std::ostream& kodgen::operator<<(std::ostream& out_stream, FileGenerationError const& fileGenerationError) noexcept
 {
-	out_stream << "Error: " << kodgen::toString(fileGenerationError.getFileGenerationError()) << ", " << fileGenerationError.getFilename() << ": " << fileGenerationError.getEntityName();
+	out_stream << fileGenerationError.toString();
 
 	return out_stream;
 }

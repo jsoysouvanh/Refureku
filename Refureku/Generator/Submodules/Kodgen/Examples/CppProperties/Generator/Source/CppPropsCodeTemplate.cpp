@@ -58,8 +58,6 @@ std::string CppPropsCodeTemplate::generateGetter(kodgen::FieldInfo const& fieldI
 	bool		isPtr				= false;
 	bool		isExplicit			= false;
 
-	std::cout << "Generate getter: " << fieldInfo.type.getName() << "	" << fieldInfo.name << std::endl;
-
 	for (std::string const& subprop : complexProp.subProperties)
 	{
 		if (!isConst && subprop.at(0) == 'c')			//const

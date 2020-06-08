@@ -40,6 +40,7 @@ add_library(${KodgenTargetLibrary}
 	
 					Source/Misc/EAccessSpecifier.cpp
 					Source/Misc/Helpers.cpp
+					Source/Misc/DefaultLogger.cpp
 	
 					Source/CodeGen/FileGenerator.cpp
 					Source/CodeGen/EFileGenerationError.cpp

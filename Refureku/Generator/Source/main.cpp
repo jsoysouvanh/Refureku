@@ -1,51 +1,52 @@
 #include <iostream>
 
 #include <Misc/Filesystem.h>
+#include <Misc/DefaultLogger.h>
 
 #include "FileParser.h"
 #include "FileGenerator.h"
 
-void printGenerationSetup(rfk::FileParser const& /*fileParser*/, rfk::FileGenerator const& fileGenerator)
+void printGenerationSetup(kodgen::ILogger& logger, rfk::FileParser const& /*fileParser*/, rfk::FileGenerator const& fileGenerator)
 {
 	//Output dir
-	std::cout << "Output directory: " << fileGenerator.outputDirectory << std::endl;
+	logger.log("Output directory: " + fileGenerator.outputDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//ToParseDirs
-	std::cout << "Parsed directories:" << std::endl;
+	logger.log("Parsed directories:", kodgen::ILogger::ELogSeverity::Info);
 	for (fs::path const& path : fileGenerator.toParseDirectories)
 	{
-		std::cout << "\t" << path << std::endl;
+		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
 
 	//IgnoredDirs
-	std::cout << "Ignored directories:" << std::endl;
+	logger.log("Ignored directories:", kodgen::ILogger::ELogSeverity::Info);
 	for (fs::path const& path : fileGenerator.ignoredDirectories)
 	{
-		std::cout << "\t" << path << std::endl;
+		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
 }
 
-void printGenerationResult(kodgen::FileGenerationResult const& genResult)
+void printGenerationResult(kodgen::ILogger& logger, kodgen::FileGenerationResult const& genResult)
 {
 	if (genResult.completed)
 	{
-		std::cout << "[LOG] (Re)generated metadata for " << genResult.parsedFiles.size() << " file(s)." << std::endl;
-		std::cout << "[LOG] Metadata of " << genResult.upToDateFiles.size() << " file(s) up-to-date." << std::endl;
+		logger.log("(Re)generated metadata for " + std::to_string(genResult.parsedFiles.size()) + " file(s).", kodgen::ILogger::ELogSeverity::Info);
+		logger.log("Metadata of " + std::to_string(genResult.upToDateFiles.size()) + " file(s) up-to-date.", kodgen::ILogger::ELogSeverity::Info);
 
 		//Errors
 		for (kodgen::ParsingError parsingError : genResult.parsingErrors)
 		{
-			std::cerr << parsingError << std::endl;
+			logger.log(parsingError.toString(), kodgen::ILogger::ELogSeverity::Error);
 		}
 
 		for (kodgen::FileGenerationError fileGenError : genResult.fileGenerationErrors)
 		{
-			std::cerr << fileGenError << std::endl;
+			logger.log(fileGenError.toString(), kodgen::ILogger::ELogSeverity::Error);
 		}
 	}
 	else
 	{
-		std::cerr << "Generation failed to complete successfully." << std::endl;
+		logger.log("Generation failed to complete successfully.", kodgen::ILogger::ELogSeverity::Error);
 	}
 }
 
@@ -54,13 +55,21 @@ void parseAndGenerate(fs::path&& exePath)
 	rfk::FileParser		fileParser;
 	rfk::FileGenerator	fileGenerator;
 
+	//Set logger
+	kodgen::DefaultLogger logger;
+
+	fileParser.provideLogger(logger);
+	fileGenerator.provideLogger(logger);
+
 	fs::path pathToSettingsFile = exePath.make_preferred() / "RefurekuSettings.toml";
+
+	logger.log("Working Directory : " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//Load settings
 	if (fileGenerator.loadSettings(pathToSettingsFile) && fileParser.loadSettings(pathToSettingsFile))
 	{
-		std::cout << "[LOADED] FileGenerator settings." << std::endl;
-		std::cout << "[LOADED] FileParser settings." << std::endl;
+		logger.log("Loaded FileGenerator settings.", kodgen::ILogger::ELogSeverity::Info);
+		logger.log("Loaded FileParser settings.", kodgen::ILogger::ELogSeverity::Info);
 
 		#if RFK_DEV
 
@@ -74,24 +83,22 @@ void parseAndGenerate(fs::path&& exePath)
 
 		#endif
 
-		printGenerationSetup(fileParser, fileGenerator);
+		printGenerationSetup(logger, fileParser, fileGenerator);
 
 		//Parse
 		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
 
 		//Result
-		printGenerationResult(genResult);
+		printGenerationResult(logger, genResult);
 	}
 	else
 	{
-		std::cerr << "[ERROR] Failed to load the RefurekuSettings file at " << pathToSettingsFile.string() << std::endl;
+		logger.log("Failed to load the RefurekuSettings file at " + pathToSettingsFile.string(), kodgen::ILogger::ELogSeverity::Error);
 	}
 }
 
 int main(int /*argc*/, char** argv)
 {
-	std::cout << "[WORKING DIRECTORY] " << fs::current_path() << std::endl;
-
 	fs::path exeDirectory = fs::path(argv[0]).parent_path();
 
 	parseAndGenerate(std::move(exeDirectory));

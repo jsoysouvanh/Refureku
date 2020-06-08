@@ -38,17 +38,21 @@ CppPropsParser::CppPropsParser() noexcept:
 
 void CppPropsParser::preParse(fs::path const& parseFile) noexcept
 {
-	std::cout << "Start parsing: " << parseFile.string() << std::endl;
+	if (_logger != nullptr)
+	{
+		_logger->log("Start parsing: " + parseFile.string(), kodgen::ILogger::ELogSeverity::Info);
+	}
 }
 
-void CppPropsParser::postParse(fs::path const& parseFile, kodgen::ParsingResult const& result) noexcept
+void CppPropsParser::postParse(fs::path const&, kodgen::ParsingResult const& result) noexcept
 {
-	for (kodgen::ParsingError const& parsingError : result.parsingErrors)
+	if (_logger != nullptr)
 	{
-		std::cout << parsingError << std::endl;
+		for (kodgen::ParsingError const& parsingError : result.parsingErrors)
+		{
+			_logger->log(parsingError.toString(), kodgen::ILogger::ELogSeverity::Error);
+		}
+
+		_logger->log("Found " + std::to_string(result.classes.size()) + " classes and " + std::to_string(result.enums.size()) + " enums.", kodgen::ILogger::ELogSeverity::Info);
 	}
-
-	std::cout << "Found " << result.classes.size() << " classes and " << result.enums.size() << " enums." << std::endl;
-
-	static_cast<void>(parseFile);
 }

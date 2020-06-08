@@ -40,9 +40,14 @@ EParsingError ParsingError::getErrorValue() const noexcept
 	return _propertyParsingError;
 }
 
+std::string ParsingError::toString() const noexcept
+{
+	return kodgen::toString(getErrorValue()) + ", " + getFilename() + ": " + std::to_string(getLine()) + ":" + std::to_string(getColumn());
+}
+
 std::ostream& kodgen::operator<<(std::ostream& out_stream, ParsingError const& parsingError) noexcept
 {
-	out_stream << "Error: " << kodgen::toString(parsingError.getErrorValue()) << ", " << parsingError.getFilename() << ": " << parsingError.getLine() << ":" << parsingError.getColumn();
+	out_stream << parsingError.toString();
 
 	return out_stream;
 }
