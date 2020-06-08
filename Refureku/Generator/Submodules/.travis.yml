@@ -5,19 +5,19 @@ dist: bionic
 
 jobs:
   include:
-   # clang 7
+   # Linux bionic / clang 7
    - env: CC=clang-7 CXX=clang++-7
      addons: { apt: { packages: ["clang-7", "g++-8", "libstdc++-8-dev", "ninja-build"] } }
-
-   # clang 8
+   
+   # Linux bionic / clang 8
    - env: CC=clang-8 CXX=clang++-8
      addons: { apt: { packages: ["clang-8", "g++-8", "libstdc++-8-dev", "ninja-build"] } }
-
-   # clang 9
+   
+   # Linux bionic / clang 9
    - env: CC=clang-9 CXX=clang++-9
      addons: { apt: { packages: ["clang-9", "g++-8", "libstdc++-9-dev", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
    
-   # clang 10
+   # Linux bionic / clang 10
    - env: CC=clang-10 CXX=clang++-10
      addons:
         apt:
@@ -29,22 +29,32 @@ jobs:
             - clang-10
             - libstdc++-10-dev
             - ninja-build
-
-   # GCC 8
+   
+   # Linux bionic / GCC 8
    - env: CC=gcc-8 CXX=g++-8
      addons: { apt: { packages: ["g++-8", "ninja-build"] } }
-
-   # GCC 9
+   
+   # Linux bionic / GCC 9
    - env: CC=gcc-9 CXX=g++-9
      addons: { apt: { packages: ["g++-9", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
-
-   # GCC 10
+   
+   # Linux bionic / GCC 10
    - env: CC=gcc-10 CXX=g++-10
      addons: { apt: { packages: ["g++-10", "ninja-build"], sources: [sourceline: "ppa:ubuntu-toolchain-r/test"] } }
 
-pre-install:
- - ${CC} --version
- - ${CXX} --version
+   # Windows / 
+   - os: windows
+
+#   # OSX / Clang
+#   - os: osx
+#     osx_image: xcode11.5
+#     addons: { homebrew: { packages: ["ninja"] } }
+
+#   # OSX / GCC
+#   - os: osx
+#     env: CC=gcc-9 CXX=g++-9
+#     addons: { homebrew: { packages: ["ninja", "gcc"] } }
+#     osx_image: xcode11.5
 
 install:
   # All the dependencies are installed in ${HOME}/deps/
@@ -57,25 +67,40 @@ install:
       CMAKE_URL="https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    else
-      brew install cmake || brew upgrade cmake
     fi
-  - cmake --version
-
+  
 before_script:
   # Go back to the root of the project
   - cd "${TRAVIS_BUILD_DIR}"
 
+  # Check versions
+  - ${CC} --version
+  - ${CXX} --version
+
+  - cmake --version
+
 script:
   # Debug build & test
-  - cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -G "Ninja"    # -DDEV=1
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
+        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Visual Studio 15 2017" -A x64
+    else
+        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Ninja"
+    fi
+
   - cmake --build Build/Debug --config Debug --verbose
   - cd Build/Debug && ctest -C Debug -V
 
   - cd ../..
 
   # Release build & test
-  - cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja"    # -DDEV=1
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
+        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Visual Studio 15 2017" -A x64
+    else
+        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Ninja"
+    fi
+
   - cmake --build Build/Release --config Release --verbose
   - cd Build/Release && ctest -C Release -V
 
@@ -88,6 +113,6 @@ notifications:
   email: false
   slack:
     rooms:
-      - secure: CLRHaJsDizMiqeWJDXTHGhG/U5glgQf6gFRlecyTorBBMNm56+9lVFO1qaLv36YbqN7waOt0clB1F7WrO0rOStpya0RQLptxL9IXcZTGtsDsT6qav8CA6Hai3KtganbHrmcmscO1U3GGzk9rvwpmUJq26ExvDOKBrMj3JLt3aNeB6+H37qTOiM1hFjf8YzE4PiduMig8X2vWd65r9SHHB5MgfDoWO3m45xncGJ/v7aZ5Q9e/1sHNSoMuDdSA1qj/mRuWmtrRuTyrpx5W2vHTGdyLG1EQ2wStDuECv4l7euQZGdwbwWLKuvuyJbuCoPYthYUo1Hl7dtYIJanoVChmrXPiNDB5quwxflU3dfFrFw+0quwki5Xz9exAxsvr0r7vk1cyAz5tAJhlZ0VeKSdIjqeh1NC1bjFKnppXGhoIzDJyp7u5LrP+6BlRA0Qc4ea6wTLM1/94nwYBgh0HeLs0PHMuzNzQMH8fZj6JCQ667HW/XDuQmHfhGY8WPZowsyE09Q+FlhXnFeynmP3ZbGTVjCtIclvjRbT8gojUzFuBBgzbLGuzTwWQl5EBTcr4EUKOVM6H1Lo1nd9WXTanXc4mgMfIXxmMkn910lRwkBYa6O67vG0iuUrTrcCm9PWG03M19JPI+wTutrRbIMo0zO3vDeG0+snrQWpuU1Ph/70sW9k=
+      - secure: 036eCHF+9IlPadO35zdkQRkCTDN5zTamjd5wgZd5G0Or0QOu4vzun9Y9bI0rQKNX/ioKCZ5ZBDGk6HNLyElDI/1Zvvgq0BTYxyRxYQ5aw3a9LAxb60DUzkGsfpVbgAjTQNC69FBAGvamdQBjt90vODB7G7yha421bVDdE/s+ZX+p/msUMNfthhK5JBJ+Ti4MDYZgEuWd+UDlqy5U+njYxJCCUt652Nwn1cHnghtyKliEocjIzRcm/Gd+Q1xt6oXg1oK2oMcwk8OZeNpD38WoNy3oPhN7WfTmlk4nngajRj1Gp7m5+ocgY80tsqu2fFtTzSWwsV3JJaDoicTvF+wWV+d0kGtXT9dJnK+VsDZLNPxTTnrVkzGW9p1bpFLlyUbkUrmPdd/MBBhKcxT0GWgNnSOzQc0Me5x0+WwAnHMnFZVuNDEcpgyhooOKU0y/GNQZI72ZA/o13hunO7S9isc+KaWKAOw/NjddLNXAhYhfcMwvWg07agNIcloJ2dvbJWLowy/DA2fNbKVLVFLqsSkNy5KD7fRPkAuYklkUFAG5mOdQMVdPLueI8FawQ4y0lYFYyAKnJs1a56Qut6aiE/Tu9BATl+kLueKpUKuud8tISIDp7r9rZnB8mFD6ywoIYnIGhiRGF19vECM9FoQpligsU9EwvlepvM7Wh7zFKaNXxX4=
     on_success: always
     on_failure: always
