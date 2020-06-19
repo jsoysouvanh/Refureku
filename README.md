@@ -1,9 +1,10 @@
 # Refureku
+
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FRefureku.svg)](https://github.com/jsoysouvanh/Refureku/releases/latest)
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
-Refureku is a powerful customizable C++17 runtime reflection library based on libclang.
+Refureku is a powerful customizable C++17 runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
 It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
@@ -64,17 +65,17 @@ Consider the following header file, let's say Example.h:
 
 class RFKStruct() ExampleStruct
 {
-    RFKExampleStruct_GENERATED
+    ExampleStruct_GENERATED
 };
 class RFKClass() ExampleClass
 {
-    RFKExampleClass_GENERATED
+    ExampleClass_GENERATED
 };
 enum class RFKEnum() ExampleEnum
 {
 };
 
-RFKExampleEnum_GENERATED
+ExampleEnum_GENERATED
 
 ```
 To retrieve those archetypes, we can write the following:
@@ -118,7 +119,7 @@ class RFKClass() ExampleClass
         RFKField()
         int exampleInt = 0;
 
-    RFKExampleClass_GENERATED
+    ExampleClass_GENERATED
 }
 ```
 ```cpp
@@ -168,7 +169,7 @@ class RFKClass() ExampleClass
         RFKMethod()
         int returnWithParams(float a, float b) { return a + b; }
 
-    RFKExampleClass_GENERATED
+    ExampleClass_GENERATED
 }
 ```
 ```cpp
@@ -228,7 +229,7 @@ It could look like this:
 class RFKClass(CustomSimpleProperty, CustomComplexProperty[SubProp1, SubProp2])
     ExampleClass
 {
-    RFKExampleClass_GENERATED
+    ExampleClass_GENERATED
 };
 
 enum class RFKEnum(EnumProp) ExampleEnum
@@ -237,7 +238,7 @@ enum class RFKEnum(EnumProp) ExampleEnum
     EnumValue2 RFKEnumVal(EnumValueProp) = 1
 };
 
-RFKExampleEnum_GENERATED
+ExampleEnum_GENERATED
 ```
 
 And we can retrieve properties like so:
@@ -282,12 +283,12 @@ DynamicGetArchetype must be specified when a class or struct inherits from rfk::
 
 class RFKClass(DynamicGetArchetype) ExampleClass : public rfk::ReflectedObject
 {
-    RFKExampleClass_GENERATED
+    ExampleClass_GENERATED
 };
 
 struct RFKStruct(DynamicGetArchetype) ExampleStruct : public ExampleClass
 {
-    RFKExampleStruct_GENERATED
+    ExampleStruct_GENERATED
 };
 ```
 ```cpp
@@ -325,7 +326,7 @@ class RFKClass() ExampleClass
         ExampleClass() = delete;
         ExampleClass(int i, float f) {  }
         
-    RFKExampleClass_GENERATED
+    ExampleClass_GENERATED
 };
 ```
 ```cpp
@@ -628,8 +629,8 @@ If you get lost when reading the following steps, you're greatly encouraged to h
 	```
 
 ## Cross-platform compatibility
-This library has been tested and is stable with the following configurations:
-- Windows 10 | MSVC 2019 16.5.2 (v142)
+This library has been tested and is stable on the following configurations:
+- Windows Server version 1809 | MSVC 19.16.27035.0
 - Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
 - Linux 18.04 | GCC 8.4.0, GCC 9.2.1
 
