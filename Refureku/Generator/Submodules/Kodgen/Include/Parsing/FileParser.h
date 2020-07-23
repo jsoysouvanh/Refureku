@@ -1,68 +1,121 @@
 #pragma once
 
+#include <string>
 #include <clang-c/Index.h>
 
 #include "Misc/Filesystem.h"
-#include "Misc/Optional.h"
 #include "Misc/ILogger.h"
-#include "InfoStructures/ParsingInfo.h"
-#include "Parsing/ClassParser.h"
-#include "Parsing/EnumParser.h"
-#include "Parsing/ParsingResult.h"
+#include "Parsing/NamespaceParser.h"
+#include "Parsing/ParsingResults/FileParsingResult.h"
 #include "Parsing/ParsingSettings.h"
 #include "Parsing/PropertyParser.h"
 
 namespace kodgen
 {
-	class FileParser
+	class FileParser : public NamespaceParser
 	{
 		private:
-			static inline std::string const	_parsingMacro		= "KODGEN_PARSING";
-			
-			CXIndex						_clangIndex;
-			
-			ClassParser					_classParser;
-			EnumParser					_enumParser;
-			ParsingInfo					_parsingInfo;
+			/** Index used internally by libclang to process a translation unit. */
+			CXIndex							_clangIndex;
 
-			//Variables used to build command line
-			std::string					_kodgenParsingMacro	= "-D" + _parsingMacro;
-			std::vector<std::string>	_projectIncludeDirs;
-			std::string					_classPropertyMacro;
-			std::string					_structPropertyMacro;
-			std::string					_fieldPropertyMacro;
-			std::string					_methodPropertyMacro;
-			std::string					_enumPropertyMacro;
-			std::string					_enumValuePropertyMacro;
+			/** Variables used to build compilation command line. */
+			std::string						_kodgenParsingMacro		= "-D" + parsingMacro;
+			std::vector<std::string>		_projectIncludeDirs;
 
-			static CXChildVisitResult	staticParseCursor(CXCursor c, CXCursor parent, CXClientData clientData)			noexcept;
-			
-			void						refreshBuildCommandStrings()													noexcept;
-			std::vector<char const*>	makeParseArguments()															noexcept;
+			std::string						_namespacePropertyMacro;
+			std::string						_classPropertyMacro;
+			std::string						_structPropertyMacro;
+			std::string						_fieldPropertyMacro;
+			std::string						_methodPropertyMacro;
+			std::string						_enumPropertyMacro;
+			std::string						_enumValuePropertyMacro;
 
-			void						setupForParsing()																noexcept;
-
-			CXChildVisitResult			parseCursor(CXCursor currentCursor)												noexcept;
-			CXChildVisitResult			parseClass(CXCursor classCursor, bool isStruct)									noexcept;
-			CXChildVisitResult			parseEnum(CXCursor enumCursor)													noexcept;
+			/** Property parser used to parse properties of all entities. */
+			PropertyParser					_propertyParser;		
 
 			/**
-			*	Remove all previously parsed information from the class
+			*	@brief This method is called at each node (cursor) of the parsing.
+			*
+			*	@param cursor		Current cursor to parse.
+			*	@param parentCursor	Parent of the current cursor.
+			*	@param clientData	Pointer to a data provided by the client. Must contain a FileParser*.
+			*
+			*	@return An enum which indicates how to choose the next cursor to parse in the AST.
 			*/
-			void	reset()																								noexcept;
+			static CXChildVisitResult	parseNestedEntity(CXCursor		cursor,
+														  CXCursor		parentCursor,
+														  CXClientData	clientData)						noexcept;
+
+			/**
+			*	@brief Refresh all internal compilation macros to pass to the compiler.
+			*/
+			void						refreshBuildCommandStrings()									noexcept;
+
+			/**
+			*	@brief Make a list of all arguments to pass to the compilation command.
+			*
+			*	@return A vector of all compilation commands.
+			*/
+			std::vector<char const*>	makeCompilationArguments()										noexcept;
+
+			/**
+			*	@brief Push a new clean context to prepare translation unit parsing.
+			*
+			*	@param translationUnit	The translation unit to parse.
+			*	@param out_result		Result to fill during parsing.
+			*
+			*	@return The new context.
+			*/
+			ParsingContext&				pushContext(CXTranslationUnit const&	translationUnit,
+													FileParsingResult&			out_result)				noexcept;
+
+			/**
+			*	@brief Add the provided namespace result to the current file context result.
+			*
+			*	@param result NamespaceParsingResult to add.
+			*/
+			void						addNamespaceResult(NamespaceParsingResult&& result)				noexcept;
+
+			/**
+			*	@brief Add the provided struct/class result to the current file context result.
+			*
+			*	@param result ClassParsingResult to add.
+			*/
+			void						addClassResult(ClassParsingResult&& result)						noexcept;
+
+			/**
+			*	@brief Add the provided enum result to the current file context result.
+			*
+			*	@param result EnumParsingResult to add.
+			*/
+			void						addEnumResult(EnumParsingResult&& result)						noexcept;
+
+			/**
+			*	@brief Log the diagnostic of the provided translation units.
+			*
+			*	@param translationUnit Translation unit we want to log the diagnostic of.
+			*/
+			void						logDiagnostic(CXTranslationUnit const& translationUnit)	const	noexcept;
+
+			/**
+			*	@brief Log the compilation command arguments.
+			*/
+			void						logCompilationArguments()										noexcept;
+
+			/**
+			*	@brief Helper to get the ParsingResult contained in the context as a FileParsingResult.
+			*
+			*	@return The cast FileParsingResult.
+			*/
+			inline FileParsingResult*	getParsingResult()												noexcept;
 
 		protected:
-			/**
-			*	Logger used to issue logs from the FileParser
-			*/
-			ILogger*	_logger	= nullptr;
-
 			/**
 			*	@brief Overridable method called just before starting the parsing process of a file
 			*
 			*	@param parseFile Path to the file which is about to be parsed
 			*/
-			virtual void preParse(fs::path const& parseFile)								noexcept;
+			virtual void preParse(fs::path const& parseFile)									noexcept;
 
 			/**
 			*	@brief Overridable method called just after the parsing process has been finished
@@ -71,48 +124,43 @@ namespace kodgen
 			*	@param parseFile Path to the file which has been parsed
 			*	@param result Result of the parsing
 			*/
-			virtual void postParse(fs::path const& parseFile, ParsingResult const& result)	noexcept;
+			virtual void postParse(fs::path const& parseFile, FileParsingResult const& result)	noexcept;
 
 		public:
+			/** Macro defined internally when kodgen processes a translation unit. */
+			static inline std::string const	parsingMacro	= "KODGEN_PARSING";
+
+			/** Settings to use when parsing. */
+			ParsingSettings					parsingSettings;
+
+			/** Logger used to issue logs from the FileParser. */
+			ILogger*						logger			= nullptr;
+
 			FileParser()					noexcept;
 			FileParser(FileParser const&)	= default;
 			FileParser(FileParser&&)		= default;
 			virtual ~FileParser()			noexcept;
 
 			/**
-			*	Get the name of the macro which is set when parsing the source code
-			*/
-			static std::string const&	getParsingMacro()												noexcept;
-
-			/**
-			*	Get the parsing settings of the parser to setup it
-			*/
-			ParsingSettings&			getParsingSettings()											noexcept;
-
-			/**
-			*	Parse a file
+			*	@brief Parse the file and fill the FileParsingResult.
 			*
-			*	@param parseFile Path to the file to parse
-			*	@param out_result Result filled with the collected information
+			*	@param toParseFile	Path to the file to parse.
+			*	@param out_result	Result filled while parsing the file.
 			*
 			*	@return true if the parsing process finished without error, else false
 			*/
-			bool						parse(fs::path const& parseFile, ParsingResult& out_result)		noexcept;
+			bool	parse(fs::path const&		toParseFile, 
+						  FileParsingResult&	out_result)					noexcept;
 
 			/**
-			*	@brief Setup this object's parameters with the provided toml file. Unset settings remain unchanged.
+			*	@brief Load parsing settings from the provided toml file. Unset settings remain unchanged.
 			*
 			*	@param pathToSettingsFile Path to the toml file.
 			*
 			*	@return true if a file could be loaded, else false.
 			*/
-			bool						loadSettings(fs::path const& pathToSettingsFile)				noexcept;
-
-			/**
-			*	\brief Setup the logger used by this parser.
-			*
-			*	\param logger Instance of the logger to use.
-			*/
-			void						provideLogger(ILogger& logger)									noexcept;
+			bool		loadSettings(fs::path const& pathToSettingsFile)	noexcept;
 	};
+
+	#include "Parsing/FileParser.inl"
 }

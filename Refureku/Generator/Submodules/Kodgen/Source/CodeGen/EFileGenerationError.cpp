@@ -6,8 +6,12 @@ std::string kodgen::toString(EFileGenerationError error) noexcept
 
 	switch (error)
 	{
-		case EFileGenerationError::MissingGeneratedCodeTemplateComplexProperty:
-			result = "MissingGeneratedCodeTemplateComplexProperty";
+		case EFileGenerationError::UnspecifiedOutputDirectory:
+			result = "UnspecifiedOutputDirectory";
+			break;
+
+		case EFileGenerationError::InvalidOutputDirectory:
+			result = "InvalidOutputDirectory";
 			break;
 
 		case EFileGenerationError::NoGeneratedCodeTemplateProvided:

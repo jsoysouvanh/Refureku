@@ -1,54 +1,81 @@
 #include "Parsing/EnumValueParser.h"
 
+#include "Parsing/ParsingSettings.h"
+#include "Parsing/PropertyParser.h"
+#include "Misc/DisableWarningMacros.h"
 #include "Misc/Helpers.h"
 
 using namespace kodgen;
 
-CXChildVisitResult EnumValueParser::parse(CXCursor const& currentCursor) noexcept
+CXChildVisitResult EnumValueParser::parse(CXCursor const& enumValueCursor, ParsingContext const& parentContext, EnumValueParsingResult& out_result) noexcept
 {
-	if (_shouldCheckValidity)
-	{
-		_shouldCheckValidity = false;
+	//Make sure the cursor is compatible for the enum value parser
+	assert(enumValueCursor.kind == CXCursorKind::CXCursor_EnumConstantDecl);
 
-		switch (clang_getCursorKind(currentCursor))
-		{
-			case CXCursorKind::CXCursor_AnnotateAttr:
-				return setAsCurrentEntityIfValid(currentCursor);
+	//Init context
+	pushContext(enumValueCursor, parentContext, out_result);
 
-			default:
-				return CXChildVisitResult::CXChildVisit_Break;
-		}
-	}
+	//An enum value is always valid regardless it has properties attached or not
+	out_result.parsedEnumValue.emplace(EnumValueInfo(enumValueCursor));
+
+	clang_visitChildren(enumValueCursor, &EnumValueParser::parseNestedEntity, this);
+
+	popContext();
+
+	DISABLE_WARNING_PUSH
+	DISABLE_WARNING_UNSCOPED_ENUM
+
+	return (parentContext.parsingSettings->shouldAbortParsingOnFirstError && !out_result.errors.empty()) ? CXChildVisitResult::CXChildVisit_Break : CXChildVisitResult::CXChildVisit_Continue;
+
+	DISABLE_WARNING_POP
+}
+
+CXChildVisitResult EnumValueParser::parseNestedEntity(CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData) noexcept
+{
+	reinterpret_cast<EnumValueParser*>(clientData)->setProperties(cursor);
 
 	return CXChildVisitResult::CXChildVisit_Break;
 }
 
-opt::optional<PropertyGroup> EnumValueParser::isEntityValid(CXCursor const& currentCursor) noexcept
+opt::optional<PropertyGroup> EnumValueParser::getProperties(CXCursor const& cursor) noexcept
 {
-	_parsingInfo->propertyParser.clean();
+	ParsingContext& context = getContext();
 
-	if (clang_getCursorKind(currentCursor) == CXCursorKind::CXCursor_AnnotateAttr)
+	context.propertyParser->clean();
+
+	if (clang_getCursorKind(cursor) == CXCursorKind::CXCursor_AnnotateAttr)
 	{
-		return _parsingInfo->propertyParser.getEnumValueProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
+		return context.propertyParser->getEnumProperties(Helpers::getString(clang_getCursorSpelling(cursor)));
 	}
 
 	return opt::nullopt;
 }
 
-CXChildVisitResult EnumValueParser::setAsCurrentEntityIfValid(CXCursor const& annotationCursor) noexcept
+void EnumValueParser::setProperties(CXCursor const& annotationCursor) noexcept
 {
-	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(annotationCursor))
+	ParsingContext& context = getContext();
+
+	if (opt::optional<PropertyGroup> propertyGroup = getProperties(annotationCursor))
 	{
-		if (_parsingInfo->currentEnum.has_value())
-		{
-			_parsingInfo->currentEnum->enumValues.back().properties = std::move(*propertyGroup);
-		}
+		getParsingResult()->parsedEnumValue->properties = std::move(*propertyGroup);
 	}
-	else if (_parsingInfo->propertyParser.getParsingError() != EParsingError::Count)
+	else if (context.propertyParser->getParsingError() != EParsingError::Count)
 	{
 		//Fatal parsing error occured
-		_parsingInfo->parsingResult.parsingErrors.emplace_back(ParsingError(_parsingInfo->propertyParser.getParsingError(), clang_getCursorLocation(annotationCursor)));
+		context.parsingResult->errors.emplace_back(ParsingError(context.propertyParser->getParsingError(), clang_getCursorLocation(annotationCursor)));
 	}
+}
 
-	return CXChildVisitResult::CXChildVisit_Break;
+void EnumValueParser::pushContext(CXCursor const& enumValueCursor, ParsingContext const& parentContext, EnumValueParsingResult& out_result) noexcept
+{
+	ParsingContext newContext;
+
+	newContext.parentContext			= &parentContext;
+	newContext.rootCursor				= enumValueCursor;
+	newContext.shouldCheckProperties	= true;
+	newContext.propertyParser			= parentContext.propertyParser;
+	newContext.parsingSettings			= parentContext.parsingSettings;
+	newContext.parsingResult			= &out_result;
+
+	contextsStack.push(std::move(newContext));
 }

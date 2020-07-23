@@ -71,7 +71,7 @@ namespace kodgen
 		
 		/**
 		*	Might be used in the future.
-		*	Is also used as a no-error value
+		*	Is is also used as a no-error value
 		*/
 		Count
 	};

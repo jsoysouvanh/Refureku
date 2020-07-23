@@ -20,12 +20,12 @@ FileGenerator::FileGenerator() noexcept:
 	addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
 
 	/**	class RFKClass() MyClass {}; enum [class] RFKEnum() {}; */
-	setDefaultClassTemplate("RefurekuClass"); 
-	setDefaultStructTemplate("RefurekuClass");
-	setDefaultEnumTemplate("RefurekuEnum");
+	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Class, "RefurekuClass");
+	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Struct, "RefurekuClass");
+	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Enum, "RefurekuEnum");
 }
 
-void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
+void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
 {
 	//Always call base class
 	kodgen::FileGenerator::writeHeader(file, parsingResult);
@@ -37,7 +37,7 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::ParsingResu
 					"\n");
 }
 
-void FileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::ParsingResult const& parsingResult) const noexcept
+void FileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
 {
 	//Always call base class
 	kodgen::FileGenerator::writeFooter(file, parsingResult);

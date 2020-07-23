@@ -58,8 +58,8 @@ void parseAndGenerate(fs::path&& exePath)
 	//Set logger
 	kodgen::DefaultLogger logger;
 
-	fileParser.provideLogger(logger);
-	fileGenerator.provideLogger(logger);
+	fileParser.logger		= &logger;
+	fileGenerator.logger	= &logger;
 
 	fs::path pathToSettingsFile = exePath.make_preferred() / "RefurekuSettings.toml";
 

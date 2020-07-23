@@ -27,8 +27,8 @@ int main(int argc, char** argv)
 			kodgen::FileGenerator fileGenerator;
 
 			//Parser and generator should log through logger
-			parser.provideLogger(logger);
-			fileGenerator.provideLogger(logger);
+			parser.logger			= &logger;
+			fileGenerator.logger	= &logger;
 
 			//Parse WorkingDir/...
 			fileGenerator.toParseDirectories.emplace(includeDirectory.string());
@@ -62,9 +62,9 @@ int main(int argc, char** argv)
 			*	Now we can simply write:
 			*		class KGClass() MyClass {};
 			*/
-			fileGenerator.setDefaultClassTemplate("PropertyCodeTemplate"); 
+			fileGenerator.setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Class, "PropertyCodeTemplate");
 
-			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, false);
+			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, true);
 
 			if (genResult.completed)
 			{

@@ -4,9 +4,9 @@
 
 #include "Generated/SomeClass.myCustomExtension.h"
 
-namespace SomeNamespace
+namespace SomeNamespace KGNamespace()
 {
-	namespace np1
+	namespace np1 KGNamespace()
 	{
 		class KGClass() SomeClass
 		{
@@ -15,7 +15,7 @@ namespace SomeNamespace
 
 			private:
 				KGField(Get[explicit], Set[])
-				int					_someInt				= 2; 
+				int					_someInt				= 2;
 
 				KGField(Get[const, *], Set[])
 				float				_someFloat				= 3.14f;

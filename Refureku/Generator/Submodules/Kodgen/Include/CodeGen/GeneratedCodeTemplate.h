@@ -17,7 +17,7 @@ namespace kodgen
 			virtual ~GeneratedCodeTemplate()					= default;
 
 			/**
-			*	@brief Write lines into the generated file
+			*	@brief Method in which we define what to write in the generated file for this entity.
 			*
 			*	@param generatedFile Object used to write in the generated file
 			*	@param entityInfo Structure containing info about the entity. You may static cast this into the derived class you expect

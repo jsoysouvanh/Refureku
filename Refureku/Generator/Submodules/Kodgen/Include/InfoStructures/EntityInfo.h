@@ -25,6 +25,7 @@ namespace kodgen
 				Field,
 				Method,
 				EnumValue,
+				Namespace,
 
 				/**
 				*	Unset
@@ -37,11 +38,11 @@ namespace kodgen
 			std::string		id			= "";
 			PropertyGroup	properties;
 
-			EntityInfo()																			= default;
-			EntityInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EType&& entityType)	noexcept;
-			EntityInfo(EntityInfo const&)															= default;
-			EntityInfo(EntityInfo&&)																= default;
-			~EntityInfo()																			= default;
+			EntityInfo()																		= default;
+			EntityInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EType entityType)	noexcept;
+			EntityInfo(EntityInfo const&)														= default;
+			EntityInfo(EntityInfo&&)															= default;
+			~EntityInfo()																		= default;
 	};
 
 	std::ostream& operator<<(std::ostream& out_stream, EntityInfo const&) noexcept;

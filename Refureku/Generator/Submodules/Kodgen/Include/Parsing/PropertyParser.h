@@ -73,7 +73,7 @@ namespace kodgen
 			/**
 			*	Called by the parser to internally setup some acceleration data
 			*/
-			void setup(PropertyParsingSettings const* propertyParsingSettings) noexcept;
+			void setup(PropertyParsingSettings const& propertyParsingSettings) noexcept;
 
 			/**
 			*	Clear all collected data such as parsingErrors or split props.
@@ -87,12 +87,13 @@ namespace kodgen
 			*/
 			opt::optional<PropertyGroup>	getProperties(std::string&& annotateMessage, std::string const& annotationId, PropertyRules const& rules) noexcept;
 
-			opt::optional<PropertyGroup>	getClassProperties(std::string&& annotateMessage) noexcept;
-			opt::optional<PropertyGroup>	getStructProperties(std::string&& annotateMessage) noexcept;
-			opt::optional<PropertyGroup>	getFieldProperties(std::string&& annotateMessage) noexcept;
-			opt::optional<PropertyGroup>	getMethodProperties(std::string&& annotateMessage) noexcept;
-			opt::optional<PropertyGroup>	getEnumProperties(std::string&& annotateMessage) noexcept;
-			opt::optional<PropertyGroup>	getEnumValueProperties(std::string&& annotateMessage) noexcept;
+			opt::optional<PropertyGroup>	getNamespaceProperties(std::string&& annotateMessage)	noexcept;
+			opt::optional<PropertyGroup>	getClassProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getStructProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getFieldProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getMethodProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getEnumProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getEnumValueProperties(std::string&& annotateMessage)	noexcept;
 
 			EParsingError					getParsingError() const noexcept;
 	};

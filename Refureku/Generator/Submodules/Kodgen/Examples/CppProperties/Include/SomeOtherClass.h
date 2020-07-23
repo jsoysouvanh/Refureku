@@ -10,7 +10,7 @@ class SomeTemplateClass
 	T* someT = nullptr;
 };
 
-namespace SomeNamespace
+namespace SomeNamespace KGNamespace()
 {
 	class KGClass() SomeOtherClass
 	{

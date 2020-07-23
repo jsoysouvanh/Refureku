@@ -18,7 +18,7 @@ namespace namespace1
 	};
 }
 
-namespace namespace2
+namespace namespace2 RFKNamespace()
 {
 	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject 
 	{
@@ -29,11 +29,11 @@ namespace namespace2
 		public:
 			ParentParentClass() noexcept {}
 
-			ParentParentClass_GENERATED
+		ParentParentClass_GENERATED
 	};
 }
 
-namespace namespace3
+namespace namespace3 RFKNamespace()
 {
 	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
 	{

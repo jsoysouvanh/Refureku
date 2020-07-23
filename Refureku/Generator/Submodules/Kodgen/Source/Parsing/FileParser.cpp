@@ -1,21 +1,16 @@
 #include "Parsing/FileParser.h"
 
-#include <iostream>
 #include <cassert>
 
 #include "Misc/Helpers.h"
 #include "Misc/DisableWarningMacros.h"
 #include "Misc/TomlUtility.h"
-#include "InfoStructures/ParsingInfo.h"
 
 using namespace kodgen;
 
 FileParser::FileParser() noexcept:
 	_clangIndex{clang_createIndex(0, 0)}
 {
-	//Propagate the parsing info to child parsers
-	_classParser.setParsingInfo(&_parsingInfo);
-	_enumParser.setParsingInfo(&_parsingInfo);
 }
 
 FileParser::~FileParser() noexcept
@@ -23,120 +18,226 @@ FileParser::~FileParser() noexcept
 	clang_disposeIndex(_clangIndex);
 }
 
-DISABLE_WARNING_PUSH
-DISABLE_WARNING_UNSCOPED_ENUM
-
-CXChildVisitResult FileParser::staticParseCursor(CXCursor c, CXCursor /* parent */, CXClientData clientData) noexcept
+bool FileParser::parse(fs::path const& toParseFile, FileParsingResult& out_result) noexcept
 {
-	FileParser*	parser = reinterpret_cast<FileParser*>(clientData);
+	bool isSuccess = false;
 
-	//Parse the given file ONLY, ignore headers
-	if (clang_Location_isFromMainFile(clang_getCursorLocation (c)))
+	preParse(toParseFile);
+
+	if (fs::exists(toParseFile) && !fs::is_directory(toParseFile))
 	{
-		return parser->parseCursor(c);
-	}
-	
-	return CXChildVisitResult::CXChildVisit_Continue;
-}
+		//Fill the parsed file info
+		out_result.parsedFile = toParseFile;
 
-DISABLE_WARNING_POP
+		std::vector<char const*> const compilationArguments = makeCompilationArguments();
 
-CXChildVisitResult FileParser::parseCursor(CXCursor currentCursor) noexcept
-{
-	//Check for namespace, class or enum
-	switch (currentCursor.kind)
-	{
-		case CXCursorKind::CXCursor_Namespace:
-			return CXChildVisitResult::CXChildVisit_Recurse;
+#if KODGEN_DEV
+		logCompilationArguments();
+#endif
 
-		case CXCursorKind::CXCursor_ClassDecl:
-			return parseClass(currentCursor, false);
+		//Parse the given file
+		CXTranslationUnit translationUnit = clang_parseTranslationUnit(_clangIndex, toParseFile.string().c_str(), compilationArguments.data(), static_cast<int32>(compilationArguments.size()), nullptr, 0, CXTranslationUnit_SkipFunctionBodies | CXTranslationUnit_Incomplete | CXTranslationUnit_KeepGoing);
 
-		case CXCursorKind::CXCursor_StructDecl:
-			return parseClass(currentCursor, true);
+		if (translationUnit != nullptr)
+		{
+			ParsingContext& context = pushContext(translationUnit, out_result);
 
-		case CXCursorKind::CXCursor_EnumDecl:
-			return parseEnum(currentCursor);
+			if (clang_visitChildren(context.rootCursor, &FileParser::parseNestedEntity, this) || !out_result.errors.empty())
+			{
+				//ERROR
+			}
+			else
+			{
+				isSuccess = true;
+			}
 
-		default:
-			break;
-	}
+#if KODGEN_DEV
+			logDiagnostic(translationUnit);
+#endif
 
-	return CXChildVisitResult::CXChildVisit_Continue;
-}
+			popContext();
 
-CXChildVisitResult FileParser::parseClass(CXCursor classCursor, bool isStruct) noexcept
-{
-	if (isStruct)
-	{
-		assert(classCursor.kind == CXCursorKind::CXCursor_StructDecl);
+			//There should not have any context left once parsing has finished
+			assert(contextsStack.empty());
 
-		_classParser.startStructParsing(classCursor);
+			clang_disposeTranslationUnit(translationUnit);
+		}
+		else
+		{
+			out_result.errors.emplace_back(ParsingError(EParsingError::TranslationUnitInitFailed));
+		}
 	}
 	else
 	{
-		assert(classCursor.kind == CXCursorKind::CXCursor_ClassDecl);
-
-		_classParser.startClassParsing(classCursor);
+		out_result.errors.emplace_back(ParsingError(EParsingError::InexistantFile));
 	}
 
-	clang_visitChildren(classCursor, [](CXCursor c, CXCursor, CXClientData clientData)
-						{
-							return reinterpret_cast<ClassParser*>(clientData)->parse(c);
+	postParse(toParseFile, out_result);
 
-						}, &_classParser);
-
-	return _classParser.endParsing();
+	return isSuccess;
 }
 
-CXChildVisitResult FileParser::parseEnum(CXCursor enumCursor) noexcept
+CXChildVisitResult FileParser::parseNestedEntity(CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData) noexcept
 {
-	assert(enumCursor.kind == CXCursorKind::CXCursor_EnumDecl);
+	FileParser*		parser		= reinterpret_cast<FileParser*>(clientData);
 
-	_enumParser.startParsing(enumCursor);
+	DISABLE_WARNING_PUSH
+	DISABLE_WARNING_UNSCOPED_ENUM
+	
+	CXChildVisitResult	visitResult = CXChildVisitResult::CXChildVisit_Continue;
 
-	clang_visitChildren(enumCursor, [](CXCursor c, CXCursor, CXClientData clientData)
-						{
-							return reinterpret_cast<EnumParser*>(clientData)->parse(c);
+	DISABLE_WARNING_POP
 
-						}, &_enumParser);
+	//Parse the given file ONLY, ignore headers
+	if (clang_Location_isFromMainFile(clang_getCursorLocation(cursor)))
+	{
+		//std::cout << "FILE => " << Helpers::getString(clang_getCursorKindSpelling(cursor.kind)) << " " << Helpers::getString(clang_getCursorDisplayName(cursor)) << std::endl;
 
-	return _enumParser.endParsing();
+		switch (cursor.kind)
+		{
+			case CXCursorKind::CXCursor_Namespace:
+				parser->addNamespaceResult(parser->parseNamespace(cursor, visitResult));
+				break;
+
+			case CXCursorKind::CXCursor_StructDecl:
+				[[fallthrough]];
+			case CXCursorKind::CXCursor_ClassDecl:
+				parser->addClassResult(parser->parseClass(cursor, visitResult));
+				break;
+
+			case CXCursorKind::CXCursor_EnumDecl:
+				parser->addEnumResult(parser->parseEnum(cursor, visitResult));
+				break;
+
+			//TODO: Handle global variables
+			//TODO: Handle free functions
+
+			default:
+				break;
+		}
+	}
+
+	return visitResult;
+}
+
+ParsingContext& FileParser::pushContext(CXTranslationUnit const& translationUnit, FileParsingResult& out_result) noexcept
+{
+	_propertyParser.setup(parsingSettings.propertyParsingSettings);
+
+	ParsingContext newContext;
+
+	newContext.parentContext	= nullptr;
+	newContext.rootCursor		= clang_getTranslationUnitCursor(translationUnit);
+	newContext.propertyParser	= &_propertyParser;
+	newContext.parsingSettings	= &parsingSettings;
+	newContext.parsingResult	= &out_result;
+
+	contextsStack.push(std::move(newContext));
+
+	return getContext();
+}
+
+void FileParser::addNamespaceResult(NamespaceParsingResult&& result) noexcept
+{
+	if (result.parsedNamespace.has_value())
+	{
+		getParsingResult()->namespaces.emplace_back(std::move(result.parsedNamespace).value());
+	}
+
+	//Append errors if any
+	if (!result.errors.empty())
+	{
+		getContext().parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
+	}
+}
+
+void FileParser::addClassResult(ClassParsingResult&& result) noexcept
+{
+	if (result.parsedClass.has_value())
+	{
+		switch (result.parsedClass->entityType)
+		{
+			case EntityInfo::EType::Struct:
+				getParsingResult()->structs.emplace_back(std::move(result.parsedClass).value());
+				break;
+
+			case EntityInfo::EType::Class:
+				getParsingResult()->classes.emplace_back(std::move(result.parsedClass).value());
+				break;
+
+			default:
+				assert(false);	//Should never reach this line
+				break;
+		}
+	}
+
+	//Append errors if any
+	if (!result.errors.empty())
+	{
+		getContext().parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
+	}
+}
+
+void FileParser::addEnumResult(EnumParsingResult&& result) noexcept
+{
+	if (result.parsedEnum.has_value())
+	{
+		getParsingResult()->enums.emplace_back(std::move(result.parsedEnum).value());
+	}
+
+	//Append errors if any
+	if (!result.errors.empty())
+	{
+		getContext().parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
+	}
+}
+
+void FileParser::preParse(fs::path const&) noexcept
+{
+	/**
+	*	Default implementation does nothing special
+	*/
+}
+
+void FileParser::postParse(fs::path const&, FileParsingResult const&) noexcept
+{
+	/**
+	*	Default implementation does nothing special
+	*/
 }
 
 void FileParser::refreshBuildCommandStrings() noexcept
 {
-	ParsingSettings const& ps = _parsingInfo.parsingSettings;
-
-	_classPropertyMacro		= "-D" + ps.propertyParsingSettings.classPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGC:\"#__VA_ARGS__)))";
-	_structPropertyMacro	= "-D" + ps.propertyParsingSettings.structPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGS:\"#__VA_ARGS__)))";
-	_fieldPropertyMacro		= "-D" + ps.propertyParsingSettings.fieldPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGF:\"#__VA_ARGS__)))";
-	_methodPropertyMacro	= "-D" + ps.propertyParsingSettings.methodPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGM:\"#__VA_ARGS__)))";
-	_enumPropertyMacro		= "-D" + ps.propertyParsingSettings.enumPropertyRules.macroName			+ "(...)=__attribute__((annotate(\"KGE:\"#__VA_ARGS__)))";
-	_enumValuePropertyMacro	= "-D" + ps.propertyParsingSettings.enumValuePropertyRules.macroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
+	_namespacePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.namespacePropertyRules.macroName	+ "(...)=__attribute__((annotate(\"KGN:\"#__VA_ARGS__)))";
+	_classPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.classPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGC:\"#__VA_ARGS__)))";
+	_structPropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.structPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGS:\"#__VA_ARGS__)))";
+	_fieldPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.fieldPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGF:\"#__VA_ARGS__)))";
+	_methodPropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.methodPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGM:\"#__VA_ARGS__)))";
+	_enumPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.enumPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGE:\"#__VA_ARGS__)))";
+	_enumValuePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.enumValuePropertyRules.macroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
 
 	_projectIncludeDirs.clear();
-	_projectIncludeDirs.reserve(ps.projectIncludeDirectories.size());
+	_projectIncludeDirs.reserve(parsingSettings.projectIncludeDirectories.size());
 
-	for (fs::path const& includeDir : ps.projectIncludeDirectories)
+	for (fs::path const& includeDir : parsingSettings.projectIncludeDirectories)
 	{
 		_projectIncludeDirs.emplace_back("-I" + includeDir.string());
 	}
 }
 
-std::vector<char const*> FileParser::makeParseArguments() noexcept
+std::vector<char const*> FileParser::makeCompilationArguments() noexcept
 {
 	std::vector<char const*>	result;
 
 	refreshBuildCommandStrings();
 
 	/**
-	*	3 to include -xc++, -sed=c++1z & _parsingMacro
+	*	3 to include -xc++, -std=c++1z & _kodgenParsingMacro
 	*
-	*	6 because we make an additional parameter per possible entity
-	*	Class, Struct, Field, Method, Enum, EnumValue
+	*	7 because we make an additional parameter per possible entity
+	*	Namespace, Class, Struct, Field, Method, Enum, EnumValue
 	*/
-	result.reserve(3u + 6u + _projectIncludeDirs.size());
+	result.reserve(3u + 7u + _projectIncludeDirs.size());
 
 	//Parsing C++
 	result.emplace_back("-xc++");
@@ -147,13 +248,14 @@ std::vector<char const*> FileParser::makeParseArguments() noexcept
 	//Macro set when we are parsing with Kodgen
 	result.emplace_back(_kodgenParsingMacro.data());
 
+	result.emplace_back(_namespacePropertyMacro.data());
 	result.emplace_back(_classPropertyMacro.data());
 	result.emplace_back(_structPropertyMacro.data());
 	result.emplace_back(_fieldPropertyMacro.data());
 	result.emplace_back(_methodPropertyMacro.data());
 	result.emplace_back(_enumPropertyMacro.data());
 	result.emplace_back(_enumValuePropertyMacro.data());
-	
+
 	for (std::string const& includeDir : _projectIncludeDirs)
 	{
 		result.emplace_back(includeDir.data());
@@ -162,120 +264,40 @@ std::vector<char const*> FileParser::makeParseArguments() noexcept
 	return result;
 }
 
-bool FileParser::parse(fs::path const& parseFile, ParsingResult& out_result) noexcept
+void FileParser::logDiagnostic(CXTranslationUnit const& translationUnit) const noexcept
 {
-	bool isSuccess = false;
-
-	reset();
-
-	preParse(parseFile);
-
-	if (fs::exists(parseFile) && !fs::is_directory(parseFile))
+	if (logger != nullptr)
 	{
-		std::vector<char const*> const parseArguments = makeParseArguments();
+		CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
 
-		#if KODGEN_DEV
+		logger->log("DIAGNOSTICS START...", ILogger::ELogSeverity::Info);
 
-		if (_logger != nullptr)
+		for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
 		{
-			for (char const* arg : parseArguments)
-			{
-				_logger->log(std::string(arg) + " ", ILogger::ELogSeverity::Info);
-			}
+			CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
+
+			logger->log(Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())), ILogger::ELogSeverity::Warning);
+
+			clang_disposeDiagnostic(diagnostic);
 		}
 
-		#endif
+		logger->log("DIAGNOSTICS END...", ILogger::ELogSeverity::Info);
 
-		//Parse the given file
-		CXTranslationUnit translationUnit = clang_parseTranslationUnit(_clangIndex, parseFile.string().c_str(), parseArguments.data(), static_cast<int32>(parseArguments.size()), nullptr, 0, CXTranslationUnit_SkipFunctionBodies | CXTranslationUnit_Incomplete | CXTranslationUnit_KeepGoing);
+		clang_disposeDiagnosticSet(diagnostics);
+	}
+}
 
-		if (translationUnit != nullptr)
+void FileParser::logCompilationArguments() noexcept
+{
+	if (logger != nullptr)
+	{
+		std::vector<char const*> const compilationArguments = makeCompilationArguments();
+
+		for (char const* arg : compilationArguments)
 		{
-			//Get the root cursor for this translation unit
-			CXCursor cursor = clang_getTranslationUnitCursor(translationUnit);
-			
-			if (clang_visitChildren(cursor, &FileParser::staticParseCursor, this) || _parsingInfo.hasErrorOccured())
-			{
-				//ERROR
-			}
-			else
-			{
-				isSuccess = true;
-			}
-			
-			#if KODGEN_DEV
-			
-			if (_logger != nullptr)
-			{
-				CXDiagnosticSet diagnostics = clang_getDiagnosticSetFromTU(translationUnit);
-
-				_logger->log("DIAGNOSTICS START...", ILogger::ELogSeverity::Info);
-
-				for (unsigned i = 0u; i < clang_getNumDiagnosticsInSet(diagnostics); i++)
-				{
-					CXDiagnostic diagnostic(clang_getDiagnosticInSet(diagnostics, i));
-
-					_logger->log(Helpers::getString(clang_formatDiagnostic(diagnostic, clang_defaultDiagnosticDisplayOptions())), ILogger::ELogSeverity::Warning);
-
-					clang_disposeDiagnostic(diagnostic);
-				}
-
-				_logger->log("DIAGNOSTICS END...", ILogger::ELogSeverity::Info);
-
-				clang_disposeDiagnosticSet(diagnostics);
-			}
-
-			#endif
-
-			clang_disposeTranslationUnit(translationUnit);
-		}
-		else
-		{
-			_parsingInfo.parsingResult.parsingErrors.emplace_back(ParsingError(EParsingError::TranslationUnitInitFailed));
+			logger->log(std::string(arg) + " ", ILogger::ELogSeverity::Info);
 		}
 	}
-	else
-	{
-		_parsingInfo.parsingResult.parsingErrors.emplace_back(ParsingError(EParsingError::InexistantFile));
-	}
-
-	out_result = std::move(_parsingInfo.parsingResult);
-
-	postParse(parseFile, out_result);
-
-	return isSuccess;
-}
-
-void FileParser::preParse(fs::path const&) noexcept
-{
-	/**
-	*	Default implementation does nothing special
-	*/
-}
-
-void FileParser::postParse(fs::path const&, ParsingResult const&) noexcept
-{
-	/**
-	*	Default implementation does nothing special
-	*/
-}
-
-void FileParser::reset() noexcept
-{
-	_classParser.reset();
-	_enumParser.reset();
-
-	_parsingInfo.reset();
-}
-
-std::string const& FileParser::getParsingMacro() noexcept
-{
-	return _parsingMacro;
-}
-
-ParsingSettings& FileParser::getParsingSettings() noexcept
-{
-	return _parsingInfo.parsingSettings;
 }
 
 bool FileParser::loadSettings(fs::path const& pathToSettingsFile) noexcept
@@ -290,33 +312,28 @@ bool FileParser::loadSettings(fs::path const& pathToSettingsFile) noexcept
 			toml::value const& parserSettings = toml::find(settings, "FileParserSettings");
 
 			//Update Parsing settings
-			TomlUtility::updateSetting(parserSettings, "shouldAbortParsingOnFirstError", _parsingInfo.parsingSettings.shouldAbortParsingOnFirstError);
-			TomlUtility::updateSetting(parserSettings, "projectIncludeDirectories", _parsingInfo.parsingSettings.projectIncludeDirectories);
+			TomlUtility::updateSetting(parserSettings, "shouldAbortParsingOnFirstError", parsingSettings.shouldAbortParsingOnFirstError);
+			TomlUtility::updateSetting(parserSettings, "projectIncludeDirectories", parsingSettings.projectIncludeDirectories);
 
 			//Update Property settings
 			if (parserSettings.contains("Properties"))
 			{
-				_parsingInfo.parsingSettings.propertyParsingSettings.loadSettings(toml::find(parserSettings, "Properties"));
+				parsingSettings.propertyParsingSettings.loadSettings(toml::find(parserSettings, "Properties"));
 			}
 		}
 
 		return true;
 	}
-	catch (std::runtime_error const&)
+	catch (std::runtime_error const& /* exception */)
 	{
 	}
-	catch (toml::syntax_error const& e)
+	catch (toml::syntax_error const& exception)
 	{
-		if (_logger != nullptr)
+		if (logger != nullptr)
 		{
-			_logger->log("Syntax error in settings file.\n" + std::string(e.what()), ILogger::ELogSeverity::Error);
+			logger->log("Syntax error in settings file.\n" + std::string(exception.what()), ILogger::ELogSeverity::Error);
 		}
 	}
 
 	return false;
-}
-
-void FileParser::provideLogger(ILogger& logger) noexcept
-{
-	_logger = &logger;
 }

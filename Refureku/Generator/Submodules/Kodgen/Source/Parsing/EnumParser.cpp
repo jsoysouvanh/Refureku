@@ -2,106 +2,132 @@
 
 #include <cassert>
 
+#include "Parsing/ParsingSettings.h"
+#include "Parsing/PropertyParser.h"
 #include "Misc/Helpers.h"
 
 using namespace kodgen;
 
-void EnumParser::reset() noexcept
+CXChildVisitResult EnumParser::parse(CXCursor const& enumCursor, ParsingContext const& parentContext, EnumParsingResult& out_result) noexcept
 {
-	EntityParser::reset();
+	//Make sure the cursor is compatible for the enum parser
+	assert(enumCursor.kind == CXCursorKind::CXCursor_EnumDecl);
 
-	_enumValueParser.reset();
+	//Init context
+	pushContext(enumCursor, parentContext, out_result);
+
+	clang_visitChildren(enumCursor, &EnumParser::parseNestedEntity, this);
+
+	popContext();
+
+	DISABLE_WARNING_PUSH
+	DISABLE_WARNING_UNSCOPED_ENUM
+
+	return (parentContext.parsingSettings->shouldAbortParsingOnFirstError && !out_result.errors.empty()) ? CXChildVisitResult::CXChildVisit_Break : CXChildVisitResult::CXChildVisit_Continue;
+
+	DISABLE_WARNING_POP
 }
 
-void EnumParser::setParsingInfo(ParsingInfo* info) noexcept
+CXChildVisitResult EnumParser::parseNestedEntity(CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData) noexcept
 {
-	EntityParser::setParsingInfo(info);
+	EnumParser*		parser	= reinterpret_cast<EnumParser*>(clientData);
+	ParsingContext&	context = parser->getContext();
 
-	_enumValueParser.setParsingInfo(info);
-}
-
-DISABLE_WARNING_PUSH
-DISABLE_WARNING_UNSCOPED_ENUM
-
-CXChildVisitResult EnumParser::parse(CXCursor const& currentCursor) noexcept
-{
-	if (_shouldCheckValidity)	//Check for any annotation if the flag is raised
+	if (context.shouldCheckProperties)
 	{
-		_shouldCheckValidity = false;
+		context.shouldCheckProperties = false;
 
-		return setAsCurrentEntityIfValid(currentCursor);
+		//Set parsed enum in result if it is valid
+		return parser->setParsedEntity(cursor);
 	}
-
-	switch (currentCursor.kind)
+	else
 	{
-		case CXCursorKind::CXCursor_EnumConstantDecl:
-			return parseEnumValue(currentCursor);
+		CXChildVisitResult visitResult = CXChildVisitResult::CXChildVisit_Continue;
 
-		default:
-			break;
+		switch (cursor.kind)
+		{
+			case CXCursorKind::CXCursor_EnumConstantDecl:
+				parser->addEnumValueResult(parser->parseEnumValue(cursor, visitResult));
+				break;
+	
+			default:
+				break;
+		}
+	
+		return visitResult;
 	}
-
-	return CXChildVisitResult::CXChildVisit_Continue;
 }
 
-DISABLE_WARNING_POP
-
-CXChildVisitResult EnumParser::parseEnumValue(CXCursor enumValueCursor) noexcept
+EnumValueParsingResult EnumParser::parseEnumValue(CXCursor const& enumValueCursor, CXChildVisitResult& out_visitResult) noexcept
 {
-	assert(enumValueCursor.kind == CXCursorKind::CXCursor_EnumConstantDecl);
+	EnumValueParsingResult enumValueResult;
 
-	_enumValueParser.startParsing(enumValueCursor);
+	out_visitResult	= enumValueParser.parse(enumValueCursor, getContext(), enumValueResult);
 
-	//Always add an enum value, eventhough is doesn't have the macro
-	_parsingInfo->currentEnum->enumValues.emplace_back(EnumValueInfo(enumValueCursor));
-
-	clang_visitChildren(enumValueCursor, [](CXCursor c, CXCursor, CXClientData clientData)
-						{
-							return reinterpret_cast<EnumValueParser*>(clientData)->parse(c);
-
-						}, &_enumValueParser);
-
-	return _enumValueParser.endParsing();
+	return enumValueResult;
 }
 
-CXChildVisitResult EnumParser::endParsing() noexcept
+opt::optional<PropertyGroup> EnumParser::getProperties(CXCursor const& cursor) noexcept
 {
-	_parsingInfo->flushCurrentEnum();
+	ParsingContext& context = getContext();
 
-	return EntityParser::endParsing();
-}
+	context.propertyParser->clean();
 
-opt::optional<PropertyGroup> EnumParser::isEntityValid(CXCursor const& currentCursor) noexcept
-{
-	_parsingInfo->propertyParser.clean();
-
-	if (clang_getCursorKind(currentCursor) == CXCursorKind::CXCursor_AnnotateAttr)
+	if (clang_getCursorKind(cursor) == CXCursorKind::CXCursor_AnnotateAttr)
 	{
-		return _parsingInfo->propertyParser.getEnumProperties(Helpers::getString(clang_getCursorSpelling(currentCursor)));
+		return context.propertyParser->getEnumProperties(Helpers::getString(clang_getCursorSpelling(cursor)));
 	}
 
 	return opt::nullopt;
 }
 
-CXChildVisitResult EnumParser::setAsCurrentEntityIfValid(CXCursor const& classAnnotationCursor) noexcept
+CXChildVisitResult EnumParser::setParsedEntity(CXCursor const& annotationCursor) noexcept
 {
-	if (opt::optional<PropertyGroup> propertyGroup = isEntityValid(classAnnotationCursor))
-	{
-		EnumInfo& enumInfo = _parsingInfo->currentEnum.emplace(EnumInfo(getCurrentCursor(), std::move(*propertyGroup)));
+	ParsingContext& context = getContext();
 
-		enumInfo.type			= clang_getCursorType(getCurrentCursor());
-		enumInfo.underlyingType	= clang_getEnumDeclIntegerType(getCurrentCursor());
+	if (opt::optional<PropertyGroup> propertyGroup = getProperties(annotationCursor))
+	{
+		getParsingResult()->parsedEnum.emplace(EnumInfo(context.rootCursor, std::move(*propertyGroup)));
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
 	else
 	{
-		if (_parsingInfo->propertyParser.getParsingError() != EParsingError::Count)
+		if (context.propertyParser->getParsingError() != EParsingError::Count)
 		{
-			//Fatal parsing error occured
-			_parsingInfo->parsingResult.parsingErrors.emplace_back(ParsingError(_parsingInfo->propertyParser.getParsingError(), clang_getCursorLocation(classAnnotationCursor)));
+			context.parsingResult->errors.emplace_back(ParsingError(context.propertyParser->getParsingError(), clang_getCursorLocation(annotationCursor)));
 		}
 
 		return CXChildVisitResult::CXChildVisit_Break;
 	}
+}
+
+void EnumParser::addEnumValueResult(EnumValueParsingResult&& result) noexcept
+{
+	ParsingContext& context = getContext();
+
+	if (result.parsedEnumValue.has_value() && getParsingResult()->parsedEnum.has_value())
+	{
+		getParsingResult()->parsedEnum->enumValues.emplace_back(std::move(result.parsedEnumValue).value());
+	}
+
+	//Append errors if any
+	if (!result.errors.empty())
+	{
+		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
+	}
+}
+
+void EnumParser::pushContext(CXCursor const& enumCursor, ParsingContext const& parentContext, EnumParsingResult& out_result) noexcept
+{
+	ParsingContext newContext;
+
+	newContext.parentContext			= &parentContext;
+	newContext.rootCursor				= enumCursor;
+	newContext.shouldCheckProperties	= true;
+	newContext.propertyParser			= parentContext.propertyParser;
+	newContext.parsingSettings			= parentContext.parsingSettings;
+	newContext.parsingResult			= &out_result;
+
+	contextsStack.push(std::move(newContext));
 }

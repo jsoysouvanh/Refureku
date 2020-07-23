@@ -15,7 +15,6 @@ namespace kodgen
 			TypeInfo					underlyingType;
 			std::vector<EnumValueInfo>	enumValues;
 
-
 			EnumInfo()														= default;
 			EnumInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup)	noexcept;
 			EnumInfo(EnumInfo const&)										= default;

@@ -6,13 +6,17 @@
 
 namespace kodgen
 {
-	enum class EFileGenerationError : uint8
+	enum class EFileGenerationError : uint16
 	{
 		/**
-		*	The GenTemplate (defined in FileGenerator::codeTemplateMainComplexPropertyName) main complex property is missing
-		*	and no default class/enum generated code template was provided to the FileGenerator
+		*	FileGenerator::outputDirectory was not specified.
 		*/
-		MissingGeneratedCodeTemplateComplexProperty,
+		UnspecifiedOutputDirectory,
+
+		/**
+		*	The output directory was specified but the system failed to create it.
+		*/
+		InvalidOutputDirectory,
 
 		/**
 		*	No generated code template was provided (GenTemplate sub property)

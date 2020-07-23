@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.13.5)
 
+# -------- PropertyRules ----------
+
 set(PropertyRulesTestsTarget Kodgen_PropertyRulesTests)
 
 add_executable(${PropertyRulesTestsTarget} PropertyRulesTests.cpp)
 
 # Setup language requirements
-set_target_properties(${PropertyRulesTestsTarget} ${ParsingTestsTarget} ${FileGeneratorTestsTarget}
+set_target_properties(${PropertyRulesTestsTarget}
 						PROPERTIES
 						CXX_STANDARD 17
 						CXX_STANDARD_REQUIRED ON

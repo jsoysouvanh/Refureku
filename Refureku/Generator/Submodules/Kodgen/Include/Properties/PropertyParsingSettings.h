@@ -15,6 +15,7 @@ namespace kodgen
 			char						subPropertyEnclosers[2]	= { '[', ']' };
 			std::unordered_set<char>	ignoredCharacters;
 
+			PropertyRules				namespacePropertyRules	= PropertyRules("Namespace");
 			PropertyRules				classPropertyRules		= PropertyRules("Class");
 			PropertyRules				structPropertyRules		= PropertyRules("Struct");
 			PropertyRules				fieldPropertyRules		= PropertyRules("Field");

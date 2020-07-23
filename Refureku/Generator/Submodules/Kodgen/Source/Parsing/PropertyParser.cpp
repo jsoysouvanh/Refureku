@@ -23,6 +23,13 @@ opt::optional<PropertyGroup> PropertyParser::getProperties(std::string&& annotat
 	return opt::nullopt;
 }
 
+opt::optional<PropertyGroup> PropertyParser::getNamespaceProperties(std::string&& annotateMessage) noexcept
+{
+	static std::string namespaceAnnotation = "KGN:";
+
+	return getProperties(std::forward<std::string>(annotateMessage), namespaceAnnotation, _propertyParsingSettings->namespacePropertyRules);
+}
+
 opt::optional<PropertyGroup> PropertyParser::getClassProperties(std::string&& annotateMessage) noexcept
 {
 	static std::string classAnnotation = "KGC:";
@@ -245,9 +252,9 @@ bool PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVect
 	return true;
 }
 
-void PropertyParser::setup(PropertyParsingSettings const* propertyParsingSettings) noexcept
+void PropertyParser::setup(PropertyParsingSettings const& propertyParsingSettings) noexcept
 {
-	_propertyParsingSettings = propertyParsingSettings;
+	_propertyParsingSettings = &propertyParsingSettings;
 
 	char charsForPropParsing[] =	{
 		_propertyParsingSettings->propertySeparator,
