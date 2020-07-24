@@ -25,7 +25,7 @@ namespace rfk
 			enum class ECategory : uint8
 			{
 				/** The archetype is a class, can safely be cast to Class. */
-				Class	= 0,
+				Class	= 0u,
 
 				/** The archetype is a struct, can safely be cast to Struct. */
 				Struct,

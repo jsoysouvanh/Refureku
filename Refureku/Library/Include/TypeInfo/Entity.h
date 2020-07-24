@@ -25,11 +25,14 @@ namespace rfk
 			*/
 			enum class EKind : uint8
 			{
+				/** The entity is a namespace, it can safely be cast to Namespace type. */
+				Namespace = 0u,
+
 				/**
 				*	The entity is an archetype, it can safely be cast to Archetype type.
 				*	More specific info can be retrieved from the entity by checking Archetype::category variable.
 				*/
-				Archetype = 0u,
+				Archetype,
 
 				/**
 				*	The entity is a field, it can safely be cast to FieldBase type.

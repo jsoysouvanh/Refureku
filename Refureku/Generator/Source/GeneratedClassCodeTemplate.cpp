@@ -3,6 +3,8 @@
 #include <cassert>
 #include <algorithm>
 
+#include "InfoStructures/NestedStructClassInfo.h"
+#include "InfoStructures/NestedEnumInfo.h"
 #include "Misc/FundamentalTypes.h"
 #include "Keywords.h"
 
@@ -54,6 +56,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 	std::array<std::string, 2>	generateFieldsMetadataMacroName			= generateFieldsMetadataMacros(generatedFile, info);
 	std::string					generateMethodsMetadataMacroName		= generateMethodsMetadataMacro(generatedFile, info);
 	std::string					generateArchetypePropertiesMacroName	= generateArchetypePropertiesMacro(generatedFile, info);
+	std::string					generatedNestedClassesMetadataMacroName	= generateNestedClassesMetadataMacro(generatedFile, info);
 
 	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
@@ -81,6 +84,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"	",
 								"			" + std::move(generateArchetypePropertiesMacroName),
 								"			" + std::move(generateParentsMetadataMacroName),
+								"			" + std::move(generatedNestedClassesMetadataMacroName),
 								"			" + std::move(generateFieldsMetadataMacroName[0]),
 								"			" + std::move(generateMethodsMetadataMacroName),
 								"		}",
@@ -303,6 +307,42 @@ std::string GeneratedClassCodeTemplate::generateParentsMetadataMacro(kodgen::Gen
 	
 	//No parents, don't bother generate a macro
 	return std::string();
+}
+
+std::string GeneratedClassCodeTemplate::generateNestedClassesMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+{
+	if (info.nestedStructs.empty() && info.nestedClasses.empty())
+	{
+		//No nested classes, don't bother generate a macro
+		return std::string();
+	}
+
+	std::string macroName = _internalPrefix + info.name + "_GenerateNestedStructsAndClassesMetadata";
+
+	generatedFile.writeLine("#define " + macroName + "\t\\");
+
+	generatedFile.writeLine("	std::pair<decltype(type.nestedStructsAndClasses)::iterator, bool> it;\t\\");
+
+	//Reserve memory first
+	generatedFile.writeLine("	type.nestedStructsAndClasses.reserve(" + std::to_string(info.nestedStructs.size() + info.nestedClasses.size()) + ");\t\\");
+	
+	//Add nested structs
+	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStruct : info.nestedStructs)
+	{
+		generatedFile.writeLine("	it = type.nestedStructsAndClasses.emplace(&" + nestedStruct->name + "::staticGetArchetype());\t\\");
+		generatedFile.writeLine("	const_cast<rfk::Struct*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + ");\t\\");
+	}
+
+	//Add nested classes
+	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedClass : info.nestedClasses)
+	{
+		generatedFile.writeLine("	it = type.nestedStructsAndClasses.emplace(&" + nestedClass->name + "::staticGetArchetype());\t\\");
+		generatedFile.writeLine("	const_cast<rfk::Struct*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + ");\t\\");
+	}
+
+	generatedFile.writeLine("");
+
+	return macroName;
 }
 
 kodgen::uint16 GeneratedClassCodeTemplate::computeMethodFlags(kodgen::MethodInfo const& method) const noexcept

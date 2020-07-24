@@ -87,7 +87,7 @@ namespace rfk
 			*	\tparam ReturnType Return type to compare with.
 			*	\tparam... ArgTypes Argument types to compare with.
 			*
-			*	\return true if this method has the same return type as ReturnType and the same
+			*	@return true if this method has the same return type as ReturnType and the same
 						parameter types as ArgTypes, else false.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
@@ -96,48 +96,48 @@ namespace rfk
 			/**
 			*	\tparam... ArgTypes Argument types to compare with.
 			*
-			*	\return true if this method has the same parameter types as ArgTypes, else false.
+			*	@return true if this method has the same parameter types as ArgTypes, else false.
 			*/
 			template <typename... ArgTypes>
 			bool				hasSameArguments()	const	noexcept;
 
 			/**
-			*	\return Access specifier of this method in its owner struct/class.
+			*	@return Access specifier of this method in its owner struct/class.
 			*/
 			EAccessSpecifier	getAccess()			const	noexcept;
 
 			/**
-			*	\return true if this method is static, else false.
+			*	@return true if this method is static, else false.
 			*/
 			bool				isStatic()			const	noexcept;
 
 			/**
-			*	\return true if this method is declared as inline, else false.
+			*	@return true if this method is declared as inline, else false.
 			*/
 			bool				isInline()			const	noexcept;
 
 			/**
-			*	\return true if this method is virtual, else false.
+			*	@return true if this method is virtual, else false.
 			*/
 			bool				isVirtual()			const	noexcept;
 
 			/**
-			*	\return true if this method is virtual pure, else false.
+			*	@return true if this method is virtual pure, else false.
 			*/
 			bool				isPureVirtual()		const	noexcept;
 
 			/**
-			*	\return true if this method overrides a previous definition, else false.
+			*	@return true if this method overrides a previous definition, else false.
 			*/
 			bool				isOverride()		const	noexcept;
 
 			/**
-			*	\return true if this method is marked as final, else false.
+			*	@return true if this method is marked as final, else false.
 			*/
 			bool				isFinal()			const	noexcept;
 
 			/**
-			*	\return true if this method is marked as const, else false.
+			*	@return true if this method is marked as const, else false.
 			*/
 			bool				isConst()			const	noexcept;
 	};

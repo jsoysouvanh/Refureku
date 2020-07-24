@@ -44,17 +44,17 @@ namespace rfk
 			~FieldBase() = default;
 
 			/**
-			*	\return The access specifier of this field in its owner struct/class.
+			*	@return The access specifier of this field in its owner struct/class.
 			*/
 			EAccessSpecifier	getAccess()		const	noexcept;
 
 			/**
-			*	\return true if this field is static, else false.
+			*	@return true if this field is static, else false.
 			*/
 			bool				isStatic()		const	noexcept;
 
 			/**
-			*	\return true if this field is mutable, else false
+			*	@return true if this field is mutable, else false
 			*/
 			bool				isMutable()		const	noexcept;
 

@@ -51,9 +51,9 @@ namespace rfk
 			*
 			*	\tparam ArgTypes Type of the argument, must actually be TypePart.
 			*
-			*	\param args Multiple instances of TypePart.
+			*	@param args Multiple instances of TypePart.
 			*
-			*	\return A reference to the modified Type (this).
+			*	@return A reference to the modified Type (this).
 			*/
 			template <typename... ArgTypes>
 			inline Type&		addPart(ArgTypes&&... args)			noexcept;
@@ -61,69 +61,69 @@ namespace rfk
 			/**
 			*	Add a TypePart to this type instance.
 			*
-			*	\param newPart The part to add to this type.
+			*	@param newPart The part to add to this type.
 			*
-			*	\return A reference to the modified Type (this).
+			*	@return A reference to the modified Type (this).
 			*/
 			inline Type&		addPart(TypePart const&	newPart)	noexcept;
 
 			/**
 			*	Remove the last TypePart from this type instance.
 			*
-			*	\return A reference to the modified Type (this).
+			*	@return A reference to the modified Type (this).
 			*/
 			inline Type&		removePart()						noexcept;
 
 			/** 
-			*	\return true if this type is a pointer type (*), else false.
+			*	@return true if this type is a pointer type (*), else false.
 			*/
 			inline bool			isPointer()					const	noexcept;
 
 			/**
-			*	\return true if this type is a left value reference type (&), else false.
+			*	@return true if this type is a left value reference type (&), else false.
 			*/
 			inline bool			isLValueReference()			const	noexcept;
 
 			/**
-			*	\return true if this type is a right value reference type (&&), else false.
+			*	@return true if this type is a right value reference type (&&), else false.
 			*/
 			inline bool			isRValueReference()			const	noexcept;
 
 			/**
-			*	\return true if this type is a c-style array ([]), else false.
+			*	@return true if this type is a c-style array ([]), else false.
 			*/
 			inline bool			isCArray()					const	noexcept;
 
 			/**
-			*	\return true if this type is a value type (not a pointer, lvalue ref, rvalue ref, c-style array), else false.
+			*	@return true if this type is a value type (not a pointer, lvalue ref, rvalue ref, c-style array), else false.
 			*/
 			inline bool			isValue()					const	noexcept;
 
 			/**
-			*	\return true if this type is const qualified, else false.
+			*	@return true if this type is const qualified, else false.
 			*/
 			inline bool			isConst()					const	noexcept;
 
 			/**
-			*	\return true if this type is volatile qualified, else false.
+			*	@return true if this type is volatile qualified, else false.
 			*/
 			inline bool			isVolatile()				const	noexcept;
 
 			/**
-			*	\return The size of the array if isCArray() returns true, else 0.
+			*	@return The size of the array if isCArray() returns true, else 0.
 			*/
 			inline uint32		getArraySize()				const	noexcept;
 
 			/**
-			*	\param type The other type to compare with.
+			*	@param type The other type to compare with.
 			*
-			*	\return true if two types match together if they represent the same type.
+			*	@return true if two types match together if they represent the same type.
 			*			Pointers and nullptr_t types also match together.
 			*/
 			bool				match(Type const& type)		const	noexcept;
 
 			/**
-			*	\return a string representation of the content of this type.
+			*	@return a string representation of the content of this type.
 			*/
 			std::string			toString()					const	noexcept;
 

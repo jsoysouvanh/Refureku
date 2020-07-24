@@ -37,6 +37,7 @@ namespace namespace3 RFKNamespace()
 {
 	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
 	{
+
 		OtherClass_GENERATED
 	};
 
@@ -76,6 +77,16 @@ namespace namespace3 RFKNamespace()
 
 	class RFKClass(DynamicGetArchetype) ExampleClass : public ParentClass, public ParentClass2
 	{
+		public:
+			class RFKClass() NestedExampleClass
+			{
+				public:
+					RFKField()
+					int i = 0;
+
+				NestedExampleClass_GENERATED 
+			};
+
 		public:
 			RFKField()
 			static inline int	someStaticInt = 69;
@@ -181,8 +192,6 @@ namespace namespace3 RFKNamespace()
 	};
 }
 
-ExampleEnum_GENERATED
-
 struct RFKStruct() ExampleStruct
 {
 	RFKField()
@@ -199,3 +208,5 @@ struct RFKStruct() ExampleStruct
 
 	ExampleStruct_GENERATED 
 };
+
+ExampleEnum_GENERATED

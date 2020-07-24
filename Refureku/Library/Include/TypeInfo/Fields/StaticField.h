@@ -35,7 +35,7 @@ namespace rfk
 			~StaticField()																	= default;
 
 			/**
-			*	\brief Get the data corresponding to this static field.
+			*	@brief Get the data corresponding to this static field.
 			*		   This method in not safe if you provide a wrong DataType.
 			*
 			*	\tparam DataType Type to retrieve from the field.
@@ -43,13 +43,13 @@ namespace rfk
 			*		If DataType is an lvalue reference, return a reference to the field.
 			*		If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
 			*
-			*	\return The queried data.
+			*	@return The queried data.
 			*/
 			template <typename DataType>
 			DataType		getData()									const noexcept;
 
 			/**
-			*	\brief Set the data corresponding to this static field.
+			*	@brief Set the data corresponding to this static field.
 			*		   This method is not safe if you provide a wrong DataType.
 			*
 			*	\tparam DataType Type to retrieve from the field.
@@ -60,16 +60,16 @@ namespace rfk
 			void			setData(DataType&& data)					const noexcept;
 
 			/**
-			*	\brief Copy dataSize bytes starting from data into the static field.
+			*	@brief Copy dataSize bytes starting from data into the static field.
 			*		   This method is not safe if you provide a wrong DataType.
 			*
-			*	\param data Address of the data to copy.
-			*	\param dataSize Number of bytes to copy into the static field starting from data.
+			*	@param data Address of the data to copy.
+			*	@param dataSize Number of bytes to copy into the static field starting from data.
 			*/
 			inline void		setData(void const* data, uint64 dataSize)	const noexcept;
 
 			/**
-			*	\return The data address corresponding to this static field.
+			*	@return The data address corresponding to this static field.
 			*/
 			inline void*	getDataAddress()							const noexcept;
 

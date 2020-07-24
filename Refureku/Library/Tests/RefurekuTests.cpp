@@ -17,6 +17,8 @@ void classes()
 	TEST(rfk::Database::getClass("ExampleClass") != nullptr);
 	TEST(rfk::Database::getEnum("ExampleClass") == nullptr);
 	TEST(rfk::Database::getStruct("ExampleClass") == nullptr);
+
+	//TODO: TEST(rfk::Database::getClass("ExampleClass")->getNested...)
 }
 
 void structs()

@@ -30,17 +30,17 @@ namespace rfk
 			~Enum()													= default;
 
 			/**
-			*	\return the EnumValue corresponding to the provided name if any, else nullptr
+			*	@return the EnumValue corresponding to the provided name if any, else nullptr
 			*/
 			inline EnumValue const*					getEnumValue(std::string enumValueName)	const noexcept;
 			
 			/**
-			*	\return the first found EnumValue corresponding to the provided value if any, else nullptr
+			*	@return the first found EnumValue corresponding to the provided value if any, else nullptr
 			*/
 			inline EnumValue const*					getEnumValue(int64 value)				const noexcept;
 
 			/**
-			*	\return all the EnumValues corresponding to the provided value
+			*	@return all the EnumValues corresponding to the provided value
 			*/
 			inline std::vector<EnumValue const*>	getEnumValues(int64 value)				const noexcept;
 

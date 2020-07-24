@@ -52,10 +52,10 @@ namespace rfk
 					}
 			};
 
-			/** Pointer to the default method used to make an instance of this archetype */
+			/** Pointer to the default method used to make an instance of this archetype. */
 			void*								(*_defaultInstantiator)()	noexcept = nullptr;
 
-			/** List of all custom instantiators for this archetype */
+			/** List of all custom instantiators for this archetype. */
 			std::vector<StaticMethod const*>	customInstantiators;
 
 			template <typename ReturnType, typename... ArgTypes>
@@ -84,22 +84,28 @@ namespace rfk
 				Struct const*		type;
 			};
 
-			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents */
+			/** Access specifier of this struct. Relevant only when this struct is nested (Undefined otherwise). */
+			EAccessSpecifier																accessSpecifier	= EAccessSpecifier::Undefined;
+
+			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
 			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>						directParents;
 
-			/** Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children */
+			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children. */
 			std::unordered_set<Struct const*>												children;
 
-			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents */
+			/** All tagged nested structs/classes contained in this struct. */
+			std::unordered_set<Struct const*>												nestedStructsAndClasses;
+
+			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
 			std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>			fields;
 
-			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents */
+			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents. */
 			std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>		staticFields;
 
-			/** All tagged methods declared in this struct */
+			/** All tagged methods declared in this struct. */
 			std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>			methods;
 
-			/** All tagged static methods declared in this struct */
+			/** All tagged static methods declared in this struct. */
 			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>	staticMethods;
 
 			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
@@ -107,16 +113,19 @@ namespace rfk
 			Struct(Struct&&)																			= default;
 			~Struct()																					= default;
 
+			//TODO: getNestedStruct
+			//TODO: getNestedClass
+
 			/**
-			*	\param fieldName Name of the field to retrieve.
-			*	\param minFlags Requirements the queried field should fulfill.
+			*	@param fieldName Name of the field to retrieve.
+			*	@param minFlags Requirements the queried field should fulfill.
 			*					Keep in mind that the returned field should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return nullptr.
 			*					EFieldFlags::Default means no requirement, so the first field named fieldName will be returned.
-			*	\param shouldInspectInherited Should inherited fields be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
 			*								  If false, only fields introduced by this struct will be considered.
 			*
-			*	\return The first field named fieldName fulfilling all requirements.
+			*	@return The first field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
 			Field const*						getField(std::string const& fieldName,
@@ -124,31 +133,31 @@ namespace rfk
 														 bool shouldInspectInherited = false)				const	noexcept;
 
 			/**
-			*	\param fieldName Name of the fields to retrieve.
-			*	\param minFlags Requirements the queried fields should fulfill.
+			*	@param fieldName Name of the fields to retrieve.
+			*	@param minFlags Requirements the queried fields should fulfill.
 			*					Keep in mind that the returned fields should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return an empty vector.
 			*					EFieldFlags::Default means no requirement, so all fields named fieldName will be returned.
-			*	\param shouldInspectInherited Should inherited fields be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
 			*								  If false, only fields introduced by this struct will be considered.
 			*
-			*	\return A vector of all fields named fieldName fulfilling all requirements.
+			*	@return A vector of all fields named fieldName fulfilling all requirements.
 			*/
 			std::vector<Field const*>			getFields(std::string const& fieldName,
 														 EFieldFlags minFlags = EFieldFlags::Default,
 														 bool shouldInspectInherited = false)				const	noexcept;
 
 			/**
-			*	\param fieldName Name of the static field to retrieve.
-			*	\param minFlags Requirements the queried static field should fulfill.
+			*	@param fieldName Name of the static field to retrieve.
+			*	@param minFlags Requirements the queried static field should fulfill.
 			*					Keep in mind that the returned static field should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return nullptr.
 			*					EFieldFlags::Default means no requirement, so the first static field named fieldName will be returned.
 			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
-			*	\param shouldInspectInherited Should inherited static fields be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
 			*								  If false, only static fields introduced by this struct will be considered.
 			*
-			*	\return The first static field named fieldName fulfilling all requirements.
+			*	@return The first static field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
 			StaticField const*					getStaticField(std::string const& fieldName,
@@ -156,16 +165,16 @@ namespace rfk
 															   bool shouldInspectInherited = false)			const	noexcept;
 
 			/**
-			*	\param fieldName Name of the static fields to retrieve.
-			*	\param minFlags Requirements the queried static fields should fulfill.
+			*	@param fieldName Name of the static fields to retrieve.
+			*	@param minFlags Requirements the queried static fields should fulfill.
 			*					Keep in mind that the returned static fields should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return an empty vector.
 			*					EFieldFlags::Default means no requirement, so all static fields named fieldName will be returned.
 			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
-			*	\param shouldInspectInherited Should inherited static fields be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
 			*								  If false, only static fields introduced by this struct will be considered.
 			*
-			*	\return A vector of all static fields named fieldName fulfilling all requirements.
+			*	@return A vector of all static fields named fieldName fulfilling all requirements.
 			*/
 			std::vector<StaticField const*>		getStaticFields(std::string const& fieldName,
 															   EFieldFlags minFlags = EFieldFlags::Default,
@@ -176,15 +185,15 @@ namespace rfk
 			*			Example1: void example1Method(int i, float j);	-> getMethod<void(int, float)>("example1Method");
 			*			Example2: int  example2Method() const;			-> getMethod<int()>("example2Method");
 			*
-			*	\param methodName Name of the method to retrieve.
-			*	\param minFlags Requirements the queried method should fulfill.
+			*	@param methodName Name of the method to retrieve.
+			*	@param minFlags Requirements the queried method should fulfill.
 			*					Keep in mind that the returned method should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return nullptr.
 			*					EMethodFlags::Default means no requirement, so the first method named methodName will be returned.
-			*	\param shouldInspectInherited Should inherited methods be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
 			*								  If false, only methods introduced by this struct will be considered.
 			*
-			*	\return The first method named methodName fulfilling all requirements, nullptr if none was found. 
+			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
 			template <typename MethodSignature>
 			Method const*						getMethod(std::string const& methodName,
@@ -192,30 +201,30 @@ namespace rfk
 														  bool shouldInspectParents = false)				const	noexcept;
 
 			/**
-			*	\param methodName Name of the method to retrieve.
-			*	\param minFlags Requirements the queried method should fulfill.
+			*	@param methodName Name of the method to retrieve.
+			*	@param minFlags Requirements the queried method should fulfill.
 			*					Keep in mind that the returned method should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return nullptr.
 			*					EMethodFlags::Default means no requirement, so the first method named methodName will be returned.
-			*	\param shouldInspectInherited Should inherited methods be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
 			*								  If false, only methods introduced by this struct will be considered.
 			*
-			*	\return The first method named methodName fulfilling all requirements, nullptr if none was found. 
+			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
 			Method const*						getMethod(std::string const& methodName,
 														  EMethodFlags minFlags = EMethodFlags::Default,
 														  bool shouldInspectParents = false)				const	noexcept;
 
 			/**
-			*	\param methodName Name of the methods to retrieve.
-			*	\param minFlags Requirements the queried methods should fulfill.
+			*	@param methodName Name of the methods to retrieve.
+			*	@param minFlags Requirements the queried methods should fulfill.
 			*					Keep in mind that the returned methods should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return an empty vector.
 			*					EMethodFlags::Default means no requirement, so all methods named methodName will be returned.
-			*	\param shouldInspectInherited Should inherited methods be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
 			*								  If false, only methods introduced by this struct will be considered.
 			*
-			*	\return A vector of all methods named methodName fulfilling all requirements. 
+			*	@return A vector of all methods named methodName fulfilling all requirements. 
 			*/
 			std::vector<Method const*>			getMethods(std::string const& methodName,
 														   EMethodFlags minFlags = EMethodFlags::Default,
@@ -226,16 +235,16 @@ namespace rfk
 			*			Example1: static void example1Method(int i, float j);	-> getStaticMethod<void(int, float)>("example1Method");
 			*			Example2: static int  example2Method() const;			-> getStaticMethod<int()>("example2Method");
 			*
-			*	\param methodName Name of the static method to retrieve.
-			*	\param minFlags Requirements the queried static method should fulfill.
+			*	@param methodName Name of the static method to retrieve.
+			*	@param minFlags Requirements the queried static method should fulfill.
 			*					Keep in mind that the returned static method should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return nullptr.
 			*					EMethodFlags::Default means no requirement, so the first static method named methodName will be returned.
 			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static methods only.
-			*	\param shouldInspectInherited Should inherited static methods be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited static methods be considered as well in the search process?
 			*								  If false, only static methods introduced by this struct will be considered.
 			*
-			*	\return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
+			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
 			template <typename MethodSignature>
 			StaticMethod const*					getStaticMethod(std::string const& methodName,
@@ -243,39 +252,39 @@ namespace rfk
 																bool shouldInspectParents = false)			const	noexcept;
 
 			/**
-			*	\param methodName Name of the static method to retrieve.
-			*	\param minFlags Requirements the queried static method should fulfill.
+			*	@param methodName Name of the static method to retrieve.
+			*	@param minFlags Requirements the queried static method should fulfill.
 			*					Keep in mind that the returned static method should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return nullptr.
 			*					EMethodFlags::Default means no requirement, so the first static method named methodName will be returned.
 			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static methods only.
-			*	\param shouldInspectInherited Should inherited static methods be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited static methods be considered as well in the search process?
 			*								  If false, only static methods introduced by this struct will be considered.
 			*
-			*	\return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
+			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
 			StaticMethod const*					getStaticMethod(std::string const& methodName,
 																EMethodFlags minFlags = EMethodFlags::Default,
 																bool shouldInspectParents = false)			const	noexcept;
 
 			/**
-			*	\param methodName Name of the static methods to retrieve.
-			*	\param minFlags Requirements the queried static methods should fulfill.
+			*	@param methodName Name of the static methods to retrieve.
+			*	@param minFlags Requirements the queried static methods should fulfill.
 			*					Keep in mind that the returned static methods should contain all of the specified flags,
 			*					so setting for example Public and Protected will always return an empty vector.
 			*					EMethodFlags::Default means no requirement, so all static methods named methodName will be returned.
 			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static methods only.
-			*	\param shouldInspectInherited Should inherited static methods be considered as well in the search process?
+			*	@param shouldInspectInherited Should inherited static methods be considered as well in the search process?
 			*								  If false, only static methods introduced by this struct will be considered.
 			*
-			*	\return All static methods named methodName fulfilling all requirements. 
+			*	@return All static methods named methodName fulfilling all requirements. 
 			*/
 			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName,
 																 EMethodFlags minFlags = EMethodFlags::Default,
 																 bool shouldInspectParents = false)			const	noexcept;
 
 			/**
-			*	\brief Make an instance of the class represented by this archetype.
+			*	@brief Make an instance of the class represented by this archetype.
 			*
 			*	If no argument is specified, the default constructor will be used.
 			*	In case the class isn't default constructible, the matching user-specified custom instantiator will be used.
@@ -283,21 +292,21 @@ namespace rfk
 			*	
 			*	For more information about custom instantiators, see https://github.com/jsoysouvanh/Refureku#custominstantiator-method.
 			*
-			*	\note Memory is not auto-managed and must be freed manually by the user.
+			*	@note Memory is not auto-managed and must be freed manually by the user.
 			*
-			*	\return an instance of this struct if a suitable constructor (no params only) / custom instantator was found,
+			*	@return an instance of this struct if a suitable constructor (no params only) / custom instantator was found,
 			*			else nullptr.
 			*/
 			template <typename ReturnType = void, typename... ArgTypes>
 			ReturnType*	makeInstance(ArgTypes&&... args)													const	noexcept;
 
 			/**
-			*	\return true if this type inherits from the provided type, else false.
+			*	@return true if this type inherits from the provided type, else false.
 			*/
 			bool		inheritsFrom(Struct const& otherType)												const	noexcept;
 			
 			/**
-			*	\return true if this type is a parent (direct or not) of the provided type, else false.
+			*	@return true if this type is a parent (direct or not) of the provided type, else false.
 			*/
 			bool		isBaseOf(Struct const& otherType)													const	noexcept;
 
