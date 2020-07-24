@@ -11,28 +11,41 @@ Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint6
 
 Struct const* Struct::getNestedStruct(std::string const& structName, EAccessSpecifier access) const noexcept
 {
-	Struct toFind(std::string(structName), 0u, ECategory::Undefined, 0u);
+	Archetype toFind((std::string(structName)));
 
 	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
-	decltype(nestedStructsAndClasses)::const_iterator it = nestedStructsAndClasses.find(&toFind);
+	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(&toFind);
 
-	return (it != nestedStructsAndClasses.cend() &&
+	return (it != nestedArchetypes.cend() &&
 			(*it)->category == ECategory::Struct &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
-				*it : nullptr;
+			reinterpret_cast<Struct const*>(*it) : nullptr;
 }
 
 Class const* Struct::getNestedClass(std::string const& className, EAccessSpecifier access) const noexcept
 {
-	Struct toFind(std::string(className), 0u, ECategory::Undefined, 0u);
+	Archetype toFind((std::string(className)));
 
 	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
-	decltype(nestedStructsAndClasses)::const_iterator it = nestedStructsAndClasses.find(&toFind);
+	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(&toFind);
 
-	return (it != nestedStructsAndClasses.cend() &&
+	return (it != nestedArchetypes.cend() &&
 			(*it)->category == ECategory::Class &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Class const*>(*it) : nullptr;
+}
+
+Enum const* Struct::getNestedEnum(std::string const& enumName, EAccessSpecifier access) const noexcept
+{
+	Archetype toFind((std::string(enumName)));
+
+	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
+	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(&toFind);
+
+	return (it != nestedArchetypes.cend() &&
+			(*it)->category == ECategory::Enum &&
+			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
+		reinterpret_cast<Enum const*>(*it) : nullptr;
 }
 
 Field const* Struct::getField(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept

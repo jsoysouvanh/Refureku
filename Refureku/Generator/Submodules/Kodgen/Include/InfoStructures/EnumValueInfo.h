@@ -6,7 +6,7 @@
 
 namespace kodgen
 {
-	class EnumValueInfo : public EntityInfo
+	class EnumValueInfo final : public EntityInfo
 	{
 		public:
 			/** Default integer value for this enum value. */

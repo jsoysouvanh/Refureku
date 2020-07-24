@@ -20,5 +20,10 @@ namespace kodgen
 			EnumInfo(EnumInfo const&)										= default;
 			EnumInfo(EnumInfo&&)											= default;
 			~EnumInfo()														= default;
+
+			/**
+			*	@brief Refresh the outerEntity field of all nested entities. Internal use only.
+			*/
+			void	refreshOuterEntity()	noexcept;
 	};
 }

@@ -288,7 +288,7 @@ void ClassParser::addEnumResult(EnumParsingResult&& result) noexcept
 
 	if (result.parsedEnum.has_value() && getParsingResult()->parsedClass.has_value())
 	{
-		getParsingResult()->parsedClass->nestedEnums.emplace_back(NestedEnumInfo(std::move(result.parsedEnum).value(), context.currentAccessSpecifier));
+		NestedEnumInfo& nestedEnum = getParsingResult()->parsedClass->nestedEnums.emplace_back(NestedEnumInfo(std::move(result.parsedEnum).value(), context.currentAccessSpecifier));
 	}
 
 	//Append errors if any

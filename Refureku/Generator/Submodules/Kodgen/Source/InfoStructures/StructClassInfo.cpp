@@ -1,5 +1,7 @@
 #include "InfoStructures/StructClassInfo.h"
 
+#include "InfoStructures/NestedStructClassInfo.h"
+
 using namespace kodgen;
 
 StructClassInfo::StructClassInfo() noexcept:
@@ -12,6 +14,37 @@ StructClassInfo::StructClassInfo(CXCursor const& cursor, PropertyGroup&& propert
 	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), std::forward<EType>(entityType)),
 	qualifiers{ false }
 {
+}
+
+void StructClassInfo::refreshOuterEntity() noexcept
+{
+	for (std::shared_ptr<NestedStructClassInfo>& nestedClass : nestedClasses)
+	{
+		nestedClass->refreshOuterEntity();
+		nestedClass->outerEntity = this;
+	}
+
+	for (std::shared_ptr<NestedStructClassInfo>& nestedStruct : nestedStructs)
+	{
+		nestedStruct->refreshOuterEntity();
+		nestedStruct->outerEntity = this;
+	}
+
+	for (NestedEnumInfo& nestedEnum : nestedEnums)
+	{
+		nestedEnum.refreshOuterEntity();
+		nestedEnum.outerEntity = this;
+	}
+
+	for (FieldInfo& field : fields)
+	{
+		field.outerEntity = this;
+	}
+
+	for (MethodInfo& method : methods)
+	{
+		method.outerEntity = this;
+	}
 }
 
 std::ostream& kodgen::operator<<(std::ostream& out_stream, StructClassInfo const& structClassInfo) noexcept

@@ -91,6 +91,13 @@ namespace kodgen
 			void						addEnumResult(EnumParsingResult&& result)						noexcept;
 
 			/**
+			*	@brief Refresh outer entities of the passed FileParsingResult.
+			*
+			*	@param out_result Result to refresh.
+			*/
+			void						refreshOuterEntity(FileParsingResult& out_result)		const	noexcept;
+
+			/**
 			*	@brief Log the diagnostic of the provided translation units.
 			*
 			*	@param translationUnit Translation unit we want to log the diagnostic of.

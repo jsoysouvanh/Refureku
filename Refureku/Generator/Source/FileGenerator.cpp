@@ -42,3 +42,18 @@ void FileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsing
 	//Always call base class
 	kodgen::FileGenerator::writeFooter(file, parsingResult);
 }
+
+void FileGenerator::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
+{
+	kodgen::FileGenerator::writeNamespaceToFile(generatedFile, namespaceInfo, genResult);
+}
+
+void FileGenerator::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& structClassInfo, kodgen::FileGenerationResult& genResult) noexcept
+{
+	kodgen::FileGenerator::writeStructOrClassToFile(generatedFile, structClassInfo, genResult);
+}
+
+void FileGenerator::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& enumInfo, kodgen::FileGenerationResult& genResult) noexcept
+{
+	kodgen::FileGenerator::writeEnumToFile(generatedFile, enumInfo, genResult);
+}

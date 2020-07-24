@@ -48,6 +48,9 @@ bool FileParser::parse(fs::path const& toParseFile, FileParsingResult& out_resul
 			}
 			else
 			{
+				//Refresh all outer entities contained in the final result
+				refreshOuterEntity(out_result);
+
 				isSuccess = true;
 			}
 
@@ -189,6 +192,29 @@ void FileParser::addEnumResult(EnumParsingResult&& result) noexcept
 	if (!result.errors.empty())
 	{
 		getContext().parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
+	}
+}
+
+void FileParser::refreshOuterEntity(FileParsingResult& out_result) const noexcept
+{
+	for (NamespaceInfo& namespaceInfo : out_result.namespaces)
+	{
+		namespaceInfo.refreshOuterEntity();
+	}
+
+	for (StructClassInfo& structInfo : out_result.structs)
+	{
+		structInfo.refreshOuterEntity();
+	}
+
+	for (StructClassInfo& classInfo : out_result.classes)
+	{
+		classInfo.refreshOuterEntity();
+	}
+
+	for (EnumInfo& enumInfo : out_result.enums)
+	{
+		enumInfo.refreshOuterEntity();
 	}
 }
 

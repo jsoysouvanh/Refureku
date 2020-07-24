@@ -8,3 +8,11 @@ EnumInfo::EnumInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexce
 	underlyingType{clang_getEnumDeclIntegerType(cursor)}
 {
 }
+
+void EnumInfo::refreshOuterEntity() noexcept
+{
+	for (EnumValueInfo& enumValue : enumValues)
+	{
+		enumValue.outerEntity = this;
+	}
+}

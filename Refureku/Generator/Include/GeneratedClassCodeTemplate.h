@@ -75,16 +75,16 @@ namespace rfk
 																	 kodgen::StructClassInfo const&	info)					const	noexcept;
 			
 			/**
-			*	@brief Generate the macro containing the nested structs/classes definition.
+			*	@brief Generate the macro containing the nested structs/classes/enums definition.
 			*
 			*	@param generatedFile	File to write into.
 			*	@param info				Struct/Class info.
 			*
 			*	@return The name of the generated macro.
 			*/
-			std::string					generateNestedClassesMetadataMacro(kodgen::GeneratedFile&			generatedFile,
-																		   kodgen::StructClassInfo const&	info)			const	noexcept;
-			
+			std::string					generateNestedArchetypesMetadataMacro(kodgen::GeneratedFile&			generatedFile,
+																			  kodgen::StructClassInfo const&	info)		const	noexcept;
+
 			/**
 			*	@brief Generate the (2) macros containing fields definition.
 			*
@@ -119,6 +119,7 @@ namespace rfk
 																		 kodgen::StructClassInfo const&	info)				const	noexcept;
 
 		protected:
-			virtual void generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo)	const noexcept override;
+			virtual void generateCode(kodgen::GeneratedFile&	generatedFile,
+									  kodgen::EntityInfo const&	entityInfo)		const noexcept override;
 	};
 }

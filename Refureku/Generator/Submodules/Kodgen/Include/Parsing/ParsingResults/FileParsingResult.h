@@ -18,10 +18,16 @@ namespace kodgen
 		/** Path to the parsed file. */
 		fs::path						parsedFile;
 
-		/** All parsed entities contained in this file. */
+		/** All namespaces contained directly under file level. */
 		std::vector<NamespaceInfo>		namespaces;
+
+		/** All classes contained directly under file level. */
 		std::vector<StructClassInfo>	classes;
+
+		/** All structs contained directly under file level. */
 		std::vector<StructClassInfo>	structs;
+
+		/** All enums contained directly under file level. */
 		std::vector<EnumInfo>			enums;
 
 		//TODO: Global functions

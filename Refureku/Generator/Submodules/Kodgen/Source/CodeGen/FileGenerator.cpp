@@ -76,12 +76,12 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 	*
 	*	for (FieldInfo const& fieldInfo : parsingResult.fields)
 	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
+	*		writeFieldToFile(generatedFile, fieldInfo, nullptr, genResult);
 	*	}
 	*
 	*	for (MethodInfo const& methodInfo : parsingResult.functions)
 	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, genResult);
+	*		writeMethodToFile(generatedFile, methodInfo, nullptr, genResult);
 	*	}
 	*/
 
@@ -194,12 +194,12 @@ void FileGenerator::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInf
 	*
 	*	for (FieldInfo const& fieldInfo : castNamespaceInfo.fields)
 	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
+	*		writeFieldToFile(generatedFile, fieldInfo, &namespaceInfo, genResult);
 	*	}
 	*
 	*	for (MethodInfo const& methodInfo : castNamespaceInfo.functions)
 	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, genResult);
+	*		writeMethodToFile(generatedFile, methodInfo, &namespaceInfo, genResult);
 	*	}
 	*/
 }
@@ -226,9 +226,9 @@ void FileGenerator::writeStructOrClassToFile(GeneratedFile& generatedFile, Entit
 	}
 
 	//Write class nested enums
-	for (EnumInfo const& enumInfo : castStructClassInfo.nestedEnums)
+	for (NestedEnumInfo const& nestedEnumInfo : castStructClassInfo.nestedEnums)
 	{
-		writeEnumToFile(generatedFile, enumInfo, genResult);
+		writeEnumToFile(generatedFile, nestedEnumInfo, genResult);
 	}
 
 	//Write class fields

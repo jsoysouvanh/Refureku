@@ -8,6 +8,7 @@
 #include "InfoStructures/EnumInfo.h"
 #include "InfoStructures/FieldInfo.h"
 #include "InfoStructures/MethodInfo.h"
+#include "InfoStructures/NestedEnumInfo.h"
 #include "Misc/EAccessSpecifier.h"
 
 namespace kodgen
@@ -46,7 +47,7 @@ namespace kodgen
 			std::vector<std::shared_ptr<NestedStructClassInfo>>	nestedStructs;
 
 			/** List of all nested enums contained in this class. */
-			std::vector<EnumInfo>								nestedEnums;
+			std::vector<NestedEnumInfo>							nestedEnums;
 
 			/** List of all fields contained in this class. */
 			std::vector<FieldInfo>								fields;
@@ -59,6 +60,11 @@ namespace kodgen
 			StructClassInfo(StructClassInfo const&)														= default;
 			StructClassInfo(StructClassInfo&&)															= default;
 			~StructClassInfo()																			= default;
+
+			/**
+			*	@brief Refresh the outerEntity field of all nested entities. Internal use only.
+			*/
+			void	refreshOuterEntity()	noexcept;
 	};
 
 	std::ostream& operator<<(std::ostream& out_stream, kodgen::StructClassInfo const&) noexcept;

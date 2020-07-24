@@ -10,12 +10,16 @@ namespace kodgen
 	class NamespaceInfo : public EntityInfo
 	{
 		public:
-			/**
-			*	Nested namespaces, classes, structs and enums
-			*/
+			/** Nested namespaces. */
 			std::vector<NamespaceInfo>		namespaces;
-			std::vector<StructClassInfo>	classes;
+
+			/** Nested structs. */
 			std::vector<StructClassInfo>	structs;
+
+			/** Nested classes. */
+			std::vector<StructClassInfo>	classes;
+
+			/** Nested enums. */
 			std::vector<EnumInfo>			enums;
 
 			//TODO: Global functions
@@ -26,5 +30,10 @@ namespace kodgen
 			NamespaceInfo(NamespaceInfo const&)										= default;
 			NamespaceInfo(NamespaceInfo&&)											= default;
 			~NamespaceInfo()														= default;
+
+			/**
+			*	@brief Refresh the outerEntity field of all nested entities. Internal use only.
+			*/
+			void	refreshOuterEntity()	noexcept;
 	};
 }

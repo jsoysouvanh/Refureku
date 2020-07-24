@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "TypeInfo/Entity.h"
+#include "TypeInfo/EAccessSpecifier.h"
 
 namespace rfk
 {
@@ -43,11 +44,14 @@ namespace rfk
 				Count
 			};
 
+			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */
+			EAccessSpecifier	accessSpecifier	= EAccessSpecifier::Undefined;
+
 			/** Category of this type */
-			ECategory	category	= ECategory::Undefined;
+			ECategory			category		= ECategory::Undefined;
 
 			/** Size in bytes an instance of this archetype takes in memory, basically what sizeof(Type) returns */
-			uint64		memorySize	= 0;
+			uint64				memorySize		= 0;
 
 			Archetype(std::string&& newName,
 					  uint64		newId			= 0u,

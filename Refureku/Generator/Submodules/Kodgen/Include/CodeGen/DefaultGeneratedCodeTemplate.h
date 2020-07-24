@@ -15,6 +15,7 @@ namespace kodgen
 			/**
 			*	Basic override which generates no code.
 			*/
-			virtual void generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) const noexcept override {}
+			virtual void generateCode(kodgen::GeneratedFile&	generatedFile,
+									  kodgen::EntityInfo const&	entityInfo)		const noexcept override {}
 	};
 }

@@ -18,13 +18,15 @@
 #include "TypeInfo/Fields/StaticField.h"
 #include "TypeInfo/Methods/Method.h"
 #include "TypeInfo/Methods/StaticMethod.h"
-#include "TypeInfo/EAccessSpecifier.h"
 #include "Utility/TypeTraits.h"
 
 namespace rfk
 {
 	//Forward declaration
 	class Class;
+
+	//Forward declaration
+	class Enum;
 
 	class Struct : public Archetype
 	{
@@ -87,31 +89,28 @@ namespace rfk
 				Struct const*		type;
 			};
 
-			/** Access specifier of this struct. Relevant only when this struct is nested (Undefined otherwise). */
-			EAccessSpecifier																accessSpecifier	= EAccessSpecifier::Undefined;
-
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
 			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
-			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>						directParents;
+			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>							directParents;
 
 			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children. */
-			std::unordered_set<Struct const*>												children;
+			std::unordered_set<Struct const*>													children;
 
-			/** All tagged nested structs/classes contained in this struct. */
+			/** All tagged nested structs/classes/enums contained in this struct. */
 			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
-			std::unordered_set<Struct const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedStructsAndClasses;
+			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedArchetypes;
 
 			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
-			std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>			fields;
+			std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>				fields;
 
 			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents. */
-			std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>		staticFields;
+			std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>			staticFields;
 
 			/** All tagged methods declared in this struct. */
-			std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>			methods;
+			std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>				methods;
 
 			/** All tagged static methods declared in this struct. */
-			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>	staticMethods;
+			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
 
 			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
 			Struct(Struct const&)																		= delete;
@@ -135,6 +134,15 @@ namespace rfk
 			*/
 			Class const*						getNestedClass(std::string const&	className,
 																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
+
+			/**
+			*	@param enumName	Name of the nested enum to look for.
+			*	@param access	Access specifier of the nested enum in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if any, else nullptr.
+			*/
+			Enum const*							getNestedEnum(std::string const&	enumName,
+															  EAccessSpecifier		access = EAccessSpecifier::Undefined)			const	noexcept;
 
 			/**
 			*	@param fieldName Name of the field to retrieve.
