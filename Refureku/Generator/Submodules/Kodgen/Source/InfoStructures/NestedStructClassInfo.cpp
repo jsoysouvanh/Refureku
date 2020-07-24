@@ -11,6 +11,7 @@ NestedStructClassInfo::NestedStructClassInfo(StructClassInfo&& base, EAccessSpec
 	properties		= std::move(base.properties);
 
 	qualifiers		= base.qualifiers;
+	type			= std::move(base.type);
 	parents			= std::move(base.parents);
 	nestedStructs	= std::move(base.nestedStructs);
 	nestedClasses	= std::move(base.nestedClasses);

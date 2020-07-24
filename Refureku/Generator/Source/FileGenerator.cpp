@@ -25,6 +25,13 @@ FileGenerator::FileGenerator() noexcept:
 	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Enum, "RefurekuEnum");
 }
 
+void FileGenerator::postGenerateFile() noexcept
+{
+	_generatedNamespaces.clear();
+	_generatedClasses.clear();
+	_generatedEnums.clear();
+}
+
 void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
 {
 	//Always call base class
@@ -41,19 +48,46 @@ void FileGenerator::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsing
 {
 	//Always call base class
 	kodgen::FileGenerator::writeFooter(file, parsingResult);
+
+	file.writeLines("#ifdef " + _endFileMacroName,
+					"	#undef " + _endFileMacroName,
+					"#endif\n");
+
+	generateEndFileMacro(file);
 }
 
 void FileGenerator::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	kodgen::FileGenerator::writeNamespaceToFile(generatedFile, namespaceInfo, genResult);
+
+	_generatedNamespaces.push_back(reinterpret_cast<kodgen::NamespaceInfo const*>(&namespaceInfo));
 }
 
 void FileGenerator::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& structClassInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	kodgen::FileGenerator::writeStructOrClassToFile(generatedFile, structClassInfo, genResult);
+
+	_generatedClasses.push_back(reinterpret_cast<kodgen::StructClassInfo const*>(&structClassInfo));
 }
 
 void FileGenerator::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& enumInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	kodgen::FileGenerator::writeEnumToFile(generatedFile, enumInfo, genResult);
+
+	_generatedEnums.push_back(reinterpret_cast<kodgen::EnumInfo const*>(&enumInfo));
+}
+
+void FileGenerator::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept
+{
+	file.writeLine("#define " + _endFileMacroName + "\t\\");
+
+	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)
+	{
+		file.writeLine("	" + std::string(_internalPrefix) + enumInfo->name + "_GENERATED\t\\");
+	}
+
+	for (kodgen::StructClassInfo const* classInfo : _generatedClasses)
+	{
+		file.writeLine("	" + std::string(_internalPrefix) + classInfo->name + "_GetTypeDefinition\t\\");
+	}
 }

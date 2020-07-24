@@ -51,22 +51,22 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 	writeHeader(generatedFile, parsingResult);
 
 	//Actual file content (per entity)
-	for (NamespaceInfo namespaceInfo : parsingResult.namespaces)
+	for (NamespaceInfo const& namespaceInfo : parsingResult.namespaces)
 	{
 		writeNamespaceToFile(generatedFile, namespaceInfo, genResult);
 	}
 
-	for (StructClassInfo structInfo : parsingResult.structs)
+	for (StructClassInfo const& structInfo : parsingResult.structs)
 	{
 		writeStructOrClassToFile(generatedFile, structInfo, genResult);
 	}
 
-	for (StructClassInfo classInfo : parsingResult.classes)
+	for (StructClassInfo const& classInfo : parsingResult.classes)
 	{
 		writeStructOrClassToFile(generatedFile, classInfo, genResult);
 	}
 
-	for (EnumInfo enumInfo : parsingResult.enums)
+	for (EnumInfo const& enumInfo : parsingResult.enums)
 	{
 		writeEnumToFile(generatedFile, enumInfo, genResult);
 	}
@@ -299,6 +299,16 @@ fs::path FileGenerator::makePathToGeneratedFile(fs::path const& sourceFilePath) 
 	assert(fs::exists(sourceFilePath) && fs::is_regular_file(sourceFilePath));
 
 	return (outputDirectory / sourceFilePath.filename()).replace_extension(generatedFilesExtension);
+}
+
+void FileGenerator::preGenerateFile() noexcept
+{
+	//Default implementation does nothing
+}
+
+void FileGenerator::postGenerateFile() noexcept
+{
+	//Default implementation does nothing
 }
 
 void FileGenerator::writeHeader(GeneratedFile& file, FileParsingResult const&) const noexcept

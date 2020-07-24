@@ -120,6 +120,16 @@ namespace kodgen
 
 		protected:
 			/**
+			*	@brief Called just before generating a file. Can be used to perform any pre-generation initialization.
+			*/
+			virtual void	preGenerateFile()																noexcept;
+
+			/**
+			*	@brief Called just after generating a file. Can be used to perform any post-generation cleanup.
+			*/
+			virtual void	postGenerateFile()																noexcept;
+
+			/**
 			*	@brief Write a header into the provided file.
 			*
 			*	@param file Reference to the generated file.

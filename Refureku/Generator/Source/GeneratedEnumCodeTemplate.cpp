@@ -13,7 +13,7 @@ void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFil
 
 void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
 {
-	std::string	mainMacroName			= _externalPrefix + enumInfo.name + "_GENERATED";
+	std::string	mainMacroName			= _internalPrefix + enumInfo.name + "_GENERATED";
 	std::string specializationMacroName	= generateGetEnumSpecialization(generatedFile, enumInfo);
 	std::string registerMacroName		= generateRegistrationMacro(generatedFile, enumInfo);
 
@@ -78,11 +78,19 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 
 std::string GeneratedEnumCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
 {
-	std::string macroName = _internalPrefix + enumInfo.name + "_RegisterEnum";
+	//Don't register to database if the class is contained in another entity (namespace / class)
+	if (enumInfo.outerEntity != nullptr)
+	{
+		return std::string();
+	}
+	else
+	{
+		std::string macroName = _internalPrefix + enumInfo.name + "_RegisterEnum";
 
-	//Wrap into a namespace to avoid pollution in rfk namespace, + Class so that the registration happens once only
-	generatedFile.writeMacro(std::string(macroName),
-								"namespace generated { class " + enumInfo.name + std::to_string(_stringHasher(enumInfo.id)) + " { static inline rfk::ArchetypeRegisterer register" + enumInfo.name + " = getEnum<" + enumInfo.type.getCanonicalName() + ">(); }; }");
+		//Wrap into a generated namespace to avoid pollution in rfk namespace
+		generatedFile.writeMacro(std::string(macroName),
+								 "namespace generated { inline rfk::ArchetypeRegisterer registerer" + std::to_string(_stringHasher(enumInfo.id)) + " = rfk::getEnum<" + enumInfo.type.getCanonicalName() + ">(); }");
 
-	return macroName;
+		return macroName;
+	}
 }

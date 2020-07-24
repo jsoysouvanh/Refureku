@@ -86,7 +86,7 @@ namespace namespace3 RFKNamespace()
 
 				NestedExampleClass_GENERATED 
 			};
-
+		
 		protected:
 			struct RFKStruct() NestedExampleStruct
 			{
@@ -177,18 +177,7 @@ namespace namespace3 RFKNamespace()
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;
 
-		//ExampleClass_GENERATED
-			friend rfk::Struct;
-			friend rfk::hasField___rfkArchetypeRegisterer<ExampleClass, rfk::ArchetypeRegisterer>;
-			__RFKExampleClass_DefaultInstantiateMacro
-
-		public:
-			__RFKExampleClass_GenerateFieldHelperMethods
-			inline static rfk::Class const& staticGetArchetype() noexcept;
-			rfk::Class const& getArchetype() const noexcept override { return ExampleClass::staticGetArchetype(); }
-			__RFKExampleClass_RegisterArchetype
-		
-		private:
+		ExampleClass_GENERATED
 	};
 
 	class RFKClass() ExampleClass2
@@ -235,7 +224,4 @@ struct RFKStruct() ExampleStruct
 	ExampleStruct_GENERATED 
 };
 
-//NestedExampleEnum_GENERATED
-//ExampleEnum_GENERATED
-
-#include "Generated/ExampleClass.end.rfk.h"
+LocalFile_GENERATED

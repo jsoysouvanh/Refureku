@@ -37,6 +37,9 @@ namespace kodgen
 				bool isFinal		: 1;
 			}													qualifiers;
 
+			/** More detailed information on this class. */
+			TypeInfo											type;
+
 			/** List of all parent classes of this class. */
 			std::vector<ParentInfo>								parents;
 
