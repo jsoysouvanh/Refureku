@@ -1,10 +1,38 @@
 #include "TypeInfo/Archetypes/Struct.h"
 
+#include "TypeInfo/Archetypes/Class.h"
+
 using namespace rfk;
 
 Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
 	Archetype(std::forward<std::string>(newName), newId, newCategory, newMemorySize)
 {
+}
+
+Struct const* Struct::getNestedStruct(std::string const& structName, EAccessSpecifier access) const noexcept
+{
+	Struct toFind(std::string(structName), 0u, ECategory::Undefined, 0u);
+
+	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
+	decltype(nestedStructsAndClasses)::const_iterator it = nestedStructsAndClasses.find(&toFind);
+
+	return (it != nestedStructsAndClasses.cend() &&
+			(*it)->category == ECategory::Struct &&
+			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
+				*it : nullptr;
+}
+
+Class const* Struct::getNestedClass(std::string const& className, EAccessSpecifier access) const noexcept
+{
+	Struct toFind(std::string(className), 0u, ECategory::Undefined, 0u);
+
+	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
+	decltype(nestedStructsAndClasses)::const_iterator it = nestedStructsAndClasses.find(&toFind);
+
+	return (it != nestedStructsAndClasses.cend() &&
+			(*it)->category == ECategory::Class &&
+			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
+				reinterpret_cast<Class const*>(*it) : nullptr;
 }
 
 Field const* Struct::getField(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept

@@ -23,6 +23,9 @@
 
 namespace rfk
 {
+	//Forward declaration
+	class Class;
+
 	class Struct : public Archetype
 	{
 		private:
@@ -88,13 +91,15 @@ namespace rfk
 			EAccessSpecifier																accessSpecifier	= EAccessSpecifier::Undefined;
 
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
+			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
 			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>						directParents;
 
 			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children. */
 			std::unordered_set<Struct const*>												children;
 
 			/** All tagged nested structs/classes contained in this struct. */
-			std::unordered_set<Struct const*>												nestedStructsAndClasses;
+			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
+			std::unordered_set<Struct const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedStructsAndClasses;
 
 			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
 			std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>			fields;
@@ -113,8 +118,23 @@ namespace rfk
 			Struct(Struct&&)																			= default;
 			~Struct()																					= default;
 
-			//TODO: getNestedStruct
-			//TODO: getNestedClass
+			/**
+			*	@param structName	Name of the nested struct to look for.
+			*	@param access		Access specifier of the nested struct in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested struct if any, else nullptr.
+			*/
+			Struct const*						getNestedStruct(std::string const&	structName,
+																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
+
+			/**
+			*	@param className	Name of the nested class to look for.
+			*	@param access		Access specifier of the nested class in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if any, else nullptr.
+			*/
+			Class const*						getNestedClass(std::string const&	className,
+																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
 
 			/**
 			*	@param fieldName Name of the field to retrieve.
@@ -128,9 +148,9 @@ namespace rfk
 			*	@return The first field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			Field const*						getField(std::string const& fieldName,
-														 EFieldFlags minFlags = EFieldFlags::Default,
-														 bool shouldInspectInherited = false)				const	noexcept;
+			Field const*						getField(std::string const&	fieldName,
+														 EFieldFlags		minFlags				= EFieldFlags::Default,
+														 bool				shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	@param fieldName Name of the fields to retrieve.
@@ -143,9 +163,9 @@ namespace rfk
 			*
 			*	@return A vector of all fields named fieldName fulfilling all requirements.
 			*/
-			std::vector<Field const*>			getFields(std::string const& fieldName,
-														 EFieldFlags minFlags = EFieldFlags::Default,
-														 bool shouldInspectInherited = false)				const	noexcept;
+			std::vector<Field const*>			getFields(std::string const&	fieldName,
+														 EFieldFlags			minFlags				= EFieldFlags::Default,
+														 bool					shouldInspectInherited	= false)					const	noexcept;
 
 			/**
 			*	@param fieldName Name of the static field to retrieve.
@@ -160,9 +180,9 @@ namespace rfk
 			*	@return The first static field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			StaticField const*					getStaticField(std::string const& fieldName,
-															   EFieldFlags minFlags = EFieldFlags::Default,
-															   bool shouldInspectInherited = false)			const	noexcept;
+			StaticField const*					getStaticField(std::string const&	fieldName,
+															   EFieldFlags			minFlags				= EFieldFlags::Default,
+															   bool					shouldInspectInherited	= false)				const	noexcept;
 
 			/**
 			*	@param fieldName Name of the static fields to retrieve.
@@ -176,9 +196,9 @@ namespace rfk
 			*
 			*	@return A vector of all static fields named fieldName fulfilling all requirements.
 			*/
-			std::vector<StaticField const*>		getStaticFields(std::string const& fieldName,
-															   EFieldFlags minFlags = EFieldFlags::Default,
-															   bool shouldInspectInherited = false)			const	noexcept;
+			std::vector<StaticField const*>		getStaticFields(std::string const&	fieldName,
+															   EFieldFlags			minFlags				= EFieldFlags::Default,
+															   bool					shouldInspectInherited	= false)				const	noexcept;
 
 			/**
 			*	\tparam MethodSignature Signature (prototype) of the method to look for.
@@ -196,9 +216,9 @@ namespace rfk
 			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
 			template <typename MethodSignature>
-			Method const*						getMethod(std::string const& methodName,
-														  EMethodFlags minFlags = EMethodFlags::Default,
-														  bool shouldInspectParents = false)				const	noexcept;
+			Method const*						getMethod(std::string const&	methodName,
+														  EMethodFlags			minFlags				= EMethodFlags::Default,
+														  bool					shouldInspectParents	= false)					const	noexcept;
 
 			/**
 			*	@param methodName Name of the method to retrieve.
@@ -211,9 +231,9 @@ namespace rfk
 			*
 			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			Method const*						getMethod(std::string const& methodName,
-														  EMethodFlags minFlags = EMethodFlags::Default,
-														  bool shouldInspectParents = false)				const	noexcept;
+			Method const*						getMethod(std::string const&	methodName,
+														  EMethodFlags			minFlags				= EMethodFlags::Default,
+														  bool					shouldInspectParents	= false)					const	noexcept;
 
 			/**
 			*	@param methodName Name of the methods to retrieve.
@@ -226,9 +246,9 @@ namespace rfk
 			*
 			*	@return A vector of all methods named methodName fulfilling all requirements. 
 			*/
-			std::vector<Method const*>			getMethods(std::string const& methodName,
-														   EMethodFlags minFlags = EMethodFlags::Default,
-														   bool shouldInspectParents = false)				const	noexcept;
+			std::vector<Method const*>			getMethods(std::string const&	methodName,
+														   EMethodFlags			minFlags				= EMethodFlags::Default,
+														   bool					shouldInspectParents	= false)					const	noexcept;
 
 			/**
 			*	\tparam MethodSignature Signature (prototype) of the static method to look for.
@@ -247,9 +267,9 @@ namespace rfk
 			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
 			template <typename MethodSignature>
-			StaticMethod const*					getStaticMethod(std::string const& methodName,
-																EMethodFlags minFlags = EMethodFlags::Default,
-																bool shouldInspectParents = false)			const	noexcept;
+			StaticMethod const*					getStaticMethod(std::string const&	methodName,
+																EMethodFlags		minFlags				= EMethodFlags::Default,
+																bool				shouldInspectParents	= false)				const	noexcept;
 
 			/**
 			*	@param methodName Name of the static method to retrieve.
@@ -263,9 +283,9 @@ namespace rfk
 			*
 			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			StaticMethod const*					getStaticMethod(std::string const& methodName,
-																EMethodFlags minFlags = EMethodFlags::Default,
-																bool shouldInspectParents = false)			const	noexcept;
+			StaticMethod const*					getStaticMethod(std::string const&	methodName,
+																EMethodFlags		minFlags				= EMethodFlags::Default,
+																bool				shouldInspectParents	= false)				const	noexcept;
 
 			/**
 			*	@param methodName Name of the static methods to retrieve.
@@ -280,8 +300,8 @@ namespace rfk
 			*	@return All static methods named methodName fulfilling all requirements. 
 			*/
 			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName,
-																 EMethodFlags minFlags = EMethodFlags::Default,
-																 bool shouldInspectParents = false)			const	noexcept;
+																 EMethodFlags		minFlags				= EMethodFlags::Default,
+																 bool				shouldInspectParents	= false)				const	noexcept;
 
 			/**
 			*	@brief Make an instance of the class represented by this archetype.

@@ -18,7 +18,17 @@ void classes()
 	TEST(rfk::Database::getEnum("ExampleClass") == nullptr);
 	TEST(rfk::Database::getStruct("ExampleClass") == nullptr);
 
-	//TODO: TEST(rfk::Database::getClass("ExampleClass")->getNested...)
+	//Nested classes
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedClass("NestedExampleClass") != nullptr);
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedClass("NestedExampleClass", rfk::EAccessSpecifier::Private) != nullptr);
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedClass("NestedExampleClass", rfk::EAccessSpecifier::Public) == nullptr);
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedStruct("NestedExampleClass") == nullptr);
+
+	//Nested structs
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedStruct("NestedExampleStruct") != nullptr);
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedStruct("NestedExampleStruct", rfk::EAccessSpecifier::Protected) != nullptr);
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedStruct("NestedExampleStruct", rfk::EAccessSpecifier::Public) == nullptr);
+	TEST(rfk::Database::getClass("ExampleClass")->getNestedClass("NestedExampleStruct") == nullptr);
 }
 
 void structs()

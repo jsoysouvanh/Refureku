@@ -77,7 +77,7 @@ namespace namespace3 RFKNamespace()
 
 	class RFKClass(DynamicGetArchetype) ExampleClass : public ParentClass, public ParentClass2
 	{
-		public:
+		private:
 			class RFKClass() NestedExampleClass
 			{
 				public:
@@ -85,6 +85,16 @@ namespace namespace3 RFKNamespace()
 					int i = 0;
 
 				NestedExampleClass_GENERATED 
+			};
+
+		protected:
+			struct RFKStruct() NestedExampleStruct
+			{
+				public:
+					RFKMethod()
+					void foo() { }
+
+				NestedExampleStruct_GENERATED
 			};
 
 		public:
