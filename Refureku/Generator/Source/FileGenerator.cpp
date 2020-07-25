@@ -37,8 +37,8 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsing
 	//Always call base class
 	kodgen::FileGenerator::writeHeader(file, parsingResult);
 
-	file.writeLines("#include \"TypeInfo/Archetypes/Class.h\"",
-					"#include \"TypeInfo/Archetypes/Enum.h\"",
+	file.writeLines("#include \"TypeInfo/Namespace.h\"",
+					"#include \"TypeInfo/NamespaceRegisterer.h\"",
 					"#include \"TypeInfo/Archetypes/ArchetypeRegisterer.h\"",
 					"#include \"Misc/DisableWarningMacros.h\"",
 					"\n");

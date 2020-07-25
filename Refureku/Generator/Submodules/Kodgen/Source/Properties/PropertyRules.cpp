@@ -6,7 +6,7 @@
 
 using namespace kodgen;
 
-PropertyRules::PropertyRules(std::string defaultMacroName):
+PropertyRules::PropertyRules(std::string defaultMacroName) noexcept:
 	macroName{std::move(defaultMacroName)}
 {
 }

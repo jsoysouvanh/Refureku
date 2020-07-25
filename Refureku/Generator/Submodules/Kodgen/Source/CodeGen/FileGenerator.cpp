@@ -76,12 +76,12 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 	*
 	*	for (FieldInfo const& fieldInfo : parsingResult.fields)
 	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, nullptr, genResult);
+	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
 	*	}
 	*
 	*	for (MethodInfo const& methodInfo : parsingResult.functions)
 	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, nullptr, genResult);
+	*		writeMethodToFile(generatedFile, methodInfo, genResult);
 	*	}
 	*/
 
@@ -194,12 +194,12 @@ void FileGenerator::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInf
 	*
 	*	for (FieldInfo const& fieldInfo : castNamespaceInfo.fields)
 	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, &namespaceInfo, genResult);
+	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
 	*	}
 	*
 	*	for (MethodInfo const& methodInfo : castNamespaceInfo.functions)
 	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, &namespaceInfo, genResult);
+	*		writeMethodToFile(generatedFile, methodInfo, genResult);
 	*	}
 	*/
 }

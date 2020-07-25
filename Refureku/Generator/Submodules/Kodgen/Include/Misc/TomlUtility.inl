@@ -20,29 +20,29 @@ bool TomlUtility::getValueFromTable(toml::value const& table, std::string const&
 }
 
 template <typename T>
-void TomlUtility::updateSetting(toml::value const& table, std::string const& entryName, T& toUpdateSetting) noexcept
+void TomlUtility::updateSetting(toml::value const& table, std::string const& entryName, T& out_toUpdateSetting) noexcept
 {
 	T foundSetting;
 
 	if (TomlUtility::getValueFromTable<T>(table, entryName, foundSetting))
 	{
-		toUpdateSetting = foundSetting;
+		out_toUpdateSetting = foundSetting;
 	}
 }
 
 template <>
-inline void TomlUtility::updateSetting<fs::path>(toml::value const& table, std::string const& entryName, fs::path& toUpdateSetting) noexcept
+inline void TomlUtility::updateSetting<fs::path>(toml::value const& table, std::string const& entryName, fs::path& out_toUpdateSetting) noexcept
 {
 	std::string foundSetting;
 
 	if (TomlUtility::getValueFromTable<std::string>(table, entryName, foundSetting))
 	{
-		toUpdateSetting = fs::path(foundSetting).make_preferred().string();
+		out_toUpdateSetting = fs::path(foundSetting).make_preferred().string();
 	}
 }
 
 template <>
-inline void TomlUtility::updateSetting<char>(toml::value const& table, std::string const& entryName, char& toUpdateSetting) noexcept
+inline void TomlUtility::updateSetting<char>(toml::value const& table, std::string const& entryName, char& out_toUpdateSetting) noexcept
 {
 	std::string foundSetting;
 
@@ -50,7 +50,7 @@ inline void TomlUtility::updateSetting<char>(toml::value const& table, std::stri
 	{
 		if (foundSetting.size() == 1)
 		{
-			toUpdateSetting = foundSetting[0];
+			out_toUpdateSetting = foundSetting[0];
 		}
 		else
 		{
@@ -60,7 +60,7 @@ inline void TomlUtility::updateSetting<char>(toml::value const& table, std::stri
 }
 
 template <>
-inline void TomlUtility::updateSetting<std::unordered_set<std::string>>(toml::value const& table, std::string const& entryName, std::unordered_set<std::string>& toUpdateUS) noexcept
+inline void TomlUtility::updateSetting<std::unordered_set<std::string>>(toml::value const& table, std::string const& entryName, std::unordered_set<std::string>& out_toUpdateSetting) noexcept
 {
 	std::vector<std::string> foundStringVector;
 
@@ -68,13 +68,13 @@ inline void TomlUtility::updateSetting<std::unordered_set<std::string>>(toml::va
 	{
 		for (std::string value : foundStringVector)
 		{
-			toUpdateUS.emplace(std::move(value));
+			out_toUpdateSetting.emplace(std::move(value));
 		}
 	}
 }
 
 template <>
-inline void TomlUtility::updateSetting<std::unordered_set<fs::path, PathHash>>(toml::value const& table, std::string const& entryName, std::unordered_set<fs::path, PathHash>& toUpdateUS) noexcept
+inline void TomlUtility::updateSetting<std::unordered_set<fs::path, PathHash>>(toml::value const& table, std::string const& entryName, std::unordered_set<fs::path, PathHash>& out_toUpdateSetting) noexcept
 {
 	std::vector<std::string> foundStringVector;
 
@@ -82,13 +82,13 @@ inline void TomlUtility::updateSetting<std::unordered_set<fs::path, PathHash>>(t
 	{
 		for (std::string value : foundStringVector)
 		{
-			toUpdateUS.emplace(fs::path(value).make_preferred());
+			out_toUpdateSetting.emplace(fs::path(value).make_preferred());
 		}
 	}
 }
 
 template <>
-inline void TomlUtility::updateSetting<std::unordered_set<char>>(toml::value const& table, std::string const& entryName, std::unordered_set<char>& toUpdateUS) noexcept
+inline void TomlUtility::updateSetting<std::unordered_set<char>>(toml::value const& table, std::string const& entryName, std::unordered_set<char>& out_toUpdateSetting) noexcept
 {
 	std::vector<std::string> foundStringVector;
 
@@ -98,7 +98,7 @@ inline void TomlUtility::updateSetting<std::unordered_set<char>>(toml::value con
 		{
 			if (value.size() == 1)
 			{
-				toUpdateUS.emplace(value[0]);
+				out_toUpdateSetting.emplace(value[0]);
 			}
 			else
 			{

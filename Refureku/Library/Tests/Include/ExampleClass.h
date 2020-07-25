@@ -225,3 +225,19 @@ struct RFKStruct() ExampleStruct
 };
 
 File_GENERATED
+
+namespace rfk::generated
+{
+	//Namespace const& getNamespace
+
+	inline void fillNamespace123(Namespace* np) noexcept
+	{
+	}
+
+	inline void fillNamespace456(Namespace* np) noexcept
+	{
+	}
+
+	inline rfk::NamespaceRegisterer namespaceRegisterer123 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
+	inline rfk::NamespaceRegisterer namespaceRegisterer1234 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
+}

@@ -1,6 +1,14 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <variant>
+
 #include <clang-c/Index.h>
 
 #include "Parsing/EntityParser.h"
@@ -19,13 +27,13 @@ namespace kodgen
 	{
 		private:
 			/** Parser used to parse enums. */
-			EnumParser		enumParser;	
+			EnumParser		_enumParser;	
 
 			/** Parser used to parse fields. */
-			FieldParser		fieldParser;
+			FieldParser		_fieldParser;
 
 			/** Parser used to parse methods. */
-			MethodParser	methodParser;
+			MethodParser	_methodParser;
 
 			/**
 			*	@brief This method is called at each node (cursor) of the parsing.

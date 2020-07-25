@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include "Misc/ILogger.h"
@@ -17,7 +24,8 @@ namespace kodgen
 			DefaultLogger(DefaultLogger&&)		= default;
 			~DefaultLogger()					= default;
 
-			virtual void log(std::string const& message, ELogSeverity logSeverity) noexcept override;
+			virtual void log(std::string const&	message,
+							 ELogSeverity		logSeverity)	noexcept override;
 
 			DefaultLogger& operator=(DefaultLogger const&)	= default;
 			DefaultLogger& operator=(DefaultLogger&&)		= default;

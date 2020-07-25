@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <string>
@@ -11,8 +18,13 @@ namespace kodgen
 		public:
 			enum class ELogSeverity : uint8
 			{
-				Info = 0,
+				/** Informative log. */
+				Info = 0u,
+
+				/** Warning log. */
 				Warning,
+
+				/** Error log. */
 				Error
 			};
 
@@ -21,9 +33,13 @@ namespace kodgen
 			ILogger(ILogger&&)		= default;
 			~ILogger()				= default;
 
-			virtual void log(std::string const& message, ELogSeverity logSeverity) noexcept = 0;
-
-			ILogger& operator=(ILogger const&)	= default;
-			ILogger& operator=(ILogger&&)		= default;
+			/**
+			*	@brief Log a message.
+			*	
+			*	@param message		Message to log.
+			*	@param logSeverity	Severity level of the message.
+			*/
+			virtual void log(std::string const&	message,
+							 ELogSeverity		logSeverity) noexcept = 0;
 	};
 }

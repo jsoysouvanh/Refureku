@@ -62,7 +62,7 @@ EnumValueParsingResult EnumParser::parseEnumValue(CXCursor const& enumValueCurso
 {
 	EnumValueParsingResult enumValueResult;
 
-	out_visitResult	= enumValueParser.parse(enumValueCursor, getContext(), enumValueResult);
+	out_visitResult	= _enumValueParser.parse(enumValueCursor, getContext(), enumValueResult);
 
 	return enumValueResult;
 }

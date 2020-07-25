@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <vector>
@@ -5,11 +12,10 @@
 #include "Parsing/ParsingError.h"
 #include "Parsing/ParsingSettings.h"
 #include "Parsing/ParsingResults/ParsingResultBase.h"
-#include "Misc/Filesystem.h"
-
 #include "InfoStructures/NamespaceInfo.h"
 #include "InfoStructures/StructClassInfo.h"
 #include "InfoStructures/EnumInfo.h"
+#include "Misc/Filesystem.h"
 
 namespace kodgen
 {

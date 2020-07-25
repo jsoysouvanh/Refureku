@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <clang-c/Index.h>
@@ -5,7 +12,6 @@
 #include "Parsing/EntityParser.h"
 #include "Parsing/EnumValueParser.h"
 #include "Parsing/ParsingResults/EnumParsingResult.h"
-#include "Parsing/ParsingResults/EnumValueParsingResult.h"
 
 namespace kodgen
 {
@@ -13,7 +19,7 @@ namespace kodgen
 	{
 		private:
 			/** Parser used to parse enum values. */
-			EnumValueParser	enumValueParser;
+			EnumValueParser	_enumValueParser;
 
 			/**
 			*	@brief This method is called at each node (cursor) of the parsing.
@@ -24,7 +30,7 @@ namespace kodgen
 			*
 			*	@return An enum which indicates how to choose the next cursor to parse in the AST.
 			*/
-			static CXChildVisitResult		parseNestedEntity(CXCursor	cursor,
+			static CXChildVisitResult		parseNestedEntity(CXCursor		cursor,
 															  CXCursor		parentCursor,
 															  CXClientData	clientData)			noexcept;
 

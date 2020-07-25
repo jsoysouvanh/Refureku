@@ -10,6 +10,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/Entity.cpp
 					Source/TypeInfo/EnumValue.cpp
+					Source/TypeInfo/Namespace.cpp
+					Source/TypeInfo/NamespaceRegisterer.cpp
 					Source/TypeInfo/Database.cpp
 
 					Source/TypeInfo/Archetypes/Archetype.cpp

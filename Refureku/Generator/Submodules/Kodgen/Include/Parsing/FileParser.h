@@ -1,14 +1,22 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <string>
+
 #include <clang-c/Index.h>
 
-#include "Misc/Filesystem.h"
-#include "Misc/ILogger.h"
 #include "Parsing/NamespaceParser.h"
 #include "Parsing/ParsingResults/FileParsingResult.h"
 #include "Parsing/ParsingSettings.h"
 #include "Parsing/PropertyParser.h"
+#include "Misc/Filesystem.h"
+#include "Misc/ILogger.h"
 
 namespace kodgen
 {

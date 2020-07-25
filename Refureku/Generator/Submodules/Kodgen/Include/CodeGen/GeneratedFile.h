@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <string>
@@ -30,29 +37,31 @@ namespace kodgen
 			*	@param lines... Some other lines
 			*/
 			template <typename... Lines>
-			void expandWriteMacroLines(std::string&& line, Lines&&... otherLines)	noexcept;
+			void expandWriteMacroLines(std::string&&	line,
+									   Lines&&...		otherLines)	noexcept;
 
 			/**
 			*	@brief Write a single line starting with a \t (one indentation level) and ending with a \ in the generated file
 			*
 			*	@param line Line to write in the generated file
 			*/
-			void expandWriteMacroLines(std::string&& line)							noexcept;
+			void expandWriteMacroLines(std::string&& line)			noexcept;
 
 		public:
-			GeneratedFile()																				= delete;
-			GeneratedFile(fs::path&& generatedFilePath, fs::path const& sourceFilePath = fs::path())	noexcept;
-			GeneratedFile(GeneratedFile const&)															= delete;
-			GeneratedFile(GeneratedFile&&)																= delete;
-			~GeneratedFile()																			noexcept;
+			GeneratedFile()													= delete;
+			GeneratedFile(fs::path&&		generatedFilePath,
+						  fs::path const&	sourceFilePath = fs::path())	noexcept;
+			GeneratedFile(GeneratedFile const&)								= delete;
+			GeneratedFile(GeneratedFile&&)									= delete;
+			~GeneratedFile()												noexcept;
 
 			/**
 			*	@brief Write a line in the generated file
 			*
 			*	@param line Line to write in the generated file
 			*/
-			void writeLine(std::string const& line)									noexcept;
-			void writeLine(std::string&& line)										noexcept;
+			void writeLine(std::string const& line)				noexcept;
+			void writeLine(std::string&& line)					noexcept;
 
 			/**
 			*	@brief Write multiple lines in the generated file
@@ -61,10 +70,12 @@ namespace kodgen
 			*	@param... otherLines Other lines to write
 			*/
 			template <typename... Lines>
-			void writeLines(std::string const& line, Lines&&... otherLines)			noexcept;
+			void writeLines(std::string const&	line,
+							Lines&&...			otherLines)		noexcept;
 
 			template <typename... Lines>
-			void writeLines(std::string&& line, Lines&&... otherLines)				noexcept;
+			void writeLines(std::string&&	line,
+							Lines&&...		otherLines)			noexcept;
 
 			/**
 			*	@brief Write a macro in the generated file
@@ -74,22 +85,23 @@ namespace kodgen
 			*	@param... lines Body of the macro. Can be composed of several lines for a better visibility.
 			*/
 			template <typename... Lines>
-			void writeMacro(std::string&& macroPrototype, Lines&&... lines)			noexcept;
+			void writeMacro(std::string&&	macroPrototype,
+							Lines&&...		lines)				noexcept;
 
 			/**
 			*	@brief Define a macro without parameters nor value like #define MY_MACRO
 			*/
-			void writeMacro(std::string&& macroName)								noexcept;
+			void writeMacro(std::string&& macroName)			noexcept;
 
 			/**
 			*	@return The path to this generated file
 			*/
-			fs::path const& getPath()										const	noexcept;
+			fs::path const& getPath()					const	noexcept;
 
 			/**
 			*	@return The path to the source file for this generated file
 			*/
-			fs::path const&	getSourceFilePath()								const	noexcept;
+			fs::path const&	getSourceFilePath()			const	noexcept;
 	};
 
 	#include "CodeGen/GeneratedFile.inl"

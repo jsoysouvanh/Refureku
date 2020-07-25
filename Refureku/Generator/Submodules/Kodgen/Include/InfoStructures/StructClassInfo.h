@@ -1,7 +1,15 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <vector>
 #include <memory>
+
 #include <clang-c/Index.h>
 
 #include "InfoStructures/EntityInfo.h"
@@ -58,11 +66,13 @@ namespace kodgen
 			/** List of all methods contained in this class. */
 			std::vector<MethodInfo>								methods;
 
-			StructClassInfo()																			noexcept;
-			StructClassInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EType&& entityType)	noexcept;
-			StructClassInfo(StructClassInfo const&)														= default;
-			StructClassInfo(StructClassInfo&&)															= default;
-			~StructClassInfo()																			= default;
+			StructClassInfo()								noexcept;
+			StructClassInfo(CXCursor const& cursor,
+							PropertyGroup&& propertyGroup,
+							EType&&			entityType)		noexcept;
+			StructClassInfo(StructClassInfo const&)			= default;
+			StructClassInfo(StructClassInfo&&)				= default;
+			~StructClassInfo()								= default;
 
 			/**
 			*	@brief Refresh the outerEntity field of all nested entities. Internal use only.

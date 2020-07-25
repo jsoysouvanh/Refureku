@@ -94,8 +94,6 @@ CXChildVisitResult FileParser::parseNestedEntity(CXCursor cursor, CXCursor /* pa
 	//Parse the given file ONLY, ignore headers
 	if (clang_Location_isFromMainFile(clang_getCursorLocation(cursor)))
 	{
-		//std::cout << "FILE => " << Helpers::getString(clang_getCursorKindSpelling(cursor.kind)) << " " << Helpers::getString(clang_getCursorDisplayName(cursor)) << std::endl;
-
 		switch (cursor.kind)
 		{
 			case CXCursorKind::CXCursor_Namespace:

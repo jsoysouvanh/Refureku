@@ -6,5 +6,5 @@ using namespace rfk;
 
 ArchetypeRegisterer::ArchetypeRegisterer(Archetype const* archetype) noexcept
 {
-	Database::registerArchetype(*archetype);
+	Database::registerEntity(*archetype);
 }

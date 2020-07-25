@@ -1,6 +1,15 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Kodgen library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <vector>
+
+#include <clang-c/Index.h>
 
 #include "InfoStructures/StructClassInfo.h"
 #include "InfoStructures/EnumInfo.h"
@@ -25,11 +34,12 @@ namespace kodgen
 			//TODO: Global functions
 			//TODO: Global fields
 
-			NamespaceInfo()															= default;
-			NamespaceInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup)	noexcept;
-			NamespaceInfo(NamespaceInfo const&)										= default;
-			NamespaceInfo(NamespaceInfo&&)											= default;
-			~NamespaceInfo()														= default;
+			NamespaceInfo()									= default;
+			NamespaceInfo(CXCursor const& cursor,
+						  PropertyGroup&& propertyGroup)	noexcept;
+			NamespaceInfo(NamespaceInfo const&)				= default;
+			NamespaceInfo(NamespaceInfo&&)					= default;
+			~NamespaceInfo()								= default;
 
 			/**
 			*	@brief Refresh the outerEntity field of all nested entities. Internal use only.

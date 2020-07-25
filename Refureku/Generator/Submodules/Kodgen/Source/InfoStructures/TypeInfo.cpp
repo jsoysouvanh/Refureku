@@ -21,8 +21,8 @@ void TypeInfo::initialize(CXType cursorType) noexcept
 
 	assert(canonicalType.kind != CXTypeKind::CXType_Invalid);
 
-	fullName			= Helpers::getString(clang_getTypeSpelling(cursorType));
-	canonicalFullName	= Helpers::getString(clang_getTypeSpelling(canonicalType));
+	_fullName			= Helpers::getString(clang_getTypeSpelling(cursorType));
+	_canonicalFullName	= Helpers::getString(clang_getTypeSpelling(canonicalType));
 
 	long long size		= clang_Type_getSizeOf(cursorType);
 
@@ -38,7 +38,7 @@ void TypeInfo::initialize(CXType cursorType) noexcept
 	}
 
 	//Remove class or struct keyword
-	removeForwardDeclaredClassQualifier(fullName);
+	removeForwardDeclaredClassQualifier(_fullName);
 
 	//Fill the descriptors vector
 	TypePart*	currTypePart;
@@ -209,7 +209,7 @@ bool TypeInfo::removeRestrictQualifier(std::string& typeString) const noexcept
 
 std::string TypeInfo::getName(bool removeQualifiers, bool shouldRemoveNamespacesAndNestedClasses) const noexcept
 {
-	std::string result = fullName;
+	std::string result = _fullName;
 
 	if (removeQualifiers)
 	{
@@ -228,7 +228,7 @@ std::string TypeInfo::getName(bool removeQualifiers, bool shouldRemoveNamespaces
 
 std::string TypeInfo::getCanonicalName(bool removeQualifiers, bool shouldRemoveNamespacesAndNestedClasses) const noexcept
 {
-	std::string result = canonicalFullName;
+	std::string result = _canonicalFullName;
 
 	if (removeQualifiers)
 	{

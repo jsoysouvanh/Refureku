@@ -103,7 +103,7 @@ bool PropertyParser::splitProperties(std::string&& propertiesString) noexcept
 	return true;
 }
 
-bool PropertyParser::lookForNextProp(std::string& inout_parsingProps, bool& out_isParsingSubProp)
+bool PropertyParser::lookForNextProp(std::string& inout_parsingProps, bool& out_isParsingSubProp) noexcept
 {
 	//Find first occurence of propertySeparator or subprop start encloser in string
 	size_t index = inout_parsingProps.find_first_of(_relevantCharsForPropParsing);
@@ -130,7 +130,7 @@ bool PropertyParser::lookForNextProp(std::string& inout_parsingProps, bool& out_
 	return true;
 }
 
-bool PropertyParser::lookForNextSubProp(std::string& inout_parsingProps, bool& out_isParsingSubProp)
+bool PropertyParser::lookForNextSubProp(std::string& inout_parsingProps, bool& out_isParsingSubProp) noexcept
 {
 	//Find first occurence of propertySeparator or subprop start encloser in string
 	size_t index = inout_parsingProps.find_first_of(_relevantCharsForSubPropParsing);

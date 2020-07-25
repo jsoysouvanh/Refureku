@@ -9,8 +9,8 @@ using namespace rfk;
 //Init database containers BEFORE any other code so that reflected classes can register at startup
 #if defined(__GNUC__) || defined(__clang__)
 
-Database::EntitiesById		Database::_entitiesById		__attribute__ ((init_priority (101)));
-Database::ArchetypesByName	Database::_archetypesByName	__attribute__ ((init_priority (101)));
+Database::EntitiesById		Database::_entitiesById		__attribute__((init_priority(101)));
+Database::ArchetypesByName	Database::_archetypesByName	__attribute__((init_priority(101)));
 
 #elif defined(_MSC_VER)
 
@@ -22,7 +22,7 @@ __RFK_DISABLE_WARNING_INIT_SEG
 __RFK_DISABLE_WARNING_POP
 
 Database::EntitiesById		Database::_entitiesById;
-Database::ArchetypesByName	Database::_archetypesByName;
+Database::EntitiesByName	Database::_fileLevelEntitiesByName;
 
 #else
 
@@ -31,12 +31,52 @@ Database::ArchetypesByName	Database::_archetypesByName;
 
 #endif
 
-void Database::registerArchetype(Archetype const& archetype) noexcept
+void Database::registerEntity(Entity const& entity) noexcept
 {
-	registerSubEntities(archetype);
+	registerSubEntities(entity);
 
-	_entitiesById.emplace(&archetype);
-	_archetypesByName.emplace(&archetype);
+	_fileLevelEntitiesByName.emplace(&entity);
+}
+
+void Database::registerSubEntities(Entity const& entity) noexcept
+{
+	switch (entity.kind)
+	{
+		case Entity::EKind::Namespace:
+			registerSubEntities(static_cast<Namespace const&>(entity));
+			break;
+
+		case Entity::EKind::Archetype:
+			registerSubEntities(static_cast<Archetype const&>(entity));
+			break;
+
+		case Entity::EKind::Field:
+			[[fallthrough]];
+		case Entity::EKind::Method:
+			[[fallthrough]];
+		case Entity::EKind::EnumValue:
+			[[fallthrough]];
+		case Entity::EKind::Undefined:
+			assert(false);	//Should never register a bad kind
+			break;
+	}
+}
+
+void Database::registerSubEntities(Namespace const& n) noexcept
+{
+	_entitiesById.emplace(&n);
+
+	//Add nested namespaces
+	for (Namespace const* nn : n.nestedNamespaces)
+	{
+		registerSubEntities(*nn);
+	}
+
+	//Add nested archetypes
+	for (Archetype const* na : n.nestedArchetypes)
+	{
+		registerSubEntities(*na);
+	}
 }
 
 void Database::registerSubEntities(Archetype const& archetype) noexcept
@@ -46,15 +86,15 @@ void Database::registerSubEntities(Archetype const& archetype) noexcept
 		case Archetype::ECategory::Struct:
 			[[fallthrough]];
 		case Archetype::ECategory::Class:
-			registerStructSubEntities(static_cast<Struct const&>(archetype));
+			registerSubEntities(static_cast<Struct const&>(archetype));
 			break;
 
 		case Archetype::ECategory::Enum:
-			registerEnumSubEntities(static_cast<Enum const&>(archetype));
+			registerSubEntities(static_cast<Enum const&>(archetype));
 			break;
 
 		case Archetype::ECategory::Fundamental:
-			//Nothing special to do here since a fundamental archetype doesn't own sub entities
+			//Nothing special to do here since a fundamental archetype doesn't own any sub entities
 			break;
 
 		case Archetype::ECategory::Count:
@@ -65,8 +105,16 @@ void Database::registerSubEntities(Archetype const& archetype) noexcept
 	}
 }
 
-void Database::registerStructSubEntities(Struct const& s) noexcept
+void Database::registerSubEntities(Struct const& s) noexcept
 {
+	_entitiesById.emplace(&s);
+
+	//Add nested archetypes
+	for (Archetype const* nestedArchetype : s.nestedArchetypes)
+	{
+		registerSubEntities(*nestedArchetype);
+	}
+
 	//Add fields
 	for (Entity const& field : s.fields)
 	{
@@ -90,8 +138,10 @@ void Database::registerStructSubEntities(Struct const& s) noexcept
 	}
 }
 
-void Database::registerEnumSubEntities(Enum const& e) noexcept
+void Database::registerSubEntities(Enum const& e) noexcept
 {
+	_entitiesById.emplace(&e);
+
 	//Enum values
 	for (Entity const& enumValue : e.values)
 	{
@@ -99,34 +149,49 @@ void Database::registerEnumSubEntities(Enum const& e) noexcept
 	}
 }
 
-Archetype const* Database::getArchetype(std::string typeName) noexcept
+Entity const* Database::getEntity(std::string const& entityName) noexcept
 {
-	Archetype searching(std::move(typeName));
+	Entity searching(std::string(entityName), 0u);
 
-	Database::ArchetypesByName::const_iterator it = _archetypesByName.find(&searching);
+	Database::EntitiesByName::const_iterator it = _fileLevelEntitiesByName.find(&searching);
 
-	return (it != _archetypesByName.cend()) ? *it : nullptr;
+	return (it != _fileLevelEntitiesByName.cend()) ? *it : nullptr;
 }
 
-Struct const* Database::getStruct(std::string structName) noexcept
+Namespace const* Database::getNamespace(std::string const& namespaceName) noexcept
 {
-	Archetype const* archetype = getArchetype(std::move(structName));
+	Entity const* entity = getEntity(std::string(namespaceName));
 
-	return (archetype != nullptr && archetype->category == Archetype::ECategory::Struct) ? static_cast<Struct const*>(archetype) : nullptr;
+	return (entity != nullptr && entity->kind == Entity::EKind::Namespace) ?
+			reinterpret_cast<Namespace const*>(entity) :
+			nullptr;
 }
 
-Class const* Database::getClass(std::string className) noexcept
+Struct const* Database::getStruct(std::string const& structName) noexcept
 {
-	Archetype const* archetype = getArchetype(std::move(className));
+	Entity const* entity = getEntity(std::string(structName));
 
-	return (archetype != nullptr && archetype->category == Archetype::ECategory::Class) ? static_cast<Class const*>(archetype) : nullptr;
+	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Struct) ?
+			reinterpret_cast<Struct const*>(entity) :
+			nullptr;
 }
 
-Enum const* Database::getEnum(std::string enumName) noexcept
+Class const* Database::getClass(std::string const& className) noexcept
 {
-	Archetype const* archetype = getArchetype(std::move(enumName));
+	Entity const* entity = getEntity(std::string(className));
 
-	return (archetype != nullptr && archetype->category == Archetype::ECategory::Enum) ? static_cast<Enum const*>(archetype) : nullptr;
+	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Class) ?
+			reinterpret_cast<Class const*>(entity) :
+			nullptr;
+}
+
+Enum const* Database::getEnum(std::string const& enumName) noexcept
+{
+	Entity const* entity = getEntity(std::string(enumName));
+
+	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Enum) ?
+			reinterpret_cast<Enum const*>(entity) :
+			nullptr;
 }
 
 Entity const* Database::getEntity(uint64 id) noexcept
@@ -141,7 +206,7 @@ Entity const* Database::getEntity(uint64 id) noexcept
 void Database::clear() noexcept
 {
 	_entitiesById.clear();
-	_archetypesByName.clear();
+	_fileLevelEntitiesByName.clear();
 }
 
 Database::EntitiesById const& Database::getEntitiesById() noexcept
@@ -149,7 +214,7 @@ Database::EntitiesById const& Database::getEntitiesById() noexcept
 	return _entitiesById;
 }
 
-Database::ArchetypesByName const& Database::getArchetypesByName() noexcept
+Database::EntitiesByName const& Database::getFileLevelEntities() noexcept
 {
-	return _archetypesByName;
+	return _fileLevelEntitiesByName;
 }
