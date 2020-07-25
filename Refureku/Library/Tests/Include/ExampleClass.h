@@ -224,4 +224,4 @@ struct RFKStruct() ExampleStruct
 	ExampleStruct_GENERATED 
 };
 
-LocalFile_GENERATED
+File_GENERATED

@@ -14,7 +14,7 @@ namespace rfk
 	class ArchetypeRegisterer
 	{
 		public:
-			ArchetypeRegisterer()							= delete;
+			ArchetypeRegisterer()							= default;
 			ArchetypeRegisterer(Archetype const* archetype)	noexcept;
 			ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
 			ArchetypeRegisterer(ArchetypeRegisterer&&)		= delete;

@@ -454,21 +454,18 @@ std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::
 
 std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	//Don't register to database if the class is contained in another entity (namespace / class)
-	if (info.outerEntity != nullptr)
-	{
-		return std::string();
-	}
-	else
-	{
-		std::string macroName = _internalPrefix + info.name + "_RegisterArchetype";
+	std::string macroName = _internalPrefix + info.name + "_RegisterArchetype";
 
-		generatedFile.writeMacro(std::string(macroName),
-								 "private:",
-								 "	static inline rfk::ArchetypeRegisterer __rfkArchetypeRegisterer = &staticGetArchetype();");
+	//Use the default registerer constructor when there is an outer entity
+	//It will not register the type to the database.
+	//This field is still necessary because it is used to know is a struct/class is reflected or not.
+	std::string fieldValue = (info.outerEntity == nullptr) ? " = &staticGetArchetype();" : ";";
 
-		generatedFile.writeLine("");
+	generatedFile.writeMacro(std::string(macroName),
+							 "private:",
+							 "	static inline rfk::ArchetypeRegisterer __rfkArchetypeRegisterer" +  fieldValue);
 
-		return macroName;
-	}
+	generatedFile.writeLine("");
+
+	return macroName;
 }

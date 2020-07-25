@@ -11,7 +11,7 @@ namespace rfk
 	{
 		private:
 			/** Name of the end file macro. */
-			inline static std::string		_endFileMacroName	= "LocalFile_GENERATED";
+			inline static std::string		_endFileMacroName	= "File_GENERATED";
 			static constexpr char const*	_internalPrefix		= "__RFK";
 
 			/** List of all namespaces we have generated metadata for. */
