@@ -31,25 +31,25 @@ namespace rfk
 			void generateEndFileMacro(kodgen::GeneratedFile& file)	const	noexcept;
 
 		protected:
-			virtual void postGenerateFile()														noexcept override;
+			virtual void postGenerateFile()																	noexcept override;
 
 			virtual void writeHeader(kodgen::GeneratedFile&				file,
-									 kodgen::FileParsingResult const&	parsingResult) const	noexcept override;
+									 kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
 			
 			virtual void writeFooter(kodgen::GeneratedFile&				file,
-									 kodgen::FileParsingResult const&	parsingResult) const	noexcept override;
+									 kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
 
 			virtual void writeNamespaceToFile(kodgen::GeneratedFile&		generatedFile,
 											  kodgen::EntityInfo const&		namespaceInfo,
-											  kodgen::FileGenerationResult&	genResult)			noexcept;
+											  kodgen::FileGenerationResult&	genResult)						noexcept override;
 
 			virtual void writeStructOrClassToFile(kodgen::GeneratedFile&		generatedFile,
 												  kodgen::EntityInfo const&		structClassInfo,
-												  kodgen::FileGenerationResult&	genResult)		noexcept;
+												  kodgen::FileGenerationResult&	genResult)					noexcept override;
 
 			virtual void writeEnumToFile(kodgen::GeneratedFile&			generatedFile,
 										 kodgen::EntityInfo const&		enumInfo,
-										 kodgen::FileGenerationResult&	genResult)				noexcept;
+										 kodgen::FileGenerationResult&	genResult)							noexcept override;
 
 		public:
 			FileGenerator()						noexcept;
