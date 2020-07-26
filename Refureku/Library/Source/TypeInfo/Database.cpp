@@ -31,7 +31,7 @@ Database::EntitiesByName	Database::_fileLevelEntitiesByName;
 
 #endif
 
-void Database::registerEntity(Entity const& entity) noexcept
+void Database::registerFileLevelEntity(Entity const& entity) noexcept
 {
 	registerSubEntities(entity);
 

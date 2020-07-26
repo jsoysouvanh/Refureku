@@ -38,7 +38,7 @@ namespace rfk
 			*	
 			*	@param entity The entity to register.
 			*/
-			static void	registerEntity(Entity const& entity)			noexcept;
+			static void	registerFileLevelEntity(Entity const& entity)	noexcept;
 
 			/**
 			*	@brief Register all nested entities to the _entitiesById map.

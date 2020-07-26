@@ -10,8 +10,10 @@
 
 using namespace rfk;
 
-void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) const noexcept
+void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo);
+
 	switch (entityInfo.entityType)
 	{
 		case kodgen::EntityInfo::EType::Class:
@@ -29,7 +31,7 @@ void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFi
 
 void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
 {
-	std::string mainMacroName					= _externalPrefix + classInfo.name + "_GENERATED";
+	std::string mainMacroName					= externalPrefix + classInfo.name + "_GENERATED";
 
 	std::string getTypeMacroName				= generateGetArchetypeMacro(generatedFile, classInfo);
 	std::string defaultInstantiateMacro			= generateDefaultInstantiateMacro(generatedFile, classInfo);
@@ -51,8 +53,8 @@ void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& gener
 
 std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string					getTypeMacroDeclaration					= _internalPrefix + info.name + "_GetTypeDeclaration";
-	std::string					getTypeMacroDefinition					= _internalPrefix + info.name + "_GetTypeDefinition";
+	std::string					getTypeMacroDeclaration					= internalPrefix + getCurrentEntityId() + "_GetTypeDeclaration";
+	std::string					getTypeMacroDefinition					= internalPrefix + getCurrentEntityId() + "_GetTypeDefinition";
 	std::string					generateParentsMetadataMacroName		= generateParentsMetadataMacro(generatedFile, info);
 	std::array<std::string, 2>	generateFieldsMetadataMacroName			= generateFieldsMetadataMacros(generatedFile, info);
 	std::string					generateMethodsMetadataMacroName		= generateMethodsMetadataMacro(generatedFile, info);
@@ -80,7 +82,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"	{",
 								"		static bool			initialized = false;",
 								"		static " + returnedType + "	type(\"" + info.name + "\", "
-																		+ std::to_string(_stringHasher(info.id)) + "u, "
+																		+ getCurrentEntityId() + "u, "
 																		+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
 																		+ "sizeof(" + info.name + "));",
 								"	",
@@ -104,7 +106,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 
 std::string GeneratedClassCodeTemplate::generateArchetypePropertiesMacro(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& info) const noexcept
 {
-	std::string macroName = _internalPrefix + info.name + "_GenerateArchetypeProperties";
+	std::string macroName = internalPrefix + getCurrentEntityId() + "_GenerateArchetypeProperties";
 
 	generatedFile.writeMacro(std::string(macroName), fillEntityProperties(info, "type."));
 
@@ -113,7 +115,7 @@ std::string GeneratedClassCodeTemplate::generateArchetypePropertiesMacro(kodgen:
 
 std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = _internalPrefix + info.name + "_GenerateMethodsMetadata";
+	std::string macroName = internalPrefix + getCurrentEntityId() + "_GenerateMethodsMetadata";
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
@@ -135,7 +137,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 			methodName = method.getName();
 
 			generatedFile.writeLine("	staticMethodsIt = type.staticMethods.emplace(\"" + methodName + "\", " +
-									std::to_string(_stringHasher(method.id)) +
+									std::to_string(stringHasher(method.id)) +
 									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
 
@@ -154,7 +156,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 			methodName = method.getName();
 
 			generatedFile.writeLine("	methodsIt = type.methods.emplace(\"" + methodName + "\", " +
-									std::to_string(_stringHasher(method.id)) +
+									std::to_string(stringHasher(method.id)) +
 									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
 
@@ -191,7 +193,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 
 std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::array<std::string, 2> macroNames = { _internalPrefix + info.name + "_GenerateFieldsMetadata" };
+	std::array<std::string, 2> macroNames = { internalPrefix + getCurrentEntityId() + "_GenerateFieldsMetadata" };
 
 	generatedFile.writeLine("#define " + macroNames[0] + "\t\\");
 
@@ -206,7 +208,7 @@ std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMac
 
 std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = _internalPrefix + info.name + "_GenerateFieldHelperMethods";
+	std::string macroName = internalPrefix + getCurrentEntityId() + "_GenerateFieldHelperMethods";
 
 	//Generate parent registering templated method to discard calls on non reflected parents
 	generatedFile.writeLines("#define " + macroName + "\t\\",
@@ -253,7 +255,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 		if (field.qualifiers.isStatic)
 		{
 			generatedFile.writeLine("		staticFieldsIt = childArchetype->staticFields.emplace(\"" + field.name + "\", " +
-									std::to_string(_stringHasher(field.id)) +
+									std::to_string(stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, &" + info.name + "::" + field.name + ");\t\\");
 
@@ -262,7 +264,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 		else
 		{
 			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
-									std::to_string(_stringHasher(field.id)) +
+									std::to_string(stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
 									"), childArchetype, &thisArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
 
@@ -293,7 +295,7 @@ std::string GeneratedClassCodeTemplate::generateParentsMetadataMacro(kodgen::Gen
 {
 	if (!info.parents.empty())
 	{
-		std::string macroName = _internalPrefix + info.name + "_GenerateParentsMetadata";
+		std::string macroName = internalPrefix + getCurrentEntityId() + "_GenerateParentsMetadata";
 
 		generatedFile.writeLine("#define " + macroName + "\t\\");
 
@@ -323,7 +325,7 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 		return std::string();
 	}
 
-	std::string macroName = _internalPrefix + info.name + "_GenerateNestedArchetypesMetadata";
+	std::string macroName = internalPrefix + getCurrentEntityId() + "_GenerateNestedArchetypesMetadata";
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
@@ -436,7 +438,7 @@ kodgen::uint16 GeneratedClassCodeTemplate::computeFieldFlags(kodgen::FieldInfo c
 
 std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = _internalPrefix + info.name + "_DefaultInstantiateDefinition";
+	std::string macroName = internalPrefix + getCurrentEntityId() + "_DefaultInstantiateDefinition";
 
 	generatedFile.writeMacro(std::string(macroName),
 								"private:",
@@ -454,7 +456,7 @@ std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::
 
 std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string macroName = _internalPrefix + info.name + "_RegisterArchetype";
+	std::string macroName = internalPrefix + getCurrentEntityId() + "_RegisterArchetype";
 
 	//Use the default registerer constructor when there is an outer entity
 	//It will not register the type to the database.

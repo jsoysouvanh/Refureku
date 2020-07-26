@@ -2,7 +2,12 @@
 
 using namespace rfk;
 
-std::hash<std::string> GeneratedEntityCodeTemplate::_stringHasher;
+std::hash<std::string> const GeneratedEntityCodeTemplate::stringHasher;
+
+void GeneratedEntityCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
+{
+	_currentEntityId = std::to_string(stringHasher(entityInfo.id));
+}
 
 std::string	GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName) const noexcept
 {

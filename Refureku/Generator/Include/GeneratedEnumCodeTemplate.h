@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Refureku library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <CodeGen/GeneratedCodeTemplate.h>
@@ -22,6 +29,12 @@ namespace rfk
 
 		protected:
 			virtual void generateCode(kodgen::GeneratedFile&	generatedFile,
-									  kodgen::EntityInfo const&	entityInfo)		const noexcept override;
+									  kodgen::EntityInfo const&	entityInfo)		noexcept override;
+
+		public:
+			GeneratedEnumCodeTemplate()									= default;
+			GeneratedEnumCodeTemplate(GeneratedEnumCodeTemplate const&)	= default;
+			GeneratedEnumCodeTemplate(GeneratedEnumCodeTemplate&&)		= default;
+			virtual ~GeneratedEnumCodeTemplate()						= default;
 	};
 }

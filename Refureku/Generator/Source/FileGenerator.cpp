@@ -1,9 +1,13 @@
 #include "FileGenerator.h"
 
+#include "GeneratedNamespaceCodeTemplate.h"
 #include "GeneratedClassCodeTemplate.h"
 #include "GeneratedEnumCodeTemplate.h"
 
 using namespace rfk;
+
+std::string const				FileGenerator::_endFileMacroName = "File_GENERATED";
+std::hash<std::string> const	FileGenerator::_stringHasher;
 
 FileGenerator::FileGenerator() noexcept:
 	kodgen::FileGenerator()
@@ -16,10 +20,12 @@ FileGenerator::FileGenerator() noexcept:
 	supportedExtensions.emplace(".hpp");
 
 	//Bind name -> templates
+	addGeneratedCodeTemplate("RefurekuNamespace", new rfk::GeneratedNamespaceCodeTemplate());
 	addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
 	addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
 
 	/**	class RFKClass() MyClass {}; enum [class] RFKEnum() {}; */
+	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Namespace, "RefurekuNamespace");
 	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Class, "RefurekuClass");
 	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Struct, "RefurekuClass");
 	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Enum, "RefurekuEnum");
@@ -83,11 +89,17 @@ void FileGenerator::generateEndFileMacro(kodgen::GeneratedFile& file) const noex
 
 	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)
 	{
-		file.writeLine("	" + std::string(_internalPrefix) + enumInfo->name + "_GENERATED\t\\");
+		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(enumInfo->id)) + "_GENERATED\t\\");
 	}
 
 	for (kodgen::StructClassInfo const* classInfo : _generatedClasses)
 	{
-		file.writeLine("	" + std::string(_internalPrefix) + classInfo->name + "_GetTypeDefinition\t\\");
+		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(classInfo->id)) + "_GetTypeDefinition\t\\");
+	}
+
+	//Iterate backward here to have deepest namespaces register first. It is necessary to make sure nested namespaces can be referenced safely
+	for (decltype(_generatedNamespaces)::const_reverse_iterator it = _generatedNamespaces.crbegin(); it != _generatedNamespaces.crend(); it++)
+	{
+		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher((*it)->id)) + "_GENERATED\t\\");
 	}
 }

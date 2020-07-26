@@ -4,8 +4,10 @@
 
 using namespace rfk;
 
-void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) const noexcept
+void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo);
+
 	assert(entityInfo.entityType == kodgen::EntityInfo::EType::Enum);
 
 	generateEnumCode(generatedFile, static_cast<kodgen::EnumInfo const&>(entityInfo));
@@ -13,7 +15,7 @@ void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFil
 
 void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
 {
-	std::string	mainMacroName			= _internalPrefix + enumInfo.name + "_GENERATED";
+	std::string	mainMacroName			= internalPrefix + getCurrentEntityId() + "_GENERATED";
 	std::string specializationMacroName	= generateGetEnumSpecialization(generatedFile, enumInfo);
 	std::string registerMacroName		= generateRegistrationMacro(generatedFile, enumInfo);
 
@@ -26,10 +28,8 @@ void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generate
 
 std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
 {
-	std::string macroName = _internalPrefix + enumInfo.name + "_GenerateGetEnumSpecialization";
-
-	//with namespace
-	std::string typeName = enumInfo.type.getCanonicalName();
+	std::string macroName	= internalPrefix + getCurrentEntityId() + "_GenerateGetEnumSpecialization";
+	std::string typeName	= enumInfo.type.getCanonicalName();
 	std::string properties;
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
@@ -37,7 +37,7 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 							 "	inline rfk::Enum const* getEnum<" + typeName + ">() noexcept\t\\",
 							 "	{\t\\",
 							 "		static bool			initialized = false;\t\\",
-							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " + std::to_string(_stringHasher(enumInfo.id)) + "u, sizeof(" + typeName + "));\t\\");
+							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " + std::to_string(stringHasher(enumInfo.id)) + "u, sizeof(" + typeName + "));\t\\");
 	
 	generatedFile.writeLines("		if (!initialized)\t\\",
 							 "		{\t\\",
@@ -46,24 +46,27 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 	//Fill enum properties
 	properties = fillEntityProperties(enumInfo, "type.");
 	if (!properties.empty())
+	{
 		generatedFile.writeLine("			" + properties + "\t\\");
+	}
 
 	if (!enumInfo.enumValues.empty())
 	{
 		generatedFile.writeLines("			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>::iterator	valueIt;\t\\",
 								 "			[[maybe_unused]] rfk::EnumValue*												ev;\t\\",
-								 "			ev;\t\\",
 								 "			type.values.reserve(" + std::to_string(enumInfo.enumValues.size()) + ");\t\\");
 
 		for (kodgen::EnumValueInfo const& ev : enumInfo.enumValues)
 		{
-			generatedFile.writeLine("			valueIt = type.values.emplace(\"" + ev.name + "\", " + std::to_string(_stringHasher(ev.id)) + "u, " + std::to_string(ev.defaultValue) + "u).first;\t\\");
+			generatedFile.writeLine("			valueIt = type.values.emplace(\"" + ev.name + "\", " + std::to_string(stringHasher(ev.id)) + "u, " + std::to_string(ev.defaultValue) + "u).first;\t\\");
 
 			//Fill enum value properties
 			properties = fillEntityProperties(ev, "ev->");
 			if (!properties.empty())
+			{
 				generatedFile.writeLines("			ev = const_cast<rfk::EnumValue*>(&*valueIt);\t\\",
 										 "			" + properties + "\t\\");
+			}
 		}
 	}
 
@@ -85,11 +88,11 @@ std::string GeneratedEnumCodeTemplate::generateRegistrationMacro(kodgen::Generat
 	}
 	else
 	{
-		std::string macroName = _internalPrefix + enumInfo.name + "_RegisterEnum";
+		std::string macroName = internalPrefix + getCurrentEntityId() + "_RegisterEnum";
 
 		//Wrap into a generated namespace to avoid pollution in rfk namespace
 		generatedFile.writeMacro(std::string(macroName),
-								 "namespace generated { inline rfk::ArchetypeRegisterer registerer" + std::to_string(_stringHasher(enumInfo.id)) + " = rfk::getEnum<" + enumInfo.type.getCanonicalName() + ">(); }");
+								 "namespace generated { inline rfk::ArchetypeRegisterer registerer" + getCurrentEntityId() + " = rfk::getEnum<" + enumInfo.type.getCanonicalName() + ">(); }");
 
 		return macroName;
 	}

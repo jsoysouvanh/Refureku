@@ -11,6 +11,7 @@ add_library(${RefurekuGeneratorLibTarget}
 				STATIC
 					Source/FileParser.cpp
 					Source/GeneratedEntityCodeTemplate.cpp
+					Source/GeneratedNamespaceCodeTemplate.cpp
 					Source/GeneratedClassCodeTemplate.cpp
 					Source/GeneratedEnumCodeTemplate.cpp
 					Source/FileGenerator.cpp)

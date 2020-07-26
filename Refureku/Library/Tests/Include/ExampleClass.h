@@ -35,6 +35,11 @@ namespace namespace2 RFKNamespace()
 
 namespace namespace3 RFKNamespace()
 {
+	//namespace namespace3_nested RFKNamespace()
+	//{
+
+	//}
+
 	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
 	{
 
@@ -88,7 +93,7 @@ namespace namespace3 RFKNamespace()
 			};
 		
 		protected:
-			struct RFKStruct() NestedExampleStruct
+			struct RFKStruct() NestedExampleStruct 
 			{
 				public:
 					RFKMethod()
@@ -222,22 +227,27 @@ struct RFKStruct() ExampleStruct
 	void method(int a, float b) { std::cout << "ExampleStruct::method(" << a << ", " << b << ")" << std::endl; }
 
 	ExampleStruct_GENERATED 
-};
+}; 
 
 File_GENERATED
 
-namespace rfk::generated
-{
-	//Namespace const& getNamespace
-
-	inline void fillNamespace123(Namespace* np) noexcept
-	{
-	}
-
-	inline void fillNamespace456(Namespace* np) noexcept
-	{
-	}
-
-	inline rfk::NamespaceRegisterer namespaceRegisterer123 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
-	inline rfk::NamespaceRegisterer namespaceRegisterer1234 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
-}
+//namespace rfk::generated
+//{
+//	inline void fillNamespace123([[maybe_unused]] Namespace* np) noexcept;
+//	inline void fillNamespace456([[maybe_unused]] Namespace* np) noexcept;
+//
+//	inline rfk::NamespaceRegisterer namespaceRegisterer123 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
+//	inline rfk::NamespaceRegisterer namespaceRegisterer1234 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
+//
+//	inline void fillNamespace123([[maybe_unused]] Namespace* np) noexcept
+//	{
+//		np->nestedNamespaces.emplace(namespaceRegisterer123.getNamespaceInstance());
+//
+//		//np->nestedArchetypes.emplace();
+//	}
+//
+//	inline void fillNamespace456([[maybe_unused]] Namespace* np) noexcept
+//	{
+//
+//	}
+//}

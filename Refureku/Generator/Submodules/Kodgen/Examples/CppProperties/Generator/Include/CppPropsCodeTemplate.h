@@ -16,5 +16,5 @@ class CppPropsCodeTemplate : public kodgen::GeneratedCodeTemplate
 
 	protected:
 		virtual void generateCode(kodgen::GeneratedFile&	generatedFile,
-								  kodgen::EntityInfo const& entityInfo)	const noexcept override;
+								  kodgen::EntityInfo const& entityInfo)		noexcept override;
 };

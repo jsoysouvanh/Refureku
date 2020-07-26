@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Refureku library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <string>
@@ -10,9 +17,14 @@ namespace rfk
 	class FileGenerator : public kodgen::FileGenerator
 	{
 		private:
+			/** Prefix used to build internal macros. Must match with GeneratedEntityCodeTemplate::internalPrefix. */
+			static constexpr char const* const	_internalPrefix		= "__RFK";
+
 			/** Name of the end file macro. */
-			inline static std::string		_endFileMacroName	= "File_GENERATED";
-			static constexpr char const*	_internalPrefix		= "__RFK";
+			static std::string const			_endFileMacroName;
+
+			/** Class global string hasher. */
+			static std::hash<std::string> const	_stringHasher;
 
 			/** List of all namespaces we have generated metadata for. */
 			std::vector<kodgen::NamespaceInfo const*>	_generatedNamespaces;

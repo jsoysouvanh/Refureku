@@ -16,25 +16,36 @@ NamespaceRegisterer::NamespaceRegisterer(char const* name, uint64 id, NamespaceF
 		std::cout << "a" << std::endl;
 
 		//This namespace hasn't been registered yet, create it and start filling
-		_generatedNamespace = new Namespace(name, id);
+		_namespaceInstance = new Namespace(name, id);
+		_isNamespaceOwner	= true;
 
-		(*fillerMethod)(_generatedNamespace);
+		(*fillerMethod)(_namespaceInstance);
 
-		Database::registerEntity(*_generatedNamespace);
+		Database::registerFileLevelEntity(*_namespaceInstance);
 	}
 	else
 	{
 		std::cout << "b" << std::endl;
 
 		//Sorry we need to get rid of that const to fill you...
-		(*fillerMethod)(const_cast<Namespace*>(reinterpret_cast<Namespace const*>(foundNamespace)));
+		_namespaceInstance = const_cast<Namespace*>(reinterpret_cast<Namespace const*>(foundNamespace));
+
+		//TODO: PROBLEM -> subEntities have already been registered during first registerEntity call...
+		//Newly added entities won't be registered in Database::entitiesById;
+		//Idea: Instead of adding entities through a method, have an intermediate class and register manually elements of this intermediate class then append it to the real namespace instance.
+		(*fillerMethod)(_namespaceInstance);
 	}
 }
 
 NamespaceRegisterer::~NamespaceRegisterer() noexcept
 {
-	if (_generatedNamespace != nullptr)
+	if (_isNamespaceOwner)
 	{
-		delete _generatedNamespace;
+		delete _namespaceInstance;
 	}
+}
+
+Namespace const* NamespaceRegisterer::getNamespaceInstance() const noexcept
+{
+	return _namespaceInstance;
 }

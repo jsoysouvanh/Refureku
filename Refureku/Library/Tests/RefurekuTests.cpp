@@ -384,7 +384,7 @@ void makeInstance()
 
 int main()
 {
-	/*classes();
+	classes();
 	structs();
 	enums();
 	methods();
@@ -395,7 +395,7 @@ int main()
 	instantiation();
 	properties();
 	dynamicTypes();
-	makeInstance();*/
+	makeInstance();
 
 	return EXIT_SUCCESS;
 }

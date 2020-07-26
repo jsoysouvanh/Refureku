@@ -1,3 +1,10 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Refureku library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
 #pragma once
 
 #include <array>
@@ -120,6 +127,12 @@ namespace rfk
 
 		protected:
 			virtual void generateCode(kodgen::GeneratedFile&	generatedFile,
-									  kodgen::EntityInfo const&	entityInfo)		const noexcept override;
+									  kodgen::EntityInfo const&	entityInfo)		noexcept override;
+
+		public:
+			GeneratedClassCodeTemplate()									= default;
+			GeneratedClassCodeTemplate(GeneratedClassCodeTemplate const&)	= default;
+			GeneratedClassCodeTemplate(GeneratedClassCodeTemplate&&)		= default;
+			virtual ~GeneratedClassCodeTemplate()							= default;
 	};
 }

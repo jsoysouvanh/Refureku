@@ -29,6 +29,6 @@ namespace kodgen
 			*	@param generatedFile	Object used to write in the generated file
 			*	@param entityInfo		Structure containing info about the entity. You may static cast this into the derived class you expect
 			*/
-			virtual void generateCode(GeneratedFile& generatedFile, EntityInfo const& entityInfo) const noexcept = 0;
+			virtual void generateCode(GeneratedFile& generatedFile, EntityInfo const& entityInfo) noexcept = 0;
 	};
 }
