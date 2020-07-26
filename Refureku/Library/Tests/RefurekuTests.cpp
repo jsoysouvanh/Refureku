@@ -13,6 +13,8 @@ void namespaces()
 	TEST(rfk::Database::getNamespace("namespace4") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4_nested") == nullptr);
 	TEST(rfk::Database::getNamespace("namespace4")->getNestedNamespace("namespace4_nested") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("AnotherClassInNamespace3") != nullptr);
+	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getNestedEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
 }
 
 void classes()

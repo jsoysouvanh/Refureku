@@ -47,6 +47,8 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 	*/
 	GeneratedFile generatedFile(makePathToGeneratedFile(parsingResult.parsedFile), parsingResult.parsedFile);
 
+	preGenerateFile();
+
 	//Header
 	writeHeader(generatedFile, parsingResult);
 
@@ -87,6 +89,8 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 
 	//Footer
 	writeFooter(generatedFile, parsingResult);
+
+	postGenerateFile();
 }
 
 GeneratedCodeTemplate* FileGenerator::getEntityGeneratedCodeTemplate(EntityInfo const& entityInfo, EFileGenerationError& out_error) const noexcept
