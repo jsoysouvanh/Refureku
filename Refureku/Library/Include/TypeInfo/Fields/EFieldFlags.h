@@ -14,15 +14,15 @@ namespace rfk
 {
 	enum class EFieldFlags : uint8
 	{
-		/** No flag */
+		/** No flag. */
 		Default			= 0,
 
-		/** Access specifiers */
+		/** Access specifiers. */
 		Public			= 1 << 0,
 		Protected		= 1 << 1,
 		Private			= 1 << 2,
 
-		/** Field qualifiers */
+		/** Field qualifiers. */
 		Static			= 1 << 3,
 		Mutable			= 1 << 4
 	};

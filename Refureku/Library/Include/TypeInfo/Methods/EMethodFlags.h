@@ -14,15 +14,15 @@ namespace rfk
 {
 	enum class EMethodFlags : uint16
 	{
-		/** No flag */
+		/** No flag. */
 		Default			= 0,
 
-		/** Access specifiers */
+		/** Access specifiers. */
 		Public			= 1 << 0,
 		Protected		= 1 << 1,
 		Private			= 1 << 2,
 
-		/** Method qualifiers */
+		/** Method qualifiers. */
 		Static			= 1 << 3,
 		Inline			= 1 << 4,
 		Virtual			= 1 << 5,

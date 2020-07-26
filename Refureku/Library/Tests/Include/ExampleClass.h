@@ -222,6 +222,14 @@ struct RFKStruct() ExampleStruct
 	void method(int a, float b) { std::cout << "ExampleStruct::method(" << a << ", " << b << ")" << std::endl; }
 
 	ExampleStruct_GENERATED 
-}; 
+};
+
+namespace namespace4 RFKNamespace()
+{
+	namespace namespace4_nested RFKNamespace()
+	{
+
+	}
+}
 
 File_GENERATED

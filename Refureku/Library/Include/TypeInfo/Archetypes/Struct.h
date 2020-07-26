@@ -121,7 +121,7 @@ namespace rfk
 			*
 			*	@return The found nested struct if any, else nullptr.
 			*/
-			Struct const*						getNestedStruct(std::string const&	structName,
+			Struct const*						getNestedStruct(std::string			structName,
 																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
 
 			/**
@@ -130,7 +130,7 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			Class const*						getNestedClass(std::string const&	className,
+			Class const*						getNestedClass(std::string			className,
 																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
 
 			/**
@@ -139,8 +139,8 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			Enum const*							getNestedEnum(std::string const&	enumName,
-															  EAccessSpecifier		access = EAccessSpecifier::Undefined)			const	noexcept;
+			Enum const*							getNestedEnum(std::string		enumName,
+															  EAccessSpecifier	access = EAccessSpecifier::Undefined)				const	noexcept;
 
 			/**
 			*	@param fieldName Name of the field to retrieve.
@@ -154,9 +154,9 @@ namespace rfk
 			*	@return The first field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			Field const*						getField(std::string const&	fieldName,
-														 EFieldFlags		minFlags				= EFieldFlags::Default,
-														 bool				shouldInspectInherited	= false)						const	noexcept;
+			Field const*						getField(std::string	fieldName,
+														 EFieldFlags	minFlags				= EFieldFlags::Default,
+														 bool			shouldInspectInherited	= false)							const	noexcept;
 
 			/**
 			*	@param fieldName Name of the fields to retrieve.
@@ -169,9 +169,9 @@ namespace rfk
 			*
 			*	@return A vector of all fields named fieldName fulfilling all requirements.
 			*/
-			std::vector<Field const*>			getFields(std::string const&	fieldName,
-														 EFieldFlags			minFlags				= EFieldFlags::Default,
-														 bool					shouldInspectInherited	= false)					const	noexcept;
+			std::vector<Field const*>			getFields(std::string	fieldName,
+														 EFieldFlags	minFlags				= EFieldFlags::Default,
+														 bool			shouldInspectInherited	= false)							const	noexcept;
 
 			/**
 			*	@param fieldName Name of the static field to retrieve.
@@ -186,9 +186,9 @@ namespace rfk
 			*	@return The first static field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			StaticField const*					getStaticField(std::string const&	fieldName,
-															   EFieldFlags			minFlags				= EFieldFlags::Default,
-															   bool					shouldInspectInherited	= false)				const	noexcept;
+			StaticField const*					getStaticField(std::string	fieldName,
+															   EFieldFlags	minFlags				= EFieldFlags::Default,
+															   bool			shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	@param fieldName Name of the static fields to retrieve.
@@ -202,9 +202,9 @@ namespace rfk
 			*
 			*	@return A vector of all static fields named fieldName fulfilling all requirements.
 			*/
-			std::vector<StaticField const*>		getStaticFields(std::string const&	fieldName,
-															   EFieldFlags			minFlags				= EFieldFlags::Default,
-															   bool					shouldInspectInherited	= false)				const	noexcept;
+			std::vector<StaticField const*>		getStaticFields(std::string	fieldName,
+															   EFieldFlags	minFlags				= EFieldFlags::Default,
+															   bool			shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	\tparam MethodSignature Signature (prototype) of the method to look for.
@@ -305,7 +305,7 @@ namespace rfk
 			*
 			*	@return All static methods named methodName fulfilling all requirements. 
 			*/
-			std::vector<StaticMethod const*>	getStaticMethods(std::string const& methodName,
+			std::vector<StaticMethod const*>	getStaticMethods(std::string const&	methodName,
 																 EMethodFlags		minFlags				= EMethodFlags::Default,
 																 bool				shouldInspectParents	= false)				const	noexcept;
 

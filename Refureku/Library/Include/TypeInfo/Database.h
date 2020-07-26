@@ -95,7 +95,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			static Entity const*				getEntity(uint64 id)				noexcept;
+			static Entity const*				getEntity(uint64 id)							noexcept;
 
 			/**
 			*	@brief Retrieve an entity by name.
@@ -104,15 +104,14 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			//TODO: Add EntityFlags
 			static Entity const*				getEntity(std::string const& entityName)		noexcept;
 
 			/**
-			*	@brief Retrieve a struct by name.
+			*	@brief Retrieve a namespace by name.
 			*
-			*	@param structName The name of the struct.
+			*	@param namespaceName The name of the namespace.
 			*
-			*	@return A constant pointer to the queried struct if it exists, else nullptr.
+			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
 			*/
 			static Namespace const*				getNamespace(std::string const& namespaceName)	noexcept;
 

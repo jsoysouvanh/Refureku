@@ -15,6 +15,11 @@
 
 namespace rfk
 {
+	//Forward declarations
+	class Struct;
+	class Class;
+	class Enum;
+
 	class Namespace final : public Entity
 	{
 		public:
@@ -29,6 +34,40 @@ namespace rfk
 			Namespace(Namespace const&)				= delete;
 			Namespace(Namespace&&)					= default;
 			~Namespace()							= default;
+
+			/**
+			*	@param structName Name of the nested namespace to look for.
+			*
+			*	@return The found nested namespace if it exists, else nullptr.
+			*/
+			Namespace const*					getNestedNamespace(std::string namespaceName)								const	noexcept;
+
+			/**
+			*	@param structName	Name of the nested struct to look for.
+			*	@param access		Access specifier of the nested struct in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested struct if it exists, else nullptr.
+			*/
+			Struct const*						getNestedStruct(std::string			structName,
+																EAccessSpecifier	access = EAccessSpecifier::Undefined)	const	noexcept;
+
+			/**
+			*	@param className	Name of the nested class to look for.
+			*	@param access		Access specifier of the nested class in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if it exists, else nullptr.
+			*/
+			Class const*						getNestedClass(std::string		className,
+															   EAccessSpecifier	access = EAccessSpecifier::Undefined)		const	noexcept;
+
+			/**
+			*	@param enumName	Name of the nested enum to look for.
+			*	@param access	Access specifier of the nested enum in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if it exists, else nullptr.
+			*/
+			Enum const*							getNestedEnum(std::string		enumName,
+															  EAccessSpecifier	access = EAccessSpecifier::Undefined)		const	noexcept;
 
 			Namespace& operator=(Namespace const&)	= delete;
 			Namespace& operator=(Namespace&&)		= default;

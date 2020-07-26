@@ -107,7 +107,7 @@ void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(N
 	}
 }
 
-void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment const* fragment) noexcept
+void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment const* /* fragment */) noexcept
 {
 	//TODO
 }

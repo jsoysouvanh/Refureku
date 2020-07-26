@@ -30,25 +30,23 @@ namespace rfk
 			~Enum()													= default;
 
 			/**
-			*	@return the EnumValue corresponding to the provided name if any, else nullptr
+			*	@return The EnumValue corresponding to the provided name if any, else nullptr
 			*/
-			inline EnumValue const*					getEnumValue(std::string enumValueName)	const noexcept;
+			EnumValue const*					getEnumValue(std::string enumValueName)	const noexcept;
 			
 			/**
-			*	@return the first found EnumValue corresponding to the provided value if any, else nullptr
+			*	@return The first found EnumValue equals to the provided value if any, else nullptr
 			*/
-			inline EnumValue const*					getEnumValue(int64 value)				const noexcept;
+			EnumValue const*					getEnumValue(int64 value)				const noexcept;
 
 			/**
-			*	@return all the EnumValues corresponding to the provided value
+			*	@return All the EnumValues equal to the provided value
 			*/
-			inline std::vector<EnumValue const*>	getEnumValues(int64 value)				const noexcept;
+			std::vector<EnumValue const*>	getEnumValues(int64 value)					const noexcept;
 
 			Enum& operator=(Enum const&)	= delete;
 			Enum& operator=(Enum&&)			= default;
 	};
-
-	#include "TypeInfo/Archetypes/Enum.inl"
 
 	/** Base implementation of getEnum, specialized for each reflected enum */
 	template <typename T, typename = std::enable_if_t<std::is_enum_v<T>>>

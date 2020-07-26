@@ -9,25 +9,27 @@ Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint6
 {
 }
 
-Struct const* Struct::getNestedStruct(std::string const& structName, EAccessSpecifier access) const noexcept
+Struct const* Struct::getNestedStruct(std::string structName, EAccessSpecifier access) const noexcept
 {
-	Archetype toFind((std::string(structName)));
+	//Use an Entity instead of a Struct to avoid containers initialization
+	Entity searchingStruct(std::move(structName), 0u);
 
-	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
-	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(&toFind);
+	//We know the hash method only uses the name inherited from Entity so cast is fine
+	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingStruct));
 
 	return (it != nestedArchetypes.cend() &&
 			(*it)->category == ECategory::Struct &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
-			reinterpret_cast<Struct const*>(*it) : nullptr;
+				reinterpret_cast<Struct const*>(*it) : nullptr;
 }
 
-Class const* Struct::getNestedClass(std::string const& className, EAccessSpecifier access) const noexcept
+Class const* Struct::getNestedClass(std::string className, EAccessSpecifier access) const noexcept
 {
-	Archetype toFind((std::string(className)));
+	//Use an Entity instead of a Class to avoid containers initialization
+	Entity searchingClass(std::move(className), 0u);
 
-	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
-	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(&toFind);
+	//We know the hash method only uses the name inherited from Entity so cast is fine
+	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingClass));
 
 	return (it != nestedArchetypes.cend() &&
 			(*it)->category == ECategory::Class &&
@@ -35,22 +37,24 @@ Class const* Struct::getNestedClass(std::string const& className, EAccessSpecifi
 				reinterpret_cast<Class const*>(*it) : nullptr;
 }
 
-Enum const* Struct::getNestedEnum(std::string const& enumName, EAccessSpecifier access) const noexcept
+Enum const* Struct::getNestedEnum(std::string enumName, EAccessSpecifier access) const noexcept
 {
-	Archetype toFind((std::string(enumName)));
+	//Use an Entity instead of a Class to avoid containers initialization
+	Entity searchingEnum(std::move(enumName), 0u);
 
-	//TODO: This is awfully unefficient, update container and lookup method to avoid creating a Struct (which is memory heavy)
-	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(&toFind);
+	//We know the hash method only uses the name inherited from Entity so cast is fine
+	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingEnum));
 
 	return (it != nestedArchetypes.cend() &&
 			(*it)->category == ECategory::Enum &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
-		reinterpret_cast<Enum const*>(*it) : nullptr;
+				reinterpret_cast<Enum const*>(*it) : nullptr;
 }
 
-Field const* Struct::getField(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+Field const* Struct::getField(std::string fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	auto range = fields.equal_range(Field(std::string(fieldName)));
+	//Use an Entity instead of a Field to avoid memory / allocation overhead
+	auto range = fields.equal_range(static_cast<Field&&>(Entity(std::move(fieldName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -71,11 +75,12 @@ Field const* Struct::getField(std::string const& fieldName, EFieldFlags minFlags
 	return nullptr;
 }
 
-std::vector<Field const*> Struct::getFields(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+std::vector<Field const*> Struct::getFields(std::string fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	std::vector<Field const*> result;
 
-	auto range = fields.equal_range(Field(std::string(fieldName)));
+	//Use an Entity instead of a Field to avoid memory / allocation overhead
+	auto range = fields.equal_range(static_cast<Field&&>(Entity(std::move(fieldName), 0u)));
 
 	//In case of full match, avoid reallocation
 	result.reserve(std::distance(range.first, range.second));
@@ -99,9 +104,10 @@ std::vector<Field const*> Struct::getFields(std::string const& fieldName, EField
 	return result;
 }
 
-StaticField const* Struct::getStaticField(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+StaticField const* Struct::getStaticField(std::string fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	auto range = staticFields.equal_range(StaticField(std::string(fieldName)));
+	//Use an Entity instead of a StaticField to avoid memory / allocation overhead
+	auto range = staticFields.equal_range(static_cast<StaticField&&>(Entity(std::move(fieldName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -122,11 +128,12 @@ StaticField const* Struct::getStaticField(std::string const& fieldName, EFieldFl
 	return nullptr;
 }
 
-std::vector<StaticField const*> Struct::getStaticFields(std::string const& fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+std::vector<StaticField const*> Struct::getStaticFields(std::string fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	std::vector<StaticField const*> result;
 
-	auto range = staticFields.equal_range(StaticField(std::string(fieldName)));
+	//Use an Entity instead of a StaticField to avoid memory / allocation overhead
+	auto range = staticFields.equal_range(static_cast<StaticField&&>(Entity(std::move(fieldName), 0u)));
 
 	//In case of full match, avoid reallocation
 	result.reserve(std::distance(range.first, range.second));
@@ -152,7 +159,8 @@ std::vector<StaticField const*> Struct::getStaticFields(std::string const& field
 
 Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
-	auto range = methods.equal_range(Method(std::string(methodName)));
+	//Use an Entity instead of a Method to avoid memory / allocation overhead
+	auto range = methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -186,7 +194,8 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMe
 {
 	std::vector<Method const*> result;
 
-	auto range = methods.equal_range(Method(std::string(methodName)));
+	//Use an Entity instead of a Method to avoid memory / allocation overhead
+	auto range = methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -218,7 +227,8 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMe
 
 StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
-	auto range = staticMethods.equal_range(StaticMethod(std::string(methodName)));
+	//Use an Entity instead of a StaticMethod to avoid memory / allocation overhead
+	auto range = staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -252,7 +262,8 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 {
 	std::vector<StaticMethod const*> result;
 
-	auto range = staticMethods.equal_range(StaticMethod(std::string(methodName)));
+	//Use an Entity instead of a StaticMethod to avoid memory / allocation overhead
+	auto range = staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
