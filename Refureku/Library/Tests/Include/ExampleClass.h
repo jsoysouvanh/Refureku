@@ -35,11 +35,6 @@ namespace namespace2 RFKNamespace()
 
 namespace namespace3 RFKNamespace()
 {
-	//namespace namespace3_nested RFKNamespace()
-	//{
-
-	//}
-
 	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
 	{
 
@@ -230,24 +225,3 @@ struct RFKStruct() ExampleStruct
 }; 
 
 File_GENERATED
-
-//namespace rfk::generated
-//{
-//	inline void fillNamespace123([[maybe_unused]] Namespace* np) noexcept;
-//	inline void fillNamespace456([[maybe_unused]] Namespace* np) noexcept;
-//
-//	inline rfk::NamespaceRegisterer namespaceRegisterer123 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
-//	inline rfk::NamespaceRegisterer namespaceRegisterer1234 = rfk::NamespaceRegisterer("aa", 123, &fillNamespace123);
-//
-//	inline void fillNamespace123([[maybe_unused]] Namespace* np) noexcept
-//	{
-//		np->nestedNamespaces.emplace(namespaceRegisterer123.getNamespaceInstance());
-//
-//		//np->nestedArchetypes.emplace();
-//	}
-//
-//	inline void fillNamespace456([[maybe_unused]] Namespace* np) noexcept
-//	{
-//
-//	}
-//}

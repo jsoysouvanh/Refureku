@@ -43,8 +43,10 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsing
 	//Always call base class
 	kodgen::FileGenerator::writeHeader(file, parsingResult);
 
-	file.writeLines("#include \"TypeInfo/Namespace.h\"",
-					"#include \"TypeInfo/NamespaceRegisterer.h\"",
+	file.writeLines("#include \"TypeInfo/Namespaces/Namespace.h\"",
+					"#include \"TypeInfo/Namespaces/NamespaceFragmentRegisterer.h\"",
+					"#include \"TypeInfo/Archetypes/Class.h\"",
+					"#include \"TypeInfo/Archetypes/Enum.h\"",
 					"#include \"TypeInfo/Archetypes/ArchetypeRegisterer.h\"",
 					"#include \"Misc/DisableWarningMacros.h\"",
 					"\n");
@@ -89,17 +91,16 @@ void FileGenerator::generateEndFileMacro(kodgen::GeneratedFile& file) const noex
 
 	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)
 	{
-		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(enumInfo->id)) + "_GENERATED\t\\");
+		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(enumInfo->id)) + "u_GENERATED\t\\");
 	}
 
 	for (kodgen::StructClassInfo const* classInfo : _generatedClasses)
 	{
-		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(classInfo->id)) + "_GetTypeDefinition\t\\");
+		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(classInfo->id)) + "u_GetTypeDefinition\t\\");
 	}
 
-	//Iterate backward here to have deepest namespaces register first. It is necessary to make sure nested namespaces can be referenced safely
-	for (decltype(_generatedNamespaces)::const_reverse_iterator it = _generatedNamespaces.crbegin(); it != _generatedNamespaces.crend(); it++)
+	for (kodgen::NamespaceInfo const* namespaceInfo : _generatedNamespaces)
 	{
-		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher((*it)->id)) + "_GENERATED\t\\");
+		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(namespaceInfo->id)) + "u_GENERATED\t\\");
 	}
 }

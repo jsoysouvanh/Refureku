@@ -11,7 +11,7 @@
 #include <unordered_set>
 #include <type_traits>
 
-#include "TypeInfo/Namespace.h"
+#include "TypeInfo/Namespaces/Namespace.h"
 #include "TypeInfo/Archetypes/Class.h"
 #include "TypeInfo/Archetypes/Enum.h"
 #include "Misc/FundamentalTypes.h"
@@ -20,7 +20,7 @@ namespace rfk
 {
 	class Database
 	{
-		friend class NamespaceRegisterer;
+		friend class NamespaceFragmentRegisterer;
 		friend class ArchetypeRegisterer;
 
 		private:
@@ -34,46 +34,50 @@ namespace rfk
 			static	EntitiesByName	_fileLevelEntitiesByName;
 
 			/**
-			*	@brief Register a file level entity to the database.
+			*	@brief Register a file level entity to the database (add it to both _entitiesById & _fileLevelEntitiesByName).
 			*	
-			*	@param entity The entity to register.
+			*	@param entity						The entity to register.
+			*	@param shouldRegisterSubEntities	Should sub entities be registered by id recursively?
 			*/
-			static void	registerFileLevelEntity(Entity const& entity)	noexcept;
+			static void	registerFileLevelEntity(Entity const&	entity,
+												bool			shouldRegisterSubEntities)	noexcept;
 
 			/**
-			*	@brief Register all nested entities to the _entitiesById map.
+			*	@brief Register an entity to the database (add it to _entitiesById).
 			*	
-			*	@param entity The parent entity.
+			*	@param entity						The entity to register.
+			*	@param shouldRegisterSubEntities	Should sub entities be registered by id recursively?
 			*/
-			static void	registerSubEntities(Entity const& entity)		noexcept;
-			
+			static void registerEntityById(Entity const&	entity,
+										   bool				shouldRegisterSubEntities)		noexcept;
+
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
 			*	@param archetype The parent archetype.
 			*/
-			static void registerSubEntities(Archetype const& archetype)	noexcept;
+			static void registerSubEntities(Archetype const& archetype)						noexcept;
 			
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
 			*	@param n The parent namespace.
 			*/
-			static void registerSubEntities(Namespace const& n)			noexcept;
+			static void registerSubEntities(Namespace const& n)								noexcept;
 			
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
 			*	@param s The parent struct.
 			*/
-			static void registerSubEntities(Struct const& s)			noexcept;
+			static void registerSubEntities(Struct const& s)								noexcept;
 			
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
 			*	@param e The parent enum.
 			*/
-			static void registerSubEntities(Enum const& e)				noexcept;
+			static void registerSubEntities(Enum const& e)									noexcept;
 
 		public:
 			Database()					= delete;
@@ -100,6 +104,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
+			//TODO: Add EntityFlags
 			static Entity const*				getEntity(std::string const& entityName)		noexcept;
 
 			/**

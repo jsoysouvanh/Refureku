@@ -1,4 +1,4 @@
-#include "TypeInfo/Namespace.h"
+#include "TypeInfo/Namespaces/Namespace.h"
 
 using namespace rfk;
 

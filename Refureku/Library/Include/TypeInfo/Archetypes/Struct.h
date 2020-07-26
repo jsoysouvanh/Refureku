@@ -22,10 +22,8 @@
 
 namespace rfk
 {
-	//Forward declaration
+	//Forward declarations
 	class Class;
-
-	//Forward declaration
 	class Enum;
 
 	class Struct : public Archetype

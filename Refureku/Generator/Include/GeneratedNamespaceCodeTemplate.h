@@ -18,15 +18,15 @@ namespace rfk
 	{
 		private:
 			/**
-			*	@brief Generate the macro which declares the fillNamespace function for the provided namespace.
+			*	@brief Generate the macro which declares the getNamespaceFragment function for the provided namespace.
 			*	
 			*	@param generatedFile	File to write into.
 			*	@param namespaceInfo	Structure containing namespace info.
 			*
 			*	@return The name of the generated macro.
 			*/
-			std::string generateFillNamespaceDeclarationMacro(kodgen::GeneratedFile&		generatedFile,
-															  kodgen::NamespaceInfo const&	namespaceInfo)		const	noexcept;
+			std::string generateGetNamespaceFragmentDeclarationMacro(kodgen::GeneratedFile&			generatedFile,
+																	 kodgen::NamespaceInfo const&	namespaceInfo)		const	noexcept;
 
 			/**
 			*	@brief Generate the macro which defines the fillNamespace function for the provided namespace.
@@ -36,8 +36,8 @@ namespace rfk
 			*
 			*	@return The name of the generated macro.
 			*/
-			std::string generateFillNamespaceDefinitionMacro(kodgen::GeneratedFile&			generatedFile,
-															 kodgen::NamespaceInfo const&	namespaceInfo)		const	noexcept;
+			std::string generateGetNamespaceFragmentDefinitionMacro(kodgen::GeneratedFile&			generatedFile,
+																	kodgen::NamespaceInfo const&	namespaceInfo)		const	noexcept;
 
 			/**
 			*	@brief Generate the macro which defines the NamespaceRegisterer
@@ -48,27 +48,27 @@ namespace rfk
 			*	@return The name of the generated macro.
 			*/
 			std::string generateRegistrationMacro(kodgen::GeneratedFile&		generatedFile,
-												  kodgen::NamespaceInfo const&	namespaceInfo)		const	noexcept;
+												  kodgen::NamespaceInfo const&	namespaceInfo)							const	noexcept;
 
 			/**
-			*	@brief Get the name of the generated fillNamespace method for the currently processing namespace.
+			*	@brief Get the name of the generated getNamespaceFragment method for the currently processing namespace.
 			*
 			*	@param generatedFile	File to write into.
 			*
-			*	@return The name of the fillNamespace function for the current namespace.
+			*	@return The name of the getNamespaceFragment function for the current namespace.
 			*/
-			std::string getFillNamespaceFunctionName(kodgen::GeneratedFile const& generatedFile)	const	noexcept;
+			std::string getGetNamespaceFragmentFunctionName(kodgen::GeneratedFile const& generatedFile)					const	noexcept;
 
 			/**
-			*	@brief Get the name of the NamespaceRegisterer variable generated for the provided namespace.
+			*	@brief Get the name of the NamespaceFragmentRegisterer variable generated for the provided namespace.
 			*
 			*	@param generatedFile	File to write into.
 			*	@param namespaceInfo	Structure containing namespace info.
 			*
 			*	@return The name of the generated NamespaceRegisterer variable.
 			*/
-			std::string getNamespaceRegistererName(kodgen::GeneratedFile const& generatedFile,
-												   kodgen::NamespaceInfo const&	namespaceInfo)		const	noexcept;
+			std::string getNamespaceFragmentRegistererName(kodgen::GeneratedFile const& generatedFile,
+														   kodgen::NamespaceInfo const&	namespaceInfo)					const	noexcept;
 
 		protected:
 			virtual void generateCode(kodgen::GeneratedFile&	generatedFile,

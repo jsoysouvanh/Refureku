@@ -82,7 +82,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"	{",
 								"		static bool			initialized = false;",
 								"		static " + returnedType + "	type(\"" + info.name + "\", "
-																		+ getCurrentEntityId() + "u, "
+																		+ getCurrentEntityId() + ", "
 																		+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
 																		+ "sizeof(" + info.name + "));",
 								"	",
@@ -436,7 +436,7 @@ kodgen::uint16 GeneratedClassCodeTemplate::computeFieldFlags(kodgen::FieldInfo c
 	return result;
 }
 
-std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& /* info */) const noexcept
 {
 	std::string macroName = internalPrefix + getCurrentEntityId() + "_DefaultInstantiateDefinition";
 

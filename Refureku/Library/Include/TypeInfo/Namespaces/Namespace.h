@@ -10,8 +10,8 @@
 #include <unordered_set>
 
 #include "TypeInfo/Entity.h"
-#include "TypeInfo/Archetypes/Class.h"
-#include "TypeInfo/Archetypes/Enum.h"
+#include "TypeInfo/Namespaces/NamespaceFragment.h"
+#include "TypeInfo/Archetypes/Archetype.h"
 
 namespace rfk
 {

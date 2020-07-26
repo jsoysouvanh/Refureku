@@ -28,6 +28,9 @@ namespace rfk
 				/** The entity is a namespace, it can safely be cast to Namespace type. */
 				Namespace = 0u,
 
+				/** The entity is a namespace fragment, it can safely be cast to NamespaceFragment type. */
+				NamespaceFragment,
+
 				/**
 				*	The entity is an archetype, it can safely be cast to Archetype type.
 				*	More specific info can be retrieved from the entity by checking Archetype::category variable.
