@@ -292,8 +292,8 @@ namespace kodgen
 			std::unordered_set<std::string>			supportedExtensions;
 
 			FileGenerator()						noexcept;
-			FileGenerator(FileGenerator const&)	= delete;
-			FileGenerator(FileGenerator&&)		= delete;
+			FileGenerator(FileGenerator const&)	= default;
+			FileGenerator(FileGenerator&&)		= default;
 			virtual ~FileGenerator()			noexcept;
 
 			/**

@@ -61,7 +61,6 @@ void Database::registerEntityById(Entity const& entity, bool shouldRegisterSubEn
 			case Entity::EKind::Method:
 				[[fallthrough]];
 			case Entity::EKind::EnumValue:
-				[[fallthrough]];
 				//No sub entity to register
 				break;
 

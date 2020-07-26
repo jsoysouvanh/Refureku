@@ -31,7 +31,7 @@ namespace kodgen
 			ILogger()				= default;
 			ILogger(ILogger const&)	= default;
 			ILogger(ILogger&&)		= default;
-			~ILogger()				= default;
+			virtual ~ILogger()		= default;
 
 			/**
 			*	@brief Log a message.
