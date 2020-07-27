@@ -43,13 +43,13 @@ namespace rfk
 												bool			shouldRegisterSubEntities)	noexcept;
 
 			/**
-			*	@brief Register an entity to the database (add it to _entitiesById).
+			*	@brief Register an entity to the database.
 			*	
 			*	@param entity						The entity to register.
 			*	@param shouldRegisterSubEntities	Should sub entities be registered by id recursively?
 			*/
-			static void registerEntityById(Entity const&	entity,
-										   bool				shouldRegisterSubEntities)		noexcept;
+			static void registerEntity(Entity const&	entity,
+									   bool				shouldRegisterSubEntities)			noexcept;
 
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
@@ -79,6 +79,12 @@ namespace rfk
 			*/
 			static void registerSubEntities(Enum const& e)									noexcept;
 
+			/**
+			*	TODO
+			*/
+			//static Namespace const* getNamespace(std::string	namespaceName,
+			//									 bool			allowNestedNamespaces)		noexcept;
+
 		public:
 			Database()					= delete;
 			Database(Database const&)	= delete;
@@ -95,7 +101,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			static Entity const*				getEntity(uint64 id)							noexcept;
+			static Entity const*				getEntity(uint64 id)					noexcept;
 
 			/**
 			*	@brief Retrieve an entity by name.
@@ -104,7 +110,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			static Entity const*				getEntity(std::string const& entityName)		noexcept;
+			static Entity const*				getEntity(std::string entityName)		noexcept;
 
 			/**
 			*	@brief Retrieve a namespace by name.
@@ -113,7 +119,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
 			*/
-			static Namespace const*				getNamespace(std::string const& namespaceName)	noexcept;
+			static Namespace const*				getNamespace(std::string namespaceName)	noexcept;
 
 			/**
 			*	@brief Retrieve a struct by name.
@@ -122,7 +128,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			static Struct const*				getStruct(std::string const& structName)		noexcept;
+			static Struct const*				getStruct(std::string structName)		noexcept;
 
 			/**
 			*	@brief Retrieve a class by name.
@@ -131,7 +137,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried class if it exists, else nullptr.
 			*/
-			static Class const*					getClass(std::string const& className)			noexcept;
+			static Class const*					getClass(std::string className)			noexcept;
 
 			/**
 			*	@brief Retrieve an enum by name.
@@ -140,21 +146,21 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
-			static Enum const*					getEnum(std::string const& enumName)			noexcept;
+			static Enum const*					getEnum(std::string enumName)			noexcept;
 
 			/**
 			*	@brief Clear the whole database of any registered entity
 			*/
-			static void							clear()											noexcept;
+			static void							clear()									noexcept;
 
 			/**
 			*	@return The unordered_map containing all registered entities sorted by id.
 			*/
-			static EntitiesById const&			getEntitiesById()								noexcept;
+			static EntitiesById const&			getEntitiesById()						noexcept;
 
 			/**
 			*	@return The unordered_map containing all registered entities at file level, hashed by name.
 			*/
-			static EntitiesByName	const&		getFileLevelEntities()							noexcept;
+			static EntitiesByName	const&		getFileLevelEntities()					noexcept;
 	};
 }

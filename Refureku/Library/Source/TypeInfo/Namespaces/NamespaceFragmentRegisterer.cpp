@@ -10,7 +10,7 @@ using namespace rfk;
 
 NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, uint64 id, NamespaceFragment const* namespaceFragment, bool isFileLevelNamespace) noexcept
 {
-	//Try to get an existing namespace
+	//Try to get the namespace this fragment belongs to
 	Entity const* foundNamespace = Database::getEntity(id);
 
 	if (foundNamespace == nullptr)
@@ -54,13 +54,16 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 
 	for (Entity const* entity : fragment->nestedEntities)
 	{
+		//Setup outer entity
+		const_cast<Entity*>(entity)->outerEntity = _namespaceInstance;	//Don't tell anyone I actually wrote const_cast...
+
 		switch (entity->kind)
 		{
 			case Entity::EKind::Namespace:
 				_namespaceInstance->nestedNamespaces.emplace(reinterpret_cast<Namespace const*>(entity));
 
 				//Register the nested namespace but don't register sub entities
-				Database::registerEntityById(*entity, false);
+				Database::registerEntity(*entity, false);
 
 				break;
 
@@ -68,12 +71,10 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 				_namespaceInstance->nestedArchetypes.emplace(reinterpret_cast<Archetype const*>(entity));
 				
 				//Register the archetype and its sub entities to the database.
-				Database::registerEntityById(*entity, true);
+				Database::registerEntity(*entity, true);
 
 				break;
 
-			case Entity::EKind::NamespaceFragment:
-				[[fallthrough]];
 			case Entity::EKind::EnumValue:
 				[[fallthrough]];
 			case Entity::EKind::Field:

@@ -62,7 +62,7 @@ Field const* Struct::getField(std::string fieldName, EFieldFlags minFlags, bool 
 		*	fields variable contains both this struct fields and inherited fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->introducedBy == this)
+		if (shouldInspectInherited || it->outerEntity == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)
@@ -91,7 +91,7 @@ std::vector<Field const*> Struct::getFields(std::string fieldName, EFieldFlags m
 		*	fields variable contains both this struct fields and inherited fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->introducedBy == this)
+		if (shouldInspectInherited || it->outerEntity == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)
@@ -115,7 +115,7 @@ StaticField const* Struct::getStaticField(std::string fieldName, EFieldFlags min
 		*	staticFields variable contains both this struct static fields and inherited static fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->introducedBy == this)
+		if (shouldInspectInherited || it->outerEntity == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)
@@ -144,7 +144,7 @@ std::vector<StaticField const*> Struct::getStaticFields(std::string fieldName, E
 		*	staticFields variable contains both this struct static fields and inherited static fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->introducedBy == this)
+		if (shouldInspectInherited || it->outerEntity == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)

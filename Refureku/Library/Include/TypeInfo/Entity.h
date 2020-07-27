@@ -27,10 +27,7 @@ namespace rfk
 			{
 				/** The entity is a namespace, it can safely be cast to Namespace type. */
 				Namespace = 0u,
-
-				/** The entity is a namespace fragment, it can safely be cast to NamespaceFragment type. */
-				NamespaceFragment,
-
+				
 				/**
 				*	The entity is an archetype, it can safely be cast to Archetype type.
 				*	More specific info can be retrieved from the entity by checking Archetype::category variable.
@@ -129,6 +126,12 @@ namespace rfk
 
 			/** Kind of this entity */
 			EKind			kind		= EKind::Undefined;
+
+			/**
+			*	The outer entity is the entity in which this entity has been declared.
+			*	If this entity is declared at file level, outerEntity will be nullptr.
+			*/
+			Entity const*	outerEntity	= nullptr;
 
 			/** Properties contained by this entity */
 			PropertyGroup	properties;

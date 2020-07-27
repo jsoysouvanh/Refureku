@@ -7,6 +7,20 @@
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
+void outerEntities()
+{
+	TEST(rfk::Database::getNamespace("namespace3")->outerEntity == nullptr);
+	TEST(rfk::Database::getNamespace("namespace4")->getNestedNamespace("namespace4_nested")->outerEntity == rfk::Database::getNamespace("namespace4"));
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("AnotherClassInNamespace3")->outerEntity == rfk::Database::getNamespace("namespace3"));
+	TEST(namespace3::ExampleClass::staticGetArchetype().getNestedStruct("NestedExampleStruct")->outerEntity == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
+	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->outerEntity == rfk::Database::getNamespace("test1")->getNestedNamespace("test2"));
+	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->outerEntity == rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace"));
+	TEST(ExampleStruct::staticGetArchetype().getStaticField("staticInt")->outerEntity == &ExampleStruct::staticGetArchetype());
+	TEST(ExampleStruct::staticGetArchetype().getField("i")->outerEntity == &ExampleStruct::staticGetArchetype());
+	TEST(ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->outerEntity == &ExampleStruct::staticGetArchetype());
+	TEST(ExampleStruct::staticGetArchetype().getMethod("method")->outerEntity == &ExampleStruct::staticGetArchetype());
+}
+
 void namespaces()
 {
 	TEST(rfk::Database::getNamespace("namespace3") != nullptr);
@@ -404,6 +418,7 @@ void entityIdRegistration()
 
 int main()
 {
+	outerEntities();
 	namespaces();
 	classes();
 	structs();

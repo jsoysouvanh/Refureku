@@ -20,6 +20,7 @@ namespace rfk
 	class StaticField : public FieldBase
 	{
 		private:
+			/** Address of the field data. */
 			void*	dataAddress	= nullptr;
 
 		public:
@@ -28,7 +29,6 @@ namespace rfk
 						uint64				id				= 0u,
 						EFieldFlags			flags			= EFieldFlags::Static,
 						Struct const*		ownerStruct		= nullptr,
-						Struct const*		introducedBy	= nullptr,
 						void*				ptrToData		= nullptr)						noexcept;
 			StaticField(StaticField const&)													= default;
 			StaticField(StaticField&&)														= default;

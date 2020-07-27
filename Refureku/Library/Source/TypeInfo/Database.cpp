@@ -34,13 +34,13 @@ Database::EntitiesByName	Database::_fileLevelEntitiesByName;
 void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	//Register by id
-	registerEntityById(entity, shouldRegisterSubEntities);
+	registerEntity(entity, shouldRegisterSubEntities);
 
 	//Register by name
 	_fileLevelEntitiesByName.emplace(&entity);
 }
 
-void Database::registerEntityById(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	_entitiesById.emplace(&entity);
 
@@ -78,13 +78,13 @@ void Database::registerSubEntities(Namespace const& n) noexcept
 	//Add nested namespaces
 	for (Namespace const* nn : n.nestedNamespaces)
 	{
-		registerEntityById(*nn, true);
+		registerEntity(*nn, true);
 	}
 
 	//Add nested archetypes
 	for (Archetype const* na : n.nestedArchetypes)
 	{
-		registerEntityById(*na, true);
+		registerEntity(*na, true);
 	}
 }
 
@@ -121,29 +121,29 @@ void Database::registerSubEntities(Struct const& s) noexcept
 	//Add nested archetypes
 	for (Archetype const* nestedArchetype : s.nestedArchetypes)
 	{
-		registerEntityById(*nestedArchetype, true);
+		registerEntity(*nestedArchetype, true);
 	}
 
 	//Add fields
 	for (Entity const& field : s.fields)
 	{
-		registerEntityById(field, false);
+		registerEntity(field, false);
 	}
 
 	for (Entity const& staticField : s.staticFields)
 	{
-		registerEntityById(staticField, false);
+		registerEntity(staticField, false);
 	}
 
 	//Add methods
 	for (Entity const& method : s.methods)
 	{
-		registerEntityById(method, false);
+		registerEntity(method, false);
 	}
 
 	for (Entity const& staticMethod : s.staticMethods)
 	{
-		registerEntityById(staticMethod, false);
+		registerEntity(staticMethod, false);
 	}
 }
 
@@ -152,7 +152,7 @@ void Database::registerSubEntities(Enum const& e) noexcept
 	//Enum values
 	for (Entity const& enumValue : e.values)
 	{
-		registerEntityById(enumValue, false);
+		registerEntity(enumValue, false);
 	}
 }
 
@@ -165,45 +165,71 @@ Entity const* Database::getEntity(uint64 id) noexcept
 	return (it != _entitiesById.cend()) ? *it : nullptr;
 }
 
-Entity const* Database::getEntity(std::string const& entityName) noexcept
+Entity const* Database::getEntity(std::string entityName) noexcept
 {
-	Entity searching(std::string(entityName), 0u);
+	Entity searching(std::move(entityName), 0u);
 
 	Database::EntitiesByName::const_iterator it = _fileLevelEntitiesByName.find(&searching);
 
 	return (it != _fileLevelEntitiesByName.cend()) ? *it : nullptr;
 }
 
-Namespace const* Database::getNamespace(std::string const& namespaceName) noexcept
+Namespace const* Database::getNamespace(std::string namespaceName) noexcept
 {
-	Entity const* entity = getEntity(std::string(namespaceName));
+	Entity const* entity = getEntity(std::move(namespaceName));
 
 	return (entity != nullptr && entity->kind == Entity::EKind::Namespace) ?
 			reinterpret_cast<Namespace const*>(entity) :
 			nullptr;
 }
 
-Struct const* Database::getStruct(std::string const& structName) noexcept
+//Namespace const* Database::getNamespace(std::string	namespaceName, bool allowNestedNamespaces) noexcept
+//{
+//	//Entity const* entity = getEntity(std::move(namespaceName));
+//
+//	//if (allowNestedNamespaces &&
+//	//	(entity == nullptr || entity->kind != Entity::EKind::Namespace))
+//	//{
+//	//	//Look in nested namespaces
+//	//	for (Entity const* entity : _fileLevelEntitiesByName)	//Might consider making a vector containing only file level namespaces to avoid iteration over all file entities (potentially a lot of classes)
+//	//	{
+//	//		if (entity->kind == Entity::EKind::Namespace)
+//	//		{
+//
+//	//		}
+//	//	}
+//	//}
+//	//else
+//	//{
+//	//	return (entity != nullptr && entity->kind == Entity::EKind::Namespace) ?
+//	//			reinterpret_cast<Namespace const*>(entity) :
+//	//			nullptr;
+//	//}
+//
+//	return nullptr;
+//}
+
+Struct const* Database::getStruct(std::string structName) noexcept
 {
-	Entity const* entity = getEntity(std::string(structName));
+	Entity const* entity = getEntity(std::move(structName));
 
 	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Struct) ?
 			reinterpret_cast<Struct const*>(entity) :
 			nullptr;
 }
 
-Class const* Database::getClass(std::string const& className) noexcept
+Class const* Database::getClass(std::string className) noexcept
 {
-	Entity const* entity = getEntity(std::string(className));
+	Entity const* entity = getEntity(std::move(className));
 
 	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Class) ?
 			reinterpret_cast<Class const*>(entity) :
 			nullptr;
 }
 
-Enum const* Database::getEnum(std::string const& enumName) noexcept
+Enum const* Database::getEnum(std::string enumName) noexcept
 {
-	Entity const* entity = getEntity(std::string(enumName));
+	Entity const* entity = getEntity(std::move(enumName));
 
 	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Enum) ?
 			reinterpret_cast<Enum const*>(entity) :

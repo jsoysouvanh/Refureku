@@ -4,11 +4,10 @@
 
 using namespace rfk;
 
-FieldBase::FieldBase(std::string&& name, uint64 id, EFieldFlags flags, Struct const* ownerStruct, Struct const* introducedBy) noexcept:
+FieldBase::FieldBase(std::string&& name, uint64 id, EFieldFlags flags, Struct const* ownerStruct) noexcept:
 	Entity(std::forward<std::string>(name), id, EKind::Field),
 	flags{flags},
-	ownerStruct{ownerStruct},
-	introducedBy{introducedBy}
+	ownerStruct{ownerStruct}
 {
 }
 

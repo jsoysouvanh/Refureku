@@ -3,6 +3,6 @@
 using namespace rfk;
 
 NamespaceFragment::NamespaceFragment(std::string&& newName, uint64 newId) noexcept:
-	Entity(std::forward<std::string>(newName), newId, Entity::EKind::NamespaceFragment)
+	Entity(std::forward<std::string>(newName), newId, Entity::EKind::Undefined)	//Fragments are used internally only, so it's fine to let it as undefined
 {
 }

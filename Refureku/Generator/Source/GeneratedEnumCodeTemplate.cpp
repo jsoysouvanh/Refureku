@@ -53,19 +53,21 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 	if (!enumInfo.enumValues.empty())
 	{
 		generatedFile.writeLines("			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>::iterator	valueIt;\t\\",
-								 "			[[maybe_unused]] rfk::EnumValue*												ev;\t\\",
+								 "			rfk::EnumValue*																	ev;\t\\",
 								 "			type.values.reserve(" + std::to_string(enumInfo.enumValues.size()) + ");\t\\");
 
 		for (kodgen::EnumValueInfo const& ev : enumInfo.enumValues)
 		{
 			generatedFile.writeLine("			valueIt = type.values.emplace(\"" + ev.name + "\", " + std::to_string(stringHasher(ev.id)) + "u, " + std::to_string(ev.defaultValue) + "u).first;\t\\");
 
+			generatedFile.writeLines("			ev = const_cast<rfk::EnumValue*>(&*valueIt);\t\\",
+									 "			ev->outerEntity = &type;\t\\");
+
 			//Fill enum value properties
 			properties = fillEntityProperties(ev, "ev->");
 			if (!properties.empty())
 			{
-				generatedFile.writeLines("			ev = const_cast<rfk::EnumValue*>(&*valueIt);\t\\",
-										 "			" + properties + "\t\\");
+				generatedFile.writeLine("			" + properties + "\t\\");
 			}
 		}
 	}

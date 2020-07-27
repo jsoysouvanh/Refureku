@@ -30,7 +30,6 @@ namespace rfk
 				  uint64			id				= 0u,
 				  EFieldFlags		flags			= EFieldFlags::Default,
 				  Struct const*		ownerStruct		= nullptr,
-				  Struct const*		introducedBy	= nullptr,
 				  uint64			memoryOffset	= 0u,
 				  bool				isMutable		= false)						noexcept;
 			Field(Field const&)														= default;

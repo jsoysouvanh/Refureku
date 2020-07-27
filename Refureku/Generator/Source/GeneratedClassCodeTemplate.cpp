@@ -168,6 +168,9 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 		if (!properties.empty())
 			generatedFile.writeLine("	" + properties + "\t\\");
 
+		//Setup the outer entity
+		generatedFile.writeLine("	currMethod->outerEntity = &type;\t\\");
+
 		//Setup return type
 		generatedFile.writeLine("	currMethod->returnType = rfk::Type::getType<" + method.returnType.getName() + ">();\t\\");
 
@@ -257,7 +260,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 			generatedFile.writeLine("		staticFieldsIt = childArchetype->staticFields.emplace(\"" + field.name + "\", " +
 									std::to_string(stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
-									"), childArchetype, &thisArchetype, &" + info.name + "::" + field.name + ");\t\\");
+									"), childArchetype, &" + info.name + "::" + field.name + ");\t\\");
 
 			generatedFile.writeLine("		currField = const_cast<rfk::StaticField*>(&*staticFieldsIt);\t\\");
 		}
@@ -266,7 +269,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
 									std::to_string(stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
-									"), childArchetype, &thisArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
+									"), childArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
 
 			generatedFile.writeLine("		currField = const_cast<rfk::Field*>(&*fieldsIt);\t\\");
 		}
@@ -278,6 +281,9 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 		properties = fillEntityProperties(field, "	currField->");
 		if (!properties.empty())
 			generatedFile.writeLine("	" + properties + "\t\\");
+
+		//Setup the outer entity
+		generatedFile.writeLine("		currField->outerEntity = &thisArchetype;\t\\");
 	}
 
 	if (hasFields)
@@ -339,6 +345,7 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 	{
 		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(&" + nestedStruct->name + "::staticGetArchetype());\t\\");
 		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + ");\t\\");
+		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
 	}
 
 	//Add nested classes
@@ -346,6 +353,7 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 	{
 		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(&" + nestedClass->name + "::staticGetArchetype());\t\\");
 		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + ");\t\\");
+		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
 	}
 
 	//Add nested enums
@@ -353,6 +361,7 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 	{
 		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());\t\\");
 		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + ");\t\\");
+		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
 	}
 
 	generatedFile.writeLine("");

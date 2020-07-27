@@ -23,8 +23,7 @@ namespace rfk
 			FieldBase(std::string&&		name,
 					  uint64			id				= 0u,
 					  EFieldFlags		flags			= EFieldFlags::Default,
-					  Struct const*		ownerStruct		= nullptr,
-					  Struct const*		introducedBy	= nullptr)				noexcept;
+					  Struct const*		ownerStruct		= nullptr)				noexcept;
 			FieldBase(FieldBase const&)											= default;
 			FieldBase(FieldBase&&)												= default;
 
@@ -37,9 +36,6 @@ namespace rfk
 			
 			/** Struct this field belongs to */
 			Struct const*		ownerStruct;
-
-			/** Struct which contains the declaration of this field */
-			Struct const*		introducedBy;
 
 			~FieldBase() = default;
 
