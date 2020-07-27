@@ -68,6 +68,7 @@ void structs()
 	{
 		ExampleStruct::staticGetArchetype().getMethod<void(int, float)>("method")->checkedInvoke(&es, 1, 2.0f);		//This passes
 		ExampleStruct::staticGetArchetype().getMethod<void(int, float)>("method")->checkedInvoke(&es, "a", "aa");	//This throws
+		TEST(false);	//Never reach this line
 	}
 	catch (std::exception const& e)
 	{
@@ -411,13 +412,41 @@ void makeInstance()
 	TEST(namespace3::ExampleClass2::staticGetArchetype().makeInstance<namespace3::ExampleClass2>(42)->i == 42);		//use customInstantiator method
 }
 
-void entityIdRegistration()
+void database()
 {
+	TEST(rfk::Database::getNamespace("namespace4") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace4::namespace4_nested") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace4_nested") == nullptr);
+	TEST(rfk::Database::getNamespace("namespace4::namespace4_nested::namespace4_nested_nested") != nullptr);
+	
+	try
+	{
+		TEST(rfk::Database::getNamespace("namespace4::") != nullptr);
+		TEST(false);	//Should never reach this line
+	}
+	catch (...)
+	{}
 
+	try
+	{
+		TEST(rfk::Database::getNamespace("names:pace4") != nullptr);
+		TEST(false);	//Should never reach this line
+	}
+	catch (...)
+	{}
+
+	try
+	{
+		TEST(rfk::Database::getNamespace("namespace4:") != nullptr);
+		TEST(false);	//Should never reach this line
+	}
+	catch (...)
+	{}
 }
 
 int main()
 {
+	database();
 	outerEntities();
 	namespaces();
 	classes();

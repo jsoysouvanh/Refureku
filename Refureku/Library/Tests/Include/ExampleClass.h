@@ -228,7 +228,10 @@ namespace namespace4 RFKNamespace()
 {
 	namespace namespace4_nested RFKNamespace()
 	{
+		namespace namespace4_nested_nested RFKNamespace()
+		{
 
+		}
 	}
 }
 

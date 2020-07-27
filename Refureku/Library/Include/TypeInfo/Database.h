@@ -101,7 +101,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			static Entity const*				getEntity(uint64 id)					noexcept;
+			static Entity const*			getEntity(uint64 id)					noexcept;
 
 			/**
 			*	@brief Retrieve an entity by name.
@@ -110,16 +110,20 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			static Entity const*				getEntity(std::string entityName)		noexcept;
+			static Entity const*			getEntity(std::string entityName)		noexcept;
 
 			/**
-			*	@brief Retrieve a namespace by name.
+			*	@brief	Retrieve a namespace by name.
+			*			Can search nested namespaces directly using :: separator.
+			*			Example: getNamespace("namespace1::namespace2") will get the namespace2 nested inside namespace1 if it exists.
 			*
 			*	@param namespaceName The name of the namespace.
 			*
 			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
+			*
+			*	@exception BadNamespaceFormat if the provided namespace name has : instead of :: as a separator, or ends with :.
 			*/
-			static Namespace const*				getNamespace(std::string namespaceName)	noexcept;
+			static Namespace const*			getNamespace(std::string namespaceName);
 
 			/**
 			*	@brief Retrieve a struct by name.
@@ -128,7 +132,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			static Struct const*				getStruct(std::string structName)		noexcept;
+			static Struct const*			getStruct(std::string structName)		noexcept;
 
 			/**
 			*	@brief Retrieve a class by name.
@@ -137,7 +141,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried class if it exists, else nullptr.
 			*/
-			static Class const*					getClass(std::string className)			noexcept;
+			static Class const*				getClass(std::string className)			noexcept;
 
 			/**
 			*	@brief Retrieve an enum by name.
@@ -146,21 +150,21 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
-			static Enum const*					getEnum(std::string enumName)			noexcept;
+			static Enum const*				getEnum(std::string enumName)			noexcept;
 
 			/**
 			*	@brief Clear the whole database of any registered entity
 			*/
-			static void							clear()									noexcept;
+			static void						clear()									noexcept;
 
 			/**
 			*	@return The unordered_map containing all registered entities sorted by id.
 			*/
-			static EntitiesById const&			getEntitiesById()						noexcept;
+			static EntitiesById const&		getEntitiesById()						noexcept;
 
 			/**
 			*	@return The unordered_map containing all registered entities at file level, hashed by name.
 			*/
-			static EntitiesByName	const&		getFileLevelEntities()					noexcept;
+			static EntitiesByName const&	getFileLevelEntities()					noexcept;
 	};
 }

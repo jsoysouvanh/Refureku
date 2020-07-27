@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "Exceptions/BadNamespaceFormat.h"
 #include "Misc/DisableWarningMacros.h"
 
 using namespace rfk;
@@ -174,16 +175,45 @@ Entity const* Database::getEntity(std::string entityName) noexcept
 	return (it != _fileLevelEntitiesByName.cend()) ? *it : nullptr;
 }
 
-Namespace const* Database::getNamespace(std::string namespaceName) noexcept
+Namespace const* Database::getNamespace(std::string namespaceName)
 {
-	Entity const* entity = getEntity(std::move(namespaceName));
+	size_t			index	= namespaceName.find_first_of(':');
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Namespace) ?
-			reinterpret_cast<Namespace const*>(entity) :
-			nullptr;
+	//Make sure namespaceName has a valid namespace syntax
+	if (index != std::string::npos && (index == namespaceName.size() - 1 || namespaceName[index + 1] != ':'))
+	{
+		throw BadNamespaceFormat("The provided namespace name is ill formed.");
+	}
+
+	Entity const*	entity	= getEntity(namespaceName.substr(0u, index));
+
+	//Couldn't find first namespace part, abort search
+	if (entity == nullptr || entity->kind != Entity::EKind::Namespace)
+	{
+		return nullptr;
+	}
+
+	Namespace const* result = reinterpret_cast<Namespace const*>(entity);
+
+	while (index != std::string::npos && result != nullptr)
+	{
+		if (namespaceName.size() <= index + 2u ||	//The provided namespace name either ends with : or :[some char]
+			namespaceName[index + 1] != ':')		//or the namespace separation was : instead of ::
+		{
+			throw BadNamespaceFormat("The provided namespace name is ill formed.");
+		}
+
+		//Remove namespace separation :: 
+		namespaceName	= namespaceName.substr(index + 2u);
+		index			= namespaceName.find_first_of(':');
+
+		result = result->getNestedNamespace(namespaceName.substr(0u, index));
+	}
+
+	return result;
 }
 
-//Namespace const* Database::getNamespace(std::string	namespaceName, bool allowNestedNamespaces) noexcept
+//Namespace const* Database::getNamespace(std::string namespaceName, bool allowNestedNamespaces) noexcept
 //{
 //	//Entity const* entity = getEntity(std::move(namespaceName));
 //

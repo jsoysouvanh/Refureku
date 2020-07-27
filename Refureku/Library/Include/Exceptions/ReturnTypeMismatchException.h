@@ -15,9 +15,9 @@ namespace rfk
 	class ReturnTypeMismatchException : public std::logic_error
 	{
 		public:
-		explicit ReturnTypeMismatchException(std::string const& errorMessage);
-		ReturnTypeMismatchException(ReturnTypeMismatchException const&)			= default;
-		ReturnTypeMismatchException(ReturnTypeMismatchException&&)				= default;
-		~ReturnTypeMismatchException()											= default;
+			explicit ReturnTypeMismatchException(std::string const& errorMessage)	noexcept;
+			ReturnTypeMismatchException(ReturnTypeMismatchException const&)			= default;
+			ReturnTypeMismatchException(ReturnTypeMismatchException&&)				= default;
+			~ReturnTypeMismatchException()											= default;
 	};
 }

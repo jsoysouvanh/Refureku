@@ -116,3 +116,38 @@ bool MethodBase::hasSameArguments() const noexcept
 		return hasSameArgumentsCount<ArgTypes...>() && hasSameArgumentTypes<ArgTypes...>();
 	}
 }
+
+inline bool MethodBase::isStatic() const noexcept
+{
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Static);
+}
+
+inline bool MethodBase::isInline() const noexcept
+{
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Inline);
+}
+
+inline bool MethodBase::isVirtual() const noexcept
+{
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Virtual);
+}
+
+inline bool MethodBase::isPureVirtual() const noexcept
+{
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::PureVirtual);
+}
+
+inline bool MethodBase::isOverride() const noexcept
+{
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Override);
+}
+
+inline bool MethodBase::isFinal() const noexcept
+{
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Final);
+}
+
+inline bool MethodBase::isConst() const noexcept
+{
+	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Const);
+}

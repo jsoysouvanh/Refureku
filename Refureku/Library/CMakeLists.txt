@@ -6,6 +6,11 @@ project(RefurekuLibrary)
 set(RefurekuLibraryTarget Refureku)
 add_library(${RefurekuLibraryTarget}
 				STATIC
+					Source/Exceptions/ArgCountMismatchException.cpp
+					Source/Exceptions/ReturnTypeMismatchException.cpp
+					Source/Exceptions/ArgTypeMismatchException.cpp
+					Source/Exceptions/BadNamespaceFormat.cpp
+
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/Entity.cpp
@@ -30,9 +35,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Methods/Method.cpp
 					Source/TypeInfo/Methods/StaticMethod.cpp
 					Source/TypeInfo/Methods/MethodParameter.cpp
-					Source/TypeInfo/Methods/Exceptions/ArgCountMismatchException.cpp
-					Source/TypeInfo/Methods/Exceptions/ReturnTypeMismatchException.cpp
-					Source/TypeInfo/Methods/Exceptions/ArgTypeMismatchException.cpp)
+			)
 
 # Setup compilation flags
 if (MSVC)

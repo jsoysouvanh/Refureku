@@ -20,6 +20,11 @@ namespace rfk
 			std::unordered_set<std::string>						simpleProperties;
 			std::unordered_multimap<std::string, std::string>	complexProperties;
 
+			PropertyGroup()						= default;
+			PropertyGroup(PropertyGroup const&)	= default;
+			PropertyGroup(PropertyGroup&&)		= default;
+			~PropertyGroup()					= default;
+
 			/** Return true if the property group contains the provided simple property */
 			inline bool	hasProperty(std::string const& prop)							const	noexcept;
 
