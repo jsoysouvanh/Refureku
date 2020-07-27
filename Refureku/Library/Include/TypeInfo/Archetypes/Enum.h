@@ -30,19 +30,31 @@ namespace rfk
 			~Enum()													= default;
 
 			/**
-			*	@return The EnumValue corresponding to the provided name if any, else nullptr
+			*	@brief Search an enum value in this enum.
+			*
+			*	@param enumValueName Name of the enum value to search for.
+			*	
+			*	@return The EnumValue corresponding to the provided name if any, else nullptr.
 			*/
-			EnumValue const*					getEnumValue(std::string enumValueName)	const noexcept;
+			EnumValue const*				getEnumValue(std::string enumValueName)	const noexcept;
 			
 			/**
-			*	@return The first found EnumValue equals to the provided value if any, else nullptr
+			*	@brief Search an enum value in this enum.
+			*
+			*	@param value Numerical value of the EnumValue to look for.
+			*
+			*	@return The first found EnumValue equals to the provided value if any, else nullptr.
 			*/
-			EnumValue const*					getEnumValue(int64 value)				const noexcept;
+			EnumValue const*				getEnumValue(int64 value)				const noexcept;
 
 			/**
-			*	@return All the EnumValues equal to the provided value
+			*	@brief Search all enum values in this enum holding the provided value.
+			*
+			*	@param value Numerical value of the EnumValues to look for.
+
+			*	@return All the EnumValues equal to the provided value.
 			*/
-			std::vector<EnumValue const*>	getEnumValues(int64 value)					const noexcept;
+			std::vector<EnumValue const*>	getEnumValues(int64 value)				const noexcept;
 
 			Enum& operator=(Enum const&)	= delete;
 			Enum& operator=(Enum&&)			= default;

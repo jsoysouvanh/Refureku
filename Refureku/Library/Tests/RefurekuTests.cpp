@@ -13,26 +13,27 @@ void namespaces()
 	TEST(rfk::Database::getNamespace("namespace4") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4_nested") == nullptr);
 	TEST(rfk::Database::getNamespace("namespace4")->getNestedNamespace("namespace4_nested") != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("AnotherClassInNamespace3") != nullptr);
-	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getNestedEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("AnotherClassInNamespace3") != nullptr);
+	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
 }
 
 void classes()
 {
 	TEST(rfk::Database::getClass("ParentParentParentClass") == nullptr);
-	TEST(rfk::Database::getNamespace("namespace2")->getNestedClass("ParentParentClass") != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("OtherClass") != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ParentClass") != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ParentClass2") != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace2")->getClass("ParentParentClass") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("OtherClass") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ParentClass") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ParentClass2") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass") != nullptr);
 	TEST(rfk::Database::getEnum("ExampleClass") == nullptr);
 	TEST(rfk::Database::getStruct("ExampleClass") == nullptr);
 
 	//Nested classes
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedClass("NestedExampleClass") != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedClass("NestedExampleClass", rfk::EAccessSpecifier::Private) != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedClass("NestedExampleClass", rfk::EAccessSpecifier::Public) == nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedStruct("NestedExampleClass") == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedClass("NestedExampleClass") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedClass("NestedExampleClass", rfk::EAccessSpecifier::Private) != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedClass("NestedExampleClass", rfk::EAccessSpecifier::Public) == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedClass("NestedExampleClass")->getField("i") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedStruct("NestedExampleClass") == nullptr);
 }
 
 void structs()
@@ -65,24 +66,25 @@ void structs()
 	TEST(ExampleStruct::staticGetArchetype().getStaticMethod<void(int, float)>("method") == nullptr);
 
 	//Nested structs
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedStruct("NestedExampleStruct") != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedStruct("NestedExampleStruct", rfk::EAccessSpecifier::Protected) != nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedStruct("NestedExampleStruct", rfk::EAccessSpecifier::Public) == nullptr);
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedClass("ExampleClass")->getNestedClass("NestedExampleStruct") == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedStruct("NestedExampleStruct") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedStruct("NestedExampleStruct", rfk::EAccessSpecifier::Protected) != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedStruct("NestedExampleStruct", rfk::EAccessSpecifier::Public) == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedStruct("NestedExampleStruct")->getMethod<void()>("foo") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedClass("NestedExampleStruct") == nullptr);
 }
 
 void enums()
 {
 	TEST(rfk::Database::getEnum("UnexistantEnum") == nullptr);
 
-	TEST(rfk::Database::getNamespace("namespace3")->getNestedEnum("ExampleEnum") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getEnum("ExampleEnum") != nullptr);
 	TEST(rfk::Database::getClass("ExampleEnum") == nullptr);
 	TEST(rfk::Database::getStruct("ExampleEnum") == nullptr);
 
-	rfk::Enum const* e = rfk::Database::getNamespace("namespace3")->getNestedEnum("ExampleEnum");
+	rfk::Enum const* e = rfk::Database::getNamespace("namespace3")->getEnum("ExampleEnum");
 	TEST(e != nullptr);
 
-	TEST(e->memorySize == sizeof(char));
+	TEST(e->memorySize == sizeof(uint8_t));
 	TEST(e->name == "ExampleEnum");
 	TEST(e->getEnumValue("ExampleValue1")->value == 1 << 0);
 	TEST(e->getEnumValue("ExampleValue2")->value == 1 << 1);
@@ -93,6 +95,9 @@ void enums()
 	TEST(e->getEnumValue(1 << 1)->name == "ExampleValue2");
 	TEST(e->getEnumValue(1 << 2)->name == "ExampleValue3");
 	TEST(e->getEnumValues(1 << 3).size() == 2);
+
+	//Nested enum
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedEnum("NestedExampleEnum")->getEnumValue("Value1")->value == 0);
 }
 
 void methods()

@@ -22,7 +22,7 @@ Namespace const* Namespace::getNestedNamespace(std::string namespaceName) const 
 	return (it != nestedNamespaces.cend()) ? *it : nullptr;
 }
 
-Struct const* Namespace::getNestedStruct(std::string structName, EAccessSpecifier access) const noexcept
+Struct const* Namespace::getStruct(std::string structName) const noexcept
 {
 	//Use an Entity instead of a Struct to avoid containers initialization
 	Entity searchingStruct(std::move(structName), 0u);
@@ -30,10 +30,10 @@ Struct const* Namespace::getNestedStruct(std::string structName, EAccessSpecifie
 	//We know the hash method only uses the name inherited from Entity so cast is fine
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingStruct));
 
-	return (it != nestedArchetypes.cend() && (access == EAccessSpecifier::Undefined || (*it)->accessSpecifier == access)) ? reinterpret_cast<Struct const*>(*it) : nullptr;
+	return (it != nestedArchetypes.cend()) ? reinterpret_cast<Struct const*>(*it) : nullptr;
 }
 
-Class const* Namespace::getNestedClass(std::string className, EAccessSpecifier access) const noexcept
+Class const* Namespace::getClass(std::string className) const noexcept
 {
 	//Use an Entity instead of a Class to avoid containers initialization
 	Entity searchingClass(std::move(className), 0u);
@@ -41,10 +41,10 @@ Class const* Namespace::getNestedClass(std::string className, EAccessSpecifier a
 	//We know the hash method only uses the name inherited from Entity so cast is fine
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingClass));
 
-	return (it != nestedArchetypes.cend() && (access == EAccessSpecifier::Undefined || (*it)->accessSpecifier == access)) ? reinterpret_cast<Class const*>(*it) : nullptr;
+	return (it != nestedArchetypes.cend()) ? reinterpret_cast<Class const*>(*it) : nullptr;
 }
 
-Enum const* Namespace::getNestedEnum(std::string enumName, EAccessSpecifier access) const noexcept
+Enum const* Namespace::getEnum(std::string enumName) const noexcept
 {
 	//Use an Entity instead of a Class to avoid containers initialization
 	Entity searchingEnum(std::move(enumName), 0u);
@@ -52,5 +52,5 @@ Enum const* Namespace::getNestedEnum(std::string enumName, EAccessSpecifier acce
 	//We know the hash method only uses the name inherited from Entity so cast is fine
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingEnum));
 
-	return (it != nestedArchetypes.cend() && (access == EAccessSpecifier::Undefined || (*it)->accessSpecifier == access)) ? reinterpret_cast<Enum const*>(*it) : nullptr;
+	return (it != nestedArchetypes.cend()) ? reinterpret_cast<Enum const*>(*it) : nullptr;
 }
