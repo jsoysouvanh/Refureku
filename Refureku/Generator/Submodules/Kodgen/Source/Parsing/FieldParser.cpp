@@ -20,7 +20,7 @@ CXChildVisitResult FieldParser::parse(CXCursor const& fieldCursor, ParsingContex
 	{
 		//If we reach this point, the cursor had no child (no annotation)
 		//Check if the parent has the shouldParseAllNested flag set
-		if (context.parentContext != nullptr && context.parentContext->shouldParseAllNested)
+		if (shouldParseCurrentEntity())
 		{
 			getParsingResult()->parsedField.emplace(fieldCursor, PropertyGroup());
 		}
@@ -45,15 +45,15 @@ CXChildVisitResult FieldParser::parseNestedEntity(CXCursor cursor, CXCursor /* p
 	{
 		context.shouldCheckProperties = false;
 
-		//If the cursor is not an annotatation and parent context "shouldParseAllNested" is true, parse it anyway
-		if (context.parentContext == nullptr || !context.parentContext->shouldParseAllNested || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
+		if (parser->shouldParseCurrentEntity() && cursor.kind != CXCursorKind::CXCursor_AnnotateAttr)
 		{
-			//Set parsed field in result if it is valid
-			return parser->setParsedEntity(cursor);
+			//Make it valid right away so init the result
+			parser->getParsingResult()->parsedField.emplace(context.rootCursor, PropertyGroup());
 		}
 		else
 		{
-			parser->getParsingResult()->parsedField.emplace(context.rootCursor, PropertyGroup());
+			//Set parsed field in result if it is valid
+			return parser->setParsedEntity(cursor);
 		}
 	}
 

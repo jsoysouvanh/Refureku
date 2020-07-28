@@ -13,6 +13,7 @@
 #include <clang-c/Index.h>
 
 #include "Parsing/ParsingContext.h"
+#include "Parsing/ParsingSettings.h"
 #include "InfoStructures/EntityInfo.h"
 #include "Misc/FundamentalTypes.h"
 
@@ -32,18 +33,30 @@ namespace kodgen
 			void	updateShouldParseAllNested(EntityInfo const& parsingEntity)	noexcept;
 
 			/**
-			*	@brief Get the current in-use context.
-			*
-			*	@return The current context.
+			*	@brief Check if the current entity (stored in the current context) should be parsed.
+			*	
+			*	@return true if it should be parsed regardless whether it is annotated or not, else false.
 			*/
-			inline ParsingContext&	getContext()	noexcept;
+			inline bool						shouldParseCurrentEntity()	const	noexcept;
 
 			/**
 			*	@brief Pop the most recent context from the contexts stack.
 			*/
-			inline void				popContext()	noexcept;
+			inline void						popContext()						noexcept;
 
-			
+			/**
+			*	@brief Get the current in-use context.
+			*
+			*	@return The current context.
+			*/
+			inline ParsingContext&			getContext()						noexcept;
+
+			/**
+			*	@brief Get the current in-use context.
+			*
+			*	@return The current context.
+			*/
+			inline ParsingContext const&	getContext()				const	noexcept;
 
 		public:
 			EntityParser()						= default;

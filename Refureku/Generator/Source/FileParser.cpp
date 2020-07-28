@@ -1,6 +1,6 @@
 #include "FileParser.h"
 
-#include "Keywords.h"
+#include "NativeProperties.h"
 
 using namespace rfk;
 
@@ -32,9 +32,9 @@ FileParser::FileParser() noexcept:
 	parsingSettings.propertyParsingSettings.enumPropertyRules.macroName			= "RFKEnum";
 	parsingSettings.propertyParsingSettings.enumValuePropertyRules.macroName	= "RFKEnumVal";
 
-	parsingSettings.propertyParsingSettings.classPropertyRules.addSimplePropertyRule(__RFK_CLASS_DYNAMIC_GET_ARCHETYPE);
-	parsingSettings.propertyParsingSettings.structPropertyRules.addSimplePropertyRule(__RFK_CLASS_DYNAMIC_GET_ARCHETYPE);
-	parsingSettings.propertyParsingSettings.methodPropertyRules.addSimplePropertyRule(__RFK_CLASS_CUSTOM_INSTANTIATOR);
+	parsingSettings.propertyParsingSettings.classPropertyRules.addSimplePropertyRule(NativeProperties::dynamicGetArchetypeProperty);
+	parsingSettings.propertyParsingSettings.structPropertyRules.addSimplePropertyRule(NativeProperties::dynamicGetArchetypeProperty);
+	parsingSettings.propertyParsingSettings.methodPropertyRules.addSimplePropertyRule(NativeProperties::customInstantiatorProperty);
 }
 
 void FileParser::preParse(fs::path const& parseFile) noexcept

@@ -18,13 +18,16 @@ namespace kodgen
 	{
 		public:
 			/** Settings used when parsing C++ entities. */
-			PropertyParsingSettings			propertyParsingSettings;
+			PropertyParsingSettings					propertyParsingSettings;
+
+			/** If set to true, will parse all C++ entities, whether they are annotated or not. */
+			bool									shouldParseAllEntities			= false;
 
 			/**
 			*	Should the parsing be aborted when an error is encountered or not
 			*	If set to false, errors will be collected for the whole parsing
 			*/
-			bool							shouldAbortParsingOnFirstError = true;
+			bool									shouldAbortParsingOnFirstError	= true;
 
 			/**
 			*	Include directories of the project which must be known for accurate parsing.

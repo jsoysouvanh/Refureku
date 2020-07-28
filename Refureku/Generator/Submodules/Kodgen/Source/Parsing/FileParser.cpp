@@ -336,6 +336,7 @@ bool FileParser::loadSettings(fs::path const& pathToSettingsFile) noexcept
 			toml::value const& parserSettings = toml::find(settings, "FileParserSettings");
 
 			//Update Parsing settings
+			TomlUtility::updateSetting(parserSettings, "shouldParseAllEntities", parsingSettings.shouldParseAllEntities);
 			TomlUtility::updateSetting(parserSettings, "shouldAbortParsingOnFirstError", parsingSettings.shouldAbortParsingOnFirstError);
 			TomlUtility::updateSetting(parserSettings, "projectIncludeDirectories", parsingSettings.projectIncludeDirectories);
 
