@@ -371,6 +371,14 @@ void instantiation()
 	delete ecI;
 }
 
+void parseAllNested()
+{
+	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getClass("NestedClass1") != nullptr);
+	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getStruct("NestedStruct1") != nullptr);
+	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getEnum("NestedEnum1") != nullptr);
+	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getNestedNamespace("parse_all_nested_namespace") != nullptr);
+}
+
 void properties()
 {
 	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
@@ -379,6 +387,8 @@ void properties()
 	TEST(ec.properties.hasProperty("DynamicGetArchetype"));
 
 	TEST(ec.getStaticMethod("customInstantiator")->properties.hasProperty("CustomInstantiator"));
+
+	parseAllNested();
 }
 
 void dynamicTypes()

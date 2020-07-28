@@ -33,6 +33,9 @@ namespace kodgen
 			/** Should check for properties (annotate) at the next parsing step? */
 			bool					shouldCheckProperties	= true;
 
+			/** Should parse all nested entities whether or not they are annotated? */
+			bool					shouldParseAllNested	= false;
+
 			/** Parser used to parse entity properties. */
 			PropertyParser*			propertyParser			= nullptr;
 

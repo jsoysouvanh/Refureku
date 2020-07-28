@@ -55,8 +55,10 @@ namespace kodgen
 			*	@param fieldCursor		Root cursor of the field to parse.
 			*	@param parentContext	Context the new context will inherit from.
 			*	@param out_result		Result to fill during parsing.
+			*
+			*	@return The new context.
 			*/
-			void							pushContext(CXCursor const&				fieldCursor,
+			ParsingContext&					pushContext(CXCursor const&				fieldCursor,
 														ParsingContext const&		parentContext,
 														FieldParsingResult&			out_result)		noexcept;
 

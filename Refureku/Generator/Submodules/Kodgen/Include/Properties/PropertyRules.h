@@ -47,7 +47,7 @@ namespace kodgen
 			*	
 			*	@return true if the simple property was added successfully, else false.
 			*/
-			bool addSimplePropertyRule(std::string&& propertyName)											noexcept;
+			bool addSimplePropertyRule(std::string propertyName)											noexcept;
 
 			/**
 			*	@brief Remove a simple property rule from this PropertyRules object.
@@ -56,7 +56,7 @@ namespace kodgen
 			*	
 			*	@return true if the simple property was removed successfully, else false.
 			*/
-			bool removeSimplePropertyRule(std::string&& propertyName)										noexcept;
+			bool removeSimplePropertyRule(std::string propertyName)											noexcept;
 
 			/**
 			*	@brief Add a complex property rule to this PropertyRules object.
@@ -66,7 +66,7 @@ namespace kodgen
 			*	
 			*	@return true if the complex property was added successfully, else false.
 			*/
-			bool addComplexPropertyRule(std::string&& mainPropertyName, std::string&& subPropPattern)		noexcept;
+			bool addComplexPropertyRule(std::string mainPropertyName, std::string subPropPattern)			noexcept;
 
 			/**
 			*	@brief Remove a complex property rule from this PropertyRules object.
@@ -76,7 +76,7 @@ namespace kodgen
 			*	
 			*	@return true if the complex property was removed successfully, else false.
 			*/
-			bool removeComplexPropertyRule(std::string&& mainPropertyName, std::string&& subPropPattern)	noexcept;
+			bool removeComplexPropertyRule(std::string mainPropertyName, std::string subPropPattern)		noexcept;
 
 			/**
 			*	@brief Remove a complex property rule from this PropertyRules object.
@@ -85,7 +85,7 @@ namespace kodgen
 			*	
 			*	@return true if the complex property was removed successfully, else false.
 			*/
-			bool removeComplexPropertyRule(std::string&& mainPropertyName)									noexcept;
+			bool removeComplexPropertyRule(std::string const& mainPropertyName)								noexcept;
 
 			/**
 			*	@brief Remove all simple property rules from this PropertyRules object.

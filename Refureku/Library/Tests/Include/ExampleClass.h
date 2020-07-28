@@ -207,7 +207,7 @@ namespace namespace3 RFKNamespace()
 	};
 }
 
-struct RFKStruct() ExampleStruct
+struct RFKStruct(ParseAllNested) ExampleStruct
 {
 	RFKField()
 	static int staticInt;
@@ -221,12 +221,33 @@ struct RFKStruct() ExampleStruct
 	RFKMethod()
 	void method(int a, float b) { std::cout << "ExampleStruct::method(" << a << ", " << b << ")" << std::endl; }
 
-	ExampleStruct_GENERATED 
+	ExampleStruct_GENERATED
 };
 
-namespace namespace4 RFKNamespace()
+namespace parse_all_nested_namespace RFKNamespace(ParseAllNested)
 {
-	namespace namespace4_nested RFKNamespace()
+	class NestedClass1
+	{
+		NestedClass1_GENERATED
+	};
+
+	struct NestedStruct1
+	{
+		NestedStruct1_GENERATED
+	};
+
+	enum class NestedEnum1
+	{
+	};
+
+	namespace parse_all_nested_namespace
+	{
+	}
+}
+
+namespace namespace4 RFKNamespace(ParseAllNested)
+{
+	namespace namespace4_nested
 	{
 		namespace namespace4_nested_nested RFKNamespace()
 		{

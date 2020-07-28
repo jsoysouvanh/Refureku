@@ -44,9 +44,9 @@ namespace kodgen
 			*
 			*	@return An enum which indicates how to choose the next cursor to parse in the AST.
 			*/
-			static CXChildVisitResult		parseEntity(CXCursor		cursor,
-														CXCursor		parentCursor,
-														CXClientData	clientData)						noexcept;
+			static CXChildVisitResult		parseNestedEntity(CXCursor		cursor,
+															  CXCursor		parentCursor,
+															  CXClientData	clientData)					noexcept;
 
 			/**
 			*	@brief Push a new clean context to prepare struct/class parsing.
@@ -54,8 +54,10 @@ namespace kodgen
 			*	@param classCursor		Root cursor of the struct/class to parse.
 			*	@param parentContext	Context the new context will inherit from.
 			*	@param out_result		Result to fill during parsing.
+			*
+			*	@return The new context.
 			*/
-			void							pushContext(CXCursor const&			classCursor,
+			ParsingContext&					pushContext(CXCursor const&			classCursor,
 														ParsingContext const&	parentContext,
 														ClassParsingResult&		out_result)				noexcept;
 

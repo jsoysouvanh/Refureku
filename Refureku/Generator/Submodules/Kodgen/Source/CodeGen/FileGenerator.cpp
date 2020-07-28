@@ -10,6 +10,7 @@
 #include "InfoStructures/EnumValueInfo.h"
 #include "InfoStructures/FieldInfo.h"
 #include "InfoStructures/MethodInfo.h"
+#include "Properties/NativeProperties.h"
 #include "Misc/TomlUtility.h"
 
 using namespace kodgen;
@@ -438,14 +439,19 @@ void FileGenerator::processIncludedDirectories(FileParser& parser, FileGeneratio
 void FileGenerator::refreshPropertyRules(ParsingSettings& parsingSettings) const noexcept
 {
 	//Make sure the CodeTemplate property is setup in class, struct and enum
-	parsingSettings.propertyParsingSettings.classPropertyRules.removeComplexPropertyRule(std::string(codeTemplateMainComplexPropertyName));
-	parsingSettings.propertyParsingSettings.classPropertyRules.addComplexPropertyRule(std::string(codeTemplateMainComplexPropertyName), std::string(_supportedCodeTemplateRegex));
+	parsingSettings.propertyParsingSettings.classPropertyRules.removeComplexPropertyRule(codeTemplateMainComplexPropertyName);
+	parsingSettings.propertyParsingSettings.classPropertyRules.addComplexPropertyRule(codeTemplateMainComplexPropertyName, _supportedCodeTemplateRegex);
 
-	parsingSettings.propertyParsingSettings.structPropertyRules.removeComplexPropertyRule(std::string(codeTemplateMainComplexPropertyName));
-	parsingSettings.propertyParsingSettings.structPropertyRules.addComplexPropertyRule(std::string(codeTemplateMainComplexPropertyName), std::string(_supportedCodeTemplateRegex));
+	parsingSettings.propertyParsingSettings.structPropertyRules.removeComplexPropertyRule(codeTemplateMainComplexPropertyName);
+	parsingSettings.propertyParsingSettings.structPropertyRules.addComplexPropertyRule(codeTemplateMainComplexPropertyName, _supportedCodeTemplateRegex);
 
-	parsingSettings.propertyParsingSettings.enumPropertyRules.removeComplexPropertyRule(std::string(codeTemplateMainComplexPropertyName));
-	parsingSettings.propertyParsingSettings.enumPropertyRules.addComplexPropertyRule(std::string(codeTemplateMainComplexPropertyName), std::string(_supportedCodeTemplateRegex));
+	parsingSettings.propertyParsingSettings.enumPropertyRules.removeComplexPropertyRule(codeTemplateMainComplexPropertyName);
+	parsingSettings.propertyParsingSettings.enumPropertyRules.addComplexPropertyRule(codeTemplateMainComplexPropertyName, _supportedCodeTemplateRegex);
+
+	//Make sure native properties are correct
+	parsingSettings.propertyParsingSettings.namespacePropertyRules.addSimplePropertyRule(NativeProperties::parseAllNestedProperty);
+	parsingSettings.propertyParsingSettings.structPropertyRules.addSimplePropertyRule(NativeProperties::parseAllNestedProperty);
+	parsingSettings.propertyParsingSettings.classPropertyRules.addSimplePropertyRule(NativeProperties::parseAllNestedProperty);
 }
 
 void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept

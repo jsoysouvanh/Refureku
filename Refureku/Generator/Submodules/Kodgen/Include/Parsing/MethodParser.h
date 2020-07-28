@@ -55,17 +55,12 @@ namespace kodgen
 			*	@param methodCursor		Root cursor of the method to parse.
 			*	@param parentContext	Context the new context will inherit from.
 			*	@param out_result		Result to fill during parsing.
+			*
+			*	@return The new context.
 			*/
-			void							pushContext(CXCursor const&			methodCursor,
+			ParsingContext&					pushContext(CXCursor const&			methodCursor,
 														ParsingContext const&	parentContext,
 														MethodParsingResult&	out_result)			noexcept;
-
-			/**
-			*	@brief Fill the provided method information using the currently parsing method.
-			*
-			*	@param methodInfo MethodInfo structure to fill.
-			*/
-			void							initializeMethodInfo(MethodInfo& methodInfo)			noexcept;
 
 			/**
 			*	@brief Helper to get the ParsingResult contained in the context as a MethodParsingResult.

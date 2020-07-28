@@ -54,8 +54,10 @@ namespace kodgen
 			*	@param namespaceCursor	Root cursor of the namespace to parse.
 			*	@param parentContext	Context the new context will inherit from.
 			*	@param out_result		Result to fill during parsing.
+			*
+			*	@return The new context.
 			*/
-			void							pushContext(CXCursor const&				namespaceCursor,
+			ParsingContext&					pushContext(CXCursor const&				namespaceCursor,
 														ParsingContext const&		parentContext,
 														NamespaceParsingResult&		out_result)		noexcept;
 

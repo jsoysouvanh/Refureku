@@ -3,12 +3,30 @@
 #include <algorithm>
 #include <cassert>
 
+#include "Misc/Helpers.h"
+
 using namespace kodgen;
 
 MethodInfo::MethodInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
 	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EType::Method),
-	qualifiers{false, false, false, false, false, false, false, false}
+	qualifiers{	clang_CXXMethod_isDefaulted(cursor) != 0u,
+				clang_CXXMethod_isStatic(cursor) != 0u,
+				clang_CXXMethod_isVirtual(cursor) != 0u,
+				clang_CXXMethod_isPureVirtual(cursor) != 0u,
+				clang_Cursor_isFunctionInlined(cursor) != 0u,
+				false,
+				false,
+				clang_CXXMethod_isConst(cursor) != 0u}
 {
+	CXType methodType = clang_getCursorType(cursor);
+
+	assert(methodType.kind == CXTypeKind::CXType_FunctionProto);
+
+	//Define prototype
+	prototype	= Helpers::getString(clang_getTypeSpelling(methodType));
+
+	//Define return type
+	returnType	= TypeInfo(clang_getResultType(methodType));
 }
 
 std::string MethodInfo::getName() const noexcept

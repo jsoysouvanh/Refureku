@@ -13,6 +13,7 @@
 #include <clang-c/Index.h>
 
 #include "Parsing/ParsingContext.h"
+#include "InfoStructures/EntityInfo.h"
 #include "Misc/FundamentalTypes.h"
 
 namespace kodgen
@@ -22,6 +23,13 @@ namespace kodgen
 		protected:
 			/** Stack of contexts of this parser. */
 			std::stack<ParsingContext>	contextsStack;
+
+			/**
+			*	@brief	Update the shouldParseAllNested boolean in the current context.
+			*	
+			*	@param parsingEntity The currently parsing entity.
+			*/
+			void	updateShouldParseAllNested(EntityInfo const& parsingEntity)	noexcept;
 
 			/**
 			*	@brief Get the current in-use context.
@@ -34,6 +42,8 @@ namespace kodgen
 			*	@brief Pop the most recent context from the contexts stack.
 			*/
 			inline void				popContext()	noexcept;
+
+			
 
 		public:
 			EntityParser()						= default;

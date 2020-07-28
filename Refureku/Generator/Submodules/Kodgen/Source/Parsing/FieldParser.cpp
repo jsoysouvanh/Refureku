@@ -14,13 +14,26 @@ CXChildVisitResult FieldParser::parse(CXCursor const& fieldCursor, ParsingContex
 	assert(fieldCursor.kind == CXCursorKind::CXCursor_VarDecl || fieldCursor.kind == CXCursorKind::CXCursor_FieldDecl);
 
 	//Init context
-	pushContext(fieldCursor, parentContext, out_result);
+	ParsingContext& context = pushContext(fieldCursor, parentContext, out_result);
 
-	clang_visitChildren(fieldCursor, &FieldParser::parseNestedEntity, this);
+	if (!clang_visitChildren(fieldCursor, &FieldParser::parseNestedEntity, this) && context.shouldCheckProperties)
+	{
+		//If we reach this point, the cursor had no child (no annotation)
+		//Check if the parent has the shouldParseAllNested flag set
+		if (context.parentContext != nullptr && context.parentContext->shouldParseAllNested)
+		{
+			getParsingResult()->parsedField.emplace(fieldCursor, PropertyGroup());
+		}
+	}
 
 	popContext();
 
+	DISABLE_WARNING_PUSH
+	DISABLE_WARNING_UNSCOPED_ENUM
+
 	return (parentContext.parsingSettings->shouldAbortParsingOnFirstError && !out_result.errors.empty()) ? CXChildVisitResult::CXChildVisit_Break : CXChildVisitResult::CXChildVisit_Continue;
+
+	DISABLE_WARNING_POP
 }
 
 CXChildVisitResult FieldParser::parseNestedEntity(CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData) noexcept
@@ -32,42 +45,29 @@ CXChildVisitResult FieldParser::parseNestedEntity(CXCursor cursor, CXCursor /* p
 	{
 		context.shouldCheckProperties = false;
 
-		//Set parsed field in result if it is valid
-		return parser->setParsedEntity(cursor);
+		//If the cursor is not an annotatation and parent context "shouldParseAllNested" is true, parse it anyway
+		if (context.parentContext == nullptr || !context.parentContext->shouldParseAllNested || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
+		{
+			//Set parsed field in result if it is valid
+			return parser->setParsedEntity(cursor);
+		}
+		else
+		{
+			parser->getParsingResult()->parsedField.emplace(context.rootCursor, PropertyGroup());
+		}
 	}
-	else
-	{
-		return CXChildVisitResult::CXChildVisit_Continue;
-	}
+
+	return CXChildVisitResult::CXChildVisit_Continue;
 }
 
 CXChildVisitResult FieldParser::setParsedEntity(CXCursor const& annotationCursor) noexcept
 {
-	FieldParsingResult* result = getParsingResult();
-
-	ParsingContext& context = getContext();
+	FieldParsingResult* result	= getParsingResult();
+	ParsingContext&		context	= getContext();
 
 	if (opt::optional<PropertyGroup> propertyGroup = getProperties(annotationCursor))
 	{
-		FieldInfo& field = result->parsedField.emplace(FieldInfo(context.rootCursor, std::move(*propertyGroup)));
-
-		//field.accessSpecifier = _parsingInfo->accessSpecifier;
-		field.type = TypeInfo(clang_getCursorType(context.rootCursor));
-		field.qualifiers.isStatic = (clang_getCursorKind(context.rootCursor) == CXCursorKind::CXCursor_VarDecl);
-
-		if (!field.qualifiers.isStatic)
-		{
-			field.qualifiers.isMutable = clang_CXXField_isMutable(context.rootCursor);
-
-			field.memoryOffset = clang_Cursor_getOffsetOfField(context.rootCursor);
-
-			// assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_Invalid);	<- Assert here on travis for some reasons...
-			assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_Incomplete);
-			assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_Dependent);
-			assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_InvalidFieldName);
-
-			field.memoryOffset /= 8;	//From bits to bytes
-		}
+		result->parsedField.emplace(context.rootCursor, std::move(*propertyGroup));
 	}
 	else if (context.propertyParser->getParsingError() != EParsingError::Count)
 	{
@@ -89,7 +89,7 @@ opt::optional<PropertyGroup> FieldParser::getProperties(CXCursor const& cursor) 
 				opt::nullopt;
 }
 
-void FieldParser::pushContext(CXCursor const& fieldCursor, ParsingContext const& parentContext, FieldParsingResult& out_result) noexcept
+ParsingContext& FieldParser::pushContext(CXCursor const& fieldCursor, ParsingContext const& parentContext, FieldParsingResult& out_result) noexcept
 {
 	ParsingContext newContext;
 
@@ -101,4 +101,6 @@ void FieldParser::pushContext(CXCursor const& fieldCursor, ParsingContext const&
 	newContext.parsingResult			= &out_result;
 
 	contextsStack.push(std::move(newContext));
+
+	return contextsStack.top();
 }

@@ -10,15 +10,23 @@
 
 using namespace kodgen;
 
-CXChildVisitResult MethodParser::parse(CXCursor const& methodCursor, ParsingContext const&	parentContext, MethodParsingResult& out_result) noexcept
+CXChildVisitResult MethodParser::parse(CXCursor const& methodCursor, ParsingContext const& parentContext, MethodParsingResult& out_result) noexcept
 {
 	//Make sure the cursor is compatible for the method parser
 	assert(methodCursor.kind == CXCursorKind::CXCursor_CXXMethod);	// /!\ might have to add CXCursor_FunctionDecl and CXCursor_FunctionTemplate
 
 	//Init context
-	pushContext(methodCursor, parentContext, out_result);
+	ParsingContext& context = pushContext(methodCursor, parentContext, out_result);
 
-	clang_visitChildren(methodCursor, &MethodParser::parseNestedEntity, this);
+	if (!clang_visitChildren(methodCursor, &MethodParser::parseNestedEntity, this) && context.shouldCheckProperties)
+	{
+		//If we reach this point, the cursor had no child (no annotation)
+		//Check if the parent has the shouldParseAllNested flag set
+		if (context.parentContext != nullptr && context.parentContext->shouldParseAllNested)
+		{
+			getParsingResult()->parsedMethod.emplace(methodCursor, PropertyGroup());
+		}
+	}
 
 	popContext();
 
@@ -39,41 +47,47 @@ CXChildVisitResult MethodParser::parseNestedEntity(CXCursor cursor, CXCursor /* 
 	{
 		context.shouldCheckProperties = false;
 
-		//Set parsed method in result if it is valid
-		return parser->setParsedEntity(cursor);
-	}
-	else
-	{
-		switch (clang_getCursorKind(cursor))
+		//If the cursor is not an annotatation and parent context "shouldParseAllNested" is true, parse it anyway
+		if (context.parentContext == nullptr || !context.parentContext->shouldParseAllNested || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
 		{
-			case CXCursorKind::CXCursor_CXXFinalAttr:
-				if (parser->getParsingResult()->parsedMethod.has_value())
-				{
-					parser->getParsingResult()->parsedMethod->qualifiers.isFinal = true;
-				}
-				break;
-
-			case CXCursorKind::CXCursor_CXXOverrideAttr:
-				if (parser->getParsingResult()->parsedMethod.has_value())
-				{
-					parser->getParsingResult()->parsedMethod->qualifiers.isOverride = true;
-				}
-				break;
-
-			case CXCursorKind::CXCursor_ParmDecl:
-				if (parser->getParsingResult()->parsedMethod.has_value())
-				{
-					parser->getParsingResult()->parsedMethod->parameters.emplace_back(MethodParamInfo{TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor))});
-				}
-				break;
-
-			default:
-				//std::cout << "Unknown method sub cursor: " << Helpers::getString(clang_getCursorKindSpelling(clang_getCursorKind(cursor))) << std::endl;
-				break;
+			//Set parsed method in result if it is valid
+			return parser->setParsedEntity(cursor);
 		}
-
-		return CXChildVisitResult::CXChildVisit_Recurse;
+		else
+		{
+			parser->getParsingResult()->parsedMethod.emplace(context.rootCursor, PropertyGroup());
+		}
 	}
+
+	switch (clang_getCursorKind(cursor))
+	{
+		case CXCursorKind::CXCursor_CXXFinalAttr:
+			if (parser->getParsingResult()->parsedMethod.has_value())
+			{
+				parser->getParsingResult()->parsedMethod->qualifiers.isFinal = true;
+			}
+			break;
+
+		case CXCursorKind::CXCursor_CXXOverrideAttr:
+			if (parser->getParsingResult()->parsedMethod.has_value())
+			{
+				parser->getParsingResult()->parsedMethod->qualifiers.isOverride = true;
+			}
+			break;
+
+		case CXCursorKind::CXCursor_ParmDecl:
+			if (parser->getParsingResult()->parsedMethod.has_value())
+			{
+				parser->getParsingResult()->parsedMethod->parameters.emplace_back(MethodParamInfo{TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor))});
+			}
+			break;
+
+		default:
+			//std::cout << "Unknown method sub cursor: " << Helpers::getString(clang_getCursorKindSpelling(clang_getCursorKind(cursor))) << std::endl;
+			break;
+	}
+
+	return CXChildVisitResult::CXChildVisit_Recurse;
 }
 
 CXChildVisitResult MethodParser::setParsedEntity(CXCursor const& annotationCursor) noexcept
@@ -84,7 +98,7 @@ CXChildVisitResult MethodParser::setParsedEntity(CXCursor const& annotationCurso
 	if (opt::optional<PropertyGroup> propertyGroup = getProperties(annotationCursor))
 	{
 		//Set the parsed entity in the result & initialize its information from the method cursor
-		initializeMethodInfo(result->parsedMethod.emplace(MethodInfo(context.rootCursor, std::move(*propertyGroup))));
+		result->parsedMethod.emplace(context.rootCursor, std::move(*propertyGroup));
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
@@ -108,47 +122,7 @@ opt::optional<PropertyGroup> MethodParser::getProperties(CXCursor const& cursor)
 				opt::nullopt;
 }
 
-void MethodParser::initializeMethodInfo(MethodInfo& methodInfo) noexcept
-{
-	ParsingContext& context		= getContext();
-	CXType			methodType	= clang_getCursorType(context.rootCursor);
-
-	assert(methodType.kind == CXTypeKind::CXType_FunctionProto);
-
-	//Define prototype
-	methodInfo.prototype = Helpers::getString(clang_getTypeSpelling(methodType));
-
-	//Define return type
-	methodInfo.returnType =	TypeInfo(clang_getResultType(methodType));
-
-	//Define method qualifiers
-	if (clang_CXXMethod_isDefaulted(context.rootCursor))
-	{
-		methodInfo.qualifiers.isDefault = true;
-	}
-	if (clang_CXXMethod_isStatic(context.rootCursor))
-	{
-		methodInfo.qualifiers.isStatic = true;
-	}
-	if (clang_CXXMethod_isVirtual(context.rootCursor))
-	{
-		methodInfo.qualifiers.isVirtual = true;
-	}
-	if (clang_CXXMethod_isPureVirtual(context.rootCursor))
-	{
-		methodInfo.qualifiers.isPureVirtual = true;
-	}
-	if (clang_CXXMethod_isConst(context.rootCursor))
-	{
-		methodInfo.qualifiers.isConst = true;
-	}
-	if (clang_Cursor_isFunctionInlined(context.rootCursor))
-	{
-		methodInfo.qualifiers.isInline = true;
-	}
-}
-
-void MethodParser::pushContext(CXCursor const& methodCursor, ParsingContext const&	parentContext, MethodParsingResult& out_result) noexcept
+ParsingContext& MethodParser::pushContext(CXCursor const& methodCursor, ParsingContext const&	parentContext, MethodParsingResult& out_result) noexcept
 {
 	ParsingContext newContext;
 
@@ -160,4 +134,6 @@ void MethodParser::pushContext(CXCursor const& methodCursor, ParsingContext cons
 	newContext.parsingResult			= &out_result;
 
 	contextsStack.push(std::move(newContext));
+
+	return contextsStack.top();
 }

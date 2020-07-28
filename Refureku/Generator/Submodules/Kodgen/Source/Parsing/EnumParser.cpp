@@ -4,6 +4,7 @@
 
 #include "Parsing/ParsingSettings.h"
 #include "Parsing/PropertyParser.h"
+#include "Properties/NativeProperties.h"
 #include "Misc/Helpers.h"
 
 using namespace kodgen;
@@ -14,9 +15,17 @@ CXChildVisitResult EnumParser::parse(CXCursor const& enumCursor, ParsingContext 
 	assert(enumCursor.kind == CXCursorKind::CXCursor_EnumDecl);
 
 	//Init context
-	pushContext(enumCursor, parentContext, out_result);
+	ParsingContext& context = pushContext(enumCursor, parentContext, out_result);
 
-	clang_visitChildren(enumCursor, &EnumParser::parseNestedEntity, this);
+	if (!clang_visitChildren(enumCursor, &EnumParser::parseNestedEntity, this) && context.shouldCheckProperties)
+	{
+		//If we reach this point, the cursor had no child (no annotation)
+		//Check if the parent has the shouldParseAllNested flag set
+		if (context.parentContext != nullptr && context.parentContext->shouldParseAllNested)
+		{
+			getParsingResult()->parsedEnum.emplace(enumCursor, PropertyGroup());
+		}
+	}
 
 	popContext();
 
@@ -37,25 +46,31 @@ CXChildVisitResult EnumParser::parseNestedEntity(CXCursor cursor, CXCursor /* pa
 	{
 		context.shouldCheckProperties = false;
 
-		//Set parsed enum in result if it is valid
-		return parser->setParsedEntity(cursor);
-	}
-	else
-	{
-		CXChildVisitResult visitResult = CXChildVisitResult::CXChildVisit_Continue;
-
-		switch (cursor.kind)
+		//If the cursor is not an annotatation and parent context "shouldParseAllNested" is true, parse it anyway
+		if (context.parentContext == nullptr || !context.parentContext->shouldParseAllNested || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
 		{
-			case CXCursorKind::CXCursor_EnumConstantDecl:
-				parser->addEnumValueResult(parser->parseEnumValue(cursor, visitResult));
-				break;
-	
-			default:
-				break;
+			//Set parsed enum in result if it is valid
+			return parser->setParsedEntity(cursor);
 		}
-	
-		return visitResult;
+		else
+		{
+			parser->getParsingResult()->parsedEnum.emplace(context.rootCursor, PropertyGroup());
+		}
 	}
+	
+	CXChildVisitResult visitResult = CXChildVisitResult::CXChildVisit_Continue;
+
+	switch (cursor.kind)
+	{
+		case CXCursorKind::CXCursor_EnumConstantDecl:
+			parser->addEnumValueResult(parser->parseEnumValue(cursor, visitResult));
+			break;
+	
+		default:
+			break;
+	}
+	
+	return visitResult;
 }
 
 EnumValueParsingResult EnumParser::parseEnumValue(CXCursor const& enumValueCursor, CXChildVisitResult& out_visitResult) noexcept
@@ -87,7 +102,8 @@ CXChildVisitResult EnumParser::setParsedEntity(CXCursor const& annotationCursor)
 
 	if (opt::optional<PropertyGroup> propertyGroup = getProperties(annotationCursor))
 	{
-		getParsingResult()->parsedEnum.emplace(EnumInfo(context.rootCursor, std::move(*propertyGroup)));
+		//Set the parsing entity in the result and update the shouldParseAllNested flag in the context
+		updateShouldParseAllNested(getParsingResult()->parsedEnum.emplace(context.rootCursor, std::move(*propertyGroup)));
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
@@ -118,7 +134,7 @@ void EnumParser::addEnumValueResult(EnumValueParsingResult&& result) noexcept
 	}
 }
 
-void EnumParser::pushContext(CXCursor const& enumCursor, ParsingContext const& parentContext, EnumParsingResult& out_result) noexcept
+ParsingContext& EnumParser::pushContext(CXCursor const& enumCursor, ParsingContext const& parentContext, EnumParsingResult& out_result) noexcept
 {
 	ParsingContext newContext;
 
@@ -130,4 +146,6 @@ void EnumParser::pushContext(CXCursor const& enumCursor, ParsingContext const& p
 	newContext.parsingResult			= &out_result;
 
 	contextsStack.push(std::move(newContext));
+
+	return contextsStack.top();
 }

@@ -65,8 +65,10 @@ namespace kodgen
 			*	@param enumCursor		Root cursor of the enum to parse.
 			*	@param parentContext	Context the new context will inherit from.
 			*	@param out_result		Result to fill during parsing.
+			*
+			*	@param The new context.
 			*/
-			void							pushContext(CXCursor const&			enumCursor,
+			ParsingContext&					pushContext(CXCursor const&			enumCursor,
 														ParsingContext const&	parentContext,
 														EnumParsingResult&		out_result)		noexcept;
 

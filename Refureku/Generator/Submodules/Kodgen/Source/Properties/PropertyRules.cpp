@@ -11,14 +11,14 @@ PropertyRules::PropertyRules(std::string defaultMacroName) noexcept:
 {
 }
 
-bool PropertyRules::addSimplePropertyRule(std::string&& propertyName) noexcept
+bool PropertyRules::addSimplePropertyRule(std::string propertyName) noexcept
 {
 	return _simplePropertyRules.emplace(SimplePropertyRule(std::forward<std::string>(propertyName))).second;
 }
 
-bool PropertyRules::removeSimplePropertyRule(std::string&& propertyName) noexcept
+bool PropertyRules::removeSimplePropertyRule(std::string propertyName) noexcept
 {
-	std::set<SimplePropertyRule>::const_iterator it = _simplePropertyRules.find(SimplePropertyRule(std::forward<std::string>(propertyName)));
+	std::set<SimplePropertyRule>::const_iterator it = _simplePropertyRules.find(SimplePropertyRule(std::move(propertyName)));
 
 	if (it != _simplePropertyRules.cend())
 	{
@@ -30,14 +30,14 @@ bool PropertyRules::removeSimplePropertyRule(std::string&& propertyName) noexcep
 	return false;
 }
 
-bool PropertyRules::addComplexPropertyRule(std::string&& mainPropertyName, std::string&& subPropPattern) noexcept
+bool PropertyRules::addComplexPropertyRule(std::string mainPropertyName, std::string subPropPattern) noexcept
 {
-	return _complexPropertyRules.insert(ComplexPropertyRule(std::forward<std::string>(mainPropertyName), std::forward<std::string>(subPropPattern))).second;
+	return _complexPropertyRules.insert(ComplexPropertyRule(std::move(mainPropertyName), std::move(subPropPattern))).second;
 }
 
-bool PropertyRules::removeComplexPropertyRule(std::string&& mainPropertyName, std::string&& subPropPattern) noexcept
+bool PropertyRules::removeComplexPropertyRule(std::string mainPropertyName, std::string subPropPattern) noexcept
 {
-	std::set<ComplexPropertyRule>::const_iterator it = _complexPropertyRules.find(ComplexPropertyRule(std::forward<std::string>(mainPropertyName), std::forward<std::string>(subPropPattern)));
+	std::set<ComplexPropertyRule>::const_iterator it = _complexPropertyRules.find(ComplexPropertyRule(std::move(mainPropertyName), std::move(subPropPattern)));
 
 	if (it != _complexPropertyRules.cend())
 	{
@@ -49,7 +49,7 @@ bool PropertyRules::removeComplexPropertyRule(std::string&& mainPropertyName, st
 	return false;
 }
 
-bool PropertyRules::removeComplexPropertyRule(std::string&& mainPropertyName) noexcept
+bool PropertyRules::removeComplexPropertyRule(std::string const& mainPropertyName) noexcept
 {
 	decltype(_complexPropertyRules)::const_iterator it = std::find_if(_complexPropertyRules.cbegin(), _complexPropertyRules.cend(), [mainPropertyName](ComplexPropertyRule const& prop) { return prop.name == mainPropertyName; });
 

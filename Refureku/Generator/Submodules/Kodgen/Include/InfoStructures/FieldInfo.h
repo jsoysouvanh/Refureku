@@ -22,7 +22,6 @@ namespace kodgen
 			{
 				bool isStatic	: 1;
 				bool isMutable	: 1;
-
 			}					qualifiers;
 
 			/** Type of this field. */
