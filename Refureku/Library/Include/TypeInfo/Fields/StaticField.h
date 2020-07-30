@@ -72,9 +72,6 @@ namespace rfk
 			*	@return The data address corresponding to this static field.
 			*/
 			inline void*	getDataAddress()							const noexcept;
-
-			StaticField& operator=(StaticField const&)	= default;
-			StaticField& operator=(StaticField&&)		= default;
 	};
 
 	#include "TypeInfo/Fields/StaticField.inl"

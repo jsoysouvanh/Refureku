@@ -96,9 +96,6 @@ namespace rfk
 			*/
 			template <typename... ArgTypes>
 			void		checkedInvoke(ArgTypes&&... arguments)	const;
-
-			StaticMethod& operator=(StaticMethod const&)	= default;
-			StaticMethod& operator=(StaticMethod&&)			= default;
 	};
 
 	#include "TypeInfo/Methods/StaticMethod.inl"

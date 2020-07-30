@@ -117,9 +117,6 @@ namespace rfk
 			*/
 			template <typename... ArgTypes>
 			void		checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
-
-			Method& operator=(Method const&)	= default;
-			Method& operator=(Method&&)			= default;
 	};
 
 	#include "TypeInfo/Methods/Method.inl"

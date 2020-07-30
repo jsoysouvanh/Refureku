@@ -16,7 +16,7 @@ bool CustomInstantiatorPropertyRule::isPropertyGroupValid(kodgen::PropertyGroup 
 	return isUsedOnlyOnce(propertyGroup, propertyIndex, out_errorDescription);
 }
 
-bool CustomInstantiatorPropertyRule::isEntityValid(kodgen::EntityInfo const& entity, kodgen::uint8 propertyIndex, std::string& out_errorDescription) const noexcept
+bool CustomInstantiatorPropertyRule::isEntityValid(kodgen::EntityInfo const& entity, kodgen::uint8 /* propertyIndex */, std::string& out_errorDescription) const noexcept
 {
 	kodgen::MethodInfo const& methodInfo = static_cast<kodgen::MethodInfo const&>(entity);
 

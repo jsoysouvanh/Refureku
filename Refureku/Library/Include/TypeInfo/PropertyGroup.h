@@ -17,7 +17,10 @@ namespace rfk
 	class PropertyGroup
 	{
 		public:
+			/** Collection of simple properties. */
 			std::unordered_set<std::string>						simpleProperties;
+
+			/** Collection of complex properties. */
 			std::unordered_multimap<std::string, std::string>	complexProperties;
 
 			PropertyGroup()						= default;

@@ -84,9 +84,6 @@ namespace rfk
 			template <typename ReturnType>
 			void checkReturnType()		const;
 
-			MethodBase& operator=(MethodBase const&)	= default;
-			MethodBase& operator=(MethodBase&&)			= default;
-
 		public:
 			/** Flags describing this method. */
 			EMethodFlags					flags	= EMethodFlags::Default;

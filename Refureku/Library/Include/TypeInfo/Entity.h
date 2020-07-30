@@ -141,8 +141,5 @@ namespace rfk
 			Entity(Entity const&)															= default;
 			Entity(Entity&&)																= default;
 			~Entity()																		= default;
-
-			Entity& operator=(Entity const&)	= default;
-			Entity& operator=(Entity&&)			= default;
 	};
 }

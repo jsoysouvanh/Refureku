@@ -359,9 +359,6 @@ namespace rfk
 			*	Internal use only.
 			*/
 			void __RFKsetDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
-
-			Struct& operator=(Struct const&)	= delete;
-			Struct& operator=(Struct&&)			= default;
 	};
 
 	#include "TypeInfo/Archetypes/Struct.inl"

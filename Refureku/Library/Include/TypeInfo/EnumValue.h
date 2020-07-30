@@ -22,8 +22,5 @@ namespace rfk
 			EnumValue(EnumValue const&)										= default;
 			EnumValue(EnumValue&&)											= default;
 			~EnumValue()													= default;
-
-			EnumValue&	operator =(EnumValue const&)	= delete;
-			EnumValue&	operator =(EnumValue&&)			= default;
 	};
 }

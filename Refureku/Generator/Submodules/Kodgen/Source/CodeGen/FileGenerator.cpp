@@ -76,7 +76,7 @@ GeneratedCodeTemplate* FileGenerator::getEntityGeneratedCodeTemplate(EntityInfo 
 
 	//Find the specified code template
 	decltype(entityInfo.properties.complexProperties)::const_iterator it = std::find_if(entityInfo.properties.complexProperties.cbegin(), entityInfo.properties.complexProperties.cend(),
-																			[this](ComplexProperty const& prop) { return prop.mainProperty == NativeProperties::parseAllNestedProperty; });
+																			[](ComplexProperty const& prop) { return prop.mainProperty == NativeProperties::parseAllNestedProperty; });
 
 	if (it == entityInfo.properties.complexProperties.cend())	//No main property corresponding to codeTemplateMainComplexPropertyName found
 	{

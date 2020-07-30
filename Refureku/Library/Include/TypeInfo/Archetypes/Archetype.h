@@ -60,8 +60,5 @@ namespace rfk
 			Archetype(Archetype const&)										= delete;
 			Archetype(Archetype&&)											= default;
 			~Archetype()													= default;
-
-			Archetype& operator=(Archetype const&)	= delete;
-			Archetype& operator=(Archetype&&)		= default;
 	};
 }

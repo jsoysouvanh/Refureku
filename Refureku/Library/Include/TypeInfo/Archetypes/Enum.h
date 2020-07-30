@@ -55,9 +55,6 @@ namespace rfk
 			*	@return All the EnumValues equal to the provided value.
 			*/
 			std::vector<EnumValue const*>	getEnumValues(int64 value)				const noexcept;
-
-			Enum& operator=(Enum const&)	= delete;
-			Enum& operator=(Enum&&)			= default;
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */

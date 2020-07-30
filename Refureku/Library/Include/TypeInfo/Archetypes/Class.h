@@ -21,8 +21,5 @@ namespace rfk
 			Class(Class const&)					= delete;
 			Class(Class&&)						= default;
 			~Class()							= default;
-
-			Class& operator=(Class const&)	= delete;
-			Class& operator=(Class&&)		= default;
 	};
 }

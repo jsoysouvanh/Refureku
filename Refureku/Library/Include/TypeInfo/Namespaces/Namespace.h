@@ -70,8 +70,5 @@ namespace rfk
 			*	@return The found enum if it exists, else nullptr.
 			*/
 			Enum const*			getEnum(std::string enumName)					const	noexcept;
-
-			Namespace& operator=(Namespace const&)	= delete;
-			Namespace& operator=(Namespace&&)		= default;
 	};
 }

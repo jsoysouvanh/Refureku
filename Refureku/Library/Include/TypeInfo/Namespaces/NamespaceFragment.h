@@ -24,8 +24,5 @@ namespace rfk
 			NamespaceFragment(NamespaceFragment const&)		= delete;
 			NamespaceFragment(NamespaceFragment&&)			= default;
 			~NamespaceFragment()							= default;
-
-			NamespaceFragment& operator=(NamespaceFragment const&)	= delete;
-			NamespaceFragment& operator=(NamespaceFragment&&)		= default;
 	};
 }

@@ -113,9 +113,6 @@ namespace rfk
 			*	@return Address of the data in instance.
 			*/
 			inline void const*	getDataAddress(void const* instance)						const noexcept;
-
-			Field& operator=(Field const&)	= default;
-			Field& operator=(Field&&)		= default;
 	};
 
 	#include "TypeInfo/Fields/Field.inl"

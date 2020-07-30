@@ -53,8 +53,5 @@ namespace rfk
 			*	@return true if this field is mutable, else false
 			*/
 			bool				isMutable()		const	noexcept;
-
-			FieldBase& operator=(FieldBase const&)	= default;
-			FieldBase& operator=(FieldBase&&)		= default;
 	};
 }

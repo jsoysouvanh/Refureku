@@ -14,7 +14,8 @@ bool DynamicGetArchetypePropertyRule::isPropertyGroupValid(kodgen::PropertyGroup
 	return isUsedOnlyOnce(propertyGroup, propertyIndex, out_errorDescription);
 }
 
-bool DynamicGetArchetypePropertyRule::isEntityValid(kodgen::EntityInfo const& entity, kodgen::uint8 propertyIndex, std::string& out_errorDescription) const noexcept
+bool DynamicGetArchetypePropertyRule::isEntityValid(kodgen::EntityInfo const& /* entity */, kodgen::uint8 /* propertyIndex */, std::string& /* out_errorDescription */) const noexcept
 {
+	//No particular check to make
 	return true;
 }
