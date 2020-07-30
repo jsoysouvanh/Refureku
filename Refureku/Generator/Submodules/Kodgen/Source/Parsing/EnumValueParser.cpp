@@ -20,6 +20,12 @@ CXChildVisitResult EnumValueParser::parse(CXCursor const& enumValueCursor, Parsi
 
 	clang_visitChildren(enumValueCursor, &EnumValueParser::parseNestedEntity, this);
 
+	//Check properties validy one last time
+	if (out_result.parsedEnumValue.has_value())
+	{
+		performFinalPropertiesCheck(*out_result.parsedEnumValue);
+	}
+
 	popContext();
 
 	DISABLE_WARNING_PUSH
@@ -59,10 +65,10 @@ void EnumValueParser::setProperties(CXCursor const& annotationCursor) noexcept
 	{
 		getParsingResult()->parsedEnumValue->properties = std::move(*propertyGroup);
 	}
-	else if (context.propertyParser->getParsingError() != EParsingError::Count)
+	else if (!context.propertyParser->getParsingErrorDescription().empty())
 	{
 		//Fatal parsing error occured
-		context.parsingResult->errors.emplace_back(ParsingError(context.propertyParser->getParsingError(), clang_getCursorLocation(annotationCursor)));
+		context.parsingResult->errors.emplace_back(context.propertyParser->getParsingErrorDescription(), clang_getCursorLocation(annotationCursor));
 	}
 }
 

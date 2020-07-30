@@ -9,10 +9,20 @@
 
 #include <Parsing/FileParser.h>
 
+#include "Properties/DynamicGetArchetypePropertyRule.h"
+#include "Properties/CustomInstantiatorPropertyRule.h"
+#include "Properties/RangePropertyRule.h"
+
 namespace rfk
 {
 	class FileParser : public kodgen::FileParser
 	{
+		private:
+			/** Native properties. */
+			DynamicGetArchetypePropertyRule	_dynamicGetArchetypePropertyRule;
+			CustomInstantiatorPropertyRule	_customInstantiatorPropertyRule;
+			RangePropertyRule				_rangePropertyRule;
+
 		protected:
 			virtual void preParse(fs::path const& parseFile)											noexcept override;
 			virtual void postParse(fs::path const& parseFile, kodgen::FileParsingResult const& result)	noexcept override;

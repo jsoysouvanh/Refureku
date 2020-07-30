@@ -26,6 +26,12 @@ CXChildVisitResult FieldParser::parse(CXCursor const& fieldCursor, ParsingContex
 		}
 	}
 
+	//Check properties validy one last time
+	if (out_result.parsedField.has_value())
+	{
+		performFinalPropertiesCheck(*out_result.parsedField);
+	}
+
 	popContext();
 
 	DISABLE_WARNING_PUSH
@@ -69,10 +75,10 @@ CXChildVisitResult FieldParser::setParsedEntity(CXCursor const& annotationCursor
 	{
 		result->parsedField.emplace(context.rootCursor, std::move(*propertyGroup));
 	}
-	else if (context.propertyParser->getParsingError() != EParsingError::Count)
+	else if (!context.propertyParser->getParsingErrorDescription().empty())
 	{
 		//Fatal parsing error occured
-		result->errors.emplace_back(ParsingError(context.propertyParser->getParsingError(), clang_getCursorLocation(annotationCursor)));
+		result->errors.emplace_back(ParsingError(context.propertyParser->getParsingErrorDescription(), clang_getCursorLocation(annotationCursor)));
 	}
 
 	return CXChildVisitResult::CXChildVisit_Break;

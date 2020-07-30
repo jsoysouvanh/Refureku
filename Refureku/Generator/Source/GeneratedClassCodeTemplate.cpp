@@ -5,8 +5,8 @@
 
 #include "InfoStructures/NestedStructClassInfo.h"
 #include "InfoStructures/NestedEnumInfo.h"
+#include "Properties/NativeProperties.h"
 #include "Misc/FundamentalTypes.h"
-#include "NativeProperties.h"
 
 using namespace rfk;
 
@@ -65,7 +65,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 	
 	bool shouldGenerateGetArchetype = std::find_if(info.properties.simpleProperties.cbegin(),
 												   info.properties.simpleProperties.cend(),
-												   [](kodgen::SimpleProperty const& p) { return p.name == NativeProperties::dynamicGetArchetypeProperty; }) != info.properties.simpleProperties.cend();
+												   [](kodgen::SimpleProperty const& p) { return p.mainProperty == NativeProperties::dynamicGetArchetypeProperty; }) != info.properties.simpleProperties.cend();
 
 	std::string getArchetypeMethod = (shouldGenerateGetArchetype) ?
 		returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" : "";
@@ -142,7 +142,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
 
 			//Check if this static method is a custom instantiator, in which case we should add it to the list of custom instantiators of this class
-			if (std::find_if(method.properties.simpleProperties.cbegin(), method.properties.simpleProperties.cend(), [](kodgen::SimpleProperty const& sp){ return sp.name == NativeProperties::customInstantiatorProperty; })
+			if (std::find_if(method.properties.simpleProperties.cbegin(), method.properties.simpleProperties.cend(), [](kodgen::SimpleProperty const& sp){ return sp.mainProperty == NativeProperties::customInstantiatorProperty; })
 					!= method.properties.simpleProperties.cend())
 			{
 				generatedFile.writeLine("	type.__RFKaddCustomInstantiator<" + method.returnType.getCanonicalName() + ">(&*staticMethodsIt);\t\\");

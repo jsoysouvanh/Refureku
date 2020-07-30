@@ -1,7 +1,5 @@
 #include "FileParser.h"
 
-#include "NativeProperties.h"
-
 using namespace rfk;
 
 FileParser::FileParser() noexcept:
@@ -24,17 +22,18 @@ FileParser::FileParser() noexcept:
 	parsingSettings.propertyParsingSettings.subPropertySeparator = ',';
 
 	//Define the Refureku property macros
-	parsingSettings.propertyParsingSettings.namespacePropertyRules.macroName	= "RFKNamespace";
-	parsingSettings.propertyParsingSettings.classPropertyRules.macroName		= "RFKClass";
-	parsingSettings.propertyParsingSettings.structPropertyRules.macroName		= "RFKStruct";
-	parsingSettings.propertyParsingSettings.fieldPropertyRules.macroName		= "RFKField";
-	parsingSettings.propertyParsingSettings.methodPropertyRules.macroName		= "RFKMethod";
-	parsingSettings.propertyParsingSettings.enumPropertyRules.macroName			= "RFKEnum";
-	parsingSettings.propertyParsingSettings.enumValuePropertyRules.macroName	= "RFKEnumVal";
+	parsingSettings.propertyParsingSettings.namespaceMacroName	= "RFKNamespace";
+	parsingSettings.propertyParsingSettings.classMacroName		= "RFKClass";
+	parsingSettings.propertyParsingSettings.structMacroName		= "RFKStruct";
+	parsingSettings.propertyParsingSettings.fieldMacroName		= "RFKField";
+	parsingSettings.propertyParsingSettings.methodMacroName		= "RFKMethod";
+	parsingSettings.propertyParsingSettings.enumMacroName		= "RFKEnum";
+	parsingSettings.propertyParsingSettings.enumValueMacroName	= "RFKEnumVal";
 
-	parsingSettings.propertyParsingSettings.classPropertyRules.addSimplePropertyRule(NativeProperties::dynamicGetArchetypeProperty);
-	parsingSettings.propertyParsingSettings.structPropertyRules.addSimplePropertyRule(NativeProperties::dynamicGetArchetypeProperty);
-	parsingSettings.propertyParsingSettings.methodPropertyRules.addSimplePropertyRule(NativeProperties::customInstantiatorProperty);
+	//Setup property rules
+	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_dynamicGetArchetypePropertyRule);
+	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_customInstantiatorPropertyRule);
+	parsingSettings.propertyParsingSettings.complexPropertyRules.emplace_back(&_rangePropertyRule);
 }
 
 void FileParser::preParse(fs::path const& parseFile) noexcept

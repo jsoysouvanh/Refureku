@@ -4,11 +4,11 @@
 
 using namespace kodgen;
 
-ParsingError::ParsingError(EParsingError parsingError, CXSourceLocation errorSourceLocation) noexcept:
+ParsingError::ParsingError(std::string errorDescription, CXSourceLocation errorSourceLocation) noexcept:
 	_line{0},
 	_column{0},
 	_filename{""},
-	_propertyParsingError{parsingError}
+	_description{std::move(errorDescription)}
 {
 	if (!clang_equalLocations(errorSourceLocation, clang_getNullLocation()))
 	{
@@ -35,14 +35,14 @@ unsigned ParsingError::getColumn() const noexcept
 	return _column;
 }
 
-EParsingError ParsingError::getErrorValue() const noexcept
+std::string const& ParsingError::getDescription() const noexcept
 {
-	return _propertyParsingError;
+	return _description;
 }
 
 std::string ParsingError::toString() const noexcept
 {
-	return kodgen::toString(getErrorValue()) + ", " + getFilename() + ": " + std::to_string(getLine()) + ":" + std::to_string(getColumn());
+	return getDescription() + ", " + getFilename() + ": " + std::to_string(getLine()) + ":" + std::to_string(getColumn());
 }
 
 std::ostream& kodgen::operator<<(std::ostream& out_stream, ParsingError const& parsingError) noexcept

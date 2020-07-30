@@ -4,7 +4,6 @@
 
 #include "Parsing/ParsingSettings.h"
 #include "Parsing/PropertyParser.h"
-#include "Properties/NativeProperties.h"
 #include "Misc/Helpers.h"
 
 using namespace kodgen;
@@ -25,6 +24,12 @@ CXChildVisitResult EnumParser::parse(CXCursor const& enumCursor, ParsingContext 
 		{
 			getParsingResult()->parsedEnum.emplace(enumCursor, PropertyGroup());
 		}
+	}
+
+	//Check properties validy one last time
+	if (out_result.parsedEnum.has_value())
+	{
+		performFinalPropertiesCheck(*out_result.parsedEnum);
 	}
 
 	popContext();
@@ -109,9 +114,9 @@ CXChildVisitResult EnumParser::setParsedEntity(CXCursor const& annotationCursor)
 	}
 	else
 	{
-		if (context.propertyParser->getParsingError() != EParsingError::Count)
+		if (!context.propertyParser->getParsingErrorDescription().empty())
 		{
-			context.parsingResult->errors.emplace_back(ParsingError(context.propertyParser->getParsingError(), clang_getCursorLocation(annotationCursor)));
+			context.parsingResult->errors.emplace_back(ParsingError(context.propertyParser->getParsingErrorDescription(), clang_getCursorLocation(annotationCursor)));
 		}
 
 		return CXChildVisitResult::CXChildVisit_Break;

@@ -66,19 +66,17 @@ namespace kodgen
 			/** List of all methods contained in this class. */
 			std::vector<MethodInfo>								methods;
 
-			StructClassInfo()								noexcept;
-			StructClassInfo(CXCursor const& cursor,
-							PropertyGroup&& propertyGroup,
-							EType&&			entityType)		noexcept;
-			StructClassInfo(StructClassInfo const&)			= default;
-			StructClassInfo(StructClassInfo&&)				= default;
-			~StructClassInfo()								= default;
+			StructClassInfo()									noexcept;
+			StructClassInfo(CXCursor const&		cursor,
+							PropertyGroup&&		propertyGroup,
+							EType&&				entityType)		noexcept;
+			StructClassInfo(StructClassInfo const&)				= default;
+			StructClassInfo(StructClassInfo&&)					= default;
+			~StructClassInfo()									= default;
 
 			/**
 			*	@brief Refresh the outerEntity field of all nested entities. Internal use only.
 			*/
 			void	refreshOuterEntity()	noexcept;
 	};
-
-	std::ostream& operator<<(std::ostream& out_stream, kodgen::StructClassInfo const&) noexcept;
 }

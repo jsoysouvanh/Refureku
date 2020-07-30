@@ -7,13 +7,29 @@
 
 #pragma once
 
-#include "Properties/SimplePropertyRule.h"
+#include <string>
 
 namespace kodgen
 {
-	/**
-	*	Those two classes actually handle the same data.
-	*	The using is just used for semantic differentiation.
-	*/
-	using SimpleProperty = SimplePropertyRule;
+	//Forward declaration
+	class SimplePropertyRule;
+
+	class SimpleProperty
+	{
+		public:
+			/** Name of this property. */
+			std::string					mainProperty;
+
+			/** Pointer to the rule which validated this property syntax. */
+			SimplePropertyRule const*	boundPropertyRule	= nullptr;
+
+
+			SimpleProperty()													= default;
+			SimpleProperty(std::string					mainProperty,
+							SimplePropertyRule const*	matchingPropertyRule)	noexcept;
+			SimpleProperty(SimpleProperty const&)								= default;
+			SimpleProperty(SimpleProperty&&)									= default;
+			~SimpleProperty()													= default;
+
+	};
 }

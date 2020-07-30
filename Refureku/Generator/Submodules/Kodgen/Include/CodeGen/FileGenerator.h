@@ -17,6 +17,8 @@
 #include "CodeGen/FileGenerationResult.h"
 #include "CodeGen/GeneratedFile.h"
 #include "Parsing/FileParser.h"
+#include "Properties/NativeProperties/ParseAllNestedPropertyRule.h"
+#include "Properties/NativeProperties/GenCodeTemplatePropertyRule.h"
 
 namespace kodgen
 {
@@ -32,14 +34,10 @@ namespace kodgen
 			/** Default generated code templates to use when none is specified in entity property parameters. */
 			std::unordered_map<EntityInfo::EType, GeneratedCodeTemplate*>	_defaultGeneratedCodeTemplates;
 			
-			/** Regex used internally to determine either a generated code template name is valid or not. */
-			std::string														_supportedCodeTemplateRegex		= "";
+			/** Native property rules. */
+			ParseAllNestedPropertyRule										_parseAllNestedPropertyRule;
+			GenCodeTemplatePropertyRule										_generatedCodeTemplatePropertyRule;
 
-			/**
-			*	@brief Update the _supportedCodeTemplateRegex string using the existing generated code templates contained in _generatedCodeTemplates.
-			*/
-			void					updateSupportedCodeTemplateRegex()												noexcept;
-			
 			/**
 			*	@brief Parse a file and generate its paired file.
 			*
@@ -112,12 +110,19 @@ namespace kodgen
 															   bool						forceRegenerateAll)			noexcept;
 			
 			/**
-			*	@brief Refresh the property rules to allow generated code template names.
+			*	@brief Add native property rules to the parsing settings.
 			*	
-			*	@param parsingSettings Parsing settings of the file parser.
+			*	@param propParsingSettings Property parsing settings of the file parser.
 			*/
-			void					refreshPropertyRules(ParsingSettings& parsingSettings)					const	noexcept;
+			void					addNativePropertyRules(PropertyParsingSettings& propParsingSettings)			noexcept;
 			
+			/**
+			*	@brief Remove native property rules from the parsing settings.
+			*	
+			*	@param propParsingSettings Property parsing settings of the file parser.
+			*/
+			void					clearNativePropertyRules(PropertyParsingSettings& propParsingSettings)			noexcept;
+
 			/**
 			*	@brief Generate / update the entity macros file.
 			*	
@@ -244,13 +249,10 @@ namespace kodgen
 
 		public:
 			/** Logger used to issue logs from the FileGenerator. */
-			ILogger*								logger								= nullptr;
-
-			/** Main (complex) property name used to specify code generator in source code. */
-			std::string								codeTemplateMainComplexPropertyName	= "GenTemplate";
+			ILogger*								logger					= nullptr;
 
 			/** Extension used for generated files. */
-			std::string								generatedFilesExtension				= ".kodgen.h";
+			std::string								generatedFilesExtension	= ".kodgen.h";
 
 			/**
 			*	Path to the directory all files should be generated (and where existing ones are).
@@ -291,18 +293,18 @@ namespace kodgen
 			/** Extensions of files which should be considered for parsing. */
 			std::unordered_set<std::string>			supportedExtensions;
 
-			FileGenerator()						noexcept;
+			FileGenerator()						= default;
 			FileGenerator(FileGenerator const&)	= default;
 			FileGenerator(FileGenerator&&)		= default;
-			virtual ~FileGenerator()			noexcept;
+			virtual ~FileGenerator()			= default;
 
 			/**
 			*	@brief Add a new template to the list of generated code templates.
 			*		   if @param templateName is already defined in the generator, replace it.
 			*
-			*	@param templateName Name of the code template which will be specified in the source code
-			*	@param codeTemplate Pointer to a GeneratedCodeTemplate instance (must be newed).
-			*			The instance will be deleted by the FileGenerator when destroyed
+			*	@param templateName Name of the code template which will be specified in the source code.
+			*	@param codeTemplate Pointer to a GeneratedCodeTemplate instance.
+			*						The provided instance has be deleted manually by the user if newed.
 			*/
 			void addGeneratedCodeTemplate(std::string const&		templateName,
 										  GeneratedCodeTemplate*	codeTemplate)			noexcept;

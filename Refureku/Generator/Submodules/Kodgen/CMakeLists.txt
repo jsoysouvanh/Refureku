@@ -11,13 +11,19 @@ set(KodgenTargetLibrary Kodgen)
 
 add_library(${KodgenTargetLibrary}
 				STATIC
+					Source/Properties/PropertyParsingSettings.cpp
+					Source/Properties/SimpleProperty.cpp
+					Source/Properties/ComplexProperty.cpp
 					Source/Properties/SimplePropertyRule.cpp
 					Source/Properties/ComplexPropertyRule.cpp
-					Source/Properties/ComplexProperty.cpp
-					Source/Properties/PropertyRules.cpp
-					Source/Properties/PropertyGroup.cpp
-					Source/Properties/PropertyParsingSettings.cpp
-	
+					Source/Properties/DefaultSimplePropertyRule.cpp
+					Source/Properties/DefaultComplexPropertyRule.cpp
+					Source/Properties/ComplexPropertySubProperty.cpp
+					Source/Properties/FixedComplexPropertyRule.cpp
+
+					Source/Properties/NativeProperties/ParseAllNestedPropertyRule.cpp
+					Source/Properties/NativeProperties/GenCodeTemplatePropertyRule.cpp
+
 					Source/InfoStructures/EntityInfo.cpp
 					Source/InfoStructures/NamespaceInfo.cpp
 					Source/InfoStructures/FieldInfo.cpp
@@ -29,7 +35,6 @@ add_library(${KodgenTargetLibrary}
 					Source/InfoStructures/EnumValueInfo.cpp
 					Source/InfoStructures/TypeInfo.cpp
 	
-					Source/Parsing/EParsingError.cpp
 					Source/Parsing/ParsingError.cpp
 					Source/Parsing/PropertyParser.cpp
 					Source/Parsing/EntityParser.cpp
@@ -95,5 +100,4 @@ if (WIN32)
 						$<IF:$<BOOL:${MSVC}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/libclang.dll,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libclang.dll>)
 endif()
 
-add_subdirectory(Tests)
 add_subdirectory(Examples)

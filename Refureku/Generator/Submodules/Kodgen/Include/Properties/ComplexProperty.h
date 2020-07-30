@@ -9,23 +9,29 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
-
-#include "Properties/SimpleProperty.h"
 
 namespace kodgen
 {
-	class ComplexProperty final : public SimpleProperty
+	//Forward declaration
+	class ComplexPropertyRule;
+
+	class ComplexProperty
 	{
 		public:
-			/** Collection of all subproperties of the main property. */
+			/** Name of this property. */
+			std::string					mainProperty;
+
+			/** Collection of all subproperties. */
 			std::vector<std::string>	subProperties;
 
-			ComplexProperty()						= default;
-			ComplexProperty(ComplexProperty const&)	= default;
-			ComplexProperty(ComplexProperty&&)		= default;
-			~ComplexProperty()						= default;
-	};
+			/** Pointer to the rule which validated this property syntax. */
+			ComplexPropertyRule const*	boundPropertyRule	= nullptr;
 
-	std::ostream& operator<<(std::ostream& out_stream, ComplexProperty const& complexProp) noexcept;
+			ComplexProperty()													= default;
+			ComplexProperty(std::string					mainProperty,
+							 ComplexPropertyRule const*	matchingPropertyRule)	noexcept;
+			ComplexProperty(ComplexProperty const&)								= default;
+			ComplexProperty(ComplexProperty&&)									= default;
+			~ComplexProperty()													= default;
+	};
 }

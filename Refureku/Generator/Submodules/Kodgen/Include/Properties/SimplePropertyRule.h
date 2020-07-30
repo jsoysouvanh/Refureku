@@ -8,33 +8,45 @@
 #pragma once
 
 #include <string>
-#include <iostream>
+
+#include "Properties/IPropertyRule.h"
 
 namespace kodgen
 {
-	class SimplePropertyRule
+	class SimplePropertyRule : public IPropertyRule
 	{
-		public:
-			/** Name of this property rule. */
-			std::string name = "";
-
-			SimplePropertyRule()							= default;
-			SimplePropertyRule(std::string&& name)			noexcept;
-			SimplePropertyRule(SimplePropertyRule const&)	= default;
-			SimplePropertyRule(SimplePropertyRule&&)		= default;
-			~SimplePropertyRule()							= default;
+		protected:
+			/**
+			*	@brief Check that a property rule is used only once in a given property group.
+			*	
+			*	@param propertyGroup		The property group containing the checked property.
+			*	@param propertyIndex		Index of the property that should appear only once.
+			*	@param out_errorDescription	Error to fill in case the property rule is used more than once.
+			*
+			*	@return true if this property rule is used by a single property in the property group, else false.
+			*			If false is returned, out_errorDescription must be filled with an error description.
+			*/
+			virtual bool		isUsedOnlyOnce(PropertyGroup const&	propertyGroup,
+											   uint8				propertyIndex,
+											   std::string&			out_errorDescription)	const noexcept;
 
 			/**
-			*	@brief Check whether 2 property rules have the same name or not.
-			*	
-			*	@param other The other property rule.
-			*	
-			*	@return true if both property rules have the same name, else false.
+			*	@return The documentation of the macro defined by this rule.
+			*			Can return an empty string.
 			*/
-			bool hasSameName(SimplePropertyRule const& other)	const noexcept;
+			virtual std::string	getMacroDocumentation()										const noexcept;
 
-			bool operator<(SimplePropertyRule const& other)		const;
+		public:
+			SimplePropertyRule()							= default;
+			SimplePropertyRule(SimplePropertyRule const&)	= default;
+			SimplePropertyRule(SimplePropertyRule&&)		= default;
+			virtual ~SimplePropertyRule()					= default;
+
+			/**
+			*	@return The macro definition for properties accepted by this rule.
+			*			This macro is only used for auto completion and documentation and is therefore not mandatory.
+			*			Can return an empty string.
+			*/
+			virtual std::string	getMacroDefinition()	const	noexcept;
 	};
-
-	std::ostream& operator<<(std::ostream& out_stream, SimplePropertyRule const&) noexcept;
 }

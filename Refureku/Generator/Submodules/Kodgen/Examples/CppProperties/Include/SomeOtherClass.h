@@ -15,7 +15,7 @@ namespace SomeNamespace KGNamespace()
 	class KGClass() SomeOtherClass
 	{
 		private:
-			KGField(Get[const, &], Get[&])
+			KGField(Get[const, &])
 			float									_someFloat	= 42.42f; 
 
 			KGField(Get[const, &])

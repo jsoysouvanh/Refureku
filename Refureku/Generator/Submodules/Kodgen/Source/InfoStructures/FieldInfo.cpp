@@ -25,10 +25,3 @@ FieldInfo::FieldInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noex
 		memoryOffset /= 8;	//From bits to bytes
 	}
 }
-
-std::ostream& kodgen::operator<<(std::ostream& out_stream, FieldInfo const& fieldInfo) noexcept
-{
-	out_stream << fieldInfo.type << "   " << fieldInfo.name << "   " << fieldInfo.properties;
-
-	return out_stream;
-}

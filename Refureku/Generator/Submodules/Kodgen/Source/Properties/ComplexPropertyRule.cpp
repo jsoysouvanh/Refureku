@@ -2,19 +2,31 @@
 
 using namespace kodgen;
 
-ComplexPropertyRule::ComplexPropertyRule(std::string&& name, std::string&& argumentPattern)	noexcept:
-	SimplePropertyRule(std::forward<std::string>(name)),
-	subPropertyPattern{std::forward<std::string>(argumentPattern)}
-{}
-
-bool ComplexPropertyRule::isValidSubProperty(std::string const& argument) const noexcept
+bool ComplexPropertyRule::isUsedOnlyOnce(PropertyGroup const& propertyGroup, uint8 propertyIndex, std::string& out_errorDescription) const noexcept
 {
-	std::match_results<std::string::const_iterator>	matchResults;
-
-	if (std::regex_search(argument, matchResults, subPropertyPattern, std::regex_constants::match_default))
+	for (uint8 i = 0u; i < propertyGroup.complexProperties.size(); i++)
 	{
-		return matchResults.prefix().str().empty() && matchResults.suffix().str().empty();
+		if (i != propertyIndex && propertyGroup.complexProperties[i].boundPropertyRule == this)
+		{
+			out_errorDescription = "Property \"" + propertyGroup.complexProperties[i].mainProperty + "\" is used more than once in the property group.";
+
+			return false;
+		}
 	}
 
-	return false;
+	return true;
+}
+
+bool ComplexPropertyRule::hasValidSubpropCount(PropertyGroup const& propertyGroup, uint8 propertyIndex, uint8 validCount, std::string& out_errorDescription) const noexcept
+{
+	size_t subpropsCount = propertyGroup.complexProperties[propertyIndex].subProperties.size();
+
+	if (subpropsCount != validCount)
+	{
+		out_errorDescription = "Expected " + std::to_string(validCount) + " subproperties but " + std::to_string(subpropsCount) + " provided."; 
+		
+		return false;
+	}
+
+	return true;
 }

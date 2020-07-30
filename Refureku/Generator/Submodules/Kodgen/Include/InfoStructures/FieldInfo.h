@@ -40,6 +40,4 @@ namespace kodgen
 			FieldInfo(FieldInfo&&)						= default;
 			~FieldInfo()								= default;
 	};
-
-	std::ostream& operator<<(std::ostream& out_stream, FieldInfo const& fieldInfo) noexcept;
 }

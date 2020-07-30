@@ -8,21 +8,27 @@
 #pragma once
 
 #include <vector>
-#include <iostream>
 
 #include "Properties/SimpleProperty.h"
 #include "Properties/ComplexProperty.h"
 
 namespace kodgen
 {
-	struct PropertyGroup
+	class PropertyGroup
 	{
-		/** Collection of simple properties. */
-		std::vector<SimpleProperty>		simpleProperties;
-		
-		/** Collection of complex properties. */
-		std::vector<ComplexProperty>	complexProperties;
-	};
+		public:
+			/** Vector containing all simple properties of an entity. */
+			std::vector<SimpleProperty>		simpleProperties;
 
-	std::ostream& operator<<(std::ostream& out_stream, PropertyGroup const&) noexcept;
+			/** Vector containing all complex properties of an entity. */
+			std::vector<ComplexProperty>	complexProperties;
+
+			PropertyGroup()						= default;
+			PropertyGroup(PropertyGroup const&)	= default;
+			PropertyGroup(PropertyGroup&&)		= default;
+			~PropertyGroup()						= default;
+
+			PropertyGroup&	operator=(PropertyGroup const&)	= default;
+			PropertyGroup&	operator=(PropertyGroup&&)			= default;
+	};
 }

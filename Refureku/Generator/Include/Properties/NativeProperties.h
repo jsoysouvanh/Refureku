@@ -15,13 +15,13 @@ namespace rfk
 	{
 		public:
 			/** Struct/Class property used to generate the override getArchetype() method. */
-			inline static std::string const	dynamicGetArchetypeProperty = "DynamicGetArchetype";
+			inline static std::string const	dynamicGetArchetypeProperty		= "DynamicGetArchetype";
 
 			/**
 			*	Method property used to register a method as a class instantiator (used by makeInstance()).
 			*	The method must have the prototype static void* (*)(AnyParameterYouWant);
 			*/
-			inline static std::string const customInstantiatorProperty	= "CustomInstantiator";
+			inline static std::string const customInstantiatorProperty		= "CustomInstantiator";
 
 			NativeProperties()							= delete;
 			NativeProperties(NativeProperties const&)	= delete;

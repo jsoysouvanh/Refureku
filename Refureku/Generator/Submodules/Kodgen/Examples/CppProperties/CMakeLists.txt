@@ -10,6 +10,8 @@ set(CppPropertiesDemoProjectGeneratorTarget CppPropertiesDemoProjectGenerator)
 add_executable(${CppPropertiesDemoProjectGeneratorTarget}
 					Generator/Source/CppPropsParser.cpp
 					Generator/Source/CppPropsCodeTemplate.cpp
+					Generator/Source/GetPropertyRule.cpp
+					Generator/Source/SetPropertyRule.cpp
 					
 					Generator/Source/main.cpp)
 

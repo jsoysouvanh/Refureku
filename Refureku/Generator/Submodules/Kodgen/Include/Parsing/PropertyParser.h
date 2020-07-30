@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Parsing/EParsingError.h"
+#include "InfoStructures/EntityInfo.h"
 #include "Properties/PropertyGroup.h"
 #include "Properties/PropertyParsingSettings.h"
 #include "Misc/Optional.h"
@@ -21,7 +21,7 @@ namespace kodgen
 			PropertyParsingSettings const*			_propertyParsingSettings	= nullptr;
 
 			/** Last parsing error which occured when parsing from this parser. */
-			EParsingError							_parsingError				= EParsingError::Count;
+			std::string								_parsingErrorDescription	= "";
 
 			/** Collection of last parsed split properties. */
 			std::vector<std::vector<std::string>>	_splitProps;
@@ -77,38 +77,38 @@ namespace kodgen
 			*	@brief	Check for each prop / subprop validity and fill a propertyGroup consequently.
 			*	
 			*	@param splitProps	The collection of all parsed props / subprops.
-			*	@param rules		The list of rules which must be fulfilled by the properties.
+			*	@param entityType	The type of the attached entity.
 			*
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
 			opt::optional<PropertyGroup> checkAndFillPropertyGroup(std::vector<std::vector<std::string>>&	splitProps,
-																   PropertyRules const&						rules)			noexcept;
+																	EntityInfo::EType						entityType)		noexcept;
 
 			/**
 			*	@brief Add a single property to the given property group using the provided data.
 			*
-			*	@param propertyAsVector  Vector of property (element 0 is the property to add).
-			*	@param rules			 Rules the properties must fulfill to be considered as valid.
-			*	@param out_propertyGroup Group of property to update.
+			*	@param propertyAsVector		Vector of property (element 0 is the property to add).
+			*	@param entityType			The type of the attached entity.
+			*	@param out_propertyGroup	Group of property to update.
 			*
 			*	@return true and update the out_propertyGroup parameter on success, else return false and update _parsingError value.
 			*/
 			bool addSimpleProperty(std::vector<std::string>&	propertyAsVector,
-								   PropertyRules const&			rules,
+								   EntityInfo::EType			entityType,
 								   PropertyGroup&				out_propertyGroup)											noexcept;
 
 			/**
 			*	@brief Add a complex property to the given property group using the provided data.
 			*
-			*	@param propertyAsVector  Vector of properties. Element 0 is the main prop, next elements are subprops.
-			*	@param rules			 Rules the properties must fulfill to be considered as valid.
-			*	@param out_propertyGroup Group of property to update.
+			*	@param propertyAsVector		Vector of properties. Element 0 is the main prop, next elements are subprops.
+			*	@param entityType			The type of the attached entity.
+			*	@param out_propertyGroup	Group of property to update.
 			*
 			*	@return true and update the out_propertyGroup parameter on success, else return false and update _parsingError value.
 			*/
 			bool addComplexProperty(std::vector<std::string>&	propertyAsVector,
-									PropertyRules const&		rules,
+									EntityInfo::EType			entityType,
 									PropertyGroup&				out_propertyGroup)											noexcept;
 
 			/**
@@ -116,14 +116,14 @@ namespace kodgen
 			*
 			*	@param annotateMessage	The raw string contained in the __attribute__(annotate()) preprocessor.
 			*	@param annotationId		The annotation the annotate message should begin with to be considered as valid.
-			*	@param rules			Rules the parsed properties must fulfilled to be considered as valid properties.
+			*	@param entityType		The type of the attached entity.
 			*
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
 			opt::optional<PropertyGroup>	getProperties(std::string&&			annotateMessage,
 														  std::string const&	annotationId,
-														  PropertyRules const&	rules)										noexcept;
+														  EntityInfo::EType		entityType)										noexcept;
 
 		public:
 			/**
@@ -146,7 +146,7 @@ namespace kodgen
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
-			opt::optional<PropertyGroup>	getNamespaceProperties(std::string&& annotateMessage)	noexcept;
+			opt::optional<PropertyGroup>	getNamespaceProperties(std::string annotateMessage)		noexcept;
 			
 			/**
 			*	@brief Retrieve the properties from a class annotate attribute.
@@ -156,7 +156,7 @@ namespace kodgen
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
-			opt::optional<PropertyGroup>	getClassProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getClassProperties(std::string annotateMessage)			noexcept;
 			
 			/**
 			*	@brief Retrieve the properties from a struct annotate attribute.
@@ -166,7 +166,7 @@ namespace kodgen
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
-			opt::optional<PropertyGroup>	getStructProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getStructProperties(std::string annotateMessage)		noexcept;
 			
 			/**
 			*	@brief Retrieve the properties from a field annotate attribute.
@@ -176,7 +176,7 @@ namespace kodgen
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
-			opt::optional<PropertyGroup>	getFieldProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getFieldProperties(std::string annotateMessage)			noexcept;
 
 			/**
 			*	@brief Retrieve the properties from a method annotate attribute.
@@ -186,7 +186,7 @@ namespace kodgen
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
-			opt::optional<PropertyGroup>	getMethodProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getMethodProperties(std::string annotateMessage)		noexcept;
 
 			/**
 			*	@brief Retrieve the properties from an enum annotate attribute.
@@ -196,7 +196,7 @@ namespace kodgen
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
-			opt::optional<PropertyGroup>	getEnumProperties(std::string&& annotateMessage)		noexcept;
+			opt::optional<PropertyGroup>	getEnumProperties(std::string annotateMessage)			noexcept;
 
 			/**
 			*	@brief Retrieve the properties from an enum value annotate attribute.
@@ -206,13 +206,13 @@ namespace kodgen
 			*	@return A valid optional object if all properties were valid, else an empty optional.
 			*			On failure, _parsingError is updated.
 			*/
-			opt::optional<PropertyGroup>	getEnumValueProperties(std::string&& annotateMessage)	noexcept;
+			opt::optional<PropertyGroup>	getEnumValueProperties(std::string annotateMessage)		noexcept;
 
 			/**
-			*	@brief Getter for _parsingError field.
+			*	@brief Getter for _parsingErrorDescription field.
 			*	
-			*	@return _parsingError.
+			*	@return _parsingErrorDescription.
 			*/
-			EParsingError					getParsingError() const noexcept;
+			std::string const&				getParsingErrorDescription()					const	noexcept;
 	};
 }

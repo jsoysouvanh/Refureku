@@ -12,8 +12,6 @@
 
 #include <clang-c/Index.h>
 
-#include "Parsing/EParsingError.h"
-
 namespace kodgen
 {
 	class ParsingError
@@ -28,12 +26,12 @@ namespace kodgen
 			/** Filename in which the error occured. */
 			std::string		_filename				= "";
 
-			/** Parsing error kind. */
-			EParsingError	_propertyParsingError	= EParsingError::Count;
+			/** Error description. */
+			std::string		_description			= "";
 
 		public:
 			ParsingError()																	= delete;
-			ParsingError(EParsingError		parsingError,
+			ParsingError(std::string		errorDescription,
 						 CXSourceLocation	errorSourceLocation = clang_getNullLocation())	noexcept;
 			ParsingError(ParsingError const&)												= default;
 			ParsingError(ParsingError&&)													= default;
@@ -44,35 +42,35 @@ namespace kodgen
 			*
 			*	@return _filename.
 			*/
-			std::string const&		getFilename()	const noexcept;
+			std::string const&		getFilename()		const noexcept;
 
 			/**
 			*	@brief Getter for _line field.
 			*
 			*	@return _line.
 			*/
-			unsigned				getLine()		const noexcept;
+			unsigned				getLine()			const noexcept;
 
 			/**
 			*	@brief Getter for _column field.
 			*
 			*	@return _column.
 			*/
-			unsigned				getColumn()		const noexcept;
+			unsigned				getColumn()			const noexcept;
 
 			/**
-			*	@brief Getter for _propertyParsingError field.
+			*	@brief Getter for _description field.
 			*
-			*	@return _propertyParsingError.
+			*	@return _description.
 			*/
-			EParsingError			getErrorValue()	const noexcept;
+			std::string const&		getDescription()	const noexcept;
 
 			/**
 			*	@brief Retrieve the string representation of one of this class instances.
 			*
 			*	@return The string representation of this instance.
-			*/
-			std::string				toString()		const noexcept;
+			*/	
+			std::string				toString()			const noexcept;
 
 			ParsingError& operator=(ParsingError const&)	= default;
 			ParsingError& operator=(ParsingError&&)			= default;

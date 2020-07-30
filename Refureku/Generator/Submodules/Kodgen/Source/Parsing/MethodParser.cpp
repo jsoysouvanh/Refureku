@@ -28,6 +28,12 @@ CXChildVisitResult MethodParser::parse(CXCursor const& methodCursor, ParsingCont
 		}
 	}
 
+	//Check properties validy one last time
+	if (out_result.parsedMethod.has_value())
+	{
+		performFinalPropertiesCheck(*out_result.parsedMethod);
+	}
+
 	popContext();
 
 	DISABLE_WARNING_PUSH
@@ -102,10 +108,10 @@ CXChildVisitResult MethodParser::setParsedEntity(CXCursor const& annotationCurso
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
-	else if (context.propertyParser->getParsingError() != EParsingError::Count)
+	else if (!context.propertyParser->getParsingErrorDescription().empty())
 	{
 		//Fatal parsing error occured
-		result->errors.emplace_back(ParsingError(context.propertyParser->getParsingError(), clang_getCursorLocation(context.rootCursor)));
+		result->errors.emplace_back(ParsingError(context.propertyParser->getParsingErrorDescription(), clang_getCursorLocation(context.rootCursor)));
 	}
 
 	return CXChildVisitResult::CXChildVisit_Break;

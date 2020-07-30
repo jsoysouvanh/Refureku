@@ -24,12 +24,12 @@ namespace kodgen
 			TypeInfo					underlyingType;
 			std::vector<EnumValueInfo>	enumValues;
 
-			EnumInfo()								= default;
+			EnumInfo()									= default;
 			EnumInfo(CXCursor const& cursor,
-					 PropertyGroup&& propertyGroup)	noexcept;
-			EnumInfo(EnumInfo const&)				= default;
-			EnumInfo(EnumInfo&&)					= default;
-			~EnumInfo()								= default;
+					 PropertyGroup&& propertyGroup)		noexcept;
+			EnumInfo(EnumInfo const&)					= default;
+			EnumInfo(EnumInfo&&)						= default;
+			~EnumInfo()									= default;
 
 			/**
 			*	@brief Refresh the outerEntity field of all nested entities. Internal use only.

@@ -19,20 +19,20 @@ CppPropsParser::CppPropsParser() noexcept:
 	//Each subproperty will be separed by a ,
 	parsingSettings.propertyParsingSettings.subPropertySeparator = ',';
 
-	kodgen::PropertyRules& fieldPropertyRules = parsingSettings.propertyParsingSettings.fieldPropertyRules;
+	//kodgen::PropertyRules& fieldPropertyRules = parsingSettings.propertyParsingSettings.fieldPropertyRules;
 
-	//Define the Get property, which can take 
-	fieldPropertyRules.addComplexPropertyRule("Get", "&|\\*|const|explicit");
-	fieldPropertyRules.addComplexPropertyRule("Set", "explicit");
+	////Define the Get property, which can take
+	parsingSettings.propertyParsingSettings.complexPropertyRules.push_back(&_getPropertyRule);
+	parsingSettings.propertyParsingSettings.complexPropertyRules.push_back(&_setPropertyRule);
 
 	//Define the macros to use for each entity type
-	parsingSettings.propertyParsingSettings.namespacePropertyRules.macroName	= "KGNamespace";
-	parsingSettings.propertyParsingSettings.classPropertyRules.macroName		= "KGClass";
-	parsingSettings.propertyParsingSettings.structPropertyRules.macroName		= "KGStruct";
-	fieldPropertyRules.macroName												= "KGField";
-	parsingSettings.propertyParsingSettings.methodPropertyRules.macroName		= "KGMethod";
-	parsingSettings.propertyParsingSettings.enumPropertyRules.macroName			= "KGEnum";
-	parsingSettings.propertyParsingSettings.enumValuePropertyRules.macroName	= "KGEnumVal";
+	parsingSettings.propertyParsingSettings.namespaceMacroName	= "KGNamespace";
+	parsingSettings.propertyParsingSettings.classMacroName		= "KGClass";
+	parsingSettings.propertyParsingSettings.structMacroName		= "KGStruct";
+	parsingSettings.propertyParsingSettings.fieldMacroName		= "KGField";
+	parsingSettings.propertyParsingSettings.methodMacroName		= "KGMethod";
+	parsingSettings.propertyParsingSettings.enumMacroName		= "KGEnum";
+	parsingSettings.propertyParsingSettings.enumValueMacroName	= "KGEnumVal";
 }
 
 void CppPropsParser::preParse(fs::path const& parseFile) noexcept

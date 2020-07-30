@@ -32,7 +32,12 @@ namespace rfk
 									  kodgen::EntityInfo const&	entityInfo)		noexcept override;
 
 			/**
-			*	TODO
+			*	@brief Generates a string containing the code which adds properties to the entity.
+			*
+			*	@param info				Source entity.
+			*	@param entityVarName	Target entity variable name in the generated code.
+			*	
+			*	@return The generated code which adds the properties to the entity.
 			*/
 			std::string	fillEntityProperties(kodgen::EntityInfo const&	info,
 											 std::string const&			entityVarName)	const	noexcept;

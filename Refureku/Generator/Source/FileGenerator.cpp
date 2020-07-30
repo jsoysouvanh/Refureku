@@ -1,9 +1,5 @@
 #include "FileGenerator.h"
 
-#include "GeneratedNamespaceCodeTemplate.h"
-#include "GeneratedClassCodeTemplate.h"
-#include "GeneratedEnumCodeTemplate.h"
-
 using namespace rfk;
 
 std::string const				FileGenerator::_endFileMacroName = "File_GENERATED";
@@ -20,11 +16,15 @@ FileGenerator::FileGenerator() noexcept:
 	supportedExtensions.emplace(".hpp");
 
 	//Bind name -> templates
-	addGeneratedCodeTemplate("RefurekuNamespace", new rfk::GeneratedNamespaceCodeTemplate());
-	addGeneratedCodeTemplate("RefurekuClass", new rfk::GeneratedClassCodeTemplate());
-	addGeneratedCodeTemplate("RefurekuEnum", new rfk::GeneratedEnumCodeTemplate());
+	addGeneratedCodeTemplate("RefurekuNamespace", &_namespaceCodeTemplate);
+	addGeneratedCodeTemplate("RefurekuClass", &_classCodeTemplate);
+	addGeneratedCodeTemplate("RefurekuEnum", &_enumCodeTemplate);
 
-	/**	class RFKClass() MyClass {}; enum [class] RFKEnum() {}; */
+	/**
+	*	namespace MyNamespace RFKNamespace() {}
+	*	class RFKClass() MyClass {};
+	*	enum [class] RFKEnum() MyEnum {};
+	*/
 	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Namespace, "RefurekuNamespace");
 	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Class, "RefurekuClass");
 	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Struct, "RefurekuClass");

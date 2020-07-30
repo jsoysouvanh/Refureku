@@ -39,21 +39,38 @@ namespace kodgen
 			/** Access of this method in its outer struct/class. */
 			EAccessSpecifier				accessSpecifier;
 
-			/** Prototype of this method as a string */
+			/** Prototype of this method as a string. */
 			std::string						prototype;
 
+			/** Return type of this method. */
 			TypeInfo						returnType;
+
+			/** Parameters of this method. */
 			std::vector<MethodParamInfo>	parameters;
 
-			MethodInfo()														= default;
-			MethodInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup)	noexcept;
-			MethodInfo(MethodInfo const&)										= default;
-			MethodInfo(MethodInfo&&)											= default;
-			~MethodInfo()														= default;
+			MethodInfo()								= default;
+			MethodInfo(CXCursor const& cursor,
+					   PropertyGroup&& propertyGroup)	noexcept;
+			MethodInfo(MethodInfo const&)				= default;
+			MethodInfo(MethodInfo&&)					= default;
+			~MethodInfo()								= default;
 
-			std::string getName()																const noexcept;
-			std::string getPrototype(bool removeQualifiers = false, bool removeSpaces = false)	const noexcept;
+			/**
+			*	@brief Get the name of this method.
+			*	
+			*	@return Return the name of this method.
+			*/
+			std::string getName()										const noexcept;
+
+			/**
+			*	@brief Get the prototype of this method.
+			*	
+			*	@param removeQualifiers	Should all method qualifiers be removed from the prototype?
+			*	@param removeSpaces		Should all spaces be removed from the prototype?
+			*	
+			*	@return The prototype of the method.
+			*/
+			std::string getPrototype(bool removeQualifiers	= false,
+									 bool removeSpaces		= false)	const noexcept;
 	};
-
-	std::ostream& operator<<(std::ostream& out_stream, MethodInfo const& methodInfo) noexcept;
 }

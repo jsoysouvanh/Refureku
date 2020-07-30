@@ -4,7 +4,6 @@
 
 #include "Parsing/ParsingSettings.h"
 #include "Parsing/PropertyParser.h"
-#include "Properties/NativeProperties.h"
 #include "Misc/Helpers.h"
 #include "Misc/DisableWarningMacros.h"
 
@@ -26,6 +25,12 @@ CXChildVisitResult NamespaceParser::parse(CXCursor const& namespaceCursor, Parsi
 		{
 			getParsingResult()->parsedNamespace.emplace(namespaceCursor, PropertyGroup());
 		}
+	}
+
+	//Check properties validy one last time
+	if (out_result.parsedNamespace.has_value())
+	{
+		performFinalPropertiesCheck(*out_result.parsedNamespace);
 	}
 
 	popContext();
@@ -132,9 +137,9 @@ CXChildVisitResult NamespaceParser::setParsedEntity(CXCursor const& annotationCu
 	}
 	else
 	{
-		if (getContext().propertyParser->getParsingError() != EParsingError::Count)
+		if (!getContext().propertyParser->getParsingErrorDescription().empty())
 		{
-			getContext().parsingResult->errors.emplace_back(ParsingError(getContext().propertyParser->getParsingError(), clang_getCursorLocation(annotationCursor)));
+			getContext().parsingResult->errors.emplace_back(ParsingError(getContext().propertyParser->getParsingErrorDescription(), clang_getCursorLocation(annotationCursor)));
 		}
 
 		return CXChildVisitResult::CXChildVisit_Break;

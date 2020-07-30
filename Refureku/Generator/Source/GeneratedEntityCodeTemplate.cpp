@@ -15,14 +15,14 @@ std::string	GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 
 	for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
 	{
-		result += entityVarName + "properties.simpleProperties.emplace(\"" + prop.name + "\"); ";
+		result += entityVarName + "properties.simpleProperties.emplace(\"" + prop.mainProperty + "\"); ";
 	}
 
 	for (kodgen::ComplexProperty const& prop : info.properties.complexProperties)
 	{
 		for (std::string subProp : prop.subProperties)
 		{
-			result += entityVarName + "properties.complexProperties.emplace(\"" + prop.name + "\", \"" + subProp + "\"); ";
+			result += entityVarName + "properties.complexProperties.emplace(\"" + prop.mainProperty + "\", \"" + subProp + "\"); ";
 		}
 	}
 

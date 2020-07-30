@@ -12,6 +12,10 @@
 
 #include <CodeGen/FileGenerator.h>
 
+#include "GeneratedNamespaceCodeTemplate.h"
+#include "GeneratedClassCodeTemplate.h"
+#include "GeneratedEnumCodeTemplate.h"
+
 namespace rfk
 {
 	class FileGenerator : public kodgen::FileGenerator
@@ -34,6 +38,11 @@ namespace rfk
 
 			/** List of all enums we have generated metadata for. */
 			std::vector<kodgen::EnumInfo const*>		_generatedEnums;
+
+			/** Code templates used by this generator. */
+			GeneratedNamespaceCodeTemplate	_namespaceCodeTemplate;
+			GeneratedClassCodeTemplate		_classCodeTemplate;
+			GeneratedEnumCodeTemplate		_enumCodeTemplate;
 
 			/**
 			*	@brief Write the end file macro

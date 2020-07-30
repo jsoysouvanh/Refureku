@@ -10,34 +10,10 @@
 #include "InfoStructures/EnumValueInfo.h"
 #include "InfoStructures/FieldInfo.h"
 #include "InfoStructures/MethodInfo.h"
-#include "Properties/NativeProperties.h"
+#include "Properties/NativeProperties/NativeProperties.h"
 #include "Misc/TomlUtility.h"
 
 using namespace kodgen;
-
-FileGenerator::FileGenerator() noexcept
-{
-}
-
-FileGenerator::~FileGenerator() noexcept
-{
-	for (auto& [key, value] : _generatedCodeTemplates)
-	{
-		delete value;
-	}
-}
-
-void FileGenerator::updateSupportedCodeTemplateRegex() noexcept
-{
-	_supportedCodeTemplateRegex.clear();
-
-	for (auto& [key, value] : _generatedCodeTemplates)
-	{
-		_supportedCodeTemplateRegex += key + "|";
-	}
-
-	_supportedCodeTemplateRegex.pop_back();
-}
 
 void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingResult const& parsingResult) noexcept
 {
@@ -100,7 +76,7 @@ GeneratedCodeTemplate* FileGenerator::getEntityGeneratedCodeTemplate(EntityInfo 
 
 	//Find the specified code template
 	decltype(entityInfo.properties.complexProperties)::const_iterator it = std::find_if(entityInfo.properties.complexProperties.cbegin(), entityInfo.properties.complexProperties.cend(),
-																			[this](ComplexProperty const& prop) { return prop.name == codeTemplateMainComplexPropertyName; });
+																			[this](ComplexProperty const& prop) { return prop.mainProperty == NativeProperties::parseAllNestedProperty; });
 
 	if (it == entityInfo.properties.complexProperties.cend())	//No main property corresponding to codeTemplateMainComplexPropertyName found
 	{
@@ -336,7 +312,7 @@ void FileGenerator::addGeneratedCodeTemplate(std::string const& templateName, Ge
 	{
 		_generatedCodeTemplates[templateName] = codeTemplate;
 
-		updateSupportedCodeTemplateRegex();
+		_generatedCodeTemplatePropertyRule.validTemplateNames.insert(templateName);
 	}
 }
 
@@ -436,22 +412,16 @@ void FileGenerator::processIncludedDirectories(FileParser& parser, FileGeneratio
 	}
 }
 
-void FileGenerator::refreshPropertyRules(ParsingSettings& parsingSettings) const noexcept
+void FileGenerator::addNativePropertyRules(PropertyParsingSettings& propParsingSettings) noexcept
 {
-	//Make sure the CodeTemplate property is setup in class, struct and enum
-	parsingSettings.propertyParsingSettings.classPropertyRules.removeComplexPropertyRule(codeTemplateMainComplexPropertyName);
-	parsingSettings.propertyParsingSettings.classPropertyRules.addComplexPropertyRule(codeTemplateMainComplexPropertyName, _supportedCodeTemplateRegex);
+	propParsingSettings.simplePropertyRules.push_back(&_parseAllNestedPropertyRule);
+	propParsingSettings.complexPropertyRules.push_back(&_generatedCodeTemplatePropertyRule);
+}
 
-	parsingSettings.propertyParsingSettings.structPropertyRules.removeComplexPropertyRule(codeTemplateMainComplexPropertyName);
-	parsingSettings.propertyParsingSettings.structPropertyRules.addComplexPropertyRule(codeTemplateMainComplexPropertyName, _supportedCodeTemplateRegex);
-
-	parsingSettings.propertyParsingSettings.enumPropertyRules.removeComplexPropertyRule(codeTemplateMainComplexPropertyName);
-	parsingSettings.propertyParsingSettings.enumPropertyRules.addComplexPropertyRule(codeTemplateMainComplexPropertyName, _supportedCodeTemplateRegex);
-
-	//Make sure native properties are correct
-	parsingSettings.propertyParsingSettings.namespacePropertyRules.addSimplePropertyRule(NativeProperties::parseAllNestedProperty);
-	parsingSettings.propertyParsingSettings.structPropertyRules.addSimplePropertyRule(NativeProperties::parseAllNestedProperty);
-	parsingSettings.propertyParsingSettings.classPropertyRules.addSimplePropertyRule(NativeProperties::parseAllNestedProperty);
+void FileGenerator::clearNativePropertyRules(PropertyParsingSettings& propParsingSettings) noexcept
+{
+	propParsingSettings.simplePropertyRules.pop_back();		//Remove _parseAllNestedPropertyRule
+	propParsingSettings.complexPropertyRules.pop_back();	//Remove _generatedCodeTemplatePropertyRule
 }
 
 void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
@@ -464,13 +434,40 @@ void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
 	macrosDefinitionFile.writeLines("#pragma once",
 									"",
 									"#ifndef " + parser.parsingMacro,
-									"	#define " + pps.namespacePropertyRules.macroName + "(...)",
-									"	#define " + pps.classPropertyRules.macroName + "(...)",
-									"	#define " + pps.structPropertyRules.macroName + "(...)",
-									"	#define " + pps.fieldPropertyRules.macroName + "(...)",
-									"	#define " + pps.methodPropertyRules.macroName + "(...)",
-									"	#define " + pps.enumPropertyRules.macroName + "(...)",
-									"	#define " + pps.enumValuePropertyRules.macroName + "(...)",
+									"",
+									"#define " + pps.namespaceMacroName	+ "(...)",
+									"#define " + pps.classMacroName		+ "(...)",
+									"#define " + pps.structMacroName	+ "(...)",
+									"#define " + pps.fieldMacroName		+ "(...)",
+									"#define " + pps.methodMacroName	+ "(...)",
+									"#define " + pps.enumMacroName		+ "(...)",
+									"#define " + pps.enumValueMacroName	+ "(...)");
+
+	//Generate property rules macros + doc
+	std::string macroDefinition;
+	for (kodgen::SimplePropertyRule const* propertyRule : parser.parsingSettings.propertyParsingSettings.simplePropertyRules)
+	{
+		macroDefinition = propertyRule->getMacroDefinition();
+
+		if (!macroDefinition.empty())
+		{
+			macrosDefinitionFile.writeLines("",
+											propertyRule->getMacroDefinition());
+		}
+	}
+
+	for (kodgen::ComplexPropertyRule const* propertyRule : parser.parsingSettings.propertyParsingSettings.complexPropertyRules)
+	{
+		macroDefinition = propertyRule->getMacroDefinition();
+		
+		if (!macroDefinition.empty())
+		{
+			macrosDefinitionFile.writeLines("",
+											propertyRule->getMacroDefinition());
+		}
+	}
+
+	macrosDefinitionFile.writeLines("",
 									"#endif");
 }
 
@@ -510,12 +507,14 @@ FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool force
 
 		if (fs::is_directory(outputDirectory))
 		{
-			refreshPropertyRules(parser.parsingSettings);
+			addNativePropertyRules(parser.parsingSettings.propertyParsingSettings);
 
 			generateMacrosFile(parser);
 
 			processIncludedFiles(parser, genResult, forceRegenerateAll);
 			processIncludedDirectories(parser, genResult, forceRegenerateAll);
+
+			clearNativePropertyRules(parser.parsingSettings.propertyParsingSettings);
 
 			genResult.completed = true;
 		}
@@ -534,7 +533,6 @@ bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 		{
 			toml::value const& generatorSettings = toml::find(settings, "FileGeneratorSettings");
 
-			TomlUtility::updateSetting<std::string>(generatorSettings, "codeTemplateMainComplexPropertyName", codeTemplateMainComplexPropertyName);
 			TomlUtility::updateSetting<std::string>(generatorSettings, "generatedFilesExtension", generatedFilesExtension);
 			TomlUtility::updateSetting<fs::path>(generatorSettings, "outputDirectory", outputDirectory);
 			TomlUtility::updateSetting(generatorSettings, "toParseFiles", toParseFiles);

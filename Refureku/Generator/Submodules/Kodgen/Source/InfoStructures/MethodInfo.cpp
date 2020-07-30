@@ -56,10 +56,3 @@ std::string MethodInfo::getPrototype(bool removeQualifiers, bool removeSpaces) c
 
 	return result;
 }
-
-std::ostream& kodgen::operator<<(std::ostream& out_stream, MethodInfo const& methodInfo) noexcept
-{
-	out_stream << methodInfo.returnType << "   " << methodInfo.name << "   " << methodInfo.properties;
-
-	return out_stream;
-}

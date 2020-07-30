@@ -27,12 +27,12 @@ void CppPropsCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, ko
 		for (kodgen::ComplexProperty const& complexProp : fieldInfo.properties.complexProperties)
 		{
 			//Getter
-			if (complexProp.name == GetterPropName)
+			if (complexProp.mainProperty == GetterPropName)
 			{
 				generatedFile.writeLine(generateGetter(fieldInfo, complexProp) + "	\\");
 			}
 			//Setter
-			else if (complexProp.name == SetterPropName)
+			else if (complexProp.mainProperty == SetterPropName)
 			{
 				generatedFile.writeLine(generateSetter(fieldInfo, complexProp) + "	\\");
 			}

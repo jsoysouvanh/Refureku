@@ -67,12 +67,12 @@ bool FileParser::parse(fs::path const& toParseFile, FileParsingResult& out_resul
 		}
 		else
 		{
-			out_result.errors.emplace_back(ParsingError(EParsingError::TranslationUnitInitFailed));
+			out_result.errors.emplace_back("Failed to initialize translation unit for file: " + toParseFile.string());
 		}
 	}
 	else
 	{
-		out_result.errors.emplace_back(ParsingError(EParsingError::InexistantFile));
+		out_result.errors.emplace_back("File " + toParseFile.string() + " doesn't exist.");
 	}
 
 	postParse(toParseFile, out_result);
@@ -232,13 +232,13 @@ void FileParser::postParse(fs::path const&, FileParsingResult const&) noexcept
 
 void FileParser::refreshBuildCommandStrings() noexcept
 {
-	_namespacePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.namespacePropertyRules.macroName	+ "(...)=__attribute__((annotate(\"KGN:\"#__VA_ARGS__)))";
-	_classPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.classPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGC:\"#__VA_ARGS__)))";
-	_structPropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.structPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGS:\"#__VA_ARGS__)))";
-	_fieldPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.fieldPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGF:\"#__VA_ARGS__)))";
-	_methodPropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.methodPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGM:\"#__VA_ARGS__)))";
-	_enumPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.enumPropertyRules.macroName		+ "(...)=__attribute__((annotate(\"KGE:\"#__VA_ARGS__)))";
-	_enumValuePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.enumValuePropertyRules.macroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
+	_namespacePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.namespaceMacroName	+ "(...)=__attribute__((annotate(\"KGN:\"#__VA_ARGS__)))";
+	_classPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.classMacroName		+ "(...)=__attribute__((annotate(\"KGC:\"#__VA_ARGS__)))";
+	_structPropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.structMacroName	+ "(...)=__attribute__((annotate(\"KGS:\"#__VA_ARGS__)))";
+	_fieldPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.fieldMacroName		+ "(...)=__attribute__((annotate(\"KGF:\"#__VA_ARGS__)))";
+	_methodPropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.methodMacroName	+ "(...)=__attribute__((annotate(\"KGM:\"#__VA_ARGS__)))";
+	_enumPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.enumMacroName		+ "(...)=__attribute__((annotate(\"KGE:\"#__VA_ARGS__)))";
+	_enumValuePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.enumValueMacroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
 
 	_projectIncludeDirs.clear();
 	_projectIncludeDirs.reserve(parsingSettings.projectIncludeDirectories.size());
