@@ -383,10 +383,36 @@ void properties()
 {
 	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
-	TEST(!ec.properties.hasProperty("dynamicGetArchetype"));
-	TEST(ec.properties.hasProperty("DynamicGetArchetype"));
+	TEST(ec.properties.getSimpleProperty("dynamicGetArchetype") == nullptr);
+	TEST(ec.properties.getSimpleProperty("DynamicGetArchetype") != nullptr);
 
-	TEST(ec.getStaticMethod("customInstantiator")->properties.hasProperty("CustomInstantiator"));
+	TEST(ec.getStaticMethod("customInstantiator")->properties.getSimpleProperty("CustomInstantiator") != nullptr);
+
+	rfk::Class const& ppc = namespace2::ParentParentClass::staticGetArchetype();
+
+	//Range
+	TEST(ppc.getField("ppFloat")->properties.getComplexProperty("Range") != nullptr);
+
+	TEST(ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getInt32(0) == 1);
+	TEST(ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getInt32(1) == 2);
+
+	try
+	{
+		ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getInt32(2);
+		TEST(false);	//Should throw here ..................................... ^
+	}
+	catch (rfk::OutOfRange const& /* exception */)
+	{
+	}
+
+	try
+	{
+		ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getString(0);
+		TEST(false);	//Should throw here ................................ ^
+	}
+	catch (rfk::TypeMismatch const& /* exception */)
+	{
+	}
 
 	parseAllNested();
 }

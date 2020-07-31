@@ -17,9 +17,9 @@
 #include "TypeInfo/EAccessSpecifier.h"
 #include "TypeInfo/Methods/EMethodFlags.h"
 #include "TypeInfo/Methods/MethodParameter.h"
-#include "Exceptions/ArgCountMismatchException.h"
-#include "Exceptions/ReturnTypeMismatchException.h"
-#include "Exceptions/ArgTypeMismatchException.h"
+#include "Exceptions/ArgCountMismatch.h"
+#include "Exceptions/ReturnTypeMismatch.h"
+#include "Exceptions/ArgTypeMismatch.h"
 
 namespace rfk
 {
@@ -62,7 +62,7 @@ namespace rfk
 			/**
 			*	@brief Check that the provided argument count is the same as this method's.
 			*
-			*	@exception ArgCountMismatchException if the argument count is different from this method arg count.
+			*	@exception ArgCountMismatch if the argument count is different from this method arg count.
 			*/
 			template <typename... ArgTypes>
 			void checkArgumentsCount()	const;
@@ -70,8 +70,8 @@ namespace rfk
 			/**
 			*	@brief Check that the provided argument types are the same as this method arguments.
 			*
-			*	@exception ArgCountMismatchException if the argument count is different from this method arg count.
-			*	@exception ArgTypeMismatchException if one the argument has a different type from the expected one.
+			*	@exception ArgCountMismatch if the argument count is different from this method arg count.
+			*	@exception ArgTypeMismatch if one the argument has a different type from the expected one.
 			*/
 			template <typename... ArgTypes>
 			void checkArguments()		const;
@@ -79,7 +79,7 @@ namespace rfk
 			/**
 			*	@brief Check that the provided type is the same as this method return type.
 			*	
-			*	@exception ReturnTypeMismatchException if the provided return type is different from this method's return type.
+			*	@exception ReturnTypeMismatch if the provided return type is different from this method's return type.
 			*/
 			template <typename ReturnType>
 			void checkReturnType()		const;

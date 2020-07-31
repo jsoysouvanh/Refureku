@@ -12,12 +12,12 @@
 
 namespace rfk
 {
-	class BadNamespaceFormat : public std::invalid_argument
+	class TypeMismatch : public std::logic_error
 	{
 		public:
-			explicit BadNamespaceFormat(std::string const& errorMessage)	noexcept;
-			BadNamespaceFormat(BadNamespaceFormat const&)					= default;
-			BadNamespaceFormat(BadNamespaceFormat&&)						= default;
-			~BadNamespaceFormat()											= default;
+			explicit TypeMismatch(std::string const& errorMessage)	noexcept;
+			TypeMismatch(TypeMismatch const&)						= default;
+			TypeMismatch(TypeMismatch&&)							= default;
+			~TypeMismatch()											= default;
 	};
 }

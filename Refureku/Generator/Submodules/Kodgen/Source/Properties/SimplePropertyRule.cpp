@@ -2,6 +2,18 @@
 
 using namespace kodgen;
 
+bool SimplePropertyRule::isPropertyGroupValid(PropertyGroup const& /* propertyGroup */, uint8 /* propertyIndex */, std::string& /* out_errorDescription */) const noexcept
+{
+	//Is valid by default, so that override is not necessary in children
+	return true;
+}
+
+bool SimplePropertyRule::isEntityValid(EntityInfo const& /* entity */, uint8 /* propertyIndex */, std::string& /* out_errorDescription */) const noexcept
+{
+	//Is valid by default, so that override is not necessary in children
+	return true;
+}
+
 bool SimplePropertyRule::isUsedOnlyOnce(PropertyGroup const& propertyGroup, uint8 propertyIndex, std::string& out_errorDescription) const noexcept
 {
 	for (uint8 i = 0u; i < propertyGroup.simpleProperties.size(); i++)

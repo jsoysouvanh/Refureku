@@ -10,7 +10,6 @@ namespace namespace1
 	class ParentParentParentClass
 	{
 		private:
-			[[maybe_unused]]
 			double pppDouble = 0.21;
 
 		public:

@@ -26,9 +26,3 @@ bool GenCodeTemplatePropertyRule::isPropertyGroupValid(PropertyGroup const& prop
 	return	hasValidSubpropCount(propertyGroup, propertyIndex, 1u, out_errorDescription) &&
 			isUsedOnlyOnce(propertyGroup, propertyIndex, out_errorDescription);
 }
-
-bool GenCodeTemplatePropertyRule::isEntityValid(EntityInfo const& /* entity */, uint8 /* propertyIndex */, std::string& /* out_errorDescription */) const noexcept
-{
-	//Nothing special to check
-	return true;
-}

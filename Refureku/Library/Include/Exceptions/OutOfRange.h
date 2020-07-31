@@ -12,12 +12,12 @@
 
 namespace rfk
 {
-	class BadNamespaceFormat : public std::invalid_argument
+	class OutOfRange : public std::out_of_range
 	{
 		public:
-			explicit BadNamespaceFormat(std::string const& errorMessage)	noexcept;
-			BadNamespaceFormat(BadNamespaceFormat const&)					= default;
-			BadNamespaceFormat(BadNamespaceFormat&&)						= default;
-			~BadNamespaceFormat()											= default;
+			explicit OutOfRange(std::string const& errorMessage)	noexcept;
+			OutOfRange(OutOfRange const&)							= default;
+			OutOfRange(OutOfRange&&)								= default;
+			~OutOfRange()											= default;
 	};
 }

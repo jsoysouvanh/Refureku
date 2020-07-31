@@ -14,9 +14,3 @@ bool ParseAllNestedPropertyRule::isPropertyGroupValid(PropertyGroup const& prope
 {
 	return isUsedOnlyOnce(propertyGroup, propertyIndex, out_errorDescription);
 }
-
-bool ParseAllNestedPropertyRule::isEntityValid(EntityInfo const& /* entity */, uint8 /* propertyIndex */, std::string& /* out_errorDescription */) const noexcept
-{
-	//Nothing special to check
-	return true;
-}

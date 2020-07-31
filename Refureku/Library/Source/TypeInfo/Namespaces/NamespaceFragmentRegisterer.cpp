@@ -93,17 +93,22 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(NamespaceFragment const* fragment) noexcept
 {
 	//Append simple properties
-	for (std::string const& simpleProperty : fragment->properties.simpleProperties)
+	for (SimpleProperty const& simpleProperty : fragment->properties.simpleProperties)
 	{
-		_namespaceInstance->properties.simpleProperties.insert(simpleProperty);
+		//Add the simple prop only if it's not there yet
+		if (_namespaceInstance->properties.getSimpleProperty(simpleProperty.mainProperty) == nullptr)
+		{
+			_namespaceInstance->properties.simpleProperties.push_back(simpleProperty);
+		}
 	}
 
 	//Append complex properties
-	for (auto& [key, value] : fragment->properties.complexProperties)
+	for (ComplexProperty const& complexProperty : fragment->properties.complexProperties)
 	{
-		if (!_namespaceInstance->properties.hasProperty(key, value))
+		//Add the complex prop only if it's not there yet
+		if (_namespaceInstance->properties.getComplexProperty(complexProperty.mainProperty) == nullptr)
 		{
-			_namespaceInstance->properties.complexProperties.insert(std::make_pair(key, value));
+			_namespaceInstance->properties.complexProperties.push_back(complexProperty);
 		}
 	}
 }

@@ -53,9 +53,9 @@ void FileParser::postParse(fs::path const&, kodgen::FileParsingResult const& res
 			logger->log(parsingError.toString(), kodgen::ILogger::ELogSeverity::Error);
 		}
 
-		logger->log("Found " + std::to_string(result.namespaces.size()) + " namespaces, " +
-					std::to_string(result.structs.size()) + " structs, " +
-					std::to_string(result.classes.size()) + " classes and " +
-					std::to_string(result.enums.size()) + " enums.", kodgen::ILogger::ELogSeverity::Info);
+		logger->log("Found " + std::to_string(result.namespaces.size()) + " namespace(s), " +
+					std::to_string(result.structs.size()) + " struct(s), " +
+					std::to_string(result.classes.size()) + " classe(s) and " +
+					std::to_string(result.enums.size()) + " enum(s).", kodgen::ILogger::ELogSeverity::Info);
 	}
 }

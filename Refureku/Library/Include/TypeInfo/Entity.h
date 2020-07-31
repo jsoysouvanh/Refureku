@@ -13,7 +13,7 @@
 #include <unordered_map>
 
 #include "Misc/FundamentalTypes.h"
-#include "TypeInfo/PropertyGroup.h"
+#include "TypeInfo/Properties/PropertyGroup.h"
 
 namespace rfk
 {

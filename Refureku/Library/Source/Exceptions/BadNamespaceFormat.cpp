@@ -3,6 +3,6 @@
 using namespace rfk;
 
 BadNamespaceFormat::BadNamespaceFormat(std::string const& errorMessage) noexcept:
-	std::logic_error(errorMessage)
+	std::invalid_argument(errorMessage)
 {
 }

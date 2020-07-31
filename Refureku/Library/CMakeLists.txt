@@ -6,16 +6,22 @@ project(RefurekuLibrary)
 set(RefurekuLibraryTarget Refureku)
 add_library(${RefurekuLibraryTarget}
 				STATIC
-					Source/Exceptions/ArgCountMismatchException.cpp
-					Source/Exceptions/ReturnTypeMismatchException.cpp
-					Source/Exceptions/ArgTypeMismatchException.cpp
+					Source/Exceptions/ArgCountMismatch.cpp
+					Source/Exceptions/TypeMismatch.cpp
+					Source/Exceptions/ReturnTypeMismatch.cpp
+					Source/Exceptions/ArgTypeMismatch.cpp
 					Source/Exceptions/BadNamespaceFormat.cpp
+					Source/Exceptions/OutOfRange.cpp
 
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/Entity.cpp
 					Source/TypeInfo/EnumValue.cpp
 					Source/TypeInfo/Database.cpp
+
+					Source/TypeInfo/Properties/SimpleProperty.cpp
+					Source/TypeInfo/Properties/ComplexProperty.cpp
+					Source/TypeInfo/Properties/PropertyGroup.cpp
 
 					Source/TypeInfo/Namespaces/Namespace.cpp
 					Source/TypeInfo/Namespaces/NamespaceFragment.cpp

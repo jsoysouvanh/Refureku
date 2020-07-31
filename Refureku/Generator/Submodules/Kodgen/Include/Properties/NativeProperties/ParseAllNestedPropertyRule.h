@@ -25,9 +25,5 @@ namespace kodgen
 			virtual bool	isPropertyGroupValid(PropertyGroup const&	propertyGroup,
 												 uint8					propertyIndex,
 												 std::string&			out_errorDescription)	const noexcept override;
-
-			virtual bool	isEntityValid(EntityInfo const& entity,
-										  uint8				propertyIndex,
-										  std::string&		out_errorDescription)				const noexcept override;
 	};
 }

@@ -13,16 +13,45 @@ std::string	GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 {
 	std::string result;
 
-	for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
+	if (info.properties.simpleProperties.size() != 0u)
 	{
-		result += entityVarName + "properties.simpleProperties.emplace(\"" + prop.mainProperty + "\"); ";
+		//Reserve space to avoid reallocation
+		result += entityVarName + "properties.simpleProperties.reserve(" + std::to_string(info.properties.simpleProperties.size()) + ");";
+
+		for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
+		{
+			result += entityVarName + "properties.simpleProperties.emplace_back(R\"(" + prop.mainProperty + ")\"); ";
+		}
 	}
 
-	for (kodgen::ComplexProperty const& prop : info.properties.complexProperties)
+	if (info.properties.complexProperties.size() != 0u)
 	{
-		for (std::string subProp : prop.subProperties)
+		//Reserve space to avoid reallocation
+		result += entityVarName + "properties.complexProperties.reserve(" + std::to_string(info.properties.complexProperties.size()) + ");";
+
+		for (kodgen::ComplexProperty const& prop : info.properties.complexProperties)
 		{
-			result += entityVarName + "properties.complexProperties.emplace(\"" + prop.mainProperty + "\", \"" + subProp + "\"); ";
+			result += entityVarName + "properties.complexProperties.emplace_back(R\"(" + prop.mainProperty + ")\", std::vector<std::string>({";
+
+			if (prop.subProperties.size() != 0u)
+			{
+				for (std::string subProp : prop.subProperties)
+				{
+					std::string a = R"(azeaze)";
+
+					result += "R\"(" + subProp + ")\",";
+				}
+
+				//Replace last string by closing }
+				result.back() = '}';
+			}
+			else
+			{
+				result += "}";
+			}
+			
+
+			result += "));";
 		}
 	}
 
