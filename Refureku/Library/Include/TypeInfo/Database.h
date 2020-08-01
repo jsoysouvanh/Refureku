@@ -158,12 +158,12 @@ namespace rfk
 			static void						clear()									noexcept;
 
 			/**
-			*	@return The unordered_map containing all registered entities sorted by id.
+			*	@return The unordered_set containing all registered entities hashed by id.
 			*/
 			static EntitiesById const&		getEntitiesById()						noexcept;
 
 			/**
-			*	@return The unordered_map containing all registered entities at file level, hashed by name.
+			*	@return The unordered_set containing all registered entities at file level, hashed by name.
 			*/
 			static EntitiesByName const&	getFileLevelEntities()					noexcept;
 	};

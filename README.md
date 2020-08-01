@@ -1,3 +1,4 @@
+
 # Refureku
 
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FRefureku.svg)](https://github.com/jsoysouvanh/Refureku/releases/latest)
@@ -5,7 +6,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
 Refureku is a powerful customizable C++17 runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
-It allows you to retrieve information on classes/structs, fields, methods, enums and enum values at runtime.
+It allows you to retrieve information on namespaces, structs/classes, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
 - The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
@@ -17,9 +18,11 @@ To get started now, see the [Getting Started](#getting-started) section.
 - [Features](#features)
 - [Framework Overview](#framework-overview)
   - [Archetype](#archetype)
-    - [Fields](#fields)
-    - [Methods](#methods)
-    - [Database](#database)
+    - [Structs / Classes](#structs--classes)
+    - [Enums / Enum values](#enums--enum-values)
+  - [Fields](#fields)
+  - [Methods](#methods)
+  - [Namespaces](#namespaces)
 - [Properties](#properties)
   - [Overview](#overview)
   - [Builtin Properties](#builtin-properties)
@@ -40,30 +43,32 @@ To get started now, see the [Getting Started](#getting-started) section.
 
 ## Features
 - Easy to integrate in a software like a game engine
-- Reflect classes, structs, enums, member methods (static or not) and member fields (static or not)
+- Reflect namespaces, structs, classes, enums, member methods (static or not) and member fields (static or not)
 - Support structs/classes with or without inheritance (multiple inheritance supported)
-- Can look for a struct/class, enum, field or method by name, with additional filtering
-- Method call with any arguments and any return type (public, protected, private, virtual, overriden, const methods callable on non const instances)
+- Can look for a struct/class, enum, field or method by name, with additional filtering parameters
+- Method call with any arguments and any return type (public, protected, private, virtual, override)
 - Field get/set any data of any type (public, protected, private)
-- Know at runtime if a reflected class inherits or is the base of another reflected class
-- Arbitrary properties (like tags) on any entity (struct, class, field, method, enum, enum value)
+- Know at runtime if an instance of a reflected struct/class inherits or is the base of another reflected struct/class
+- Arbitrary properties (like tags) on any entity (namespace, struct, class, field, method, enum, enum value)
 - Reflection metadata is regenerated only when a file changes
 - Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
 - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
 
 ## Framework overview
 ### Archetype
-An archetype is a class wich contains information about a model type, like its name for example.
+The archetype class contains information about a model type, like its name for example.
 Each reflected class, struct and enum owns a unique archetype in the program. All C++ fundamental types also have their archetype.
+
+#### Structs / Classes
 The Class and Struct classes inherit from Archetype and contain additional data such as fields and methods. Class and Struct are not different from each other in the current library implementation, but are still separated to allow further development.
 
-Consider the following header file, let's say Example.h:
+Consider the following header file, let's say ExampleClass.h:
 ```cpp
 #pragma once
 
-#include "Generated/Example.rfk.h"
+#include "Generated/ExampleClass.rfk.h"
 
-class RFKStruct() ExampleStruct
+struct RFKStruct() ExampleStruct
 {
     ExampleStruct_GENERATED
 };
@@ -71,34 +76,78 @@ class RFKClass() ExampleClass
 {
     ExampleClass_GENERATED
 };
-enum class RFKEnum() ExampleEnum
-{
-};
 
-ExampleEnum_GENERATED
+File_GENERATED
 
 ```
-To retrieve those archetypes, we can write the following:
+To retrieve those classes, we can write the following:
 ```cpp
-#include "Example.h"
+#include "ExampleClass.h"
 
 //...
 
 rfk::Struct const& exampleStructArchetype = ExampleStruct::staticGetArchetype();
 rfk::Class const& exampleClassArchetype = ExampleClass::staticGetArchetype();
-rfk::Enum const* exampleEnumArchetype = rfk::getEnum<ExampleEnum>();
 
 //Iterate over fields
 for (rfk::Field const& field : exampleClassArchetype.fields)
     //Do something
 
 //Iterate over methods
-for (rfk::Method const& method : exampleClassArchetype.method)
+for (rfk::Method const& method : exampleClassArchetype.methods)
     //Do something
+```
+
+You could also retrieve archetypes from the database using the archetype name like so:
+```cpp
+#include <TypeInfo/Database.h>
+
+rfk::Struct const* exampleStructArchetype = rfk::Database::getStruct("ExampleStruct");
+rfk::Class const* exampleClassArchetype = rfk::Database::getClass("ExampleClass");
+```
+Or even use the getArchetype method on an instance of a reflected archetype having the [DynamicGetArchetype property](#dynamicgetarchetype-struct--class).
+
+#### Enums / Enum values
+Just like structs and classes, we can reflect enums. If an enum is reflected, nested enum values will automatically be reflected too, but it is still possible to add [properties](#properties) to them.
+
+```cpp
+#include "Generated/ExampleEnum.rfk.h"
+
+enum class RFKEnum() ExampleEnum : int
+{
+	ExampleValue1 = 0u,
+	ExampleValue2 RFKEnumVal(SomeProperty) = 42u,
+	ExampleValue3
+};
+
+File_GENERATED
+```
+
+```cpp
+#include "ExampleEnum.h"
+
+rfk::Enum const* exampleEnumArchetype = rfk::getEnum<ExampleEnum>();
 
 //Iterate over enum values
 for (rfk::EnumValue const& enumValue : exampleEnumArchetype->values)
+{
     //Do something
+    std::cout << enumValue.name << " = " << enumValue.value << std::endl;
+}
+
+//Retrieve an EnumValue from name
+exampleEnumArchetype->getEnumValue("ExampleValue1");
+
+//Retrieve an EnumValue from int value
+exampleEnumArchetype->getEnumValue(0u);
+```
+From the database:
+```cpp
+#include <TypeInfo/Database.h>
+
+//...
+
+rfk::Enum const* exampleEnumArchetype = rfk::Database::getEnum("ExampleEnum");
 ```
 
 ### Fields
@@ -113,14 +162,16 @@ class RFKClass() ExampleClass
 {
     protected:
         RFKField()
-        static float exampleFloat = 3.14f;
+        inline static float exampleFloat = 3.14f;
 
     public:
         RFKField()
         int exampleInt = 0;
 
     ExampleClass_GENERATED
-}
+};
+
+File_GENERATED
 ```
 ```cpp
 #include "ExampleClass.h"
@@ -170,7 +221,9 @@ class RFKClass() ExampleClass
         int returnWithParams(float a, float b) { return a + b; }
 
     ExampleClass_GENERATED
-}
+};
+
+File_GENERATED
 ```
 ```cpp
 #include "ExampleClass.h"
@@ -185,49 +238,93 @@ rfk::Method const* f1 = classArchetype.getMethod("noReturnNoParam");
 f1->invoke(&instance);  //Note that we can call non const method on const instance
 
 rfk::Method const* f2 = classArchetype.getMethod("returnNoParam");
-f2->invoke(&instance);  //If you don't care about the return value, you can omit template
+f2->invoke(&instance);  //If you don't care about the return value, you can omit the template argument
 f2->invoke<int>(&instance); //Return 42
 
 rfk::Method const* f3 = classArchetype.getMethod("returnWithParams");
 f3->invoke<int>(&instance, 21.0f, 21.0f);   //Return 42
 
-//It works exactly the same for static methods, but we don't need an instance
+//It works exactly the same for static methods, but we don't need to provide an instance
 rfk::StaticMethod const* sf1 = classArchetype.getStaticMethod("staticNoReturnNoParam");
 sf1->invoke();
 ```
 
-### Database
-The Database class regroups all reflection data in a single place. It can provide us Archetype from a string or an id.
+### Namespaces
+Namespaces can be reflected like this:
 
+```cpp
+#include "Generated/ExampleNamespace.rfk.h"
+
+namespace ExampleNamespace RFKNamespace()
+{
+    namespace ExampleNamespaceNested RFKNamespace()
+    {
+    }
+}
+
+File_GENERATED
+```
+
+C++17 nested namespace declaration is also supported, but note that all namespaces will be assigned the same properties:
+```cpp
+#include "Generated/ExampleNamespace.rfk.h"
+
+namespace ExampleNamespace::ExampleNamespaceNested RFKNamespace()
+{
+}
+
+File_GENERATED
+```
+
+Note that declaring the same namespace multiple times in a single file will produce an error. Declaring the same namespaces in different files is however valid.
+```cpp
+#include "Generated/ExampleNamespace.rfk.h"
+
+namespace ExampleNamespace RFKNamespace()
+{
+    //Do something
+}
+
+// ---------v This produces an error 
+namespace ExampleNamespace RFKNamespace()
+{
+    //Do something else
+}
+
+// ---------v This also produces an error because ExampleNamespace is already defined above
+namespace ExampleNamespace::ExampleNamespaceNested RFKNamespace()
+{
+    //Do something
+}
+
+File_GENERATED
+```
+
+Use namespace reflected data:
 ```cpp
 #include <TypeInfo/Database.h>
 
 //...
 
-rfk::Class const* classArchetype = rfk::Database::getClass("ExampleClass");
-void* classInstance = classArchetype->makeInstance();
+rfk::Namespace const* en = rfk::Database::getNamespace("ExampleNamespace");
+rfk::Namespace const* enn = rfk::Database::getNamespace("ExampleNamespace::ExampleNamespaceNested");
 
-//Do whatever you want with your class
-classArchetype->getField("exampleInt")->getData<int>(classInstance);
-classArchetype->getMethod("noReturnNoParam")->invoke(classInstance);
-
-//Don't forget to delete your instance at the end, there is no memory auto managing
-delete classInstance;
-
+rfk::Struct const* s = en->getStruct("SomeReflectedStruct");
+rfk::Class const* c = en->getClass("SomeReflectedClass");
+rfk::Enum const* e = en->getEnum("SomeReflectedEnum");
+rfk::Namespace const* nn = en->getNestedNamespace("ExampleNamespaceNested");
 ```
 
 ## Properties
 ### Overview
-Properties are just like tags (strings) that can be attached to any entity (Struct, Class, Enum, Field, Method, EnumValue), through the reflection macro. These properties are following a syntax which is handled by the parser using regex (see the [Customization section](#customization)), so that we know what is permitted to write and what's not. These rules also prevent unintentional syntax errors. Each property can accept subproperties (or arguments).
+Properties are just like tags that can be attached to any entity through the reflection macro. These properties are following a syntax which is handled by the parser using rules defined by the user (see the [Customization section](#customization)). If the syntax is violated, the generator will generate errors. Each property can accept subproperties (or arguments).
 
-It could look like this:
 ```cpp
 #pragma once
 
 #include "Generated/Example.rfk.h"
 
-class RFKClass(CustomSimpleProperty, CustomComplexProperty[SubProp1, SubProp2])
-    ExampleClass
+class RFKClass(CustomSimpleProperty, CustomComplexProperty[SubProp1, SubProp2]) ExampleClass
 {
     ExampleClass_GENERATED
 };
@@ -238,7 +335,7 @@ enum class RFKEnum(EnumProp) ExampleEnum
     EnumValue2 RFKEnumVal(EnumValueProp) = 1
 };
 
-ExampleEnum_GENERATED
+File_GENERATED
 ```
 
 And we can retrieve properties like so:
@@ -250,59 +347,75 @@ And we can retrieve properties like so:
 rfk::Class const& classArchetype = ExampleClass::staticGetArchetype();
 
 //Iterate over all simple properties
-for (std::string const& simpleProp : classArchetype.properties.simpleProperty)
-    //Do something
+for (rfk::SimpleProperty const& simpleProp : classArchetype.properties.simpleProperties)
+    std::cout << simpleProp.mainProperty << std::endl;
 
 //Iterate over all complex properties
-for (auto& [complexProp, subProp] : classArchetype.properties.complexProperties)
-    //Do something
-
-//Iterate over all subproperties of a chosen complex property
-auto range = classArchetype.properties.complexProperties.equal_range("CustomComplexProperty");
-for (auto it = range.first; it != range.second; it++)
-    //Do something
+for (rfk::ComplexProperty const& complexProp : classArchetype.properties.complexProperties)
+    std::cout << complexProp.mainProperty << std::endl;
 
 //Check if an entity has a specific simple or complex property
-classArchetype.properties.hasProperty("CustomSimpleProperty");  //true
-classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp1"); //true
-classArchetype.properties.hasProperty("CustomComplexProperty", "SubProp2"); //true
+if (rfk::SimpleProperty const* simpleProp = classArchetype.properties.getSimpleProperty("CustomSimpleProperty"))
+{
+    //Do something
+}
+
+if (rfk::ComplexProperty const* complexProp = classArchetype.properties.getComplexProperty("CustomComplexProperty"))
+{
+    //Iterate over all subproperties of a chosen complex property
+    for (std::string const& subprop : complexProp->subProperties)
+    {
+        //Do something with subprops
+    }
+
+    //Helpers to retrieve a property as int, uint, float or string
+    complexProp->getInt32(0u);	//0 means the first subproperty
+    //this call actually throws an exception because can't convert SubProp1 to an int.
+}
 ```
 
-It can be really useful when you want to adapt behaviors depending on specific properties (for example, a game engine editor).
+It can be really useful when you want to adapt behaviors depending on specific properties (for a game engine editor?).
 
 ### Builtin Properties
 - [DynamicGetArchetype](#dynamicgetarchetype-struct--class)
 - [CustomInstantiator](#custominstantiator-method)
+- [ParseAllNested](#parseallnested-namespace--struct--class)
 
 #### DynamicGetArchetype (Struct / Class)
-DynamicGetArchetype must be specified when a class or struct inherits from rfk::ReflectedObject. It allows to retrieve the archetype of a class dynamically.
+DynamicGetArchetype is a simple property which should be specified when a class or struct should override the getArchetype() method declared by rfk::ReflectedObject. It allows to retrieve the archetype of a class on its instances through a virtual call to classInstance->getArchetype().
 ```cpp
 #include <ReflectedObject.h>
 
 #include "Generated/ExampleClass.rfk.h"
 
-class RFKClass(DynamicGetArchetype) ExampleClass : public rfk::ReflectedObject
+class RFKClass(DynamicGetArchetype) ExampleClassBase : public rfk::ReflectedObject
+{
+    ExampleClassBase_GENERATED
+};
+
+//DynamicGetArchetype MUST be specified even if it doesn't inherit directly from rfk::ReflectedObject
+class RFKClass(DynamicGetArchetype) ExampleClass : public ExampleClassBase
 {
     ExampleClass_GENERATED
 };
 
-struct RFKStruct(DynamicGetArchetype) ExampleStruct : public ExampleClass
-{
-    ExampleStruct_GENERATED
-};
+File_GENERATED
 ```
 ```cpp
-#include "ExampleClass.h"
+#include <TypeInfo/Database.h>
 
 //...
 
-rfk::ReflectedObject* ec = new ExampleClass();
-rfk::ReflectedObject* es = new ExampleStruct();
+rfk::ReflectedObject* ecb = rfk::Database::getClass("ExampleClassBase")->makeInstance<rfk::ReflectedObject>();
+rfk::ReflectedObject* ec = rfk::Database::getClass("ExampleClass")->makeInstance<rfk::ReflectedObject>();
 
+std::cout << ecb->getArchetype().name << std::endl;    //Prints ExampleClassBase
 std::cout << ec->getArchetype().name << std::endl;    //Prints ExampleClass
-std::cout << es->getArchetype().name << std::endl;    //Prints ExampleStruct
+
+delete ecb;
+delete ec;
 ```
-Note that DynamicGetArchetype must be specified eventhough ExampleStruct doesn't directly inherit from rfk::ReflectedObject.
+Note that DynamicGetArchetype must be specified eventhough ExampleStruct doesn't directly inherit from rfk::ReflectedObject. If not specified, calling getArchetype on an instance of ExampleClass will call the parent implementation, which will return ExampleClassBase archetype.
 
 #### CustomInstantiator (Method)
 CustomInstantiator is used to provide custom ways of instantiating a struct or class through the rfk::Struct::makeInstance method. By default, we can only call this method without parameters (it will call the default constructor if it is not deleted, otherwise the method will return nullptr). Using the CustomInstantiator property, we can write the following:
@@ -328,6 +441,8 @@ class RFKClass() ExampleClass
         
     ExampleClass_GENERATED
 };
+
+File_GENERATED
 ```
 ```cpp
 #include "ExampleClass.h"
@@ -343,16 +458,61 @@ rfk::Class const& c = ExampleClass::staticGetArchetype();
 */
 ExampleClass* instance1 = c.makeInstance<ExampleClass>();
 
-/**
-*    ExampleClass will be instantiated through customInstantiateMethod
-*/
+//ExampleClass will be instantiated through customInstantiateMethod
 ExampleClass* instance2 = c.makeInstance<ExampleClass>(42, 3.14f);
 
 delete instance1;
 delete instance2;
 ```
 
-Note that a CustomInstantiator tagged method **MUST** be static and return void*. If the method is not static, the property will be ignored.
+Note that a CustomInstantiator tagged method **MUST** be static and return void*. If the method doesn't fulfil those requirements, an error will be thrown by the parser/generator.
+
+#### ParseAllNested (Namespace / Struct / Class)
+Use ParseAllNested when you want to parse every entity **directly** nested in a namespace, struct or class, without having to necessarly specify the reflection macro again.
+
+```cpp
+#include "Generated/ExampleClass.rfk.h"
+
+namespace ExampleNamespace RFKNamespace(ParseAllNested)
+{
+    class /* Even if RFKClass() is not specified, this class is reflected */ NestedExampleClass
+    {
+        public:
+            int i; //This field is NOT reflected as it is not **directly** inside a ParseAllNested tagged entity
+        
+        NestedExampleClass_GENERATED
+    };
+}
+
+class RFKClass(ParseAllNested) ExampleClass
+{
+    public:
+        //This field is reflected automatically
+        int i;
+        
+        //This method is reflected automatically
+        void someMethod() {}
+
+        //This nested struct is reflected automatically
+	struct NestedExampleStruct
+	{
+	    NestedExampleStruct_GENERATED
+	};
+
+        //This enum is reflected automatically
+        enum class NestedExampleEnum
+        {
+            Value1 //Enum values are ALWAYS reflected automatically
+        };
+    
+    ExampleClass_GENERATED
+};
+
+File_GENERATED
+
+```
+
+Alternatively, if you just want to reflect all entities contained in each parsed file, you might consider setup FileParser::parsingSettings.shouldParseAllEntities = true.
 
 ## Customization
 Before talking about how to customize the code generation, let's talk a bit about how it works.   

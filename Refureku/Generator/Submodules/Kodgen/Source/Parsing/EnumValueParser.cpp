@@ -51,7 +51,7 @@ opt::optional<PropertyGroup> EnumValueParser::getProperties(CXCursor const& curs
 
 	if (clang_getCursorKind(cursor) == CXCursorKind::CXCursor_AnnotateAttr)
 	{
-		return context.propertyParser->getEnumProperties(Helpers::getString(clang_getCursorSpelling(cursor)));
+		return context.propertyParser->getEnumValueProperties(Helpers::getString(clang_getCursorSpelling(cursor)));
 	}
 
 	return opt::nullopt;
