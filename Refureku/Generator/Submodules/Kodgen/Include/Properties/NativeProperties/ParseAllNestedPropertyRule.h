@@ -7,20 +7,17 @@
 
 #pragma once
 
-#include "Properties/SimplePropertyRule.h"
+#include "Properties/DefaultSimplePropertyRule.h"
 
 namespace kodgen
 {
-	class ParseAllNestedPropertyRule : public SimplePropertyRule
+	class ParseAllNestedPropertyRule : public DefaultSimplePropertyRule
 	{
 		public:
-			ParseAllNestedPropertyRule()									= default;
+			ParseAllNestedPropertyRule()									noexcept;
 			ParseAllNestedPropertyRule(ParseAllNestedPropertyRule const&)	= default;
 			ParseAllNestedPropertyRule(ParseAllNestedPropertyRule&&)		= default;
 			virtual ~ParseAllNestedPropertyRule()							= default;
-
-			virtual bool	isMainPropSyntaxValid(std::string const& mainProperty,
-												  EntityInfo::EType	 entityType)				const noexcept override;
 
 			virtual bool	isPropertyGroupValid(PropertyGroup const&	propertyGroup,
 												 uint8					propertyIndex,

@@ -11,7 +11,7 @@ FileGenerator::FileGenerator() noexcept:
 	//Generated files will use .rfk.h extension
 	generatedFilesExtension = ".rfk.h";
 
-	//Only parse .h files
+	//Only parse .h and .hpp files
 	supportedExtensions.emplace(".h");
 	supportedExtensions.emplace(".hpp");
 
@@ -89,11 +89,13 @@ void FileGenerator::generateEndFileMacro(kodgen::GeneratedFile& file) const noex
 {
 	file.writeLine("#define " + _endFileMacroName + "\t\\");
 
+	//Enum first because structs/classes and namespaces can have nested (and then reference to) enums
 	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)
 	{
 		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(enumInfo->id)) + "u_GENERATED\t\\");
 	}
 
+	//Structs/Classes before namespaces because namespaces can have nested (and then reference to) structs/classes
 	for (kodgen::StructClassInfo const* classInfo : _generatedClasses)
 	{
 		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(classInfo->id)) + "u_GetTypeDefinition\t\\");

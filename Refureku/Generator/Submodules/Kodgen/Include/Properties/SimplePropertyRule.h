@@ -93,6 +93,6 @@ namespace kodgen
 			*			This macro is only used for auto completion and documentation and is therefore not mandatory.
 			*			Can return an empty string.
 			*/
-			virtual std::string	getMacroDefinition()											const	noexcept;
+			virtual std::string	getMacroDefinition()												const	noexcept;
 	};
 }

@@ -76,7 +76,7 @@ GeneratedCodeTemplate* FileGenerator::getEntityGeneratedCodeTemplate(EntityInfo 
 
 	//Find the specified code template
 	decltype(entityInfo.properties.complexProperties)::const_iterator it = std::find_if(entityInfo.properties.complexProperties.cbegin(), entityInfo.properties.complexProperties.cend(),
-																			[](ComplexProperty const& prop) { return prop.mainProperty == NativeProperties::parseAllNestedProperty; });
+																			[](ComplexProperty const& prop) { return prop.mainProperty == NativeProperties::generatedCodeTemplateProperty; });
 
 	if (it == entityInfo.properties.complexProperties.cend())	//No main property corresponding to codeTemplateMainComplexPropertyName found
 	{
@@ -104,7 +104,12 @@ GeneratedCodeTemplate* FileGenerator::getEntityGeneratedCodeTemplate(EntityInfo 
 	}
 	else
 	{
-		std::unordered_map<std::string,	GeneratedCodeTemplate*>::const_iterator it2 = _generatedCodeTemplates.find(it->subProperties[0]);
+		std::string const& generatedCodeTemplateName = it->subProperties[0];
+
+		//All these preconditions should have already been checked by the GenCodeTemplatePropertyRule during parsing
+		assert(generatedCodeTemplateName.size() >= 2u && generatedCodeTemplateName.front() == '"' && generatedCodeTemplateName.back());
+
+		std::unordered_map<std::string,	GeneratedCodeTemplate*>::const_iterator it2 = _generatedCodeTemplates.find(generatedCodeTemplateName.substr(1u, generatedCodeTemplateName.size() - 2u));	//substr remove start and end "
 
 		if (it2 != _generatedCodeTemplates.cend())
 		{

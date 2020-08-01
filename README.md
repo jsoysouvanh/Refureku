@@ -1,4 +1,3 @@
-
 # Refureku
 
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FRefureku.svg)](https://github.com/jsoysouvanh/Refureku/releases/latest)
@@ -153,6 +152,7 @@ rfk::Enum const* exampleEnumArchetype = rfk::Database::getEnum("ExampleEnum");
 ### Fields
 Field and StaticField classes handle information about a class or struct reflected field.
 Usage example:
+
 ```cpp
 #pragma once
 
@@ -173,6 +173,7 @@ class RFKClass() ExampleClass
 
 File_GENERATED
 ```
+
 ```cpp
 #include "ExampleClass.h"
 
@@ -198,6 +199,7 @@ staticField->getData<float>();  //Get 42.42
 
 ### Methods
 Method and StaticMethod classes work just the same way as fields:
+
 ```cpp
 #pragma once
 
@@ -225,6 +227,7 @@ class RFKClass() ExampleClass
 
 File_GENERATED
 ```
+
 ```cpp
 #include "ExampleClass.h"
 
@@ -301,6 +304,7 @@ File_GENERATED
 ```
 
 Use namespace reflected data:
+
 ```cpp
 #include <TypeInfo/Database.h>
 
@@ -339,6 +343,7 @@ File_GENERATED
 ```
 
 And we can retrieve properties like so:
+
 ```cpp
 #include "Example.h"
 
@@ -374,7 +379,7 @@ if (rfk::ComplexProperty const* complexProp = classArchetype.properties.getCompl
 }
 ```
 
-It can be really useful when you want to adapt behaviors depending on specific properties (for a game engine editor?).
+It can be really useful when you want to adapt behaviors depending on specific properties (for a game engine editor for example).
 
 ### Builtin Properties
 - [DynamicGetArchetype](#dynamicgetarchetype-struct--class)
@@ -383,6 +388,7 @@ It can be really useful when you want to adapt behaviors depending on specific p
 
 #### DynamicGetArchetype (Struct / Class)
 DynamicGetArchetype is a simple property which should be specified when a class or struct should override the getArchetype() method declared by rfk::ReflectedObject. It allows to retrieve the archetype of a class on its instances through a virtual call to classInstance->getArchetype().
+
 ```cpp
 #include <ReflectedObject.h>
 
@@ -401,6 +407,7 @@ class RFKClass(DynamicGetArchetype) ExampleClass : public ExampleClassBase
 
 File_GENERATED
 ```
+
 ```cpp
 #include <TypeInfo/Database.h>
 
@@ -415,10 +422,12 @@ std::cout << ec->getArchetype().name << std::endl;    //Prints ExampleClass
 delete ecb;
 delete ec;
 ```
-Note that DynamicGetArchetype must be specified eventhough ExampleStruct doesn't directly inherit from rfk::ReflectedObject. If not specified, calling getArchetype on an instance of ExampleClass will call the parent implementation, which will return ExampleClassBase archetype.
+
+> DynamicGetArchetype must be specified eventhough ExampleStruct doesn't directly inherit from rfk::ReflectedObject. If not specified, calling getArchetype on an instance of ExampleClass will call the parent implementation, which will return ExampleClassBase archetype.
 
 #### CustomInstantiator (Method)
 CustomInstantiator is used to provide custom ways of instantiating a struct or class through the rfk::Struct::makeInstance method. By default, we can only call this method without parameters (it will call the default constructor if it is not deleted, otherwise the method will return nullptr). Using the CustomInstantiator property, we can write the following:
+
 ```cpp
 #include <iostream>
 
@@ -444,6 +453,7 @@ class RFKClass() ExampleClass
 
 File_GENERATED
 ```
+
 ```cpp
 #include "ExampleClass.h"
 
@@ -465,7 +475,7 @@ delete instance1;
 delete instance2;
 ```
 
-Note that a CustomInstantiator tagged method **MUST** be static and return void*. If the method doesn't fulfil those requirements, an error will be thrown by the parser/generator.
+>A CustomInstantiator tagged method **MUST** be static and return void*. If the method doesn't fulfill those requirements, an error will be thrown by the parser/generator.
 
 #### ParseAllNested (Namespace / Struct / Class)
 Use ParseAllNested when you want to parse every entity **directly** nested in a namespace, struct or class, without having to necessarly specify the reflection macro again.
@@ -512,7 +522,7 @@ File_GENERATED
 
 ```
 
-Alternatively, if you just want to reflect all entities contained in each parsed file, you might consider setup FileParser::parsingSettings.shouldParseAllEntities = true.
+Alternatively, if you just want to reflect all entities contained in each parsed file, you might consider setup FileParser::parsingSettings.shouldParseAllEntities boolean to true.
 
 ## Customization
 Before talking about how to customize the code generation, let's talk a bit about how it works.   
@@ -795,9 +805,10 @@ This library has been tested and is stable on the following configurations:
 - Linux 18.04 | GCC 8.4.0, GCC 9.2.1
 
 ## Planned features
-- Add namespace variable to Archetype class
-- Add a proper logger interface to avoid raw stream use and provide a better user control
-- Add the possibility to add new valid properties via TOML
+- Add new valid properties via TOML file
+- Update database to allow entity unregistering, hence making hot reload possible
+- Support global scope (or namespace) fields and functions reflection
+- Support template methods reflection 
 
 ## Known issues
 
