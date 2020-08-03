@@ -25,9 +25,6 @@ namespace kodgen
 	class FileGenerator
 	{
 		private:
-			/** Name of the internally generated header containing empty definitions for entity macros. */
-			static inline std::string										_entityMacrosDefFilename		= "EntityMacros.h";
-
 			/** All generated code templates usable by this generator. */
 			std::unordered_map<std::string,	GeneratedCodeTemplate*>			_generatedCodeTemplates;
 			
@@ -250,6 +247,9 @@ namespace kodgen
 		public:
 			/** Logger used to issue logs from the FileGenerator. */
 			ILogger*								logger					= nullptr;
+
+			/** Name of the internally generated header containing empty definitions for entity macros. */
+			std::string								entityMacrosFilename	= "EntityMacros.h";
 
 			/** Extension used for generated files. */
 			std::string								generatedFilesExtension	= ".kodgen.h";

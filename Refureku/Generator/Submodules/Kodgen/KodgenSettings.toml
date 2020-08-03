@@ -5,10 +5,10 @@ generatedFilesExtension = ".rfk.h"
 # List of supported extensions
 supportedExtensions		= [".h", ".hpp"]
 
+entityMacrosFilename	= "EntityMacros.h"
+
 # Generated files will be located here
 outputDirectory			= '''Path/To/Output/Dir'''
-
-entityMacrosFilename	= "EntityMacros.h"
 
 # Files contained in the directories of this list will be parsed
 toParseDirectories		= [
@@ -45,10 +45,10 @@ subPropertyStartEncloser = "("
 subPropertyEndEncloser = ")"
 ignoredCharacters = [ " " ]
 
-namespaceMacroName = "RFKNamespace"
-classmacroName = "RFKClass"
-structMacroName = "RFKStruct"
-fieldMacroName = "RFKField"
-methodMacroName = "RFKMethod"
-enumMacroName = "RFKEnum"
-enumValueMacroName = "RFKEnumVal"
+namespaceMacroName = "Namespace"
+classmacroName = "Class"
+structMacroName = "Struct"
+fieldMacroName = "Field"
+methodMacroName = "Method"
+enumMacroName = "Enum"
+enumValueMacroName = "EnumVal"

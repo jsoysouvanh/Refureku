@@ -21,7 +21,6 @@ namespace rfk
 			/** Native properties. */
 			DynamicGetArchetypePropertyRule	_dynamicGetArchetypePropertyRule;
 			CustomInstantiatorPropertyRule	_customInstantiatorPropertyRule;
-			RangePropertyRule				_rangePropertyRule;
 
 		protected:
 			virtual void preParse(fs::path const& parseFile)											noexcept override;

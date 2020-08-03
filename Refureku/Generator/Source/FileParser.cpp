@@ -33,7 +33,6 @@ FileParser::FileParser() noexcept:
 	//Setup property rules
 	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_dynamicGetArchetypePropertyRule);
 	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_customInstantiatorPropertyRule);
-	parsingSettings.propertyParsingSettings.complexPropertyRules.emplace_back(&_rangePropertyRule);
 }
 
 void FileParser::preParse(fs::path const& parseFile) noexcept

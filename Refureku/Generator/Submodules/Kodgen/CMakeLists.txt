@@ -76,13 +76,13 @@ target_compile_features(${KodgenTargetLibrary} PUBLIC cxx_std_17)
 target_include_directories(${KodgenTargetLibrary}
 							PUBLIC
 								Include
-								Libraries/Include)
+								ThirdParty/Include)
 
 # Setup link directories
 target_link_directories(${KodgenTargetLibrary}
 							PUBLIC
-								Libraries/x64/Static
-								Libraries/x64/Shared)
+								ThirdParty/x64/Static
+								ThirdParty/x64/Shared)
 
 # Link to required libraries
 target_link_libraries(${KodgenTargetLibrary}
@@ -96,7 +96,7 @@ target_link_libraries(${KodgenTargetLibrary}
 if (WIN32)
 	add_custom_command(	TARGET ${KodgenTargetLibrary} POST_BUILD
 						COMMAND ${CMAKE_COMMAND} -E copy
-						${PROJECT_SOURCE_DIR}/Libraries/x64/Shared/libclang.dll
+						${PROJECT_SOURCE_DIR}/ThirdParty/x64/Shared/libclang.dll
 						$<IF:$<BOOL:${MSVC}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/libclang.dll,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libclang.dll>)
 endif()
 

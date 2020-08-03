@@ -22,7 +22,7 @@ namespace namespace2 RFKNamespace()
 	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject 
 	{
 		private:
-			RFKField(Range[1, 2])
+			RFKField()
 			float ppFloat = 123456.123456f;
 
 		public:

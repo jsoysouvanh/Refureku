@@ -37,10 +37,10 @@ namespace kodgen
 										   std::string&				out_errorDescription)		const noexcept override final;
 
 		public:
-			ComplexPropertyRule()								= default;
+			ComplexPropertyRule()							= default;
 			ComplexPropertyRule(ComplexPropertyRule const&)	= default;
 			ComplexPropertyRule(ComplexPropertyRule&&)		= default;
-			virtual ~ComplexPropertyRule()						= default;
+			virtual ~ComplexPropertyRule()					= default;
 
 			/**
 			*	@brief	Check that a sub property has a valid syntax for a given type of entity.

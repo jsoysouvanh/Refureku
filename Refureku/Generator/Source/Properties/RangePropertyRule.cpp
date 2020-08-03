@@ -1,6 +1,6 @@
 #include "Properties/RangePropertyRule.h"
 
-#include "InfoStructures/FieldInfo.h"
+#include <InfoStructures/FieldInfo.h>
 
 using namespace rfk;
 

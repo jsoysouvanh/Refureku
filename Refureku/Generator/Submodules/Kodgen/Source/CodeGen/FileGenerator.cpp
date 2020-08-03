@@ -303,7 +303,7 @@ void FileGenerator::writeHeader(GeneratedFile& file, FileParsingResult const&) c
 
 	file.writeLines("/**", "*	Source file: " + file.getSourceFilePath().string(), "*/\n");
 
-	file.writeLine("#include \"" + _entityMacrosDefFilename + "\"\n");
+	file.writeLine("#include \"" + entityMacrosFilename + "\"\n");
 }
 
 void FileGenerator::writeFooter(GeneratedFile&, FileParsingResult const&) const noexcept
@@ -431,7 +431,7 @@ void FileGenerator::clearNativePropertyRules(PropertyParsingSettings& propParsin
 
 void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
 {
-	GeneratedFile macrosDefinitionFile(outputDirectory / _entityMacrosDefFilename);
+	GeneratedFile macrosDefinitionFile(outputDirectory / entityMacrosFilename);
 
 	PropertyParsingSettings& pps = parser.parsingSettings.propertyParsingSettings;
 
@@ -540,6 +540,7 @@ bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 
 			TomlUtility::updateSetting<std::string>(generatorSettings, "generatedFilesExtension", generatedFilesExtension);
 			TomlUtility::updateSetting<fs::path>(generatorSettings, "outputDirectory", outputDirectory);
+			TomlUtility::updateSetting<std::string>(generatorSettings, "entityMacrosFilename", entityMacrosFilename);
 			TomlUtility::updateSetting(generatorSettings, "toParseFiles", toParseFiles);
 			TomlUtility::updateSetting(generatorSettings, "toParseDirectories", toParseDirectories);
 			TomlUtility::updateSetting(generatorSettings, "ignoredFiles", ignoredFiles);
