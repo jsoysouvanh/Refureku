@@ -1,4 +1,3 @@
-
 # Kodgen
 
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FKodgen.svg)](https://github.com/jsoysouvanh/Kodgen/releases/latest)

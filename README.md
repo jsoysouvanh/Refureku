@@ -1,5 +1,3 @@
-
-
 # Refureku
 
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FRefureku.svg)](https://github.com/jsoysouvanh/Refureku/releases/latest)
@@ -125,20 +123,24 @@ Here is a non-exhaustive list of Refureku library features:
 	- You will find the built libraries in Build/[Debug|Release]/Lib/
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
-3. Setup your project following [Kodgen's Getting Started](https://github.com/jsoysouvanh/Kodgen#getting-started) instructions **from step 3**.
-
-4.  Add header directories to your project settings:
+3.  Add necessary header directories to your project settings:
+    - Kodgen header directory, located at /Refureku/Generator/Submodules/Kodgen/Include, or /ThirdParty/Kodgen/ThirdParty/Include if you downloaded the binaries.
+    - Kodgen dependencies header directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include, or /ThirdParty/Include if you downloaded the binaries.
     - RefurekuGenerator header directory, located at /Refureku/Generator/Include, or /Include/Generator if you downloaded the binaries.
 
-5.  Add library directories to your projet settings:
-    - The directory containing RefurekuGeneratorLib.lib, located at /Build/[Debug|Release]/Lib/, or /Lib if you downloaded the binaries.
-    > **Note:** If Kodgen.lib and RefurekuGeneratorLib.lib are located in the same directory, you should already have added this library directory during step 3, so you can skip to step 6 directly. 
+4.  Add library directories to your projet settings:
+    - Kodgen.lib directory, located at /Build/[Debug|Release]/Lib/, or /ThirdParty/Kodgen/Lib if you downloaded the binaries.
+    - Kodgen dependencies library directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static, or /ThirdParty/Kodgen/ThirdParty/Lib if you downloaded the binaries.
+    - RefurekuGeneratorLib.lib directory, located at /Build/[Debug|Release]/Lib/, or /Lib if you downloaded the binaries.
 
-6. Link against:
-    - RefurekuGeneratorLib.lib. Make sure to use the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
+5.  Link against:
+    - Kodgen.lib: Make sure to use the Debug version if you compile your project in Debug mode
+    - clang.lib
+    - RefurekuGeneratorLib.lib: Make sure to use the Debug version if you compile your project in Debug mode
 
+6.  Setup your project C++ compilation version to C++17 or later.
 7.  Compile!
-8.  Before running your program, make sure that the libclang dynamic library is located next to your executable.
+8.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared (or /Bin from the binaries).
 
 You should be able to run the following snippet:
 
