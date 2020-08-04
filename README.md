@@ -27,9 +27,10 @@ Here is a non-exhaustive list of Refureku library features:
 ## Index
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
-  - [Library Integration](#library-integration)
-  - [Parser/Generator Integration](#parsergenerator-integration)
+  - [Library integration](#library-integration)
+  - [Parser/Generator integration](#parsergenerator-integration)
   - [Possible issues](#possible-issues)
+- [Reflect entities](#reflect-entities)
 - [Framework Overview](#framework-overview)
   - [Archetype](#archetype)
     - [Structs / Classes](#structs--classes)
@@ -55,14 +56,14 @@ Here is a non-exhaustive list of Refureku library features:
 - CMake 3.15.0+ (if you build the library from source).
 - A compatible compiler: MSVC Platform Toolset v141+ / GCC8.0.0+ / Clang 7.0.0+.
 
-### Library Integration
+### Library integration
 1. Pull the repository
 2. Compile the library and the generator following these steps:
 	- At the root of the Refureku folder, open a terminal
 		- cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "\<Generator\>"
 			> Most common generators include:
 			> - Visual Studio 15 2017 -> cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 15 2017" -A x64
-				>**Note:** If you use Visual Studio generator, you must explicitely specify the target architecture using -A x64
+			>**Note:** If you use Visual Studio generator, you must explicitely specify the target architecture using -A x64
 			> - Unix Makefiles
 			> - Ninja -> cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja"
 			> - Type cmake -G for more information
@@ -84,9 +85,12 @@ Here is a non-exhaustive list of Refureku library features:
 
 6. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
 	- [FileGeneratorSettings] outputDirectory = '''Path/To/An/Output/Directory'''
+		> The output directory is the directory where metadata files will be generated. If the directory doesn't exist, the generator will try to create it. 
 	- [FileGeneratorSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
+		> List of the directories containing header files to parse. These directories are recursively inspected.
 	- [FileParserSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
-	- **If the specified outputDirectory is in a parsed directory**, you should ignore it too (you don't want to parse generated metadata do you?)
+		> Paths to your project's additional include directories. They are **absolutely necessary** to make sure the parser can find all included files.
+	- **If the specified outputDirectory is in a parsed directory**, you should ignore it (you don't want to waste time parsing generated metadata do you?)
 	[FileGeneratorSettings] ignoredDirectories = [ '''Path/To/An/Output/Directory''' ]
 	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory. Check out the [SimpleIntegration project](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/SimpleIntegration)'s [RefurekuSettings.toml](https://github.com/jsoysouvanh/Refureku/blob/master/Refureku/Examples/ThirdParty/Bin/RefurekuSettings.toml) for a concrete example.
 	
@@ -105,7 +109,7 @@ Here is a non-exhaustive list of Refureku library features:
 8. Make sure you compile your project in C++17 or later.
 9. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
 
-### Parser/Generator Integration
+### Parser/Generator integration
 1. Pull the repository
 2. Compile the generator library following these steps:
 	- At the root of the Refureku folder, open a terminal
@@ -170,6 +174,65 @@ int main()
 ### Possible issues
 #### Issue 1
 - If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
+
+## Reflect entities
+Once you've setup the generator as explained in [this part](#library-integration), metadata will be generated for the macroed entities contained in included files.
+To integrate those reflection metadata to your program, you'll have to follow a few steps:
+1. Include the generated file to your header file. For example, if your file is called "Example.h", you'll have to include "Example.rfk.h" (generated file extension and location are customizable). This include **MUST** be the last included file.
+
+	Example:
+	```cpp
+	//This file is Example.h
+	#pragma once
+	
+	#include <string>
+	
+	#include "AnotherExample.h"
+	
+	//The Generated folder depends on the outputDirectory setting
+	//The ".rfk.h" extension depends on the generatedFilesExtension setting
+	#include "Generated/Example.rfk.h"
+	```
+2. Add the reflection macro to any entity you want to reflect. Reflection macros are customizable with the [entityType]MacroName setting.
+	```cpp
+	namespace ExampleNamespace RFKNamespace() {}
+	
+	class RFKClass() ExampleClass
+	{
+	    RFKField()
+	    int exampleField;
+
+	    RFKMethod()
+	    void exampleMethod() {}
+	};
+
+	struct RFKStruct() ExampleStruct
+	{
+	};
+
+	enum class RFKEnum() ExampleEnum
+	{
+	    ExampleValue RFKEnumValue() = 42
+	};
+	```
+	Some settings also allow to reflect entities without having to bother with these macros. If you set the **shouldParseAllEntities** setting to true, all entities will be reflected whether they have the macro or not. See also the [ParseAllNested property](https://github.com/jsoysouvanh/Kodgen#parseallnested).
+3. 　Write **File_GENERATED** at the end of your file. This macro wraps all reflection registration boilerplate so that the user do not have to care about it.
+
+A typical header file would look like:
+
+```cpp
+//This file is Example.h
+#pragma once
+
+//Some includes
+//...
+
+#include "Generated/Example.rfk.h"
+
+//Some code
+
+File_GENERATED
+```
 
 ## Framework overview
 ### Archetype

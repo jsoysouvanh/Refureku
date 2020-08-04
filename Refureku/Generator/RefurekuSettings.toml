@@ -8,8 +8,6 @@ supportedExtensions		= [".h", ".hpp"]
 # Generated files will be located here
 outputDirectory			= '''Path/To/Output/Dir'''
 
-entityMacrosFilename	= "EntityMacros.h"
-
 # Files contained in the directories of this list will be parsed
 toParseDirectories		= [
 #	'''Path/To/Directory/To/Parse'''
