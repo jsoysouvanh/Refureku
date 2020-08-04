@@ -4,7 +4,7 @@
 
 #include "Generated/Class1.rfk.h"
 
-namespace test
+namespace test RFKNamespace()
 {
 	class RFKClass() Class1
 	{
@@ -25,3 +25,5 @@ namespace test
 		Class1_GENERATED
 	};
 }
+
+File_GENERATED

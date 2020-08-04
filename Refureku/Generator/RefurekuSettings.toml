@@ -32,6 +32,9 @@ ignoredFiles			= []
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError	= true
 
+# Should all entities be parsed whether they are tagged with the macro or not
+shouldParseAllEntities			= false
+
 # Include directories of the project
 projectIncludeDirectories		= [
 #	'''Path/To/RefurekuLibrary/Include''',

@@ -13,14 +13,12 @@ int main()
 
 	test::Class1	c1;
 	Class2			c2;
-	test::Struct1	s1;
-	Enum1			e1;
 
-	rfk::Class const& arch = test::Class1::staticGetArchetype();
+	rfk::Class const* arch = rfk::Database::getNamespace("test")->getClass("Class1");
 
-	std::cout << arch.name << std::endl;
+	std::cout << arch->name << std::endl;
 
-	rfk::Method const* m = arch.getMethod("method1");
+	rfk::Method const* m = arch->getMethod("method1");
 	m->invoke(&c1);
 
 	for (auto& parent : Class2::staticGetArchetype().directParents)
@@ -28,6 +26,10 @@ int main()
 
 	std::cout << Class2::staticGetArchetype().getField("class1")->type.archetype->name << std::endl;
 	std::cout << Class2::staticGetArchetype().getField("vec")->type.archetype << std::endl;
+
+	rfk::Struct const* arch2 = rfk::Database::getNamespace("test")->getStruct("Struct1");
+
+	std::cout << arch2->name << std::endl;
 
 	return EXIT_SUCCESS;
 }

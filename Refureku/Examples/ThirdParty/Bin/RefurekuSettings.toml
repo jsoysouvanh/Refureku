@@ -5,14 +5,16 @@ generatedFilesExtension = ".rfk.h"
 # List of supported extensions
 supportedExtensions		= [".h", ".hpp"]
 
+entityMacrosFilename	= "EntityMacros.h"
+
 # Generated files will be located here
-# The working directory is Refureku/Examples,
-# so the outputDirectory will be Refureku/Examples/Include/Generated
+# The working directory is Refureku/Examples/SimpleIntegration (or GeneratorIntegration),
+# so the outputDirectory will be Refureku/Examples/SimpleIntegration/Include/Generated (or Refureku/Examples/GeneratorIntegration/Include/Generated)
 outputDirectory			= '''Include/Generated'''
 
 # Files contained in the directories of this list will be parsed
 toParseDirectories		= [
-	'''Include'''	# Include is relative to Examples/, so it becomes Examples/Include/
+	'''Include'''	# Include is relative to Examples/SimpleIntegration, so it becomes Examples/SimpleIntegration/Include/
 ]
 
 # Files to parse which are not included in any directory of toParseDirectories
@@ -20,7 +22,7 @@ toParseFiles			= []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories		= [
-	'''Include/Generated''',	# Include/Generated is relative to Examples/, so it becomes Examples/Include/Generated/
+	'''Include/Generated''',	# Include/Generated is relative to Examples/SimpleIntegration/, so it becomes Examples/SimpleIntegration/Include/Generated/
 ]
 
 # Files not to parse which are not included in any directory of ignoredDirectories
@@ -29,35 +31,27 @@ ignoredFiles			= []
 
 [FileParserSettings]
 # Abort parsing on first encountered error
-shouldAbortParsingOnFirstError = true
+shouldAbortParsingOnFirstError	= true
+
+shouldParseAllEntities			= false
 
 # Include directories of the project
 projectIncludeDirectories	= [
-	'''../Library/Include''',	# ../Library/Include is relative to Refureku/Examples/, so it becomes Refureku/Library/Include
-	'''Include'''				# Include is relative to Examples/, so it becomes Examples/Include/
+	'''../../Library/Include''',	# ../Library/Include is relative to Refureku/Examples/SimpleIntegration/, so it becomes Refureku/Library/Include
+	'''Include'''				# Include is relative to Examples/SimpleIntegration/, so it becomes Examples/Include/SimpleIntegration/
 ]
 
 [FileParserSettings.Properties]
 propertySeparator = ","
 subPropertySeparator = ","
-subPropertyStartEncloser = "["
-subPropertyEndEncloser = "]"
+subPropertyStartEncloser = "("
+subPropertyEndEncloser = ")"
 ignoredCharacters = [ " " ]
 
-[FileParserSettings.Properties.Class]
-macroName = "RFKClass"
-
-[FileParserSettings.Properties.Struct]
-macroName = "RFKStruct"
-
-[FileParserSettings.Properties.Field]
-macroName = "RFKField"
-
-[FileParserSettings.Properties.Method]
-macroName = "RFKMethod"
-
-[FileParserSettings.Properties.Enum]
-macroName = "RFKEnum"
-
-[FileParserSettings.Properties.EnumValue]
-macroName = "RFKEnumVal"
+namespaceMacroName = "RFKNamespace"
+classmacroName = "RFKClass"
+structMacroName = "RFKStruct"
+fieldMacroName = "RFKField"
+methodMacroName = "RFKMethod"
+enumMacroName = "RFKEnum"
+enumValueMacroName = "RFKEnumVal"

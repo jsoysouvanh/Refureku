@@ -12,4 +12,4 @@ enum class RFKEnum() Enum1
 	COUNT  
 };
 
-Enum1_GENERATED
+File_GENERATED

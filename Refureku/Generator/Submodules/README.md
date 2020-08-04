@@ -737,16 +737,16 @@ else
 All paths specified in the settings should be either absolute (best option), or relative to the working directory.
 
 ### Referenced Settings
-#1: FileGenerator::outputDirectory
-#2: FileGenerator::entityMacrosFilename
-#3: FileParser::parsingSettings.propertyParsingSettings.namespaceMacroName 
-#4: FileParser::parsingSettings.propertyParsingSettings.classMacroName 
-#5: FileParser::parsingSettings.propertyParsingSettings.enumMacroName 
-#6: FileParser::parsingSettings.propertyParsingSettings.enumValueMacroName
-#7: FileParser::parsingSettings.propertyParsingSettings.fieldMacroName 
-#8: FileParser::parsingSettings.propertyParsingSettings.methodMacroName 
-#9: FileParser::parsingSettings.propertyParsingSettings.structMacroName 
-#10: FileParser::parsingSettings.shouldParseAllEntities
+- #1: FileGenerator::outputDirectory
+- #2: FileGenerator::entityMacrosFilename
+- #3: FileParser::parsingSettings.propertyParsingSettings.namespaceMacroName 
+- #4: FileParser::parsingSettings.propertyParsingSettings.classMacroName 
+- #5: FileParser::parsingSettings.propertyParsingSettings.enumMacroName 
+- #6: FileParser::parsingSettings.propertyParsingSettings.enumValueMacroName
+- #7: FileParser::parsingSettings.propertyParsingSettings.fieldMacroName 
+- #8: FileParser::parsingSettings.propertyParsingSettings.methodMacroName 
+- #9: FileParser::parsingSettings.propertyParsingSettings.structMacroName 
+- #10: FileParser::parsingSettings.shouldParseAllEntities
 
 ## Cross-platform compatibility
 This library has been tested and is stable on the following configurations:
