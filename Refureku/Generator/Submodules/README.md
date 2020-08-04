@@ -84,7 +84,7 @@ else
   - [Properties / PropertyRules](#properties--propertyrules)
     - [SimplePropertyRule](#simplepropertyrule)
     - [ComplexPropertyRule](#complexpropertyrule)
-    - [Native properties](#native-properties)
+    - [Builtin properties](#builtin-properties)
   - [GeneratedCodeTemplate](#generatedcodetemplate)
   - [FileParser](#fileparser)
   - [FileGenerator](#filegenerator)
@@ -393,13 +393,13 @@ bool RangePropertyRule::isEntityValid(kodgen::EntityInfo const& entity, kodgen::
 }
 ```
 
-#### Native properties
+#### Builtin properties
 Kodgen implements some properties that it is possible to use out of the box.
 
-- [ParseAllNested](#parseallnested)
-- [GenCodeTemplate](#gencodetemplate)
+- [ParseAllNested](#parseallnested-namespace--struct--class)
+- [GenCodeTemplate](#gencodetemplate-all-entities)
 
-##### ParseAllNested
+##### ParseAllNested (Namespace / Struct / Class)
 ParseAllNested is a simple property which can be used on namespaces, structs and classes. Use it when you want to parse every **directly** nested entity, without having to necessarily specify the parsing macro again.
 
 ```cpp
@@ -438,7 +438,7 @@ class Class(ParseAllNested) /* #4 */ ExampleClass
 };
 ```
 
-##### GenCodeTemplate
+##### GenCodeTemplate (All entities)
 GenCodeTemplate is a complex property used to specify which [GeneratedCodeTemplate](#generatedcodetemplate) to use for a specific entity. Just pass the name of the GeneratedCodeTemplate as a subproperty (between ""), and the FileGenerator will use it to generate the code of the tagged entity.
 
 ```cpp
