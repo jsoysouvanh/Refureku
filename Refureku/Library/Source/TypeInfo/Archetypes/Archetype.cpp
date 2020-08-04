@@ -1,8 +1,8 @@
-#include "TypeInfo/Archetypes/Archetype.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
 #include <cassert>
 
-#include "TypeInfo/Methods/StaticMethod.h"
+#include "Refureku/TypeInfo/Methods/StaticMethod.h"
 
 using namespace rfk;
 

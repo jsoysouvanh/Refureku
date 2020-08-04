@@ -1,6 +1,6 @@
-#include "TypeInfo/Archetypes/ArchetypeRegisterer.h"
+#include "Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h"
 
-#include "TypeInfo/Database.h"
+#include "Refureku/TypeInfo/Database.h"
 
 using namespace rfk;
 

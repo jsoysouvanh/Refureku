@@ -1,4 +1,4 @@
-#include "Exceptions/BadNamespaceFormat.h"
+#include "Refureku/Exceptions/BadNamespaceFormat.h"
 
 using namespace rfk;
 

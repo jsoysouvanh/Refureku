@@ -1,4 +1,4 @@
-#include "InfoStructures/NestedEnumInfo.h"
+#include "Kodgen/InfoStructures/NestedEnumInfo.h"
 
 using namespace kodgen;
 

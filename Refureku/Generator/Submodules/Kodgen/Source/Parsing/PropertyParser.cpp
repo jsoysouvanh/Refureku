@@ -1,9 +1,9 @@
-#include "Parsing/PropertyParser.h"
+#include "Kodgen/Parsing/PropertyParser.h"
 
 #include <cassert>
 
-#include "Properties/SimpleProperty.h"
-#include "Properties/ComplexProperty.h"
+#include "Kodgen/Properties/SimpleProperty.h"
+#include "Kodgen/Properties/ComplexProperty.h"
 
 using namespace kodgen;
 

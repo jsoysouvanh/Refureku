@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include <Misc/Filesystem.h>
-#include <Misc/DefaultLogger.h>
-#include <CodeGen/FileGenerator.h>
+#include <Kodgen/Misc/Filesystem.h>
+#include <Kodgen/Misc/DefaultLogger.h>
+#include <Kodgen/CodeGen/FileGenerator.h>
 
 #include "CppPropsParser.h"
 #include "CppPropsCodeTemplate.h"

@@ -1,18 +1,18 @@
-#include "Parsing/ClassParser.h"
+#include "Kodgen/Parsing/ClassParser.h"
 
 #include <cassert>
 
-#include "Parsing/ParsingSettings.h"
-#include "Parsing/PropertyParser.h"
-#include "InfoStructures/NamespaceInfo.h"
-#include "InfoStructures/StructClassInfo.h"
-#include "InfoStructures/NestedStructClassInfo.h"
-#include "InfoStructures/FieldInfo.h"
-#include "InfoStructures/MethodInfo.h"
-#include "InfoStructures/EntityInfo.h"
-#include "InfoStructures/NestedEnumInfo.h"
-#include "Misc/Helpers.h"
-#include "Misc/DisableWarningMacros.h"
+#include "Kodgen/Parsing/ParsingSettings.h"
+#include "Kodgen/Parsing/PropertyParser.h"
+#include "Kodgen/InfoStructures/NamespaceInfo.h"
+#include "Kodgen/InfoStructures/StructClassInfo.h"
+#include "Kodgen/InfoStructures/NestedStructClassInfo.h"
+#include "Kodgen/InfoStructures/FieldInfo.h"
+#include "Kodgen/InfoStructures/MethodInfo.h"
+#include "Kodgen/InfoStructures/EntityInfo.h"
+#include "Kodgen/InfoStructures/NestedEnumInfo.h"
+#include "Kodgen/Misc/Helpers.h"
+#include "Kodgen/Misc/DisableWarningMacros.h"
 
 using namespace kodgen;
 

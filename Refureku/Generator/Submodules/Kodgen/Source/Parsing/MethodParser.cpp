@@ -1,12 +1,12 @@
-#include "Parsing/MethodParser.h"
+#include "Kodgen/Parsing/MethodParser.h"
 
 #include <assert.h>
 
-#include "Parsing/ParsingSettings.h"
-#include "Parsing/PropertyParser.h"
-#include "InfoStructures/MethodParamInfo.h"
-#include "Misc/Helpers.h"
-#include "Misc/DisableWarningMacros.h"
+#include "Kodgen/Parsing/ParsingSettings.h"
+#include "Kodgen/Parsing/PropertyParser.h"
+#include "Kodgen/InfoStructures/MethodParamInfo.h"
+#include "Kodgen/Misc/Helpers.h"
+#include "Kodgen/Misc/DisableWarningMacros.h"
 
 using namespace kodgen;
 

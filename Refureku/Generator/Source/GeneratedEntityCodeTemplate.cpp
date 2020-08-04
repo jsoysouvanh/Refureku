@@ -1,4 +1,4 @@
-#include "GeneratedEntityCodeTemplate.h"
+#include "RefurekuGenerator/GeneratedEntityCodeTemplate.h"
 
 using namespace rfk;
 

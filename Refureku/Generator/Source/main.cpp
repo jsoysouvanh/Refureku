@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include <Misc/Filesystem.h>
-#include <Misc/DefaultLogger.h>
+#include <Kodgen/Misc/Filesystem.h>
+#include <Kodgen/Misc/DefaultLogger.h>
 
-#include "FileParser.h"
-#include "FileGenerator.h"
+#include "RefurekuGenerator/FileParser.h"
+#include "RefurekuGenerator/FileGenerator.h"
 
 void printGenerationSetup(kodgen::ILogger& logger, rfk::FileParser const& /*fileParser*/, rfk::FileGenerator const& fileGenerator)
 {

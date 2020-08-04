@@ -1,6 +1,6 @@
-#include "TypeInfo/Archetypes/Struct.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 
-#include "TypeInfo/Archetypes/Class.h"
+#include "Refureku/TypeInfo/Archetypes/Class.h"
 
 using namespace rfk;
 

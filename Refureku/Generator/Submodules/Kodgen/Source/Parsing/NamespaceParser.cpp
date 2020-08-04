@@ -1,11 +1,11 @@
-#include "Parsing/NamespaceParser.h"
+#include "Kodgen/Parsing/NamespaceParser.h"
 
 #include <cassert>
 
-#include "Parsing/ParsingSettings.h"
-#include "Parsing/PropertyParser.h"
-#include "Misc/Helpers.h"
-#include "Misc/DisableWarningMacros.h"
+#include "Kodgen/Parsing/ParsingSettings.h"
+#include "Kodgen/Parsing/PropertyParser.h"
+#include "Kodgen/Misc/Helpers.h"
+#include "Kodgen/Misc/DisableWarningMacros.h"
 
 using namespace kodgen;
 

@@ -1,6 +1,6 @@
-#include "Properties/NativeProperties/GenCodeTemplatePropertyRule.h"
+#include "Kodgen/Properties/NativeProperties/GenCodeTemplatePropertyRule.h"
 
-#include "Properties/NativeProperties/NativeProperties.h"
+#include "Kodgen/Properties/NativeProperties/NativeProperties.h"
 
 using namespace kodgen;
 

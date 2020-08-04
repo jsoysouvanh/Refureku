@@ -1,4 +1,4 @@
-#include "TypeInfo/Methods/StaticMethod.h"
+#include "Refureku/TypeInfo/Methods/StaticMethod.h"
 
 #include <utility>	//std::forward
 #include <cassert>

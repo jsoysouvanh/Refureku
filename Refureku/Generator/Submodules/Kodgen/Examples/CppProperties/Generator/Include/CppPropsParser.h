@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Parsing/FileParser.h>
+#include <Kodgen/Parsing/FileParser.h>
 
 #include "GetPropertyRule.h"
 #include "SetPropertyRule.h"

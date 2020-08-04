@@ -1,8 +1,8 @@
-#include "TypeInfo/Type.h"
+#include "Refureku/TypeInfo/Type.h"
 
 #include <cstring>
 
-#include "TypeInfo/Archetypes/Archetype.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
 using namespace rfk;
 

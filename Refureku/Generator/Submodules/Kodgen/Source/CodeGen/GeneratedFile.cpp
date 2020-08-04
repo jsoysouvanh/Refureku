@@ -1,4 +1,4 @@
-#include "CodeGen/GeneratedFile.h"
+#include "Kodgen/CodeGen/GeneratedFile.h"
 
 using namespace kodgen;
 

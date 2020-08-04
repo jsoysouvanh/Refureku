@@ -1,4 +1,4 @@
-#include "TypeInfo/TypePart.h"
+#include "Refureku/TypeInfo/TypePart.h"
 
 using namespace rfk;
 

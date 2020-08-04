@@ -1,6 +1,6 @@
-#include "InfoStructures/StructClassInfo.h"
+#include "Kodgen/InfoStructures/StructClassInfo.h"
 
-#include "InfoStructures/NestedStructClassInfo.h"
+#include "Kodgen/InfoStructures/NestedStructClassInfo.h"
 
 using namespace kodgen;
 

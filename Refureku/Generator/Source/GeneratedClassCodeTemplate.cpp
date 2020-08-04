@@ -1,12 +1,13 @@
-#include "GeneratedClassCodeTemplate.h"
+#include "RefurekuGenerator/GeneratedClassCodeTemplate.h"
 
 #include <cassert>
 #include <algorithm>
 
-#include "InfoStructures/NestedStructClassInfo.h"
-#include "InfoStructures/NestedEnumInfo.h"
-#include "Properties/NativeProperties.h"
-#include "Misc/FundamentalTypes.h"
+#include <Kodgen/InfoStructures/NestedStructClassInfo.h>
+#include <Kodgen/InfoStructures/NestedEnumInfo.h>
+#include <Kodgen/Misc/FundamentalTypes.h>
+
+#include "RefurekuGenerator/Properties/NativeProperties.h"
 
 using namespace rfk;
 

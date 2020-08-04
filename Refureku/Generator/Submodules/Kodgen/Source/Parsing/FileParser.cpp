@@ -1,10 +1,10 @@
-#include "Parsing/FileParser.h"
+#include "Kodgen/Parsing/FileParser.h"
 
 #include <cassert>
 
-#include "Misc/Helpers.h"
-#include "Misc/DisableWarningMacros.h"
-#include "Misc/TomlUtility.h"
+#include "Kodgen/Misc/Helpers.h"
+#include "Kodgen/Misc/DisableWarningMacros.h"
+#include "Kodgen/Misc/TomlUtility.h"
 
 using namespace kodgen;
 

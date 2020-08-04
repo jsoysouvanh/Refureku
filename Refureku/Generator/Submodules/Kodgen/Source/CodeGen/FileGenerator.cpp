@@ -1,17 +1,17 @@
-#include "CodeGen/FileGenerator.h"
+#include "Kodgen/CodeGen/FileGenerator.h"
 
 #include <cassert>
 
-#include "InfoStructures/NamespaceInfo.h"
-#include "InfoStructures/StructClassInfo.h"
-#include "InfoStructures/NestedStructClassInfo.h"
-#include "InfoStructures/EnumInfo.h"
-#include "InfoStructures/NestedEnumInfo.h"
-#include "InfoStructures/EnumValueInfo.h"
-#include "InfoStructures/FieldInfo.h"
-#include "InfoStructures/MethodInfo.h"
-#include "Properties/NativeProperties/NativeProperties.h"
-#include "Misc/TomlUtility.h"
+#include "Kodgen/InfoStructures/NamespaceInfo.h"
+#include "Kodgen/InfoStructures/StructClassInfo.h"
+#include "Kodgen/InfoStructures/NestedStructClassInfo.h"
+#include "Kodgen/InfoStructures/EnumInfo.h"
+#include "Kodgen/InfoStructures/NestedEnumInfo.h"
+#include "Kodgen/InfoStructures/EnumValueInfo.h"
+#include "Kodgen/InfoStructures/FieldInfo.h"
+#include "Kodgen/InfoStructures/MethodInfo.h"
+#include "Kodgen/Properties/NativeProperties/NativeProperties.h"
+#include "Kodgen/Misc/TomlUtility.h"
 
 using namespace kodgen;
 

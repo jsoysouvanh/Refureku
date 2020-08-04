@@ -1,6 +1,6 @@
-#include "InfoStructures/EntityInfo.h"
+#include "Kodgen/InfoStructures/EntityInfo.h"
 
-#include "Misc/Helpers.h"
+#include "Kodgen/Misc/Helpers.h"
 
 using namespace kodgen;
 

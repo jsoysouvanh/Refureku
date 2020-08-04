@@ -1,4 +1,4 @@
-#include "FileGenerator.h"
+#include "RefurekuGenerator/FileGenerator.h"
 
 using namespace rfk;
 
@@ -43,12 +43,12 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsing
 	//Always call base class
 	kodgen::FileGenerator::writeHeader(file, parsingResult);
 
-	file.writeLines("#include \"TypeInfo/Namespaces/Namespace.h\"",
-					"#include \"TypeInfo/Namespaces/NamespaceFragmentRegisterer.h\"",
-					"#include \"TypeInfo/Archetypes/Class.h\"",
-					"#include \"TypeInfo/Archetypes/Enum.h\"",
-					"#include \"TypeInfo/Archetypes/ArchetypeRegisterer.h\"",
-					"#include \"Misc/DisableWarningMacros.h\"",
+	file.writeLines("#include <Refureku/TypeInfo/Namespaces/Namespace.h>",
+					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>",
+					"#include <Refureku/TypeInfo/Archetypes/Class.h>",
+					"#include <Refureku/TypeInfo/Archetypes/Enum.h>",
+					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>",
+					"#include <Refureku/Misc/DisableWarningMacros.h>",
 					"\n");
 }
 

@@ -1,4 +1,4 @@
-#include "InfoStructures/EnumValueInfo.h"
+#include "Kodgen/InfoStructures/EnumValueInfo.h"
 
 using namespace kodgen;
 

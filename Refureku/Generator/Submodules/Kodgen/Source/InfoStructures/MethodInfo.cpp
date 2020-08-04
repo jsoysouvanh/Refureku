@@ -1,9 +1,9 @@
-#include "InfoStructures/MethodInfo.h"
+#include "Kodgen/InfoStructures/MethodInfo.h"
 
 #include <algorithm>
 #include <cassert>
 
-#include "Misc/Helpers.h"
+#include "Kodgen/Misc/Helpers.h"
 
 using namespace kodgen;
 

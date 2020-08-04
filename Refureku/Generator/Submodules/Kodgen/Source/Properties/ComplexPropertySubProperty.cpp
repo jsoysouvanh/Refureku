@@ -1,4 +1,4 @@
-#include "Properties/ComplexPropertySubProperty.h"
+#include "Kodgen/Properties/ComplexPropertySubProperty.h"
 
 #include <cassert>
 #include <stdexcept>

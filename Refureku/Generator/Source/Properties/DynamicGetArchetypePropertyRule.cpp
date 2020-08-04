@@ -1,6 +1,6 @@
-#include "Properties/DynamicGetArchetypePropertyRule.h"
+#include "RefurekuGenerator/Properties/DynamicGetArchetypePropertyRule.h"
 
-#include "Properties/NativeProperties.h"
+#include "RefurekuGenerator/Properties/NativeProperties.h"
 
 using namespace rfk;
 

@@ -1,6 +1,6 @@
-#include "Properties/NativeProperties/ParseAllNestedPropertyRule.h"
+#include "Kodgen/Properties/NativeProperties/ParseAllNestedPropertyRule.h"
 
-#include "Properties/NativeProperties/NativeProperties.h"
+#include "Kodgen/Properties/NativeProperties/NativeProperties.h"
 
 using namespace kodgen;
 

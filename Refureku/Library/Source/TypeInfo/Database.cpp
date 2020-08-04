@@ -1,9 +1,9 @@
-#include "TypeInfo/Database.h"
+#include "Refureku/TypeInfo/Database.h"
 
 #include <iostream>
 
-#include "Exceptions/BadNamespaceFormat.h"
-#include "Misc/DisableWarningMacros.h"
+#include "Refureku/Exceptions/BadNamespaceFormat.h"
+#include "Refureku/Misc/DisableWarningMacros.h"
 
 using namespace rfk;
 

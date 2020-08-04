@@ -1,4 +1,4 @@
-#include "Properties/ComplexPropertyRule.h"
+#include "Kodgen/Properties/ComplexPropertyRule.h"
 
 using namespace kodgen;
 

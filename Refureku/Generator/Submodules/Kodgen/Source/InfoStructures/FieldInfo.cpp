@@ -1,4 +1,4 @@
-#include "InfoStructures/FieldInfo.h"
+#include "Kodgen/InfoStructures/FieldInfo.h"
 
 #include <cassert>
 

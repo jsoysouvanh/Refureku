@@ -1,4 +1,4 @@
-#include "GeneratedNamespaceCodeTemplate.h"
+#include "RefurekuGenerator/GeneratedNamespaceCodeTemplate.h"
 
 #include <cassert>
 

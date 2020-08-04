@@ -1,7 +1,7 @@
 #pragma once
 
-#include <CodeGen/GeneratedCodeTemplate.h>
-#include <InfoStructures/FieldInfo.h>
+#include <Kodgen/CodeGen/GeneratedCodeTemplate.h>
+#include <Kodgen/InfoStructures/FieldInfo.h>
 
 class CppPropsCodeTemplate : public kodgen::GeneratedCodeTemplate
 {

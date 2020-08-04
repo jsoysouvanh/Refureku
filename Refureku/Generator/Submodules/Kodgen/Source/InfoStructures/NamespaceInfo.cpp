@@ -1,4 +1,4 @@
-#include "InfoStructures/NamespaceInfo.h"
+#include "Kodgen/InfoStructures/NamespaceInfo.h"
 
 using namespace kodgen;
 

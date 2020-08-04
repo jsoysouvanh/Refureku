@@ -1,8 +1,8 @@
-#include "TypeInfo/Namespaces/Namespace.h"
+#include "Refureku/TypeInfo/Namespaces/Namespace.h"
 
-#include "TypeInfo/Archetypes/Struct.h"
-#include "TypeInfo/Archetypes/Class.h"
-#include "TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/TypeInfo/Archetypes/Class.h"
+#include "Refureku/TypeInfo/Archetypes/Enum.h"
 
 using namespace rfk;
 

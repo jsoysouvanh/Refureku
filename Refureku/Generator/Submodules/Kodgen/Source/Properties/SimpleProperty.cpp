@@ -1,4 +1,4 @@
-#include "Properties/SimpleProperty.h"
+#include "Kodgen/Properties/SimpleProperty.h"
 
 using namespace kodgen;
 

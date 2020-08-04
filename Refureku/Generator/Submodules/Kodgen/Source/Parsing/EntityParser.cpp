@@ -1,8 +1,8 @@
-#include "Parsing/EntityParser.h"
+#include "Kodgen/Parsing/EntityParser.h"
 
 #include <algorithm>
 
-#include "Properties/NativeProperties/NativeProperties.h"
+#include "Kodgen/Properties/NativeProperties/NativeProperties.h"
 
 using namespace kodgen;
 

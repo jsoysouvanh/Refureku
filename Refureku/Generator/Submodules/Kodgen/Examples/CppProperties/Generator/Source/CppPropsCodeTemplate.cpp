@@ -3,7 +3,7 @@
 #include <cctype>
 #include <cassert>
 
-#include <InfoStructures/StructClassInfo.h>
+#include <Kodgen/InfoStructures/StructClassInfo.h>
 
 void CppPropsCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
 {

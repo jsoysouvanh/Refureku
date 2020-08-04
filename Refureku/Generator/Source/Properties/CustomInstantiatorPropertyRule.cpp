@@ -1,8 +1,8 @@
-#include "Properties/CustomInstantiatorPropertyRule.h"
+#include "RefurekuGenerator/Properties/CustomInstantiatorPropertyRule.h"
 
-#include <InfoStructures/MethodInfo.h>
+#include <Kodgen/InfoStructures/MethodInfo.h>
 
-#include "Properties/NativeProperties.h"
+#include "RefurekuGenerator/Properties/NativeProperties.h"
 
 using namespace rfk;
 

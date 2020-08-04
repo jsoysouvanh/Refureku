@@ -1,4 +1,4 @@
-#include "Properties/PropertyParsingSettings.h"
+#include "Kodgen/Properties/PropertyParsingSettings.h"
 
 using namespace kodgen;
 

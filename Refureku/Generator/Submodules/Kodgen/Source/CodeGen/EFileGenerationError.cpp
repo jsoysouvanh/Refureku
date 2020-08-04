@@ -1,4 +1,4 @@
-#include "CodeGen/EFileGenerationError.h"
+#include "Kodgen/CodeGen/EFileGenerationError.h"
 
 std::string kodgen::toString(EFileGenerationError error) noexcept
 {

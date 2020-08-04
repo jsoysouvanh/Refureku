@@ -1,9 +1,9 @@
-#include "Parsing/EnumValueParser.h"
+#include "Kodgen/Parsing/EnumValueParser.h"
 
-#include "Parsing/ParsingSettings.h"
-#include "Parsing/PropertyParser.h"
-#include "Misc/DisableWarningMacros.h"
-#include "Misc/Helpers.h"
+#include "Kodgen/Parsing/ParsingSettings.h"
+#include "Kodgen/Parsing/PropertyParser.h"
+#include "Kodgen/Misc/DisableWarningMacros.h"
+#include "Kodgen/Misc/Helpers.h"
 
 using namespace kodgen;
 

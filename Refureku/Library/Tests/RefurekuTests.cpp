@@ -3,7 +3,7 @@
 
 #include "ExampleClass.h"
 
-#include "TypeInfo/Database.h"
+#include "Refureku/TypeInfo/Database.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -388,7 +388,7 @@ void properties()
 
 	TEST(ec.getStaticMethod("customInstantiator")->properties.getSimpleProperty("CustomInstantiator") != nullptr);
 
-	rfk::Class const& ppc = namespace2::ParentParentClass::staticGetArchetype();
+	//rfk::Class const& ppc = namespace2::ParentParentClass::staticGetArchetype();
 
 	//Range
 	//TEST(ppc.getField("ppFloat")->properties.getComplexProperty("Range") != nullptr);

@@ -1,10 +1,10 @@
-#include "Parsing/EnumParser.h"
+#include "Kodgen/Parsing/EnumParser.h"
 
 #include <cassert>
 
-#include "Parsing/ParsingSettings.h"
-#include "Parsing/PropertyParser.h"
-#include "Misc/Helpers.h"
+#include "Kodgen/Parsing/ParsingSettings.h"
+#include "Kodgen/Parsing/PropertyParser.h"
+#include "Kodgen/Misc/Helpers.h"
 
 using namespace kodgen;
 
