@@ -24,3 +24,5 @@ class RFKClass() Class2 : public test::Class1
 
 	Class2_GENERATED
 };
+
+File_GENERATED

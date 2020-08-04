@@ -2,7 +2,7 @@
 
 #include "Generated/Struct1.rfk.h"
 
-namespace test
+namespace test RFKNamespace()
 {
 	struct RFKStruct() Struct1
 	{
@@ -13,3 +13,5 @@ namespace test
 		Struct1_GENERATED
 	};
 }
+
+File_GENERATED

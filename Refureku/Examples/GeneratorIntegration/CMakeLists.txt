@@ -11,15 +11,15 @@ target_compile_features(${Target} PUBLIC cxx_std_17)
 # Add Include directories
 target_include_directories(${Target}
 							PRIVATE
-								../../Generator/Submodules/Kodgen/Libraries/Include	# Kodgen dependencies
-								../../Generator/Submodules/Kodgen/Include			# Kodgen headers
-								../../Generator/Include)							# Refureku generator headers
+								../../Generator/Submodules/Kodgen/ThirdParty/Include	# Kodgen dependencies
+								../../Generator/Submodules/Kodgen/Include				# Kodgen headers
+								../../Generator/Include)								# Refureku generator headers
 
 # Link against dependant libraries
 target_link_directories(${Target}
 							PRIVATE
-								../ThirdParty/Lib										# Kodgen, RefurekuGeneratorLib
-								../../Generator/Submodules/Kodgen/Libraries/x64/Static)	# clang.lib
+								../ThirdParty/Lib											# Kodgen, RefurekuGeneratorLib
+								../../Generator/Submodules/Kodgen/ThirdParty/x64/Static)	# clang.lib
 
 target_link_libraries(${Target}
 						PRIVATE

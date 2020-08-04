@@ -38,8 +38,8 @@ int main()
 	//Set logger
 	kodgen::DefaultLogger logger;
 
-	fileParser.provideLogger(logger);
-	fileGenerator.provideLogger(logger);
+	fileParser.logger = &logger;
+	fileGenerator.logger = &logger;
 
 	//current_path() is the working directory
 	//It is set to Refureku/Examples/GeneratorIntegration in VS project settings, but not set from CMake,
@@ -51,21 +51,17 @@ int main()
 		generatorIntegrationPath = generatorIntegrationPath.parent_path();
 	}
 
-	fs::path pathToSettingsFile = generatorIntegrationPath / "RefurekuSettings.toml";
-
 	logger.log("Working Directory: " + generatorIntegrationPath.string(), kodgen::ILogger::ELogSeverity::Info);
 		
 	//Setup generator and parser. Can also load from .toml settings file,
 	//but keep in mind that paths must be either absolute, either relative to the WORKING DIRECTORY
 	//When launching from the executable, they must be relative to the executable path.
 	//In any case, it's much safer to always provide absolute paths.
-	fileGenerator.generatedFilesExtension = ".rfk.h";
-	fileGenerator.supportedExtensions.insert("h");
 	fileGenerator.outputDirectory = generatorIntegrationPath / "Include" / "Generated";
 	fileGenerator.toParseDirectories.emplace(generatorIntegrationPath / "Include");
 	fileGenerator.ignoredDirectories.emplace(generatorIntegrationPath / "Include" / "Generated");
 
-	fileParser.getParsingSettings().projectIncludeDirectories.emplace(generatorIntegrationPath.parent_path().parent_path() / "Library" / "Include");
+	fileParser.parsingSettings.projectIncludeDirectories.emplace(generatorIntegrationPath.parent_path().parent_path() / "Library" / "Include");
 
 	//User needs to press G to generate headers
 	std::string userInput;
