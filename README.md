@@ -8,7 +8,7 @@ Refureku is a powerful C++17 runtime reflection library based on [Kodgen](https:
 It allows you to retrieve information on namespaces, structs/classes, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
-- The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see the [Customization section](#customization)).
+- The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see [Customization](#customization)).
 - The actual library which contains the framework classes to access and manipulate reflected data at runtime.
 
 Here is a non-exhaustive list of Refureku library features:
@@ -74,15 +74,15 @@ Here is a non-exhaustive list of Refureku library features:
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - Refureku header directory, located at /Refureku/Library/Include, or /Include/Library if you downloaded the binaries.
+    - Refureku header directory, located at /Refureku/Library/Include, or /Include from the binaries.
 
 4.  Add library directories to your projet settings:
-    - The directory containing Refureku.lib, located at /Build/[Debug|Release]/Lib/, or /Lib if you downloaded the binaries.
+    - The directory containing Refureku.lib, located at /Build/[Debug|Release]/Lib/, or /Lib from the binaries.
 
 5.  Link against:
     - Refureku.lib. Make sure you link against the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
-	```
-5. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
+
+6. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
 	- [FileGeneratorSettings] outputDirectory = '''Path/To/An/Output/Directory'''
 	- [FileGeneratorSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
 	- [FileParserSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
@@ -90,7 +90,7 @@ Here is a non-exhaustive list of Refureku library features:
 	[FileGeneratorSettings] ignoredDirectories = [ '''Path/To/An/Output/Directory''' ]
 	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory. Check out the [SimpleIntegration project](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/SimpleIntegration)'s [RefurekuSettings.toml](https://github.com/jsoysouvanh/Refureku/blob/master/Refureku/Examples/ThirdParty/Bin/RefurekuSettings.toml) for a concrete example.
 	
-6. Make the RefurekuGenerator run just before your project's compilation:
+7. Make the RefurekuGenerator run just before your project's compilation:
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
@@ -102,8 +102,8 @@ Here is a non-exhaustive list of Refureku library features:
 	- With Visual Studio:
 		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe
 
-7. Make sure you compile your project in C++17 or later.
-8. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
+8. Make sure you compile your project in C++17 or later.
+9. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
 
 ### Parser/Generator Integration
 1. Pull the repository
@@ -124,30 +124,30 @@ Here is a non-exhaustive list of Refureku library features:
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - Kodgen header directory, located at /Refureku/Generator/Submodules/Kodgen/Include, or /ThirdParty/Kodgen/ThirdParty/Include if you downloaded the binaries.
-    - Kodgen dependencies header directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include, or /ThirdParty/Include if you downloaded the binaries.
-    - RefurekuGenerator header directory, located at /Refureku/Generator/Include, or /Include/Generator if you downloaded the binaries.
+    - Kodgen header directory, located at /Refureku/Generator/Submodules/Kodgen/Include, or /ThirdParty/Include from the binaries.
+    - Kodgen dependencies header directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include. If you downloaded the binaries, it is the same directory as above so you don't need to redo it.
+    - RefurekuGenerator header directory, located at /Refureku/Generator/Include, or /Include/RefurekuGenerator from the binaries.
 
 4.  Add library directories to your projet settings:
-    - Kodgen.lib directory, located at /Build/[Debug|Release]/Lib/, or /ThirdParty/Kodgen/Lib if you downloaded the binaries.
-    - Kodgen dependencies library directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static, or /ThirdParty/Kodgen/ThirdParty/Lib if you downloaded the binaries.
-    - RefurekuGeneratorLib.lib directory, located at /Build/[Debug|Release]/Lib/, or /Lib if you downloaded the binaries.
+    - Kodgen.lib directory, located at /Build/[Debug|Release]/Lib/, or /ThirdParty/Lib from the binaries.
+    - Kodgen dependencies library directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static. If you downloaded the binaries, it is the same directory as above so you don't need to redo it.
+    - RefurekuGeneratorLib.lib directory, located at /Build/[Debug|Release]/Lib/, or /Lib from the binaries.
 
 5.  Link against:
-    - Kodgen.lib: Make sure to use the Debug version if you compile your project in Debug mode
     - clang.lib
+    - Kodgen.lib: Make sure to use the Debug version if you compile your project in Debug mode
     - RefurekuGeneratorLib.lib: Make sure to use the Debug version if you compile your project in Debug mode
 
-6.  Setup your project C++ compilation version to C++17 or later.
-7.  Compile!
-8.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared (or /Bin from the binaries).
+7.  Setup your project C++ compilation version to C++17 or later.
+8.  Compile!
+9.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared, or /Bin from the binaries.
 
 You should be able to run the following snippet:
 
 ```cpp
-#include <FileParser.h>
-#include <FileGenerator.h>
-#include <Misc/DefaultLogger.h>
+#include <Refureku/FileParser.h>
+#include <Refureku/FileGenerator.h>
+#include <Kodgen/Misc/DefaultLogger.h>
 
 int main()
 {
@@ -221,7 +221,7 @@ for (rfk::Method const& method : exampleClassArchetype.methods)
 You could also retrieve archetypes from the database using the archetype name like so:
 
 ```cpp
-#include <TypeInfo/Database.h>
+#include <Refureku/TypeInfo/Database.h>
 
 rfk::Struct const* exampleStructArchetype = rfk::Database::getStruct("ExampleStruct");
 rfk::Class const* exampleClassArchetype = rfk::Database::getClass("ExampleClass");
@@ -239,7 +239,7 @@ Just like structs and classes, we can reflect enums. If an enum is reflected, ne
 enum class RFKEnum() ExampleEnum : int
 {
 	ExampleValue1 = 0u,
-	ExampleValue2 RFKEnumVal(SomeProperty) = 42u,
+	ExampleValue2 RFKEnumVal() = 42u,
 	ExampleValue3
 };
 
@@ -268,7 +268,7 @@ exampleEnumArchetype->getEnumValue(0u);
 From the database:
 
 ```cpp
-#include <TypeInfo/Database.h>
+#include <Refureku/TypeInfo/Database.h>
 
 //...
 
@@ -440,7 +440,7 @@ File_GENERATED
 Use namespace reflected data:
 
 ```cpp
-#include <TypeInfo/Database.h>
+#include <Refureku/TypeInfo/Database.h>
 
 //...
 
@@ -526,7 +526,7 @@ DynamicGetArchetype is a simple property which should be specified when a class 
 ```cpp
 #pragma once
 
-#include <ReflectedObject.h>
+#include <Refureku/ReflectedObject.h>
 
 #include "Generated/ExampleClass.rfk.h"
 
@@ -545,7 +545,7 @@ File_GENERATED
 ```
 
 ```cpp
-#include <TypeInfo/Database.h>
+#include <Refureku/TypeInfo/Database.h>
 
 //...
 
