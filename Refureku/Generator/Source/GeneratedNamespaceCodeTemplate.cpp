@@ -12,6 +12,10 @@ void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generat
 
 	kodgen::NamespaceInfo const& namespaceInfo = static_cast<kodgen::NamespaceInfo const&>(entityInfo);
 
+	//Hide namespace macro redefinition warning as it is likely to happen often
+	generatedFile.writeLines("__RFK_DISABLE_WARNING_PUSH",
+							 "__RFK_DISABLE_WARNING_MACRO_REDEFINED\n");
+
 	std::string	mainMacroName						= internalPrefix + getCurrentEntityId() + "_GENERATED";
 	std::string fillNamespaceDeclarationMacroName	= generateGetNamespaceFragmentDeclarationMacro(generatedFile, namespaceInfo);
 	std::string fillNamespaceDefinitionMacroName	= generateGetNamespaceFragmentDefinitionMacro(generatedFile, namespaceInfo);
@@ -23,6 +27,8 @@ void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generat
 							 std::move(registerMacroName),
 							 std::move(fillNamespaceDefinitionMacroName),
 							 "}");
+
+	generatedFile.writeLine("__RFK_DISABLE_WARNING_POP\n");
 }
 
 std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDeclarationMacro(kodgen::GeneratedFile& generatedFile, kodgen::NamespaceInfo const& /* namespaceInfo */) const noexcept
