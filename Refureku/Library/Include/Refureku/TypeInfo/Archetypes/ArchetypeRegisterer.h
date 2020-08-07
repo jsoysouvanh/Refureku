@@ -13,12 +13,16 @@ namespace rfk
 
 	class ArchetypeRegisterer
 	{
+		private:
+			/** Registered archetype. */
+			Archetype const* _registeredArchetype = nullptr;
+
 		public:
 			ArchetypeRegisterer()							= default;
 			ArchetypeRegisterer(Archetype const* archetype)	noexcept;
 			ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
 			ArchetypeRegisterer(ArchetypeRegisterer&&)		= delete;
-			~ArchetypeRegisterer()							= default;
+			~ArchetypeRegisterer()							noexcept;
 
 			ArchetypeRegisterer& operator=(ArchetypeRegisterer const&)	= delete;
 			ArchetypeRegisterer& operator=(ArchetypeRegisterer&&)		= delete;

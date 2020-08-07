@@ -12,6 +12,7 @@ using namespace rfk;
 
 Database::EntitiesById		Database::_entitiesById				__attribute__((init_priority(101)));
 Database::EntitiesByName	Database::_fileLevelEntitiesByName	__attribute__((init_priority(101)));
+Database::GenNamespaces		Database::_generatedNamespaces		__attribute__((init_priority(101)));
 
 #elif defined(_MSC_VER)
 
@@ -24,11 +25,13 @@ __RFK_DISABLE_WARNING_POP
 
 Database::EntitiesById		Database::_entitiesById;
 Database::EntitiesByName	Database::_fileLevelEntitiesByName;
+Database::GenNamespaces		Database::_generatedNamespaces;
 
 #else
 
 Database::EntitiesById		Database::_entitiesById;
 Database::EntitiesByName	Database::_fileLevelEntitiesByName;
+Database::GenNamespaces		Database::_generatedNamespaces;
 
 #endif
 
@@ -74,6 +77,46 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 	}
 }
 
+void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEntities) noexcept
+{
+	if (shouldUnregisterSubEntities)
+	{
+		switch (entity.kind)
+		{
+			case Entity::EKind::Namespace:
+				assert(false); //This situation should never happen
+				break;
+
+			case Entity::EKind::Archetype:
+				unregisterSubEntities(static_cast<Archetype const&>(entity));
+				break;
+
+			case Entity::EKind::Field:
+				[[fallthrough]];
+			case Entity::EKind::Method:
+				[[fallthrough]];
+			case Entity::EKind::EnumValue:
+				//No sub entity to unregister
+				break;
+
+			case Entity::EKind::Undefined:
+				[[fallthrough]];
+			default:
+				assert(false);	//Should never register a bad kind
+				break;
+		}
+	}
+
+	//Remove this entity from the list of registered entity ids
+	_entitiesById.erase(&entity);
+
+	//Remove from file level entities
+	if (entity.outerEntity == nullptr)
+	{
+		_fileLevelEntitiesByName.erase(&entity);
+	}
+}
+
 void Database::registerSubEntities(Namespace const& n) noexcept
 {
 	//Add nested namespaces
@@ -101,6 +144,34 @@ void Database::registerSubEntities(Archetype const& archetype) noexcept
 
 		case Archetype::ECategory::Enum:
 			registerSubEntities(static_cast<Enum const&>(archetype));
+			break;
+
+		case Archetype::ECategory::Fundamental:
+			//Nothing special to do here since a fundamental archetype doesn't own any sub entities
+			break;
+
+		case Archetype::ECategory::Count:
+			[[fallthrough]];
+		case Archetype::ECategory::Undefined:
+			[[fallthrough]];
+		default:
+			assert(false);	//Should never register a bad category
+			break;
+	}
+}
+
+void Database::unregisterSubEntities(Archetype const& archetype) noexcept
+{
+	switch (archetype.category)
+	{
+		case Archetype::ECategory::Struct:
+			[[fallthrough]];
+		case Archetype::ECategory::Class:
+			unregisterSubEntities(static_cast<Struct const&>(archetype));
+			break;
+
+		case Archetype::ECategory::Enum:
+			unregisterSubEntities(static_cast<Enum const&>(archetype));
 			break;
 
 		case Archetype::ECategory::Fundamental:
@@ -148,6 +219,37 @@ void Database::registerSubEntities(Struct const& s) noexcept
 	}
 }
 
+void Database::unregisterSubEntities(Struct const& s) noexcept
+{
+	//Remove nested archetypes
+	for (Archetype const* nestedArchetype : s.nestedArchetypes)
+	{
+		unregisterEntity(*nestedArchetype, true);
+	}
+
+	//Add fields
+	for (Entity const& field : s.fields)
+	{
+		unregisterEntity(field, false);
+	}
+
+	for (Entity const& staticField : s.staticFields)
+	{
+		unregisterEntity(staticField, false);
+	}
+
+	//Add methods
+	for (Entity const& method : s.methods)
+	{
+		unregisterEntity(method, false);
+	}
+
+	for (Entity const& staticMethod : s.staticMethods)
+	{
+		unregisterEntity(staticMethod, false);
+	}
+}
+
 void Database::registerSubEntities(Enum const& e) noexcept
 {
 	//Enum values
@@ -155,6 +257,38 @@ void Database::registerSubEntities(Enum const& e) noexcept
 	{
 		registerEntity(enumValue, false);
 	}
+}
+
+void Database::unregisterSubEntities(Enum const& e) noexcept
+{
+	//Enum values
+	for (Entity const& enumValue : e.values)
+	{
+		unregisterEntity(enumValue, false);
+	}
+}
+
+void Database::checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr) noexcept
+{
+	//std::cout << npPtr->name << ", COUNT = " << npPtr.use_count() << std::endl;
+
+	assert(npPtr.use_count() >= 2);
+
+	// 2: first is this method parameter, the second is the ptr stored in _generatedNamespaces
+	if (npPtr.use_count() == 2)
+	{
+		//This shared pointer is used by database only so we can delete it
+		unregisterEntity(*npPtr, false);
+		
+		_generatedNamespaces.erase(std::find_if(_generatedNamespaces.cbegin(),
+												_generatedNamespaces.cend(),
+												[npPtr](std::shared_ptr<Namespace> const& n) { return npPtr == n; }));
+	}
+}
+
+std::shared_ptr<Namespace> Database::generateNamespace(char const* name, uint64 id) noexcept
+{
+	return _generatedNamespaces.emplace_back(std::make_shared<Namespace>(name, id));
 }
 
 Entity const* Database::getEntity(uint64 id) noexcept
@@ -212,32 +346,6 @@ Namespace const* Database::getNamespace(std::string namespaceName)
 
 	return result;
 }
-
-//Namespace const* Database::getNamespace(std::string namespaceName, bool allowNestedNamespaces) noexcept
-//{
-//	//Entity const* entity = getEntity(std::move(namespaceName));
-//
-//	//if (allowNestedNamespaces &&
-//	//	(entity == nullptr || entity->kind != Entity::EKind::Namespace))
-//	//{
-//	//	//Look in nested namespaces
-//	//	for (Entity const* entity : _fileLevelEntitiesByName)	//Might consider making a vector containing only file level namespaces to avoid iteration over all file entities (potentially a lot of classes)
-//	//	{
-//	//		if (entity->kind == Entity::EKind::Namespace)
-//	//		{
-//
-//	//		}
-//	//	}
-//	//}
-//	//else
-//	//{
-//	//	return (entity != nullptr && entity->kind == Entity::EKind::Namespace) ?
-//	//			reinterpret_cast<Namespace const*>(entity) :
-//	//			nullptr;
-//	//}
-//
-//	return nullptr;
-//}
 
 Struct const* Database::getStruct(std::string structName) noexcept
 {

@@ -1,6 +1,7 @@
 #include "Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h"
 
 #include <cassert>
+#include <algorithm>
 
 #include "Refureku/TypeInfo/Namespaces/Namespace.h"
 #include "Refureku/TypeInfo/Namespaces/NamespaceFragment.h"
@@ -8,7 +9,8 @@
 
 using namespace rfk;
 
-NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, uint64 id, NamespaceFragment const* namespaceFragment, bool isFileLevelNamespace) noexcept
+NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, uint64 id, NamespaceFragment const* namespaceFragment, bool isFileLevelNamespace) noexcept:
+	_fragment{namespaceFragment}
 {
 	//Try to get the namespace this fragment belongs to
 	Entity const* foundNamespace = Database::getEntity(id);
@@ -16,8 +18,7 @@ NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, uint6
 	if (foundNamespace == nullptr)
 	{
 		//This namespace hasn't been registered yet, so create it
-		_namespaceInstance = new Namespace(name, id);	//TODO: The database should be the one generating the pointer, (using shared_ptr)
-		_isNamespaceOwner	= true;
+		_namespaceInstance = Database::generateNamespace(name, id);
 
 		if (isFileLevelNamespace)
 		{
@@ -27,8 +28,10 @@ NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, uint6
 	}
 	else
 	{
-		//Sorry we need to get rid of that const to fill you...
-		_namespaceInstance = const_cast<Namespace*>(reinterpret_cast<Namespace const*>(foundNamespace));
+		//Retrieve the namespace pointer shared between all fragments
+		_namespaceInstance = *std::find_if(Database::_generatedNamespaces.cbegin(),
+										   Database::_generatedNamespaces.cend(),
+										   [foundNamespace](std::shared_ptr<Namespace> const& n) { return n.get() == foundNamespace; });
 	}
 
 	mergeFragmentToNamespace(namespaceFragment);
@@ -36,10 +39,11 @@ NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, uint6
 
 NamespaceFragmentRegisterer::~NamespaceFragmentRegisterer() noexcept
 {
-	if (_isNamespaceOwner)
-	{
-		delete _namespaceInstance;
-	}
+	//Unregister namespace fragment
+	removeFragmentFromNamespace(_fragment);
+
+	//Check if this fragment was the last one from the namespace
+	Database::checkNamespaceRefCount(_namespaceInstance);
 }
 
 void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment const* fragment) noexcept
@@ -55,7 +59,7 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 	for (Entity const* entity : fragment->nestedEntities)
 	{
 		//Setup outer entity
-		const_cast<Entity*>(entity)->outerEntity = _namespaceInstance;	//Don't tell anyone I actually wrote const_cast...
+		const_cast<Entity*>(entity)->outerEntity = _namespaceInstance.get();	//Don't tell anyone I actually wrote const_cast...
 
 		switch (entity->kind)
 		{
@@ -115,10 +119,43 @@ void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(N
 
 void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment const* /* fragment */) noexcept
 {
-	//TODO
+	//Each namespace self unregister, so we only need to unregister
+	//nested non-namespace entities
+	for (Entity const* entity : _fragment->nestedEntities)
+	{
+		switch (entity->kind)
+		{
+			case Entity::EKind::Namespace:
+				_namespaceInstance->nestedNamespaces.erase(reinterpret_cast<Namespace const*>(entity));
+
+				//Namespaces unregister automatically from the database, don't need to do it here
+
+				break;
+
+			case Entity::EKind::Archetype:
+				_namespaceInstance->nestedArchetypes.erase(reinterpret_cast<Archetype const*>(entity));
+
+				//Unregister archetypes and their sub entities from the database
+				Database::unregisterEntity(*entity, true);
+
+				break;
+
+			case Entity::EKind::EnumValue:
+				[[fallthrough]];
+			case Entity::EKind::Field:
+				[[fallthrough]];
+			case Entity::EKind::Method:
+				[[fallthrough]];
+			case Entity::EKind::Undefined:
+				[[fallthrough]];
+			default:
+				assert(false);	//None of these kind of entities should ever be a namespace nested entity
+				break;
+		}
+	}
 }
 
 Namespace const* NamespaceFragmentRegisterer::getNamespaceInstance() const noexcept
 {
-	return _namespaceInstance;
+	return _namespaceInstance.get();
 }

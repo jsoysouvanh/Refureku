@@ -4,8 +4,8 @@
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
-Refureku is a powerful C++17 runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
-It allows you to retrieve information on namespaces, structs/classes, fields, methods, enums and enum values at runtime.
+Refureku is a powerful C++17 RTTI free runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
+It allows to retrieve information on namespaces, structs/classes, fields, methods, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
 - The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see [Customization](#customization)).
