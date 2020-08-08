@@ -144,7 +144,7 @@ void FileGenerator::writeEntityToFile(GeneratedFile& generatedFile, EntityInfo c
 
 void FileGenerator::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInfo const& namespaceInfo, FileGenerationResult& genResult) noexcept
 {
-	assert(namespaceInfo.entityType == EntityInfo::EType::Namespace);
+	assert(namespaceInfo.entityType == EEntityType::Namespace);
 
 	//Write namespace
 	writeEntityToFile(generatedFile, namespaceInfo, genResult);
@@ -192,7 +192,7 @@ void FileGenerator::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInf
 
 void FileGenerator::writeStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& structClassInfo, FileGenerationResult& genResult) noexcept
 {
-	assert(structClassInfo.entityType == EntityInfo::EType::Struct || structClassInfo.entityType == EntityInfo::EType::Class);
+	assert(structClassInfo.entityType == EEntityType::Struct || structClassInfo.entityType == EEntityType::Class);
 
 	//Write struct/class
 	writeEntityToFile(generatedFile, structClassInfo, genResult);
@@ -238,7 +238,7 @@ void FileGenerator::writeNestedStructOrClassToFile(GeneratedFile& generatedFile,
 
 void FileGenerator::writeEnumToFile(GeneratedFile& generatedFile, EntityInfo const& enumInfo, FileGenerationResult& genResult) noexcept
 {
-	assert(enumInfo.entityType == EntityInfo::EType::Enum);
+	assert(enumInfo.entityType == EEntityType::Enum);
 
 	//Write enum
 	writeEntityToFile(generatedFile, enumInfo, genResult);
@@ -254,21 +254,21 @@ void FileGenerator::writeEnumToFile(GeneratedFile& generatedFile, EntityInfo con
 
 void FileGenerator::writeEnumValueToFile(GeneratedFile& generatedFile, EntityInfo const& enumValueInfo, FileGenerationResult& genResult) noexcept
 {
-	assert(enumValueInfo.entityType == EntityInfo::EType::EnumValue);
+	assert(enumValueInfo.entityType == EEntityType::EnumValue);
 
 	writeEntityToFile(generatedFile, enumValueInfo, genResult);
 }
 
 void FileGenerator::writeFieldToFile(GeneratedFile& generatedFile, EntityInfo const& fieldInfo, FileGenerationResult& genResult) noexcept
 {
-	assert(fieldInfo.entityType == EntityInfo::EType::Field);
+	assert(fieldInfo.entityType == EEntityType::Field);
 
 	writeEntityToFile(generatedFile, fieldInfo, genResult);
 }
 
 void FileGenerator::writeMethodToFile(GeneratedFile& generatedFile, EntityInfo const& methodInfo, FileGenerationResult& genResult) noexcept
 {
-	assert(methodInfo.entityType == EntityInfo::EType::Method);
+	assert(methodInfo.entityType == EEntityType::Method);
 
 	writeEntityToFile(generatedFile, methodInfo, genResult);
 }
@@ -321,7 +321,7 @@ void FileGenerator::addGeneratedCodeTemplate(std::string const& templateName, Ge
 	}
 }
 
-bool FileGenerator::setDefaultGeneratedCodeTemplate(EntityInfo::EType entityType, std::string const& templateName) noexcept
+bool FileGenerator::setDefaultGeneratedCodeTemplate(EEntityType entityType, std::string const& templateName) noexcept
 {
 	decltype(_generatedCodeTemplates)::const_iterator it = _generatedCodeTemplates.find(templateName);
 

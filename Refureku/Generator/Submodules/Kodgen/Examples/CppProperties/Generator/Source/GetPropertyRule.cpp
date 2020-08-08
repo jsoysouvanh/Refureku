@@ -4,9 +4,9 @@
 
 using namespace kodgen;
 
-bool GetPropertyRule::isMainPropSyntaxValid(std::string const& mainProperty, EntityInfo::EType entityType) const noexcept
+bool GetPropertyRule::isMainPropSyntaxValid(std::string const& mainProperty, EEntityType entityType) const noexcept
 {
-	return mainProperty == "Get" && entityType == EntityInfo::EType::Field;
+	return mainProperty == "Get" && entityType == EEntityType::Field;
 }
 
 bool GetPropertyRule::isSubPropSyntaxValid(std::string const& subProperty, uint8 /* subPropIndex */, std::string& out_errorDescription) const noexcept

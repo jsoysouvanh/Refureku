@@ -158,11 +158,11 @@ void FileParser::addClassResult(ClassParsingResult&& result) noexcept
 	{
 		switch (result.parsedClass->entityType)
 		{
-			case EntityInfo::EType::Struct:
+			case EEntityType::Struct:
 				getParsingResult()->structs.emplace_back(std::move(result.parsedClass).value());
 				break;
 
-			case EntityInfo::EType::Class:
+			case EEntityType::Class:
 				getParsingResult()->classes.emplace_back(std::move(result.parsedClass).value());
 				break;
 

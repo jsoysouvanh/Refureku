@@ -22,9 +22,5 @@ namespace rfk
 			virtual bool	isPropertyGroupValid(kodgen::PropertyGroup const&	propertyGroup,
 												 kodgen::uint8					propertyIndex,
 												 std::string&					out_errorDescription)	const noexcept override;
-
-			virtual bool	isEntityValid(kodgen::EntityInfo const& entity,
-										  kodgen::uint8				propertyIndex,
-										  std::string&				out_errorDescription)				const noexcept override;
 	};
 }

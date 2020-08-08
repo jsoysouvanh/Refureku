@@ -5,7 +5,7 @@
 using namespace kodgen;
 
 FieldInfo::FieldInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EType::Field),
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EEntityType::Field),
 	qualifiers{clang_getCursorKind(cursor) == CXCursorKind::CXCursor_VarDecl, false},
 	type(clang_getCursorType(cursor)),
 	accessSpecifier{EAccessSpecifier::Invalid},

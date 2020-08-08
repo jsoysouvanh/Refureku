@@ -19,8 +19,8 @@ class SetPropertyRule : public kodgen::ComplexPropertyRule
 		SetPropertyRule(SetPropertyRule&&)		= default;
 		virtual ~SetPropertyRule()				= default;
 
-		virtual bool	isMainPropSyntaxValid(std::string const&			mainProperty,
-											  kodgen::EntityInfo::EType		entityType)				const noexcept override;
+		virtual bool	isMainPropSyntaxValid(std::string const&	mainProperty,
+											  kodgen::EEntityType	entityType)						const noexcept override;
 
 		virtual bool	isSubPropSyntaxValid(std::string const& subProperty,
 											 kodgen::uint8		subPropIndex,

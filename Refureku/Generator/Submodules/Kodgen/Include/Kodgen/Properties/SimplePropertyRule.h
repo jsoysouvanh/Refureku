@@ -53,8 +53,8 @@ namespace kodgen
 			*	
 			*	@return true if the property syntax is valid, else false.
 			*/
-			virtual bool		isMainPropSyntaxValid(std::string const& mainProperty,
-													  EntityInfo::EType	 entityType)				const noexcept = 0;
+			virtual bool		isMainPropSyntaxValid(std::string const&	mainProperty,
+													  EEntityType			entityType)		const noexcept = 0;
 
 			/**
 			*	@brief	Check that a property is valid inside a given property group.

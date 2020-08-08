@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 			*	Now we can simply write:
 			*		class KGClass() MyClass {};
 			*/
-			fileGenerator.setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Class, "PropertyCodeTemplate");
+			fileGenerator.setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Class, "PropertyCodeTemplate");
 
 			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, true);
 

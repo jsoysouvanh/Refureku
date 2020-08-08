@@ -83,7 +83,7 @@ namespace kodgen
 			*			On failure, _parsingError is updated.
 			*/
 			opt::optional<PropertyGroup> checkAndFillPropertyGroup(std::vector<std::vector<std::string>>&	splitProps,
-																	EntityInfo::EType						entityType)		noexcept;
+																   EEntityType								entityType)		noexcept;
 
 			/**
 			*	@brief Add a single property to the given property group using the provided data.
@@ -95,7 +95,7 @@ namespace kodgen
 			*	@return true and update the out_propertyGroup parameter on success, else return false and update _parsingError value.
 			*/
 			bool addSimpleProperty(std::vector<std::string>&	propertyAsVector,
-								   EntityInfo::EType			entityType,
+								   EEntityType					entityType,
 								   PropertyGroup&				out_propertyGroup)											noexcept;
 
 			/**
@@ -108,7 +108,7 @@ namespace kodgen
 			*	@return true and update the out_propertyGroup parameter on success, else return false and update _parsingError value.
 			*/
 			bool addComplexProperty(std::vector<std::string>&	propertyAsVector,
-									EntityInfo::EType			entityType,
+									EEntityType					entityType,
 									PropertyGroup&				out_propertyGroup)											noexcept;
 
 			/**
@@ -123,7 +123,7 @@ namespace kodgen
 			*/
 			opt::optional<PropertyGroup>	getProperties(std::string&&			annotateMessage,
 														  std::string const&	annotationId,
-														  EntityInfo::EType		entityType)										noexcept;
+														  EEntityType			entityType)									noexcept;
 
 		public:
 			/**

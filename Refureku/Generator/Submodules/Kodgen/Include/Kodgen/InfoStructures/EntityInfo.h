@@ -13,6 +13,7 @@
 #include <clang-c/Index.h>
 
 #include "Kodgen/Misc/FundamentalTypes.h"
+#include "Kodgen/InfoStructures/EEntityType.h"
 #include "Kodgen/Properties/PropertyGroup.h"
 
 namespace kodgen
@@ -20,28 +21,8 @@ namespace kodgen
 	class EntityInfo
 	{
 		public:
-			/**
-			*	Enum representing type of an entity
-			*	This avoids unnecessary dynamic casts and allows EntityInfo to be a non-polymorphic class
-			*/
-			enum class EType : uint8
-			{
-				Class,
-				Struct,
-				Enum,
-				Field,
-				Method,
-				EnumValue,
-				Namespace,
-
-				/**
-				*	Unset
-				*/
-				Count
-			};
-
 			/** Type of entity. */
-			EType				entityType	= EType::Count;
+			EEntityType			entityType	= EEntityType::Undefined;
 			
 			/** Name of the entity. */
 			std::string			name		= "";
@@ -58,7 +39,7 @@ namespace kodgen
 			EntityInfo()								= default;
 			EntityInfo(CXCursor const&	cursor,
 					   PropertyGroup&&	propertyGroup,
-					   EType			entityType)		noexcept;
+					   EEntityType		entityType)		noexcept;
 			EntityInfo(EntityInfo const&)				= default;
 			EntityInfo(EntityInfo&&)					= default;
 			~EntityInfo()								= default;

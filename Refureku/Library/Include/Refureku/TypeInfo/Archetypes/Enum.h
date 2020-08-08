@@ -17,7 +17,7 @@
 
 namespace rfk
 {
-	class Enum : public Archetype
+	class Enum final : public Archetype
 	{
 		public:
 			/** Values contained in this enum */

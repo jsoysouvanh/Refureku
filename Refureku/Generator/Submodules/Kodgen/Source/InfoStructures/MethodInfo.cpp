@@ -8,7 +8,7 @@
 using namespace kodgen;
 
 MethodInfo::MethodInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EType::Method),
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EEntityType::Method),
 	qualifiers{	clang_CXXMethod_isDefaulted(cursor) != 0u,
 				clang_CXXMethod_isStatic(cursor) != 0u,
 				clang_CXXMethod_isVirtual(cursor) != 0u,

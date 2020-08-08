@@ -150,8 +150,6 @@ void Database::registerSubEntities(Archetype const& archetype) noexcept
 			//Nothing special to do here since a fundamental archetype doesn't own any sub entities
 			break;
 
-		case Archetype::ECategory::Count:
-			[[fallthrough]];
 		case Archetype::ECategory::Undefined:
 			[[fallthrough]];
 		default:
@@ -178,8 +176,6 @@ void Database::unregisterSubEntities(Archetype const& archetype) noexcept
 			//Nothing special to do here since a fundamental archetype doesn't own any sub entities
 			break;
 
-		case Archetype::ECategory::Count:
-			[[fallthrough]];
 		case Archetype::ECategory::Undefined:
 			[[fallthrough]];
 		default:

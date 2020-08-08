@@ -26,14 +26,14 @@ namespace kodgen
 	{
 		private:
 			/** All generated code templates usable by this generator. */
-			std::unordered_map<std::string,	GeneratedCodeTemplate*>			_generatedCodeTemplates;
+			std::unordered_map<std::string,	GeneratedCodeTemplate*>	_generatedCodeTemplates;
 			
 			/** Default generated code templates to use when none is specified in entity property parameters. */
-			std::unordered_map<EntityInfo::EType, GeneratedCodeTemplate*>	_defaultGeneratedCodeTemplates;
+			std::unordered_map<EEntityType, GeneratedCodeTemplate*>	_defaultGeneratedCodeTemplates;
 			
 			/** Native property rules. */
-			ParseAllNestedPropertyRule										_parseAllNestedPropertyRule;
-			GenCodeTemplatePropertyRule										_generatedCodeTemplatePropertyRule;
+			ParseAllNestedPropertyRule								_parseAllNestedPropertyRule;
+			GenCodeTemplatePropertyRule								_generatedCodeTemplatePropertyRule;
 
 			/**
 			*	@brief Parse a file and generate its paired file.
@@ -319,7 +319,7 @@ namespace kodgen
 			*
 			*	@return true if the new default generated code template was setup successfully, else false.
 			*/
-			bool setDefaultGeneratedCodeTemplate(EntityInfo::EType	entityType,
+			bool setDefaultGeneratedCodeTemplate(EEntityType		entityType,
 												 std::string const&	templateName)		noexcept;
 
 			/**

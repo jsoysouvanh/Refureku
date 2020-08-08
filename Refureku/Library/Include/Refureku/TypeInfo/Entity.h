@@ -24,32 +24,32 @@ namespace rfk
 			*/
 			enum class EKind : uint8
 			{
+				/** This entity is... what? Should never happen... */
+				Undefined	= 0u,
+
 				/** The entity is a namespace, it can safely be cast to Namespace type. */
-				Namespace = 0u,
+				Namespace	= 1 << 0,
 				
 				/**
 				*	The entity is an archetype, it can safely be cast to Archetype type.
 				*	More specific info can be retrieved from the entity by checking Archetype::category variable.
 				*/
-				Archetype,
+				Archetype	= 1 << 1,
 
 				/**
 				*	The entity is a field, it can safely be cast to FieldBase type.
 				*	More specific info can be retrieved from the entity by checking FieldBase::flags.
 				*/
-				Field,
+				Field		= 1 << 2,
 
 				/**
 				*	The entity is a method, it can safely be cast to MethodBase type.
 				*	More specific info can be retrieved from the entity by checking MethodBase::flags.
 				*/
-				Method,
+				Method		= 1 << 3,
 
 				/** The entity is an enum value, it can safely be cast to EnumValue. */
-				EnumValue,
-
-				/** This entity is... what? Should never happen... */
-				Undefined
+				EnumValue	= 1 << 4
 			};
 
 			/** Helper structs for hashing / equal */

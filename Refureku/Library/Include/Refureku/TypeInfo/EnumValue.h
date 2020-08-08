@@ -11,7 +11,7 @@
 
 namespace rfk
 {
-	class EnumValue : public Entity
+	class EnumValue final : public Entity
 	{
 		public:
 			/** Value of this enum value. */

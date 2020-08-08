@@ -2,13 +2,15 @@
 
 #include <cassert>
 
+#include "RefurekuGenerator/Helpers.h"
+
 using namespace rfk;
 
 void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
 {
 	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo);
 
-	assert(entityInfo.entityType == kodgen::EntityInfo::EType::Namespace);
+	assert(entityInfo.entityType == kodgen::EEntityType::Namespace);
 
 	kodgen::NamespaceInfo const& namespaceInfo = static_cast<kodgen::NamespaceInfo const&>(entityInfo);
 

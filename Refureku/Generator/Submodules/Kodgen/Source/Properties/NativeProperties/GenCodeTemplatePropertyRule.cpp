@@ -6,7 +6,7 @@ using namespace kodgen;
 
 GenCodeTemplatePropertyRule::GenCodeTemplatePropertyRule() noexcept:
 	FixedComplexPropertyRule(NativeProperties::generatedCodeTemplateProperty,
-							 { EntityInfo::EType::Namespace, EntityInfo::EType::Struct, EntityInfo::EType::Class, EntityInfo::EType::Field, EntityInfo::EType::Method, EntityInfo::EType::Enum, EntityInfo::EType::EnumValue },
+							 EEntityType::Namespace | EEntityType::Struct | EEntityType::Class | EEntityType::Field | EEntityType::Method | EEntityType::Enum | EEntityType::EnumValue,
 							 "This property can be used with any entity. Used to specify the GeneratedCodeTemplate to use when generating code for this entity.")
 {
 	subProperties.emplace_back(ComplexPropertySubProperty::EType::String, "generatedCodeTemplateName", "Name of the registered generated code template to use for this entity.");

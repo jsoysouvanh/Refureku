@@ -8,6 +8,7 @@
 #include <Kodgen/Misc/FundamentalTypes.h>
 
 #include "RefurekuGenerator/Properties/NativeProperties.h"
+#include "RefurekuGenerator/Helpers.h"
 
 using namespace rfk;
 
@@ -17,11 +18,11 @@ void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFi
 
 	switch (entityInfo.entityType)
 	{
-		case kodgen::EntityInfo::EType::Class:
+		case kodgen::EEntityType::Class:
 			generateClassCode(generatedFile, static_cast<kodgen::StructClassInfo const&>(entityInfo));
 			break;
 
-		case kodgen::EntityInfo::EType::Struct:
+		case kodgen::EEntityType::Struct:
 			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo const&>(entityInfo));
 			break;
 
@@ -62,7 +63,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 	std::string					generateArchetypePropertiesMacroName	= generateArchetypePropertiesMacro(generatedFile, info);
 	std::string					generatedNestedClassesMetadataMacroName	= generateNestedArchetypesMetadataMacro(generatedFile, info);
 
-	std::string returnedType = (info.entityType == kodgen::EntityInfo::EType::Struct) ? "rfk::Struct" : "rfk::Class";
+	std::string returnedType = (info.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
 	bool shouldGenerateGetArchetype = std::find_if(info.properties.simpleProperties.cbegin(),
 												   info.properties.simpleProperties.cend(),
@@ -84,7 +85,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"		static bool			initialized = false;",
 								"		static " + returnedType + "	type(\"" + info.name + "\", "
 																		+ getCurrentEntityId() + ", "
-																		+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(static_cast<kodgen::uint8>(info.entityType)) + "), "
+																		+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(Helpers::convertToArchetypeCategory(info.entityType)) + "), "
 																		+ "sizeof(" + info.name + "));",
 								"	",
 								"		if (!initialized)",

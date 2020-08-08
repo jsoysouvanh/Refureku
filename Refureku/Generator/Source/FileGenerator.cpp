@@ -25,10 +25,10 @@ FileGenerator::FileGenerator() noexcept:
 	*	class RFKClass() MyClass {};
 	*	enum [class] RFKEnum() MyEnum {};
 	*/
-	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Namespace, "RefurekuNamespace");
-	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Class, "RefurekuClass");
-	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Struct, "RefurekuClass");
-	setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Enum, "RefurekuEnum");
+	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Namespace, "RefurekuNamespace");
+	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Class, "RefurekuClass");
+	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Struct, "RefurekuClass");
+	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Enum, "RefurekuEnum");
 }
 
 void FileGenerator::postGenerateFile() noexcept

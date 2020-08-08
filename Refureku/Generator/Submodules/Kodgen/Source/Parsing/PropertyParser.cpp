@@ -7,7 +7,7 @@
 
 using namespace kodgen;
 
-opt::optional<PropertyGroup> PropertyParser::getProperties(std::string&& annotateMessage, std::string const& annotationId, EntityInfo::EType entityType) noexcept
+opt::optional<PropertyGroup> PropertyParser::getProperties(std::string&& annotateMessage, std::string const& annotationId, EEntityType entityType) noexcept
 {
 	if (annotateMessage.substr(0, annotationId.size()) == annotationId)
 	{
@@ -53,49 +53,49 @@ opt::optional<PropertyGroup> PropertyParser::getNamespaceProperties(std::string 
 {
 	static std::string namespaceAnnotation = "KGN:";
 
-	return getProperties(std::move(annotateMessage), namespaceAnnotation, EntityInfo::EType::Namespace);
+	return getProperties(std::move(annotateMessage), namespaceAnnotation, EEntityType::Namespace);
 }
 
 opt::optional<PropertyGroup> PropertyParser::getClassProperties(std::string annotateMessage) noexcept
 {
 	static std::string classAnnotation = "KGC:";
 
-	return getProperties(std::move(annotateMessage), classAnnotation, EntityInfo::EType::Class);
+	return getProperties(std::move(annotateMessage), classAnnotation, EEntityType::Class);
 }
 
 opt::optional<PropertyGroup> PropertyParser::getStructProperties(std::string annotateMessage) noexcept
 {
 	static std::string structAnnotation = "KGS:";
 
-	return getProperties(std::move(annotateMessage), structAnnotation, EntityInfo::EType::Struct);
+	return getProperties(std::move(annotateMessage), structAnnotation, EEntityType::Struct);
 }
 
 opt::optional<PropertyGroup> PropertyParser::getFieldProperties(std::string annotateMessage) noexcept
 {
 	static std::string fieldAnnotation = "KGF:";
 
-	return getProperties(std::move(annotateMessage), fieldAnnotation, EntityInfo::EType::Field);
+	return getProperties(std::move(annotateMessage), fieldAnnotation, EEntityType::Field);
 }
 
 opt::optional<PropertyGroup> PropertyParser::getMethodProperties(std::string annotateMessage) noexcept
 {
 	static std::string methodAnnotation = "KGM:";
 
-	return getProperties(std::move(annotateMessage), methodAnnotation, EntityInfo::EType::Method);
+	return getProperties(std::move(annotateMessage), methodAnnotation, EEntityType::Method);
 }
 
 opt::optional<PropertyGroup> PropertyParser::getEnumProperties(std::string annotateMessage) noexcept
 {
 	static std::string enumAnnotation = "KGE:";
 
-	return getProperties(std::move(annotateMessage), enumAnnotation, EntityInfo::EType::Enum);
+	return getProperties(std::move(annotateMessage), enumAnnotation, EEntityType::Enum);
 }
 
 opt::optional<PropertyGroup> PropertyParser::getEnumValueProperties(std::string annotateMessage) noexcept
 {
 	static std::string enumValueAnnotation = "KGEV:";
 
-	return getProperties(std::move(annotateMessage), enumValueAnnotation, EntityInfo::EType::EnumValue);
+	return getProperties(std::move(annotateMessage), enumValueAnnotation, EEntityType::EnumValue);
 }
 
 bool PropertyParser::splitProperties(std::string&& propertiesString) noexcept
@@ -201,7 +201,7 @@ void PropertyParser::cleanString(std::string& toCleanString) const noexcept
 	}
 }
 
-opt::optional<PropertyGroup> PropertyParser::checkAndFillPropertyGroup(std::vector<std::vector<std::string>>& splitProps, EntityInfo::EType entityType) noexcept
+opt::optional<PropertyGroup> PropertyParser::checkAndFillPropertyGroup(std::vector<std::vector<std::string>>& splitProps, EEntityType entityType) noexcept
 {
 	PropertyGroup propertyGroup;
 
@@ -225,7 +225,7 @@ opt::optional<PropertyGroup> PropertyParser::checkAndFillPropertyGroup(std::vect
 	return propertyGroup;
 }
 
-bool PropertyParser::addSimpleProperty(std::vector<std::string>& propertyAsVector, EntityInfo::EType entityType, PropertyGroup& out_propertyGroup) noexcept
+bool PropertyParser::addSimpleProperty(std::vector<std::string>& propertyAsVector, EEntityType entityType, PropertyGroup& out_propertyGroup) noexcept
 {
 	std::string propName = std::move(propertyAsVector[0]);
 
@@ -246,7 +246,7 @@ bool PropertyParser::addSimpleProperty(std::vector<std::string>& propertyAsVecto
 	return false;
 }
 
-bool PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVector, EntityInfo::EType entityType, PropertyGroup& out_propertyGroup) noexcept
+bool PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVector, EEntityType entityType, PropertyGroup& out_propertyGroup) noexcept
 {
 	std::string mainProp = std::move(propertyAsVector[0]);
 

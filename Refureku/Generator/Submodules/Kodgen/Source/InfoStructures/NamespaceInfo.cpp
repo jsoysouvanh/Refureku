@@ -3,7 +3,7 @@
 using namespace kodgen;
 
 NamespaceInfo::NamespaceInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EntityInfo::EType::Namespace)
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EEntityType::Namespace)
 {
 }
 

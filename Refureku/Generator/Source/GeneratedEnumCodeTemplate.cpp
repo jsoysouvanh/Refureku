@@ -8,7 +8,7 @@ void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFil
 {
 	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo);
 
-	assert(entityInfo.entityType == kodgen::EntityInfo::EType::Enum);
+	assert(entityInfo.entityType == kodgen::EEntityType::Enum);
 
 	generateEnumCode(generatedFile, static_cast<kodgen::EnumInfo const&>(entityInfo));
 }
