@@ -234,11 +234,7 @@ class ExampleSimplePropertyRule : kodgen::DefaultSimplePropertyRule
 
 ExampleSimplePropertyRule::ExampleSimplePropertyRule() noexcept:
     kodgen::DefaultSimplePropertyRule("ExampleSimpleProperty",
-                                      {
-                                          kodgen::EntityInfo::EType::Namespace,
-                                          kodgen::EntityInfo::EType::Struct,
-                                          kodgen::EntityInfo::EType::Class
-                                      },
+                                      kodgen::EEntityType::Namespace | kodgen::EEntityType::Struct | kodgen::EEntityType::Class,
                                       "This is a description for this example property rule.")
 {
 }
@@ -296,7 +292,7 @@ class ExampleComplexPropertyRule : kodgen::DefaultComplexPropertyRule
 
 ExampleComplexPropertyRule::ExampleComplexPropertyRule() noexcept:
     kodgen::DefaultComplexPropertyRule("ExampleComplexProperty",
-                                      { kodgen::EntityInfo::EType::Method },
+                                      kodgen::EEntityType::Method,
                                       "This is a description for this example property rule.")
 {
 }
@@ -350,9 +346,7 @@ class RangePropertyRule : public kodgen::FixedComplexPropertyRule
 
 RangePropertyRule::RangePropertyRule() noexcept:
     kodgen::FixedComplexPropertyRule("Range",
-                                     {
-                                         kodgen::EntityInfo::EType::Field
-                                     },
+                                     kodgen::EEntityType::Field,
                                      "Defines a float range between min and max.")
 {
     subProperties.emplace_back(kodgen::ComplexPropertySubProperty::EType::Float, "min", "Minimum of the range.");
@@ -473,14 +467,14 @@ using namespace kodgen;
 
 void ExampleGeneratedCodeTemplate::generateCode(GeneratedFile& generatedFile, EntityInfo const& entityInfo) noexcept
 {
-    if (entityInfo.entityType == EntityInfo::EType::Namespace)
+    if (entityInfo.entityType == EEntityType::Namespace)
     {
         NamespaceInfo const& ni = static_cast<NamespaceInfo const&>(entityInfo);
         //Do whatever with the namespace data...
         //ex: generatedFile.writeLine("Namespace : " + ni.name);
     }
-    else if (entityInfo.entityType == EntityInfo::EType::Class ||
-             entityInfo.entityType == EntityInfo::EType::Struct)
+    else if (entityInfo.entityType == EEntityType::Class ||
+             entityInfo.entityType == EEntityType::Struct)
     {
         StructClassInfo const& sci = static_cast<NamespaceInfo const&>(entityInfo);
         //Do whatever with struct/class data...
@@ -673,7 +667,7 @@ ExampleFileGenerator::ExampleFileGenerator() noexcept:
 
     //Use a given GeneratedCodeTemplate by default
     //when GenCodeTemplate complex property is not specified
-    setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Namespace, "ExampleTemplate");
+    setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Namespace, "ExampleTemplate");
     //Now if we write namespace ExampleNamespace Namespace() {}, ExampleTemplate will be used by default
 
     //The following settings are contained in the FileGenerator but it is likely that you will want to setup them from the outside

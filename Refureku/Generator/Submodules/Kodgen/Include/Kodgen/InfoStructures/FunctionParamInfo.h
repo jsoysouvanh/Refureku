@@ -14,7 +14,7 @@
 
 namespace kodgen
 {
-	struct MethodParamInfo
+	struct FunctionParamInfo
 	{
 		public:
 			/** Parameter type */

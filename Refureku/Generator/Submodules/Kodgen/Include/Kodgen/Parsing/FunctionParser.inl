@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline EnumValueParsingResult* EnumValueParser::getParsingResult() noexcept
+inline FunctionParsingResult* FunctionParser::getParsingResult() noexcept
 {
-	return reinterpret_cast<EnumValueParsingResult*>(getContext().parsingResult);
+	return reinterpret_cast<FunctionParsingResult*>(getContext().parsingResult);
 }

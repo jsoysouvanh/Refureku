@@ -25,7 +25,9 @@ FileParser::FileParser() noexcept:
 	parsingSettings.propertyParsingSettings.namespaceMacroName	= "RFKNamespace";
 	parsingSettings.propertyParsingSettings.classMacroName		= "RFKClass";
 	parsingSettings.propertyParsingSettings.structMacroName		= "RFKStruct";
+	parsingSettings.propertyParsingSettings.variableMacroName	= "RFKVariable";
 	parsingSettings.propertyParsingSettings.fieldMacroName		= "RFKField";
+	parsingSettings.propertyParsingSettings.functionMacroName	= "RFKFunction";
 	parsingSettings.propertyParsingSettings.methodMacroName		= "RFKMethod";
 	parsingSettings.propertyParsingSettings.enumMacroName		= "RFKEnum";
 	parsingSettings.propertyParsingSettings.enumValueMacroName	= "RFKEnumVal";

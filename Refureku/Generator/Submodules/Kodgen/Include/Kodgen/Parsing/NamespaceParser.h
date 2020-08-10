@@ -10,13 +10,23 @@
 #include <clang-c/Index.h>
 
 #include "Kodgen/Parsing/ClassParser.h"
+#include "Kodgen/Parsing/FunctionParser.h"
+#include "Kodgen/Parsing/VariableParser.h"
 #include "Kodgen/Parsing/ParsingResults/NamespaceParsingResult.h"
+#include "Kodgen/Parsing/ParsingResults/FunctionParsingResult.h"
+#include "Kodgen/Parsing/ParsingResults/VariableParsingResult.h"
 
 namespace kodgen
 {
 	class NamespaceParser : public ClassParser
 	{
 		private:
+			/** Function parser. */
+			FunctionParser	_functionParser;
+
+			/** Variable parser. */
+			VariableParser	_variableParser;
+
 			/**
 			*	@brief This method is called at each node (cursor) of the parsing.
 			*
@@ -83,6 +93,20 @@ namespace kodgen
 			void							addEnumResult(EnumParsingResult&& result)				noexcept;
 
 			/**
+			*	@brief Add the provided function result to the namespace result.
+			*
+			*	@param result FunctionParsingResult to add.
+			*/
+			void							addFunctionResult(FunctionParsingResult&& result)		noexcept;
+
+			/**
+			*	@brief Add the provided variable result to the namespace result.
+			*
+			*	@param result VariableParsingResult to add.
+			*/
+			void							addVariableResult(VariableParsingResult&& result)		noexcept;
+
+			/**
 			*	@brief Helper to get the ParsingResult contained in the context as a NamespaceParsingResult.
 			*
 			*	@return The cast NamespaceParsingResult.
@@ -100,6 +124,28 @@ namespace kodgen
 			*/
 			NamespaceParsingResult 	parseNamespace(CXCursor const&		namespaceCursor,
 												   CXChildVisitResult&	out_visitResult)	noexcept;
+
+			/**
+			*	@brief Parse a (non-member) function.
+			*
+			*	@param functionCursor	AST cursor to the function to parse.
+			*	@param out_visitResult	An enum which indicates how to choose the next cursor to parse in the AST.
+			*
+			*	@return A structure containing information about the parsed function.
+			*/
+			FunctionParsingResult	parseFunction(CXCursor const&		functionCursor,
+												  CXChildVisitResult&	out_visitResult)	noexcept;
+
+			/**
+			*	@brief Parse a (non-member) variable.
+			*
+			*	@param variableCursor	AST cursor to the variable to parse.
+			*	@param out_visitResult	An enum which indicates how to choose the next cursor to parse in the AST.
+			*
+			*	@return A structure containing information about the parsed variable.
+			*/
+			VariableParsingResult	parseVariable(CXCursor const&		variableCursor,
+												  CXChildVisitResult&	out_visitResult)	noexcept;
 
 		public:
 			NamespaceParser()						= default;

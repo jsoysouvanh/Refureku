@@ -89,7 +89,7 @@ std::string CppPropsCodeTemplate::generateGetter(kodgen::FieldInfo const& fieldI
 	methodName.insert(0, "get");
 	methodName += "()";
 
-	if (fieldInfo.qualifiers.isStatic)
+	if (fieldInfo.isStatic)
 	{
 		preTypeQualifiers = "static";
 		postQualifiers.clear();	//remove the const
@@ -155,7 +155,7 @@ std::string CppPropsCodeTemplate::generateSetter(kodgen::FieldInfo const& fieldI
 
 	methodName += ")";
 
-	if (fieldInfo.qualifiers.isStatic)
+	if (fieldInfo.isStatic)
 	{
 		preTypeQualifiers = "static";
 	}

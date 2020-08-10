@@ -13,6 +13,8 @@
 
 #include "Kodgen/InfoStructures/StructClassInfo.h"
 #include "Kodgen/InfoStructures/EnumInfo.h"
+#include "Kodgen/InfoStructures/FunctionInfo.h"
+#include "Kodgen/InfoStructures/VariableInfo.h"
 
 namespace kodgen
 {
@@ -31,8 +33,11 @@ namespace kodgen
 			/** Nested enums. */
 			std::vector<EnumInfo>			enums;
 
-			//TODO: Global functions
-			//TODO: Global fields
+			/** Nested functions. */
+			std::vector<FunctionInfo>		functions;
+
+			/** Nested variables. */
+			std::vector<VariableInfo>		variables;
 
 			NamespaceInfo()									= default;
 			NamespaceInfo(CXCursor const& cursor,

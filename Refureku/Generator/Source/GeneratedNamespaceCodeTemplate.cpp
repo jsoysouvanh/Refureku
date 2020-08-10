@@ -95,6 +95,20 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 		{
 			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());\t\\");
 		}
+
+		for (kodgen::FunctionInfo const& function : namespaceInfo.functions)
+		{
+			std::cout << "Func: " << function.getPrototype() << " -> " << function.getName() << std::endl;
+
+			//TODO: Fill nested functions
+		}
+		
+		for (kodgen::VariableInfo const& variable : namespaceInfo.variables)
+		{
+			std::cout << "Var: " << variable.name << " -> " << variable.type.getCanonicalName() << std::endl;
+
+			//TODO: Fill nested variables
+		}
 	}
 
 	generatedFile.writeLines("		}\t\\",

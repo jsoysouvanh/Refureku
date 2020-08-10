@@ -1,36 +1,35 @@
-#include "Kodgen/Parsing/MethodParser.h"
+#include "Kodgen/Parsing/FunctionParser.h"
 
 #include <assert.h>
 
-#include "Kodgen/Parsing/ParsingSettings.h"
 #include "Kodgen/Parsing/PropertyParser.h"
 #include "Kodgen/Misc/Helpers.h"
 #include "Kodgen/Misc/DisableWarningMacros.h"
 
 using namespace kodgen;
 
-CXChildVisitResult MethodParser::parse(CXCursor const& methodCursor, ParsingContext const& parentContext, MethodParsingResult& out_result) noexcept
+CXChildVisitResult FunctionParser::parse(CXCursor const& functionCursor, ParsingContext const& parentContext, FunctionParsingResult& out_result) noexcept
 {
 	//Make sure the cursor is compatible for the method parser
-	assert(methodCursor.kind == CXCursorKind::CXCursor_CXXMethod);	// /!\ might have to add CXCursor_FunctionDecl and CXCursor_FunctionTemplate
+	assert(functionCursor.kind == CXCursorKind::CXCursor_FunctionDecl);	// /!\ might have to add CXCursor_FunctionTemplate
 
 	//Init context
-	ParsingContext& context = pushContext(methodCursor, parentContext, out_result);
+	ParsingContext& context = pushContext(functionCursor, parentContext, out_result);
 
-	if (!clang_visitChildren(methodCursor, &MethodParser::parseNestedEntity, this) && context.shouldCheckProperties)
+	if (!clang_visitChildren(functionCursor, &FunctionParser::parseNestedEntity, this) && context.shouldCheckProperties)
 	{
 		//If we reach this point, the cursor had no child (no annotation)
 		//Check if the parent has the shouldParseAllNested flag set
 		if (shouldParseCurrentEntity())
 		{
-			getParsingResult()->parsedMethod.emplace(methodCursor, PropertyGroup());
+			getParsingResult()->parsedFunction.emplace(functionCursor, PropertyGroup());
 		}
 	}
 
 	//Check properties validy one last time
-	if (out_result.parsedMethod.has_value())
+	if (out_result.parsedFunction.has_value())
 	{
-		performFinalPropertiesCheck(*out_result.parsedMethod);
+		performFinalPropertiesCheck(*out_result.parsedFunction);
 	}
 
 	popContext();
@@ -43,9 +42,9 @@ CXChildVisitResult MethodParser::parse(CXCursor const& methodCursor, ParsingCont
 	DISABLE_WARNING_POP
 }
 
-CXChildVisitResult MethodParser::parseNestedEntity(CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData) noexcept
+CXChildVisitResult FunctionParser::parseNestedEntity(CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData) noexcept
 {
-	MethodParser*	parser	= reinterpret_cast<MethodParser*>(clientData);
+	FunctionParser*	parser	= reinterpret_cast<FunctionParser*>(clientData);
 	ParsingContext&	context = parser->getContext();
 
 	if (context.shouldCheckProperties)
@@ -55,7 +54,7 @@ CXChildVisitResult MethodParser::parseNestedEntity(CXCursor cursor, CXCursor /* 
 		if (parser->shouldParseCurrentEntity() && cursor.kind != CXCursorKind::CXCursor_AnnotateAttr)
 		{
 			//Make it valid right away so init the result
-			parser->getParsingResult()->parsedMethod.emplace(context.rootCursor, PropertyGroup());
+			parser->getParsingResult()->parsedFunction.emplace(context.rootCursor, PropertyGroup());
 		}
 		else
 		{
@@ -66,24 +65,10 @@ CXChildVisitResult MethodParser::parseNestedEntity(CXCursor cursor, CXCursor /* 
 
 	switch (clang_getCursorKind(cursor))
 	{
-		case CXCursorKind::CXCursor_CXXFinalAttr:
-			if (parser->getParsingResult()->parsedMethod.has_value())
-			{
-				parser->getParsingResult()->parsedMethod->isFinal = true;
-			}
-			break;
-
-		case CXCursorKind::CXCursor_CXXOverrideAttr:
-			if (parser->getParsingResult()->parsedMethod.has_value())
-			{
-				parser->getParsingResult()->parsedMethod->isOverride = true;
-			}
-			break;
-
 		case CXCursorKind::CXCursor_ParmDecl:
-			if (parser->getParsingResult()->parsedMethod.has_value())
+			if (parser->getParsingResult()->parsedFunction.has_value())
 			{
-				parser->getParsingResult()->parsedMethod->parameters.emplace_back(FunctionParamInfo{TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor))});
+				parser->getParsingResult()->parsedFunction->parameters.emplace_back(FunctionParamInfo{TypeInfo(clang_getCursorType(cursor)), Helpers::getString(clang_getCursorDisplayName(cursor))});
 			}
 			break;
 
@@ -95,15 +80,15 @@ CXChildVisitResult MethodParser::parseNestedEntity(CXCursor cursor, CXCursor /* 
 	return CXChildVisitResult::CXChildVisit_Recurse;
 }
 
-CXChildVisitResult MethodParser::setParsedEntity(CXCursor const& annotationCursor) noexcept
+CXChildVisitResult FunctionParser::setParsedEntity(CXCursor const& annotationCursor) noexcept
 {
-	MethodParsingResult*	result	= getParsingResult();
+	FunctionParsingResult*	result	= getParsingResult();
 	ParsingContext&			context	= getContext();
 
 	if (opt::optional<PropertyGroup> propertyGroup = getProperties(annotationCursor))
 	{
 		//Set the parsed entity in the result & initialize its information from the method cursor
-		result->parsedMethod.emplace(context.rootCursor, std::move(*propertyGroup));
+		result->parsedFunction.emplace(context.rootCursor, std::move(*propertyGroup));
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
@@ -116,18 +101,18 @@ CXChildVisitResult MethodParser::setParsedEntity(CXCursor const& annotationCurso
 	return CXChildVisitResult::CXChildVisit_Break;
 }
 
-opt::optional<PropertyGroup> MethodParser::getProperties(CXCursor const& cursor) noexcept
+opt::optional<PropertyGroup> FunctionParser::getProperties(CXCursor const& cursor) noexcept
 {
 	ParsingContext& context	= getContext();
 
 	context.propertyParser->clean();
-
+	
 	return (clang_getCursorKind(cursor) == CXCursorKind::CXCursor_AnnotateAttr) ?
-				context.propertyParser->getMethodProperties(Helpers::getString(clang_getCursorSpelling(cursor))) :
-				opt::nullopt;
+		context.propertyParser->getFunctionProperties(Helpers::getString(clang_getCursorSpelling(cursor))) :
+		opt::nullopt;
 }
 
-ParsingContext& MethodParser::pushContext(CXCursor const& methodCursor, ParsingContext const&	parentContext, MethodParsingResult& out_result) noexcept
+ParsingContext& FunctionParser::pushContext(CXCursor const& methodCursor, ParsingContext const&	parentContext, FunctionParsingResult& out_result) noexcept
 {
 	ParsingContext newContext;
 

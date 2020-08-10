@@ -8,15 +8,28 @@
 #pragma once
 
 #include <vector>
+#include <iterator>	//std::make_move_iterator
 
 #include "Kodgen/Parsing/ParsingError.h"
 
 namespace kodgen
 {
-	struct ParsingResultBase
+	class ParsingResultBase
 	{
 		public:
 			/** List of errors that happened during parsing */
 			std::vector<ParsingError>	errors;
+
+			ParsingResultBase()							= default;
+			ParsingResultBase(ParsingResultBase const&)	= default;
+			ParsingResultBase(ParsingResultBase&&)		= default;
+			~ParsingResultBase()						= default;
+
+			/**
+			*	@brief Append the errors of the provided result to this result.
+			*/
+			inline void appendResultErrors(ParsingResultBase const& result) noexcept;
 	};
+
+	#include "Kodgen/Parsing/ParsingResults/ParsingResultBase.inl"
 }

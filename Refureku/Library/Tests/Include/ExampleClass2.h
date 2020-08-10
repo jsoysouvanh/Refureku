@@ -9,7 +9,19 @@ namespace namespace3 RFKNamespace()
 
 		AnotherClassInNamespace3_GENERATED
 	};
+
+	RFKFunction()
+	void thisIsATest(int i) {}
+
+	RFKVariable()
+	int someVariable;
 }
+
+RFKFunction() 
+static void ThisIsAnotherTest(float j) {} 
+
+RFKVariable()
+static float someOtherVariable;
 
 namespace test1::test2 RFKNamespace()
 {
@@ -19,4 +31,4 @@ namespace test1::test2 RFKNamespace()
 	};
 }
 
-File_GENERATED
+File_GENERATED 

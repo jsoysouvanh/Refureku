@@ -70,11 +70,25 @@ opt::optional<PropertyGroup> PropertyParser::getStructProperties(std::string ann
 	return getProperties(std::move(annotateMessage), structAnnotation, EEntityType::Struct);
 }
 
+opt::optional<PropertyGroup> PropertyParser::getVariableProperties(std::string annotateMessage) noexcept
+{
+	static std::string variableAnnotation = "KGV:";
+
+	return getProperties(std::move(annotateMessage), variableAnnotation, EEntityType::Variable);
+}
+
 opt::optional<PropertyGroup> PropertyParser::getFieldProperties(std::string annotateMessage) noexcept
 {
 	static std::string fieldAnnotation = "KGF:";
 
 	return getProperties(std::move(annotateMessage), fieldAnnotation, EEntityType::Field);
+}
+
+opt::optional<PropertyGroup> PropertyParser::getFunctionProperties(std::string annotateMessage) noexcept
+{
+	static std::string functionAnnotation = "KGFu:";
+
+	return getProperties(std::move(annotateMessage), functionAnnotation, EEntityType::Function);
 }
 
 opt::optional<PropertyGroup> PropertyParser::getMethodProperties(std::string annotateMessage) noexcept

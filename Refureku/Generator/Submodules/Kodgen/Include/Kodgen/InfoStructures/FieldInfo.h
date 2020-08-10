@@ -9,23 +9,16 @@
 
 #include <clang-c/Index.h>
 
-#include "Kodgen/InfoStructures/EntityInfo.h"
-#include "Kodgen/InfoStructures/TypeInfo.h"
+#include "Kodgen/InfoStructures/VariableInfo.h"
 #include "Kodgen/Misc/EAccessSpecifier.h"
 
 namespace kodgen
 {
-	class FieldInfo : public EntityInfo
+	class FieldInfo final : public VariableInfo
 	{
 		public:
-			struct FieldQualifiers
-			{
-				bool isStatic	: 1;
-				bool isMutable	: 1;
-			}					qualifiers;
-
-			/** Type of this field. */
-			TypeInfo			type;
+			/** Is this field mutable qualified? */
+			bool isMutable : 1;
 
 			/** Access of this field in its outer struct/class. */
 			EAccessSpecifier	accessSpecifier;

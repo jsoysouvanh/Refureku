@@ -133,7 +133,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 	std::string properties;
 	for (kodgen::MethodInfo const& method : info.methods)
 	{
-		if (method.qualifiers.isStatic)
+		if (method.isStatic)
 		{
 			functionType = "rfk::NonMemberFunction<" + method.getPrototype(true) + ">";
 			methodName = method.getName();
@@ -181,7 +181,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 		{
 			generatedFile.writeLine("	currMethod->parameters.reserve(" + std::to_string(method.parameters.size()) + ");\t\\");
 
-			for (kodgen::MethodParamInfo const& param : method.parameters)
+			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
 				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type(rfk::Type::getType<" + param.type.getName() + ">()));\t\\");
 			}
@@ -257,7 +257,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 	std::string properties;
 	for (kodgen::FieldInfo const& field : info.fields)
 	{
-		if (field.qualifiers.isStatic)
+		if (field.isStatic)
 		{
 			generatedFile.writeLine("		staticFieldsIt = childArchetype->staticFields.emplace(\"" + field.name + "\", " +
 									std::to_string(stringHasher(field.id)) +
@@ -271,7 +271,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
 									std::to_string(stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
-									"), childArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.qualifiers.isMutable) + ");\t\\");
+									"), childArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.isMutable) + ");\t\\");
 
 			generatedFile.writeLine("		currField = const_cast<rfk::Field*>(&*fieldsIt);\t\\");
 		}
@@ -393,25 +393,25 @@ kodgen::uint16 GeneratedClassCodeTemplate::computeMethodFlags(kodgen::MethodInfo
 			break;
 	}
 
-	if (method.qualifiers.isStatic)
+	if (method.isStatic)
 		result |= 1 << 3;
 
-	if (method.qualifiers.isInline)
+	if (method.isInline)
 		result |= 1 << 4;
 
-	if (method.qualifiers.isVirtual)
+	if (method.isVirtual)
 		result |= 1 << 5;
 
-	if (method.qualifiers.isPureVirtual)
+	if (method.isPureVirtual)
 		result |= 1 << 6;
 
-	if (method.qualifiers.isOverride)
+	if (method.isOverride)
 		result |= 1 << 7;
 
-	if (method.qualifiers.isFinal)
+	if (method.isFinal)
 		result |= 1 << 8;
 
-	if (method.qualifiers.isConst)
+	if (method.isConst)
 		result |= 1 << 9;
 
 	return result;
@@ -438,10 +438,10 @@ kodgen::uint16 GeneratedClassCodeTemplate::computeFieldFlags(kodgen::FieldInfo c
 			break;
 	}
 
-	if (field.qualifiers.isStatic)
+	if (field.isStatic)
 		result |= 1 << 3;
 
-	if (field.qualifiers.isMutable)
+	if (field.isMutable)
 		result |= 1 << 4;
 
 	return result;

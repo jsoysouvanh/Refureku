@@ -251,11 +251,7 @@ void ClassParser::addFieldResult(FieldParsingResult&& result) noexcept
 		getParsingResult()->parsedClass->fields.emplace_back(std::move(result.parsedField).value());
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }
 
 void ClassParser::addMethodResult(MethodParsingResult&& result) noexcept
@@ -270,11 +266,7 @@ void ClassParser::addMethodResult(MethodParsingResult&& result) noexcept
 		getParsingResult()->parsedClass->methods.emplace_back(std::move(result.parsedMethod).value());
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }
 
 void ClassParser::addClassResult(ClassParsingResult&& result) noexcept
@@ -299,11 +291,7 @@ void ClassParser::addClassResult(ClassParsingResult&& result) noexcept
 		}
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }
 
 void ClassParser::addEnumResult(EnumParsingResult&& result) noexcept
@@ -315,9 +303,5 @@ void ClassParser::addEnumResult(EnumParsingResult&& result) noexcept
 		getParsingResult()->parsedClass->nestedEnums.emplace_back(NestedEnumInfo(std::move(result.parsedEnum).value(), context.currentAccessSpecifier));
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }

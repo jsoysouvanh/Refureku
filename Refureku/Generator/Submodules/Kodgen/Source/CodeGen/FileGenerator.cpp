@@ -8,7 +8,9 @@
 #include "Kodgen/InfoStructures/EnumInfo.h"
 #include "Kodgen/InfoStructures/NestedEnumInfo.h"
 #include "Kodgen/InfoStructures/EnumValueInfo.h"
+#include "Kodgen/InfoStructures/VariableInfo.h"
 #include "Kodgen/InfoStructures/FieldInfo.h"
+#include "Kodgen/InfoStructures/FunctionInfo.h"
 #include "Kodgen/InfoStructures/MethodInfo.h"
 #include "Kodgen/Properties/NativeProperties/NativeProperties.h"
 #include "Kodgen/Misc/TomlUtility.h"
@@ -50,19 +52,20 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 		writeEnumToFile(generatedFile, enumInfo, genResult);
 	}
 
-	/**
-	*	TODO
-	*
-	*	for (FieldInfo const& fieldInfo : parsingResult.fields)
-	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
-	*	}
-	*
-	*	for (MethodInfo const& methodInfo : parsingResult.functions)
-	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, genResult);
-	*	}
-	*/
+	for (VariableInfo const& variable : parsingResult.variables)
+	{
+		std::cout << "File Var: " << variable.name << " -> " << variable.type.getCanonicalName() << std::endl;
+
+		//writeFieldToFile(generatedFile, fieldInfo, genResult);
+	}
+	
+	for (FunctionInfo const& function : parsingResult.functions)
+	{
+		std::cout << "File Func: " << function.getPrototype() << " -> " << function.getName() << std::endl;
+
+		//writeMethodToFile(generatedFile, methodInfo, genResult);
+	}
+	
 
 	//Footer
 	writeFooter(generatedFile, parsingResult);
@@ -443,10 +446,12 @@ void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
 									"#define " + pps.namespaceMacroName	+ "(...)",
 									"#define " + pps.classMacroName		+ "(...)",
 									"#define " + pps.structMacroName	+ "(...)",
+									"#define " + pps.variableMacroName	+ "(...)",
 									"#define " + pps.fieldMacroName		+ "(...)",
 									"#define " + pps.methodMacroName	+ "(...)",
 									"#define " + pps.enumMacroName		+ "(...)",
-									"#define " + pps.enumValueMacroName	+ "(...)");
+									"#define " + pps.enumValueMacroName	+ "(...)",
+									"#define " + pps.functionMacroName	+ "(...)");
 
 	//Generate property rules macros + doc
 	std::string macroDefinition;
@@ -472,8 +477,7 @@ void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
 		}
 	}
 
-	macrosDefinitionFile.writeLines("",
-									"#endif");
+	macrosDefinitionFile.writeLine("\n#endif");
 }
 
 FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool forceRegenerateAll) noexcept

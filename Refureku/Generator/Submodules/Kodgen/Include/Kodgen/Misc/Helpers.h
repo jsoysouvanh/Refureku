@@ -21,6 +21,22 @@ namespace kodgen
 			Helpers(Helpers&&)		= delete;
 			~Helpers()				= delete;
 
-			static std::string getString(CXString&& clangString) noexcept;
+			/**
+			*	@brief Convert a clang string to a std::string.
+			*	
+			*	@param clangString The clang string.
+			*	
+			*	@return The converted string.
+			*/
+			static std::string getString(CXString&& clangString)	noexcept;
+
+			/**
+			*	@brief Get debug info about the provided cursor as string.
+			*	
+			*	@param cursor The cursor to debug.
+			*	
+			*	@return A string containing debug info.
+			*/
+			static std::string getDebugInfo(CXCursor const& cursor)	noexcept;
 	};
 }

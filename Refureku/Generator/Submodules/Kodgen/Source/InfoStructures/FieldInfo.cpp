@@ -5,16 +5,17 @@
 using namespace kodgen;
 
 FieldInfo::FieldInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EEntityType::Field),
-	qualifiers{clang_getCursorKind(cursor) == CXCursorKind::CXCursor_VarDecl, false},
-	type(clang_getCursorType(cursor)),
+	VariableInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EEntityType::Field),
+	isMutable{isMutable = clang_CXXField_isMutable(cursor)},
 	accessSpecifier{EAccessSpecifier::Invalid},
 	memoryOffset{0}
 {
-	if (!qualifiers.isStatic)
-	{
-		qualifiers.isMutable = clang_CXXField_isMutable(cursor);
+	assert(cursor.kind == CXCursorKind::CXCursor_FieldDecl);
 
+	isStatic = clang_getCursorKind(cursor) == CXCursorKind::CXCursor_VarDecl;
+
+	if (!isStatic)
+	{
 		memoryOffset = clang_Cursor_getOffsetOfField(cursor);
 
 		// assert(field.memoryOffset != CXTypeLayoutError::CXTypeLayoutError_Invalid);	<- Assert here on travis for some reasons...

@@ -13,7 +13,9 @@ void PropertyParsingSettings::loadSettings(toml::value const& table) noexcept
 	TomlUtility::updateSetting(table, "namespaceMacroName", namespaceMacroName);
 	TomlUtility::updateSetting(table, "classMacroName", classMacroName);
 	TomlUtility::updateSetting(table, "structMacroName", structMacroName);
+	TomlUtility::updateSetting(table, "variableMacroName", variableMacroName);
 	TomlUtility::updateSetting(table, "fieldMacroName", fieldMacroName);
+	TomlUtility::updateSetting(table, "functionMacroName", functionMacroName);
 	TomlUtility::updateSetting(table, "methodMacroName", methodMacroName);
 	TomlUtility::updateSetting(table, "enumMacroName", enumMacroName);
 	TomlUtility::updateSetting(table, "enumValueMacroName", enumValueMacroName);

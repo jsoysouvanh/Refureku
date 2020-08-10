@@ -21,7 +21,7 @@ bool CustomInstantiatorPropertyRule::isEntityValid(kodgen::EntityInfo const& ent
 	kodgen::MethodInfo const& methodInfo = static_cast<kodgen::MethodInfo const&>(entity);
 
 	//Check that the method is static
-	if (!methodInfo.qualifiers.isStatic)
+	if (!methodInfo.isStatic)
 	{
 		out_errorDescription = "A method tagged with " + NativeProperties::customInstantiatorProperty + " must be static.";
 
