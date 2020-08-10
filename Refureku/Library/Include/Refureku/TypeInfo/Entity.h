@@ -117,13 +117,13 @@ namespace rfk
 				}
 			};
 
-			/** Name qualifying this entity */
+			/** Name qualifying this entity. */
 			std::string		name		= "";
 
-			/** Program-unique ID given for this entity */
+			/** Program-unique ID given for this entity. */
 			uint64			id			= 0u;
 
-			/** Kind of this entity */
+			/** Kind of this entity. */
 			EKind			kind		= EKind::Undefined;
 
 			/**
@@ -132,13 +132,15 @@ namespace rfk
 			*/
 			Entity const*	outerEntity	= nullptr;
 
-			/** Properties contained by this entity */
+			/** Properties contained by this entity. */
 			PropertyGroup	properties;
 
-			Entity()																		= delete;
-			Entity(std::string&& newName, uint64 newId, EKind newKind = EKind::Undefined)	noexcept;
-			Entity(Entity const&)															= default;
-			Entity(Entity&&)																= default;
-			~Entity()																		= default;
+			Entity()											= delete;
+			Entity(std::string&&	newName,
+				   uint64			newId,
+				   EKind			newKind = EKind::Undefined)	noexcept;
+			Entity(Entity const&)								= default;
+			Entity(Entity&&)									= default;
+			~Entity()											= default;
 	};
 }

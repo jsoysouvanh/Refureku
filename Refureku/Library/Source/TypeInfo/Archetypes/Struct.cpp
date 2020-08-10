@@ -9,6 +9,11 @@ Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint6
 {
 }
 
+Struct::Struct(std::string&& newName, uint64 newId, uint64 newMemorySize) noexcept:
+	Struct(std::forward<std::string>(newName), newId, ECategory::Struct, newMemorySize)
+{
+}
+
 Struct const* Struct::getNestedStruct(std::string structName, EAccessSpecifier access) const noexcept
 {
 	//Use an Entity instead of a Struct to avoid containers initialization

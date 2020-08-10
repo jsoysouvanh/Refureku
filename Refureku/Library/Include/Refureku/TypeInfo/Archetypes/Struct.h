@@ -64,6 +64,12 @@ namespace rfk
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const noexcept;
 
+		protected:
+			Struct(std::string&&	newName,
+				   uint64			newId,
+				   ECategory		newCategory,
+				   uint64			newMemorySize)	noexcept;
+
 		public:
 			struct Parent
 			{
@@ -110,10 +116,12 @@ namespace rfk
 			/** All tagged static methods declared in this struct. */
 			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
 
-			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
-			Struct(Struct const&)																		= delete;
-			Struct(Struct&&)																			= default;
-			~Struct()																					= default;
+			Struct(std::string&&	newName,
+				   uint64			newId,
+				   uint64			newMemorySize)	noexcept;
+			Struct(Struct const&)					= default;
+			Struct(Struct&&)						= default;
+			~Struct()								= default;
 
 			/**
 			*	@param structName	Name of the nested struct to look for.

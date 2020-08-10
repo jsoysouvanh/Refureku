@@ -102,7 +102,6 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"		static bool			initialized = false;",
 								"		static " + returnedType + "	type(\"" + info.name + "\", "
 																		+ getCurrentEntityId() + ", "
-																		+ "static_cast<rfk::Archetype::ECategory>(" + std::to_string(Helpers::convertToArchetypeCategory(info.entityType)) + "), "
 																		+ "sizeof(" + info.name + "));",
 								"	",
 								"		if (!initialized)",

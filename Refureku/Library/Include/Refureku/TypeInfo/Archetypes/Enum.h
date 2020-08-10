@@ -23,11 +23,13 @@ namespace rfk
 			/** Values contained in this enum */
 			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>	values;
 
-			Enum()													= delete;
-			Enum(std::string&& name, uint64 id, uint64 memorySize)	noexcept;
-			Enum(Enum const&)										= delete;
-			Enum(Enum&&)											= default;
-			~Enum()													= default;
+			Enum()							= delete;
+			Enum(std::string&&	name,
+				 uint64			id,
+				 uint64			memorySize)	noexcept;
+			Enum(Enum const&)				= delete;
+			Enum(Enum&&)					= default;
+			~Enum()							= default;
 
 			/**
 			*	@brief Search an enum value in this enum.
@@ -59,8 +61,7 @@ namespace rfk
 
 	/** Base implementation of getEnum, specialized for each reflected enum */
 	template <typename T, typename = std::enable_if_t<std::is_enum_v<T>>>
-	inline rfk::Enum const* getEnum() noexcept
-	{
-		return nullptr;
-	}
+	inline rfk::Enum const* getEnum() noexcept;
+
+	#include "Refureku/TypeInfo/Archetypes/Enum.inl"
 }

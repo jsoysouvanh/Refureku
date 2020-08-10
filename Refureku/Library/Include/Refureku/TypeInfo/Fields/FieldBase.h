@@ -28,13 +28,13 @@ namespace rfk
 			FieldBase(FieldBase&&)												= default;
 
 		public:
-			/** Flags describing this field */
+			/** Flags describing this field. */
 			EFieldFlags			flags	= EFieldFlags::Default;
 
-			/** Type of this field */
+			/** Type of this field. */
 			Type				type;
 			
-			/** Struct this field belongs to */
+			/** Struct this field belongs to. */
 			Struct const*		ownerStruct;
 
 			~FieldBase() = default;

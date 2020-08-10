@@ -11,12 +11,11 @@
 
 namespace rfk
 {
-	class Class : public Struct
+	class Class final : public Struct
 	{
 		public:
 			Class(std::string&&	newName,
 				  uint64		newId,
-				  ECategory		newCategory,
 				  uint64		newMemorySize)	noexcept;
 			Class(Class const&)					= delete;
 			Class(Class&&)						= default;
