@@ -3,6 +3,7 @@
 #include <cassert>
 #include <algorithm>
 
+#include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
 #include <Kodgen/InfoStructures/NestedStructClassInfo.h>
 #include <Kodgen/InfoStructures/NestedEnumInfo.h>
 #include <Kodgen/Misc/FundamentalTypes.h>
@@ -39,13 +40,22 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	std::string defaultInstantiateMacro			= generateDefaultInstantiateMacro(generatedFile, classInfo);
 	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
 
+	//Use parsing macro to avoid parsing generated data
+	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+
+	generatedFile.writeMacro(std::string(mainMacroName));
+
+	generatedFile.writeLine("#else");
+
 	generatedFile.writeMacro(std::move(mainMacroName),
-								"friend rfk::Struct;",
-								"friend rfk::hasField___rfkArchetypeRegisterer<" + classInfo.name + ", rfk::ArchetypeRegisterer>;",
-									std::move(defaultInstantiateMacro),
-									std::move(getTypeMacroName),
-									std::move(generateRegistrationMacroName),
-								"private:");
+							 "friend rfk::Struct;",
+							 "friend rfk::hasField___rfkArchetypeRegisterer<" + classInfo.name + ", rfk::ArchetypeRegisterer>;",
+							 std::move(defaultInstantiateMacro),
+							 std::move(getTypeMacroName),
+							 std::move(generateRegistrationMacroName),
+							 "private:");
+
+	generatedFile.writeLine("#endif\n");
 }
 
 void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
@@ -79,6 +89,13 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 							 "	" + std::move(getArchetypeMethod)
 	);
 
+	//Use parsing macro to avoid parsing generated data
+	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+
+	generatedFile.writeMacro(std::string(getTypeMacroDefinition));
+
+	generatedFile.writeLine("#else");
+
 	generatedFile.writeMacro(std::move(getTypeMacroDefinition),
 								"	inline " + returnedType + " const& " + info.type.getCanonicalName() + "::staticGetArchetype() noexcept",
 								"	{",
@@ -102,6 +119,8 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"		return type;",
 								"	}"
 							 );
+
+	generatedFile.writeLine("#endif");
 
 	return getTypeMacroDeclaration;
 }

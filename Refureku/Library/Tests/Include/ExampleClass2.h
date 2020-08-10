@@ -4,24 +4,24 @@
 
 namespace namespace3 RFKNamespace()
 {
-	class RFKClass() AnotherClassInNamespace3
+	class RFKClass(ParseAllNested) AnotherClassInNamespace3
 	{
 
 		AnotherClassInNamespace3_GENERATED
 	};
 
 	RFKFunction()
-	void thisIsATest(int i) {}
+	void functionInsideNamespace(int i) {}
 
 	RFKVariable()
-	int someVariable;
+	int variableInsideNamespace;
 }
 
 RFKFunction() 
-static void ThisIsAnotherTest(float j) {} 
+static void functionInsideGlobalScope(float j) {} 
 
 RFKVariable()
-static float someOtherVariable;
+static float variableInsideGlobalScope;
 
 namespace test1::test2 RFKNamespace()
 {

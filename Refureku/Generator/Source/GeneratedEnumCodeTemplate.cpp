@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
+
 using namespace rfk;
 
 void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
@@ -16,14 +18,24 @@ void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFil
 void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
 {
 	std::string	mainMacroName			= internalPrefix + getCurrentEntityId() + "_GENERATED";
+
 	std::string specializationMacroName	= generateGetEnumSpecialization(generatedFile, enumInfo);
 	std::string registerMacroName		= generateRegistrationMacro(generatedFile, enumInfo);
+
+	//Use parsing macro to avoid parsing generated data
+	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+
+	generatedFile.writeMacro(std::string(mainMacroName));
+
+	generatedFile.writeLine("#else");
 
 	generatedFile.writeMacro(std::move(mainMacroName),
 							 "namespace rfk {",
 								std::move(specializationMacroName),
 								std::move(registerMacroName),
 							 "}");
+
+	generatedFile.writeLine("#endif\n");
 }
 
 std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept

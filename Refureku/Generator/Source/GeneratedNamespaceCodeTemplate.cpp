@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
+
 #include "RefurekuGenerator/Helpers.h"
 
 using namespace rfk;
@@ -19,9 +21,17 @@ void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generat
 							 "__RFK_DISABLE_WARNING_MACRO_REDEFINED\n");
 
 	std::string	mainMacroName						= internalPrefix + getCurrentEntityId() + "_GENERATED";
+
 	std::string fillNamespaceDeclarationMacroName	= generateGetNamespaceFragmentDeclarationMacro(generatedFile, namespaceInfo);
 	std::string fillNamespaceDefinitionMacroName	= generateGetNamespaceFragmentDefinitionMacro(generatedFile, namespaceInfo);
 	std::string registerMacroName					= generateRegistrationMacro(generatedFile, namespaceInfo);
+
+	//Use parsing macro to avoid parsing generated data
+	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+
+	generatedFile.writeMacro(std::string(mainMacroName));
+
+	generatedFile.writeLine("#else");
 
 	generatedFile.writeMacro(std::move(mainMacroName),
 							 "namespace rfk::generated {",
@@ -29,6 +39,8 @@ void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generat
 							 std::move(registerMacroName),
 							 std::move(fillNamespaceDefinitionMacroName),
 							 "}");
+
+	generatedFile.writeLine("#endif\n");
 
 	generatedFile.writeLine("__RFK_DISABLE_WARNING_POP\n");
 }

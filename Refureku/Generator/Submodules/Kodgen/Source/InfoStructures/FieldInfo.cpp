@@ -10,9 +10,10 @@ FieldInfo::FieldInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noex
 	accessSpecifier{EAccessSpecifier::Invalid},
 	memoryOffset{0}
 {
-	assert(cursor.kind == CXCursorKind::CXCursor_FieldDecl);
+	assert(cursor.kind == CXCursorKind::CXCursor_FieldDecl ||
+		   cursor.kind == CXCursorKind::CXCursor_VarDecl);		//Static fields are var decl
 
-	isStatic = clang_getCursorKind(cursor) == CXCursorKind::CXCursor_VarDecl;
+	isStatic = cursor.kind == CXCursorKind::CXCursor_VarDecl;
 
 	if (!isStatic)
 	{

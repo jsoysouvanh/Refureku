@@ -7,7 +7,7 @@
 namespace namespace1
 {
 	/** Non reflected class */
-	class ParentParentParentClass
+	class ParentParentParentClass 
 	{
 		private:
 			double pppDouble = 0.21;
