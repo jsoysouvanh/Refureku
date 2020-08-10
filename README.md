@@ -193,7 +193,7 @@ To integrate those reflection metadata to your program, you'll have to follow a 
 	//The ".rfk.h" extension depends on the generatedFilesExtension setting
 	#include "Generated/Example.rfk.h"
 	```
-2. Add the reflection macro to any entity you want to reflect. Reflection macros are customizable with the [entityType]MacroName setting.
+2. Add the reflection macro to any entity you want to reflect. Reflection macros are customizable with the [entityType]MacroName setting. For classes and structs, an additional macro [ClassName]_GENERATED has to be inserted just before closing the struct/class.
 	```cpp
 	namespace ExampleNamespace RFKNamespace() {}
 	
@@ -204,10 +204,13 @@ To integrate those reflection metadata to your program, you'll have to follow a 
 
 	    RFKMethod()
 	    void exampleMethod() {}
+
+        ExampleClass_GENERATED
 	};
 
 	struct RFKStruct() ExampleStruct
 	{
+        ExampleStruct_GENERATED
 	};
 
 	enum class RFKEnum() ExampleEnum
