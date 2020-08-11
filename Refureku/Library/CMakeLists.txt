@@ -33,6 +33,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/Class.cpp
 					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
 
+					Source/TypeInfo/Variables/VariableBase.cpp
+					Source/TypeInfo/Variables/Variable.cpp
 					Source/TypeInfo/Fields/FieldBase.cpp
 					Source/TypeInfo/Fields/Field.cpp
 					Source/TypeInfo/Fields/StaticField.cpp

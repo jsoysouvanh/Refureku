@@ -9,8 +9,8 @@
 
 #include <cassert>
 #include <type_traits>
-#include <cstring>	//std::memcpy
-#include <utility>	//std::forward
+#include <cstring>		//std::memcpy
+#include <utility>		//std::forward
 
 #include "Refureku/TypeInfo/Fields/FieldBase.h"
 #include "Refureku/TypeInfo/Type.h"
@@ -38,10 +38,10 @@ namespace rfk
 			*	@brief Get the data corresponding to this static field.
 			*		   This method in not safe if you provide a wrong DataType.
 			*
-			*	\tparam DataType Type to retrieve from the field.
-			*		If DataType is an rvalue reference, the data is moved into the return value (so the class data is no longer safe to use).
-			*		If DataType is an lvalue reference, return a reference to the field.
-			*		If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
+			*	@tparam DataType Type to retrieve from the field.
+			*			If DataType is an rvalue reference, the data is moved into the return value (so the class data is no longer safe to use).
+			*			If DataType is an lvalue reference, return a reference to the field.
+			*			If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
 			*
 			*	@return The queried data.
 			*/
@@ -52,9 +52,9 @@ namespace rfk
 			*	@brief Set the data corresponding to this static field.
 			*		   This method is not safe if you provide a wrong DataType.
 			*
-			*	\tparam DataType Type to retrieve from the field.
-			*		If DataType is an rvalue reference, the data is forwarded into the static field.
-			*		If DataType is an lvalue reference, the data is copied into the static field.
+			*	@tparam DataType Type to retrieve from the field.
+			*			If DataType is an rvalue reference, the data is forwarded into the static field.
+			*			If DataType is an lvalue reference, the data is copied into the static field.
 			*/
 			template <typename DataType>
 			void			setData(DataType&& data)					const noexcept;

@@ -22,34 +22,46 @@ namespace rfk
 			/**
 			*	Describe the kind of an entity
 			*/
-			enum class EKind : uint8
+			enum class EKind : uint16
 			{
 				/** This entity is... what? Should never happen... */
-				Undefined	= 0u,
+				Undefined				= 0u,
 
-				/** The entity is a namespace, it can safely be cast to Namespace type. */
-				Namespace	= 1 << 0,
+				/** The entity is a namespace, it can safely be cast to rfk::Namespace type. */
+				Namespace				= 1 << 0,
 				
-				/**
-				*	The entity is an archetype, it can safely be cast to Archetype type.
-				*	More specific info can be retrieved from the entity by checking Archetype::category variable.
-				*/
-				Archetype	= 1 << 1,
+				/** The entity is a class, it can safely be cast to rfk::Class. */
+				Class					= 1 << 1,
+
+				/** The archetype is a struct, it can safely be cast to rfk::Struct. */
+				Struct					= 1 << 2,
+
+				/** The archetype is an enum, it can safely by cast to rfk::Enum. */
+				Enum					= 1 << 3,
+
+				/** The archetype is a fundamental archetype. it can safely by cast to rfk::FundamentalArchetype. */
+				FundamentalArchetype	= 1 << 4,
+
+				/** This entity is a (non-member) variable, it can safely be cast to rfk::Variable. */
+				Variable				= 1 << 5,
 
 				/**
 				*	The entity is a field, it can safely be cast to FieldBase type.
 				*	More specific info can be retrieved from the entity by checking FieldBase::flags.
 				*/
-				Field		= 1 << 2,
+				Field					= 1 << 6,
+
+				/** This entity is a (non-member) function, is can safely be cast to rfk::Function. */
+				Function				= 1 << 7,
 
 				/**
 				*	The entity is a method, it can safely be cast to MethodBase type.
 				*	More specific info can be retrieved from the entity by checking MethodBase::flags.
 				*/
-				Method		= 1 << 3,
+				Method					= 1 << 8,
 
 				/** The entity is an enum value, it can safely be cast to EnumValue. */
-				EnumValue	= 1 << 4
+				EnumValue				= 1 << 9
 			};
 
 			/** Helper structs for hashing / equal */

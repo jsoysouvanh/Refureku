@@ -65,10 +65,10 @@ namespace rfk
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const noexcept;
 
 		protected:
-			Struct(std::string&&	newName,
-				   uint64			newId,
-				   ECategory		newCategory,
-				   uint64			newMemorySize)	noexcept;
+			Struct(std::string&&	name,
+				   uint64			id,
+				   EKind			kind,
+				   uint64			memorySize)	noexcept;
 
 		public:
 			struct Parent

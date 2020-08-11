@@ -69,20 +69,6 @@ namespace rfk
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
-			*	@param archetype The parent archetype.
-			*/
-			static void registerSubEntities(Archetype const& archetype)						noexcept;
-			
-			/**
-			*	@brief Remove all nested entities from the _entitiesById map.
-			*	
-			*	@param archetype The parent archetype.
-			*/
-			static void unregisterSubEntities(Archetype const& archetype)					noexcept;
-
-			/**
-			*	@brief Add all nested entities to the _entitiesById map.
-			*	
 			*	@param n The parent namespace.
 			*/
 			static void registerSubEntities(Namespace const& n)								noexcept;

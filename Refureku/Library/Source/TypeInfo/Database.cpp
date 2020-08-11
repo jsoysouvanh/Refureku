@@ -56,8 +56,18 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 				registerSubEntities(static_cast<Namespace const&>(entity));
 				break;
 
-			case Entity::EKind::Archetype:
-				registerSubEntities(static_cast<Archetype const&>(entity));
+			case Entity::EKind::Struct:
+				[[fallthrough]];
+			case Entity::EKind::Class:
+				registerSubEntities(static_cast<Struct const&>(entity));
+				break;
+
+			case Entity::EKind::Enum:
+				registerSubEntities(static_cast<Enum const&>(entity));
+				break;
+
+			case Entity::EKind::FundamentalArchetype:
+				//Nothing special to do here since a fundamental archetype doesn't own any sub entities
 				break;
 
 			case Entity::EKind::Field:
@@ -87,10 +97,18 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 				assert(false); //This situation should never happen
 				break;
 
-			case Entity::EKind::Archetype:
-				unregisterSubEntities(static_cast<Archetype const&>(entity));
+			case Entity::EKind::Struct:
+				[[fallthrough]];
+			case Entity::EKind::Class:
+				unregisterSubEntities(static_cast<Struct const&>(entity));
 				break;
 
+			case Entity::EKind::Enum:
+				unregisterSubEntities(static_cast<Enum const&>(entity));
+				break;
+
+			case Entity::EKind::FundamentalArchetype:
+				[[fallthrough]];
 			case Entity::EKind::Field:
 				[[fallthrough]];
 			case Entity::EKind::Method:
@@ -129,58 +147,6 @@ void Database::registerSubEntities(Namespace const& n) noexcept
 	for (Archetype const* na : n.nestedArchetypes)
 	{
 		registerEntity(*na, true);
-	}
-}
-
-void Database::registerSubEntities(Archetype const& archetype) noexcept
-{
-	switch (archetype.category)
-	{
-		case Archetype::ECategory::Struct:
-			[[fallthrough]];
-		case Archetype::ECategory::Class:
-			registerSubEntities(static_cast<Struct const&>(archetype));
-			break;
-
-		case Archetype::ECategory::Enum:
-			registerSubEntities(static_cast<Enum const&>(archetype));
-			break;
-
-		case Archetype::ECategory::Fundamental:
-			//Nothing special to do here since a fundamental archetype doesn't own any sub entities
-			break;
-
-		case Archetype::ECategory::Undefined:
-			[[fallthrough]];
-		default:
-			assert(false);	//Should never register a bad category
-			break;
-	}
-}
-
-void Database::unregisterSubEntities(Archetype const& archetype) noexcept
-{
-	switch (archetype.category)
-	{
-		case Archetype::ECategory::Struct:
-			[[fallthrough]];
-		case Archetype::ECategory::Class:
-			unregisterSubEntities(static_cast<Struct const&>(archetype));
-			break;
-
-		case Archetype::ECategory::Enum:
-			unregisterSubEntities(static_cast<Enum const&>(archetype));
-			break;
-
-		case Archetype::ECategory::Fundamental:
-			//Nothing special to do here since a fundamental archetype doesn't own any sub entities
-			break;
-
-		case Archetype::ECategory::Undefined:
-			[[fallthrough]];
-		default:
-			assert(false);	//Should never register a bad category
-			break;
 	}
 }
 
@@ -347,7 +313,7 @@ Struct const* Database::getStruct(std::string structName) noexcept
 {
 	Entity const* entity = getEntity(std::move(structName));
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Struct) ?
+	return (entity != nullptr && entity->kind == Entity::EKind::Struct) ?
 			reinterpret_cast<Struct const*>(entity) :
 			nullptr;
 }
@@ -356,7 +322,7 @@ Class const* Database::getClass(std::string className) noexcept
 {
 	Entity const* entity = getEntity(std::move(className));
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Class) ?
+	return (entity != nullptr && entity->kind == Entity::EKind::Class) ?
 			reinterpret_cast<Class const*>(entity) :
 			nullptr;
 }
@@ -365,7 +331,7 @@ Enum const* Database::getEnum(std::string enumName) noexcept
 {
 	Entity const* entity = getEntity(std::move(enumName));
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Archetype && reinterpret_cast<Archetype const*>(entity)->category == Archetype::ECategory::Enum) ?
+	return (entity != nullptr && entity->kind == Entity::EKind::Enum) ?
 			reinterpret_cast<Enum const*>(entity) :
 			nullptr;
 }

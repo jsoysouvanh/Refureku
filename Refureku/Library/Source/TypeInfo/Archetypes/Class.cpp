@@ -2,7 +2,7 @@
 
 using namespace rfk;
 
-Class::Class(std::string&& newName, uint64 newId, uint64 newMemorySize) noexcept:
-	Struct(std::forward<std::string>(newName), newId, ECategory::Class, newMemorySize)
+Class::Class(std::string&& name, uint64 id, uint64 memorySize) noexcept:
+	Struct(std::forward<std::string>(name), id, EKind::Class, memorySize)
 {
 }

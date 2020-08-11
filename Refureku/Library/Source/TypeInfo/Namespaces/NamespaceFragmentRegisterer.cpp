@@ -71,7 +71,11 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 
 				break;
 
-			case Entity::EKind::Archetype:
+			case Entity::EKind::Struct:
+				[[fallthrough]];
+			case Entity::EKind::Class:
+				[[fallthrough]];
+			case Entity::EKind::Enum:
 				_namespaceInstance->nestedArchetypes.emplace(reinterpret_cast<Archetype const*>(entity));
 				
 				//Register the archetype and its sub entities to the database.
@@ -132,7 +136,11 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 
 				break;
 
-			case Entity::EKind::Archetype:
+			case Entity::EKind::Struct:
+				[[fallthrough]];
+			case Entity::EKind::Class:
+				[[fallthrough]];
+			case Entity::EKind::Enum:
 				_namespaceInstance->nestedArchetypes.erase(reinterpret_cast<Archetype const*>(entity));
 
 				//Unregister archetypes and their sub entities from the database
