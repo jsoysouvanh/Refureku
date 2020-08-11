@@ -12,7 +12,7 @@
 #include <cstring>		//std::memcpy
 #include <utility>		//std::forward
 
-#include "Refureku/TypeInfo/Fields/FieldBase.h"
+#include "Refureku/TypeInfo/Variables/FieldBase.h"
 #include "Refureku/TypeInfo/Type.h"
 
 namespace rfk
@@ -75,5 +75,5 @@ namespace rfk
 			inline void*	getDataAddress()							const noexcept;
 	};
 
-	#include "Refureku/TypeInfo/Fields/StaticField.inl"
+	#include "Refureku/TypeInfo/Variables/StaticField.inl"
 }

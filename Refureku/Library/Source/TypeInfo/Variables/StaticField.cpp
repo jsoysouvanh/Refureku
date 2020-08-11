@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/Fields/StaticField.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
 
 using namespace rfk;
 

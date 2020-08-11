@@ -14,8 +14,8 @@
 #include <type_traits>
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/Fields/Field.h"
-#include "Refureku/TypeInfo/Fields/StaticField.h"
+#include "Refureku/TypeInfo/Variables/Field.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
 #include "Refureku/TypeInfo/Methods/Method.h"
 #include "Refureku/TypeInfo/Methods/StaticMethod.h"
 #include "Refureku/Utility/TypeTraits.h"

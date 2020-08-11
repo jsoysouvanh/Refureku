@@ -9,7 +9,7 @@
 
 #include "Refureku/TypeInfo/Variables/VariableBase.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
-#include "Refureku/TypeInfo/Fields/EFieldFlags.h"
+#include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 
 namespace rfk
 {
@@ -51,5 +51,5 @@ namespace rfk
 			inline bool			isMutable()		const	noexcept;
 	};
 
-	#include "Refureku/TypeInfo/Fields/FieldBase.inl"
+	#include "Refureku/TypeInfo/Variables/FieldBase.inl"
 }
