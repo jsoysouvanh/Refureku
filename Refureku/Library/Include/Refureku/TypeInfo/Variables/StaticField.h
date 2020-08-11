@@ -31,8 +31,8 @@ namespace rfk
 						EFieldFlags		flags,
 						Struct const*	ownerStruct,
 						void*			ptrToData)		noexcept;
-			StaticField(StaticField const&)				= default;
-			StaticField(StaticField&&)					= default;
+			StaticField(StaticField const&)				= delete;
+			StaticField(StaticField&&)					= delete;
 			~StaticField()								= default;
 
 			/**

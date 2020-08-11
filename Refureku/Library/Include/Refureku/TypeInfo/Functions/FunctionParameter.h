@@ -22,7 +22,7 @@ namespace rfk
 			/** Type of this parameter */
 			Type const&	type;
 
-			FunctionParameter()										= default;
+			FunctionParameter()										= delete;
 			FunctionParameter(std::string&& name, Type const& type)	noexcept;
 			FunctionParameter(FunctionParameter const&)				= default;
 			FunctionParameter(FunctionParameter&&)					= default;

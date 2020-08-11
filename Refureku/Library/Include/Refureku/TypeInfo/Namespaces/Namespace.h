@@ -97,9 +97,14 @@ namespace rfk
 			*	@param flags		Flags describing the queried function.
 			*						The result function will have at least the provided flags.
 			*	
-			*	@return The found function if it exists, else nullptr.
+			*	@return The first function matching the provided name and flags if it exists, else nullptr.
 			*/
 			Function const*		getFunction(std::string		functionName,
 											EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
+
+			//TODO
+			//template <typename T>
+			//Function const*		getFunction(std::string		functionName,
+			//								EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
 	};
 }

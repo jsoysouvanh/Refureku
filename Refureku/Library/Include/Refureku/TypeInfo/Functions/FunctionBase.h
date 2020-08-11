@@ -12,7 +12,7 @@
 
 #include "Refureku/TypeInfo/Entity.h"
 #include "Refureku/TypeInfo/Functions/FunctionParameter.h"
-#include "Refureku/Utility/ICallable.h"
+#include "Refureku/TypeInfo/Functions/ICallable.h"
 #include "Refureku/Exceptions/ArgCountMismatch.h"
 #include "Refureku/Exceptions/ReturnTypeMismatch.h"
 #include "Refureku/Exceptions/ArgTypeMismatch.h"
@@ -53,8 +53,8 @@ namespace rfk
 						 EKind							kind,
 						 Type const&					returnType,
 						 std::unique_ptr<ICallable>&&	internalMethod)	noexcept;
-			FunctionBase(FunctionBase const&)							= default;
-			FunctionBase(FunctionBase&&)								= default;
+			FunctionBase(FunctionBase const&)							= delete;
+			FunctionBase(FunctionBase&&)								= delete;
 			~FunctionBase()												= default;
 
 			/**

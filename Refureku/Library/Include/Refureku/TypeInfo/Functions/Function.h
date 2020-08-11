@@ -9,6 +9,7 @@
 
 #include "Refureku/TypeInfo/Functions/FunctionBase.h"
 #include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
+#include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
 
 namespace rfk
 {

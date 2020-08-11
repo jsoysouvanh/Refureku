@@ -24,8 +24,8 @@ namespace rfk
 					  Type const&		type,
 					  EFieldFlags		flags,
 					  Struct const*		ownerStruct)	noexcept;
-			FieldBase(FieldBase const&)					= default;
-			FieldBase(FieldBase&&)						= default;
+			FieldBase(FieldBase const&)					= delete;
+			FieldBase(FieldBase&&)						= delete;
 			~FieldBase()								= default;
 
 		public:

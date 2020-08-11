@@ -9,7 +9,7 @@
 
 #include <utility>	//std::forward
 
-#include "Refureku/Utility/ICallable.h"
+#include "Refureku/TypeInfo/Functions/ICallable.h"
 
 namespace rfk
 {

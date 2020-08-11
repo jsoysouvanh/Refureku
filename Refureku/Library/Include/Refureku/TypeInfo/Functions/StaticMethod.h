@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
-#include "Refureku/Utility/NonMemberFunction.h"
+#include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
 
 namespace rfk
 {
@@ -35,8 +35,8 @@ namespace rfk
 						 Type const&					returnType,
 						 std::unique_ptr<ICallable>&&	internalMethod,
 						 EMethodFlags					flags)			noexcept;
-			StaticMethod(StaticMethod const&)							= default;
-			StaticMethod(StaticMethod&&)								= default;
+			StaticMethod(StaticMethod const&)							= delete;
+			StaticMethod(StaticMethod&&)								= delete;
 			~StaticMethod()												= default;
 
 			/**

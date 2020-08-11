@@ -30,8 +30,8 @@ namespace rfk
 				  EFieldFlags	flags,
 				  Struct const*	ownerStruct,
 				  uint64		memoryOffset)	noexcept;
-			Field(Field const&)					= default;
-			Field(Field&&)						= default;
+			Field(Field const&)					= delete;
+			Field(Field&&)						= delete;
 			~Field()							= default;
 
 			/**

@@ -46,7 +46,7 @@ Class const* Namespace::getClass(std::string className) const noexcept
 
 Enum const* Namespace::getEnum(std::string enumName) const noexcept
 {
-	//Use an Entity instead of a Class to avoid containers initialization
+	//Use an Entity instead of an Enum to avoid containers initialization
 	Entity searchingEnum(std::move(enumName), 0u);
 
 	//We know the hash method only uses the name inherited from Entity so cast is fine
@@ -57,12 +57,22 @@ Enum const* Namespace::getEnum(std::string enumName) const noexcept
 
 Variable const* Namespace::getVariable(std::string variableName, EVarFlags flags) const noexcept
 {
-	//TODO
-	return nullptr;
+	//Use an Entity instead of an Enum to avoid containers initialization
+	Entity searchingVariable(std::move(variableName), 0u);
+
+	//We know the hash method only uses the name inherited from Entity so cast is fine
+	decltype(nestedVariables)::const_iterator it = nestedVariables.find(reinterpret_cast<Variable const*>(&searchingVariable));
+	
+	return (it != nestedVariables.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }
 
 Function const* Namespace::getFunction(std::string functionName, EFunctionFlags flags) const noexcept
 {
-	//TODO
-	return nullptr;
+	//Use an Entity instead of a Function to avoid containers initialization
+	Entity searchingMethod(std::move(functionName), 0u);
+
+	//We know the hash method only uses the name inherited from Entity so cast is fine
+	decltype(nestedFunctions)::const_iterator it = nestedFunctions.find(reinterpret_cast<Function const*>(&searchingMethod));
+
+	return (it != nestedFunctions.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }

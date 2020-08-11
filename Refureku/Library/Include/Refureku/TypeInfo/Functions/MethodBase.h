@@ -22,8 +22,8 @@ namespace rfk
 					   Type const&					returnType,
 					   std::unique_ptr<ICallable>&&	internalMethod,
 					   EMethodFlags					flags)			noexcept;
-			MethodBase(MethodBase const&)							= default;
-			MethodBase(MethodBase&&)								= default;
+			MethodBase(MethodBase const&)							= delete;
+			MethodBase(MethodBase&&)								= delete;
 			~MethodBase()											= default;
 
 		public:

@@ -11,7 +11,7 @@
 
 #include "Refureku/Misc/FundamentalTypes.h"
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
-#include "Refureku/Utility/MemberFunction.h"
+#include "Refureku/TypeInfo/Functions/MemberFunction.h"
 
 namespace rfk
 {
@@ -43,8 +43,8 @@ namespace rfk
 				   Type const&					returnType,
 				   std::unique_ptr<ICallable>&&	internalMethod,
 				   EMethodFlags					flags)			noexcept;
-			Method(Method const&)								= default;
-			Method(Method&&)									= default;
+			Method(Method const&)								= delete;
+			Method(Method&&)									= delete;
 			~Method()											= default;
 
 			/**
