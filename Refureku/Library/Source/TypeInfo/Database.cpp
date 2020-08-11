@@ -336,6 +336,18 @@ Enum const* Database::getEnum(std::string enumName) noexcept
 			nullptr;
 }
 
+Variable const* Database::getVariable(std::string variableName, EVarFlags flags) noexcept
+{
+	//TODO
+	return nullptr;
+}
+
+Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) noexcept
+{
+	//TODO
+	return nullptr;
+}
+
 void Database::clear() noexcept
 {
 	_entitiesById.clear();

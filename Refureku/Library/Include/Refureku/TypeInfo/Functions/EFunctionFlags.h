@@ -12,25 +12,18 @@
 
 namespace rfk
 {
-	enum class EMethodFlags : uint16
+	/** Flags describing a (non-member) function. */
+	enum class EFunctionFlags : uint8
 	{
 		/** No flag. */
 		Default			= 0,
 
-		/** Access specifiers. */
-		Public			= 1 << 0,
-		Protected		= 1 << 1,
-		Private			= 1 << 2,
+		/** static qualifier. */
+		Static			= 1 << 1,
 
-		/** Method qualifiers. */
-		Static			= 1 << 3,
-		Inline			= 1 << 4,
-		Virtual			= 1 << 5,
-		PureVirtual		= 1 << 6,
-		Override		= 1 << 7,
-		Final			= 1 << 8,
-		Const			= 1 << 9
+		/** inline qualifier. */
+		Inline			= 1 << 2
 	};
 
-	GENERATE_ENUM_OPERATORS(EMethodFlags)
+	GENERATE_ENUM_OPERATORS(EFunctionFlags)
 }

@@ -13,22 +13,19 @@
 
 namespace rfk
 {
-	class MethodParameter
+	class FunctionParameter
 	{
 		public:
 			/** Name of this parameter. Can be unspecified (empty). */
 			std::string	name;
 
 			/** Type of this parameter */
-			Type		type;
+			Type const&	type;
 
-			MethodParameter()									= default;
-			MethodParameter(std::string&& name, Type&& type)	noexcept;
-			MethodParameter(MethodParameter const&)				= default;
-			MethodParameter(MethodParameter&&)					= default;
-			~MethodParameter()									= default;
-
-			MethodParameter& operator=(MethodParameter const&)	= default;
-			MethodParameter& operator=(MethodParameter&&)		= default;
+			FunctionParameter()										= default;
+			FunctionParameter(std::string&& name, Type const& type)	noexcept;
+			FunctionParameter(FunctionParameter const&)				= default;
+			FunctionParameter(FunctionParameter&&)					= default;
+			~FunctionParameter()									= default;
 	};
 }

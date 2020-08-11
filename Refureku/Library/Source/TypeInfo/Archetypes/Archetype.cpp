@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Refureku/TypeInfo/Methods/StaticMethod.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
 
 using namespace rfk;
 

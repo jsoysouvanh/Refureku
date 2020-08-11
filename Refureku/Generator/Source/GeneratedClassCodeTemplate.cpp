@@ -157,9 +157,10 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 			methodName = method.getName();
 
 			generatedFile.writeLine("	staticMethodsIt = type.staticMethods.emplace(\"" + methodName + "\", " +
-									std::to_string(stringHasher(method.id)) +
-									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
-									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")));\t\\");
+									std::to_string(stringHasher(method.id)) + "u, "
+									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
+									"std::unique_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), "
+									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
 			//Check if this static method is a custom instantiator, in which case we should add it to the list of custom instantiators of this class
 			if (std::find_if(method.properties.simpleProperties.cbegin(), method.properties.simpleProperties.cend(), [](kodgen::SimpleProperty const& sp){ return sp.mainProperty == NativeProperties::customInstantiatorProperty; })
@@ -176,9 +177,10 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 			methodName = method.getName();
 
 			generatedFile.writeLine("	methodsIt = type.methods.emplace(\"" + methodName + "\", " +
-									std::to_string(stringHasher(method.id)) +
-									"u, static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) +
-									"), std::shared_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), &type);\t\\");
+									std::to_string(stringHasher(method.id)) + "u, "
+									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
+									"std::unique_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), "
+									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
 			generatedFile.writeLine("	currMethod = const_cast<rfk::Method*>(&*methodsIt);\t\\");
 		}
@@ -191,9 +193,6 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 		//Setup the outer entity
 		generatedFile.writeLine("	currMethod->outerEntity = &type;\t\\");
 
-		//Setup return type
-		generatedFile.writeLine("	currMethod->returnType = rfk::Type::getType<" + method.returnType.getName() + ">();\t\\");
-
 		//Setup parameters
 		if (!method.parameters.empty())
 		{
@@ -201,7 +200,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
-				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type(rfk::Type::getType<" + param.type.getName() + ">()));\t\\");
+				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">());\t\\");
 			}
 		}
 	}

@@ -40,11 +40,13 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Variables/Field.cpp
 					Source/TypeInfo/Variables/StaticField.cpp
 
-					Source/TypeInfo/Methods/MethodBase.cpp
-					Source/TypeInfo/Methods/Method.cpp
-					Source/TypeInfo/Methods/StaticMethod.cpp
-					Source/TypeInfo/Methods/MethodParameter.cpp
-			)
+					Source/TypeInfo/Functions/FunctionBase.cpp
+					Source/TypeInfo/Functions/Function.cpp
+					Source/TypeInfo/Functions/MethodBase.cpp
+					Source/TypeInfo/Functions/Method.cpp
+					Source/TypeInfo/Functions/StaticMethod.cpp
+					Source/TypeInfo/Functions/FunctionParameter.cpp
+				)
 
 # Setup compilation flags
 if (MSVC)

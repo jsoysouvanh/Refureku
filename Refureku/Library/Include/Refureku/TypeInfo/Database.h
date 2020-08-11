@@ -136,16 +136,16 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			static Entity const*			getEntity(uint64 id)					noexcept;
+			static Entity const*			getEntity(uint64 id)											noexcept;
 
 			/**
-			*	@brief Retrieve an entity by name.
+			*	@brief Retrieve a file level entity by name.
 			*
 			*	@param entityName The name of the entity (Entity::name).
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			static Entity const*			getEntity(std::string entityName)		noexcept;
+			static Entity const*			getEntity(std::string entityName)								noexcept;
 
 			/**
 			*	@brief	Retrieve a namespace by name.
@@ -161,45 +161,69 @@ namespace rfk
 			static Namespace const*			getNamespace(std::string namespaceName);
 
 			/**
-			*	@brief Retrieve a struct by name.
+			*	@brief Retrieve a file level struct by name.
 			*
 			*	@param structName The name of the struct.
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			static Struct const*			getStruct(std::string structName)		noexcept;
+			static Struct const*			getStruct(std::string structName)								noexcept;
 
 			/**
-			*	@brief Retrieve a class by name.
+			*	@brief Retrieve a file level class by name.
 			*
 			*	@param className The name of the class.
 			*
 			*	@return A constant pointer to the queried class if it exists, else nullptr.
 			*/
-			static Class const*				getClass(std::string className)			noexcept;
+			static Class const*				getClass(std::string className)									noexcept;
 
 			/**
-			*	@brief Retrieve an enum by name.
+			*	@brief Retrieve a file level enum by name.
 			*
 			*	@param enumName The name of the enum.
 			*
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
-			static Enum const*				getEnum(std::string enumName)			noexcept;
+			static Enum const*				getEnum(std::string enumName)									noexcept;
+
+			/**
+			*	@brief Retrieve a file level (non-member) variable by name.
+			*	
+			*	@param variableName The name of the variable.
+			*	@param flags		Flags describing the queried variable.
+			*						The result variable will have at least the provided flags.
+			*	
+			*	@return A constant pointer to the queried variable if it exists, else nullptr.
+			*/
+			static Variable const*			getVariable(std::string variableName,
+														EVarFlags	flags = EVarFlags::Default)				noexcept;
+
+			/**
+			*	@brief Retrieve a file level (non-member) function by name.
+			*	
+			*	@param functionName The name of the function.
+			*	@param flags		Flags describing the queried function.
+			*						The result function will have at least the provided flags.
+			*	
+			*	@return A constant pointer to the queried function if it exists, else nullptr.
+			*/
+			static Function const*			getFunction(std::string		functionName,
+														EFunctionFlags	flags = EFunctionFlags::Default)	noexcept;
 
 			/**
 			*	@brief Clear the whole database of any registered entity
 			*/
-			static void						clear()									noexcept;
+			static void						clear()															noexcept;
 
 			/**
 			*	@return The unordered_set containing all registered entities hashed by id.
 			*/
-			static EntitiesById const&		getEntitiesById()						noexcept;
+			static EntitiesById const&		getEntitiesById()												noexcept;
 
 			/**
 			*	@return The unordered_set containing all registered entities at file level, hashed by name.
 			*/
-			static EntitiesByName const&	getFileLevelEntities()					noexcept;
+			static EntitiesByName const&	getFileLevelEntities()											noexcept;
 	};
 }

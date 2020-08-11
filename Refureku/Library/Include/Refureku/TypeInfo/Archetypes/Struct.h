@@ -16,8 +16,8 @@
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Variables/Field.h"
 #include "Refureku/TypeInfo/Variables/StaticField.h"
-#include "Refureku/TypeInfo/Methods/Method.h"
-#include "Refureku/TypeInfo/Methods/StaticMethod.h"
+#include "Refureku/TypeInfo/Functions/Method.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/Utility/TypeTraits.h"
 
 namespace rfk

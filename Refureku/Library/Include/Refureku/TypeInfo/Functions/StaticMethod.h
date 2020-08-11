@@ -7,22 +7,37 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Methods/MethodBase.h"
+#include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/Utility/NonMemberFunction.h"
 
 namespace rfk
 {
-	class StaticMethod : public MethodBase
+	class StaticMethod final : public MethodBase
 	{
+		private:
+			/**
+			*	@brief Invoke the internal method using passed arguments.
+			*	
+			*	@tparam		ReturnType Return type of the internal method.
+			*	@tparam...	ArgTypes Passed argument types.
+			*
+			*	@param arguments... Arguments to forward to the internal method.
+			*	
+			*	@return The result of the internal method call.
+			*/
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	internalInvoke(ArgTypes&&... arguments) const noexcept;
+
 		public:
-			StaticMethod()																			= delete;
+			StaticMethod()												= delete;
 			StaticMethod(std::string&&					name,
-						 uint64							id				= 0u,
-						 EMethodFlags					flags			= EMethodFlags::Static,
-						 std::shared_ptr<ICallable>&&	internalMethod	= nullptr)					noexcept;
-			StaticMethod(StaticMethod const&)														= default;
-			StaticMethod(StaticMethod&&)															= default;
-			~StaticMethod()																			= default;
+						 uint64							id,
+						 Type const&					returnType,
+						 std::unique_ptr<ICallable>&&	internalMethod,
+						 EMethodFlags					flags)			noexcept;
+			StaticMethod(StaticMethod const&)							= default;
+			StaticMethod(StaticMethod&&)								= default;
+			~StaticMethod()												= default;
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any.
@@ -32,15 +47,15 @@ namespace rfk
 			*	If it is incorrect, a MethodError exception is thrown.
 			*	Type checks are not performed so calling this method with bad parameters might lead to a crash.
 			*
-			*	\tparam ReturnType Return type of the method
-			*	\tparam... ArgTypes Type of all arguments
+			*	@tparam ReturnType Return type of the method
+			*	@tparam... ArgTypes Type of all arguments
 			*
-			*	@param arguments Arguments provided to the method call. This can in some cases be omitted thanks to template deduction.
+			*	@param arguments... Arguments provided to the method call. This can in some cases be omitted thanks to template deduction.
 			*
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(ArgTypes&&... arguments)			const	noexcept(REFUREKU_RELEASE);
+			ReturnType	invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any.
@@ -50,16 +65,15 @@ namespace rfk
 			*	If it is incorrect, a MethodError exception is thrown.
 			*	Type checks are not performed so calling this method with bad parameters might lead to a crash.
 			*
-			*	\note This is only an overload of the other invoke method.
+			*	@note This is only an overload of the other invoke method.
 			*		  This allows to conveniently call static methods when we don't care about the returned value.
 			*
-			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction.
+			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
-			*	@param caller Pointer to the instance of the class the method will be called.
-			*	@param arguments Arguments provided to the method call.
+			*	@param arguments... Arguments provided to the method call.
 			*/
 			template <typename... ArgTypes>
-			void		invoke(ArgTypes&&... arguments)			const	noexcept(REFUREKU_RELEASE);
+			void		invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any.
@@ -67,12 +81,12 @@ namespace rfk
 			*	Checks the argument count and the type of each argument before actually invoking the underlying method.
 			*	If any of those is incorrect, a MethodError exception is thrown.
 			*
-			*	\tparam ReturnType Return type of the method
-			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
+			*	@tparam ReturnType Return type of the method
+			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
 			*		but it is always safer to explicitly specify each template type to avoid type mismatches (a char* could
 			*		be template deducted as a char[], and as they are different types a MethodError exception will be thrown).
 			*
-			*	@param arguments Arguments provided to the method call.
+			*	@param arguments... Arguments provided to the method call.
 			*
 			*	@return The result of the static method call.
 			*/
@@ -85,18 +99,18 @@ namespace rfk
 			*	Checks the argument count and the type of each argument before actually invoking the underlying method.
 			*	If any of those is incorrect, a MethodError exception is thrown.
 			*
-			*	\note This is only an overload of the other checkedInvoke method.
+			*	@note This is only an overload of the other checkedInvoke method.
 			*		  This allows to conveniently call static methods when we don't care about the returned value.
 			*
-			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
+			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
 			*		but it is always safer to explicitly specify each template type to avoid type mismatches (a char* could
 			*		be template deducted as a char[], and as they are different types a MethodError exception will be thrown).
 			*
-			*	@param arguments Arguments provided to the method call.
+			*	@param arguments... Arguments provided to the method call.
 			*/
 			template <typename... ArgTypes>
 			void		checkedInvoke(ArgTypes&&... arguments)	const;
 	};
 
-	#include "Refureku/TypeInfo/Methods/StaticMethod.inl"
+	#include "Refureku/TypeInfo/Functions/StaticMethod.inl"
 }

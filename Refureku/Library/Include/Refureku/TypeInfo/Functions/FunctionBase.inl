@@ -6,7 +6,7 @@
 */
 
 template <typename... ArgTypes>
-void MethodBase::checkArgumentsCount() const
+void FunctionBase::checkArgumentsCount() const
 {
 	size_t correctParamCount = parameters.size();
 
@@ -18,7 +18,7 @@ void MethodBase::checkArgumentsCount() const
 }
 
 template <typename... ArgTypes>
-void MethodBase::checkArguments() const
+void FunctionBase::checkArguments() const
 {
 	//Check that there is the right amount of parameters
 	checkArgumentsCount<ArgTypes...>();
@@ -31,14 +31,14 @@ void MethodBase::checkArguments() const
 }
 
 template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
-void MethodBase::checkArguments() const
+void FunctionBase::checkArguments() const
 {
 	checkArguments<Rank, FirstArgType>();
 	checkArguments<Rank + 1, SecondArgType, OtherArgTypes...>();
 }
 
 template <size_t Rank, typename LastArgType>
-void MethodBase::checkArguments() const
+void FunctionBase::checkArguments() const
 {
 	Type providedType = Type::getType<LastArgType>();
 
@@ -50,7 +50,7 @@ void MethodBase::checkArguments() const
 }
 
 template <typename ReturnType>
-void MethodBase::checkReturnType() const
+void FunctionBase::checkReturnType() const
 {
 	Type providedType = Type::getType<ReturnType>();
 
@@ -61,37 +61,37 @@ void MethodBase::checkReturnType() const
 }
 
 template <typename... ArgTypes>
-bool MethodBase::hasSameArgumentsCount() const noexcept
+bool FunctionBase::hasSameArgumentsCount() const noexcept
 {
 	return sizeof...(ArgTypes) == parameters.size();
 }
 
 template <typename ReturnType>
-bool MethodBase::hasSameReturnType() const noexcept
+bool FunctionBase::hasSameReturnType() const noexcept
 {
 	return Type::getType<ReturnType>() == returnType;
 }
 
 template <typename... ArgTypes>
-bool MethodBase::hasSameArgumentTypes() const noexcept
+bool FunctionBase::hasSameArgumentTypes() const noexcept
 {
 	return hasSameArgumentTypes<0u, ArgTypes...>();
 }
 
 template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
-bool MethodBase::hasSameArgumentTypes() const noexcept
+bool FunctionBase::hasSameArgumentTypes() const noexcept
 {
 	return hasSameArgumentTypes<Rank, FirstArgType>() && hasSameArgumentTypes<Rank + 1, SecondArgType, OtherArgTypes...>();
 }
 
 template <size_t Rank, typename LastArgType>
-bool MethodBase::hasSameArgumentTypes() const noexcept
+bool FunctionBase::hasSameArgumentTypes() const noexcept
 {
 	return parameters[Rank].type == Type::getType<LastArgType>();
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool MethodBase::hasSamePrototype() const noexcept
+bool FunctionBase::hasSamePrototype() const noexcept
 {
 	if constexpr (sizeof...(ArgTypes) == 0u)
 	{
@@ -105,7 +105,7 @@ bool MethodBase::hasSamePrototype() const noexcept
 }
 
 template <typename... ArgTypes>
-bool MethodBase::hasSameArguments() const noexcept
+bool FunctionBase::hasSameArguments() const noexcept
 {
 	if constexpr (sizeof...(ArgTypes) == 0u)
 	{
@@ -115,39 +115,4 @@ bool MethodBase::hasSameArguments() const noexcept
 	{
 		return hasSameArgumentsCount<ArgTypes...>() && hasSameArgumentTypes<ArgTypes...>();
 	}
-}
-
-inline bool MethodBase::isStatic() const noexcept
-{
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Static);
-}
-
-inline bool MethodBase::isInline() const noexcept
-{
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Inline);
-}
-
-inline bool MethodBase::isVirtual() const noexcept
-{
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Virtual);
-}
-
-inline bool MethodBase::isPureVirtual() const noexcept
-{
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::PureVirtual);
-}
-
-inline bool MethodBase::isOverride() const noexcept
-{
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Override);
-}
-
-inline bool MethodBase::isFinal() const noexcept
-{
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Final);
-}
-
-inline bool MethodBase::isConst() const noexcept
-{
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Const);
 }

@@ -46,8 +46,8 @@ namespace rfk
 				Variable				= 1 << 5,
 
 				/**
-				*	The entity is a field, it can safely be cast to FieldBase type.
-				*	More specific info can be retrieved from the entity by checking FieldBase::flags.
+				*	The entity is a field, it can safely be cast to rfk::FieldBase type.
+				*	More specific info can be retrieved from the entity by checking rfk::FieldBase::flags.
 				*/
 				Field					= 1 << 6,
 
@@ -55,12 +55,12 @@ namespace rfk
 				Function				= 1 << 7,
 
 				/**
-				*	The entity is a method, it can safely be cast to MethodBase type.
-				*	More specific info can be retrieved from the entity by checking MethodBase::flags.
+				*	The entity is a method, it can safely be cast to rfk::MethodBase type.
+				*	More specific info can be retrieved from the entity by checking rfk::MethodBase::flags.
 				*/
 				Method					= 1 << 8,
 
-				/** The entity is an enum value, it can safely be cast to EnumValue. */
+				/** The entity is an enum value, it can safely be cast to rfk::EnumValue. */
 				EnumValue				= 1 << 9
 			};
 
@@ -148,9 +148,9 @@ namespace rfk
 			PropertyGroup	properties;
 
 			Entity()											= delete;
-			Entity(std::string&&	newName,
-				   uint64			newId,
-				   EKind			newKind = EKind::Undefined)	noexcept;
+			Entity(std::string&&	name,
+				   uint64			id,
+				   EKind			kind = EKind::Undefined)	noexcept;
 			Entity(Entity const&)								= default;
 			Entity(Entity&&)									= default;
 			~Entity()											= default;

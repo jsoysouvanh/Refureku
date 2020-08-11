@@ -1,10 +1,9 @@
-#include "Refureku/TypeInfo/Methods/MethodBase.h"
+#include "Refureku/TypeInfo/Functions/MethodBase.h"
 
 using namespace rfk;
 
-MethodBase::MethodBase(std::string&& name, uint64 id, EMethodFlags flags, std::shared_ptr<ICallable>&& internalMethod) noexcept:
-	Entity(std::forward<std::string>(name), id, EKind::Method),
-	_internalMethod{std::forward<std::shared_ptr<ICallable>>(internalMethod)},
+MethodBase::MethodBase(std::string&& name, uint64 id, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod, EMethodFlags flags) noexcept:
+	FunctionBase(std::forward<std::string>(name), id, EKind::Method, returnType, std::forward<std::unique_ptr<ICallable>>(internalMethod)),
 	flags{flags}
 {
 }

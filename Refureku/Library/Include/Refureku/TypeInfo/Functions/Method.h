@@ -10,7 +10,7 @@
 #include <string>
 
 #include "Refureku/Misc/FundamentalTypes.h"
-#include "Refureku/TypeInfo/Methods/MethodBase.h"
+#include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/Utility/MemberFunction.h"
 
 namespace rfk
@@ -22,25 +22,30 @@ namespace rfk
 		private:
 			class DummyClass {};
 
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(void* caller, ArgTypes&&... arguments)		const	noexcept;
-
+			/**
+			*	@brief Invoke the internal method using passed arguments.
+			*	
+			*	@tparam		ReturnType Return type of the internal method.
+			*	@tparam...	ArgTypes Passed argument types.
+			*
+			*	@param		caller Pointer to the object the internal method should be called on.
+			*	@param...	arguments Arguments to forward to the internal method.
+			*	
+			*	@return The result of the internal method call.
+			*/
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType	internalInvoke(void const* caller, ArgTypes&&... arguments)	const	noexcept;
 
 		public:
-			/** Class containing the declaration of this method */
-			Struct const*	ownerType	= nullptr;
-
-			Method()												= delete;
+			Method()											= delete;
 			Method(std::string&&				methodName,
 				   uint64						methodId,
-				   EMethodFlags					flags,
-				   std::shared_ptr<ICallable>&&	internalMethod,
-				   Struct const*				methodOwnerType)	noexcept;
-			Method(Method const&)									= default;
-			Method(Method&&)										= default;
-			~Method()												= default;
+				   Type const&					returnType,
+				   std::unique_ptr<ICallable>&&	internalMethod,
+				   EMethodFlags					flags)			noexcept;
+			Method(Method const&)								= default;
+			Method(Method&&)									= default;
+			~Method()											= default;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
@@ -119,5 +124,5 @@ namespace rfk
 			void		checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
 	};
 
-	#include "Refureku/TypeInfo/Methods/Method.inl"
+	#include "Refureku/TypeInfo/Functions/Method.inl"
 }

@@ -54,3 +54,15 @@ Enum const* Namespace::getEnum(std::string enumName) const noexcept
 
 	return (it != nestedArchetypes.cend()) ? reinterpret_cast<Enum const*>(*it) : nullptr;
 }
+
+Variable const* Namespace::getVariable(std::string variableName, EVarFlags flags) const noexcept
+{
+	//TODO
+	return nullptr;
+}
+
+Function const* Namespace::getFunction(std::string functionName, EFunctionFlags flags) const noexcept
+{
+	//TODO
+	return nullptr;
+}

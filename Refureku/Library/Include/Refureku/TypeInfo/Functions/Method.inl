@@ -8,7 +8,7 @@
 template <typename ReturnType, typename... ArgTypes>
 ReturnType Method::internalInvoke(void const* caller, ArgTypes&&... arguments) const noexcept
 {
-	return std::static_pointer_cast<MemberFunction<DummyClass, ReturnType(ArgTypes...)>>(_internalMethod)->operator()(caller, std::forward<ArgTypes>(arguments)...);
+	return reinterpret_cast<MemberFunction<DummyClass, ReturnType(ArgTypes...)>*>(internalMethod.get())->operator()(caller, std::forward<ArgTypes>(arguments)...);
 }
 
 template <typename... ArgTypes>

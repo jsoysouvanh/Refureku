@@ -44,6 +44,7 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsing
 	kodgen::FileGenerator::writeHeader(file, parsingResult);
 
 	file.writeLines("#include <Refureku/TypeInfo/Namespaces/Namespace.h>",
+					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>",
 					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>",
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>",
 					"#include <Refureku/TypeInfo/Archetypes/Enum.h>",
@@ -94,6 +95,8 @@ void FileGenerator::generateEndFileMacro(kodgen::GeneratedFile& file) const noex
 	{
 		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(enumInfo->id)) + "u_GENERATED\t\\");
 	}
+
+	//TODO: variables, fields, functions, methods here
 
 	//Structs/Classes before namespaces because namespaces can have nested (and then reference to) structs/classes
 	for (kodgen::StructClassInfo const* classInfo : _generatedClasses)
