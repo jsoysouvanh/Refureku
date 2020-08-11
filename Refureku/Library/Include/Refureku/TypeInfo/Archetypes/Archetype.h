@@ -14,8 +14,6 @@
 
 namespace rfk
 {
-	class StaticMethod;	//Forward declaration	//TODO: Is this necessary?
-
 	class Archetype : public Entity
 	{
 		public:
