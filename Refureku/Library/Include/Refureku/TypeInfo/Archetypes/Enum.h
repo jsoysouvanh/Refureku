@@ -28,7 +28,7 @@ namespace rfk
 				 uint64			id,
 				 uint64			memorySize)	noexcept;
 			Enum(Enum const&)				= delete;
-			Enum(Enum&&)					= default;
+			Enum(Enum&&)					= delete;
 			~Enum()							= default;
 
 			/**

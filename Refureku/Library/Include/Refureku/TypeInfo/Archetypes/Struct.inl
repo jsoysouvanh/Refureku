@@ -17,7 +17,8 @@ void Struct::__RFKaddToParents([[maybe_unused]] EAccessSpecifier inheritanceAcce
 template <typename MethodSignature>
 Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
-	auto range = methods.equal_range(Method(std::string(methodName)));
+	//Use an Entity instead of a Method to avoid memory / allocation overhead
+	auto range = methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -50,7 +51,8 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 template <typename MethodSignature>
 StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
-	auto range = staticMethods.equal_range(StaticMethod(std::string(methodName)));
+	//Use an Entity instead of a StaticMethod to avoid memory / allocation overhead
+	auto range = staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{

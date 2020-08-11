@@ -119,8 +119,8 @@ namespace rfk
 			Struct(std::string&&	newName,
 				   uint64			newId,
 				   uint64			newMemorySize)	noexcept;
-			Struct(Struct const&)					= default;
-			Struct(Struct&&)						= default;
+			Struct(Struct const&)					= delete;
+			Struct(Struct&&)						= delete;
 			~Struct()								= default;
 
 			/**

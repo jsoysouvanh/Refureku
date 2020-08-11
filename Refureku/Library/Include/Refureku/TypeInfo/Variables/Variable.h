@@ -38,6 +38,7 @@ namespace rfk
 					 EVarFlags		flags)		noexcept;
 			Variable(Variable const&)			= delete;
 			Variable(Variable&&)				= delete;
+			~Variable()							= default;
 
 			/**
 			*	@brief Get the data stored in this variable.

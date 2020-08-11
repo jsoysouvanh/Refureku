@@ -24,8 +24,8 @@ namespace rfk
 						 uint64			id,
 						 EKind			newKind,
 						 Type const&	type)		noexcept;
-			VariableBase(VariableBase const&)		= default;
-			VariableBase(VariableBase&&)			= default;
+			VariableBase(VariableBase const&)		= delete;
+			VariableBase(VariableBase&&)			= delete;
 			~VariableBase()							= default;
 			
 		public:

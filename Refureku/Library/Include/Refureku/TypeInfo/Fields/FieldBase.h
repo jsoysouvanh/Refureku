@@ -26,6 +26,7 @@ namespace rfk
 					  Struct const*		ownerStruct		= nullptr)				noexcept;
 			FieldBase(FieldBase const&)											= default;
 			FieldBase(FieldBase&&)												= default;
+			~FieldBase()														= default;
 
 		public:
 			/** Flags describing this field. */
@@ -36,8 +37,6 @@ namespace rfk
 			
 			/** Struct this field belongs to. */
 			Struct const*		ownerStruct;
-
-			~FieldBase() = default;
 
 			/**
 			*	@return The access specifier of this field in its owner struct/class.

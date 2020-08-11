@@ -17,7 +17,7 @@ namespace rfk
 {
 	class Struct;	//Forward declaration
 
-	class Method : public MethodBase
+	class Method final : public MethodBase
 	{
 		private:
 			class DummyClass {};
@@ -32,15 +32,15 @@ namespace rfk
 			/** Class containing the declaration of this method */
 			Struct const*	ownerType	= nullptr;
 
-			Method()																		= delete;
+			Method()												= delete;
 			Method(std::string&&				methodName,
-				   uint64						methodId		= 0u,
-				   EMethodFlags					flags			= EMethodFlags::Default,
-				   std::shared_ptr<ICallable>&&	internalMethod	= nullptr,
-				   Struct const*				methodOwnerType	= nullptr)					noexcept;
-			Method(Method const&)															= default;
-			Method(Method&&)																= default;
-			~Method()																		= default;
+				   uint64						methodId,
+				   EMethodFlags					flags,
+				   std::shared_ptr<ICallable>&&	internalMethod,
+				   Struct const*				methodOwnerType)	noexcept;
+			Method(Method const&)									= default;
+			Method(Method&&)										= default;
+			~Method()												= default;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.

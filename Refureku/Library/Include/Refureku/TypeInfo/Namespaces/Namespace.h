@@ -32,7 +32,7 @@ namespace rfk
 			Namespace(std::string&& newName,
 					  uint64		newId	= 0u)	noexcept;
 			Namespace(Namespace const&)				= delete;
-			Namespace(Namespace&&)					= default;
+			Namespace(Namespace&&)					= delete;
 			~Namespace()							= default;
 
 			/**

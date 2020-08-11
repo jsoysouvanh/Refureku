@@ -18,7 +18,7 @@ namespace rfk
 				  uint64		id,
 				  uint64		memorySize)	noexcept;
 			Class(Class const&)				= delete;
-			Class(Class&&)					= default;
+			Class(Class&&)					= delete;
 			~Class()						= default;
 	};
 }

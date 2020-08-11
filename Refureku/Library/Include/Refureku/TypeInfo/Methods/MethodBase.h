@@ -58,6 +58,7 @@ namespace rfk
 					   std::shared_ptr<ICallable>&&	internalMethod)	noexcept;
 			MethodBase(MethodBase const&)							= default;
 			MethodBase(MethodBase&&)								= default;
+			~MethodBase()											= default;
 
 			/**
 			*	@brief Check that the provided argument count is the same as this method's.
@@ -93,8 +94,6 @@ namespace rfk
 
 			/** Parameters of this method. */
 			std::vector<MethodParameter>	parameters;
-
-			~MethodBase() = default;
 
 			/**
 			*	@tparam ReturnType Return type to compare with.
