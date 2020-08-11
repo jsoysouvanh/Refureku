@@ -24,15 +24,16 @@ namespace rfk
 			void*	dataAddress	= nullptr;
 
 		public:
-			StaticField()																	= delete;
-			StaticField(std::string&&		name,
-						uint64				id				= 0u,
-						EFieldFlags			flags			= EFieldFlags::Static,
-						Struct const*		ownerStruct		= nullptr,
-						void*				ptrToData		= nullptr)						noexcept;
-			StaticField(StaticField const&)													= default;
-			StaticField(StaticField&&)														= default;
-			~StaticField()																	= default;
+			StaticField()								= delete;
+			StaticField(std::string&&	name,
+						uint64			id,
+						Type const&		type,
+						EFieldFlags		flags,
+						Struct const*	ownerStruct,
+						void*			ptrToData)		noexcept;
+			StaticField(StaticField const&)				= default;
+			StaticField(StaticField&&)					= default;
+			~StaticField()								= default;
 
 			/**
 			*	@brief Get the data corresponding to this static field.

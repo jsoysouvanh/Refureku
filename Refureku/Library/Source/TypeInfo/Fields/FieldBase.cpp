@@ -4,8 +4,8 @@
 
 using namespace rfk;
 
-FieldBase::FieldBase(std::string&& name, uint64 id, EFieldFlags flags, Struct const* ownerStruct) noexcept:
-	Entity(std::forward<std::string>(name), id, EKind::Field),
+FieldBase::FieldBase(std::string&& name, uint64 id, Type const& type, EFieldFlags flags, Struct const* ownerStruct) noexcept:
+	VariableBase(std::forward<std::string>(name), id, EKind::Field, type),
 	flags{flags},
 	ownerStruct{ownerStruct}
 {
@@ -19,14 +19,4 @@ EAccessSpecifier FieldBase::getAccess() const noexcept
 			(static_cast<UnderlyingType>(flags & EFieldFlags::Protected)) ? EAccessSpecifier::Protected :
 			(static_cast<UnderlyingType>(flags & EFieldFlags::Private)) ? EAccessSpecifier::Private :
 			EAccessSpecifier::Undefined;
-}
-
-bool FieldBase::isStatic() const noexcept
-{
-	return static_cast<std::underlying_type_t<EFieldFlags>>(flags & EFieldFlags::Static);
-}
-
-bool FieldBase::isMutable() const noexcept
-{
-	return static_cast<std::underlying_type_t<EFieldFlags>>(flags & EFieldFlags::Mutable);
 }

@@ -23,15 +23,16 @@ namespace rfk
 			/** Memory offset in bytes of this field in its owner class */
 			uint64	memoryOffset	= 0u;
 
-			Field()																= delete;
-			Field(std::string&&		name,
-				  uint64			id				= 0u,
-				  EFieldFlags		flags			= EFieldFlags::Default,
-				  Struct const*		ownerStruct		= nullptr,
-				  uint64			memoryOffset	= 0u)						noexcept;
-			Field(Field const&)													= default;
-			Field(Field&&)														= default;
-			~Field()															= default;
+			Field()								= delete;
+			Field(std::string&&	name,
+				  uint64		id,
+				  Type const&	type,
+				  EFieldFlags	flags,
+				  Struct const*	ownerStruct,
+				  uint64		memoryOffset)	noexcept;
+			Field(Field const&)					= default;
+			Field(Field&&)						= default;
+			~Field()							= default;
 
 			/**
 			*	@brief Get the data corresponding to this field in the provided instance.

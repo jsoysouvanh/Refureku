@@ -278,24 +278,25 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 		if (field.isStatic)
 		{
 			generatedFile.writeLine("		staticFieldsIt = childArchetype->staticFields.emplace(\"" + field.name + "\", " +
-									std::to_string(stringHasher(field.id)) +
-									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
-									"), childArchetype, &" + info.name + "::" + field.name + ");\t\\");
+											std::to_string(stringHasher(field.id)) + "u, "
+											"rfk::Type::getType<" + field.type.getName() + ">(), "
+											"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
+											"childArchetype, "
+											"&" + info.name + "::" + field.name + ");\t\\");
 
 			generatedFile.writeLine("		currField = const_cast<rfk::StaticField*>(&*staticFieldsIt);\t\\");
 		}
 		else
 		{
 			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
-									std::to_string(stringHasher(field.id)) +
-									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
-									"), childArchetype, offsetof(ChildType, " + field.name + "));\t\\");
+											std::to_string(stringHasher(field.id)) + "u, "
+											"rfk::Type::getType<" + field.type.getName() + ">(), "
+											"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
+											"childArchetype, "
+											"offsetof(ChildType, " + field.name + "));\t\\");
 
 			generatedFile.writeLine("		currField = const_cast<rfk::Field*>(&*fieldsIt);\t\\");
 		}
-
-		//Make type
-		generatedFile.writeLine("		currField->type = rfk::Type::getType<" + field.type.getName() + ">();\t\\");
 
 		//Add properties
 		properties = fillEntityProperties(field, "	currField->");
