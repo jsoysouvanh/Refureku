@@ -289,7 +289,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
 									std::to_string(stringHasher(field.id)) +
 									"u, static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) +
-									"), childArchetype, offsetof(ChildType, " + field.name + ")" + ", " + std::to_string(field.isMutable) + ");\t\\");
+									"), childArchetype, offsetof(ChildType, " + field.name + "));\t\\");
 
 			generatedFile.writeLine("		currField = const_cast<rfk::Field*>(&*fieldsIt);\t\\");
 		}

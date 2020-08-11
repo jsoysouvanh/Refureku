@@ -29,16 +29,7 @@ namespace rfk
 			*	
 			*	@return The converted value.
 			*/
-			constexpr static kodgen::uint8 convertToEntityKind(kodgen::EEntityType entityType)			noexcept;
-
-			/**
-			*	@brief Convert a kodgen::EEntityType to the corresponding integer value in rfk::Archetype::ECategory
-			*
-			*	@param entityType The enum value to convert.
-			*	
-			*	@return The converted value.
-			*/
-			constexpr static kodgen::uint8 convertToArchetypeCategory(kodgen::EEntityType entityType)	noexcept;
+			constexpr static kodgen::uint16 convertToEntityKind(kodgen::EEntityType entityType)			noexcept;
 	};
 
 	#include "RefurekuGenerator/Helpers.inl"
