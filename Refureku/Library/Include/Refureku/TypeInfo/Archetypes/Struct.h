@@ -18,6 +18,7 @@
 #include "Refureku/TypeInfo/Variables/StaticField.h"
 #include "Refureku/TypeInfo/Functions/Method.h"
 #include "Refureku/TypeInfo/Functions/StaticMethod.h"
+#include "Refureku/TypeInfo/Functions/FunctionHelper.h"
 #include "Refureku/Utility/TypeTraits.h"
 
 namespace rfk
@@ -29,32 +30,6 @@ namespace rfk
 	class Struct : public Archetype
 	{
 		private:
-			template <typename T>
-			class GetMethodHelper
-			{
-				public:
-					static bool hasSamePrototype(MethodBase const&)
-					{
-						//If the code asserts here, it means there's a call to getMethod or getStaticMethod with an invalid template.
-						//The template must be a method signature.
-						//Example1: void example1Method(int i, float j); -> getMethod<void(int, float)>("example1Method");
-						//Example2: static int example2Method();		 -> getStaticMethod<int()>("example2Method");
-						assert(false);
-
-						return false;
-					}
-			};
-
-			template <typename ReturnType, typename... ArgTypes>
-			class GetMethodHelper<ReturnType(ArgTypes...)>
-			{
-				public:
-					static bool hasSamePrototype(MethodBase const& method)
-					{
-						return method.hasSamePrototype<ReturnType, ArgTypes...>();
-					}
-			};
-
 			/** Pointer to the default method used to make an instance of this archetype. */
 			void*								(*_defaultInstantiator)()	noexcept = nullptr;
 

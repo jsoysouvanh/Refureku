@@ -138,13 +138,13 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 void Database::registerSubEntities(Namespace const& n) noexcept
 {
 	//Add nested namespaces
-	for (Namespace const* nn : n.nestedNamespaces)
+	for (Namespace const* nn : n.namespaces)
 	{
 		registerEntity(*nn, true);
 	}
 
 	//Add nested archetypes
-	for (Archetype const* na : n.nestedArchetypes)
+	for (Archetype const* na : n.archetypes)
 	{
 		registerEntity(*na, true);
 	}

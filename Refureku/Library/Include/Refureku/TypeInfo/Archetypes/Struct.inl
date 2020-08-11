@@ -23,7 +23,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && GetMethodHelper<MethodSignature>::hasSamePrototype(*it))
+		if ((it->flags & minFlags) == minFlags && internal::FunctionHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}
@@ -57,7 +57,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && GetMethodHelper<MethodSignature>::hasSamePrototype(*it))
+		if ((it->flags & minFlags) == minFlags && internal::FunctionHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}

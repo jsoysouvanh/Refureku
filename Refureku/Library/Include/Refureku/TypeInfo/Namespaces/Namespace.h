@@ -13,6 +13,7 @@
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Variables/Variable.h"
 #include "Refureku/TypeInfo/Functions/Function.h"
+#include "Refureku/TypeInfo/Functions/FunctionHelper.h"
 
 namespace rfk
 {
@@ -25,16 +26,16 @@ namespace rfk
 	{
 		public:
 			/** Collection of all namespaces contained in this namespace. */
-			std::unordered_set<Namespace const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedNamespaces;
+			std::unordered_set<Namespace const*, Entity::PtrNameHasher, Entity::PtrEqualName>	namespaces;
 
 			/** Collection of all archetypes contained in this namespace. */
-			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedArchetypes;
+			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	archetypes;
 
 			/** Collection of all (non-member) variables contained in this namespace. */
-			std::unordered_set<Variable const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedVariables;
+			std::unordered_set<Variable const*, Entity::PtrNameHasher, Entity::PtrEqualName>	variables;
 
 			/** Collection of all (non-member) functions contained in this namespace. */
-			std::unordered_set<Function const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedFunctions;
+			std::unordered_set<Function const*, Entity::PtrNameHasher, Entity::PtrEqualName>	functions;
 
 			Namespace(std::string&& newName,
 					  uint64		newId)		noexcept;
@@ -43,7 +44,23 @@ namespace rfk
 			~Namespace()						= default;
 
 			/**
-			*	@brief Retrieve a namespace inside this namespace.
+			*	@brief Retrieve a function from this namespace with a specific prototype.
+			*
+			*	@tparam FunctionSignature	Signature of the function to look for.
+			*								The signature must be formatted like <ReturnType(ArgType1, ArgType2, ...)>
+			*
+			*	@param functionName	The name of the function.
+			*	@param flags		Flags describing the queried function.
+			*						The result function will have at least the provided flags.
+			*
+			*	@return The function matching with the provided prototype, name and flags if it exists, else nullptr.
+			*/
+			template <typename FunctionSignature>
+			Function const*		getFunction(std::string		functionName,
+											EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
+
+			/**
+			*	@brief Retrieve a namespace from this namespace.
 			*	
 			*	@param namespaceName Name of the nested namespace to look for.
 			*
@@ -101,10 +118,7 @@ namespace rfk
 			*/
 			Function const*		getFunction(std::string		functionName,
 											EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
-
-			//TODO
-			//template <typename T>
-			//Function const*		getFunction(std::string		functionName,
-			//								EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Namespaces/Namespace.inl"
 }
