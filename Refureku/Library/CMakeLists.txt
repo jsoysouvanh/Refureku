@@ -28,6 +28,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Namespaces/NamespaceFragmentRegisterer.cpp
 
 					Source/TypeInfo/Archetypes/Archetype.cpp
+					Source/TypeInfo/Archetypes/FundamentalArchetype.cpp
 					Source/TypeInfo/Archetypes/Enum.cpp
 					Source/TypeInfo/Archetypes/Struct.cpp
 					Source/TypeInfo/Archetypes/Class.cpp

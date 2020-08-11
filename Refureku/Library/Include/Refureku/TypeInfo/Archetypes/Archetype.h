@@ -16,19 +16,20 @@ namespace rfk
 {
 	class Archetype : public Entity
 	{
+		protected:
+			Archetype(std::string&& newName,
+					  uint64		newId,
+					  EKind			kind,
+					  uint64		newMemorySize)	noexcept;
+			Archetype(Archetype const&)				= delete;
+			Archetype(Archetype&&)					= delete;
+			~Archetype()							= default;
+
 		public:
 			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */
 			EAccessSpecifier	accessSpecifier	= EAccessSpecifier::Undefined;
 
 			/** Size in bytes an instance of this archetype takes in memory, basically what sizeof(Type) returns */
 			uint64				memorySize		= 0;
-
-			Archetype(std::string&& newName,
-					  uint64		newId,
-					  EKind			kind,
-					  uint64		newMemorySize)	noexcept;
-			Archetype(Archetype const&)				= delete;
-			Archetype(Archetype&&)					= default;
-			~Archetype()							= default;
 	};
 }

@@ -12,7 +12,7 @@
 #include <cstddef>
 
 #include "Refureku/Misc/FundamentalTypes.h"
-#include "Refureku/TypeInfo/Archetypes/Archetype.h"
+#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 
 namespace rfk
 {
@@ -27,250 +27,142 @@ namespace rfk
 			FundamentalArchetypes(FundamentalArchetypes&&)		= delete;
 			~FundamentalArchetypes()							= delete;
 
-			static Archetype const& getVoidArchetype() noexcept
+			static FundamentalArchetype const& getVoidArchetype() noexcept
 			{
-				static Archetype archetype("void", stringHasher("void"), Entity::EKind::FundamentalArchetype, 0u);
+				static FundamentalArchetype archetype("void", stringHasher("void"), 0u);
 
 				return archetype;
 			}
 
-			static Archetype const& getNullptrArchetype() noexcept
+			static FundamentalArchetype const& getNullptrArchetype() noexcept
 			{
-				static Archetype	archetype("nullptr_t", stringHasher("nullptr_t"), Entity::EKind::FundamentalArchetype, sizeof(std::nullptr_t));
+				static FundamentalArchetype	archetype("nullptr_t", stringHasher("nullptr_t"), sizeof(std::nullptr_t));
 
 				return archetype;
 			}
 
-			static Archetype const& getBoolArchetype() noexcept
+			static FundamentalArchetype const& getBoolArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("bool", stringHasher("bool"), Entity::EKind::FundamentalArchetype, sizeof(bool));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("bool", stringHasher("bool"), sizeof(bool));
 
 				return archetype;
 			}
 
-			static Archetype const& getCharArchetype() noexcept
+			static FundamentalArchetype const& getCharArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("char", stringHasher("char"), Entity::EKind::FundamentalArchetype, sizeof(char));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("char", stringHasher("char"), sizeof(char));
 
 				return archetype;
 			}
 
-			static Archetype const& getSignedCharArchetype() noexcept
+			static FundamentalArchetype const& getSignedCharArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("signed char", stringHasher("signed char"), Entity::EKind::FundamentalArchetype, sizeof(signed char));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("signed char", stringHasher("signed char"), sizeof(signed char));
 
 				return archetype;
 			}
 
-			static Archetype const& getUnsignedCharArchetype() noexcept
+			static FundamentalArchetype const& getUnsignedCharArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("unsigned char", stringHasher("unsigned char"), Entity::EKind::FundamentalArchetype, sizeof(unsigned char));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("unsigned char", stringHasher("unsigned char"), sizeof(unsigned char));
 
 				return archetype;
 			}
 
-			static Archetype const& getWideCharArchetype() noexcept
+			static FundamentalArchetype const& getWideCharArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("wide char", stringHasher("wide char"), Entity::EKind::FundamentalArchetype, sizeof(wchar_t));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("wide char", stringHasher("wide char"), sizeof(wchar_t));
 
 				return archetype;
 			}
 
-			static Archetype const& getChar16Archetype() noexcept
+			static FundamentalArchetype const& getChar16Archetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("char16", stringHasher("char16"), Entity::EKind::FundamentalArchetype, sizeof(char16_t));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("char16", stringHasher("char16"), sizeof(char16_t));
 
 				return archetype;
 			}
 
-			static Archetype const& getChar32Archetype() noexcept
+			static FundamentalArchetype const& getChar32Archetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("char32", stringHasher("char32"), Entity::EKind::FundamentalArchetype, sizeof(char32_t));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("char32", stringHasher("char32"), sizeof(char32_t));
 
 				return archetype;
 			}
 
-			static Archetype const& getShortArchetype() noexcept
+			static FundamentalArchetype const& getShortArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("short", stringHasher("short"), Entity::EKind::FundamentalArchetype, sizeof(short));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("short", stringHasher("short"), sizeof(short));
 
 				return archetype;
 			}
 
-			static Archetype const& getUnsignedShortArchetype() noexcept
+			static FundamentalArchetype const& getUnsignedShortArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("unsigned short", stringHasher("unsigned short"), Entity::EKind::FundamentalArchetype, sizeof(unsigned short));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("unsigned short", stringHasher("unsigned short"), sizeof(unsigned short));
 
 				return archetype;
 			}
 
-			static Archetype const& getIntArchetype() noexcept
+			static FundamentalArchetype const& getIntArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("int", stringHasher("int"), Entity::EKind::FundamentalArchetype, sizeof(int));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("int", stringHasher("int"), sizeof(int));
 
 				return archetype;
 			}
 
-			static Archetype const& getUnsignedIntArchetype() noexcept
+			static FundamentalArchetype const& getUnsignedIntArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("unsigned int", stringHasher("unsigned int"), Entity::EKind::FundamentalArchetype, sizeof(unsigned int));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("unsigned int", stringHasher("unsigned int"), sizeof(unsigned int));
 
 				return archetype;
 			}
 
-			static Archetype const& getLongArchetype() noexcept
+			static FundamentalArchetype const& getLongArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("long", stringHasher("long"), Entity::EKind::FundamentalArchetype, sizeof(long));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("long", stringHasher("long"), sizeof(long));
 
 				return archetype;
 			}
 
-			static Archetype const& getUnsignedLongArchetype() noexcept
+			static FundamentalArchetype const& getUnsignedLongArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("unsigned long", stringHasher("unsigned long"), Entity::EKind::FundamentalArchetype, sizeof(unsigned long));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("unsigned long", stringHasher("unsigned long"), sizeof(unsigned long));
 
 				return archetype;
 			}
 
-			static Archetype const& getLongLongArchetype() noexcept
+			static FundamentalArchetype const& getLongLongArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("long long", stringHasher("long long"), Entity::EKind::FundamentalArchetype, sizeof(long long));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("long long", stringHasher("long long"), sizeof(long long));
 
 				return archetype;
 			}
 
-			static Archetype const& getUnsignedLongLongArchetype() noexcept
+			static FundamentalArchetype const& getUnsignedLongLongArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("unsigned long long", stringHasher("unsigned long long"), Entity::EKind::FundamentalArchetype, sizeof(unsigned long long));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("unsigned long long", stringHasher("unsigned long long"), sizeof(unsigned long long));
 
 				return archetype;
 			}
 
-			static Archetype const& getFloatArchetype() noexcept
+			static FundamentalArchetype const& getFloatArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("float", stringHasher("float"), Entity::EKind::FundamentalArchetype, sizeof(float));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("float", stringHasher("float"), sizeof(float));
 
 				return archetype;
 			}
 
-			static Archetype const& getDoubleArchetype() noexcept
+			static FundamentalArchetype const& getDoubleArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("double", stringHasher("double"), Entity::EKind::FundamentalArchetype, sizeof(double));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("double", stringHasher("double"), sizeof(double));
 
 				return archetype;
 			}
 
-			static Archetype const& getLongDoubleArchetype() noexcept
+			static FundamentalArchetype const& getLongDoubleArchetype() noexcept
 			{
-				static bool			initialized = false;
-				static Archetype	archetype("long double", stringHasher("long double"), Entity::EKind::FundamentalArchetype, sizeof(long double));
-
-				if (!initialized)
-				{
-					initialized = true;
-				}
+				static FundamentalArchetype	archetype("long double", stringHasher("long double"), sizeof(long double));
 
 				return archetype;
 			}
