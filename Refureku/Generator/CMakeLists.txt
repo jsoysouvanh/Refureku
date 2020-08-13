@@ -18,6 +18,7 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/GeneratedNamespaceCodeTemplate.cpp
 					Source/GeneratedClassCodeTemplate.cpp
 					Source/GeneratedEnumCodeTemplate.cpp
+					Source/GeneratedVariableCodeTemplate.cpp
 					Source/FileGenerator.cpp)
 
 # Warning level

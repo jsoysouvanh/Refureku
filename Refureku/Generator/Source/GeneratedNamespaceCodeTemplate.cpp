@@ -4,6 +4,7 @@
 
 #include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
 
+#include "RefurekuGenerator/GeneratedVariableCodeTemplate.h"
 #include "RefurekuGenerator/Helpers.h"
 
 using namespace rfk;
@@ -76,7 +77,12 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 		generatedFile.writeLine("			" + properties + "\t\\");
 	}
 
-	kodgen::uint64 totalSize = namespaceInfo.namespaces.size() + namespaceInfo.structs.size() + namespaceInfo.classes.size() + namespaceInfo.enums.size();
+	kodgen::uint64 totalSize = namespaceInfo.namespaces.size() +
+								namespaceInfo.structs.size() +
+								namespaceInfo.classes.size() +
+								namespaceInfo.enums.size() +
+								namespaceInfo.variables.size() +
+								namespaceInfo.functions.size();
 
 	//Fill nested namespaces
 	if (totalSize != 0u)
@@ -108,18 +114,17 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());\t\\");
 		}
 
+		//Fill nested variables
+		for (kodgen::VariableInfo const& variable : namespaceInfo.variables)
+		{
+			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + GeneratedVariableCodeTemplate::getGetVariableFunctionName(variable) + "());\t\\");
+		}
+
 		for (kodgen::FunctionInfo const& function : namespaceInfo.functions)
 		{
 			std::cout << "Func: " << function.getPrototype() << " -> " << function.getName() << std::endl;
 
 			//TODO: Fill nested functions
-		}
-		
-		for (kodgen::VariableInfo const& variable : namespaceInfo.variables)
-		{
-			std::cout << "Var: " << variable.name << " -> " << variable.type.getCanonicalName() << std::endl;
-
-			//TODO: Fill nested variables
 		}
 	}
 

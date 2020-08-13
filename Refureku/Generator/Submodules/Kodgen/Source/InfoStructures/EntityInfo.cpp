@@ -12,6 +12,11 @@ EntityInfo::EntityInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EE
 {
 }
 
+std::string EntityInfo::getFullName() const noexcept
+{
+	return (outerEntity != nullptr) ? outerEntity->getFullName() + "::" + name : name;
+}
+
 std::ostream& kodgen::operator<<(std::ostream& out_stream, EntityInfo const& entityInfo) noexcept
 {
 	out_stream << entityInfo.name;

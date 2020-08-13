@@ -54,9 +54,7 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 
 	for (VariableInfo const& variable : parsingResult.variables)
 	{
-		std::cout << "File Var: " << variable.name << " -> " << variable.type.getCanonicalName() << std::endl;
-
-		//writeFieldToFile(generatedFile, fieldInfo, genResult);
+		writeVariableToFile(generatedFile, variable, genResult);
 	}
 	
 	for (FunctionInfo const& function : parsingResult.functions)
@@ -66,7 +64,6 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 		//writeMethodToFile(generatedFile, methodInfo, genResult);
 	}
 	
-
 	//Footer
 	writeFooter(generatedFile, parsingResult);
 
@@ -177,14 +174,14 @@ void FileGenerator::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInf
 	{
 		writeEnumToFile(generatedFile, enumInfo, genResult);
 	}
+	
+	for (VariableInfo const& varInfo : castNamespaceInfo.variables)
+	{
+		writeVariableToFile(generatedFile, varInfo, genResult);
+	}
 
 	/**
 	*	TODO
-	*
-	*	for (FieldInfo const& fieldInfo : castNamespaceInfo.fields)
-	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
-	*	}
 	*
 	*	for (MethodInfo const& methodInfo : castNamespaceInfo.functions)
 	*	{
@@ -262,11 +259,25 @@ void FileGenerator::writeEnumValueToFile(GeneratedFile& generatedFile, EntityInf
 	writeEntityToFile(generatedFile, enumValueInfo, genResult);
 }
 
+void FileGenerator::writeVariableToFile(GeneratedFile& generatedFile, EntityInfo const& variableInfo, FileGenerationResult& genResult) noexcept
+{
+	assert(variableInfo.entityType == EEntityType::Variable);
+
+	writeEntityToFile(generatedFile, variableInfo, genResult);
+}
+
 void FileGenerator::writeFieldToFile(GeneratedFile& generatedFile, EntityInfo const& fieldInfo, FileGenerationResult& genResult) noexcept
 {
 	assert(fieldInfo.entityType == EEntityType::Field);
 
 	writeEntityToFile(generatedFile, fieldInfo, genResult);
+}
+
+void FileGenerator::writeFunctionToFile(GeneratedFile& generatedFile, EntityInfo const& functionInfo, FileGenerationResult& genResult) noexcept
+{
+	assert(functionInfo.entityType == EEntityType::Function);
+
+	writeEntityToFile(generatedFile, functionInfo, genResult);
 }
 
 void FileGenerator::writeMethodToFile(GeneratedFile& generatedFile, EntityInfo const& methodInfo, FileGenerationResult& genResult) noexcept

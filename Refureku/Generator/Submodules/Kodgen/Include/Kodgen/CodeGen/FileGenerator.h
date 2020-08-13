@@ -223,6 +223,17 @@ namespace kodgen
 												 FileGenerationResult&	genResult)							noexcept;
 
 			/**
+			*	@brief Generate code for a variable in generatedFile.
+			*
+			*	@param generatedFile	Generated file to write in.
+			*	@param variableInfo		Variable we generate the code from.
+			*	@param genResult		Reference to the generation result to fill during file generation.
+			*/
+			virtual void	writeVariableToFile(GeneratedFile&			generatedFile,
+												EntityInfo const&		variableInfo,
+												FileGenerationResult&	genResult)							noexcept;
+
+			/**
 			*	@brief Generate code for fieldInfo in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
@@ -232,6 +243,17 @@ namespace kodgen
 			virtual void	writeFieldToFile(GeneratedFile&			generatedFile,
 											 EntityInfo const&		fieldInfo,
 											 FileGenerationResult&	genResult)								noexcept;
+
+			/**
+			*	@brief Generate code for a (non-member) function in generatedFile.
+			*
+			*	@param generatedFile	Generated file to write in.
+			*	@param functionInfo		Function we generate the code from.
+			*	@param genResult		Reference to the generation result to fill during file generation.
+			*/
+			virtual void	writeFunctionToFile(GeneratedFile&			generatedFile,
+												EntityInfo const&		functionInfo,
+												FileGenerationResult&	genResult)								noexcept;
 
 			/**
 			*	@brief Generate code for methodInfo in generatedFile.

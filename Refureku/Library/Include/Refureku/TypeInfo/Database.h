@@ -24,6 +24,7 @@ namespace rfk
 	{
 		friend class NamespaceFragmentRegisterer;
 		friend class ArchetypeRegisterer;
+		friend class VariableRegisterer;
 
 		private:
 			using EntitiesById		= std::unordered_set<Entity const*, Entity::PtrIdHasher, Entity::PtrEqualId>;

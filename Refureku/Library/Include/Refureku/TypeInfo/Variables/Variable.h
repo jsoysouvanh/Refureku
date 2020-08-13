@@ -20,9 +20,6 @@ namespace rfk
 {
 	class Variable final : public VariableBase
 	{
-		protected:
-				
-
 		public:
 			/** Address of this variable in memory. */
 			void*		address	= nullptr;

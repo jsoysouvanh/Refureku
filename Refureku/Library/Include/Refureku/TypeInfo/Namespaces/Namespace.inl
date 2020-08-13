@@ -10,7 +10,7 @@ Function const* Namespace::getFunction(std::string functionName, EFunctionFlags 
 {
 	Entity searchedFunction(std::move(functionName), 0u);
 
-	//Use an Entity instead of a Method to avoid memory / allocation overhead
+	//Use an Entity instead of a Function to avoid memory / allocation overhead
 	auto range = functions.equal_range(static_cast<Function const*>(&searchedFunction));
 
 	for (auto it = range.first; it != range.second; it++)

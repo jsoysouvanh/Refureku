@@ -28,8 +28,8 @@ namespace rfk
 			/** Class global string hasher. */
 			static std::hash<std::string> const	stringHasher;
 
-			virtual void generateCode(kodgen::GeneratedFile&	generatedFile,
-									  kodgen::EntityInfo const&	entityInfo)		noexcept override;
+			virtual void				generateCode(kodgen::GeneratedFile&	generatedFile,
+													 kodgen::EntityInfo const&	entityInfo)						noexcept override;
 
 			/**
 			*	@brief Generates a string containing the code which adds properties to the entity.
@@ -39,10 +39,15 @@ namespace rfk
 			*	
 			*	@return The generated code which adds the properties to the entity.
 			*/
-			std::string	fillEntityProperties(kodgen::EntityInfo const&	info,
-											 std::string const&			entityVarName)	const	noexcept;
+			std::string					fillEntityProperties(kodgen::EntityInfo const&	info,
+															 std::string const&			entityVarName)	const	noexcept;
 
-			inline std::string const& getCurrentEntityId() const noexcept { return _currentEntityId; }
+			/**
+			*	@brief Getter for _currentEntityId field.
+			*	
+			*	@return _currentEntityId.
+			*/
+			inline std::string const&	getCurrentEntityId()											const	noexcept;
 
 		public:
 			GeneratedEntityCodeTemplate()									= default;
@@ -50,4 +55,6 @@ namespace rfk
 			GeneratedEntityCodeTemplate(GeneratedEntityCodeTemplate&&)		= default;
 			virtual ~GeneratedEntityCodeTemplate()							= default;
 	};
+
+	#include "RefurekuGenerator/GeneratedEntityCodeTemplate.inl"
 }

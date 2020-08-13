@@ -39,6 +39,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Variables/FieldBase.cpp
 					Source/TypeInfo/Variables/Field.cpp
 					Source/TypeInfo/Variables/StaticField.cpp
+					Source/TypeInfo/Variables/VariableRegisterer.cpp
 
 					Source/TypeInfo/Functions/FunctionBase.cpp
 					Source/TypeInfo/Functions/Function.cpp

@@ -434,6 +434,7 @@ kodgen::uint16 GeneratedClassCodeTemplate::computeMethodFlags(kodgen::MethodInfo
 
 	return result;
 }
+
 kodgen::uint16 GeneratedClassCodeTemplate::computeFieldFlags(kodgen::FieldInfo const& field) const noexcept
 {
 	kodgen::uint16 result = 0;

@@ -26,16 +26,16 @@ namespace rfk
 	{
 		public:
 			/** Collection of all namespaces contained in this namespace. */
-			std::unordered_set<Namespace const*, Entity::PtrNameHasher, Entity::PtrEqualName>	namespaces;
+			std::unordered_set<Namespace const*, Entity::PtrNameHasher, Entity::PtrEqualName>		namespaces;
 
 			/** Collection of all archetypes contained in this namespace. */
-			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	archetypes;
+			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>		archetypes;
 
 			/** Collection of all (non-member) variables contained in this namespace. */
-			std::unordered_set<Variable const*, Entity::PtrNameHasher, Entity::PtrEqualName>	variables;
+			std::unordered_set<Variable const*, Entity::PtrNameHasher, Entity::PtrEqualName>		variables;
 
 			/** Collection of all (non-member) functions contained in this namespace. */
-			std::unordered_set<Function const*, Entity::PtrNameHasher, Entity::PtrEqualName>	functions;
+			std::unordered_multiset<Function const*, Entity::PtrNameHasher, Entity::PtrEqualName>	functions;
 
 			Namespace(std::string&& newName,
 					  uint64		newId)		noexcept;

@@ -70,7 +70,11 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 				//Nothing special to do here since a fundamental archetype doesn't own any sub entities
 				break;
 
+			case Entity::EKind::Variable:
+				[[fallthrough]];
 			case Entity::EKind::Field:
+				[[fallthrough]];
+			case Entity::EKind::Function:
 				[[fallthrough]];
 			case Entity::EKind::Method:
 				[[fallthrough]];
@@ -338,8 +342,11 @@ Enum const* Database::getEnum(std::string enumName) noexcept
 
 Variable const* Database::getVariable(std::string variableName, EVarFlags flags) noexcept
 {
-	//TODO
-	return nullptr;
+	Entity const* entity = getEntity(std::move(variableName));
+
+	return (entity != nullptr && entity->kind == Entity::EKind::Variable && (reinterpret_cast<Variable const*>(entity)->flags & flags) == flags) ?
+			reinterpret_cast<Variable const*>(entity) :
+			nullptr;
 }
 
 Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) noexcept

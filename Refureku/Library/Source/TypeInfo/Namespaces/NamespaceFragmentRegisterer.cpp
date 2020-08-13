@@ -68,7 +68,6 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 
 				//Register the nested namespace but don't register sub entities
 				Database::registerEntity(*entity, false);
-
 				break;
 
 			case Entity::EKind::Struct:
@@ -80,7 +79,20 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 				
 				//Register the archetype and its sub entities to the database.
 				Database::registerEntity(*entity, true);
+				break;
 
+			case Entity::EKind::Variable:
+				_namespaceInstance->variables.emplace(reinterpret_cast<Variable const*>(entity));
+
+				//Register the variable to the database, a variable doesn't have sub entities so can write false right away
+				Database::registerEntity(*entity, false);
+				break;
+
+			case Entity::EKind::Function:
+				_namespaceInstance->functions.emplace(reinterpret_cast<Function const*>(entity));
+
+				//Register the function to the database, a function doesn't have sub entities so can write false right away
+				Database::registerEntity(*entity, false);
 				break;
 
 			case Entity::EKind::EnumValue:
@@ -133,7 +145,6 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 				_namespaceInstance->namespaces.erase(reinterpret_cast<Namespace const*>(entity));
 
 				//Namespaces unregister automatically from the database, don't need to do it here
-
 				break;
 
 			case Entity::EKind::Struct:
@@ -145,7 +156,20 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 
 				//Unregister archetypes and their sub entities from the database
 				Database::unregisterEntity(*entity, true);
+				break;
 
+			case Entity::EKind::Variable:
+				_namespaceInstance->variables.erase(reinterpret_cast<Variable const*>(entity));
+
+				//Unregister the variable from the database, a variable doesn't have sub entities so can write false right away
+				Database::unregisterEntity(*entity, false);
+				break;
+
+			case Entity::EKind::Function:
+				_namespaceInstance->functions.erase(reinterpret_cast<Function const*>(entity));
+
+				//Unregister the function from the database, a function doesn't have sub entities so can write false right away
+				Database::unregisterEntity(*entity, false);
 				break;
 
 			case Entity::EKind::EnumValue:

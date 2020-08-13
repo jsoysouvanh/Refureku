@@ -19,6 +19,7 @@ FileGenerator::FileGenerator() noexcept:
 	addGeneratedCodeTemplate("RefurekuNamespace", &_namespaceCodeTemplate);
 	addGeneratedCodeTemplate("RefurekuClass", &_classCodeTemplate);
 	addGeneratedCodeTemplate("RefurekuEnum", &_enumCodeTemplate);
+	addGeneratedCodeTemplate("RefurekuVariable", &_variableCodeTemplate);
 
 	/**
 	*	namespace MyNamespace RFKNamespace() {}
@@ -29,6 +30,7 @@ FileGenerator::FileGenerator() noexcept:
 	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Class, "RefurekuClass");
 	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Struct, "RefurekuClass");
 	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Enum, "RefurekuEnum");
+	setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Variable, "RefurekuVariable");
 }
 
 void FileGenerator::postGenerateFile() noexcept
@@ -36,6 +38,7 @@ void FileGenerator::postGenerateFile() noexcept
 	_generatedNamespaces.clear();
 	_generatedClasses.clear();
 	_generatedEnums.clear();
+	_generatedVariables.clear();
 }
 
 void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
@@ -49,6 +52,7 @@ void FileGenerator::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsing
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>",
 					"#include <Refureku/TypeInfo/Archetypes/Enum.h>",
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>",
+					"#include <Refureku/TypeInfo/Variables/VariableRegisterer.h>",
 					"#include <Refureku/Misc/DisableWarningMacros.h>",
 					"\n");
 }
@@ -86,6 +90,13 @@ void FileGenerator::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen
 	_generatedEnums.push_back(reinterpret_cast<kodgen::EnumInfo const*>(&enumInfo));
 }
 
+void FileGenerator::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& variableInfo, kodgen::FileGenerationResult& genResult) noexcept
+{
+	kodgen::FileGenerator::writeVariableToFile(generatedFile, variableInfo, genResult);
+
+	_generatedVariables.push_back(reinterpret_cast<kodgen::VariableInfo const*>(&variableInfo));
+}
+
 void FileGenerator::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept
 {
 	file.writeLine("#define " + _endFileMacroName + "\t\\");
@@ -96,7 +107,12 @@ void FileGenerator::generateEndFileMacro(kodgen::GeneratedFile& file) const noex
 		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(enumInfo->id)) + "u_GENERATED\t\\");
 	}
 
-	//TODO: variables, fields, functions, methods here
+	for (kodgen::VariableInfo const* varInfo : _generatedVariables)
+	{
+		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(varInfo->id)) + "u_GENERATED\t\\");
+	}
+
+	//TODO: functions here
 
 	//Structs/Classes before namespaces because namespaces can have nested (and then reference to) structs/classes
 	for (kodgen::StructClassInfo const* classInfo : _generatedClasses)

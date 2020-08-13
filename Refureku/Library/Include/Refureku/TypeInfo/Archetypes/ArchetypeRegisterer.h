@@ -23,8 +23,5 @@ namespace rfk
 			ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
 			ArchetypeRegisterer(ArchetypeRegisterer&&)		= delete;
 			~ArchetypeRegisterer()							noexcept;
-
-			ArchetypeRegisterer& operator=(ArchetypeRegisterer const&)	= delete;
-			ArchetypeRegisterer& operator=(ArchetypeRegisterer&&)		= delete;
 	};
 }

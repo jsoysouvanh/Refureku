@@ -43,6 +43,13 @@ namespace kodgen
 			EntityInfo(EntityInfo const&)				= default;
 			EntityInfo(EntityInfo&&)					= default;
 			~EntityInfo()								= default;
+
+			/**
+			*	@brief Generates the full name of this entity (with outer entities).
+			*	
+			*	@return The full name of the entity.
+			*/
+			std::string getFullName() const noexcept;
 	};
 
 	std::ostream& operator<<(std::ostream& out_stream, EntityInfo const&) noexcept;
