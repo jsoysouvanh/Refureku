@@ -17,19 +17,26 @@
 
 namespace rfk
 {
+	//Forward declaration
+	class Type;
+
 	class Enum final : public Archetype
 	{
 		public:
-			/** Values contained in this enum */
+			/** Values contained in this enum. */
 			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>	values;
 
-			Enum()							= delete;
+			/** Underlying type of this enum. */
+			Type const&																underlyingType;
+
+			Enum()								= delete;
 			Enum(std::string&&	name,
 				 uint64			id,
-				 uint64			memorySize)	noexcept;
-			Enum(Enum const&)				= delete;
-			Enum(Enum&&)					= delete;
-			~Enum()							= default;
+				 uint64			memorySize,
+				 Type const&	underlyingType)	noexcept;
+			Enum(Enum const&)					= delete;
+			Enum(Enum&&)						= delete;
+			~Enum()								= default;
 
 			/**
 			*	@brief Search an enum value in this enum.

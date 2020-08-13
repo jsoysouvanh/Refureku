@@ -12,7 +12,7 @@ std::string GeneratedVariableCodeTemplate::generateGetVariableDefinition(kodgen:
 	std::string properties;
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
-							 "	rfk::Variable const& " + getGetVariableFunctionName(varInfo) + "() noexcept\t\\",
+							 "	inline rfk::Variable const& " + getGetVariableFunctionName(varInfo) + "() noexcept\t\\",
 							 "	{\t\\",
 							 "		static bool				initialized = false;\t\\",
 							 "		static rfk::Variable	variable(\"" + varInfo.name + "\", " +

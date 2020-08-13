@@ -1,9 +1,12 @@
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 
+#include "Refureku/TypeInfo/Type.h"
+
 using namespace rfk;
 
-Enum::Enum(std::string&& name, uint64 id, uint64 memorySize) noexcept:
-	Archetype(std::forward<std::string>(name), id, EKind::Enum, memorySize)
+Enum::Enum(std::string&& name, uint64 id, uint64 memorySize, Type const& underlyingType) noexcept:
+	Archetype(std::forward<std::string>(name), id, EKind::Enum, memorySize),
+	underlyingType{underlyingType}
 {
 }
 

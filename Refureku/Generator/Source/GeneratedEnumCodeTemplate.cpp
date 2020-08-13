@@ -49,7 +49,10 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 							 "	inline rfk::Enum const* getEnum<" + typeName + ">() noexcept\t\\",
 							 "	{\t\\",
 							 "		static bool			initialized = false;\t\\",
-							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " + getCurrentEntityId() + ", sizeof(" + typeName + "));\t\\");
+							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " +
+															 getCurrentEntityId() + ", "
+															 "sizeof(" + typeName + "), "
+															 "rfk::Type::getType<" + enumInfo.underlyingType.getCanonicalName() + ">());\t\\");
 	
 	generatedFile.writeLines("		if (!initialized)\t\\",
 							 "		{\t\\",

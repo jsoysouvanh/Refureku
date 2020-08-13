@@ -130,6 +130,12 @@ void enums()
 
 	//Nested enum
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedEnum("NestedExampleEnum")->getEnumValue("Value1")->value == 0);
+
+	//Normal enum (no enum class)
+	TEST(rfk::Database::getEnum("EThisIsANormalEnum") != nullptr);
+
+	//Underlying type
+	TEST(rfk::Database::getEnum("EThisIsANormalEnum")->underlyingType.archetype->name == "int");
 }
 
 void methods()

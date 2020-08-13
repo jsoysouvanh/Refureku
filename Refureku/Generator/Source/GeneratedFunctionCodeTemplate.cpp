@@ -13,7 +13,7 @@ std::string GeneratedFunctionCodeTemplate::generateGetFunctionDefinition(kodgen:
 	std::string nonMemberFuncType = "rfk::NonMemberFunction<" + funcInfo.getPrototype(true, true) + ">";
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
-							 "	rfk::Function const& " + getGetFunctionFunctionName(funcInfo) + "() noexcept\t\\",
+							 "	inline rfk::Function const& " + getGetFunctionFunctionName(funcInfo) + "() noexcept\t\\",
 							 "	{\t\\",
 							 "		static bool				initialized = false;\t\\",
 							 "		static rfk::Function	function(\"" + funcInfo.name + "\", " +

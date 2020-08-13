@@ -43,4 +43,10 @@ namespace test1::test2 RFKNamespace()
 	};
 }
 
+enum RFKEnum() EThisIsANormalEnum : int
+{
+	Value1 = 0,
+	Value2
+};
+
 File_GENERATED 
