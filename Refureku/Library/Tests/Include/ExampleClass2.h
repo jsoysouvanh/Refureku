@@ -11,7 +11,7 @@ namespace namespace3 RFKNamespace()
 	};
 
 	RFKFunction()
-	void functionInsideNamespace(int i) {}
+	inline void functionInsideNamespace(int i) {} 
 
 	RFKVariable()
 	int variableInsideNamespace = 42;
@@ -30,15 +30,5 @@ namespace test1::test2 RFKNamespace()
 		SomeValue = 42u
 	};
 }
-
-//namespace rfk::generated
-//{
-//	Function const& getFunction123() noexcept
-//	{
-//		static Function f("methods", 123u, Type::getType<void>(), std::unique_ptr<NonMemberFunction<void()>>(new NonMemberFunction<void()>(&namespace3::functionInsideNamespace)), EFunctionFlags::Default);
-//
-//		return f; 
-//	}
-//} 
 
 File_GENERATED 

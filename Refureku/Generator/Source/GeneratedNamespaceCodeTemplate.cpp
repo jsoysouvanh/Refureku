@@ -5,6 +5,7 @@
 #include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
 
 #include "RefurekuGenerator/GeneratedVariableCodeTemplate.h"
+#include "RefurekuGenerator/GeneratedFunctionCodeTemplate.h"
 #include "RefurekuGenerator/Helpers.h"
 
 using namespace rfk;
@@ -120,11 +121,10 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + GeneratedVariableCodeTemplate::getGetVariableFunctionName(variable) + "());\t\\");
 		}
 
+		//Fill nested functions
 		for (kodgen::FunctionInfo const& function : namespaceInfo.functions)
 		{
-			std::cout << "Func: " << function.getPrototype() << " -> " << function.getName() << std::endl;
-
-			//TODO: Fill nested functions
+			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + GeneratedFunctionCodeTemplate::getGetFunctionFunctionName(function) + "());\t\\");
 		}
 	}
 

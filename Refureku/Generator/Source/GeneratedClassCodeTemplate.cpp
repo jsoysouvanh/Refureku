@@ -147,19 +147,17 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 	}
 
 	std::string functionType;
-	std::string methodName;
 	std::string properties;
 	for (kodgen::MethodInfo const& method : info.methods)
 	{
 		if (method.isStatic)
 		{
 			functionType = "rfk::NonMemberFunction<" + method.getPrototype(true) + ">";
-			methodName = method.getName();
 
-			generatedFile.writeLine("	staticMethodsIt = type.staticMethods.emplace(\"" + methodName + "\", " +
+			generatedFile.writeLine("	staticMethodsIt = type.staticMethods.emplace(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
-									"std::unique_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), "
+									"std::unique_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
 			//Check if this static method is a custom instantiator, in which case we should add it to the list of custom instantiators of this class
@@ -174,12 +172,11 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 		else
 		{
 			functionType = "rfk::MemberFunction<" + info.name + ", " + method.getPrototype(true) + ">";
-			methodName = method.getName();
 
-			generatedFile.writeLine("	methodsIt = type.methods.emplace(\"" + methodName + "\", " +
+			generatedFile.writeLine("	methodsIt = type.methods.emplace(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
-									"std::unique_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + methodName + ")), "
+									"std::unique_ptr<" + functionType + ">(new " + functionType + "(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
 			generatedFile.writeLine("	currMethod = const_cast<rfk::Method*>(&*methodsIt);\t\\");

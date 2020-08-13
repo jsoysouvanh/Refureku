@@ -30,9 +30,14 @@ void namespaces()
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("AnotherClassInNamespace3") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("OtherClass") != nullptr);
 	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
+	
 	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace")->getData<int>() == 42);
 	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace", rfk::EVarFlags::Static) == nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideGlobalScope") == nullptr);
+
+	rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Inline)->invoke(1);
+	rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Default)->invoke(2);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Static) == nullptr);
 }
 
 void classes()
@@ -282,11 +287,19 @@ void staticFields()
 
 void variables()
 {
-	//Dumb test becuase of float imprecision...
+	//Dumb test because of float imprecision...
 	TEST(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Default)->getData<float>() == 10.0f);
 	TEST(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Static)->getData<float>() == 10.0f);
 	
 	TEST(rfk::Database::getVariable("variableInsideNamespace") == nullptr);
+}
+
+void functions()
+{
+	rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Default)->invoke(12.f);
+	rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Static)->invoke(12.f);
+
+	TEST(rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Inline) == nullptr);
 }
 
 void inheritance()
@@ -506,6 +519,7 @@ int main()
 	fields();
 	staticFields();
 	variables();
+	functions();
 	inheritance();
 	instantiation();
 	properties();

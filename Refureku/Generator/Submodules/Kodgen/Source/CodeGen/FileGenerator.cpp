@@ -59,9 +59,7 @@ void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingRes
 	
 	for (FunctionInfo const& function : parsingResult.functions)
 	{
-		std::cout << "File Func: " << function.getPrototype() << " -> " << function.getName() << std::endl;
-
-		//writeMethodToFile(generatedFile, methodInfo, genResult);
+		writeFunctionToFile(generatedFile, function, genResult);
 	}
 	
 	//Footer
@@ -175,19 +173,17 @@ void FileGenerator::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInf
 		writeEnumToFile(generatedFile, enumInfo, genResult);
 	}
 	
+	//Write namespace variables
 	for (VariableInfo const& varInfo : castNamespaceInfo.variables)
 	{
 		writeVariableToFile(generatedFile, varInfo, genResult);
 	}
 
-	/**
-	*	TODO
-	*
-	*	for (MethodInfo const& methodInfo : castNamespaceInfo.functions)
-	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, genResult);
-	*	}
-	*/
+	//Write namespace functions
+	for (FunctionInfo const& funcInfo : castNamespaceInfo.functions)
+	{
+		writeFunctionToFile(generatedFile, funcInfo, genResult);
+	}
 }
 
 void FileGenerator::writeStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& structClassInfo, FileGenerationResult& genResult) noexcept

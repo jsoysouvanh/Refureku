@@ -19,6 +19,7 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/GeneratedClassCodeTemplate.cpp
 					Source/GeneratedEnumCodeTemplate.cpp
 					Source/GeneratedVariableCodeTemplate.cpp
+					Source/GeneratedFunctionCodeTemplate.cpp
 					Source/FileGenerator.cpp)
 
 # Warning level

@@ -10,9 +10,14 @@ using namespace rfk;
 //Init database containers BEFORE any other code so that reflected classes can register at startup
 #if defined(__GNUC__) || defined(__clang__)
 
-Database::EntitiesById		Database::_entitiesById				__attribute__((init_priority(101)));
-Database::EntitiesByName	Database::_fileLevelEntitiesByName	__attribute__((init_priority(101)));
-Database::GenNamespaces		Database::_generatedNamespaces		__attribute__((init_priority(101)));
+Database::EntitiesById		Database::_entitiesById					__attribute__((init_priority(101)));
+Database::NamespacesByName	Database::_fileLevelNamespacesByName	__attribute__((init_priority(101)));
+Database::StructsByName		Database::_fileLevelStructsByName		__attribute__((init_priority(101)));
+Database::ClassesByName		Database::_fileLevelClassesByName		__attribute__((init_priority(101)));
+Database::EnumsByName		Database::_fileLevelEnumsByName			__attribute__((init_priority(101)));
+Database::VariablesByName	Database::_fileLevelVariablesByName		__attribute__((init_priority(101)));
+Database::FunctionsByName	Database::_fileLevelFunctionsByName		__attribute__((init_priority(101)));
+Database::GenNamespaces		Database::_generatedNamespaces			__attribute__((init_priority(101)));
 
 #elif defined(_MSC_VER)
 
@@ -24,13 +29,23 @@ __RFK_DISABLE_WARNING_INIT_SEG
 __RFK_DISABLE_WARNING_POP
 
 Database::EntitiesById		Database::_entitiesById;
-Database::EntitiesByName	Database::_fileLevelEntitiesByName;
+Database::NamespacesByName	Database::_fileLevelNamespacesByName;
+Database::StructsByName		Database::_fileLevelStructsByName;
+Database::ClassesByName		Database::_fileLevelClassesByName;
+Database::EnumsByName		Database::_fileLevelEnumsByName;
+Database::VariablesByName	Database::_fileLevelVariablesByName;
+Database::FunctionsByName	Database::_fileLevelFunctionsByName;
 Database::GenNamespaces		Database::_generatedNamespaces;
 
 #else
 
 Database::EntitiesById		Database::_entitiesById;
-Database::EntitiesByName	Database::_fileLevelEntitiesByName;
+Database::NamespacesByName	Database::_fileLevelNamespacesByName;
+Database::StructsByName		Database::_fileLevelStructsByName;
+Database::ClassesByName		Database::_fileLevelClassesByName;
+Database::EnumsByName		Database::_fileLevelEnumsByName;
+Database::VariablesByName	Database::_fileLevelVariablesByName;
+Database::FunctionsByName	Database::_fileLevelFunctionsByName;
 Database::GenNamespaces		Database::_generatedNamespaces;
 
 #endif
@@ -41,7 +56,47 @@ void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegister
 	registerEntity(entity, shouldRegisterSubEntities);
 
 	//Register by name
-	_fileLevelEntitiesByName.emplace(&entity);
+	switch (entity.kind)
+	{
+		case Entity::EKind::Namespace:
+			_fileLevelNamespacesByName.emplace(reinterpret_cast<Namespace const*>(&entity));
+			break;
+
+		case Entity::EKind::Struct:
+			_fileLevelStructsByName.emplace(reinterpret_cast<Struct const*>(&entity));
+			break;
+
+		case Entity::EKind::Class:
+			_fileLevelClassesByName.emplace(reinterpret_cast<Class const*>(&entity));
+			break;
+
+		case Entity::EKind::Enum:
+			_fileLevelEnumsByName.emplace(reinterpret_cast<Enum const*>(&entity));
+			break;
+
+		case Entity::EKind::Variable:
+			_fileLevelVariablesByName.emplace(reinterpret_cast<Variable const*>(&entity));
+			break;
+
+		case Entity::EKind::Function:
+			_fileLevelFunctionsByName.emplace(reinterpret_cast<Function const*>(&entity));
+			break;
+
+		case Entity::EKind::EnumValue:
+			[[fallthrough]];
+		case Entity::EKind::Field:
+			[[fallthrough]];
+		case Entity::EKind::Method:
+			[[fallthrough]];
+		case Entity::EKind::FundamentalArchetype:
+			[[fallthrough]];
+		case Entity::EKind::Undefined:
+			[[fallthrough]];
+		default:
+			//Should never reach this point
+			assert(false);
+			break;
+	}
 }
 
 void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
@@ -111,13 +166,17 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 				unregisterSubEntities(static_cast<Enum const&>(entity));
 				break;
 
-			case Entity::EKind::FundamentalArchetype:
+			case Entity::EKind::Variable:
 				[[fallthrough]];
 			case Entity::EKind::Field:
+				[[fallthrough]];
+			case Entity::EKind::Function:
 				[[fallthrough]];
 			case Entity::EKind::Method:
 				[[fallthrough]];
 			case Entity::EKind::EnumValue:
+				[[fallthrough]];
+			case Entity::EKind::FundamentalArchetype:
 				//No sub entity to unregister
 				break;
 
@@ -132,10 +191,49 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 	//Remove this entity from the list of registered entity ids
 	_entitiesById.erase(&entity);
 
-	//Remove from file level entities
 	if (entity.outerEntity == nullptr)
 	{
-		_fileLevelEntitiesByName.erase(&entity);
+		switch (entity.kind)
+		{
+			case Entity::EKind::Namespace:
+				_fileLevelNamespacesByName.erase(reinterpret_cast<Namespace const*>(&entity));
+				break;
+
+			case Entity::EKind::Struct:
+				_fileLevelStructsByName.emplace(reinterpret_cast<Struct const*>(&entity));
+				break;
+
+			case Entity::EKind::Class:
+				_fileLevelClassesByName.emplace(reinterpret_cast<Class const*>(&entity));
+				break;
+
+			case Entity::EKind::Enum:
+				_fileLevelEnumsByName.emplace(reinterpret_cast<Enum const*>(&entity));
+				break;
+
+			case Entity::EKind::Variable:
+				_fileLevelVariablesByName.emplace(reinterpret_cast<Variable const*>(&entity));
+				break;
+
+			case Entity::EKind::Function:
+				_fileLevelFunctionsByName.emplace(reinterpret_cast<Function const*>(&entity));
+				break;
+
+			case Entity::EKind::EnumValue:
+				[[fallthrough]];
+			case Entity::EKind::Field:
+				[[fallthrough]];
+			case Entity::EKind::Method:
+				[[fallthrough]];
+			case Entity::EKind::FundamentalArchetype:
+				[[fallthrough]];
+			case Entity::EKind::Undefined:
+				[[fallthrough]];
+			default:
+				//Those entities can't be at file level.
+				assert(false);
+				break;
+		}
 	}
 }
 
@@ -236,8 +334,6 @@ void Database::unregisterSubEntities(Enum const& e) noexcept
 
 void Database::checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr) noexcept
 {
-	//std::cout << npPtr->name << ", COUNT = " << npPtr.use_count() << std::endl;
-
 	assert(npPtr.use_count() >= 2);
 
 	// 2: first is this method parameter, the second is the ptr stored in _generatedNamespaces
@@ -266,18 +362,9 @@ Entity const* Database::getEntity(uint64 id) noexcept
 	return (it != _entitiesById.cend()) ? *it : nullptr;
 }
 
-Entity const* Database::getEntity(std::string entityName) noexcept
-{
-	Entity searching(std::move(entityName), 0u);
-
-	Database::EntitiesByName::const_iterator it = _fileLevelEntitiesByName.find(&searching);
-
-	return (it != _fileLevelEntitiesByName.cend()) ? *it : nullptr;
-}
-
 Namespace const* Database::getNamespace(std::string namespaceName)
 {
-	size_t			index	= namespaceName.find_first_of(':');
+	size_t index = namespaceName.find_first_of(':');
 
 	//Make sure namespaceName has a valid namespace syntax
 	if (index != std::string::npos && (index == namespaceName.size() - 1 || namespaceName[index + 1] != ':'))
@@ -285,15 +372,17 @@ Namespace const* Database::getNamespace(std::string namespaceName)
 		throw BadNamespaceFormat("The provided namespace name is ill formed.");
 	}
 
-	Entity const*	entity	= getEntity(namespaceName.substr(0u, index));
+	Entity searchedNamespace(namespaceName.substr(0u, index), 0u);
+
+	Database::NamespacesByName::const_iterator it = _fileLevelNamespacesByName.find(reinterpret_cast<Namespace const*>(&searchedNamespace));
 
 	//Couldn't find first namespace part, abort search
-	if (entity == nullptr || entity->kind != Entity::EKind::Namespace)
+	if (it == _fileLevelNamespacesByName.cend())
 	{
 		return nullptr;
 	}
 
-	Namespace const* result = reinterpret_cast<Namespace const*>(entity);
+	Namespace const* result = *it;
 
 	while (index != std::string::npos && result != nullptr)
 	{
@@ -315,50 +404,58 @@ Namespace const* Database::getNamespace(std::string namespaceName)
 
 Struct const* Database::getStruct(std::string structName) noexcept
 {
-	Entity const* entity = getEntity(std::move(structName));
+	Entity searchedStruct(std::move(structName), 0u);
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Struct) ?
-			reinterpret_cast<Struct const*>(entity) :
-			nullptr;
+	Database::StructsByName::const_iterator it = _fileLevelStructsByName.find(reinterpret_cast<Struct const*>(&searchedStruct));
+
+	return (it != _fileLevelStructsByName.cend()) ? *it : nullptr;
 }
 
 Class const* Database::getClass(std::string className) noexcept
 {
-	Entity const* entity = getEntity(std::move(className));
+	Entity searchedClass(std::move(className), 0u);
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Class) ?
-			reinterpret_cast<Class const*>(entity) :
-			nullptr;
+	Database::ClassesByName::const_iterator it = _fileLevelClassesByName.find(reinterpret_cast<Class const*>(&searchedClass));
+
+	return (it != _fileLevelClassesByName.cend()) ? *it : nullptr;
 }
 
 Enum const* Database::getEnum(std::string enumName) noexcept
 {
-	Entity const* entity = getEntity(std::move(enumName));
+	Entity searchedEnum(std::move(enumName), 0u);
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Enum) ?
-			reinterpret_cast<Enum const*>(entity) :
-			nullptr;
+	Database::EnumsByName::const_iterator it = _fileLevelEnumsByName.find(reinterpret_cast<Enum const*>(&searchedEnum));
+
+	return (it != _fileLevelEnumsByName.cend()) ? *it : nullptr;
 }
 
 Variable const* Database::getVariable(std::string variableName, EVarFlags flags) noexcept
 {
-	Entity const* entity = getEntity(std::move(variableName));
+	Entity searchedVariable(std::move(variableName), 0u);
 
-	return (entity != nullptr && entity->kind == Entity::EKind::Variable && (reinterpret_cast<Variable const*>(entity)->flags & flags) == flags) ?
-			reinterpret_cast<Variable const*>(entity) :
-			nullptr;
+	Database::VariablesByName::const_iterator it = _fileLevelVariablesByName.find(reinterpret_cast<Variable const*>(&searchedVariable));
+
+	return (it != _fileLevelVariablesByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }
 
 Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) noexcept
 {
-	//TODO
-	return nullptr;
+	Entity searchedFunction(std::move(functionName), 0u);
+
+	Database::FunctionsByName::const_iterator it = _fileLevelFunctionsByName.find(reinterpret_cast<Function const*>(&searchedFunction));
+
+	return (it != _fileLevelFunctionsByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }
 
 void Database::clear() noexcept
 {
 	_entitiesById.clear();
-	_fileLevelEntitiesByName.clear();
+	_fileLevelNamespacesByName.clear();
+	_fileLevelStructsByName.clear();
+	_fileLevelClassesByName.clear();
+	_fileLevelEnumsByName.clear();
+	_fileLevelVariablesByName.clear();
+	_fileLevelFunctionsByName.clear();
 }
 
 Database::EntitiesById const& Database::getEntitiesById() noexcept
@@ -366,7 +463,32 @@ Database::EntitiesById const& Database::getEntitiesById() noexcept
 	return _entitiesById;
 }
 
-Database::EntitiesByName const& Database::getFileLevelEntities() noexcept
+Database::NamespacesByName const& Database::getFileLevelNamespaces() noexcept
 {
-	return _fileLevelEntitiesByName;
+	return _fileLevelNamespacesByName;
+}
+
+Database::StructsByName const& Database::getFileLevelStructs() noexcept
+{
+	return _fileLevelStructsByName;
+}
+
+Database::ClassesByName const& Database::getFileLevelClasses() noexcept
+{
+	return _fileLevelClassesByName;
+}
+
+Database::EnumsByName const& Database::getFileLevelEnums() noexcept
+{
+	return _fileLevelEnumsByName;
+}
+
+Database::VariablesByName const& Database::getFileLevelVariables() noexcept
+{
+	return _fileLevelVariablesByName;
+}
+
+Database::FunctionsByName const& Database::getFileLevelFunctions() noexcept
+{
+	return _fileLevelFunctionsByName;
 }

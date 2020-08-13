@@ -21,6 +21,9 @@ FunctionInfo::FunctionInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup
 
 	//Define return type
 	returnType	= TypeInfo(clang_getResultType(functionType));
+
+	//Update name without arguments
+	name = getName();
 }
 
 FunctionInfo::FunctionInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:

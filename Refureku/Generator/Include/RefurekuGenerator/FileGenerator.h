@@ -16,6 +16,7 @@
 #include "RefurekuGenerator/GeneratedClassCodeTemplate.h"
 #include "RefurekuGenerator/GeneratedEnumCodeTemplate.h"
 #include "RefurekuGenerator/GeneratedVariableCodeTemplate.h"
+#include "RefurekuGenerator/GeneratedFunctionCodeTemplate.h"
 
 namespace rfk
 {
@@ -43,11 +44,15 @@ namespace rfk
 			/** List of all variables we have generated metadata for. */
 			std::vector<kodgen::VariableInfo const*>	_generatedVariables;
 
+			/** List of all functions we have generated metadata for. */
+			std::vector<kodgen::FunctionInfo const*>	_generatedFunctions;
+
 			/** Code templates used by this generator. */
 			GeneratedNamespaceCodeTemplate	_namespaceCodeTemplate;
 			GeneratedClassCodeTemplate		_classCodeTemplate;
 			GeneratedEnumCodeTemplate		_enumCodeTemplate;
 			GeneratedVariableCodeTemplate	_variableCodeTemplate;
+			GeneratedFunctionCodeTemplate	_functionCodeTemplate;
 
 			/**
 			*	@brief Write the end file macro
@@ -80,6 +85,11 @@ namespace rfk
 			virtual void writeVariableToFile(kodgen::GeneratedFile&			generatedFile,
 											 kodgen::EntityInfo const&		variableInfo,
 											 kodgen::FileGenerationResult&	genResult)						noexcept override;
+
+			virtual void writeFunctionToFile(kodgen::GeneratedFile&			generatedFile,
+											 kodgen::EntityInfo const&		functionInfo,
+											 kodgen::FileGenerationResult&	genResult)						noexcept override;
+
 		public:
 			FileGenerator()						noexcept;
 			FileGenerator(FileGenerator const&)	= default;

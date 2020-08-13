@@ -52,9 +52,8 @@ std::string GeneratedVariableCodeTemplate::generateRegistrationMacro(kodgen::Gen
 	{
 		std::string macroName = internalPrefix + getCurrentEntityId() + "_RegisterVariable";
 
-		//Wrap into a generated namespace to avoid pollution in rfk namespace
 		generatedFile.writeMacro(std::string(macroName),
-								 "inline rfk::VariableRegisterer registerer" + getCurrentEntityId() + " = &getVariable" + getCurrentEntityId() + "();");
+								 "inline rfk::DefaultEntityRegisterer registerer" + getCurrentEntityId() + " = &getVariable" + getCurrentEntityId() + "();");
 
 		return macroName;
 	}

@@ -20,6 +20,14 @@ namespace kodgen
 {
 	class FunctionInfo : public EntityInfo
 	{
+		private:
+			/**
+			*	@brief Get the name of this function.
+			*	
+			*	@return Return the name of this function.
+			*/
+			std::string getName() const noexcept;
+
 		protected:
 			FunctionInfo(CXCursor const&	cursor,
 						 PropertyGroup&&	propertyGroup,
@@ -47,13 +55,6 @@ namespace kodgen
 			FunctionInfo(FunctionInfo const&)				= default;
 			FunctionInfo(FunctionInfo&&)					= default;
 			~FunctionInfo()									= default;
-
-			/**
-			*	@brief Get the name of this function.
-			*	
-			*	@return Return the name of this function.
-			*/
-			std::string getName()										const noexcept;
 
 			/**
 			*	@brief Get the prototype of this function.

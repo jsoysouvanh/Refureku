@@ -19,10 +19,10 @@ namespace rfk
 		Default			= 0,
 
 		/** static qualifier. */
-		Static			= 1 << 1,
+		Static			= 1 << 0,
 
 		/** inline qualifier. */
-		Inline			= 1 << 2
+		Inline			= 1 << 1
 	};
 
 	GENERATE_ENUM_OPERATORS(EFunctionFlags)
