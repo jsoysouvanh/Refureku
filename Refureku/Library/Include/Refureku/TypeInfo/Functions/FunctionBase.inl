@@ -96,7 +96,7 @@ bool FunctionBase::hasSamePrototype() const noexcept
 	if constexpr (sizeof...(ArgTypes) == 0u)
 	{
 		//Check only return type if there are no arguments
-		return hasSameReturnType<ReturnType>();
+		return parameters.size() == 0u && hasSameReturnType<ReturnType>();
 	}
 	else
 	{

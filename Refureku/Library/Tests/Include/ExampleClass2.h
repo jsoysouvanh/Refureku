@@ -13,12 +13,24 @@ namespace namespace3 RFKNamespace()
 	RFKFunction()
 	inline void functionInsideNamespace(int i) {} 
 
+	RFKFunction()
+	int function1(int i) { return i; }
+
+	RFKFunction()
+	int function1(int i, int j) { return i + j; }
+
 	RFKVariable()
 	int variableInsideNamespace = 42;
 }
 
 RFKFunction() 
 static void functionInsideGlobalScope(float j) {} 
+
+RFKFunction()
+int function1(int i) { return i; }
+
+RFKFunction()
+int function1(int i, int j) { return i + j; }
 
 RFKVariable()
 static float variableInsideGlobalScope = 10.0f;

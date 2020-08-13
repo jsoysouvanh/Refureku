@@ -18,7 +18,10 @@ void outerEntities()
 	TEST(ExampleStruct::staticGetArchetype().getStaticField("staticInt")->outerEntity == &ExampleStruct::staticGetArchetype());
 	TEST(ExampleStruct::staticGetArchetype().getField("i")->outerEntity == &ExampleStruct::staticGetArchetype());
 	TEST(ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->outerEntity == &ExampleStruct::staticGetArchetype());
-	TEST(ExampleStruct::staticGetArchetype().getMethod("method")->outerEntity == &ExampleStruct::staticGetArchetype());
+	TEST(rfk::Database::getFunction("function1")->outerEntity == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction("function1")->outerEntity == rfk::Database::getNamespace("namespace3"));
+	TEST(rfk::Database::getVariable("variableInsideGlobalScope")->outerEntity == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace")->outerEntity == rfk::Database::getNamespace("namespace3"));
 }
 
 void namespaces()
@@ -38,6 +41,11 @@ void namespaces()
 	rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Inline)->invoke(1);
 	rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Default)->invoke(2);
 	TEST(rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Static) == nullptr);
+
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int)>("function1")->invoke<int, int>(1) == 1);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int, int)>("function1")->invoke<int, int, int>(1, 2) == 3);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<void(int, int)>("function1") == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int()>("function1") == nullptr);
 }
 
 void classes()
@@ -504,6 +512,11 @@ void database()
 	}
 	catch (...)
 	{}
+
+	TEST(rfk::Database::getFunction<int(int)>("function1")->invoke<int, int>(1) == 1);
+	TEST(rfk::Database::getFunction<int(int, int)>("function1")->invoke<int, int, int>(1, 2) == 3);
+	TEST(rfk::Database::getFunction<void(int, int)>("function1") == nullptr);
+	TEST(rfk::Database::getFunction<int()>("function1") == nullptr);
 }
 
 int main()
