@@ -1,4 +1,4 @@
-#include "RefurekuGenerator/FileGenerator.h"
+#include "RefurekuGenerator/CodeGen/FileGenerator.h"
 
 using namespace rfk;
 

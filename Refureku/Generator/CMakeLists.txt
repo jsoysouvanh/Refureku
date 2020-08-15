@@ -13,14 +13,15 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/Properties/CustomInstantiatorPropertyRule.cpp
 					Source/Properties/RangePropertyRule.cpp
 
-					Source/FileParser.cpp
-					Source/GeneratedEntityCodeTemplate.cpp
-					Source/GeneratedNamespaceCodeTemplate.cpp
-					Source/GeneratedClassCodeTemplate.cpp
-					Source/GeneratedEnumCodeTemplate.cpp
-					Source/GeneratedVariableCodeTemplate.cpp
-					Source/GeneratedFunctionCodeTemplate.cpp
-					Source/FileGenerator.cpp)
+					Source/CodeGen/FileParser.cpp
+					Source/CodeGen/GeneratedEntityCodeTemplate.cpp
+					Source/CodeGen/GeneratedNamespaceCodeTemplate.cpp
+					Source/CodeGen/GeneratedClassCodeTemplate.cpp
+					Source/CodeGen/GeneratedEnumCodeTemplate.cpp
+					Source/CodeGen/GeneratedVariableCodeTemplate.cpp
+					Source/CodeGen/GeneratedFunctionCodeTemplate.cpp
+					Source/CodeGen/FileGenerator.cpp
+				)
 
 # Warning level
 if (MSVC)

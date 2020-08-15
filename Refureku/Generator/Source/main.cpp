@@ -3,8 +3,8 @@
 #include <Kodgen/Misc/Filesystem.h>
 #include <Kodgen/Misc/DefaultLogger.h>
 
-#include "RefurekuGenerator/FileParser.h"
-#include "RefurekuGenerator/FileGenerator.h"
+#include "RefurekuGenerator/CodeGen/FileParser.h"
+#include "RefurekuGenerator/CodeGen/FileGenerator.h"
 
 void printGenerationSetup(kodgen::ILogger& logger, rfk::FileParser const& /*fileParser*/, rfk::FileGenerator const& fileGenerator)
 {

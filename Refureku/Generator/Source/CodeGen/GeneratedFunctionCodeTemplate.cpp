@@ -1,8 +1,8 @@
-#include "RefurekuGenerator/GeneratedFunctionCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedFunctionCodeTemplate.h"
 
 #include <cassert>
 
-#include "RefurekuGenerator/FileParser.h"
+#include "RefurekuGenerator/CodeGen/FileParser.h"
 
 using namespace rfk;
 

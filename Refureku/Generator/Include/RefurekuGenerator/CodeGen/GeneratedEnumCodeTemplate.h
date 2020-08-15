@@ -10,7 +10,7 @@
 #include <Kodgen/CodeGen/GeneratedCodeTemplate.h>
 #include <Kodgen/InfoStructures/EnumInfo.h>
 
-#include "RefurekuGenerator/GeneratedEntityCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.h"
 
 namespace rfk
 {

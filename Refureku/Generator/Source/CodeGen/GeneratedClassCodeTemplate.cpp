@@ -1,4 +1,4 @@
-#include "RefurekuGenerator/GeneratedClassCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedClassCodeTemplate.h"
 
 #include <cassert>
 #include <algorithm>
@@ -9,7 +9,7 @@
 #include <Kodgen/Misc/FundamentalTypes.h>
 
 #include "RefurekuGenerator/Properties/NativeProperties.h"
-#include "RefurekuGenerator/Helpers.h"
+#include "RefurekuGenerator/Misc/Helpers.h"
 
 using namespace rfk;
 

@@ -27,6 +27,8 @@ namespace kodgen
 
 			/**
 			*	@brief Append the errors of the provided result to this result.
+			*
+			*	@param result ParsingResult to append.
 			*/
 			inline void appendResultErrors(ParsingResultBase const& result) noexcept;
 	};

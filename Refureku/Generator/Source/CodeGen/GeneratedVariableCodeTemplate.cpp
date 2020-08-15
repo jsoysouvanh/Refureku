@@ -1,8 +1,8 @@
-#include "RefurekuGenerator/GeneratedVariableCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedVariableCodeTemplate.h"
 
 #include <cassert>
 
-#include "RefurekuGenerator/FileParser.h"
+#include "RefurekuGenerator/CodeGen/FileParser.h"
 
 using namespace rfk;
 

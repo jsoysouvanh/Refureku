@@ -1,4 +1,4 @@
-#include "RefurekuGenerator/GeneratedEnumCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedEnumCodeTemplate.h"
 
 #include <cassert>
 

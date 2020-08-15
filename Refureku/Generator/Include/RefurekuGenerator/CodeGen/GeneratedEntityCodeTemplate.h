@@ -56,5 +56,5 @@ namespace rfk
 			virtual ~GeneratedEntityCodeTemplate()							= default;
 	};
 
-	#include "RefurekuGenerator/GeneratedEntityCodeTemplate.inl"
+	#include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.inl"
 }

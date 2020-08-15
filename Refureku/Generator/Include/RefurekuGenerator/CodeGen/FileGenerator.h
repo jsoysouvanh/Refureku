@@ -12,11 +12,11 @@
 
 #include <Kodgen/CodeGen/FileGenerator.h>
 
-#include "RefurekuGenerator/GeneratedNamespaceCodeTemplate.h"
-#include "RefurekuGenerator/GeneratedClassCodeTemplate.h"
-#include "RefurekuGenerator/GeneratedEnumCodeTemplate.h"
-#include "RefurekuGenerator/GeneratedVariableCodeTemplate.h"
-#include "RefurekuGenerator/GeneratedFunctionCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedNamespaceCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedClassCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedEnumCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedVariableCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedFunctionCodeTemplate.h"
 
 namespace rfk
 {

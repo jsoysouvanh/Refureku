@@ -1,12 +1,12 @@
-#include "RefurekuGenerator/GeneratedNamespaceCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedNamespaceCodeTemplate.h"
 
 #include <cassert>
 
 #include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
 
-#include "RefurekuGenerator/GeneratedVariableCodeTemplate.h"
-#include "RefurekuGenerator/GeneratedFunctionCodeTemplate.h"
-#include "RefurekuGenerator/Helpers.h"
+#include "RefurekuGenerator/CodeGen/GeneratedVariableCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedFunctionCodeTemplate.h"
+#include "RefurekuGenerator/Misc/Helpers.h"
 
 using namespace rfk;
 

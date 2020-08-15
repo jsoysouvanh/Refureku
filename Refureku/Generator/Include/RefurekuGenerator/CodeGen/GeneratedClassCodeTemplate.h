@@ -11,7 +11,7 @@
 
 #include <Kodgen/InfoStructures/StructClassInfo.h>
 
-#include "RefurekuGenerator/GeneratedEntityCodeTemplate.h"
+#include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.h"
 
 namespace rfk
 {

@@ -32,5 +32,5 @@ namespace rfk
 			constexpr static kodgen::uint16 convertToEntityKind(kodgen::EEntityType entityType)			noexcept;
 	};
 
-	#include "RefurekuGenerator/Helpers.inl"
+	#include "RefurekuGenerator/Misc/Helpers.inl"
 }
