@@ -10,8 +10,14 @@
 #include "Refureku/Config.h"
 
 #include "Refureku/TypeInfo/Database.h"
-#include "Refureku/TypeInfo/EnumValue.h"
 
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/EnumValue.h"
+#include "Refureku/TypeInfo/Variables/Variable.h"
+#include "Refureku/TypeInfo/Variables/Field.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
+#include "Refureku/TypeInfo/Functions/Function.h"
+#include "Refureku/TypeInfo/Functions/Method.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetypes.h"

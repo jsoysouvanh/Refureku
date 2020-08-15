@@ -5,7 +5,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
 Refureku is a powerful C++17 RTTI free runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
-It allows to retrieve information on namespaces, structs/classes, fields, methods, enums and enum values at runtime.
+It allows to retrieve information on namespaces, structs/classes, fields, methods, non-member variables, non-member functions, enums and enum values at runtime.
 
 It is separated into 2 distinct parts:
 - The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see [Customization](#customization)).
@@ -13,13 +13,13 @@ It is separated into 2 distinct parts:
 
 Here is a non-exhaustive list of Refureku library features:
 - Easy to integrate in a software like a game engine
-- Reflect namespaces, structs, classes, enums, member methods (static or not) and member fields (static or not)
+- Reflect namespaces, structs, classes, methods, fields, variables, functions, enums and enum values
 - Support structs/classes with or without inheritance (multiple inheritance supported)
 - Can look for a struct/class, enum, field or method by name, with additional filtering parameters
-- Method call with any arguments and any return type (public, protected, private, virtual, override)
-- Field get/set any data of any type (public, protected, private)
+- Function/Method call with any arguments and any return type (public, protected, private, virtual, override)
+- Variable/Field get/set any data of any type (public, protected, private)
 - Know at runtime if an instance of a reflected struct/class inherits or is the base of another reflected struct/class
-- Arbitrary properties (like tags) on any entity (namespace, struct, class, field, method, enum, enum value)
+- Arbitrary properties (like tags) on any entity
 - Reflection metadata is regenerated only when a file changes
 - Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
 - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
@@ -35,7 +35,9 @@ Here is a non-exhaustive list of Refureku library features:
   - [Archetype](#archetype)
     - [Structs / Classes](#structs--classes)
     - [Enums / Enum values](#enums--enum-values)
+  - [Variables](#variables)
   - [Fields](#fields)
+  - [Functions](#functions)
   - [Methods](#methods)
   - [Namespaces](#namespaces)
 - [Properties](#properties)
@@ -338,9 +340,49 @@ From the database:
 rfk::Enum const* exampleEnumArchetype = rfk::Database::getEnum("ExampleEnum");
 ```
 
+### Variables
+Reflect non-member variables:
+
+```cpp
+//VariableExample.h
+#pragma once
+
+#include "Generated/VariableExample.rfk.h"
+
+RFKVariable()
+static int staticVariable;
+
+namespace ExampleNamespace RFKNamespace()
+{
+    RFKVariable()
+    float variableInsideReflectedNamespace;
+}
+
+File_GENERATED
+```
+
+We can manipulate those variables with the following code:
+
+```cpp
+#include <Refureku/Refureku.h>
+
+//...
+
+rfk::Variable const* staticVar = rfk::Database::getVariable("staticVariable");
+
+staticVar->getData<int>();
+
+//<int> can be ommited thanks to template deduction
+//Template must be specified if template deduction fails
+staticVar->setData(32);
+
+rfk::Variable const* namespaceVar = rfk::Database::getNamespace("ExampleNamespace")->getVariable("variableInsideReflectedNamespace");
+```
+
+> **Note:** For variables with internal linkage (like static variables), you can't know which translation unit's version will be registered to the database if they are included in different source files.
+
 ### Fields
-Field and StaticField classes handle information about a class or struct reflected field.
-Usage example:
+Reflect fields:
 
 ```cpp
 #pragma once
@@ -386,8 +428,43 @@ staticField->setData(42.42f);   //Set 42.42
 staticField->getData<float>();  //Get 42.42
 ```
 
+### Functions
+Reflect non-member functions:
+
+```cpp
+//FunctionExample.h
+#pragma once
+
+#include "Generated/FunctionExample.rfk.h"
+
+RFKFunction()
+inline int inlineFunction(int i) { return i; }
+
+namespace ExampleNamespace RFKNamespace()
+{
+    RFKFunction()
+    void functionInsideNamespace() { }
+}
+
+File_GENERATED
+```
+
+We can manipulate those functions with the following code:
+
+```cpp
+#include <Refureku/Refureku.h>
+
+//...
+
+rfk::Function const* inlineFunc = rfk::Database::getFunction("inlineFunction");
+
+inlineFunc ->invoke(42);
+
+rfk::Function const* namespaceFunc = rfk::Database::getNamespace("ExampleNamespace")->getFunction("functionInsideNamespace");
+```
+
 ### Methods
-Method and StaticMethod classes work just the same way as fields:
+Reflect methods:
 
 ```cpp
 #pragma once
@@ -442,7 +519,7 @@ sf1->invoke();
 ```
 
 ### Namespaces
-Namespaces can be reflected like this:
+Reflect namespaces:
 
 ```cpp
 #pragma once
@@ -690,8 +767,7 @@ This library has been tested and is stable on the following configurations:
 - Linux 18.04 | GCC 8.4.0, GCC 9.2.1
 
 ## Planned features
-- Update database to allow entity unregistering, hence making hot reload possible
-- Support global scope (or namespace) fields and functions reflection
+- Multithread file parsing and generation
 - Support template methods reflection 
 
 ## Known issues
