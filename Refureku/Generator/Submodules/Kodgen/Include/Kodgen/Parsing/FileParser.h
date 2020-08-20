@@ -168,7 +168,7 @@ namespace kodgen
 			ILogger*						logger			= nullptr;
 
 			FileParser()					noexcept;
-			FileParser(FileParser const&)	= default;
+			FileParser(FileParser const&)	noexcept;
 			FileParser(FileParser&&)		= default;
 			virtual ~FileParser()			noexcept;
 

@@ -22,10 +22,6 @@ std::string kodgen::toString(EFileGenerationError error) noexcept
 			result = "TooManyGeneratedCodeTemplateProvided";
 			break;
 
-		case EFileGenerationError::UnregisteredGeneratedCodeTemplateProvided:
-			result = "UnregisteredGeneratedCodeTemplateProvided";
-			break;
-
 		case EFileGenerationError::Count:
 			result = "Count";
 			break;

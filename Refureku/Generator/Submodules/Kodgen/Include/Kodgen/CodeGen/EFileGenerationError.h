@@ -38,12 +38,6 @@ namespace kodgen
 		TooManyGeneratedCodeTemplateProvided,
 
 		/**
-		*	An unregistered generated code template were provided.
-		*	Make sure it is not a syntax miss, or add it to the FileGenerator before
-		*/
-		UnregisteredGeneratedCodeTemplateProvided,
-
-		/**
 		*	Might be used in the future.
 		*	Is also used as a no-error value
 		*/

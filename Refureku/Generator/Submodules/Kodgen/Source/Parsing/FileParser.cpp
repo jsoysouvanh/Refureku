@@ -13,6 +13,14 @@ FileParser::FileParser() noexcept:
 {
 }
 
+FileParser::FileParser(FileParser const& other) noexcept:
+	NamespaceParser(other),
+	_clangIndex{clang_createIndex(0, 0)},	//Don't copy clang index, create a new one
+	parsingSettings{other.parsingSettings},
+	logger{other.logger}
+{
+}
+
 FileParser::~FileParser() noexcept
 {
 	clang_disposeIndex(_clangIndex);
@@ -266,7 +274,7 @@ void FileParser::refreshBuildCommandStrings() noexcept
 
 std::vector<char const*> FileParser::makeCompilationArguments() noexcept
 {
-	std::vector<char const*>	result;
+	std::vector<char const*> result;
 
 	refreshBuildCommandStrings();
 

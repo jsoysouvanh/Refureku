@@ -26,11 +26,15 @@ namespace kodgen
 			~ParsingResultBase()						= default;
 
 			/**
-			*	@brief Append the errors of the provided result to this result.
+			*	@brief	Append the errors of the provided result to this result.
+			*			Errors contained in the provided result are then cleared.
 			*
 			*	@param result ParsingResult to append.
 			*/
-			inline void appendResultErrors(ParsingResultBase const& result) noexcept;
+			inline void appendResultErrors(ParsingResultBase& result) noexcept;
+
+			ParsingResultBase& operator=(ParsingResultBase const&)	= default;
+			ParsingResultBase& operator=(ParsingResultBase&&)		= default;
 	};
 
 	#include "Kodgen/Parsing/ParsingResults/ParsingResultBase.inl"
