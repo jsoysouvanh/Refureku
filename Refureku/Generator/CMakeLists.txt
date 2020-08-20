@@ -20,6 +20,7 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/CodeGen/GeneratedEnumCodeTemplate.cpp
 					Source/CodeGen/GeneratedVariableCodeTemplate.cpp
 					Source/CodeGen/GeneratedFunctionCodeTemplate.cpp
+					Source/CodeGen/FileGenerationUnit.cpp
 					Source/CodeGen/FileGenerator.cpp
 				)
 

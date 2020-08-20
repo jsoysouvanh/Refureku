@@ -5,22 +5,23 @@
 
 #include "RefurekuGenerator/CodeGen/FileParser.h"
 #include "RefurekuGenerator/CodeGen/FileGenerator.h"
+#include "RefurekuGenerator/CodeGen/FileGenerationUnit.h"
 
 void printGenerationSetup(kodgen::ILogger& logger, rfk::FileParser const& /*fileParser*/, rfk::FileGenerator const& fileGenerator)
 {
 	//Output dir
-	logger.log("Output directory: " + fileGenerator.outputDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
+	logger.log("Output directory: " + fileGenerator.settings.outputDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//ToParseDirs
 	logger.log("Parsed directories:", kodgen::ILogger::ELogSeverity::Info);
-	for (fs::path const& path : fileGenerator.toParseDirectories)
+	for (fs::path const& path : fileGenerator.settings.toParseDirectories)
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
 
 	//IgnoredDirs
 	logger.log("Ignored directories:", kodgen::ILogger::ELogSeverity::Info);
-	for (fs::path const& path : fileGenerator.ignoredDirectories)
+	for (fs::path const& path : fileGenerator.settings.ignoredDirectories)
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
@@ -30,7 +31,7 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::FileGenerationResult
 {
 	if (genResult.completed)
 	{
-		logger.log("(Re)generated metadata for " + std::to_string(genResult.parsedFiles.size()) + " file(s).", kodgen::ILogger::ELogSeverity::Info);
+		logger.log("(Re)generated metadata for " + std::to_string(genResult.parsedFiles.size()) + " file(s) in " + std::to_string(genResult.duration) + " seconds.", kodgen::ILogger::ELogSeverity::Info);
 		logger.log("Metadata of " + std::to_string(genResult.upToDateFiles.size()) + " file(s) up-to-date.", kodgen::ILogger::ELogSeverity::Info);
 
 		//Errors
@@ -77,16 +78,18 @@ void parseAndGenerate(fs::path&& exePath)
 		fs::path includeDir		= fs::current_path() / "Include";
 		fs::path generatedDir	= includeDir / "Generated";
 
-		fileGenerator.outputDirectory = generatedDir;
-		fileGenerator.toParseDirectories.emplace(includeDir);
-		fileGenerator.ignoredDirectories.emplace(generatedDir);
+		fileGenerator.settings.outputDirectory = generatedDir;
+		fileGenerator.settings.toParseDirectories.emplace(includeDir);
+		fileGenerator.settings.ignoredDirectories.emplace(generatedDir);
 
 		#endif
 
 		printGenerationSetup(logger, fileParser, fileGenerator);
 
+		rfk::FileGenerationUnit fileGenerationUnit;
+
 		//Parse
-		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, fileGenerationUnit, false);
 
 		//Result
 		printGenerationResult(logger, genResult);

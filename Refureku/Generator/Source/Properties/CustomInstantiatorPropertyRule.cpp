@@ -7,7 +7,7 @@
 using namespace rfk;
 
 CustomInstantiatorPropertyRule::CustomInstantiatorPropertyRule() noexcept:
-	kodgen::DefaultSimplePropertyRule(NativeProperties::customInstantiatorProperty, { kodgen::EEntityType::Method }, "Method property. Used to make a custom way to instantiate this class through the Struct::makeInstance() method. The method must be static and return void*.")
+	kodgen::DefaultSimplePropertyRule(NativeProperties::customInstantiatorProperty, kodgen::EEntityType::Method, "Method property. Used to make a custom way to instantiate this class through the Struct::makeInstance() method. The method must be static and return void*.")
 {
 }
 

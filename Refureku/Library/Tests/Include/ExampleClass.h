@@ -168,7 +168,7 @@ namespace namespace3 RFKNamespace()
 			static	int		staticMethod3(int p1, int p2)	noexcept;
 
 			RFKMethod()
-			float			method3(int i)				noexcept;
+			float			method3(int i)					noexcept;
 
 		public:
 			ExampleClass()						noexcept { }
