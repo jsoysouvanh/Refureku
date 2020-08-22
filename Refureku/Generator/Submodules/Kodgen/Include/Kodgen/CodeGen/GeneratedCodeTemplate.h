@@ -7,9 +7,8 @@
 
 #pragma once
 
-#include <fstream>
+#include <string>
 
-#include "Kodgen/Misc/Filesystem.h"
 #include "Kodgen/InfoStructures/EntityInfo.h"
 #include "Kodgen/CodeGen/GeneratedFile.h"
 
@@ -29,12 +28,14 @@ namespace kodgen
 			/**
 			*	@brief Method in which we define what to write in the generated file for this entity.
 			*
-			*	@param generatedFile	Object used to write in the generated file.
-			*	@param entityInfo		Structure containing info about the entity. You may static cast this into the derived class you expect.
-			*	@param generationUnit	FileGenerationUnit generating this entity.
+			*	@param generatedFile		Object used to write in the generated file.
+			*	@param entityInfo			Structure containing info about the entity. You may static cast this into the derived class you expect.
+			*	@param generationUnit		FileGenerationUnit generating this entity.
+			*	@param out_errorDescription	If any error occurs, out_errorMessage must be filled with the error description.
 			*/
 			virtual void generateCode(GeneratedFile&		generatedFile,
 									  EntityInfo const&		entityInfo,
-									  FileGenerationUnit&	generationUnit)		const noexcept = 0;
+									  FileGenerationUnit&	generationUnit,
+									  std::string&			out_errorDescription)	const noexcept = 0;
 	};
 }

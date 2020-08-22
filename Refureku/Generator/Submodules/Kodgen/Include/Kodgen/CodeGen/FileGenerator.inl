@@ -104,7 +104,7 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 	if (settings.outputDirectory.empty())
 	{
 		//Generator can't run without outputDirectory
-		genResult.fileGenerationErrors.emplace_back(FileGenerationError("", "", EFileGenerationError::UnspecifiedOutputDirectory));
+		genResult.fileGenerationErrors.emplace_back("", "", "Output directory is empty, it must be specified for the files to be generated.");
 		
 		if (logger != nullptr)
 		{
@@ -125,7 +125,7 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 			{
 				if (logger != nullptr)
 				{
-					genResult.fileGenerationErrors.emplace_back(FileGenerationError("", "", EFileGenerationError::InvalidOutputDirectory));
+					genResult.fileGenerationErrors.emplace_back("", "", "Output directory is invalid: " + std::string(exception.what()));
 
 					logger->log("Output directory is invalid: " + std::string(exception.what()), ILogger::ELogSeverity::Error);
 				}

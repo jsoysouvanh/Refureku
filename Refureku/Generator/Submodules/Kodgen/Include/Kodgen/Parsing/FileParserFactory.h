@@ -19,6 +19,7 @@ namespace kodgen
 	{
 		static_assert(std::is_base_of_v<FileParser, FileParserType>, "The provided type must be a derived class of FileParser.");
 		static_assert(std::is_default_constructible_v<FileParserType>, "The provided FileParser type must be default constructible.");
+		static_assert(std::is_move_constructible_v<FileParserType>, "The provided FileParser type must be move constructible.");
 
 		protected:
 			/**

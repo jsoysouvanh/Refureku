@@ -30,7 +30,8 @@ namespace rfk
 		protected:
 			virtual void generateCode(kodgen::GeneratedFile&		generatedFile,
 									  kodgen::EntityInfo const&		entityInfo,
-									  kodgen::FileGenerationUnit&	fgu)			const noexcept override;
+									  kodgen::FileGenerationUnit&	fgu,
+									  std::string&					out_errorDescription)	const noexcept override;
 
 		public:
 			GeneratedEnumCodeTemplate()									= default;

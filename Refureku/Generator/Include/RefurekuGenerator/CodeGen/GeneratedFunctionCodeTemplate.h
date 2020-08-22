@@ -17,31 +17,32 @@ namespace rfk
 	class GeneratedFunctionCodeTemplate : public GeneratedEntityCodeTemplate
 	{
 		private:
-		/** Return generated macro name */
-		std::string		generateGetFunctionDefinition(kodgen::GeneratedFile&		generatedFile,
-													  kodgen::FunctionInfo const&	funcInfo)		const	noexcept;
+			/** Return generated macro name */
+			std::string		generateGetFunctionDefinition(kodgen::GeneratedFile&		generatedFile,
+														  kodgen::FunctionInfo const&	funcInfo)		const	noexcept;
 
-		std::string		generateRegistrationMacro(kodgen::GeneratedFile&		generatedFile,
-												  kodgen::FunctionInfo const&	funcInfo)			const	noexcept;
+			std::string		generateRegistrationMacro(kodgen::GeneratedFile&		generatedFile,
+													  kodgen::FunctionInfo const&	funcInfo)			const	noexcept;
 
-		kodgen::uint8	computeFunctionFlags(kodgen::FunctionInfo const& funcInfo)					const	noexcept;
+			kodgen::uint8	computeFunctionFlags(kodgen::FunctionInfo const& funcInfo)					const	noexcept;
 
 		protected:
-		virtual void generateCode(kodgen::GeneratedFile&		generatedFile,
-								  kodgen::EntityInfo const&		entityInfo,
-								  kodgen::FileGenerationUnit&	fgu)			const noexcept override;
+			virtual void generateCode(kodgen::GeneratedFile&		generatedFile,
+									  kodgen::EntityInfo const&		entityInfo,
+									  kodgen::FileGenerationUnit&	fgu,
+									  std::string&					out_errorDescription)	const noexcept override;
 
 		public:
-		GeneratedFunctionCodeTemplate()										= default;
-		GeneratedFunctionCodeTemplate(GeneratedFunctionCodeTemplate const&)	= default;
-		GeneratedFunctionCodeTemplate(GeneratedFunctionCodeTemplate&&)		= default;
-		virtual ~GeneratedFunctionCodeTemplate()							= default;
+			GeneratedFunctionCodeTemplate()										= default;
+			GeneratedFunctionCodeTemplate(GeneratedFunctionCodeTemplate const&)	= default;
+			GeneratedFunctionCodeTemplate(GeneratedFunctionCodeTemplate&&)		= default;
+			virtual ~GeneratedFunctionCodeTemplate()							= default;
 
-		/**
-		*	@brief Get the name of the getFunction generated function for the provided function.
-		*	
-		*	@return The name of the getFunction generated function for the provided function.
-		*/
-		static std::string getGetFunctionFunctionName(kodgen::FunctionInfo const& funcInfo)	noexcept;
+			/**
+			*	@brief Get the name of the getFunction generated function for the provided function.
+			*	
+			*	@return The name of the getFunction generated function for the provided function.
+			*/
+			static std::string getGetFunctionFunctionName(kodgen::FunctionInfo const& funcInfo)	noexcept;
 	};
 }

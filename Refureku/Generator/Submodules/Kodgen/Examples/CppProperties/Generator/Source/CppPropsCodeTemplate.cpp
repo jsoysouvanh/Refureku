@@ -5,7 +5,7 @@
 
 #include <Kodgen/InfoStructures/StructClassInfo.h>
 
-void CppPropsCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit&	/* fgu */) const noexcept
+void CppPropsCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit&	/* fgu */, std::string& /* out_errorDescription */) const noexcept
 {
 	static std::string GetterPropName = "Get";
 	static std::string SetterPropName = "Set";

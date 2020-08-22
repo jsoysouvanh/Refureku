@@ -57,7 +57,6 @@ add_library(${KodgenTargetLibrary}
 	
 					Source/CodeGen/FileGenerationUnit.cpp
 					Source/CodeGen/FileGenerationResult.cpp
-					Source/CodeGen/EFileGenerationError.cpp
 					Source/CodeGen/FileGenerationError.cpp
 					Source/CodeGen/GeneratedFile.cpp
 					Source/CodeGen/FileGenerator.cpp

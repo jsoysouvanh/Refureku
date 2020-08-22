@@ -31,12 +31,10 @@ namespace kodgen
 			*	@brief Retrieve the appropriate generated code template to use for a given entity.
 			*
 			*	@param entityInfo	Information on a parsed entity.
-			*	@param out_error	Reference to a file generation error. It is filled with an error if something wrong happen, else remains unchanged.
 			*
 			*	@return The appropriate generated code template if found, else nullptr.
 			*/
-			GeneratedCodeTemplate*	getEntityGeneratedCodeTemplate(EntityInfo const&		entityInfo,
-																   EFileGenerationError&	out_error)		const	noexcept;
+			GeneratedCodeTemplate*	getEntityGeneratedCodeTemplate(EntityInfo const& entityInfo)	const	noexcept;
 
 			/**
 			*	@brief Provide information on whether the generated code for @param filePath should be regenerated or not.
@@ -45,7 +43,7 @@ namespace kodgen
 			*
 			*	@return true if the corresponding generated file should be regenerated, else false.
 			*/
-			bool					shouldRegenerateFile(fs::path const& filePath)							const	noexcept;
+			bool					shouldRegenerateFile(fs::path const& filePath)					const	noexcept;
 
 			/**
 			*	@brief Build the generated file path from a source file.
@@ -54,7 +52,7 @@ namespace kodgen
 			*	
 			*	@return The path to the generated file.
 			*/
-			fs::path				makePathToGeneratedFile(fs::path const& sourceFilePath)					const	noexcept;
+			fs::path				makePathToGeneratedFile(fs::path const& sourceFilePath)			const	noexcept;
 
 		protected:
 			/** Logger used to issue logs from the FileGenerationUnit. */
@@ -93,110 +91,110 @@ namespace kodgen
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param entityInfo		Entity we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeEntityToFile(GeneratedFile&		generatedFile,
 											  EntityInfo const&		entityInfo,
-											  FileGenerationResult&	genResult)								noexcept;
+											  FileGenerationResult&	out_genResult)							noexcept;
 
 			/**
 			*	@brief Generate code for namespaceInfo in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param namespaceInfo	Namespace we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeNamespaceToFile(GeneratedFile&			generatedFile,
 												 EntityInfo const&		namespaceInfo,
-												 FileGenerationResult&	genResult)							noexcept;
+												 FileGenerationResult&	out_genResult)						noexcept;
 
 			/**
 			*	@brief Generate code for structClassInfo in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param structClassInfo	Struct/class we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeStructOrClassToFile(GeneratedFile&			generatedFile,
 													 EntityInfo const&		structClassInfo,
-													 FileGenerationResult&	genResult)						noexcept;
+													 FileGenerationResult&	out_genResult)					noexcept;
 
 			/**
 			*	@brief Generate code for nestedStructClassInfo in generatedFile.
 			*
 			*	@param generatedFile			Generated file to write in.
 			*	@param nestedStructClassInfo	Nested struct/class we generate the code from.
-			*	@param genResult				Reference to the generation result to fill during file generation.
+			*	@param out_genResult			Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeNestedStructOrClassToFile(GeneratedFile&			generatedFile,
 														   EntityInfo const&		nestedStructClassInfo,
-														   FileGenerationResult&	genResult)				noexcept;
+														   FileGenerationResult&	out_genResult)			noexcept;
 
 			/**
 			*	@brief Generate code for enumInfo in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param enumInfo			Enum we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeEnumToFile(GeneratedFile&			generatedFile,
 											EntityInfo const&		enumInfo,
-											FileGenerationResult&	genResult)								noexcept;
+											FileGenerationResult&	out_genResult)							noexcept;
 
 			/**
 			*	@brief Generate code for enumValueInfo in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param enumValueInfo	Enum we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeEnumValueToFile(GeneratedFile&			generatedFile,
 												 EntityInfo const&		enumValueInfo,
-												 FileGenerationResult&	genResult)							noexcept;
+												 FileGenerationResult&	out_genResult)						noexcept;
 
 			/**
 			*	@brief Generate code for a variable in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param variableInfo		Variable we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeVariableToFile(GeneratedFile&			generatedFile,
 												EntityInfo const&		variableInfo,
-												FileGenerationResult&	genResult)							noexcept;
+												FileGenerationResult&	out_genResult)						noexcept;
 
 			/**
 			*	@brief Generate code for fieldInfo in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param fieldInfo		Field we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeFieldToFile(GeneratedFile&			generatedFile,
 											 EntityInfo const&		fieldInfo,
-											 FileGenerationResult&	genResult)								noexcept;
+											 FileGenerationResult&	out_genResult)							noexcept;
 
 			/**
 			*	@brief Generate code for a (non-member) function in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param functionInfo		Function we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeFunctionToFile(GeneratedFile&			generatedFile,
 												EntityInfo const&		functionInfo,
-												FileGenerationResult&	genResult)							noexcept;
+												FileGenerationResult&	out_genResult)						noexcept;
 
 			/**
 			*	@brief Generate code for methodInfo in generatedFile.
 			*
 			*	@param generatedFile	Generated file to write in.
 			*	@param methodInfo		Method we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*/
 			virtual void	writeMethodToFile(GeneratedFile&		generatedFile,
 											  EntityInfo const&		methodInfo,
-											  FileGenerationResult&	genResult)								noexcept;
+											  FileGenerationResult&	out_genResult)							noexcept;
 
 		public:
 			FileGenerationUnit()							= default;

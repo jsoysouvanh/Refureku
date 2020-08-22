@@ -14,7 +14,7 @@
 
 using namespace kodgen;
 
-void FileGenerationUnit::generateFile(FileGenerationResult& genResult, FileParsingResult const& parsingResult) noexcept
+void FileGenerationUnit::generateFile(FileGenerationResult& out_genResult, FileParsingResult const& parsingResult) noexcept
 {
 	/**
 	*	This constructor actually create the file in the filesystem.
@@ -31,32 +31,32 @@ void FileGenerationUnit::generateFile(FileGenerationResult& genResult, FileParsi
 	//Actual file content (per entity)
 	for (NamespaceInfo const& namespaceInfo : parsingResult.namespaces)
 	{
-		writeNamespaceToFile(generatedFile, namespaceInfo, genResult);
+		writeNamespaceToFile(generatedFile, namespaceInfo, out_genResult);
 	}
 
 	for (StructClassInfo const& structInfo : parsingResult.structs)
 	{
-		writeStructOrClassToFile(generatedFile, structInfo, genResult);
+		writeStructOrClassToFile(generatedFile, structInfo, out_genResult);
 	}
 
 	for (StructClassInfo const& classInfo : parsingResult.classes)
 	{
-		writeStructOrClassToFile(generatedFile, classInfo, genResult);
+		writeStructOrClassToFile(generatedFile, classInfo, out_genResult);
 	}
 
 	for (EnumInfo const& enumInfo : parsingResult.enums)
 	{
-		writeEnumToFile(generatedFile, enumInfo, genResult);
+		writeEnumToFile(generatedFile, enumInfo, out_genResult);
 	}
 
 	for (VariableInfo const& variable : parsingResult.variables)
 	{
-		writeVariableToFile(generatedFile, variable, genResult);
+		writeVariableToFile(generatedFile, variable, out_genResult);
 	}
 
 	for (FunctionInfo const& function : parsingResult.functions)
 	{
-		writeFunctionToFile(generatedFile, function, genResult);
+		writeFunctionToFile(generatedFile, function, out_genResult);
 	}
 
 	//Footer
@@ -65,7 +65,7 @@ void FileGenerationUnit::generateFile(FileGenerationResult& genResult, FileParsi
 	postGenerateFile();
 }
 
-GeneratedCodeTemplate* FileGenerationUnit::getEntityGeneratedCodeTemplate(EntityInfo const& entityInfo, EFileGenerationError& out_error) const noexcept
+GeneratedCodeTemplate* FileGenerationUnit::getEntityGeneratedCodeTemplate(EntityInfo const& entityInfo) const noexcept
 {
 	GeneratedCodeTemplate* result = nullptr;
 
@@ -107,162 +107,164 @@ GeneratedCodeTemplate* FileGenerationUnit::getEntityGeneratedCodeTemplate(Entity
 	return result;
 }
 
-void FileGenerationUnit::writeEntityToFile(GeneratedFile& generatedFile, EntityInfo const& entityInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeEntityToFile(GeneratedFile& generatedFile, EntityInfo const& entityInfo, FileGenerationResult& out_genResult) noexcept
 {
-	EFileGenerationError	error			= EFileGenerationError::Count;
-	GeneratedCodeTemplate*	codeTemplate	= getEntityGeneratedCodeTemplate(entityInfo, error);
+	GeneratedCodeTemplate*	codeTemplate			= getEntityGeneratedCodeTemplate(entityInfo);
+	std::string				out_errorDescription;
 
 	if (codeTemplate != nullptr)
 	{
-		codeTemplate->generateCode(generatedFile, entityInfo, *this);
-	}
-	else if (error != EFileGenerationError::Count)
-	{
-		genResult.fileGenerationErrors.emplace_back(FileGenerationError(generatedFile.getSourceFilePath(), entityInfo.name, error));
+		codeTemplate->generateCode(generatedFile, entityInfo, *this, out_errorDescription);
+
+		//Add an error to the result if something wrong happened during code generation
+		if (!out_errorDescription.empty())
+		{
+			out_genResult.fileGenerationErrors.emplace_back(generatedFile.getPath(), entityInfo.getFullName(), out_errorDescription);
+		}
 	}
 }
 
-void FileGenerationUnit::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInfo const& namespaceInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInfo const& namespaceInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(namespaceInfo.entityType == EEntityType::Namespace);
 
 	//Write namespace
-	writeEntityToFile(generatedFile, namespaceInfo, genResult);
+	writeEntityToFile(generatedFile, namespaceInfo, out_genResult);
 
 	NamespaceInfo const& castNamespaceInfo = static_cast<NamespaceInfo const&>(namespaceInfo);
 
 	//Write recursive namespaces
 	for (NamespaceInfo const& nestedNamespaceInfo : castNamespaceInfo.namespaces)
 	{
-		writeNamespaceToFile(generatedFile, nestedNamespaceInfo, genResult);
+		writeNamespaceToFile(generatedFile, nestedNamespaceInfo, out_genResult);
 	}
 
 	//Write namespace structs
 	for (StructClassInfo const& structInfo : castNamespaceInfo.structs)
 	{
-		writeStructOrClassToFile(generatedFile, structInfo, genResult);
+		writeStructOrClassToFile(generatedFile, structInfo, out_genResult);
 	}
 
 	//Write namespace classes
 	for (StructClassInfo const& classInfo : castNamespaceInfo.classes)
 	{
-		writeStructOrClassToFile(generatedFile, classInfo, genResult);
+		writeStructOrClassToFile(generatedFile, classInfo, out_genResult);
 	}
 
 	//Write namespace enums
 	for (EnumInfo const& enumInfo : castNamespaceInfo.enums)
 	{
-		writeEnumToFile(generatedFile, enumInfo, genResult);
+		writeEnumToFile(generatedFile, enumInfo, out_genResult);
 	}
 
 	//Write namespace variables
 	for (VariableInfo const& varInfo : castNamespaceInfo.variables)
 	{
-		writeVariableToFile(generatedFile, varInfo, genResult);
+		writeVariableToFile(generatedFile, varInfo, out_genResult);
 	}
 
 	//Write namespace functions
 	for (FunctionInfo const& funcInfo : castNamespaceInfo.functions)
 	{
-		writeFunctionToFile(generatedFile, funcInfo, genResult);
+		writeFunctionToFile(generatedFile, funcInfo, out_genResult);
 	}
 }
 
-void FileGenerationUnit::writeStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& structClassInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& structClassInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(structClassInfo.entityType == EEntityType::Struct || structClassInfo.entityType == EEntityType::Class);
 
 	//Write struct/class
-	writeEntityToFile(generatedFile, structClassInfo, genResult);
+	writeEntityToFile(generatedFile, structClassInfo, out_genResult);
 
 	StructClassInfo const& castStructClassInfo = static_cast<StructClassInfo const&>(structClassInfo);
 
 	//Write struct/class nested structs
 	for (std::shared_ptr<NestedStructClassInfo> const& nestedStructInfo : castStructClassInfo.nestedStructs)
 	{
-		writeNestedStructOrClassToFile(generatedFile, *nestedStructInfo, genResult);
+		writeNestedStructOrClassToFile(generatedFile, *nestedStructInfo, out_genResult);
 	}
 
 	//Write struct/class nested classes
 	for (std::shared_ptr<NestedStructClassInfo> const& nestedClassInfo : castStructClassInfo.nestedClasses)
 	{
-		writeNestedStructOrClassToFile(generatedFile, *nestedClassInfo, genResult);
+		writeNestedStructOrClassToFile(generatedFile, *nestedClassInfo, out_genResult);
 	}
 
 	//Write class nested enums
 	for (NestedEnumInfo const& nestedEnumInfo : castStructClassInfo.nestedEnums)
 	{
-		writeEnumToFile(generatedFile, nestedEnumInfo, genResult);
+		writeEnumToFile(generatedFile, nestedEnumInfo, out_genResult);
 	}
 
 	//Write class fields
 	for (FieldInfo const& fieldInfo : castStructClassInfo.fields)
 	{
-		writeFieldToFile(generatedFile, fieldInfo, genResult);
+		writeFieldToFile(generatedFile, fieldInfo, out_genResult);
 	}
 
 	//Write class methods
 	for (MethodInfo const& methodInfo : castStructClassInfo.methods)
 	{
-		writeMethodToFile(generatedFile, methodInfo, genResult);
+		writeMethodToFile(generatedFile, methodInfo, out_genResult);
 	}
 }
 
-void FileGenerationUnit::writeNestedStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& nestedStructClassInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeNestedStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& nestedStructClassInfo, FileGenerationResult& out_genResult) noexcept
 {
 	//Might do something else special for nested structs/classes in the future
-	writeStructOrClassToFile(generatedFile, nestedStructClassInfo, genResult);
+	writeStructOrClassToFile(generatedFile, nestedStructClassInfo, out_genResult);
 }
 
-void FileGenerationUnit::writeEnumToFile(GeneratedFile& generatedFile, EntityInfo const& enumInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeEnumToFile(GeneratedFile& generatedFile, EntityInfo const& enumInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(enumInfo.entityType == EEntityType::Enum);
 
 	//Write enum
-	writeEntityToFile(generatedFile, enumInfo, genResult);
+	writeEntityToFile(generatedFile, enumInfo, out_genResult);
 
 	EnumInfo const& castEnumInfo = static_cast<EnumInfo const&>(enumInfo);
 
 	//Write enum values
 	for (EnumValueInfo const& enumValueInfo : castEnumInfo.enumValues)
 	{
-		writeEnumValueToFile(generatedFile, enumValueInfo, genResult);
+		writeEnumValueToFile(generatedFile, enumValueInfo, out_genResult);
 	}
 }
 
-void FileGenerationUnit::writeEnumValueToFile(GeneratedFile& generatedFile, EntityInfo const& enumValueInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeEnumValueToFile(GeneratedFile& generatedFile, EntityInfo const& enumValueInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(enumValueInfo.entityType == EEntityType::EnumValue);
 
-	writeEntityToFile(generatedFile, enumValueInfo, genResult);
+	writeEntityToFile(generatedFile, enumValueInfo, out_genResult);
 }
 
-void FileGenerationUnit::writeVariableToFile(GeneratedFile& generatedFile, EntityInfo const& variableInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeVariableToFile(GeneratedFile& generatedFile, EntityInfo const& variableInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(variableInfo.entityType == EEntityType::Variable);
 
-	writeEntityToFile(generatedFile, variableInfo, genResult);
+	writeEntityToFile(generatedFile, variableInfo, out_genResult);
 }
 
-void FileGenerationUnit::writeFieldToFile(GeneratedFile& generatedFile, EntityInfo const& fieldInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeFieldToFile(GeneratedFile& generatedFile, EntityInfo const& fieldInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(fieldInfo.entityType == EEntityType::Field);
 
-	writeEntityToFile(generatedFile, fieldInfo, genResult);
+	writeEntityToFile(generatedFile, fieldInfo, out_genResult);
 }
 
-void FileGenerationUnit::writeFunctionToFile(GeneratedFile& generatedFile, EntityInfo const& functionInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeFunctionToFile(GeneratedFile& generatedFile, EntityInfo const& functionInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(functionInfo.entityType == EEntityType::Function);
 
-	writeEntityToFile(generatedFile, functionInfo, genResult);
+	writeEntityToFile(generatedFile, functionInfo, out_genResult);
 }
 
-void FileGenerationUnit::writeMethodToFile(GeneratedFile& generatedFile, EntityInfo const& methodInfo, FileGenerationResult& genResult) noexcept
+void FileGenerationUnit::writeMethodToFile(GeneratedFile& generatedFile, EntityInfo const& methodInfo, FileGenerationResult& out_genResult) noexcept
 {
 	assert(methodInfo.entityType == EEntityType::Method);
 
-	writeEntityToFile(generatedFile, methodInfo, genResult);
+	writeEntityToFile(generatedFile, methodInfo, out_genResult);
 }
 
 bool FileGenerationUnit::shouldRegenerateFile(fs::path const& filePath) const noexcept

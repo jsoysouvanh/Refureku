@@ -73,7 +73,7 @@ std::string GeneratedFunctionCodeTemplate::generateRegistrationMacro(kodgen::Gen
 	}
 }
 
-void GeneratedFunctionCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */) const noexcept
+void GeneratedFunctionCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
 {
 	assert(entityInfo.entityType == kodgen::EEntityType::Function);
 
