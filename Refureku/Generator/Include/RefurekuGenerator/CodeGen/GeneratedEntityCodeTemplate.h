@@ -14,10 +14,6 @@ namespace rfk
 {
 	class GeneratedEntityCodeTemplate : public kodgen::GeneratedCodeTemplate
 	{
-		private:
-			/** Id of the currently generating entity as an integer string (i.e. "42"). */
-			std::string	_currentEntityId;
-
 		protected:
 			/** Prefix used to build internal macros. */
 			static constexpr char const* const	internalPrefix = "__RFK";
@@ -27,9 +23,6 @@ namespace rfk
 
 			/** Class global string hasher. */
 			static std::hash<std::string> const	stringHasher;
-
-			virtual void				generateCode(kodgen::GeneratedFile&	generatedFile,
-													 kodgen::EntityInfo const&	entityInfo)						noexcept override;
 
 			/**
 			*	@brief Generates a string containing the code which adds properties to the entity.
@@ -43,11 +36,13 @@ namespace rfk
 															 std::string const&			entityVarName)	const	noexcept;
 
 			/**
-			*	@brief Getter for _currentEntityId field.
+			*	@brief Get the provided entity id as string.
 			*	
-			*	@return _currentEntityId.
+			*	@param entity Entity we retrieve the id from.
+			*
+			*	@return The provided entity id as string.
 			*/
-			inline std::string const&	getCurrentEntityId()											const	noexcept;
+			static inline std::string	getEntityId(kodgen::EntityInfo const& entity)							noexcept;
 
 		public:
 			GeneratedEntityCodeTemplate()									= default;

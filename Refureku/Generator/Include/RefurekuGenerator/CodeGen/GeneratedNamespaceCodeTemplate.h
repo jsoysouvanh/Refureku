@@ -54,10 +54,12 @@ namespace rfk
 			*	@brief Get the name of the generated getNamespaceFragment method for the currently processing namespace.
 			*
 			*	@param generatedFile	File to write into.
+			*	@param namespaceInfo	Corresponding NamespaceInfo object.
 			*
 			*	@return The name of the getNamespaceFragment function for the current namespace.
 			*/
-			std::string getGetNamespaceFragmentFunctionName(kodgen::GeneratedFile const& generatedFile)					const	noexcept;
+			std::string getGetNamespaceFragmentFunctionName(kodgen::GeneratedFile const& generatedFile,
+															kodgen::NamespaceInfo const& namespaceInfo)					const	noexcept;
 
 			/**
 			*	@brief Get the name of the NamespaceFragmentRegisterer variable generated for the provided namespace.
@@ -71,8 +73,9 @@ namespace rfk
 														   kodgen::NamespaceInfo const&	namespaceInfo)					const	noexcept;
 
 		protected:
-			virtual void generateCode(kodgen::GeneratedFile&	generatedFile,
-									  kodgen::EntityInfo const&	entityInfo)		noexcept override;
+			virtual void generateCode(kodgen::GeneratedFile&		generatedFile,
+									  kodgen::EntityInfo const&		entityInfo,
+									  kodgen::FileGenerationUnit&	fgu)			const noexcept override;
 
 		public:
 			GeneratedNamespaceCodeTemplate()										= default;

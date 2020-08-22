@@ -8,7 +8,8 @@ using namespace rfk;
 
 std::string GeneratedVariableCodeTemplate::generateGetVariableDefinition(kodgen::GeneratedFile& generatedFile, kodgen::VariableInfo const& varInfo) const noexcept
 {
-	std::string macroName	= internalPrefix + getCurrentEntityId() + "_GenerateGetVariableDefinition";
+	std::string entityId	= getEntityId(varInfo);
+	std::string macroName	= internalPrefix + entityId + "_GenerateGetVariableDefinition";
 	std::string properties;
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
@@ -16,7 +17,7 @@ std::string GeneratedVariableCodeTemplate::generateGetVariableDefinition(kodgen:
 							 "	{\t\\",
 							 "		static bool				initialized = false;\t\\",
 							 "		static rfk::Variable	variable(\"" + varInfo.name + "\", " +
-																	 getCurrentEntityId() + ", "
+																	 entityId + ", "
 																	 "rfk::Type::getType<" + varInfo.type.getCanonicalName() + ">(), "
 																	 "&" + varInfo.getFullName() + ", "
 																	 "static_cast<rfk::EVarFlags>(" + std::to_string(computeVarFlags(varInfo)) + ")"
@@ -50,24 +51,23 @@ std::string GeneratedVariableCodeTemplate::generateRegistrationMacro(kodgen::Gen
 	}
 	else
 	{
-		std::string macroName = internalPrefix + getCurrentEntityId() + "_RegisterVariable";
+		std::string entityId	= getEntityId(varInfo);
+		std::string macroName	= internalPrefix + entityId + "_RegisterVariable";
 
 		generatedFile.writeMacro(std::string(macroName),
-								 "inline rfk::DefaultEntityRegisterer registerer" + getCurrentEntityId() + " = &getVariable" + getCurrentEntityId() + "();");
+								 "inline rfk::DefaultEntityRegisterer registerer" + entityId + " = &getVariable" + entityId + "();");
 
 		return macroName;
 	}
 }
 
-void GeneratedVariableCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
+void GeneratedVariableCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */) const noexcept
 {
-	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo);
-
 	assert(entityInfo.entityType == kodgen::EEntityType::Variable);
 
 	kodgen::VariableInfo const& varInfo = static_cast<kodgen::VariableInfo const&>(entityInfo);
 
-	std::string	mainMacroName		= internalPrefix + getCurrentEntityId() + "_GENERATED";
+	std::string	mainMacroName		= internalPrefix + getEntityId(entityInfo) + "_GENERATED";
 
 	std::string variableDefinition	= generateGetVariableDefinition(generatedFile, varInfo);
 	std::string variableRegisterer	= generateRegistrationMacro(generatedFile, varInfo);

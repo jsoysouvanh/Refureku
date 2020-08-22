@@ -15,6 +15,9 @@
 
 namespace kodgen
 {
+	//Forward declaration
+	class FileGenerationUnit;
+
 	class GeneratedCodeTemplate
 	{
 		public:
@@ -26,9 +29,12 @@ namespace kodgen
 			/**
 			*	@brief Method in which we define what to write in the generated file for this entity.
 			*
-			*	@param generatedFile	Object used to write in the generated file
-			*	@param entityInfo		Structure containing info about the entity. You may static cast this into the derived class you expect
+			*	@param generatedFile	Object used to write in the generated file.
+			*	@param entityInfo		Structure containing info about the entity. You may static cast this into the derived class you expect.
+			*	@param generationUnit	FileGenerationUnit generating this entity.
 			*/
-			virtual void generateCode(GeneratedFile& generatedFile, EntityInfo const& entityInfo) noexcept = 0;
+			virtual void generateCode(GeneratedFile&		generatedFile,
+									  EntityInfo const&		entityInfo,
+									  FileGenerationUnit&	generationUnit)		const noexcept = 0;
 	};
 }

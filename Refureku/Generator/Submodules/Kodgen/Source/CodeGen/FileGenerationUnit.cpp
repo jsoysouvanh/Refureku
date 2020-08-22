@@ -114,7 +114,7 @@ void FileGenerationUnit::writeEntityToFile(GeneratedFile& generatedFile, EntityI
 
 	if (codeTemplate != nullptr)
 	{
-		codeTemplate->generateCode(generatedFile, entityInfo);
+		codeTemplate->generateCode(generatedFile, entityInfo, *this);
 	}
 	else if (error != EFileGenerationError::Count)
 	{

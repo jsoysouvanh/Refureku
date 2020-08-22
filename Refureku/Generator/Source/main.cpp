@@ -54,6 +54,7 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::FileGenerationResult
 void parseAndGenerate(fs::path&& exePath)
 {
 	rfk::FileParserFactory	fileParserFactory;
+	rfk::FileGenerationUnit fileGenerationUnit;
 	rfk::FileGenerator		fileGenerator;
 	
 	//Set logger
@@ -85,8 +86,6 @@ void parseAndGenerate(fs::path&& exePath)
 		#endif
 
 		printGenerationSetup(logger, fileGenerator);
-
-		rfk::FileGenerationUnit fileGenerationUnit;
 
 		//Parse
 		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);

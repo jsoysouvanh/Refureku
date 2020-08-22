@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline std::string const& GeneratedEntityCodeTemplate::getCurrentEntityId() const noexcept
+inline std::string GeneratedEntityCodeTemplate::getEntityId(kodgen::EntityInfo const& entity) noexcept
 {
-	return _currentEntityId;
+	return std::to_string(GeneratedEntityCodeTemplate::stringHasher(entity.id)) + "u";
 }

@@ -6,10 +6,8 @@
 
 using namespace rfk;
 
-void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
+void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */) const noexcept
 {
-	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo);
-
 	assert(entityInfo.entityType == kodgen::EEntityType::Enum);
 
 	generateEnumCode(generatedFile, static_cast<kodgen::EnumInfo const&>(entityInfo));
@@ -17,7 +15,7 @@ void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFil
 
 void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
 {
-	std::string	mainMacroName			= internalPrefix + getCurrentEntityId() + "_GENERATED";
+	std::string	mainMacroName			= internalPrefix + getEntityId(enumInfo) + "_GENERATED";
 
 	std::string specializationMacroName	= generateGetEnumSpecialization(generatedFile, enumInfo);
 	std::string registerMacroName		= generateRegistrationMacro(generatedFile, enumInfo);
@@ -40,7 +38,8 @@ void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generate
 
 std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
 {
-	std::string macroName	= internalPrefix + getCurrentEntityId() + "_GenerateGetEnumSpecialization";
+	std::string entityId	= getEntityId(enumInfo);
+	std::string macroName	= internalPrefix + entityId + "_GenerateGetEnumSpecialization";
 	std::string typeName	= enumInfo.type.getCanonicalName();
 	std::string properties;
 
@@ -50,7 +49,7 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 							 "	{\t\\",
 							 "		static bool			initialized = false;\t\\",
 							 "		static rfk::Enum	type(\"" + enumInfo.name + "\", " +
-															 getCurrentEntityId() + ", "
+															 entityId + ", "
 															 "sizeof(" + typeName + "), "
 															 "rfk::Type::getType<" + enumInfo.underlyingType.getCanonicalName() + ">());\t\\");
 	
@@ -105,11 +104,12 @@ std::string GeneratedEnumCodeTemplate::generateRegistrationMacro(kodgen::Generat
 	}
 	else
 	{
-		std::string macroName = internalPrefix + getCurrentEntityId() + "_RegisterEnum";
+		std::string entityId	= getEntityId(enumInfo);
+		std::string macroName	= internalPrefix + entityId + "_RegisterEnum";
 
 		//Wrap into a generated namespace to avoid pollution in rfk namespace
 		generatedFile.writeMacro(std::string(macroName),
-								 "namespace generated { inline rfk::ArchetypeRegisterer registerer" + getCurrentEntityId() + " = rfk::getEnum<" + enumInfo.type.getCanonicalName() + ">(); }");
+								 "namespace generated { inline rfk::ArchetypeRegisterer registerer" + entityId + " = rfk::getEnum<" + enumInfo.type.getCanonicalName() + ">(); }");
 
 		return macroName;
 	}

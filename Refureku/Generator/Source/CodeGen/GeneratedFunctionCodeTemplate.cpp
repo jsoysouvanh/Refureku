@@ -8,7 +8,8 @@ using namespace rfk;
 
 std::string GeneratedFunctionCodeTemplate::generateGetFunctionDefinition(kodgen::GeneratedFile& generatedFile, kodgen::FunctionInfo const& funcInfo) const noexcept
 {
-	std::string macroName	= internalPrefix + getCurrentEntityId() + "_GenerateGetFunctionDefinition";
+	std::string entityId	= getEntityId(funcInfo);
+	std::string macroName	= internalPrefix + entityId + "_GenerateGetFunctionDefinition";
 	std::string properties;
 	std::string nonMemberFuncType = "rfk::NonMemberFunction<" + funcInfo.getPrototype(true, true) + ">";
 
@@ -17,7 +18,7 @@ std::string GeneratedFunctionCodeTemplate::generateGetFunctionDefinition(kodgen:
 							 "	{\t\\",
 							 "		static bool				initialized = false;\t\\",
 							 "		static rfk::Function	function(\"" + funcInfo.name + "\", " +
-																	 getCurrentEntityId() + ", "
+																	 entityId + ", "
 																	 "rfk::Type::getType<" + funcInfo.returnType.getCanonicalName() + ">(), "
 																	 "std::unique_ptr<" + nonMemberFuncType + ">(new " + nonMemberFuncType + "(&" + funcInfo.getFullName() + ")), "
 																	 "static_cast<rfk::EFunctionFlags>(" + std::to_string(computeFunctionFlags(funcInfo)) + ")"
@@ -62,24 +63,23 @@ std::string GeneratedFunctionCodeTemplate::generateRegistrationMacro(kodgen::Gen
 	}
 	else
 	{
-		std::string macroName = internalPrefix + getCurrentEntityId() + "_RegisterFunction";
+		std::string entityId	= getEntityId(funcInfo);
+		std::string macroName	= internalPrefix + entityId + "_RegisterFunction";
 
 		generatedFile.writeMacro(std::string(macroName),
-								 "inline rfk::DefaultEntityRegisterer registerer" + getCurrentEntityId() + " = &" + getGetFunctionFunctionName(funcInfo) + "();");
+								 "inline rfk::DefaultEntityRegisterer registerer" + entityId + " = &" + getGetFunctionFunctionName(funcInfo) + "();");
 
 		return macroName;
 	}
 }
 
-void GeneratedFunctionCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
+void GeneratedFunctionCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */) const noexcept
 {
-	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo);
-
 	assert(entityInfo.entityType == kodgen::EEntityType::Function);
 
 	kodgen::FunctionInfo const& funcInfo = static_cast<kodgen::FunctionInfo const&>(entityInfo);
 
-	std::string	mainMacroName		= internalPrefix + getCurrentEntityId() + "_GENERATED";
+	std::string	mainMacroName		= internalPrefix + getEntityId(entityInfo) + "_GENERATED";
 
 	std::string functionDefinition	= generateGetFunctionDefinition(generatedFile, funcInfo);
 	std::string functionRegisterer	= generateRegistrationMacro(generatedFile, funcInfo);
@@ -119,5 +119,5 @@ kodgen::uint8 GeneratedFunctionCodeTemplate::computeFunctionFlags(kodgen::Functi
 
 std::string GeneratedFunctionCodeTemplate::getGetFunctionFunctionName(kodgen::FunctionInfo const& funcInfo) noexcept
 {
-	return "getFunction" + std::to_string(stringHasher(funcInfo.id)) + "u";
+	return "getFunction" + getEntityId(funcInfo);
 }
