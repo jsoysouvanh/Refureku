@@ -124,16 +124,16 @@ void FileGenerator::clearNativePropertyRules(PropertyParsingSettings& propParsin
 	propParsingSettings.complexPropertyRules.pop_back();	//Remove _generatedCodeTemplatePropertyRule
 }
 
-void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
+void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory) const noexcept
 {
 	GeneratedFile macrosDefinitionFile(settings.outputDirectory / settings.entityMacrosFilename);
 
-	PropertyParsingSettings& pps = parser.parsingSettings.propertyParsingSettings;
+	PropertyParsingSettings& pps = fileParserFactory.parsingSettings.propertyParsingSettings;
 
 	//Define empty entity macros to allow compilation outside of the Kodgen parsing
 	macrosDefinitionFile.writeLines("#pragma once",
 									"",
-									"#ifndef " + parser.parsingMacro,
+									"#ifndef " + FileParserFactoryBase::parsingMacro,
 									"",
 									"#define " + pps.namespaceMacroName	+ "(...)",
 									"#define " + pps.classMacroName		+ "(...)",
@@ -147,7 +147,7 @@ void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
 
 	//Generate simple property rules macros + doc
 	std::string macroDefinition;
-	for (kodgen::SimplePropertyRule const* propertyRule : parser.parsingSettings.propertyParsingSettings.simplePropertyRules)
+	for (kodgen::SimplePropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.simplePropertyRules)
 	{
 		macroDefinition = propertyRule->getMacroDefinition();
 
@@ -159,7 +159,7 @@ void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
 	}
 
 	//Generate complex property rules macros + doc
-	for (kodgen::ComplexPropertyRule const* propertyRule : parser.parsingSettings.propertyParsingSettings.complexPropertyRules)
+	for (kodgen::ComplexPropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.complexPropertyRules)
 	{
 		macroDefinition = propertyRule->getMacroDefinition();
 
@@ -185,9 +185,9 @@ bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 	{
 		toml::value tomlContent = toml::parse(pathToSettingsFile.string());
 
-		if (tomlContent.contains("FileGeneratorSettings"))
+		if (tomlContent.contains("FileGenerationSettings"))
 		{
-			toml::value const& generatorSettings = toml::find(tomlContent, "FileGeneratorSettings");
+			toml::value const& generatorSettings = toml::find(tomlContent, "FileGenerationSettings");
 
 			TomlUtility::updateSetting<std::string>(generatorSettings, "generatedFilesExtension", settings.generatedFilesExtension);
 			TomlUtility::updateSetting<fs::path>(generatorSettings, "outputDirectory", settings.outputDirectory);

@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
+#include <Kodgen/Parsing/FileParserFactoryBase.h>	//For FileParser::parsingMacro
 
 using namespace rfk;
 
@@ -23,7 +23,7 @@ void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generate
 	std::string registerMacroName		= generateRegistrationMacro(generatedFile, enumInfo);
 
 	//Use parsing macro to avoid parsing generated data
-	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
 
 	generatedFile.writeMacro(std::string(mainMacroName));
 

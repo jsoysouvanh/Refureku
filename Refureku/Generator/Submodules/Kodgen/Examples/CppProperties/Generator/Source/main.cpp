@@ -4,7 +4,7 @@
 #include <Kodgen/Misc/DefaultLogger.h>
 #include <Kodgen/CodeGen/FileGenerator.h>
 
-#include "CppPropsParser.h"
+#include "CppPropsParserFactory.h"
 #include "CppPropsCodeTemplate.h"
 
 int main(int argc, char** argv)
@@ -23,13 +23,13 @@ int main(int argc, char** argv)
 			fs::path includeDirectory	= workingDirectory / "Include";
 			fs::path generatedDirectory	= includeDirectory / "Generated";
 
-			CppPropsParser				fileParser;
+			CppPropsParserFactory		fileParserFactory;
 			kodgen::FileGenerationUnit	fileGenUnit;
 			kodgen::FileGenerator		fileGenerator;
 
 			//Parser and generator should log through logger
-			fileParser.logger		= &logger;
-			fileGenerator.logger	= &logger;
+			fileParserFactory.logger	= &logger;
+			fileGenerator.logger		= &logger;
 
 			//Parse WorkingDir/...
 			fileGenerator.settings.toParseDirectories.emplace(includeDirectory.string());
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 			*/
 			fileGenerator.setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Class, "PropertyCodeTemplate");
 
-			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, fileGenUnit);
+			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenUnit);
 
 			if (genResult.completed)
 			{

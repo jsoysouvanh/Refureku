@@ -1,4 +1,4 @@
-[FileGeneratorSettings]
+[FileGenerationSettings]
 # Generated files will use this extension
 generatedFilesExtension = ".rfk.h"
 
@@ -28,7 +28,7 @@ ignoredDirectories		= [
 ignoredFiles			= []
 
 
-[FileParserSettings]
+[FileParsingSettings]
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError	= true
 
@@ -41,7 +41,7 @@ projectIncludeDirectories		= [
 #	'''Path/To/Your/Project/Include'''
 ]
 
-[FileParserSettings.Properties]
+[FileParsingSettings.Properties]
 propertySeparator = ","
 subPropertySeparator = ","
 subPropertyStartEncloser = "("

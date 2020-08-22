@@ -7,29 +7,25 @@
 
 #pragma once
 
-#include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/Parsing/FileParserFactory.h>
 
+#include "RefurekuGenerator/Parsing/FileParser.h"
 #include "RefurekuGenerator/Properties/DynamicGetArchetypePropertyRule.h"
 #include "RefurekuGenerator/Properties/CustomInstantiatorPropertyRule.h"
-#include "RefurekuGenerator/Properties/RangePropertyRule.h"
 
 namespace rfk
 {
-	class FileParser : public kodgen::FileParser
+	class FileParserFactory : public kodgen::FileParserFactory<FileParser>
 	{
 		private:
 			/** Native properties. */
 			DynamicGetArchetypePropertyRule	_dynamicGetArchetypePropertyRule;
 			CustomInstantiatorPropertyRule	_customInstantiatorPropertyRule;
 
-		protected:
-			virtual void preParse(fs::path const& parseFile)											noexcept override;
-			virtual void postParse(fs::path const& parseFile, kodgen::FileParsingResult const& result)	noexcept override;
-
 		public:
-			FileParser()					noexcept;
-			FileParser(FileParser const&)	= default;
-			FileParser(FileParser&&)		= default;
-			virtual ~FileParser()			= default;
+			FileParserFactory()							noexcept;
+			FileParserFactory(FileParserFactory const&)	= default;
+			FileParserFactory(FileParserFactory&&)		= default;
+			~FileParserFactory()						= default;
 	};
 }

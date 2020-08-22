@@ -3,7 +3,7 @@
 #include <cassert>
 #include <algorithm>
 
-#include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
+#include <Kodgen/Parsing/FileParserFactoryBase.h>	//For FileParser::parsingMacro
 #include <Kodgen/InfoStructures/NestedStructClassInfo.h>
 #include <Kodgen/InfoStructures/NestedEnumInfo.h>
 #include <Kodgen/Misc/FundamentalTypes.h>
@@ -41,7 +41,7 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
 
 	//Use parsing macro to avoid parsing generated data
-	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
 
 	generatedFile.writeMacro(std::string(mainMacroName));
 
@@ -90,7 +90,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 	);
 
 	//Use parsing macro to avoid parsing generated data
-	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
 
 	generatedFile.writeMacro(std::string(getTypeMacroDefinition));
 

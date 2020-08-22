@@ -1,9 +1,9 @@
-#include "RefurekuGenerator/CodeGen/FileParser.h"
+#include "RefurekuGenerator/Parsing/FileParserFactory.h"
 
 using namespace rfk;
 
-FileParser::FileParser() noexcept:
-	kodgen::FileParser()
+FileParserFactory::FileParserFactory() noexcept:
+	kodgen::FileParserFactory<FileParser>()
 {
 	//We abort parsing if we encounter a single error during parsing
 	parsingSettings.shouldAbortParsingOnFirstError = true;
@@ -14,9 +14,9 @@ FileParser::FileParser() noexcept:
 	//Each property will be separated with a , (and potentially some spaces as they are ignored)
 	parsingSettings.propertyParsingSettings.propertySeparator = ',';
 
-	//Subproperties are surrounded by []
-	parsingSettings.propertyParsingSettings.subPropertyEnclosers[0] = '[';
-	parsingSettings.propertyParsingSettings.subPropertyEnclosers[1] = ']';
+	//Subproperties are surrounded by ()
+	parsingSettings.propertyParsingSettings.subPropertyEnclosers[0] = '(';
+	parsingSettings.propertyParsingSettings.subPropertyEnclosers[1] = ')';
 
 	//Each subproperty will be separated with a , (and potentially some spaces as they are ignored)
 	parsingSettings.propertyParsingSettings.subPropertySeparator = ',';
@@ -35,28 +35,4 @@ FileParser::FileParser() noexcept:
 	//Setup property rules
 	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_dynamicGetArchetypePropertyRule);
 	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_customInstantiatorPropertyRule);
-}
-
-void FileParser::preParse(fs::path const& parseFile) noexcept
-{
-	if (logger != nullptr)
-	{
-		logger->log("Start parsing: " + parseFile.string(), kodgen::ILogger::ELogSeverity::Info);
-	}
-}
-
-void FileParser::postParse(fs::path const&, kodgen::FileParsingResult const& result) noexcept
-{
-	if (logger != nullptr)
-	{
-		for (kodgen::ParsingError const& parsingError : result.errors)
-		{
-			logger->log(parsingError.toString(), kodgen::ILogger::ELogSeverity::Error);
-		}
-
-		logger->log("Found " + std::to_string(result.namespaces.size()) + " namespace(s), " +
-					std::to_string(result.structs.size()) + " struct(s), " +
-					std::to_string(result.classes.size()) + " classe(s) and " +
-					std::to_string(result.enums.size()) + " enum(s).", kodgen::ILogger::ELogSeverity::Info);
-	}
 }

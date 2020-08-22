@@ -13,7 +13,9 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/Properties/CustomInstantiatorPropertyRule.cpp
 					Source/Properties/RangePropertyRule.cpp
 
-					Source/CodeGen/FileParser.cpp
+					Source/Parsing/FileParser.cpp
+					Source/Parsing/FileParserFactory.cpp
+
 					Source/CodeGen/GeneratedEntityCodeTemplate.cpp
 					Source/CodeGen/GeneratedNamespaceCodeTemplate.cpp
 					Source/CodeGen/GeneratedClassCodeTemplate.cpp

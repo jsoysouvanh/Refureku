@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "RefurekuGenerator/CodeGen/FileParser.h"
+#include <Kodgen/Parsing/FileParserFactoryBase.h>
 
 using namespace rfk;
 
@@ -85,7 +85,7 @@ void GeneratedFunctionCodeTemplate::generateCode(kodgen::GeneratedFile& generate
 	std::string functionRegisterer	= generateRegistrationMacro(generatedFile, funcInfo);
 
 	//Use parsing macro to avoid parsing generated data
-	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
 
 	generatedFile.writeMacro(std::string(mainMacroName));
 

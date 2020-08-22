@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <clang-c/Index.h>
 
@@ -24,24 +25,10 @@ namespace kodgen
 	{
 		private:
 			/** Index used internally by libclang to process a translation unit. */
-			CXIndex							_clangIndex;
-
-			/** Variables used to build compilation command line. */
-			std::string						_kodgenParsingMacro		= "-D" + parsingMacro;
-			std::vector<std::string>		_projectIncludeDirs;
-
-			std::string						_namespacePropertyMacro;
-			std::string						_classPropertyMacro;
-			std::string						_structPropertyMacro;
-			std::string						_variablePropertyMacro;
-			std::string						_fieldPropertyMacro;
-			std::string						_functionPropertyMacro;
-			std::string						_methodPropertyMacro;
-			std::string						_enumPropertyMacro;
-			std::string						_enumValuePropertyMacro;
+			CXIndex			_clangIndex;
 
 			/** Property parser used to parse properties of all entities. */
-			PropertyParser					_propertyParser;		
+			PropertyParser	_propertyParser;		
 
 			/**
 			*	@brief This method is called at each node (cursor) of the parsing.
@@ -55,18 +42,6 @@ namespace kodgen
 			static CXChildVisitResult	parseNestedEntity(CXCursor		cursor,
 														  CXCursor		parentCursor,
 														  CXClientData	clientData)						noexcept;
-
-			/**
-			*	@brief Refresh all internal compilation macros to pass to the compiler.
-			*/
-			void						refreshBuildCommandStrings()									noexcept;
-
-			/**
-			*	@brief Make a list of all arguments to pass to the compilation command.
-			*
-			*	@return A vector of all compilation commands.
-			*/
-			std::vector<char const*>	makeCompilationArguments()										noexcept;
 
 			/**
 			*	@brief Push a new clean context to prepare translation unit parsing.
@@ -129,11 +104,6 @@ namespace kodgen
 			void						logDiagnostic(CXTranslationUnit const& translationUnit)	const	noexcept;
 
 			/**
-			*	@brief Log the compilation command arguments.
-			*/
-			void						logCompilationArguments()										noexcept;
-
-			/**
 			*	@brief Helper to get the ParsingResult contained in the context as a FileParsingResult.
 			*
 			*	@return The cast FileParsingResult.
@@ -158,39 +128,29 @@ namespace kodgen
 			virtual void postParse(fs::path const& parseFile, FileParsingResult const& result)	noexcept;
 
 		public:
-			/** Macro defined internally when kodgen processes a translation unit. */
-			static inline std::string const	parsingMacro	= "KODGEN_PARSING";
-
 			/** Settings to use when parsing. */
-			ParsingSettings					parsingSettings;
+			ParsingSettings const*	parsingSettings;
 
 			/** Logger used to issue logs from the FileParser. */
-			ILogger*						logger			= nullptr;
+			ILogger*				logger			= nullptr;
 
 			FileParser()					noexcept;
 			FileParser(FileParser const&)	noexcept;
-			FileParser(FileParser&&)		= default;
+			FileParser(FileParser&&)		noexcept;
 			virtual ~FileParser()			noexcept;
 
 			/**
 			*	@brief Parse the file and fill the FileParsingResult.
 			*
 			*	@param toParseFile	Path to the file to parse.
+			*	@param compilArgs	Arguments to use to generate the provided file AST.
 			*	@param out_result	Result filled while parsing the file.
 			*
 			*	@return true if the parsing process finished without error, else false
 			*/
-			bool	parse(fs::path const&		toParseFile, 
-						  FileParsingResult&	out_result)					noexcept;
-
-			/**
-			*	@brief Load parsing settings from the provided toml file. Unset settings remain unchanged.
-			*
-			*	@param pathToSettingsFile Path to the toml file.
-			*
-			*	@return true if a file could be loaded, else false.
-			*/
-			bool		loadSettings(fs::path const& pathToSettingsFile)	noexcept;
+			bool	parse(fs::path const&					toParseFile,
+						  std::vector<char const*> const&	compilArgs,
+						  FileParsingResult&				out_result)		noexcept;
 	};
 
 	#include "Kodgen/Parsing/FileParser.inl"

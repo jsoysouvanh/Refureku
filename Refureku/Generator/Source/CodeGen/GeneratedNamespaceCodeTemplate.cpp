@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include <Kodgen/Parsing/FileParser.h>	//For FileParser::parsingMacro
+#include <Kodgen/Parsing/FileParserFactoryBase.h>	//For FileParser::parsingMacro
 
 #include "RefurekuGenerator/CodeGen/GeneratedVariableCodeTemplate.h"
 #include "RefurekuGenerator/CodeGen/GeneratedFunctionCodeTemplate.h"
@@ -29,7 +29,7 @@ void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generat
 	std::string registerMacroName					= generateRegistrationMacro(generatedFile, namespaceInfo);
 
 	//Use parsing macro to avoid parsing generated data
-	generatedFile.writeLine("#ifdef " + kodgen::FileParser::parsingMacro);
+	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
 
 	generatedFile.writeMacro(std::string(mainMacroName));
 
