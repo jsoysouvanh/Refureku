@@ -43,10 +43,16 @@ std::string	GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 				result += "}";
 			}
 			
-
 			result += "));";
 		}
 	}
 
 	return result;
+}
+
+void GeneratedEntityCodeTemplate::ifDefUndefMacro(kodgen::GeneratedFile& generatedFile, std::string const& macroName) const noexcept
+{
+	generatedFile.writeLines("#ifdef " + macroName,
+							 "\t#undef " + macroName,
+							 "#endif\n");
 }

@@ -6,7 +6,7 @@ using namespace kodgen;
 
 FieldInfo::FieldInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
 	VariableInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EEntityType::Field),
-	isMutable{isMutable = clang_CXXField_isMutable(cursor)},
+	isMutable{clang_CXXField_isMutable(cursor) != 0u},
 	accessSpecifier{EAccessSpecifier::Invalid},
 	memoryOffset{0}
 {

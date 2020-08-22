@@ -25,6 +25,15 @@ namespace rfk
 			static std::hash<std::string> const	stringHasher;
 
 			/**
+			*	@brief Get the provided entity id as string.
+			*	
+			*	@param entity Entity we retrieve the id from.
+			*
+			*	@return The provided entity id as string.
+			*/
+			static inline std::string	getEntityId(kodgen::EntityInfo const& entity)							noexcept;
+
+			/**
 			*	@brief Generates a string containing the code which adds properties to the entity.
 			*
 			*	@param info				Source entity.
@@ -36,13 +45,13 @@ namespace rfk
 															 std::string const&			entityVarName)	const	noexcept;
 
 			/**
-			*	@brief Get the provided entity id as string.
+			*	@brief Write in the generated file #ifdef macroName #undef macroName #endif
 			*	
-			*	@param entity Entity we retrieve the id from.
-			*
-			*	@return The provided entity id as string.
+			*	@param generatedFile	File to write into.
+			*	@param macroName		Macro to undef if defined.
 			*/
-			static inline std::string	getEntityId(kodgen::EntityInfo const& entity)							noexcept;
+			void						ifDefUndefMacro(kodgen::GeneratedFile&	generatedFile,
+														std::string const&		macroName)				const	noexcept;
 
 		public:
 			GeneratedEntityCodeTemplate()									= default;

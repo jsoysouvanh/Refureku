@@ -79,7 +79,10 @@ void FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFil
 
 void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept
 {
-	file.writeLine("#define " + _endFileMacroName + "\t\\");
+	file.writeLines("#ifdef " + _endFileMacroName,
+					"\t#undef " + _endFileMacroName,
+					"#endif\n",
+					"#define " + _endFileMacroName + "\t\\");
 
 	//Enum first because structs/classes and namespaces can have nested (and then reference to) enums
 	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)
@@ -109,4 +112,7 @@ void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const
 	{
 		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(namespaceInfo->id)) + "u_GENERATED\t\\");
 	}
+
+	//New line to avoid "warning: backslash-newline at end of file"
+	file.writeLine("\n");
 }

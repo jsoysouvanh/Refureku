@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ExampleClass.h"
+
 #include "Generated/ExampleClass2.rfk.h"
 
 namespace namespace3 RFKNamespace()
@@ -49,4 +51,4 @@ enum RFKEnum() EThisIsANormalEnum : int
 	Value2
 };
 
-File_GENERATED 
+File_GENERATED
