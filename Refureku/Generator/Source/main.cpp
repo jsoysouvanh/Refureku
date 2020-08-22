@@ -73,8 +73,7 @@ void parseAndGenerate(fs::path&& exePath)
 		logger.log("Loaded FileGenerator settings.", kodgen::ILogger::ELogSeverity::Info);
 		logger.log("Loaded FileParser settings.", kodgen::ILogger::ELogSeverity::Info);
 
-		#if RFK_DEV
-
+#if RFK_DEV
 		// This part is for travis only
 		fs::path includeDir		= fs::current_path() / "Include";
 		fs::path generatedDir	= includeDir / "Generated";
@@ -82,8 +81,7 @@ void parseAndGenerate(fs::path&& exePath)
 		fileGenerator.settings.outputDirectory = generatedDir;
 		fileGenerator.settings.toParseDirectories.emplace(includeDir);
 		fileGenerator.settings.ignoredDirectories.emplace(generatedDir);
-
-		#endif
+#endif
 
 		printGenerationSetup(logger, fileGenerator);
 
