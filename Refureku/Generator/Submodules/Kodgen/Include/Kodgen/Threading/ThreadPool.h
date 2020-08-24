@@ -9,6 +9,7 @@
 
 #include <thread>
 #include <vector>
+#include <list>
 #include <condition_variable>
 #include <mutex>
 #include <atomic>
@@ -29,8 +30,7 @@ namespace kodgen
 			std::vector<std::thread>				_workers;
 
 			/** List of all tasks. */
-			//TODO: Might change to std::list to allow fast removal of any element
-			std::vector<std::shared_ptr<TaskBase>>	_tasks;
+			std::list<std::shared_ptr<TaskBase>>	_tasks;
 
 			/** Set to true when the ThreadPool destructor has been called. */
 			bool									_destructorCalled	= false;
@@ -41,7 +41,7 @@ namespace kodgen
 			/** Mutex used with taskCondition. */
 			std::mutex								_taskMutex;
 
-			/** Number of actual workers currently running a task. */
+			/** Number of workers currently running a task. */
 			std::atomic_uint						_workingWorkers;
 
 			/**
@@ -89,7 +89,7 @@ namespace kodgen
 			/**
 			*	@brief Join all workers.
 			*/
-			void						joinWorkers()				noexcept;
+			void						joinWorkers()													noexcept;
 	};
 
 	#include "Kodgen/Threading/ThreadPool.inl"

@@ -73,6 +73,13 @@ void FileParserFactoryBase::logCompilationArguments() noexcept
 	}
 }
 
+void FileParserFactoryBase::setupFileParser(kodgen::FileParser& fileParser) const noexcept
+{
+	fileParser.logger = logger;
+
+	fileParser.parsingSettings = &parsingSettings;
+}
+
 void FileParserFactoryBase::_init() noexcept
 {
 	refreshCompilationArguments();

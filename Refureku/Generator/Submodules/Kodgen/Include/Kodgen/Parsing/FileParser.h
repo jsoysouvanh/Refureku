@@ -23,6 +23,9 @@ namespace kodgen
 {
 	class FileParser : public NamespaceParser
 	{
+		//Friend the factory to allow setup of logger & parsing settings
+		friend class FileParserFactoryBase;
+
 		private:
 			/** Index used internally by libclang to process a translation unit. */
 			CXIndex			_clangIndex;
@@ -111,6 +114,12 @@ namespace kodgen
 			inline FileParsingResult*	getParsingResult()												noexcept;
 
 		protected:
+			/** Settings to use when parsing. */
+			ParsingSettings const*	parsingSettings;
+
+			/** Logger used to issue logs from the FileParser. */
+			ILogger*				logger			= nullptr;
+
 			/**
 			*	@brief Overridable method called just before starting the parsing process of a file
 			*
@@ -128,12 +137,6 @@ namespace kodgen
 			virtual void postParse(fs::path const& parseFile, FileParsingResult const& result)	noexcept;
 
 		public:
-			/** Settings to use when parsing. */
-			ParsingSettings const*	parsingSettings;
-
-			/** Logger used to issue logs from the FileParser. */
-			ILogger*				logger			= nullptr;
-
 			FileParser()					noexcept;
 			FileParser(FileParser const&)	noexcept;
 			FileParser(FileParser&&)		noexcept;

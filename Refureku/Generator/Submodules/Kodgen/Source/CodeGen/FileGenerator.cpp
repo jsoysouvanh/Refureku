@@ -22,7 +22,8 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 		}
 		else
 		{
-			//TODO: Add FileGenerationFile invalid path
+			//Add FileGenerationFile invalid path
+			out_genResult.fileGenerationErrors.emplace_back(path, "", "This path was find in the toParseFiles list but it doesn't exist or is not a file.");
 			logger->log("File " + path.string() + " doesn't exist", ILogger::ELogSeverity::Warning);
 		}
 	}
@@ -66,7 +67,8 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 		}
 		else
 		{
-			//TODO: Add FileGenerationFile invalid path
+			//Add FileGenerationFile invalid path
+			out_genResult.fileGenerationErrors.emplace_back(pathToIncludedDir, "", "This path was find in the toParseDirectories list but it doesn't exist or is not a directory.");
 			logger->log("Directory " + pathToIncludedDir.string() + " doesn't exist", ILogger::ELogSeverity::Warning);
 		}
 	}
@@ -147,6 +149,7 @@ void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory)
 
 	//Generate simple property rules macros + doc
 	std::string macroDefinition;
+
 	for (kodgen::SimplePropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.simplePropertyRules)
 	{
 		macroDefinition = propertyRule->getMacroDefinition();
@@ -154,7 +157,7 @@ void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory)
 		if (!macroDefinition.empty())
 		{
 			macrosDefinitionFile.writeLines("",
-											propertyRule->getMacroDefinition());
+											macroDefinition);
 		}
 	}
 
@@ -166,7 +169,7 @@ void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory)
 		if (!macroDefinition.empty())
 		{
 			macrosDefinitionFile.writeLines("",
-											propertyRule->getMacroDefinition());
+											macroDefinition);
 		}
 	}
 

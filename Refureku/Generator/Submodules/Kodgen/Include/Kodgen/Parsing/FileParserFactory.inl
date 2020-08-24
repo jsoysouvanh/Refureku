@@ -14,11 +14,3 @@ FileParserType FileParserFactory<FileParserType>::generateFileParser() const noe
 
 	return fileParser;
 }
-
-template <typename FileParserType>
-void FileParserFactory<FileParserType>::setupFileParser(FileParserType& fileParser) const noexcept
-{
-	fileParser.logger = logger;
-
-	fileParser.parsingSettings = &parsingSettings;
-}

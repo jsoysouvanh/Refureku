@@ -28,6 +28,13 @@ namespace kodgen
 			FileGenerationSettings const*	_settings = nullptr;
 
 			/**
+			*
+			*/
+			void					writeFileContent(GeneratedFile&				generatedFile,
+													 FileParsingResult const&	parsingResult,
+													 FileGenerationResult&		out_genResult)				noexcept;
+
+			/**
 			*	@brief Retrieve the appropriate generated code template to use for a given entity.
 			*
 			*	@param entityInfo	Information on a parsed entity.
@@ -92,8 +99,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param entityInfo		Entity we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeEntityToFile(GeneratedFile&		generatedFile,
+			virtual bool	writeEntityToFile(GeneratedFile&		generatedFile,
 											  EntityInfo const&		entityInfo,
 											  FileGenerationResult&	out_genResult)							noexcept;
 
@@ -103,8 +112,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param namespaceInfo	Namespace we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeNamespaceToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeNamespaceToFile(GeneratedFile&			generatedFile,
 												 EntityInfo const&		namespaceInfo,
 												 FileGenerationResult&	out_genResult)						noexcept;
 
@@ -114,8 +125,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param structClassInfo	Struct/class we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeStructOrClassToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeStructOrClassToFile(GeneratedFile&			generatedFile,
 													 EntityInfo const&		structClassInfo,
 													 FileGenerationResult&	out_genResult)					noexcept;
 
@@ -125,8 +138,10 @@ namespace kodgen
 			*	@param generatedFile			Generated file to write in.
 			*	@param nestedStructClassInfo	Nested struct/class we generate the code from.
 			*	@param out_genResult			Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeNestedStructOrClassToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeNestedStructOrClassToFile(GeneratedFile&			generatedFile,
 														   EntityInfo const&		nestedStructClassInfo,
 														   FileGenerationResult&	out_genResult)			noexcept;
 
@@ -136,8 +151,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param enumInfo			Enum we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeEnumToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeEnumToFile(GeneratedFile&			generatedFile,
 											EntityInfo const&		enumInfo,
 											FileGenerationResult&	out_genResult)							noexcept;
 
@@ -147,8 +164,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param enumValueInfo	Enum we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeEnumValueToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeEnumValueToFile(GeneratedFile&			generatedFile,
 												 EntityInfo const&		enumValueInfo,
 												 FileGenerationResult&	out_genResult)						noexcept;
 
@@ -158,8 +177,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param variableInfo		Variable we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeVariableToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeVariableToFile(GeneratedFile&			generatedFile,
 												EntityInfo const&		variableInfo,
 												FileGenerationResult&	out_genResult)						noexcept;
 
@@ -169,8 +190,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param fieldInfo		Field we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeFieldToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeFieldToFile(GeneratedFile&			generatedFile,
 											 EntityInfo const&		fieldInfo,
 											 FileGenerationResult&	out_genResult)							noexcept;
 
@@ -180,8 +203,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param functionInfo		Function we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeFunctionToFile(GeneratedFile&			generatedFile,
+			virtual bool	writeFunctionToFile(GeneratedFile&			generatedFile,
 												EntityInfo const&		functionInfo,
 												FileGenerationResult&	out_genResult)						noexcept;
 
@@ -191,8 +216,10 @@ namespace kodgen
 			*	@param generatedFile	Generated file to write in.
 			*	@param methodInfo		Method we generate the code from.
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
+			*
+			*	@return true if no generation happened (no code template) or if no error happened during generation, false otherwise.
 			*/
-			virtual void	writeMethodToFile(GeneratedFile&		generatedFile,
+			virtual bool	writeMethodToFile(GeneratedFile&		generatedFile,
 											  EntityInfo const&		methodInfo,
 											  FileGenerationResult&	out_genResult)							noexcept;
 
@@ -208,7 +235,7 @@ namespace kodgen
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*	@param parsingResult	Result of a file parsing used to generate the new file.
 			*/
-			void							generateFile(FileGenerationResult&		out_genResult,
-														 FileParsingResult const&	parsingResult)	noexcept;
+			void							generateFile(FileParsingResult const&	parsingResult,
+														 FileGenerationResult&		out_genResult)	noexcept;
 	};
 }

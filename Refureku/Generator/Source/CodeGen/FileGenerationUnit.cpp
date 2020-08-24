@@ -42,39 +42,64 @@ void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FilePa
 	generateEndFileMacro(file);
 }
 
-void FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
-	kodgen::FileGenerationUnit::writeNamespaceToFile(generatedFile, namespaceInfo, genResult);
+	if (kodgen::FileGenerationUnit::writeNamespaceToFile(generatedFile, namespaceInfo, genResult))
+	{
+		_generatedNamespaces.push_back(reinterpret_cast<kodgen::NamespaceInfo const*>(&namespaceInfo));
 
-	_generatedNamespaces.push_back(reinterpret_cast<kodgen::NamespaceInfo const*>(&namespaceInfo));
+		return true;
+	}
+
+	return false;
 }
 
-void FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& structClassInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& structClassInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
-	kodgen::FileGenerationUnit::writeStructOrClassToFile(generatedFile, structClassInfo, genResult);
+	if (kodgen::FileGenerationUnit::writeStructOrClassToFile(generatedFile, structClassInfo, genResult))
+	{
+		_generatedClasses.push_back(reinterpret_cast<kodgen::StructClassInfo const*>(&structClassInfo));
 
-	_generatedClasses.push_back(reinterpret_cast<kodgen::StructClassInfo const*>(&structClassInfo));
+		return true;
+	}
+
+	return false;
 }
 
-void FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& enumInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& enumInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
-	kodgen::FileGenerationUnit::writeEnumToFile(generatedFile, enumInfo, genResult);
+	if (kodgen::FileGenerationUnit::writeEnumToFile(generatedFile, enumInfo, genResult))
+	{
+		_generatedEnums.push_back(reinterpret_cast<kodgen::EnumInfo const*>(&enumInfo));
 
-	_generatedEnums.push_back(reinterpret_cast<kodgen::EnumInfo const*>(&enumInfo));
+		return true;
+	}
+
+	return false;
 }
 
-void FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& variableInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& variableInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
-	kodgen::FileGenerationUnit::writeVariableToFile(generatedFile, variableInfo, genResult);
+	if (kodgen::FileGenerationUnit::writeVariableToFile(generatedFile, variableInfo, genResult))
+	{
+		_generatedVariables.push_back(reinterpret_cast<kodgen::VariableInfo const*>(&variableInfo));
 
-	_generatedVariables.push_back(reinterpret_cast<kodgen::VariableInfo const*>(&variableInfo));
+		return true;
+	}
+
+	return false;
 }
 
-void FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& functionInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& functionInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
-	kodgen::FileGenerationUnit::writeFunctionToFile(generatedFile, functionInfo, genResult);
+	if (kodgen::FileGenerationUnit::writeFunctionToFile(generatedFile, functionInfo, genResult))
+	{
+		_generatedFunctions.push_back(reinterpret_cast<kodgen::FunctionInfo const*>(&functionInfo));
 
-	_generatedFunctions.push_back(reinterpret_cast<kodgen::FunctionInfo const*>(&functionInfo));
+		return true;
+	}
+
+	return false;
 }
 
 void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept

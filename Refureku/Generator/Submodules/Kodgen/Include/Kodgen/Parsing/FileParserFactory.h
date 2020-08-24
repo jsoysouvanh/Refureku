@@ -21,13 +21,6 @@ namespace kodgen
 		static_assert(std::is_default_constructible_v<FileParserType>, "The provided FileParser type must be default constructible.");
 		static_assert(std::is_move_constructible_v<FileParserType>, "The provided FileParser type must be move constructible.");
 
-		protected:
-			/**
-			*	@brief	Setup a generated parser for parsing, forwarding any necessary data/settings.
-			*			FileParserFactory::setupParser(fileParser) **MUST** be called in any override implementation.
-			*/
-			virtual void setupFileParser(FileParserType& fileParser)	const	noexcept;
-
 		public:
 			FileParserFactory()							= default;
 			FileParserFactory(FileParserFactory const&)	= default;

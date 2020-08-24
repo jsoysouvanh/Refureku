@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#include <Kodgen/Parsing/FileParser.h>
+
 #include "Kodgen/Parsing/ParsingSettings.h"
 #include "Kodgen/Misc/ILogger.h"
 #include "Kodgen/Misc/Filesystem.h"
@@ -55,6 +57,14 @@ namespace kodgen
 			FileParserFactoryBase(FileParserFactoryBase const&)	= default;
 			FileParserFactoryBase(FileParserFactoryBase&&)		= default;
 			~FileParserFactoryBase()							= default;
+
+			/**
+			*	@brief	Setup a generated parser for parsing, forwarding any necessary data/settings.
+			*			FileParserFactory::setupParser(fileParser) **MUST** be called in any override implementation.
+			*
+			*	@param fileParser The generated file parser to setup. It can safely be downcasted to the type of generated FileParser.
+			*/
+			virtual void setupFileParser(kodgen::FileParser& fileParser)	const noexcept;
 
 		public:
 			/** Macro defined internally when kodgen processes a translation unit. */

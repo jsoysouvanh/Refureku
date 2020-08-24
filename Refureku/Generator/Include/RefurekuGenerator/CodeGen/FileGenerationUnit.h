@@ -58,23 +58,23 @@ namespace rfk
 			virtual void writeFooter(kodgen::GeneratedFile&				file,
 									 kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
 
-			virtual void writeNamespaceToFile(kodgen::GeneratedFile&		generatedFile,
+			virtual bool writeNamespaceToFile(kodgen::GeneratedFile&		generatedFile,
 											  kodgen::EntityInfo const&		namespaceInfo,
 											  kodgen::FileGenerationResult&	genResult)						noexcept override;
 
-			virtual void writeStructOrClassToFile(kodgen::GeneratedFile&		generatedFile,
+			virtual bool writeStructOrClassToFile(kodgen::GeneratedFile&		generatedFile,
 												  kodgen::EntityInfo const&		structClassInfo,
 												  kodgen::FileGenerationResult&	genResult)					noexcept override;
 
-			virtual void writeEnumToFile(kodgen::GeneratedFile&			generatedFile,
+			virtual bool writeEnumToFile(kodgen::GeneratedFile&			generatedFile,
 										 kodgen::EntityInfo const&		enumInfo,
 										 kodgen::FileGenerationResult&	genResult)							noexcept override;
 
-			virtual void writeVariableToFile(kodgen::GeneratedFile&			generatedFile,
+			virtual bool writeVariableToFile(kodgen::GeneratedFile&			generatedFile,
 											 kodgen::EntityInfo const&		variableInfo,
 											 kodgen::FileGenerationResult&	genResult)						noexcept override;
 
-			virtual void writeFunctionToFile(kodgen::GeneratedFile&			generatedFile,
+			virtual bool writeFunctionToFile(kodgen::GeneratedFile&			generatedFile,
 											 kodgen::EntityInfo const&		functionInfo,
 											 kodgen::FileGenerationResult&	genResult)						noexcept override;
 

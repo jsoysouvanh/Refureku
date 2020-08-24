@@ -1,7 +1,6 @@
 #include "Kodgen/Threading/ThreadPool.h"
 
 #include <cassert>
-#include <iostream>		//TO DELETE
 
 using namespace kodgen;
 
@@ -11,8 +10,6 @@ ThreadPool::ThreadPool(uint32 threadCount, ETerminationMode	terminationMode) noe
 	terminationMode{terminationMode}
 {
 	assert(threadCount > 0u);
-
-	std::cout << "Start a thread pool with " << threadCount << " workers." << std::endl;
 
 	//Preallocate enough space to avoid reallocations
 	_workers.reserve(threadCount);
