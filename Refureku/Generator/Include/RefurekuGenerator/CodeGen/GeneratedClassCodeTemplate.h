@@ -25,6 +25,8 @@ namespace rfk
 
 			kodgen::uint16				computeMethodFlags(kodgen::MethodInfo const& method)								const	noexcept;
 			kodgen::uint16				computeFieldFlags(kodgen::FieldInfo const& field)									const	noexcept;
+			std::string					getFullMethodPrototype(kodgen::StructClassInfo const&	classInfo,
+															   kodgen::MethodInfo const&		method)						const	noexcept;
 
 			/**
 			*	@brief Generate the macro containing the getArchetype definition.

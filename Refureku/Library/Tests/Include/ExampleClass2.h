@@ -54,4 +54,13 @@ enum RFKEnum() EThisIsANormalEnum : int
 	Value2
 };
 
+RFKFunction()
+inline int inlineFunction(int i) { return i; }
+
+namespace ExampleNamespace RFKNamespace()
+{
+	RFKFunction()
+	void functionInsideNamespace() { }
+}
+
 File_GENERATED

@@ -17,13 +17,15 @@ void Struct::__RFKaddToParents([[maybe_unused]] EAccessSpecifier inheritanceAcce
 template <typename MethodSignature>
 Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
+	static_assert(std::is_function_v<MethodSignature>, "Struct::getMethod<> must be called with a function signature as template argument.");
+
 	//Use an Entity instead of a Method to avoid memory / allocation overhead
 	auto range = methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && internal::FunctionHelper<MethodSignature>::hasSamePrototype(*it))
+		if ((it->flags & minFlags) == minFlags && internal::MethodHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}
@@ -51,13 +53,15 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 template <typename MethodSignature>
 StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
+	static_assert(std::is_function_v<MethodSignature>, "Struct::getStaticMethod<> must be called with a function signature as template argument.");
+
 	//Use an Entity instead of a StaticMethod to avoid memory / allocation overhead
 	auto range = staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && internal::FunctionHelper<MethodSignature>::hasSamePrototype(*it))
+		if ((it->flags & minFlags) == minFlags && internal::MethodHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}
@@ -89,7 +93,7 @@ ReturnType* Struct::makeInstanceFromCustomInstantiator(ArgTypes&&... args) const
 	{
 		if (instantiator->hasSameArguments<ArgTypes...>())
 		{
-			return static_cast<ReturnType*>(instantiator->invoke<void*, ArgTypes...>(std::forward<ArgTypes>(args)...));
+			return static_cast<ReturnType*>(instantiator->rInvoke<void*>(std::forward<ArgTypes>(args)...));
 		}
 	}
 

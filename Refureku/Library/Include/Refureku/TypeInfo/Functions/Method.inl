@@ -24,7 +24,7 @@ void Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept(
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
+ReturnType Method::rInvoke(void const* caller, ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
 	#if REFUREKU_DEBUG
 
@@ -44,7 +44,7 @@ void Method::checkedInvoke(void const* caller, ArgTypes&&... arguments) const
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Method::checkedInvoke(void const* caller, ArgTypes&&... arguments) const
+ReturnType Method::checkedRInvoke(void const* caller, ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
 	checkArguments<ArgTypes...>();

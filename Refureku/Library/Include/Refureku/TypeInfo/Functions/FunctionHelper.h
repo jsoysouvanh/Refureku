@@ -7,24 +7,28 @@
 
 #pragma once
 
-#include <cassert>
-
-#include "Refureku/TypeInfo/Functions/FunctionBase.h"
+#include "Refureku/TypeInfo/Functions/Function.h"
 
 namespace rfk::internal
 {
+	/** Base declaration of the helper. */
 	template <typename T>
-	class FunctionHelper
-	{
-		public:
-			static bool hasSamePrototype(FunctionBase const&) noexcept;
-	};
+	class FunctionHelper;
 
+	/** Overload for normal functions. */
 	template <typename ReturnType, typename... ArgTypes>
 	class FunctionHelper<ReturnType(ArgTypes...)>
 	{
 		public:
-			static bool hasSamePrototype(FunctionBase const& function) noexcept;
+			static bool hasSamePrototype(Function const& function) noexcept;
+	};
+
+	/** Overload for noexcept functions. */
+	template <typename ReturnType, typename... ArgTypes>
+	class FunctionHelper<ReturnType(ArgTypes...) noexcept>
+	{
+		public:
+			static bool hasSamePrototype(Function const& function) noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionHelper.inl"

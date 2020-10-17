@@ -5,20 +5,14 @@
 *	See the README.md file for full license details.
 */
 
-template <typename T>
-bool FunctionHelper<T>::hasSamePrototype(FunctionBase const&) noexcept
+template <typename ReturnType, typename... ArgTypes>
+bool FunctionHelper<ReturnType(ArgTypes...)>::hasSamePrototype(Function const& function) noexcept
 {
-	//If the code asserts here, it means there's a call to getMethod or getStaticMethod with an invalid template.
-	//The template must be a method signature.
-	//Example1: void example1Method(int i, float j); -> getMethod<void(int, float)>("example1Method");
-	//Example2: static int example2Method();		 -> getStaticMethod<int()>("example2Method");
-	assert(false);
-
-	return false;
+	return function.hasSamePrototype<ReturnType, ArgTypes...>();
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool FunctionHelper<ReturnType(ArgTypes...)>::hasSamePrototype(FunctionBase const& function) noexcept
+bool FunctionHelper<ReturnType(ArgTypes...) noexcept>::hasSamePrototype(Function const& function) noexcept
 {
 	return function.hasSamePrototype<ReturnType, ArgTypes...>();
 }

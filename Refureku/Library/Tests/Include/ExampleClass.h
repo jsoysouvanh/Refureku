@@ -171,7 +171,13 @@ namespace namespace3 RFKNamespace()
 			static	int		staticMethod3(int p1, int p2)	noexcept;
 
 			RFKMethod()
-			float			method3(int i)					noexcept;
+			int				method3(int i)					noexcept;
+
+			RFKMethod()
+			int				method3(int i)			const	noexcept;
+
+			RFKMethod()
+			void			constMethod(int i)		const	noexcept;
 
 		public:
 			ExampleClass()						noexcept: c{nullptr} {}

@@ -44,7 +44,7 @@ namespace rfk
 			~Function()												= default;
 
 			/**
-			*	@brief Call the function with the provided argument(s) if any.
+			*	@brief Call the function with the provided argument(s) if any, and return the result.
 			*
 			*	In debug mode (NDEBUG macro not defined), checks that the correct number of
 			*	arguments is passed before actually invoking the underlying function.
@@ -59,18 +59,15 @@ namespace rfk
 			*	@return The result of the function call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
+			ReturnType	rInvoke(ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
 
 			/**
-			*	@brief Call the static function with the provided argument(s) if any.
+			*	@brief Call the function with the provided argument(s) if any.
 			*
 			*	In debug mode (NDEBUG macro not defined), checks that the correct number of
 			*	arguments is passed to the function call before actually invoking the underlying function.
 			*	If it is incorrect, a MethodError exception is thrown.
 			*	Type checks are not performed so calling this function with bad parameters might lead to a crash.
-			*
-			*	@note This is only an overload of the other invoke method.
-			*		  This allows to conveniently call functions when we don't care about the returned value.
 			*
 			*	@tparam ArgTypes... Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
@@ -80,7 +77,7 @@ namespace rfk
 			void		invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
-			*	@brief Call the function with the provided argument(s) if any.
+			*	@brief Call the function with the provided argument(s) if any, and return the result.
 			*
 			*	Checks the argument count and the type of each argument before actually invoking the underlying function.
 			*	If any of those is incorrect, a MethodError exception is thrown.
@@ -95,16 +92,13 @@ namespace rfk
 			*	@return The result of the function call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	checkedInvoke(ArgTypes&&... arguments)	const;
+			ReturnType	checkedRInvoke(ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Call the function with the provided argument(s) if any.
 			*
 			*	Checks the argument count and the type of each argument before actually invoking the underlying function.
 			*	If any of those is incorrect, a MethodError exception is thrown.
-			*
-			*	@note This is only an overload of the other checkedInvoke method.
-			*		  This allows to conveniently call static methods when we don't care about the returned value.
 			*
 			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
 			*		but it is always safer to explicitly specify each template type to avoid type mismatches (a char* could

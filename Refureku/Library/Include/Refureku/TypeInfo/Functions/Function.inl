@@ -24,7 +24,7 @@ void Function::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Function::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
+ReturnType Function::rInvoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
 	#if REFUREKU_DEBUG
 
@@ -44,7 +44,7 @@ void Function::checkedInvoke(ArgTypes&&... arguments) const
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Function::checkedInvoke(ArgTypes&&... arguments) const
+ReturnType Function::checkedRInvoke(ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
 	checkArguments<ArgTypes...>();

@@ -40,7 +40,7 @@ namespace rfk
 			~StaticMethod()												= default;
 
 			/**
-			*	@brief Call the static method with the provided argument(s) if any.
+			*	@brief Call the static method with the provided argument(s) if any, and return the result.
 			*
 			*	In debug mode (NDEBUG macro not defined), checks that the correct number of
 			*	arguments is passed to the method call before actually invoking the underlying method.
@@ -55,7 +55,7 @@ namespace rfk
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
+			ReturnType	rInvoke(ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any.
@@ -76,7 +76,7 @@ namespace rfk
 			void		invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
-			*	@brief Call the static method with the provided argument(s) if any.
+			*	@brief Call the static method with the provided argument(s) if any, and return the result.
 			*
 			*	Checks the argument count and the type of each argument before actually invoking the underlying method.
 			*	If any of those is incorrect, a MethodError exception is thrown.
@@ -91,7 +91,7 @@ namespace rfk
 			*	@return The result of the static method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	checkedInvoke(ArgTypes&&... arguments)	const;
+			ReturnType	checkedRInvoke(ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any.

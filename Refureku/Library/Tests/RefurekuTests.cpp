@@ -42,8 +42,8 @@ void namespaces()
 	rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Default)->invoke(2);
 	TEST(rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Static) == nullptr);
 
-	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int)>("function1")->invoke<int, int>(1) == 1);
-	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int, int)>("function1")->invoke<int, int, int>(1, 2) == 3);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int)>("function1")->rInvoke<int>(1) == 1);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int, int)>("function1")->rInvoke<int>(1, 2) == 3);
 	TEST(rfk::Database::getNamespace("namespace3")->getFunction<void(int, int)>("function1") == nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int()>("function1") == nullptr);
 }
@@ -152,7 +152,7 @@ void methods()
 	pc.getMethod("parentClassMethod1")->invoke(&p);
 
 	rfk::Method const* pc_method1 = pc.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const);
-	TEST(pc_method1->checkedInvoke<int>(&p) == 1);
+	TEST(pc_method1->checkedRInvoke<int>(&p) == 1);
 	TEST(pc.getMethod("method1", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const) == nullptr);
 
 	//ExampleClass
@@ -160,14 +160,14 @@ void methods()
 	rfk::Class const&			ec = namespace3::ExampleClass::staticGetArchetype();
 
 	rfk::Method const*			ec_method1 = ec.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Override | rfk::EMethodFlags::Final | rfk::EMethodFlags::Virtual);
-	TEST(ec_method1->invoke<int>(&e) != 1);
-	TEST(ec_method1->invoke<int>(&e) == 2);
+	TEST(ec_method1->rInvoke<int>(&e) != 1);
+	TEST(ec_method1->rInvoke<int>(&e) == 2);
 
 	rfk::Method const* ec_method2 = ec.getMethod("method2", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Const);
 	ec_method2->invoke(&e);
 
 	rfk::Method const* ec_method3int = ec.getMethod("method3", rfk::EMethodFlags::Protected);
-	TEST(ec_method3int->invoke<int>(&e) == 42);
+	TEST(ec_method3int->rInvoke<int>(&e) == 42);
 
 	rfk::Method const* ec_method3float	= ec.getMethod("method3", rfk::EMethodFlags::Private);
 	
@@ -182,27 +182,27 @@ void methods()
 
 	try
 	{
-		ec_method3float->invoke<float>(&e);	// <- Bad number of arguments
+		ec_method3float->invoke(&e);	// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^ in DEBUG only
 	}
 	catch (std::exception const&)
 	{
-		ec_method3float->invoke<float>(&e, 7);	// <- Call with correct arguments count
+		ec_method3float->invoke(&e, 7);	// <- Call with correct arguments count
 	}
 
 	#else
 
-	ec_method3float->invoke<float>(&e);	// <- This should not throw in release eventhough bad arguments count
-	ec_method3float->invoke<float>(&e, 7);
+	ec_method3float->invoke(&e);	// <- This should not throw in release eventhough bad arguments count
+	ec_method3float->invoke(&e, 7);
 
 	#endif
 
 	rfk::Method const*	ec_method4	= ec.getMethod("method4", rfk::EMethodFlags::Public);
-	TEST(ec_method4->invoke<unsigned long long>(&e, nullptr) == 0u);
+	TEST(ec_method4->rInvoke<unsigned long long>(&e, nullptr) == 0u);
 
 	try
 	{
-		ec_method4->checkedInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
+		ec_method4->checkedRInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^
 	}
 	catch (std::exception const&)
@@ -224,6 +224,19 @@ void methods()
 	TEST(ec_parentClassMethod1 != nullptr);
 
 	ec_parentClassMethod1->invoke(&e);
+
+	//Check const / non-const
+	TEST(ec.getMethod("constMethod", rfk::EMethodFlags::Const) != nullptr);
+	TEST(ec.getMethod<void(int)>("constMethod") == nullptr);
+	TEST(ec.getMethod<void(int) const>("constMethod") != nullptr);
+	TEST(ec.getMethod<void(int) const>("constMethod", rfk::EMethodFlags::Const) != nullptr);
+
+	TEST(ec.getMethod("method3") != nullptr);			//We don't know if it's the const or non-const overload
+	TEST(ec.getMethod<int(int)>("method3")->rInvoke<int>(&e, 1) == 1);	//non-const
+	TEST(ec.getMethod<int(int) const>("method3")->rInvoke<int>(&e, 1) == 2);	//const
+	TEST(ec.getMethod("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
+	TEST(ec.getMethod<int(int) const>("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
+	TEST(ec.getMethod<int(int)>("method3", rfk::EMethodFlags::Const) == nullptr);	//Method signature is non const and flag is const -> contradiction
 }
 
 void staticMethods()
@@ -238,14 +251,14 @@ void staticMethods()
 
 	ec.getStaticMethod("staticMethod1", rfk::EMethodFlags::Private)->invoke();
 
-	TEST(ec.getStaticMethod("staticMethod2", rfk::EMethodFlags::Private)->invoke<int>() == 2);
+	TEST(ec.getStaticMethod("staticMethod2", rfk::EMethodFlags::Private)->rInvoke<int>() == 2);
 
 	TEST(ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Public) == nullptr);
 
 	TEST(ec.getStaticMethods("staticMethod3").size() == 2u);
 
 	ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Protected)->invoke("This is a test, and let's try to make sure it works even when it's long");
-	TEST(ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Private)->invoke<int, int, int>(1, 2) == 3);
+	TEST(ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Private)->rInvoke<int>(1, 2) == 3);
 }
 
 void fields()
@@ -526,8 +539,8 @@ void database()
 	catch (...)
 	{}
 
-	TEST(rfk::Database::getFunction<int(int)>("function1")->invoke<int, int>(1) == 1);
-	TEST(rfk::Database::getFunction<int(int, int)>("function1")->invoke<int, int, int>(1, 2) == 3);
+	TEST(rfk::Database::getFunction<int(int)>("function1")->rInvoke<int>(1) == 1);
+	TEST(rfk::Database::getFunction<int(int, int)>("function1")->rInvoke<int>(1, 2) == 3);
 	TEST(rfk::Database::getFunction<void(int, int)>("function1") == nullptr);
 	TEST(rfk::Database::getFunction<int()>("function1") == nullptr);
 	TEST(rfk::Database::getFunction<void(namespace3::ExampleClass)>("function1") != nullptr);

@@ -24,7 +24,7 @@ void StaticMethod::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEA
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType StaticMethod::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
+ReturnType StaticMethod::rInvoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
 	#if REFUREKU_DEBUG
 
@@ -44,7 +44,7 @@ void StaticMethod::checkedInvoke(ArgTypes&&... arguments) const
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType StaticMethod::checkedInvoke(ArgTypes&&... arguments) const
+ReturnType StaticMethod::checkedRInvoke(ArgTypes&&... arguments) const
 {
 	checkReturnType<ReturnType>();
 	checkArguments<ArgTypes...>();

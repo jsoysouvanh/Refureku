@@ -8,6 +8,8 @@
 template <typename FunctionSignature>
 Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) noexcept
 {
+	static_assert(std::is_function_v<FunctionSignature>, "Database::getFunction<> must be called with a function signature as template argument.");
+
 	Entity searchedFunction(std::move(functionName), 0u);
 
 	//Use an Entity instead of a Function to avoid memory / allocation overhead

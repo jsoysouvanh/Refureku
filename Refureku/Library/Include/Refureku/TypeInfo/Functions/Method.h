@@ -48,7 +48,7 @@ namespace rfk
 			~Method()											= default;
 
 			/**
-			*	@brief Call the method on an instance with the provided argument(s) if any.
+			*	@brief Call the method on an instance with the provided argument(s) if any, and return the result.
 			*
 			*	In debug mode (NDEBUG macro not defined), checks that the correct number of
 			*	arguments is passed to the method call before actually invoking the underlying method.
@@ -64,7 +64,7 @@ namespace rfk
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(void const* caller, ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
+			ReturnType	rInvoke(void const* caller, ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
@@ -86,7 +86,7 @@ namespace rfk
 			void		invoke(void const* caller, ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
 
 			/**
-			*	@brief Call the method on an instance with the provided argument(s) if any.
+			*	@brief Call the method on an instance with the provided argument(s) if any, and return the result.
 			*
 			*	Checks the argument count and the type of each argument before actually invoking the underlying method.
 			*	If any of those is incorrect, a MethodError exception is thrown.
@@ -102,7 +102,7 @@ namespace rfk
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			ReturnType	checkedRInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
