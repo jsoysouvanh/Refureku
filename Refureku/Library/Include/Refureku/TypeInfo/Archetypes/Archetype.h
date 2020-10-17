@@ -11,7 +11,6 @@
 
 #include "Refureku/TypeInfo/Entity.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
-#include "Refureku/Utility/TypeTraits.h"
 
 namespace rfk
 {
@@ -33,15 +32,6 @@ namespace rfk
 			/** Size in bytes an instance of this archetype takes in memory, basically what sizeof(Type) returns */
 			uint64				memorySize		= 0;
 	};
-
-	/**
-	*	@brief	Get the archetype of any type if it exists.
-	*			This templated method can be specialized to handle unreflected types.
-	*
-	*	@return The archetype of the provided type if it exists, else nullptr.
-	*/
-	template <typename T>
-	inline rfk::Archetype const* getArchetype() noexcept;
 
 	#include "Refureku/TypeInfo/Archetypes/Archetype.inl"
 }

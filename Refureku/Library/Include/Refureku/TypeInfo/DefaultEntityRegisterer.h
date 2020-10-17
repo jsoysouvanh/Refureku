@@ -15,14 +15,14 @@ namespace rfk
 	class DefaultEntityRegisterer
 	{
 		private:
-		/** Registered variable. */
-		Entity const* _registeredEntity = nullptr;
+			/** Registered variable. */
+			Entity const* _registeredEntity = nullptr;
 
 		public:
-		DefaultEntityRegisterer()								= delete;
-		DefaultEntityRegisterer(Entity const* entity)			noexcept;
-		DefaultEntityRegisterer(DefaultEntityRegisterer const&)	= delete;
-		DefaultEntityRegisterer(DefaultEntityRegisterer&&)		= delete;
-		~DefaultEntityRegisterer()								noexcept;
+			DefaultEntityRegisterer()								= delete;
+			DefaultEntityRegisterer(Entity const* entity)			noexcept;
+			DefaultEntityRegisterer(DefaultEntityRegisterer const&)	= delete;
+			DefaultEntityRegisterer(DefaultEntityRegisterer&&)		= delete;
+			~DefaultEntityRegisterer()								noexcept;
 	};
 }

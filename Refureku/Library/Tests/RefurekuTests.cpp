@@ -163,14 +163,21 @@ void methods()
 	TEST(ec_method1->invoke<int>(&e) != 1);
 	TEST(ec_method1->invoke<int>(&e) == 2);
 
-	rfk::Method const*			ec_method2 = ec.getMethod("method2", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Const);
+	rfk::Method const* ec_method2 = ec.getMethod("method2", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Const);
 	ec_method2->invoke(&e);
 
-	rfk::Method const*			ec_method3int = ec.getMethod("method3", rfk::EMethodFlags::Protected);
+	rfk::Method const* ec_method3int = ec.getMethod("method3", rfk::EMethodFlags::Protected);
 	TEST(ec_method3int->invoke<int>(&e) == 42);
 
-	rfk::Method const*			ec_method3float	= ec.getMethod("method3", rfk::EMethodFlags::Private);
+	rfk::Method const* ec_method3float	= ec.getMethod("method3", rfk::EMethodFlags::Private);
 	
+	//TODO: Handle functions / variables reflection when they use an incomplete type (forward declared type)
+	//rfk::Method const* ec_methodWithForwardDeclaredParam = ec.getMethod("methodWithForwardDeclaredParam");
+	//ec_methodWithForwardDeclaredParam->invoke(&e);
+
+	rfk::Method const* ec_methodWithClassParam = ec.getMethod("methodWithClassParam");
+	ec_methodWithClassParam->invoke(&e, nullptr);
+
 	#if REFUREKU_DEBUG
 
 	try
@@ -523,18 +530,34 @@ void database()
 	TEST(rfk::Database::getFunction<int(int, int)>("function1")->invoke<int, int, int>(1, 2) == 3);
 	TEST(rfk::Database::getFunction<void(int, int)>("function1") == nullptr);
 	TEST(rfk::Database::getFunction<int()>("function1") == nullptr);
+	TEST(rfk::Database::getFunction<void(namespace3::ExampleClass)>("function1") != nullptr);
 }
 
-#include "ExampleClass.h"
 void templateEnums()
 {
 	TEST(rfk::getEnum<namespace3::ExampleEnum>() == rfk::Database::getNamespace("namespace3")->getEnum("ExampleEnum"));
 }
 
-void templateArchetypes()
+void getArchetypes()
 {
 	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
 	TEST(rfk::getArchetype<namespace3::ExampleClass2>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass2"));
+
+	TEST(rfk::getArchetype<void>() == rfk::getArchetype<void*>());
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::getArchetype<volatile const namespace3::ExampleClass&>());
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::getArchetype<volatile const namespace3::ExampleClass* const>());
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::getArchetype<namespace3::ExampleClass****>());
+	TEST(rfk::getArchetype<int>() == rfk::getArchetype<int*&>());
+	TEST(rfk::getArchetype<int>() == rfk::getArchetype<int[2]>());
+	TEST(rfk::getArchetype<int>() == rfk::getArchetype<int[2][3]>());
+
+	TEST(rfk::getArchetype<void(int)>() == nullptr);			//Func prototype
+	TEST(rfk::getArchetype<void(*)(int)>() == nullptr);			//Func ptr
+	TEST(rfk::getArchetype<int(rfk::Class::*)>() == nullptr);	//Ptr to field
+	TEST(rfk::getArchetype<int(rfk::Class::*)()>() == nullptr);	//Ptr to method
+
+	auto l = [](){};
+	TEST(rfk::getArchetype<decltype(l)>() == nullptr);			//Lambda
 }
 
 int main()
@@ -543,7 +566,7 @@ int main()
 	outerEntities();
 	namespaces();
 	templateEnums();
-	templateArchetypes();
+	getArchetypes();
 	classes();
 	structs();
 	enums();

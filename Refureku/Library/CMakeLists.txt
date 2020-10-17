@@ -34,6 +34,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/Struct.cpp
 					Source/TypeInfo/Archetypes/Class.cpp
 					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
+					Source/TypeInfo/Archetypes/GetArchetype.cpp
 
 					Source/TypeInfo/Variables/VariableBase.cpp
 					Source/TypeInfo/Variables/Variable.cpp

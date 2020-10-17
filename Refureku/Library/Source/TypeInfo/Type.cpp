@@ -1,17 +1,15 @@
 #include "Refureku/TypeInfo/Type.h"
 
-#include <cstring>
-
-#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
+#include <cstring>	//std::memcmp
 
 using namespace rfk;
 
 bool Type::match(Type const& other) const noexcept
 {
-	return	(this == &other) ||													//Types have the same address, don't need any further check
-			(*this == other) ||													//Strictly the same type
-			((isPointer() && other.archetype == getArchetype<nullptr_t>()) ||	//Pointer - nullptr_t correspondance
-			(archetype == getArchetype<nullptr_t>() && other.isPointer()));
+	return	(this == &other) ||														//Types have the same address, don't need any further check
+			(*this == other) ||														//Strictly the same type
+			((isPointer() && other.archetype == getArchetype<std::nullptr_t>()) ||	//Pointer - nullptr_t correspondance
+			(archetype == getArchetype<std::nullptr_t>() && other.isPointer()));
 }
 
 std::string Type::toString() const noexcept

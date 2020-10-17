@@ -34,6 +34,9 @@ namespace namespace2 RFKNamespace()
 
 namespace namespace3 RFKNamespace()
 {
+	//Forward declaration
+	class AnotherClassInNamespace3;
+
 	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
 	{
 
@@ -175,6 +178,12 @@ namespace namespace3 RFKNamespace()
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;
+
+			RFKMethod()
+			void	methodWithClassParam(ParentClass pc) {}
+
+			//RFKMethod()
+			//void	methodWithForwardDeclaredParam(AnotherClassInNamespace3*) {}
 
 		ExampleClass_GENERATED
 	};

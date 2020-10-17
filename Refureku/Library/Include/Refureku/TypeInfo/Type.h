@@ -11,11 +11,8 @@
 #include <vector>
 #include <type_traits>
 
-#include "Refureku/Utility/TypeTraits.h"
 #include "Refureku/TypeInfo/TypePart.h"
-#include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
-#include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 
 namespace rfk
 {
@@ -24,9 +21,6 @@ namespace rfk
 		private:
 			template <typename T>
 			static void				fillType(Type& out_type)	noexcept;
-
-			/*template <typename T>
-			static Archetype const* getArchetype() noexcept;*/
 
 		public:
 			/** Archetype of this type. */

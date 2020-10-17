@@ -34,6 +34,9 @@ int function1(int i) { return i; }
 RFKFunction()
 int function1(int i, int j) { return i + j; }
 
+RFKFunction()
+void function1(namespace3::ExampleClass) { }
+
 RFKVariable()
 static float variableInsideGlobalScope = 10.0f;
 
