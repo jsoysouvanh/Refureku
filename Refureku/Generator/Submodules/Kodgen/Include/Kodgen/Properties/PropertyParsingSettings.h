@@ -20,49 +20,49 @@ namespace kodgen
 	{
 		public:
 			/** Char used to separate two properties. */
-			char								propertySeparator		= ',';
+			char									propertySeparator		= ',';
 
 			/** Char used to separate two sub properties. */
-			char								subPropertySeparator	= ',';
+			char									subPropertySeparator	= ',';
 
 			/** Chars used to respectively start and close a group of sub properties. */
-			char								subPropertyEnclosers[2]	= { '[', ']' };
+			char									subPropertyEnclosers[2]	= { '[', ']' };
 
 			/** Collection of chars which will be ignored by the property parser. */
-			std::unordered_set<char>			ignoredCharacters;
+			std::unordered_set<char>				ignoredCharacters;
 
 			/** Collection of all simple property rules. */
-			std::vector<SimplePropertyRule*>	simplePropertyRules;
+			std::vector<SimplePropertyRule const*>	simplePropertyRules;
 
 			/** Collection of all complex property rules. */
-			std::vector<ComplexPropertyRule*>	complexPropertyRules;
+			std::vector<ComplexPropertyRule const*>	complexPropertyRules;
 
 			/** Macro to use to attach properties to a namespace. */
-			std::string							namespaceMacroName		= "Namespace";
+			std::string								namespaceMacroName		= "Namespace";
 
 			/** Macro to use to attach properties to a class. */
-			std::string							classMacroName			= "Class";
+			std::string								classMacroName			= "Class";
 
 			/** Macro to use to attach properties to a struct. */
-			std::string							structMacroName			= "Struct";
+			std::string								structMacroName			= "Struct";
 
 			/** Macro to use to attach properties to a variable (non-member). */
-			std::string							variableMacroName		= "Variable";
+			std::string								variableMacroName		= "Variable";
 
 			/** Macro to use to attach properties to a field. */
-			std::string							fieldMacroName			= "Field";
+			std::string								fieldMacroName			= "Field";
 
 			/** Macro to use to attach properties to a function. */
-			std::string							functionMacroName		= "Function";
+			std::string								functionMacroName		= "Function";
 
 			/** Macro to use to attach properties to a method. */
-			std::string							methodMacroName			= "Method";
+			std::string								methodMacroName			= "Method";
 
 			/** Macro to use to attach properties to an enum. */
-			std::string							enumMacroName			= "Enum";
+			std::string								enumMacroName			= "Enum";
 
 			/** Macro to use to attach properties to an enum value. */
-			std::string							enumValueMacroName		= "EnumVal";
+			std::string								enumValueMacroName		= "EnumVal";
 
 			PropertyParsingSettings()								= default;
 			PropertyParsingSettings(PropertyParsingSettings const&)	= default;

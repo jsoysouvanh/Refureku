@@ -114,13 +114,13 @@ bool FileGenerator::setDefaultGeneratedCodeTemplate(EEntityType entityType, std:
 	return false;
 }
 
-void FileGenerator::addNativePropertyRules(PropertyParsingSettings& propParsingSettings) noexcept
+void FileGenerator::addNativePropertyRules(PropertyParsingSettings& propParsingSettings) const noexcept
 {
 	propParsingSettings.simplePropertyRules.push_back(&_parseAllNestedPropertyRule);
 	propParsingSettings.complexPropertyRules.push_back(&_generatedCodeTemplatePropertyRule);
 }
 
-void FileGenerator::clearNativePropertyRules(PropertyParsingSettings& propParsingSettings) noexcept
+void FileGenerator::clearNativePropertyRules(PropertyParsingSettings& propParsingSettings) const noexcept
 {
 	propParsingSettings.simplePropertyRules.pop_back();		//Remove _parseAllNestedPropertyRule
 	propParsingSettings.complexPropertyRules.pop_back();	//Remove _generatedCodeTemplatePropertyRule

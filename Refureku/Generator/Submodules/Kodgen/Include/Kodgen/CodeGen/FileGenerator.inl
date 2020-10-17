@@ -6,7 +6,7 @@
 */
 
 template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
-void FileGenerator::processFilesMultithread(FileParserFactoryType<FileParserType>& fileParserFactory, FileGenerationUnitType& fileGenerationUnit, std::set<fs::path> const& toProcessFiles, FileGenerationResult& out_genResult, uint32 threadCount) noexcept
+void FileGenerator::processFilesMultithread(FileParserFactoryType<FileParserType>& fileParserFactory, FileGenerationUnitType& fileGenerationUnit, std::set<fs::path> const& toProcessFiles, FileGenerationResult& out_genResult, uint32 threadCount) const noexcept
 {
 	ThreadPool								threadPool(threadCount, ETerminationMode::FinishAll);
 	std::vector<std::shared_ptr<TaskBase>>	generationTasks;
@@ -65,7 +65,7 @@ void FileGenerator::processFilesMultithread(FileParserFactoryType<FileParserType
 }
 
 template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
-void FileGenerator::processFilesMonothread(FileParserFactoryType<FileParserType>& fileParserFactory, FileGenerationUnitType& fileGenerationUnit, std::set<fs::path> const& toProcessFiles, FileGenerationResult& out_genResult) noexcept
+void FileGenerator::processFilesMonothread(FileParserFactoryType<FileParserType>& fileParserFactory, FileGenerationUnitType& fileGenerationUnit, std::set<fs::path> const& toProcessFiles, FileGenerationResult& out_genResult) const noexcept
 {
 	FileParserType fileParser = fileParserFactory.generateFileParser();
 

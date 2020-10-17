@@ -235,7 +235,7 @@ namespace kodgen
 			*	@param out_genResult	Reference to the generation result to fill during file generation.
 			*	@param parsingResult	Result of a file parsing used to generate the new file.
 			*/
-			void							generateFile(FileParsingResult const&	parsingResult,
-														 FileGenerationResult&		out_genResult)	noexcept;
+			void	generateFile(FileParsingResult const&	parsingResult,
+								 FileGenerationResult&		out_genResult)	noexcept;
 	};
 }

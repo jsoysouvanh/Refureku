@@ -42,11 +42,11 @@ namespace kodgen
 			*	@param threadCount			Number of additional threads to use to process the files.
 			*/
 			template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
-			void					processFilesMultithread(FileParserFactoryType<FileParserType>&	fileParserFactory,
-															FileGenerationUnitType&					fileGenerationUnit,
-															std::set<fs::path> const&				toProcessFiles,
-															FileGenerationResult&					out_genResult,
-															uint32									threadCount)		noexcept;
+			void	processFilesMultithread(FileParserFactoryType<FileParserType>&	fileParserFactory,
+											FileGenerationUnitType&					fileGenerationUnit,
+											std::set<fs::path> const&				toProcessFiles,
+											FileGenerationResult&					out_genResult,
+											uint32									threadCount)		const	noexcept;
 
 			/**
 			*	@brief Process all provided files on the main thread.
@@ -57,10 +57,10 @@ namespace kodgen
 			*	@param out_genResult		Reference to the generation result to fill during file generation.
 			*/
 			template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
-			void					processFilesMonothread(FileParserFactoryType<FileParserType>&	fileParserFactory,
-														   FileGenerationUnitType&					fileGenerationUnit,
-														   std::set<fs::path> const&				toProcessFiles,
-														   FileGenerationResult&					out_genResult)		noexcept;
+			void	processFilesMonothread(FileParserFactoryType<FileParserType>&	fileParserFactory,
+										   FileGenerationUnitType&					fileGenerationUnit,
+										   std::set<fs::path> const&				toProcessFiles,
+										   FileGenerationResult&					out_genResult)		const	noexcept;
 
 			/**
 			*	@brief Identify all files which will be regenerated.
@@ -96,19 +96,19 @@ namespace kodgen
 			*	
 			*	@param propParsingSettings Property parsing settings of the file parser.
 			*/
-			void					addNativePropertyRules(PropertyParsingSettings& propParsingSettings)			noexcept;
+			void					addNativePropertyRules(PropertyParsingSettings& propParsingSettings)	const	noexcept;
 			
 			/**
 			*	@brief Remove native property rules from the parsing settings.
 			*	
 			*	@param propParsingSettings Property parsing settings of the file parser.
 			*/
-			void					clearNativePropertyRules(PropertyParsingSettings& propParsingSettings)			noexcept;
+			void					clearNativePropertyRules(PropertyParsingSettings& propParsingSettings)	const	noexcept;
 
 			/**
 			*	@brief Generate / update the entity macros file.
 			*	
-			*	@param parser The file parser factory.
+			*	@param fileParserFactory FileParserFactory containing parsing settings.
 			*/
 			void					generateMacrosFile(FileParserFactoryBase& fileParserFactory)			const	noexcept;
 
@@ -135,7 +135,7 @@ namespace kodgen
 			*	@brief Parse registered files if they were changes since last generation.
 			*			and try to generate corresponding files using code templates.
 			*
-			*	@param fileParser			The file parser to use for file parsing.
+			*	@param fileParserFactory	Factory to use to generate the file parser(s).
 			*	@param fileGenerationUnit	Generation unit used to generate files. It must have a clean state when this method is called.
 			*	@param forceRegenerateAll	Ignore the last write time check and reparse / regenerate all files.
 			*	@param threadCount			Number of threads to use for file parsing and generation.
@@ -146,8 +146,8 @@ namespace kodgen
 			template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
 			FileGenerationResult generateFiles(FileParserFactoryType<FileParserType>&	fileParserFactory,
 											   FileGenerationUnitType&					fileGenerationUnit,
-											   bool										forceRegenerateAll = false,
-											   uint32									threadCount = std::thread::hardware_concurrency())	noexcept;
+											   bool										forceRegenerateAll	= false,
+											   uint32									threadCount			= std::thread::hardware_concurrency())	noexcept;
 
 			/**
 			*	@brief Add a new template to the list of generated code templates.
@@ -158,7 +158,7 @@ namespace kodgen
 			*						The provided instance has be deleted manually by the user if newed.
 			*/
 			void addGeneratedCodeTemplate(std::string const&		templateName,
-										  GeneratedCodeTemplate*	codeTemplate)											noexcept;
+										  GeneratedCodeTemplate*	codeTemplate)	noexcept;
 
 			/**
 			*	@brief Set the default generated code template to use with the specified entity type when no template is specified in the entity properties.
@@ -171,7 +171,7 @@ namespace kodgen
 			*	@return true if the new default generated code template was setup successfully, else false.
 			*/
 			bool setDefaultGeneratedCodeTemplate(EEntityType		entityType,
-												 std::string const&	templateName)											noexcept;
+												 std::string const&	templateName)	noexcept;
 
 			/**
 			*	@brief Setup this object's parameters with the provided toml file. Unset settings remain unchanged.
@@ -180,7 +180,7 @@ namespace kodgen
 			*
 			*	@return true if a file could be loaded, else false.
 			*/
-			bool loadSettings(fs::path const& pathToSettingsFile)															noexcept;
+			bool loadSettings(fs::path const& pathToSettingsFile)					noexcept;
 	};
 
 	#include "Kodgen/CodeGen/FileGenerator.inl"
