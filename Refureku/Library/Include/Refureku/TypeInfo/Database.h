@@ -16,6 +16,7 @@
 #include "Refureku/TypeInfo/Namespaces/Namespace.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 #include "Refureku/Misc/FundamentalTypes.h"
 
 namespace rfk
@@ -148,6 +149,21 @@ namespace rfk
 			~Database()					= delete;
 
 			/**
+			*	@brief Retrieve a file level (non-member) function by name and signature.
+			*	
+			*	@tparam FunctionSignature Signature of the function to look for.
+			*
+			*	@param functionName The name of the function.
+			*	@param flags		Flags describing the queried function.
+			*						The result function will have at least the provided flags.
+			*	
+			*	@return A constant pointer to the function matching the signature, name and flags if it exists, else nullptr.
+			*/
+			template <typename FunctionSignature>
+			static Function const*			getFunction(std::string		functionName,
+														EFunctionFlags	flags = EFunctionFlags::Default)	noexcept;
+
+			/**
 			*	@brief Retrieve an entity by id.
 			*
 			*	This is not limited to archetypes, as it can also retrieve
@@ -210,21 +226,6 @@ namespace rfk
 			*/
 			static Variable const*			getVariable(std::string variableName,
 														EVarFlags	flags = EVarFlags::Default)				noexcept;
-
-			/**
-			*	@brief Retrieve a file level (non-member) function by name and signature.
-			*	
-			*	@tparam FunctionSignature Signature of the function to look for.
-			*
-			*	@param functionName The name of the function.
-			*	@param flags		Flags describing the queried function.
-			*						The result function will have at least the provided flags.
-			*	
-			*	@return A constant pointer to the function matching the signature, name and flags if it exists, else nullptr.
-			*/
-			template <typename FunctionSignature>
-			static Function const*			getFunction(std::string		functionName,
-														EFunctionFlags	flags = EFunctionFlags::Default)	noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) function by name.

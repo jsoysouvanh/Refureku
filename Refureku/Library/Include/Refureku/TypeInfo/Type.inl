@@ -6,117 +6,6 @@
 */
 
 template <typename T>
-Archetype const* Type::getArchetype() noexcept
-{
-	if constexpr (std::is_fundamental_v<T>)
-	{
-		if constexpr (std::is_same_v<T, void>)
-		{
-			return &FundamentalArchetypes::getVoidArchetype();
-		}
-		else if constexpr (std::is_same_v<T, std::nullptr_t>)
-		{
-			return &FundamentalArchetypes::getNullptrArchetype();
-		}
-		else if constexpr (std::is_same_v<T, bool>)
-		{
-			return &FundamentalArchetypes::getBoolArchetype();
-		}
-		else if constexpr (std::is_same_v<T, char>)
-		{
-			return &FundamentalArchetypes::getCharArchetype();
-		}
-		else if constexpr (std::is_same_v<T, signed char>)
-		{
-			return &FundamentalArchetypes::getSignedCharArchetype();
-		}
-		else if constexpr (std::is_same_v<T, unsigned char>)
-		{
-			return &FundamentalArchetypes::getUnsignedCharArchetype();
-		}
-		else if constexpr (std::is_same_v<T, wchar_t>)
-		{
-			return &FundamentalArchetypes::getWideCharArchetype();
-		}
-		else if constexpr (std::is_same_v<T, char16_t>)
-		{
-			return &FundamentalArchetypes::getChar16Archetype();
-		}
-		else if constexpr (std::is_same_v<T, char32_t>)
-		{
-			return &FundamentalArchetypes::getChar32Archetype();
-		}
-		else if constexpr (std::is_same_v<T, short>)
-		{
-			return &FundamentalArchetypes::getShortArchetype();
-		}
-		else if constexpr (std::is_same_v<T, unsigned short>)
-		{
-			return &FundamentalArchetypes::getUnsignedShortArchetype();
-		}
-		else if constexpr (std::is_same_v<T, int>)
-		{
-			return &FundamentalArchetypes::getIntArchetype();
-		}
-		else if constexpr (std::is_same_v<T, unsigned int>)
-		{
-			return &FundamentalArchetypes::getUnsignedIntArchetype();
-		}
-		else if constexpr (std::is_same_v<T, long>)
-		{
-			return &FundamentalArchetypes::getLongArchetype();
-		}
-		else if constexpr (std::is_same_v<T, unsigned long>)
-		{
-			return &FundamentalArchetypes::getUnsignedLongArchetype();
-		}
-		else if constexpr (std::is_same_v<T, long long>)
-		{
-			return &FundamentalArchetypes::getLongLongArchetype();
-		}
-		else if constexpr (std::is_same_v<T, unsigned long long>)
-		{
-			return &FundamentalArchetypes::getUnsignedLongLongArchetype();
-		}
-		else if constexpr (std::is_same_v<T, float>)
-		{
-			return &FundamentalArchetypes::getFloatArchetype();
-		}
-		else if constexpr (std::is_same_v<T, double>)
-		{
-			return &FundamentalArchetypes::getDoubleArchetype();
-		}
-		else if constexpr (std::is_same_v<T, long double>)
-		{
-			return &FundamentalArchetypes::getLongDoubleArchetype();
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-	else if constexpr (std::is_class_v<T>)
-	{
-		if constexpr (isReflectedClass<T>)
-		{
-			return &T::staticGetArchetype();
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-	else if constexpr (std::is_enum_v<T>)
-	{
-		return getEnum<T>();
-	}
-	else
-	{
-		return nullptr;
-	}
-}
-
-template <typename T>
 void Type::fillType(Type& out_type) noexcept
 {
 	TypePart& currPart = out_type.parts.emplace_back(TypePart{ 0u, ETypePartDescriptor::Undefined, 0u });
@@ -159,7 +48,7 @@ void Type::fillType(Type& out_type) noexcept
 	{
 		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::Value;
 
-		out_type.archetype = Type::getArchetype<std::decay_t<T>>();
+		out_type.archetype = rfk::getArchetype<std::decay_t<T>>();
 	}
 }
 

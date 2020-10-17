@@ -171,7 +171,7 @@ namespace namespace3 RFKNamespace()
 			float			method3(int i)					noexcept;
 
 		public:
-			ExampleClass()						noexcept { }
+			ExampleClass()						noexcept: c{nullptr} {}
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;

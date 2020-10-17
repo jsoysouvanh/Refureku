@@ -13,7 +13,7 @@ namespace namespace3 RFKNamespace()
 	};
 
 	RFKFunction()
-	inline void functionInsideNamespace(int i) {} 
+	inline void functionInsideNamespace(int i) { i; } 
 
 	RFKFunction()
 	int function1(int i) { return i; }
@@ -26,7 +26,7 @@ namespace namespace3 RFKNamespace()
 }
 
 RFKFunction() 
-static void functionInsideGlobalScope(float j) {} 
+static void functionInsideGlobalScope(float j) { j; } 
 
 RFKFunction()
 int function1(int i) { return i; }

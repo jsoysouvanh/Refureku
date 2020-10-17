@@ -1,0 +1,30 @@
+/**
+*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Refureku library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
+template <typename T>
+inline rfk::Archetype const* getArchetype() noexcept
+{
+	if constexpr (std::is_class_v<T>)
+	{
+		if constexpr (isReflectedClass<T>)
+		{
+			return &T::staticGetArchetype();
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+	else if constexpr (std::is_enum_v<T>)
+	{
+		return getEnum<T>();
+	}
+	else
+	{
+		return nullptr;
+	}
+}

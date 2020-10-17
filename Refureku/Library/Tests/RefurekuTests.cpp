@@ -525,11 +525,25 @@ void database()
 	TEST(rfk::Database::getFunction<int()>("function1") == nullptr);
 }
 
+#include "ExampleClass.h"
+void templateEnums()
+{
+	TEST(rfk::getEnum<namespace3::ExampleEnum>() == rfk::Database::getNamespace("namespace3")->getEnum("ExampleEnum"));
+}
+
+void templateArchetypes()
+{
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
+	TEST(rfk::getArchetype<namespace3::ExampleClass2>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass2"));
+}
+
 int main()
 {
 	database();
 	outerEntities();
 	namespaces();
+	templateEnums();
+	templateArchetypes();
 	classes();
 	structs();
 	enums();
