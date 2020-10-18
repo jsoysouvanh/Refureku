@@ -8,3 +8,8 @@ Variable::Variable(std::string&& name, uint64 id, Type const& type, void* addres
 	flags{flags}
 {
 }
+
+bool Variable::isStatic() const noexcept
+{
+	return (flags & EVarFlags::Static) != EVarFlags::Default;
+}

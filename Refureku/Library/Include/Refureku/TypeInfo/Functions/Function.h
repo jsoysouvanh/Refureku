@@ -108,6 +108,20 @@ namespace rfk
 			*/
 			template <typename... ArgTypes>
 			void		checkedInvoke(ArgTypes&&... arguments)	const;
+
+			/**
+			*	@brief Check if this function is inline.
+			*
+			*	@return true if the function is inline, else false.
+			*/
+			bool	isInline()									const noexcept;
+
+			/**
+			*	@brief Check if this function is static.
+			*
+			*	@return true if the function is static, else false.
+			*/
+			bool	isStatic()									const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/Function.inl"

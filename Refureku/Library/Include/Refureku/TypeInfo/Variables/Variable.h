@@ -69,6 +69,13 @@ namespace rfk
 			*	@param dataSize Number of bytes to copy into the variable starting from data.
 			*/
 			inline void		setData(void const* data, uint64 dataSize)	const noexcept;
+
+			/**
+			*	@brief Check if this variable is static.
+			*
+			*	@return true if the variable is static, else false.
+			*/
+			bool			isStatic()									const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/Variable.inl"

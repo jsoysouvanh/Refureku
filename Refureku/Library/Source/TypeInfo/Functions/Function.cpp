@@ -7,3 +7,13 @@ Function::Function(std::string&& name, uint64 id, Type const& returnType, std::u
 	flags{flags}
 {
 }
+
+bool Function::isInline() const noexcept
+{
+	return (flags & EFunctionFlags::Inline) != EFunctionFlags::Default;
+}
+
+bool Function::isStatic() const noexcept
+{
+	return (flags & EFunctionFlags::Static) != EFunctionFlags::Default;
+}

@@ -58,6 +58,8 @@ void Field::setData(void* instance, DataType&& data) const noexcept
 
 inline void* Field::getDataAddress(void* instance) const noexcept
 {
+	assert(instance != nullptr);
+
 	return reinterpret_cast<char*>(instance) + memoryOffset;
 }
 
