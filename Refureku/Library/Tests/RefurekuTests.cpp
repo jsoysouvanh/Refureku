@@ -1,20 +1,19 @@
 #include <iostream>
-#include <vector>
 
 #include "ExampleClass.h"
 
-#include "Refureku/TypeInfo/Database.h"
+#include <Refureku/Refureku.h>
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
 void outerEntities()
 {
 	TEST(rfk::Database::getNamespace("namespace3")->outerEntity == nullptr);
-	TEST(rfk::Database::getNamespace("namespace4")->getNestedNamespace("namespace4_nested")->outerEntity == rfk::Database::getNamespace("namespace4"));
+	TEST(rfk::Database::getNamespace("namespace4")->getNamespace("namespace4_nested")->outerEntity == rfk::Database::getNamespace("namespace4"));
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("AnotherClassInNamespace3")->outerEntity == rfk::Database::getNamespace("namespace3"));
 	TEST(namespace3::ExampleClass::staticGetArchetype().getNestedStruct("NestedExampleStruct")->outerEntity == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
-	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->outerEntity == rfk::Database::getNamespace("test1")->getNestedNamespace("test2"));
-	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->outerEntity == rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace"));
+	TEST(rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->outerEntity == rfk::Database::getNamespace("test1")->getNamespace("test2"));
+	TEST(rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->outerEntity == rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace"));
 	TEST(ExampleStruct::staticGetArchetype().getStaticField("staticInt")->outerEntity == &ExampleStruct::staticGetArchetype());
 	TEST(ExampleStruct::staticGetArchetype().getField("i")->outerEntity == &ExampleStruct::staticGetArchetype());
 	TEST(ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->outerEntity == &ExampleStruct::staticGetArchetype());
@@ -29,10 +28,10 @@ void namespaces()
 	TEST(rfk::Database::getNamespace("namespace3") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4_nested") == nullptr);
-	TEST(rfk::Database::getNamespace("namespace4")->getNestedNamespace("namespace4_nested") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace4")->getNamespace("namespace4_nested") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("AnotherClassInNamespace3") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("OtherClass") != nullptr);
-	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
+	TEST(rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
 	
 	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace")->getData<int>() == 42);
 	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace", rfk::EVarFlags::Static) == nullptr);
@@ -436,7 +435,7 @@ void parseAllNested()
 	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getClass("NestedClass1") != nullptr);
 	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getStruct("NestedStruct1") != nullptr);
 	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getEnum("NestedEnum1") != nullptr);
-	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getNestedNamespace("parse_all_nested_namespace") != nullptr);
+	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getNamespace("parse_all_nested_namespace") != nullptr);
 }
 
 void properties()

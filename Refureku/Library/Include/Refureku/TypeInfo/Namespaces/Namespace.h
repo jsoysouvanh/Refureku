@@ -60,13 +60,13 @@ namespace rfk
 											EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
 
 			/**
-			*	@brief Retrieve a namespace from this namespace.
+			*	@brief Retrieve a namespace contained in this namespace.
 			*	
 			*	@param namespaceName Name of the nested namespace to look for.
 			*
 			*	@return The found nested namespace if it exists, else nullptr.
 			*/
-			Namespace const*	getNestedNamespace(std::string namespaceName)					const noexcept;
+			Namespace const*	getNamespace(std::string namespaceName)							const noexcept;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.

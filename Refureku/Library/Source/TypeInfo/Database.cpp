@@ -396,7 +396,7 @@ Namespace const* Database::getNamespace(std::string namespaceName)
 		namespaceName	= namespaceName.substr(index + 2u);
 		index			= namespaceName.find_first_of(':');
 
-		result = result->getNestedNamespace(namespaceName.substr(0u, index));
+		result = result->getNamespace(namespaceName.substr(0u, index));
 	}
 
 	return result;

@@ -11,7 +11,7 @@ Namespace::Namespace(std::string&& newName, uint64 newId) noexcept:
 {
 }
 
-Namespace const* Namespace::getNestedNamespace(std::string namespaceName) const noexcept
+Namespace const* Namespace::getNamespace(std::string namespaceName) const noexcept
 {
 	//Use an Entity instead of a Namespace to avoid containers initialization
 	Entity searchingNamespace(std::move(namespaceName), 0u);
