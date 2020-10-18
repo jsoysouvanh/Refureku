@@ -26,6 +26,8 @@ void StaticMethod::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEA
 template <typename ReturnType, typename... ArgTypes>
 ReturnType StaticMethod::rInvoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
+	static_assert(!std::is_void_v<ReturnType>, "ReturnType can't be void.");
+
 	#if REFUREKU_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
@@ -46,6 +48,8 @@ void StaticMethod::checkedInvoke(ArgTypes&&... arguments) const
 template <typename ReturnType, typename... ArgTypes>
 ReturnType StaticMethod::checkedRInvoke(ArgTypes&&... arguments) const
 {
+	static_assert(!std::is_void_v<ReturnType>, "ReturnType can't be void.");
+
 	checkReturnType<ReturnType>();
 	checkArguments<ArgTypes...>();
 

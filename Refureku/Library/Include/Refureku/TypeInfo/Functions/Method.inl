@@ -26,6 +26,8 @@ void Method::invoke(void const* caller, ArgTypes&&... arguments) const noexcept(
 template <typename ReturnType, typename... ArgTypes>
 ReturnType Method::rInvoke(void const* caller, ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 {
+	static_assert(!std::is_void_v<ReturnType>, "ReturnType can't be void.");
+
 	#if REFUREKU_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
@@ -46,6 +48,8 @@ void Method::checkedInvoke(void const* caller, ArgTypes&&... arguments) const
 template <typename ReturnType, typename... ArgTypes>
 ReturnType Method::checkedRInvoke(void const* caller, ArgTypes&&... arguments) const
 {
+	static_assert(!std::is_void_v<ReturnType>, "ReturnType can't be void.");
+
 	checkReturnType<ReturnType>();
 	checkArguments<ArgTypes...>();
 

@@ -48,8 +48,8 @@ namespace rfk
 			*
 			*	In debug mode (NDEBUG macro not defined), checks that the correct number of
 			*	arguments is passed before actually invoking the underlying function.
-			*	If it is incorrect, a MethodError exception is thrown.
-			*	Type checks are not performed so calling this function with bad parameters might lead to a crash.
+			*	If it is incorrect, a ArgCountMismatch exception is thrown.
+			*	Type checks are not performed so calling this function with bad parameters might lead to a crash or unexpected behavior.
 			*
 			*	\tparam ReturnType Return type of the function
 			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction.
@@ -66,8 +66,8 @@ namespace rfk
 			*
 			*	In debug mode (NDEBUG macro not defined), checks that the correct number of
 			*	arguments is passed to the function call before actually invoking the underlying function.
-			*	If it is incorrect, a MethodError exception is thrown.
-			*	Type checks are not performed so calling this function with bad parameters might lead to a crash.
+			*	If it is incorrect, a ArgCountMismatch exception is thrown.
+			*	Type checks are not performed so calling this function with bad parameters might lead to a crash or unexpected behavior.
 			*
 			*	@tparam ArgTypes... Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
@@ -80,7 +80,7 @@ namespace rfk
 			*	@brief Call the function with the provided argument(s) if any, and return the result.
 			*
 			*	Checks the argument count and the type of each argument before actually invoking the underlying function.
-			*	If any of those is incorrect, a MethodError exception is thrown.
+			*	If any of those is incorrect, a ArgCountMismatch, ArgTypeMismatch, or ReturnTypeMismatch exception is thrown.
 			*
 			*	@tparam		ReturnType	Return type of the function
 			*	@tparam...	ArgTypes	Type of all arguments. This can in some cases be omitted thanks to template deduction,
@@ -98,7 +98,7 @@ namespace rfk
 			*	@brief Call the function with the provided argument(s) if any.
 			*
 			*	Checks the argument count and the type of each argument before actually invoking the underlying function.
-			*	If any of those is incorrect, a MethodError exception is thrown.
+			*	If any of those is incorrect, a ArgCountMismatch or ArgTypeMismatch exception is thrown.
 			*
 			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
 			*		but it is always safer to explicitly specify each template type to avoid type mismatches (a char* could
