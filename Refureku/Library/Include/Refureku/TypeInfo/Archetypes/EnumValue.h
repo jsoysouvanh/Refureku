@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <type_traits>
+
 #include "Refureku/TypeInfo/Entity.h"
 
 namespace rfk
@@ -22,5 +24,17 @@ namespace rfk
 			EnumValue(EnumValue const&)								= delete;
 			EnumValue(EnumValue&&)									= delete;
 			~EnumValue()											= default;
+
+			/**
+			*	@brief Cast the enum value as the provided template type.
+			*
+			*	@tparam T Type to cast the value to. Must be an integral type or an enum type.
+			*
+			*	@return The value contained in this enum value cast to T.
+			*/
+			template <typename T, typename = std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
+			T as() const noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Archetypes/EnumValue.inl"
 }

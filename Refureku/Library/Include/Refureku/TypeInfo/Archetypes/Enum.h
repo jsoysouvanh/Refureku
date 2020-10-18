@@ -13,7 +13,7 @@
 #include <algorithm>
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/EnumValue.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 
 namespace rfk
 {

@@ -69,14 +69,12 @@ namespace rfk
 			};
 
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
-			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
 			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>							directParents;
 
 			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children. */
 			std::unordered_set<Struct const*>													children;
 
 			/** All tagged nested structs/classes/enums contained in this struct. */
-			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
 			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedArchetypes;
 
 			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
