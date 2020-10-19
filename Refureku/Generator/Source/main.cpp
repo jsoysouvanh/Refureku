@@ -7,7 +7,7 @@
 #include "RefurekuGenerator/CodeGen/FileGenerator.h"
 #include "RefurekuGenerator/CodeGen/FileGenerationUnit.h"
 
-void printGenerationSetup(kodgen::ILogger& logger, rfk::FileGenerator const& fileGenerator)
+void printGenerationSetup(kodgen::ILogger& logger, rfk::FileGenerator const& fileGenerator, rfk::FileParserFactory const& fileParserFactory)
 {
 	//Output dir
 	logger.log("Output directory: " + fileGenerator.settings.outputDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
@@ -22,6 +22,12 @@ void printGenerationSetup(kodgen::ILogger& logger, rfk::FileGenerator const& fil
 	//IgnoredDirs
 	logger.log("Ignored directories:", kodgen::ILogger::ELogSeverity::Info);
 	for (fs::path const& path : fileGenerator.settings.ignoredDirectories)
+	{
+		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
+	}
+
+	logger.log("Project include directories:", kodgen::ILogger::ELogSeverity::Info);
+	for (fs::path const& path : fileParserFactory.parsingSettings.projectIncludeDirectories)
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
@@ -73,23 +79,20 @@ void parseAndGenerate(fs::path&& exePath)
 		logger.log("Loaded FileGenerator settings.", kodgen::ILogger::ELogSeverity::Info);
 		logger.log("Loaded FileParser settings.", kodgen::ILogger::ELogSeverity::Info);
 
+		
 #if RFK_DEV
 		// This part is for travis only
-		fs::path includeDir		= fs::current_path() / "Include";
-		fs::path generatedDir	= includeDir / "Generated";
+		fs::path includeDir			= fs::current_path() / "Include";
+		fs::path generatedDir		= includeDir / "Generated";
+		fs::path refurekuIncludeDir	= fs::current_path().parent_path() / "Include";
 
 		fileGenerator.settings.outputDirectory = generatedDir;
 		fileGenerator.settings.toParseDirectories.emplace(includeDir);
 		fileGenerator.settings.ignoredDirectories.emplace(generatedDir);
-
-		logger.log("Project include directories:", kodgen::ILogger::ELogSeverity::Info);
-		for (fs::path const& path : fileParserFactory.parsingSettings.projectIncludeDirectories)
-		{
-			logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
-		}
+		fileParserFactory.parsingSettings.projectIncludeDirectories.emplace(refurekuIncludeDir);
 #endif
 
-		printGenerationSetup(logger, fileGenerator);
+		printGenerationSetup(logger, fileGenerator, fileParserFactory);
 
 		//Parse
 		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);

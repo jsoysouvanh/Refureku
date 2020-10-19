@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Refureku/Object.h"
+#include <Refureku/Object.h>
 
 #include "Generated/ExampleClass.rfk.h"
 
@@ -13,7 +13,7 @@ namespace namespace1
 			double pppDouble = 0.21;
 
 		public:
-			ParentParentParentClass() noexcept {}  
+			ParentParentParentClass() noexcept {} 
 	};
 }
 

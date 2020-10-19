@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Kodgen/Object.h"
+#include <Kodgen/Object.h>
 
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 

@@ -35,7 +35,10 @@ void FileParserFactoryBase::refreshCompilationArguments() noexcept
 	*	9 because we make an additional parameter per possible entity
 	*	Namespace, Class, Struct, Variable, Field, Function, Method, Enum, EnumValue
 	*/
-	_compilationArguments.reserve(3u + 9u + _projectIncludeDirs.size());
+	_compilationArguments.reserve(4u + 9u + _projectIncludeDirs.size());
+
+	//Debug
+	_compilationArguments.emplace_back("-v");
 
 	//Parsing C++
 	_compilationArguments.emplace_back("-xc++");
