@@ -81,6 +81,12 @@ void parseAndGenerate(fs::path&& exePath)
 		fileGenerator.settings.outputDirectory = generatedDir;
 		fileGenerator.settings.toParseDirectories.emplace(includeDir);
 		fileGenerator.settings.ignoredDirectories.emplace(generatedDir);
+
+		logger.log("Project include directories:", kodgen::ILogger::ELogSeverity::Info);
+		for (fs::path const& path : fileParserFactory.parsingSettings.projectIncludeDirectories)
+		{
+			logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
+		}
 #endif
 
 		printGenerationSetup(logger, fileGenerator);

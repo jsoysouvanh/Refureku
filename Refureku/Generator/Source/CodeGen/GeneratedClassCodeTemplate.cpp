@@ -74,18 +74,14 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 
 	std::string returnedType = (info.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
-	bool shouldGenerateGetArchetype = std::find_if(info.properties.simpleProperties.cbegin(),
-												   info.properties.simpleProperties.cend(),
-												   [](kodgen::SimpleProperty const& p) { return p.mainProperty == NativeProperties::dynamicGetArchetypeProperty; }) != info.properties.simpleProperties.cend();
-
-	std::string getArchetypeMethod = (shouldGenerateGetArchetype) ?
-		returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" : "";
+	if (info.isObject)
+		std::cout << "Generate: " << "	" + returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" << std::endl;
 
 	generatedFile.writeMacro(std::string(getTypeMacroDeclaration),
 							 std::move(generateFieldsMetadataMacroName[1]),
 							 "public:",
 							 "	inline static " + returnedType + " const& staticGetArchetype() noexcept;",
-							 "	" + std::move(getArchetypeMethod)
+							 (info.isObject) ? "	" + returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" : ""
 	);
 
 	//Use parsing macro to avoid parsing generated data

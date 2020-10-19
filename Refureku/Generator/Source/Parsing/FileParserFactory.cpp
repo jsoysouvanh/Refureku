@@ -33,6 +33,5 @@ FileParserFactory::FileParserFactory() noexcept:
 	parsingSettings.propertyParsingSettings.enumValueMacroName	= "RFKEnumVal";
 
 	//Setup property rules
-	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_dynamicGetArchetypePropertyRule);
 	parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_customInstantiatorPropertyRule);
 }

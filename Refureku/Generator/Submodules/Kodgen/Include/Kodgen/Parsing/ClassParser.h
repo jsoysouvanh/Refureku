@@ -8,6 +8,7 @@
 #pragma once
 
 #include <variant>
+#include <string>
 
 #include <clang-c/Index.h>
 
@@ -26,6 +27,12 @@ namespace kodgen
 	class ClassParser : public EntityParser
 	{
 		private:
+			struct InheritanceSearch
+			{
+				std::string	baseClassName;
+				bool		doesInherit = false;
+			};
+
 			/** Parser used to parse enums. */
 			EnumParser		_enumParser;	
 
@@ -47,6 +54,17 @@ namespace kodgen
 			static CXChildVisitResult		parseNestedEntity(CXCursor		cursor,
 															  CXCursor		parentCursor,
 															  CXClientData	clientData)					noexcept;
+
+			/**
+			*	@brief Check if a class inherits from another class.
+			*	
+			*	@param childClass		The child class to check.
+			*	@param parentClassName	Name of the potential base class to check.
+			*	
+			*	@return true if childClass inherits from baseClassName, else false.
+			*/
+			static bool						isBaseOf(std::string const& baseClassName,
+													 CXType const&		childClass)						noexcept;
 
 			/**
 			*	@brief Push a new clean context to prepare struct/class parsing.

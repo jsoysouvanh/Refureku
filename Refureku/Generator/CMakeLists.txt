@@ -9,7 +9,6 @@ add_subdirectory(Submodules/Kodgen)
 set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
 add_library(${RefurekuGeneratorLibTarget}
 				STATIC
-					Source/Properties/DynamicGetArchetypePropertyRule.cpp
 					Source/Properties/CustomInstantiatorPropertyRule.cpp
 					Source/Properties/RangePropertyRule.cpp
 

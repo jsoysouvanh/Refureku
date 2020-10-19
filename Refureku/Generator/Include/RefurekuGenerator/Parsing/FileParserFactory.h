@@ -10,7 +10,6 @@
 #include <Kodgen/Parsing/FileParserFactory.h>
 
 #include "RefurekuGenerator/Parsing/FileParser.h"
-#include "RefurekuGenerator/Properties/DynamicGetArchetypePropertyRule.h"
 #include "RefurekuGenerator/Properties/CustomInstantiatorPropertyRule.h"
 
 namespace rfk
@@ -19,7 +18,6 @@ namespace rfk
 	{
 		private:
 			/** Native properties. */
-			DynamicGetArchetypePropertyRule	_dynamicGetArchetypePropertyRule;
 			CustomInstantiatorPropertyRule	_customInstantiatorPropertyRule;
 
 		public:

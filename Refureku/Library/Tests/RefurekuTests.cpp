@@ -442,9 +442,6 @@ void properties()
 {
 	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
-	TEST(ec.properties.getSimpleProperty("dynamicGetArchetype") == nullptr);
-	TEST(ec.properties.getSimpleProperty("DynamicGetArchetype") != nullptr);
-
 	TEST(ec.getStaticMethod("customInstantiator")->properties.getSimpleProperty("CustomInstantiator") != nullptr);
 
 	//rfk::Class const& ppc = namespace2::ParentParentClass::staticGetArchetype();
@@ -478,7 +475,7 @@ void properties()
 
 void dynamicTypes()
 {
-	std::vector<rfk::ReflectedObject*>	objects;
+	std::vector<rfk::Object*>	objects;
 
 	objects.push_back(new namespace3::ExampleClass());
 	objects.push_back(new namespace3::ParentClass());
@@ -489,7 +486,7 @@ void dynamicTypes()
 	TEST(objects[2]->getArchetype().name == "ParentParentClass");
 
 	//Yummy leak
-	for (rfk::ReflectedObject* o : objects)
+	for (rfk::Object* o : objects)
 	{
 		delete o;
 	}

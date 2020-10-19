@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Refureku/ReflectedObject.h"
+#include "Refureku/Object.h"
 
 #include "Generated/ExampleClass.rfk.h"
 
@@ -13,13 +13,13 @@ namespace namespace1
 			double pppDouble = 0.21;
 
 		public:
-			ParentParentParentClass() noexcept {}
+			ParentParentParentClass() noexcept {}  
 	};
 }
 
 namespace namespace2 RFKNamespace()
 {
-	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject 
+	class RFKClass() ParentParentClass : public namespace1::ParentParentParentClass, public rfk::Object 
 	{
 		private:
 			RFKField()
@@ -37,13 +37,13 @@ namespace namespace3 RFKNamespace()
 	//Forward declaration
 	class AnotherClassInNamespace3;
 
-	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
+	class RFKClass() OtherClass : public rfk::Object
 	{
 
 		OtherClass_GENERATED
 	};
 
-	class RFKClass(DynamicGetArchetype) ParentClass : public namespace2::ParentParentClass
+	class RFKClass() ParentClass : public namespace2::ParentParentClass
 	{
 		private:
 			RFKMethod()
@@ -77,7 +77,7 @@ namespace namespace3 RFKNamespace()
 		ParentClass2_GENERATED
 	};
 
-	class RFKClass(DynamicGetArchetype) ExampleClass : public ParentClass, public ParentClass2
+	class RFKClass() ExampleClass : public ParentClass, public ParentClass2
 	{
 		private:
 			class RFKClass() NestedExampleClass
@@ -238,7 +238,7 @@ struct RFKStruct(ParseAllNested) ExampleStruct
 	ExampleStruct_GENERATED
 };
 
-namespace parse_all_nested_namespace RFKNamespace(ParseAllNested)
+namespace parse_all_nested_namespace RFKNamespace(ParseAllNested) 
 {
 	class NestedClass1
 	{

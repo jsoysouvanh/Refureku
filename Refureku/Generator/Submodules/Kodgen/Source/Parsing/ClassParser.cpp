@@ -235,8 +235,67 @@ void ClassParser::addBaseClass(CXCursor cursor) noexcept
 
 	if (getParsingResult()->parsedClass.has_value())
 	{
-		getParsingResult()->parsedClass->parents.emplace_back(StructClassInfo::ParentInfo{ static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor)), TypeInfo(clang_getCursorType(cursor)) });
+		StructClassInfo&	parsedClass = getParsingResult()->parsedClass.value();
+		CXType				parentType	= clang_getCursorType(cursor);
+
+		parsedClass.parents.emplace_back(StructClassInfo::ParentInfo{ static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor)), TypeInfo(parentType) });
+
+		if (!parsedClass.isObject)
+		{
+			std::cout << "------ Test " << parsedClass.name << std::endl;
+
+			//we haven't confirmed that the current parsed class inherits from Object, search again
+			parsedClass.isObject = isBaseOf("kodgen::Object", parentType);
+
+			if (parsedClass.isObject)
+			{
+				std::cout << parsedClass.name << " is a kodgen::Object." << std::endl;
+			}
+		}
 	}
+}
+
+bool ClassParser::isBaseOf(std::string const& baseClassName, CXType const& childClass) noexcept
+{
+	std::cout << "? " << Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(childClass))) << std::endl;
+
+	//Check if the base class is actually the child class
+	if (Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(childClass))) == baseClassName)
+	{
+		return true;
+	}
+
+	InheritanceSearch searchData{baseClassName, false};
+
+	//Recursively search in class childClass parents
+	clang_visitChildren(clang_getTypeDeclaration(childClass), [](CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData)
+	{
+		InheritanceSearch& searchData = *reinterpret_cast<InheritanceSearch*>(clientData);
+
+		if (cursor.kind == CXCursorKind::CXCursor_CXXBaseSpecifier)
+		{
+			if (isBaseOf(searchData.baseClassName, clang_getCanonicalType(clang_getCursorType(cursor))))
+			{
+				searchData.doesInherit = true;
+
+				return CXChildVisitResult::CXChildVisit_Break;
+			}
+			else
+			{
+				return CXChildVisitResult::CXChildVisit_Continue;
+			}
+		}
+		else if (cursor.kind == CXCursorKind::CXCursor_CXXFinalAttr || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
+		{
+			return CXChildVisitResult::CXChildVisit_Continue;
+		}
+		else
+		{
+			return CXChildVisitResult::CXChildVisit_Break;
+		}
+	}, &searchData);
+
+	return searchData.doesInherit;
 }
 
 void ClassParser::addFieldResult(FieldParsingResult&& result) noexcept
