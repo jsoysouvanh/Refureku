@@ -78,13 +78,21 @@ void parseAndGenerate(fs::path&& exePath)
 	{
 		logger.log("Loaded FileGenerator settings.", kodgen::ILogger::ELogSeverity::Info);
 		logger.log("Loaded FileParser settings.", kodgen::ILogger::ELogSeverity::Info);
-
 		
 #if RFK_DEV
 		// This part is for travis only
 		fs::path includeDir			= fs::current_path() / "Include";
 		fs::path generatedDir		= includeDir / "Generated";
 		fs::path refurekuIncludeDir	= fs::current_path().parent_path() / "Include";
+
+		//Specify used compiler
+#if defined(__GNUC__)
+		fileParserFactory.parsingSettings.compilerExeName = "g++";
+#elif defined(__clang__)
+		fileParserFactory.parsingSettings.compilerExeName = "clang++";
+#elif defined(_MSC_VER)
+		fileParserFactory.parsingSettings.compilerExeName = "clang++";
+#endif
 
 		fileGenerator.settings.outputDirectory = generatedDir;
 		fileGenerator.settings.toParseDirectories.emplace(includeDir);

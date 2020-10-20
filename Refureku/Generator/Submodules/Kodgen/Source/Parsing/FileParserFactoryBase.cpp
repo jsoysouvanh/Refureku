@@ -1,5 +1,7 @@
 #include "Kodgen/Parsing/FileParserFactoryBase.h"
 
+#include "Kodgen/Misc/CompilerHelpers.h"
+
 using namespace kodgen;
 
 void FileParserFactoryBase::refreshBuildCommandStrings() noexcept
@@ -14,12 +16,27 @@ void FileParserFactoryBase::refreshBuildCommandStrings() noexcept
 	_enumPropertyMacro		= "-D" + parsingSettings.propertyParsingSettings.enumMacroName		+ "(...)=__attribute__((annotate(\"KGE:\"#__VA_ARGS__)))";
 	_enumValuePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.enumValueMacroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
 
-	_projectIncludeDirs.clear();
-	_projectIncludeDirs.reserve(parsingSettings.projectIncludeDirectories.size());
+	//Setup project include directories
+	std::vector<std::string> nativeIncludeDirectories = CompilerHelpers::getCompilerNativeIncludeDirectories(parsingSettings.compilerExeName);
 
+	if (nativeIncludeDirectories.empty())
+	{
+		logger->log("Could not find any include directory from the specified compiler. Make sure the compiler is installed on your computer.", kodgen::ILogger::ELogSeverity::Warning);
+	}
+
+	_projectIncludeDirs.clear();
+	_projectIncludeDirs.reserve(parsingSettings.projectIncludeDirectories.size() + nativeIncludeDirectories.size());
+
+	//Add user manually specified include directories
 	for (fs::path const& includeDir : parsingSettings.projectIncludeDirectories)
 	{
 		_projectIncludeDirs.emplace_back("-I" + includeDir.string());
+	}
+
+	//Add compiler native include directories
+	for (std::string& includeDir : nativeIncludeDirectories)
+	{
+		_projectIncludeDirs.emplace_back("-I" + std::move(includeDir));
 	}
 }
 
@@ -29,19 +46,26 @@ void FileParserFactoryBase::refreshCompilationArguments() noexcept
 
 	refreshBuildCommandStrings();
 
+#if KODGEN_DEV
+	constexpr size_t baseCompilationArgCount = 4u;	//-xc++, -v, -std=c++1z & _kodgenParsingMacro
+#else
+	constexpr size_t baseCompilationArgCount = 3u;	//-xc++, -std=c++1z & _kodgenParsingMacro
+#endif
+
 	/**
 	*	3 to include -xc++, -std=c++1z & _kodgenParsingMacro
 	*
 	*	9 because we make an additional parameter per possible entity
 	*	Namespace, Class, Struct, Variable, Field, Function, Method, Enum, EnumValue
 	*/
-	_compilationArguments.reserve(4u + 9u + _projectIncludeDirs.size());
-
-	//Debug
-	_compilationArguments.emplace_back("-v");
+	_compilationArguments.reserve(baseCompilationArgCount + 9u + _projectIncludeDirs.size());
 
 	//Parsing C++
 	_compilationArguments.emplace_back("-xc++");
+
+#if KODGEN_DEV
+	_compilationArguments.emplace_back("-v");
+#endif
 
 	//Use C++17
 	_compilationArguments.emplace_back("-std=c++1z"); 

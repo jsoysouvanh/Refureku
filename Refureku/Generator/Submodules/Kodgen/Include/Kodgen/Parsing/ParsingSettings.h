@@ -8,6 +8,7 @@
 #pragma once
 
 #include <unordered_set>
+#include <string>
 
 #include "Kodgen/Properties/PropertyParsingSettings.h"
 #include "Kodgen/Misc/Filesystem.h"
@@ -35,5 +36,12 @@ namespace kodgen
 			*	when compiling.
 			*/
 			std::unordered_set<fs::path, PathHash>	projectIncludeDirectories;
+
+			/**
+			*	Name of the compiler used to compile the header files being parsed.
+			*	This is used to make sure the parser recognizes the included headers.
+			*	As for now, supported values are "clang", "gcc" and "msvc".
+			*/
+			std::string								compilerExeName					= "clang";
 	};
 }

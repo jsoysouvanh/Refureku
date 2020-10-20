@@ -54,6 +54,8 @@ add_library(${KodgenTargetLibrary}
 					Source/Misc/EAccessSpecifier.cpp
 					Source/Misc/Helpers.cpp
 					Source/Misc/DefaultLogger.cpp
+					Source/Misc/CompilerHelpers.cpp
+					Source/Misc/System.cpp
 	
 					Source/CodeGen/FileGenerationUnit.cpp
 					Source/CodeGen/FileGenerationResult.cpp
