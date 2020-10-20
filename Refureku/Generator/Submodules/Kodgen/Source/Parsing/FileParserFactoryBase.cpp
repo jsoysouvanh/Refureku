@@ -17,11 +17,20 @@ void FileParserFactoryBase::refreshBuildCommandStrings() noexcept
 	_enumValuePropertyMacro	= "-D" + parsingSettings.propertyParsingSettings.enumValueMacroName	+ "(...)=__attribute__((annotate(\"KGEV:\"#__VA_ARGS__)))";
 
 	//Setup project include directories
-	std::vector<std::string> nativeIncludeDirectories = CompilerHelpers::getCompilerNativeIncludeDirectories(parsingSettings.compilerExeName);
-
-	if (nativeIncludeDirectories.empty())
+	std::vector<fs::path> nativeIncludeDirectories;
+	
+	try
 	{
-		logger->log("Could not find any include directory from the specified compiler. Make sure the compiler is installed on your computer.", kodgen::ILogger::ELogSeverity::Warning);
+		nativeIncludeDirectories = CompilerHelpers::getCompilerNativeIncludeDirectories(parsingSettings.compilerExeName);
+
+		if (nativeIncludeDirectories.empty())
+		{
+			logger->log("Could not find any include directory from the specified compiler. Make sure the compiler is installed on your computer.", kodgen::ILogger::ELogSeverity::Warning);
+		}
+	}
+	catch (std::exception const& e)
+	{
+		logger->log(e.what(), kodgen::ILogger::ELogSeverity::Error);
 	}
 
 	_projectIncludeDirs.clear();
@@ -34,9 +43,9 @@ void FileParserFactoryBase::refreshBuildCommandStrings() noexcept
 	}
 
 	//Add compiler native include directories
-	for (std::string& includeDir : nativeIncludeDirectories)
+	for (fs::path& includeDir : nativeIncludeDirectories)
 	{
-		_projectIncludeDirs.emplace_back("-I" + std::move(includeDir));
+		_projectIncludeDirs.emplace_back("-I" + std::move(includeDir.string()));
 	}
 }
 
@@ -131,6 +140,7 @@ bool FileParserFactoryBase::loadSettings(fs::path const& pathToSettingsFile) noe
 			TomlUtility::updateSetting(parserSettings, "shouldParseAllEntities", parsingSettings.shouldParseAllEntities);
 			TomlUtility::updateSetting(parserSettings, "shouldAbortParsingOnFirstError", parsingSettings.shouldAbortParsingOnFirstError);
 			TomlUtility::updateSetting(parserSettings, "projectIncludeDirectories", parsingSettings.projectIncludeDirectories);
+			TomlUtility::updateSetting(parserSettings, "compilerExeName", parsingSettings.compilerExeName);
 
 			//Update Property settings
 			if (parserSettings.contains("Properties"))

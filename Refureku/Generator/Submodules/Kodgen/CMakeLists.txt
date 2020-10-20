@@ -107,12 +107,18 @@ target_link_libraries(${KodgenTargetLibrary}
 							${CMAKE_THREAD_LIBS_INIT}
 						)
 
-# Copy libclang shared library to the bin folder
+# Copy libclang shared library & vswhere to the bin folder
 if (WIN32)
 	add_custom_command(	TARGET ${KodgenTargetLibrary} POST_BUILD
 						COMMAND ${CMAKE_COMMAND} -E copy
 						${PROJECT_SOURCE_DIR}/ThirdParty/x64/Shared/libclang.dll
 						$<IF:$<BOOL:${MSVC}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/libclang.dll,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libclang.dll>
+					)
+
+	add_custom_command(	TARGET ${KodgenTargetLibrary} POST_BUILD
+						COMMAND ${CMAKE_COMMAND} -E copy
+						${PROJECT_SOURCE_DIR}/ThirdParty/x64/Bin/vswhere.exe
+						$<IF:$<BOOL:${MSVC}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/vswhere.exe,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vswhere.exe>
 					)
 endif()
 

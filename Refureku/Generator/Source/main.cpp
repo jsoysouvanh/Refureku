@@ -91,7 +91,7 @@ void parseAndGenerate(fs::path&& exePath)
 #elif defined(__clang__)
 		fileParserFactory.parsingSettings.compilerExeName = "clang++";
 #elif defined(_MSC_VER)
-		fileParserFactory.parsingSettings.compilerExeName = "clang++";
+		fileParserFactory.parsingSettings.compilerExeName = "msvc";
 #endif
 
 		fileGenerator.settings.outputDirectory = generatedDir;

@@ -12,6 +12,8 @@
 #include <array>
 #include <string_view>
 
+#include "Kodgen/Misc/Filesystem.h"
+
 namespace kodgen
 {
 	class CompilerHelpers
@@ -29,8 +31,10 @@ namespace kodgen
 			*	@param clangExeName Clang executable name (version might be specified in there).
 			*	
 			*	@return A vector containing all clang native include directories.
+			*
+			*	@exception std::runtime_error is thrown if the clang executable could not be launched.
 			*/
-			static std::vector<std::string> getClangNativeIncludeDirectories(std::string const& clangExeName) noexcept;
+			static std::vector<fs::path> getClangNativeIncludeDirectories(std::string const& clangExeName);
 
 			/**
 			*	@brief Retrieve all GCC native include directories on the executing computer.
@@ -38,17 +42,28 @@ namespace kodgen
 			*	@param gccExeName GCC executable name (version might be specified in there).
 			*	
 			*	@return A vector containing all GCC native include directories.
+			*
+			*	@exception std::runtime_error is thrown if the gcc executable could not be launched.
 			*/
-			static std::vector<std::string> getGCCNativeIncludeDirectories(std::string const& gccExeName) noexcept;
+			static std::vector<fs::path> getGCCNativeIncludeDirectories(std::string const& gccExeName);
 
+#if _WIN32
 			/**
 			*	@brief Retrieve all MSVC native include directories on the executing computer.
 			*
-			*	@param gccExeName MSVC executable name (version might be specified in there).
-			*	
 			*	@return A vector containing all MSVC native include directories.
+			*
+			*	@exception std::runtime_error is thrown if vswhere could not be located.
 			*/
-			static std::vector<std::string> getMSVCNativeIncludeDirectories(std::string const& msvcExeName) noexcept;
+			static std::vector<fs::path> getMSVCNativeIncludeDirectories();
+
+			/**
+			*	@brief Retrieve the path of the vswhere executable, which should be at the same level as the executable.
+			*
+			*	@return The vswhere.exe path, if found next to the executable, else an empty path.
+			*/
+			static fs::path					getvswherePath()	noexcept;
+#endif
 
 		public:
 			CompilerHelpers()						= delete;
@@ -63,8 +78,8 @@ namespace kodgen
 			*	
 			*	@return A vector containing all native include directories for the provided compiler.
 			*
-			*	@exception std::runtime_error will be thrown if the compiler string is empty or not supported.
+			*	@exception std::runtime_error is thrown if the compiler has a valid name but include directories could not be queried on the executing computer.
 			*/
-			static std::vector<std::string> getCompilerNativeIncludeDirectories(std::string compiler);
+			static std::vector<fs::path> getCompilerNativeIncludeDirectories(std::string compiler);
 	};
 }

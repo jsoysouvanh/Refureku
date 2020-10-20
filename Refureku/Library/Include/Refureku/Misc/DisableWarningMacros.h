@@ -21,12 +21,8 @@
 #if defined (__clang__)
 //clang specific warning flags
 
-//#define __RFK_DISABLE_WARNING_MACRO_REDEFINED	__RFK_DISABLE_WARNING(-Wmacro-redefined)
-
 #else
 //gcc specific warning flags
-
-//#define __RFK_DISABLE_WARNING_MACRO_REDEFINED	
 
 #endif
 
@@ -39,7 +35,6 @@
 #define __RFK_DISABLE_WARNING_INIT_SEG			__RFK_DISABLE_WARNING(4073)
 #define __RFK_DISABLE_WARNING_OFFSETOF
 #define __RFK_DISABLE_WARNING_UNSCOPED_ENUM		__RFK_DISABLE_WARNING(26812)
-//#define __RFK_DISABLE_WARNING_MACRO_REDEFINED	__RFK_DISABLE_WARNING(4005)
 
 #else
 
@@ -50,6 +45,5 @@
 #define __RFK_DISABLE_WARNING_INIT_SEG
 #define __RFK_DISABLE_WARNING_OFFSETOF
 #define __RFK_DISABLE_WARNING_UNSCOPED_ENUM
-//#define __RFK_DISABLE_WARNING_MACRO_REDEFINED
 
 #endif
