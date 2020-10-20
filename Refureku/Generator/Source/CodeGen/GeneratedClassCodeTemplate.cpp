@@ -74,9 +74,6 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 
 	std::string returnedType = (info.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
-	if (info.isObject)
-		std::cout << "Generate: " << "	" + returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" << std::endl;
-
 	generatedFile.writeMacro(std::string(getTypeMacroDeclaration),
 							 std::move(generateFieldsMetadataMacroName[1]),
 							 "public:",

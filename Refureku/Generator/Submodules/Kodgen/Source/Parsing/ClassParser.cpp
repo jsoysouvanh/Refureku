@@ -242,23 +242,14 @@ void ClassParser::addBaseClass(CXCursor cursor) noexcept
 
 		if (!parsedClass.isObject)
 		{
-			std::cout << "------ Test " << parsedClass.name << std::endl;
-
 			//we haven't confirmed that the current parsed class inherits from Object, search again
 			parsedClass.isObject = isBaseOf("kodgen::Object", parentType);
-
-			if (parsedClass.isObject)
-			{
-				std::cout << parsedClass.name << " is a kodgen::Object." << std::endl;
-			}
 		}
 	}
 }
 
 bool ClassParser::isBaseOf(std::string const& baseClassName, CXType const& childClass) noexcept
 {
-	std::cout << "? " << Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(childClass))) << std::endl;
-
 	//Check if the base class is actually the child class
 	if (Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(childClass))) == baseClassName)
 	{

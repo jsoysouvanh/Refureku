@@ -17,9 +17,9 @@ std::vector<std::string> CompilerHelpers::getCompilerNativeIncludeDirectories(st
 	if (compiler.size() > 0)
 	{
 		//lowercase compiler name to make checks easier
-		std::transform(compiler.begin(), compiler.end(), compiler.begin(), [](unsigned char c)
+		std::transform(compiler.begin(), compiler.end(), compiler.begin(), [](char c) -> char
 					   {
-						   return std::tolower(c);
+						   return static_cast<char>(std::tolower((static_cast<int>(c))));
 					   });
 
 #if _WIN32
@@ -143,7 +143,7 @@ std::vector<std::string> CompilerHelpers::getGCCNativeIncludeDirectories(std::st
 	return result;
 }
 
-std::vector<std::string> CompilerHelpers::getMSVCNativeIncludeDirectories(std::string const& msvcExeName) noexcept
+std::vector<std::string> CompilerHelpers::getMSVCNativeIncludeDirectories(std::string const& /* msvcExeName */) noexcept
 {
 	std::vector<std::string> result;
 

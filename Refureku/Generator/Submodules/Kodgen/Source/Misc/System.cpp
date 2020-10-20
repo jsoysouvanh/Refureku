@@ -9,8 +9,10 @@ using namespace kodgen;
 
 std::string System::executeCommand(std::string const& cmd)
 {
-	std::array<char, 128>	buffer;
-	std::string				result;
+	constexpr int const bufferSize = 128;
+
+	std::array<char, bufferSize>	buffer;
+	std::string						result;
 
 #if _WIN32
 	std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.data(), "r"), _pclose);
@@ -23,7 +25,7 @@ std::string System::executeCommand(std::string const& cmd)
 		throw std::runtime_error("Failed to create a pipe to execute the command.");
 	}
 
-	while (std::fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+	while (std::fgets(buffer.data(), bufferSize, pipe.get()) != nullptr)
 	{
 		result += buffer.data();
 	}
