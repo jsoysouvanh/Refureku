@@ -8,8 +8,6 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
-#include <type_traits>
 
 #include "Refureku/Config.h"
 #include "Refureku/Misc/FundamentalTypes.h"
@@ -17,9 +15,6 @@
 
 namespace rfk
 {
-	//Forward declarations
-	class Class;
-
 	class Entity
 	{
 		public:
@@ -158,25 +153,5 @@ namespace rfk
 			Entity(Entity const&)								= default;
 			Entity(Entity&&)									= default;
 			~Entity()											= default;
-
-			template <typename T, typename = std::enable_if_t<std::is_base_of_v<Entity, T> && std::is_same_v<T, Class>>>
-			T const* as() const noexcept
-			{
-				if constexpr (std::is_same_v<T, Class>)
-				{
-					if (kind == EKind::Class)
-					{
-						return reinterpret_cast<T const*>(this);
-					}
-					else
-					{
-						return nullptr;
-					}
-				}
-				else
-				{
-					return nullptr;
-				}
-			}
 	};
 }

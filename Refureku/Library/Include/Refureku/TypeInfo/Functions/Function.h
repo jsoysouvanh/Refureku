@@ -13,7 +13,7 @@
 
 namespace rfk
 {
-	class Function : public FunctionBase
+	class Function final : public FunctionBase
 	{
 		private:
 			/**

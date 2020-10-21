@@ -45,7 +45,7 @@ void FileParserFactoryBase::refreshBuildCommandStrings() noexcept
 	//Add compiler native include directories
 	for (fs::path& includeDir : nativeIncludeDirectories)
 	{
-		_projectIncludeDirs.emplace_back("-I" + std::move(includeDir.string()));
+		_projectIncludeDirs.emplace_back("-I" + includeDir.string());
 	}
 }
 

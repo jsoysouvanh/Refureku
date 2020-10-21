@@ -10,6 +10,7 @@
 #include <type_traits>
 
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h"
 #include "Refureku/Utility/TypeTraits.h"
 
 namespace rfk
@@ -91,6 +92,31 @@ namespace rfk
 
 	template <>
 	rfk::Archetype const* getArchetype<long double>()			noexcept;
+
+	//Register all of these archetypes to database
+	namespace internal
+	{
+		inline ArchetypeRegisterer voidRegisterer		= getArchetype<void>();
+		inline ArchetypeRegisterer nullptrRegisterer	= getArchetype<std::nullptr_t>();
+		inline ArchetypeRegisterer boolRegisterer		= getArchetype<bool>();
+		inline ArchetypeRegisterer charRegisterer		= getArchetype<char>();
+		inline ArchetypeRegisterer signedCharRegisterer	= getArchetype<signed char>();
+		inline ArchetypeRegisterer ucharRegisterer		= getArchetype<unsigned char>();
+		inline ArchetypeRegisterer wcharRegisterer		= getArchetype<wchar_t>();
+		inline ArchetypeRegisterer char16Registerer		= getArchetype<char16_t>();
+		inline ArchetypeRegisterer char32Registerer		= getArchetype<char32_t>();
+		inline ArchetypeRegisterer shortRegisterer		= getArchetype<short>();
+		inline ArchetypeRegisterer ushortRegisterer		= getArchetype<unsigned short>();
+		inline ArchetypeRegisterer intRegisterer		= getArchetype<int>();
+		inline ArchetypeRegisterer uintRegisterer		= getArchetype<unsigned int>();
+		inline ArchetypeRegisterer longRegisterer		= getArchetype<long>();
+		inline ArchetypeRegisterer ulongRegisterer		= getArchetype<unsigned long>();
+		inline ArchetypeRegisterer longLongRegisterer	= getArchetype<long long>();
+		inline ArchetypeRegisterer ulongLongRegisterer	= getArchetype<unsigned long long>();
+		inline ArchetypeRegisterer floatRegisterer		= getArchetype<float>();
+		inline ArchetypeRegisterer doubleRegisterer		= getArchetype<double>();
+		inline ArchetypeRegisterer longDoubleRegisterer	= getArchetype<long double>();
+	}
 
 	#include "Refureku/TypeInfo/Archetypes/GetArchetype.inl"
 }

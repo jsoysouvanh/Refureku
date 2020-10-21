@@ -17,7 +17,7 @@
 
 namespace rfk
 {
-	class StaticField : public FieldBase
+	class StaticField final : public FieldBase
 	{
 		private:
 			/** Address of the field data. */

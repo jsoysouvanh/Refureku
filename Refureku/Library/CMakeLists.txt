@@ -16,6 +16,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/Entity.cpp
+					Source/TypeInfo/EntityCast.cpp
 					Source/TypeInfo/EnumValue.cpp
 					Source/TypeInfo/DefaultEntityRegisterer.cpp
 					Source/TypeInfo/Database.cpp

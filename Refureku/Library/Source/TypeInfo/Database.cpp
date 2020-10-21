@@ -10,14 +10,15 @@ using namespace rfk;
 //Init database containers BEFORE any other code so that reflected classes can register at startup
 #if defined(__GNUC__) || defined(__clang__)
 
-Database::EntitiesById		Database::_entitiesById					__attribute__((init_priority(101)));
-Database::NamespacesByName	Database::_fileLevelNamespacesByName	__attribute__((init_priority(101)));
-Database::StructsByName		Database::_fileLevelStructsByName		__attribute__((init_priority(101)));
-Database::ClassesByName		Database::_fileLevelClassesByName		__attribute__((init_priority(101)));
-Database::EnumsByName		Database::_fileLevelEnumsByName			__attribute__((init_priority(101)));
-Database::VariablesByName	Database::_fileLevelVariablesByName		__attribute__((init_priority(101)));
-Database::FunctionsByName	Database::_fileLevelFunctionsByName		__attribute__((init_priority(101)));
-Database::GenNamespaces		Database::_generatedNamespaces			__attribute__((init_priority(101)));
+Database::EntitiesById					Database::_entitiesById					__attribute__((init_priority(101)));
+Database::NamespacesByName				Database::_fileLevelNamespacesByName	__attribute__((init_priority(101)));
+Database::FundamentalArchetypesByName	Database::_fundamentalArchetypes		__attribute__((init_priority(101)));
+Database::StructsByName					Database::_fileLevelStructsByName		__attribute__((init_priority(101)));
+Database::ClassesByName					Database::_fileLevelClassesByName		__attribute__((init_priority(101)));
+Database::EnumsByName					Database::_fileLevelEnumsByName			__attribute__((init_priority(101)));
+Database::VariablesByName				Database::_fileLevelVariablesByName		__attribute__((init_priority(101)));
+Database::FunctionsByName				Database::_fileLevelFunctionsByName		__attribute__((init_priority(101)));
+Database::GenNamespaces					Database::_generatedNamespaces			__attribute__((init_priority(101)));
 
 #elif defined(_MSC_VER)
 
@@ -28,25 +29,27 @@ __RFK_DISABLE_WARNING_INIT_SEG
 
 __RFK_DISABLE_WARNING_POP
 
-Database::EntitiesById		Database::_entitiesById;
-Database::NamespacesByName	Database::_fileLevelNamespacesByName;
-Database::StructsByName		Database::_fileLevelStructsByName;
-Database::ClassesByName		Database::_fileLevelClassesByName;
-Database::EnumsByName		Database::_fileLevelEnumsByName;
-Database::VariablesByName	Database::_fileLevelVariablesByName;
-Database::FunctionsByName	Database::_fileLevelFunctionsByName;
-Database::GenNamespaces		Database::_generatedNamespaces;
+Database::EntitiesById					Database::_entitiesById;
+Database::NamespacesByName				Database::_fileLevelNamespacesByName;
+Database::FundamentalArchetypesByName	Database::_fundamentalArchetypes;
+Database::StructsByName					Database::_fileLevelStructsByName;
+Database::ClassesByName					Database::_fileLevelClassesByName;
+Database::EnumsByName					Database::_fileLevelEnumsByName;
+Database::VariablesByName				Database::_fileLevelVariablesByName;
+Database::FunctionsByName				Database::_fileLevelFunctionsByName;
+Database::GenNamespaces					Database::_generatedNamespaces;
 
 #else
 
-Database::EntitiesById		Database::_entitiesById;
-Database::NamespacesByName	Database::_fileLevelNamespacesByName;
-Database::StructsByName		Database::_fileLevelStructsByName;
-Database::ClassesByName		Database::_fileLevelClassesByName;
-Database::EnumsByName		Database::_fileLevelEnumsByName;
-Database::VariablesByName	Database::_fileLevelVariablesByName;
-Database::FunctionsByName	Database::_fileLevelFunctionsByName;
-Database::GenNamespaces		Database::_generatedNamespaces;
+Database::EntitiesById					Database::_entitiesById;
+Database::NamespacesByName				Database::_fileLevelNamespacesByName;
+Database::FundamentalArchetypesByName	Database::_fundamentalArchetypes;
+Database::StructsByName					Database::_fileLevelStructsByName;
+Database::ClassesByName					Database::_fileLevelClassesByName;
+Database::EnumsByName					Database::_fileLevelEnumsByName;
+Database::VariablesByName				Database::_fileLevelVariablesByName;
+Database::FunctionsByName				Database::_fileLevelFunctionsByName;
+Database::GenNamespaces					Database::_generatedNamespaces;
 
 #endif
 
@@ -82,13 +85,15 @@ void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegister
 			_fileLevelFunctionsByName.emplace(reinterpret_cast<Function const*>(&entity));
 			break;
 
+		case Entity::EKind::FundamentalArchetype:
+			_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetype const*>(&entity));
+			break;
+
 		case Entity::EKind::EnumValue:
 			[[fallthrough]];
 		case Entity::EKind::Field:
 			[[fallthrough]];
 		case Entity::EKind::Method:
-			[[fallthrough]];
-		case Entity::EKind::FundamentalArchetype:
 			[[fallthrough]];
 		case Entity::EKind::Undefined:
 			[[fallthrough]];
@@ -122,9 +127,7 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 				break;
 
 			case Entity::EKind::FundamentalArchetype:
-				//Nothing special to do here since a fundamental archetype doesn't own any sub entities
-				break;
-
+				[[fallthrough]];
 			case Entity::EKind::Variable:
 				[[fallthrough]];
 			case Entity::EKind::Field:
@@ -200,23 +203,27 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 				break;
 
 			case Entity::EKind::Struct:
-				_fileLevelStructsByName.emplace(reinterpret_cast<Struct const*>(&entity));
+				_fileLevelStructsByName.erase(reinterpret_cast<Struct const*>(&entity));
 				break;
 
 			case Entity::EKind::Class:
-				_fileLevelClassesByName.emplace(reinterpret_cast<Class const*>(&entity));
+				_fileLevelClassesByName.erase(reinterpret_cast<Class const*>(&entity));
 				break;
 
 			case Entity::EKind::Enum:
-				_fileLevelEnumsByName.emplace(reinterpret_cast<Enum const*>(&entity));
+				_fileLevelEnumsByName.erase(reinterpret_cast<Enum const*>(&entity));
 				break;
 
 			case Entity::EKind::Variable:
-				_fileLevelVariablesByName.emplace(reinterpret_cast<Variable const*>(&entity));
+				_fileLevelVariablesByName.erase(reinterpret_cast<Variable const*>(&entity));
 				break;
 
 			case Entity::EKind::Function:
-				_fileLevelFunctionsByName.emplace(reinterpret_cast<Function const*>(&entity));
+				_fileLevelFunctionsByName.erase(reinterpret_cast<Function const*>(&entity));
+				break;
+
+			case Entity::EKind::FundamentalArchetype:
+				_fundamentalArchetypes.erase(reinterpret_cast<FundamentalArchetype const*>(&entity));
 				break;
 
 			case Entity::EKind::EnumValue:
@@ -224,8 +231,6 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 			case Entity::EKind::Field:
 				[[fallthrough]];
 			case Entity::EKind::Method:
-				[[fallthrough]];
-			case Entity::EKind::FundamentalArchetype:
 				[[fallthrough]];
 			case Entity::EKind::Undefined:
 				[[fallthrough]];
@@ -402,6 +407,28 @@ Namespace const* Database::getNamespace(std::string namespaceName)
 	return result;
 }
 
+Archetype const* Database::getArchetype(std::string archetypeName) noexcept
+{
+	Archetype const* result = getClass(archetypeName);
+	
+	if (result == nullptr)
+	{
+		result = getStruct(archetypeName);
+
+		if (result == nullptr)
+		{
+			result = getEnum(archetypeName);
+
+			if (result == nullptr)
+			{
+				result = getFundamentalArchetype(std::move(archetypeName));
+			}
+		}
+	}
+
+	return result;
+}
+
 Struct const* Database::getStruct(std::string structName) noexcept
 {
 	Entity searchedStruct(std::move(structName), 0u);
@@ -427,6 +454,15 @@ Enum const* Database::getEnum(std::string enumName) noexcept
 	Database::EnumsByName::const_iterator it = _fileLevelEnumsByName.find(reinterpret_cast<Enum const*>(&searchedEnum));
 
 	return (it != _fileLevelEnumsByName.cend()) ? *it : nullptr;
+}
+
+FundamentalArchetype const* Database::getFundamentalArchetype(std::string archetypeName) noexcept
+{
+	Entity searchedFundamentalArchetype(std::move(archetypeName), 0u);
+
+	Database::FundamentalArchetypesByName::const_iterator it = _fundamentalArchetypes.find(reinterpret_cast<FundamentalArchetype const*>(&searchedFundamentalArchetype));
+
+	return (it != _fundamentalArchetypes.cend()) ? *it : nullptr;
 }
 
 Variable const* Database::getVariable(std::string variableName, EVarFlags flags) noexcept
@@ -456,6 +492,8 @@ void Database::clear() noexcept
 	_fileLevelEnumsByName.clear();
 	_fileLevelVariablesByName.clear();
 	_fileLevelFunctionsByName.clear();
+
+	//Don't clear _fundamentalArchetypes because it will never re-register
 }
 
 Database::EntitiesById const& Database::getEntitiesById() noexcept
@@ -466,6 +504,11 @@ Database::EntitiesById const& Database::getEntitiesById() noexcept
 Database::NamespacesByName const& Database::getFileLevelNamespaces() noexcept
 {
 	return _fileLevelNamespacesByName;
+}
+
+Database::FundamentalArchetypesByName const& Database::getFundamentalArchetypes() noexcept
+{
+	return _fundamentalArchetypes;
 }
 
 Database::StructsByName const& Database::getFileLevelStructs() noexcept

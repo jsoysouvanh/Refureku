@@ -17,7 +17,7 @@
 
 namespace rfk
 {
-	class Field : public FieldBase
+	class Field final : public FieldBase
 	{
 		public:
 			/** Memory offset in bytes of this field in its owner class */

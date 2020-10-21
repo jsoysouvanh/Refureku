@@ -549,6 +549,10 @@ void templateEnums()
 
 void getArchetypes()
 {
+	//From database
+	TEST(rfk::Database::getArchetype("ExampleStruct") != nullptr);
+
+	//Using templated version
 	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
 	TEST(rfk::getArchetype<namespace3::ExampleClass2>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass2"));
 
@@ -569,13 +573,83 @@ void getArchetypes()
 	TEST(rfk::getArchetype<decltype(l)>() == nullptr);			//Lambda
 }
 
+void entityCast()
+{
+	/*
+	FundamentalArchetype const* entityCast<FundamentalArchetype, void>(Entity const* entity)	noexcept;
+	Variable const*				entityCast<Variable, void>(Entity const* entity)				noexcept;
+	Function const*				entityCast<Function, void>(Entity const* entity)				noexcept;
+	*/
+
+	//FundamentalArchetype
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(rfk::getArchetype<int>()->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::FundamentalArchetype>(rfk::Database::getEntity(rfk::getArchetype<float>()->id)) != nullptr);
+
+	//Enum
+	rfk::Enum const* e = rfk::getEnum<namespace3::ExampleEnum>();
+
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(e->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Enum>(rfk::Database::getEntity(e->id)) != nullptr);
+
+	//EnumValue
+	TEST(rfk::entityCast<rfk::EnumValue>(rfk::Database::getEntity(e->getEnumValue(1)->id)) != nullptr);
+
+	//Struct
+	rfk::Struct const& s = ExampleStruct::staticGetArchetype();
+
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(s.id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Struct>(rfk::Database::getEntity(s.id)) != nullptr);
+
+	//Class
+	rfk::Class const& c = namespace3::ExampleClass::staticGetArchetype();
+
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(c.id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Struct>(rfk::Database::getEntity(c.id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Class>(rfk::Database::getEntity(c.id)) != nullptr);
+
+	//Fields
+	rfk::Field const* field = s.getField("i");
+	rfk::StaticField const* sField = s.getStaticField("staticInt");
+
+	TEST(rfk::entityCast<rfk::FieldBase>(rfk::Database::getEntity(field->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Field>(rfk::Database::getEntity(field->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::FieldBase>(rfk::Database::getEntity(sField->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::StaticField>(rfk::Database::getEntity(sField->id)) != nullptr);
+
+	//Methods
+	rfk::Method const* method = s.getMethod("method");
+	rfk::StaticMethod const* sMethod = s.getStaticMethod("staticMethod");
+
+	TEST(rfk::entityCast<rfk::MethodBase>(rfk::Database::getEntity(method->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Method>(rfk::Database::getEntity(method->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::MethodBase>(rfk::Database::getEntity(sMethod->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::StaticMethod>(rfk::Database::getEntity(sMethod->id)) != nullptr);
+
+	//Namespaces
+	TEST(rfk::entityCast<rfk::Namespace>(rfk::Database::getEntity(rfk::Database::getNamespace("namespace3")->id)) != nullptr);
+
+	//Variables
+	TEST(rfk::entityCast<rfk::Variable>(rfk::Database::getEntity(rfk::Database::getVariable("variableInsideGlobalScope")->id)) != nullptr);
+
+	//Functions
+	TEST(rfk::entityCast<rfk::Function>(rfk::Database::getEntity(rfk::Database::getFunction("function1")->id)) != nullptr);
+}
+
+void fundamentalArchetypes()
+{
+	TEST(rfk::Database::getFundamentalArchetype("int") != nullptr);
+	TEST(rfk::Database::getFundamentalArchetype("void") != nullptr);
+	TEST(rfk::Database::getFundamentalArchetype("nullptr_t") != nullptr);
+}
+
 int main()
 {
-	/*database();
+	database();
 	outerEntities();
 	namespaces();
 	templateEnums();
 	getArchetypes();
+	entityCast();
 	classes();
 	structs();
 	enums();
@@ -589,15 +663,17 @@ int main()
 	instantiation();
 	properties();
 	dynamicTypes();
-	makeInstance();*/
+	makeInstance();
+	fundamentalArchetypes();
 
-	rfk::Entity const* entity = rfk::Database::getEntity(namespace3::ExampleClass::staticGetArchetype().id);
+	//using namespace rfk;
 
-	if (entity->kind == rfk::Entity::EKind::Class)
-	{
-		rfk::Class const* c = entity->as<rfk::Class>();
-		//Do something with your class
-	}
+	//rfk::Entity const* entity = rfk::Database::getEntity(namespace3::ExampleClass::staticGetArchetype().id);
+
+	//if (rfk::FundamentalArchetype const* f = entityCast<FundamentalArchetype>(entity))
+	//{
+	//	//Do something with your fundamental archetype
+	//}
 
 	return EXIT_SUCCESS;
 }
