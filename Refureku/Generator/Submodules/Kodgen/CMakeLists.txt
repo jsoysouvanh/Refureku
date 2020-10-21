@@ -122,5 +122,5 @@ if (WIN32)
 					)
 endif()
 
-# add_subdirectory(Examples)
+add_subdirectory(Examples)
 add_subdirectory(Tests)
