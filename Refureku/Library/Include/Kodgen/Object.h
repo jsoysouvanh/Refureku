@@ -16,6 +16,5 @@ namespace kodgen
 	*/
 	class Object
 	{
-
 	};
 }

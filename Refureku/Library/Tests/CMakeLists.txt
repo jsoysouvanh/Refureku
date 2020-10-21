@@ -10,6 +10,8 @@ set(RefurekuTestsTarget RefurekuTests)
 add_executable(${RefurekuTestsTarget}
 					ExampleClass.cpp
 					ExampleClass2.cpp
+					CustomString.cpp
+					ThirdPartyEnumReflectionCode.cpp
 					Test.cpp
 
 					RefurekuTests.cpp

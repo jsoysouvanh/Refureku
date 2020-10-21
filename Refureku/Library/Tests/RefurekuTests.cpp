@@ -1,8 +1,9 @@
 #include <iostream>
 
-#include "ExampleClass.h"
-
 #include <Refureku/Refureku.h>
+
+#include "ExampleClass.h"
+#include "ThirdPartyEnumReflectionCode.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -642,6 +643,17 @@ void fundamentalArchetypes()
 	TEST(rfk::Database::getFundamentalArchetype("nullptr_t") != nullptr);
 }
 
+void enumManualReflection()
+{
+	rfk::Enum const* e = rfk::Database::getEnum("ThirdPartyEnum");
+
+	TEST(e != nullptr);
+	TEST(rfk::getEnum<ThirdPartyEnum>() != nullptr);
+	TEST(e == rfk::getEnum<ThirdPartyEnum>());
+	TEST(e->getEnumValue("Value1")->value == 0);
+	TEST(e->getEnumValue(2)->name == "Value2");
+}
+
 int main()
 {
 	database();
@@ -665,15 +677,7 @@ int main()
 	dynamicTypes();
 	makeInstance();
 	fundamentalArchetypes();
-
-	//using namespace rfk;
-
-	//rfk::Entity const* entity = rfk::Database::getEntity(namespace3::ExampleClass::staticGetArchetype().id);
-
-	//if (rfk::FundamentalArchetype const* f = entityCast<FundamentalArchetype>(entity))
-	//{
-	//	//Do something with your fundamental archetype
-	//}
+	enumManualReflection();
 
 	return EXIT_SUCCESS;
 }
