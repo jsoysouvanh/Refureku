@@ -571,7 +571,7 @@ void getArchetypes()
 
 int main()
 {
-	database();
+	/*database();
 	outerEntities();
 	namespaces();
 	templateEnums();
@@ -589,7 +589,15 @@ int main()
 	instantiation();
 	properties();
 	dynamicTypes();
-	makeInstance();
+	makeInstance();*/
+
+	rfk::Entity const* entity = rfk::Database::getEntity(namespace3::ExampleClass::staticGetArchetype().id);
+
+	if (entity->kind == rfk::Entity::EKind::Class)
+	{
+		rfk::Class const* c = entity->as<rfk::Class>();
+		//Do something with your class
+	}
 
 	return EXIT_SUCCESS;
 }

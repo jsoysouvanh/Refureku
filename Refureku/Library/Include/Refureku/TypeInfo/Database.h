@@ -166,9 +166,6 @@ namespace rfk
 			/**
 			*	@brief Retrieve an entity by id.
 			*
-			*	This is not limited to archetypes, as it can also retrieve
-			*	Namespaces, [Static]Methods, [Static]Fields and EnumValues.
-			*
 			*	@param id The id of the entity.
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
