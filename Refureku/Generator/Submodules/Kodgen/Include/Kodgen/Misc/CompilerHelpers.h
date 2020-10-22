@@ -62,14 +62,54 @@ namespace kodgen
 			*
 			*	@return The vswhere.exe path, if found next to the executable, else an empty path.
 			*/
-			static fs::path					getvswherePath()	noexcept;
+			static fs::path					getvswherePath()											noexcept;
 #endif
+
+			/**
+			*	@brief Normalize the provided compiler name (lower case).
+			*	
+			*	@param compilerName Name of the compiler.
+			*
+			*	@return The normalized compiler name.
+			*/
+			static std::string				normalizeCompilerExeName(std::string const& compilerName)	noexcept;
+
+			/**
+			*	@brief Check if a name corresponds to a given compiler.
+			*	
+			*	@param normalizedName Name of the compiler executable.
+			*
+			*	@return true if the normalized compiler executable matches, else false.
+			*/
+			static bool						isMSVC(std::string const& normalizedCompilerExeName)		noexcept;
+			static bool						isClang(std::string const& normalizedCompilerExeName)		noexcept;
+			static bool						isGCC(std::string const& normalizedCompilerExeName)			noexcept;
 
 		public:
 			CompilerHelpers()						= delete;
 			CompilerHelpers(CompilerHelpers const&)	= delete;
 			CompilerHelpers(CompilerHelpers&&)		= delete;
 			~CompilerHelpers()						= delete;
+
+			/**
+			*	@brief Check if the provided compiler is valid and supported on the running machine.
+			*	
+			*	@param compiler Compiler we check the validity of.
+			*	
+			*	@return true if the compiler is supported on the running machine, else false.
+			*/
+			static bool						isSupportedCompiler(std::string const& compiler)					noexcept;
+
+			/**
+			*	@brief Check if the specific compiler is supported on the running machine.
+			*	
+			*	@param []ExeName Name of the executable of the queried compiler. The string might contain a specific version.
+			*	
+			*	@return true if the compiler is supported on the running machine, else false.
+			*/
+			static bool						isGCCSupported(std::string const& gccExeName)						noexcept;
+			static bool						isClangSupported(std::string const& clangExeName)					noexcept;
+			static bool						isMSVCSupported()													noexcept;
 
 			/**
 			*	@brief Retrieve all native include directories of a given compiler on the executing computer.
@@ -80,6 +120,6 @@ namespace kodgen
 			*
 			*	@exception std::runtime_error is thrown if the compiler has a valid name but include directories could not be queried on the executing computer.
 			*/
-			static std::vector<fs::path> getCompilerNativeIncludeDirectories(std::string compiler);
+			static std::vector<fs::path>	getCompilerNativeIncludeDirectories(std::string const& compiler);
 	};
 }

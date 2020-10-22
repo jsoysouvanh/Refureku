@@ -13,6 +13,7 @@
 #include "Kodgen/Properties/SimplePropertyRule.h"
 #include "Kodgen/Properties/ComplexPropertyRule.h"
 #include "Kodgen/Misc/TomlUtility.h"
+#include "Kodgen/Misc/ILogger.h"
 
 namespace kodgen
 {
@@ -73,7 +74,9 @@ namespace kodgen
 			*	@brief Load settings from a TOML file.
 			*	
 			*	@param table TOML file table to look into.
+			*	@param logger Logger used to issue error when settings contain bad values.
 			*/
-			void	loadSettings(toml::value const& table)	noexcept;
+			void	loadSettings(toml::value const& table,
+								 ILogger*			logger = nullptr)	noexcept;
 	};
 }

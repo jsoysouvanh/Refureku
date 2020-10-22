@@ -114,12 +114,18 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 	else
 	{
 		//Before doing anything, make sure destination folder exists
+		//If it doesn't, create it
 		if (!fs::exists(settings.outputDirectory))
 		{
 			//Try to create them is it doesn't exist
 			try
 			{
 				genResult.completed = fs::create_directories(settings.outputDirectory);
+				
+				if (logger != nullptr)
+				{
+					logger->log("Specified output directory doesn't exist. Create " + FilesystemHelpers::sanitizePath(settings.outputDirectory).string(), ILogger::ELogSeverity::Info);
+				}
 			}
 			catch (fs::filesystem_error const& exception)
 			{

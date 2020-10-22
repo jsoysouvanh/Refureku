@@ -10,24 +10,24 @@
 void printGenerationSetup(kodgen::ILogger& logger, rfk::FileGenerator const& fileGenerator, rfk::FileParserFactory const& fileParserFactory)
 {
 	//Output dir
-	logger.log("Output directory: " + fileGenerator.settings.outputDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
+	logger.log("Output directory: " + kodgen::FilesystemHelpers::sanitizePath(fileGenerator.settings.outputDirectory).string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//ToParseDirs
 	logger.log("Parsed directories:", kodgen::ILogger::ELogSeverity::Info);
-	for (fs::path const& path : fileGenerator.settings.toParseDirectories)
+	for (fs::path const& path : fileGenerator.settings.getToParseDirectories())
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
 
 	//IgnoredDirs
 	logger.log("Ignored directories:", kodgen::ILogger::ELogSeverity::Info);
-	for (fs::path const& path : fileGenerator.settings.ignoredDirectories)
+	for (fs::path const& path : fileGenerator.settings.getIgnoredDirectories())
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
 
 	logger.log("Project include directories:", kodgen::ILogger::ELogSeverity::Info);
-	for (fs::path const& path : fileParserFactory.parsingSettings.projectIncludeDirectories)
+	for (fs::path const& path : fileParserFactory.parsingSettings.getProjectIncludeDirectories())
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
@@ -87,17 +87,17 @@ void parseAndGenerate(fs::path&& exePath)
 
 		//Specify used compiler
 #if defined(__GNUC__)
-		fileParserFactory.parsingSettings.compilerExeName = "g++";
+		fileParserFactory.parsingSettings.setCompilerExeName("g++");
 #elif defined(__clang__)
-		fileParserFactory.parsingSettings.compilerExeName = "clang++";
+		fileParserFactory.parsingSettings.setCompilerExeName("clang++");
 #elif defined(_MSC_VER)
-		fileParserFactory.parsingSettings.compilerExeName = "msvc";
+		fileParserFactory.parsingSettings.setCompilerExeName("msvc");
 #endif
 
 		fileGenerator.settings.outputDirectory = generatedDir;
-		fileGenerator.settings.toParseDirectories.emplace(includeDir);
-		fileGenerator.settings.ignoredDirectories.emplace(generatedDir);
-		fileParserFactory.parsingSettings.projectIncludeDirectories.emplace(refurekuIncludeDir);
+		fileGenerator.settings.addToParseDirectory(includeDir);
+		fileGenerator.settings.addIgnoredDirectory(generatedDir);
+		fileParserFactory.parsingSettings.addProjectIncludeDirectory(refurekuIncludeDir);
 #endif
 
 		printGenerationSetup(logger, fileGenerator, fileParserFactory);

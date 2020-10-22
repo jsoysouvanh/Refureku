@@ -32,10 +32,10 @@ int main(int argc, char** argv)
 			fileGenerator.logger		= &logger;
 
 			//Parse WorkingDir/...
-			fileGenerator.settings.toParseDirectories.emplace(includeDirectory.string());
+			fileGenerator.settings.addToParseDirectory(includeDirectory);
 
 			//Ignore generated files...
-			fileGenerator.settings.ignoredDirectories.emplace(generatedDirectory.string());
+			fileGenerator.settings.addIgnoredDirectory(generatedDirectory);
 			
 			//Only parse .h files
 			fileGenerator.settings.supportedExtensions.emplace(".h");

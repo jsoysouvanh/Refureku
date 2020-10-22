@@ -40,17 +40,31 @@ namespace kodgen
 			/**
 			*	@brief Refresh all internal compilation macros to pass to the compiler.
 			*/
-			void	refreshBuildCommandStrings()	noexcept;
+			void	refreshBuildCommandStrings()							noexcept;
 
 			/**
 			*	@brief Make a list of all arguments to pass to the compilation command and store it in _compilationArguments.
 			*/
-			void	refreshCompilationArguments()	noexcept;
+			void	refreshCompilationArguments()							noexcept;
 
 			/**
 			*	@brief Log currently stored compilation command arguments.
 			*/
-			void	logCompilationArguments()		noexcept;
+			void	logCompilationArguments()								noexcept;
+
+			/**
+			*	@brief Load project include directories paths from toml.
+			*	
+			*	@param table Toml content.
+			*/
+			void	loadProjectIncludeDirectories(toml::value const& table)	noexcept;
+
+			/**
+			*	@brief Load the compilerExeName from toml.
+			*
+			*	@param table Toml content.
+			*/
+			void	loadCompilerExeName(toml::value const& table)			noexcept;
 
 		protected:
 			FileParserFactoryBase()								= default;

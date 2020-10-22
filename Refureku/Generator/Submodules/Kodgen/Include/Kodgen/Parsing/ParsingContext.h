@@ -16,7 +16,7 @@ namespace kodgen
 {
 	//Forward declarations
 	class	PropertyParser;
-	struct	ParsingSettings;
+	class	ParsingSettings;
 
 	struct ParsingContext
 	{

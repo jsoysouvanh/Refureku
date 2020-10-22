@@ -14,6 +14,7 @@
 
 #include "Kodgen/Misc/Filesystem.h"
 #include "Kodgen/Misc/Toml11.h"
+#include "Kodgen/Misc/ILogger.h"
 
 namespace kodgen
 {
@@ -32,13 +33,15 @@ namespace kodgen
 			*	@param table		Toml file we look into.
 			*	@param entryName	Name of the value we are looking for.
 			*	@param out_value	Value which should contain the result on success.
+			*	@param logger		Logger used to issue errors when a value is invalid.
 			*
 			*	@return true if the specified value was found and consequently out_value updated, else false.
 			*/
 			template <typename T>
 			static bool getValueFromTable(toml::value const&	table,
 										  std::string const&	entryName,
-										  T&					out_value)			noexcept;
+										  T&					out_value,
+										  ILogger*				logger = nullptr)	noexcept;
 
 			/**
 			*	@brief Retrieve a value from a toml table if possible.
@@ -50,13 +53,15 @@ namespace kodgen
 			*	@param table				Toml file we look into.
 			*	@param entryName			Name of the value we are looking for.
 			*	@param out_toUpdateSetting	Value which should contain the result on success.
+			*	@param logger				Logger used to issue errors when a value is invalid.
 			*
 			*	@return true if the specified value was found and consequently out_value updated, else false.
 			*/
 			template <typename T>
 			static void updateSetting(toml::value const&	table,
 									  std::string const&	entryName,
-									  T&					out_toUpdateSetting)	noexcept;
+									  T&					out_toUpdateSetting,
+									  ILogger*				logger = nullptr)		noexcept;
 	};
 
 	#include "Kodgen/Misc/TomlUtility.inl"

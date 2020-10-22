@@ -40,6 +40,6 @@ namespace kodgen
 			*	@param logSeverity	Severity level of the message.
 			*/
 			virtual void log(std::string const&	message,
-							 ELogSeverity		logSeverity) noexcept = 0;
+							 ELogSeverity		logSeverity = ELogSeverity::Info) noexcept = 0;
 	};
 }

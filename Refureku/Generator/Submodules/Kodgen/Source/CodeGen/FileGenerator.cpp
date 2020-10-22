@@ -7,7 +7,7 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 	std::set<fs::path> result;
 
 	//Iterate over all "toParseFiles"
-	for (fs::path path : settings.toParseFiles)
+	for (fs::path path : settings.getToParseFiles())
 	{
 		if (fs::exists(path) && !fs::is_directory(path))
 		{
@@ -29,7 +29,7 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 	}
 
 	//Iterate over all "toParseDirectories"
-	for (fs::path pathToIncludedDir : settings.toParseDirectories)
+	for (fs::path pathToIncludedDir : settings.getToParseDirectories())
 	{
 		if (fs::exists(pathToIncludedDir) && fs::is_directory(pathToIncludedDir))
 		{
@@ -44,8 +44,8 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 
 					if (entry.is_regular_file())
 					{
-						if (settings.supportedExtensions.find(entryPath.extension().string()) != settings.supportedExtensions.cend() &&
-							settings.ignoredFiles.find(entryPath.string()) == settings.ignoredFiles.cend())
+						if (settings.supportedExtensions.find(entryPath.extension().string()) != settings.supportedExtensions.cend() &&	//supported extension
+							settings.getIgnoredFiles().find(entryPath.string()) == settings.getIgnoredFiles().cend())					//file is not ignored
 						{
 							if (forceRegenerateAll || shouldRegenerateFile(entryPath))
 							{
@@ -57,7 +57,7 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 							}
 						}
 					}
-					else if (entry.is_directory() && settings.ignoredDirectories.find(entryPath.string()) != settings.ignoredDirectories.cend())
+					else if (entry.is_directory() && settings.getIgnoredDirectories().find(entryPath.string()) != settings.getIgnoredDirectories().cend())	//directory is ignored
 					{
 						//Don't iterate on ignored directory content
 						directoryIt.disable_recursion_pending();
@@ -68,7 +68,7 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 		else
 		{
 			//Add FileGenerationFile invalid path
-			out_genResult.fileGenerationErrors.emplace_back(pathToIncludedDir, "", "This path was find in the toParseDirectories list but it doesn't exist or is not a directory.");
+			//out_genResult.fileGenerationErrors.emplace_back(pathToIncludedDir, "", "This path was find in the toParseDirectories list but it doesn't exist or is not a directory.");
 			logger->log("Directory " + pathToIncludedDir.string() + " doesn't exist", ILogger::ELogSeverity::Warning);
 		}
 	}
@@ -182,6 +182,66 @@ void FileGenerator::setupFileGenerationUnit(FileGenerationUnit& fileGenerationUn
 	fileGenerationUnit._settings	= &settings;
 }
 
+void FileGenerator::loadToParseFiles(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> toParseFiles;
+	
+	TomlUtility::updateSetting(tomlGeneratorSettings, "toParseFiles", toParseFiles, logger);
+	
+	for (fs::path const& path : toParseFiles)
+	{
+		if (!settings.addToParseFile(path) && logger != nullptr)
+		{
+			logger->log("Can't add " + path.string() + " to the toParseFiles list as it doesn't exist, is not a file or is already part of the list.", ILogger::ELogSeverity::Warning);
+		}
+	}
+}
+
+void FileGenerator::loadToParseDirectories(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> toParseDirectories;
+
+	TomlUtility::updateSetting(tomlGeneratorSettings, "toParseDirectories", toParseDirectories, logger);
+
+	for (fs::path const& path : toParseDirectories)
+	{
+		if (!settings.addToParseDirectory(path) && logger != nullptr)
+		{
+			logger->log("Can't add " + path.string() + " to the toParseDirectories list as it doesn't exist, is not a directory or is already part of the list.", ILogger::ELogSeverity::Warning);
+		}
+	}
+}
+
+void FileGenerator::loadIgnoredFiles(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> ignoredFiles;
+
+	TomlUtility::updateSetting(tomlGeneratorSettings, "ignoredFiles", ignoredFiles, logger);
+
+	for (fs::path const& path : ignoredFiles)
+	{
+		if (!settings.addIgnoredFile(path) && logger != nullptr)
+		{
+			logger->log("Can't add " + path.string() + " to the ignoredFiles list as it doesn't exist, is not a file or is already part of the list.", ILogger::ELogSeverity::Warning);
+		}
+	}
+}
+
+void FileGenerator::loadIgnoredDirectories(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> ignoredDirectories;
+
+	TomlUtility::updateSetting(tomlGeneratorSettings, "ignoredDirectories", ignoredDirectories, logger);
+
+	for (fs::path const& path : ignoredDirectories)
+	{
+		if (!settings.addIgnoredDirectory(path) && logger != nullptr)
+		{
+			logger->log("Can't add " + path.string() + " to the ignoredDirectories list as it doesn't exist, is not a directory or is already part of the list.", ILogger::ELogSeverity::Warning);
+		}
+	}
+}
+
 bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 {
 	try
@@ -190,16 +250,17 @@ bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 
 		if (tomlContent.contains("FileGenerationSettings"))
 		{
-			toml::value const& generatorSettings = toml::find(tomlContent, "FileGenerationSettings");
+			toml::value const& tomlGeneratorSettings = toml::find(tomlContent, "FileGenerationSettings");
 
-			TomlUtility::updateSetting<std::string>(generatorSettings, "generatedFilesExtension", settings.generatedFilesExtension);
-			TomlUtility::updateSetting<fs::path>(generatorSettings, "outputDirectory", settings.outputDirectory);
-			TomlUtility::updateSetting<std::string>(generatorSettings, "entityMacrosFilename", settings.entityMacrosFilename);
-			TomlUtility::updateSetting(generatorSettings, "toParseFiles", settings.toParseFiles);
-			TomlUtility::updateSetting(generatorSettings, "toParseDirectories", settings.toParseDirectories);
-			TomlUtility::updateSetting(generatorSettings, "ignoredFiles", settings.ignoredFiles);
-			TomlUtility::updateSetting(generatorSettings, "ignoredDirectories", settings.ignoredDirectories);
-			TomlUtility::updateSetting(generatorSettings, "supportedExtensions", settings.supportedExtensions);
+			TomlUtility::updateSetting(tomlGeneratorSettings, "generatedFilesExtension", settings.generatedFilesExtension, logger);
+			TomlUtility::updateSetting(tomlGeneratorSettings, "entityMacrosFilename", settings.entityMacrosFilename, logger);
+			TomlUtility::updateSetting(tomlGeneratorSettings, "supportedExtensions", settings.supportedExtensions, logger);
+			TomlUtility::updateSetting(tomlGeneratorSettings, "outputDirectory", settings.outputDirectory, logger);
+
+			loadToParseFiles(tomlGeneratorSettings);
+			loadToParseDirectories(tomlGeneratorSettings);
+			loadIgnoredFiles(tomlGeneratorSettings);
+			loadIgnoredDirectories(tomlGeneratorSettings);
 		}
 
 		return true;

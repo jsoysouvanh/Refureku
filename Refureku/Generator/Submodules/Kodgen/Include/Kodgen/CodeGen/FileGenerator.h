@@ -119,6 +119,11 @@ namespace kodgen
 			*/
 			void					setupFileGenerationUnit(FileGenerationUnit& fileGenerationUnit)			const	noexcept;
 
+			void					loadToParseFiles(toml::value const& tomlGeneratorSettings)						noexcept;
+			void					loadToParseDirectories(toml::value const& tomlGeneratorSettings)				noexcept;
+			void					loadIgnoredFiles(toml::value const& tomlGeneratorSettings)						noexcept;
+			void					loadIgnoredDirectories(toml::value const& tomlGeneratorSettings)				noexcept;
+
 		public:
 			/** Logger used to issue logs from the FileGenerator. */
 			ILogger*				logger	= nullptr;

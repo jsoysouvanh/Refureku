@@ -13,36 +13,122 @@
 
 using namespace kodgen;
 
-std::vector<fs::path> CompilerHelpers::getCompilerNativeIncludeDirectories(std::string compiler)
+bool CompilerHelpers::isSupportedCompiler(std::string const& compiler) noexcept
+{
+	std::string normalizedCompilerExecutable = normalizeCompilerExeName(compiler);
+
+	return 
+#if _WIN32
+		//Check MSVC only on windows platform
+		(isMSVC(normalizedCompilerExecutable) && isMSVCSupported()) ||
+#endif
+		(isClang(normalizedCompilerExecutable) && isClangSupported(normalizedCompilerExecutable)) ||
+		(isGCC(normalizedCompilerExecutable) && isGCCSupported(normalizedCompilerExecutable));
+}
+
+bool CompilerHelpers::isGCCSupported(std::string const& gccExeName) noexcept
+{
+	std::stringstream cmdResult(System::executeCommand(gccExeName + " 2>&1"));
+
+	std::string line;
+	while (!cmdResult.eof())
+	{
+		std::getline(cmdResult, line);
+
+		if (line.find("no input files") != std::string::npos)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CompilerHelpers::isClangSupported(std::string const& clangExeName) noexcept
+{
+	std::stringstream cmdResult(System::executeCommand(clangExeName + " 2>&1"));
+
+	std::string line;
+	while (!cmdResult.eof())
+	{
+		std::getline(cmdResult, line);
+
+		if (line.find("no input files") != std::string::npos)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CompilerHelpers::isMSVCSupported() noexcept
+{
+#if _WIN32
+	fs::path vswhere = getvswherePath();
+
+	if (!vswhere.empty())
+	{
+		std::stringstream cmdResult(System::executeCommand(vswhere.string() + R"( -latest -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find "VC\Tools\MSVC)"));
+
+		std::string line;
+		while (!cmdResult.eof())
+		{
+			std::getline(cmdResult, line);
+
+			if (!line.empty())
+			{
+				return true;
+			}
+		}
+	}
+#endif
+
+	return false;
+}
+
+bool CompilerHelpers::isMSVC(std::string const& normalizedCompilerExeName) noexcept
+{
+	return normalizedCompilerExeName == msvcCompilerName;
+}
+
+bool CompilerHelpers::isClang(std::string const& normalizedCompilerExeName) noexcept
+{
+	return normalizedCompilerExeName.substr(0, clangCompilerName.size()) == clangCompilerName;
+}
+
+bool CompilerHelpers::isGCC(std::string const& normalizedCompilerExeName) noexcept
+{
+	return	normalizedCompilerExeName.substr(0u, gccCompilerName.size()) == gccCompilerName ||
+			normalizedCompilerExeName.substr(0u, gccCompilerName2.size()) == gccCompilerName2;
+}
+
+std::vector<fs::path> CompilerHelpers::getCompilerNativeIncludeDirectories(std::string const& compiler)
 {
 	std::vector<fs::path> result;
 	
 	//Don't do anything if the compiler is an empty string
 	if (compiler.size() > 0)
 	{
-		//lowercase compiler name to make checks easier
-		std::transform(compiler.begin(), compiler.end(), compiler.begin(), [](char c) -> char
-					   {
-						   return static_cast<char>(std::tolower((static_cast<int>(c))));
-					   });
+		std::string normalizedCompilerExeName = normalizeCompilerExeName(compiler);
 
 #if _WIN32
 		//Check MSVC on windows only
-		if (compiler == msvcCompilerName)
+		if (isMSVC(normalizedCompilerExeName))
 		{
 			return getMSVCNativeIncludeDirectories();
 		}
 #endif
 
 		//Check clang
-		if (compiler.substr(0u, clangCompilerName.size()) == clangCompilerName)
+		if (isClang(normalizedCompilerExeName))
 		{
-			return getClangNativeIncludeDirectories(compiler);
+			return getClangNativeIncludeDirectories(normalizedCompilerExeName);
 		}
 		//Check GCC
-		else if (compiler.substr(0u, gccCompilerName.size()) == gccCompilerName || compiler.substr(0u, gccCompilerName2.size()) == gccCompilerName2)
+		else if (isGCC(normalizedCompilerExeName))
 		{
-			return getGCCNativeIncludeDirectories(compiler);
+			return getGCCNativeIncludeDirectories(normalizedCompilerExeName);
 		}
 	}
 
@@ -52,7 +138,7 @@ std::vector<fs::path> CompilerHelpers::getCompilerNativeIncludeDirectories(std::
 std::vector<fs::path> CompilerHelpers::getClangNativeIncludeDirectories(std::string const& clangExeName)
 {
 	//Make sure the compiler name actually starts by "clang"
-	assert(clangExeName.substr(0u, clangCompilerName.size()) == clangCompilerName);
+	assert(isClang(clangExeName));
 
 	std::vector<fs::path> result;
 
@@ -104,7 +190,7 @@ std::vector<fs::path> CompilerHelpers::getClangNativeIncludeDirectories(std::str
 std::vector<fs::path> CompilerHelpers::getGCCNativeIncludeDirectories(std::string const& gccExeName)
 {
 	//Make sure the compiler name actually starts by "gcc" or "g++"
-	assert(gccExeName.substr(0u, gccCompilerName.size()) == gccCompilerName || gccExeName.substr(0u, gccCompilerName2.size()) == gccCompilerName2);
+	assert(isGCC(gccExeName));
 
 	std::vector<fs::path> result;
 
@@ -149,6 +235,18 @@ std::vector<fs::path> CompilerHelpers::getGCCNativeIncludeDirectories(std::strin
 	{
 		throw std::runtime_error("Could not run the " + gccExeName + " command on this computer.");
 	}
+
+	return result;
+}
+
+std::string CompilerHelpers::normalizeCompilerExeName(std::string const& compilerName) noexcept
+{
+	std::string result = compilerName;
+
+	std::transform(result.begin(), result.end(), result.begin(), [](char c) -> char
+				   {
+					   return static_cast<char>(std::tolower((static_cast<int>(c))));
+				   });
 
 	return result;
 }
