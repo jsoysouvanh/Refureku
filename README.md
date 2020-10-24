@@ -4,16 +4,24 @@
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
-Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) for more documentation and use examples!
+**Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) for more documentation and use examples!**
 
 Refureku is a powerful C++17 RTTI free runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
 It allows to retrieve information on namespaces, structs/classes, fields, methods, non-member variables, non-member functions, enums and enum values at runtime.
 
-It is separated into 2 distinct parts:
-- The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs.
-- The actual library which contains the framework classes to access and manipulate reflected data at runtime.
+## Index
+- [Features](#features)
+- [Getting started](#getting-started)
+  - [Requirements](#requirements)
+  - [Library integration](#library-integration)
+  - [Parser/Generator integration](#parsergenerator-integration)
+  - [Possible issues](#possible-issues)
+- [Cross-platform compatibility](#cross-platform-compatibility)
+- [Planned features](#planned-features)
+- [Known issues](#known-issues)
+- [License](#license)
 
-Here is a non-exhaustive list of Refureku library features:
+## Features
 - Easy to integrate in a software like a game engine
 - Reflect namespaces, structs, classes, methods, fields, variables, functions, enums and enum values
 - Support structs/classes with or without inheritance (multiple inheritance supported)
@@ -25,17 +33,6 @@ Here is a non-exhaustive list of Refureku library features:
 - Reflection metadata is regenerated only when a file changes
 - Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
 - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
-
-## Index
-- [Getting started](#getting-started)
-  - [Requirements](#requirements)
-  - [Library integration](#library-integration)
-  - [Parser/Generator integration](#parsergenerator-integration)
-  - [Possible issues](#possible-issues)
-- [Cross-platform compatibility](#cross-platform-compatibility)
-- [Planned features](#planned-features)
-- [Known issues](#known-issues)
-- [License](#license)
 
 ## Getting started
 **Pre-built binaries for Windows x64 are available [here](https://github.com/jsoysouvanh/Refureku/releases). If you want to use those, you can skip to step 3 (this is true for the [Library Integration part](#library-integration) as well as the [Parser/Generator Integration part](#parsergenerator-integration).**
@@ -65,26 +62,32 @@ Here is a non-exhaustive list of Refureku library features:
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - Refureku header directory, located at /Refureku/Library/Include, or /Include from the binaries.
+    - From binaries: /Include
+    - From source: /Refureku/Library/Include
 
 4.  Add library directories to your projet settings:
-    - The directory containing Refureku.lib, located at /Build/[Debug|Release]/Lib/, or /Lib from the binaries.
+    - From binaries: /Lib
+    - From source: /Build/[Debug|Release]/Lib/
+    > Make sure /Build/Debug/Lib/ is only set in debug mode, and /Build/Release/Lib/ only in release mode
 
 5.  Link against:
-    - Refureku.lib. Make sure you link against the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
+    - From binaries: RefurekuDebug.lib in debug mode, RefurekuRelease.lib in release mode
+    - From source: Refureku.lib
 
-6. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
-	- [FileGeneratorSettings] outputDirectory = '''Path/To/An/Output/Directory'''
+7. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
+	- [FileGenerationSettings] outputDirectory = '''Path/To/Output/Directory'''
 		> The output directory is the directory where metadata files will be generated. If the directory doesn't exist, the generator will try to create it. 
-	- [FileGeneratorSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
+	- [FileGenerationSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
 		> List of the directories containing header files to parse. These directories are recursively inspected.
-	- [FileParserSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
-		> Paths to your project's additional include directories. They are **absolutely necessary** to make sure the parser can find all included files.
+	- [FileParsingSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
+		> Paths to your project's additional include directories. They are **absolutely necessary** to make sure the parser can find all included files. As you added Refureku include directory at step 3, you must add it to the list.
+	- [FileParsingSettings] compilerExeName = "clang++"
+		> Fill this with the compiler you are using to compile your application. "msvc", "clang++" and "g++" are the only supported compilers. For clang++ and g++, you can specify a version (as long as the command is properly running in a terminal).
 	- **If the specified outputDirectory is in a parsed directory**, you should ignore it (you don't want to waste time parsing generated metadata do you?)
-	[FileGeneratorSettings] ignoredDirectories = [ '''Path/To/An/Output/Directory''' ]
-	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory. Check out the [SimpleIntegration project](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/SimpleIntegration)'s [RefurekuSettings.toml](https://github.com/jsoysouvanh/Refureku/blob/master/Refureku/Examples/ThirdParty/Bin/RefurekuSettings.toml) for a concrete example.
+	[FileGenerationSettings] ignoredDirectories = [ '''Path/To/Output/Directory''' ]
+	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory. Check out the [LibraryIntegration project](https://github.com/jsoysouvanh/RefurekuIntegration/tree/master/LibraryIntegration)'s [RefurekuSettings.toml](https://github.com/jsoysouvanh/RefurekuIntegration/blob/master/ThirdParty/Bin/RefurekuSettings.toml) for a concrete example.
 	
-7. Make the RefurekuGenerator run just before your project's compilation:
+8. Make the RefurekuGenerator run just before your project's compilation:
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
@@ -96,8 +99,8 @@ Here is a non-exhaustive list of Refureku library features:
 	- With Visual Studio:
 		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe
 
-8. Make sure you compile your project in C++17 or later.
-9. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
+9. Make sure you compile your project in C++17 or later.
+10. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
 
 ### Parser/Generator integration
 1. Pull the repository
@@ -118,19 +121,28 @@ Here is a non-exhaustive list of Refureku library features:
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - Kodgen header directory, located at /Refureku/Generator/Submodules/Kodgen/Include, or /ThirdParty/Include from the binaries.
-    - Kodgen dependencies header directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include. If you downloaded the binaries, it is the same directory as above so you don't need to redo it.
-    - RefurekuGenerator header directory, located at /Refureku/Generator/Include, or /Include/RefurekuGenerator from the binaries.
+    - From binaries: /Include
+    - From source:
+	    - /Refureku/Generator/Submodules/Kodgen/Include
+	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include
+	    - /Refureku/Generator/Include
 
 4.  Add library directories to your projet settings:
-    - Kodgen.lib directory, located at /Build/[Debug|Release]/Lib/, or /ThirdParty/Lib from the binaries.
-    - Kodgen dependencies library directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static. If you downloaded the binaries, it is the same directory as above so you don't need to redo it.
-    - RefurekuGeneratorLib.lib directory, located at /Build/[Debug|Release]/Lib/, or /Lib from the binaries.
+    - From binaries: /Lib
+    - From source:
+	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static
+	    - /Build/[Debug|Release]/Lib/
+    > Make sure /Build/Debug/Lib/ is only set in debug mode, and /Build/Release/Lib/ only in release mode
 
 5.  Link against:
-    - clang.lib
-    - Kodgen.lib: Make sure to use the Debug version if you compile your project in Debug mode
-    - RefurekuGeneratorLib.lib: Make sure to use the Debug version if you compile your project in Debug mode
+    - From binaries:
+	    - clang.lib
+	    - KodgenDebug.lib in debug only, KodgenRelease.lib in release only
+	    - RefurekuGeneratorLibDebug.lib in debug only, RefurekuGeneratorLibRelease.lib in release only
+    - From source:
+	    - clang.lib
+	    - Kodgen.lib
+	    - RefurekuGeneratorLib.lib
 
 7.  Setup your project C++ compilation version to C++17 or later.
 8.  Compile!
@@ -139,23 +151,27 @@ Here is a non-exhaustive list of Refureku library features:
 You should be able to run the following snippet:
 
 ```cpp
-#include <Refureku/FileParser.h>
-#include <Refureku/FileGenerator.h>
 #include <Kodgen/Misc/DefaultLogger.h>
+#include <RefurekuGenerator/Parsing/FileParserFactory.h>
+#include <RefurekuGenerator/CodeGen/FileGenerator.h>
+#include <RefurekuGenerator/CodeGen/FileGenerationUnit.h>
 
 int main()
 {
-    rfk::FileParser	fileParser;
-    rfk::FileGenerator	fileGenerator;
+    rfk::FileParserFactory	fileParserFactory;
+    rfk::FileGenerator		fileGenerator;
+    rfk::FileGenerationUnit	fileGenerationUnit;
 
     //Set logger
     kodgen::DefaultLogger logger;
 
-    fileParser.logger = &logger;
-    fileGenerator.logger = &logger;
+    fileParserFactory.logger	= &logger;
+    fileGenerator.logger	= &logger;
 
-    //Parse
-    kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+    //You will need to setup parsing settings and generation settings here.
+    //Either load settings from a settings file, or set them by calling the appropriate methods.
+
+    fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit);
 
     return 0;
 }
@@ -163,13 +179,17 @@ int main()
 
 ### Possible issues
 #### Issue 1
-- If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
+If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
+
+#### Issue 2
+If you downloaded the binaries, you might get linkage errors. This means the binaries have been compiled with build tools not compatible with yours. You can try to adjust your platform toolset and/or (for Windows/MSVC) your Windows SDK version. If you still get linkage errors, rebuild the library from source.
+
 
 ## Cross-platform compatibility
 This library has been tested and is stable on the following configurations:
-- Windows Server version 1809 | MSVC 19.16.27035.0
-- Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
-- Linux 18.04 | GCC 8.4.0, GCC 9.2.1
+- Windows Server version 1809 | MSVC 19.16.27041.0
+- Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0, Clang 10.0.1
+- Linux 18.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.1.0
 
 ## Planned features
 - Property system rework to make it more flexible and easier to extend
