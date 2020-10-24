@@ -58,10 +58,36 @@ namespace kodgen
 			*	@return true if the specified value was found and consequently out_value updated, else false.
 			*/
 			template <typename T>
-			static void updateSetting(toml::value const&	table,
+			static bool updateSetting(toml::value const&	table,
 									  std::string const&	entryName,
 									  T&					out_toUpdateSetting,
 									  ILogger*				logger = nullptr)		noexcept;
+
+			/** Template specializations of the updateSetting method. */
+			static bool updateSetting(toml::value const&	table,
+									  std::string const&	entryName,
+									  fs::path&				out_toUpdateSetting,
+									  ILogger*				logger)										noexcept;
+
+			static bool updateSetting(toml::value const&		table,
+											std::string const&	entryName,
+											char&				out_toUpdateSetting,
+											ILogger*			logger)									noexcept;
+
+			static bool updateSetting(toml::value const&				table,
+									  std::string const&				entryName,
+									  std::unordered_set<std::string>&	out_toUpdateSetting,
+									  ILogger*							logger)							noexcept;
+
+			static bool updateSetting(toml::value const&						table,
+									  std::string const&						entryName,
+									  std::unordered_set<fs::path, PathHash>&	out_toUpdateSetting,
+									  ILogger*									logger)					noexcept;
+
+			static bool updateSetting(toml::value const&			table,
+									  std::string const&			entryName,
+									  std::unordered_set<char>&		out_toUpdateSetting,
+									  ILogger*						logger)								noexcept;
 	};
 
 	#include "Kodgen/Misc/TomlUtility.inl"

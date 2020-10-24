@@ -21,8 +21,11 @@ namespace kodgen
 	class FileParserFactoryBase
 	{
 		private:
+			/** Section name used in the toml file for FileParserFactory settings. */
+			static constexpr char const*	_tomlSettingsSectionName	= "FileParsingSettings";
+
 			/** Variables used to build compilation command line. */
-			std::string						_kodgenParsingMacro		= "-D" + parsingMacro;
+			std::string						_kodgenParsingMacro			= "-D" + parsingMacro;
 			std::vector<std::string>		_projectIncludeDirs;
 
 			std::string						_namespacePropertyMacro;
@@ -52,19 +55,34 @@ namespace kodgen
 			*/
 			void	logCompilationArguments()								noexcept;
 
+
+			/**
+			*	@brief Load the shouldParseAllEntities setting from toml.
+			*
+			*	@param table Toml content.
+			*/
+			void	loadShouldParseAllEntities(toml::value const& table)			noexcept;
+
+			/**
+			*	@brief Load the shouldAbortParsingOnFirstError setting from toml.
+			*
+			*	@param table Toml content.
+			*/
+			void	loadShouldAbortParsingOnFirstError(toml::value const& table)	noexcept;
+
 			/**
 			*	@brief Load project include directories paths from toml.
 			*	
 			*	@param table Toml content.
 			*/
-			void	loadProjectIncludeDirectories(toml::value const& table)	noexcept;
+			void	loadProjectIncludeDirectories(toml::value const& table)			noexcept;
 
 			/**
 			*	@brief Load the compilerExeName from toml.
 			*
 			*	@param table Toml content.
 			*/
-			void	loadCompilerExeName(toml::value const& table)			noexcept;
+			void	loadCompilerExeName(toml::value const& table)					noexcept;
 
 		protected:
 			FileParserFactoryBase()								= default;

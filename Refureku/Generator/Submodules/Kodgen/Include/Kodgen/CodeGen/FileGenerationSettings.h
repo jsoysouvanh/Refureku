@@ -59,18 +59,18 @@ namespace kodgen
 			*/
 			std::unordered_set<fs::path, PathHash>					_ignoredDirectories;
 
+			/**
+			*	Path to the directory in which all files should be generated (and where existing ones are).
+			*	If the output directory doesn't exist, it will be created if possible.
+			*/
+			fs::path												_outputDirectory;
+
 		public:
 			/** Name of the internally generated header containing empty definitions for entity macros. */
 			std::string								entityMacrosFilename	= "EntityMacros.h";
 
 			/** Extension used for generated files. */
 			std::string								generatedFilesExtension	= ".kodgen.h";
-
-			/**
-			*	Path to the directory all files should be generated (and where existing ones are).
-			*	If the existed directory doesn't exist, it will be created if possible.
-			*/
-			fs::path								outputDirectory;
 
 			/** Extensions of files which should be considered for parsing. */
 			std::unordered_set<std::string>			supportedExtensions;
@@ -79,6 +79,17 @@ namespace kodgen
 			FileGenerationSettings(FileGenerationSettings const&)	= default;
 			FileGenerationSettings(FileGenerationSettings&&)		= default;
 			~FileGenerationSettings()								= default;
+
+			/**
+			*	@brief	Setter for _outputDirectory.
+			*			If the path exists check that it is a directory.
+			*			Sanitize the provided path before setting.
+			*	
+			*	@param outputDirectory New output directory path.
+			*
+			*	@return true if the outputDirectory has been updated, else false.
+			*/
+			bool setOutputDirectory(fs::path outputDirectory)										noexcept;
 
 			/**
 			*	@brief	Add a file to the list of parsed files.
@@ -147,6 +158,33 @@ namespace kodgen
 			*	@param path Path to the directory to remove.
 			*/
 			void removeIgnoredDirectory(fs::path const& path)										noexcept;
+
+			/**
+			*	@brief Clear the list of files to parse.
+			*/
+			void clearToParseFiles()																noexcept;
+
+			/**
+			*	@brief Clear the list of directories to parse.
+			*/
+			void clearToParseDirectories()															noexcept;
+
+			/**
+			*	@brief Clear the list of ignored files.
+			*/
+			void clearIgnoredFiles()																noexcept;
+
+			/**
+			*	@brief Clear the list of ignored directories.
+			*/
+			void clearIgnoredDirectories()															noexcept;
+
+			/**
+			*	@brief Getter for _outputDirectory.
+			*
+			*	@return _outputDirectory.
+			*/
+			inline fs::path const&									getOutputDirectory()	const	noexcept;
 
 			/**
 			*	@brief Getter for _toParseFiles.

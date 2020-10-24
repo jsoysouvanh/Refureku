@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 			fileGenerator.settings.supportedExtensions.emplace(".h");
 
 			//All generated files will be located in WorkingDir/Include/Generated
-			fileGenerator.settings.outputDirectory = generatedDirectory;
+			fileGenerator.settings.setOutputDirectory(generatedDirectory);
 
 			//Generated files will use .myCustomExtension.h extension
 			fileGenerator.settings.generatedFilesExtension = ".myCustomExtension.h";

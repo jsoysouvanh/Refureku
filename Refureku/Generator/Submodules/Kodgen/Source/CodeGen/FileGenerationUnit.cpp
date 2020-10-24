@@ -350,7 +350,7 @@ fs::path FileGenerationUnit::makePathToGeneratedFile(fs::path const& sourceFileP
 {
 	assert(fs::exists(sourceFilePath) && fs::is_regular_file(sourceFilePath));
 
-	return (_settings->outputDirectory / sourceFilePath.filename()).replace_extension(_settings->generatedFilesExtension);
+	return (_settings->getOutputDirectory() / sourceFilePath.filename()).replace_extension(_settings->generatedFilesExtension);
 }
 
 void FileGenerationUnit::preGenerateFile() noexcept

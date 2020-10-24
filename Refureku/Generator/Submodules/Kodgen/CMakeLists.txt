@@ -58,6 +58,7 @@ add_library(${KodgenTargetLibrary}
 					Source/Misc/CompilerHelpers.cpp
 					Source/Misc/System.cpp
 					Source/Misc/Filesystem.cpp
+					Source/Misc/TomlUtility.cpp
 	
 					Source/CodeGen/FileGenerationUnit.cpp
 					Source/CodeGen/FileGenerationResult.cpp

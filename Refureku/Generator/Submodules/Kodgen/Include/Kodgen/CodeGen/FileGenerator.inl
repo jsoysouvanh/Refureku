@@ -101,7 +101,7 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 
 	FileGenerationResult genResult;
 
-	if (settings.outputDirectory.empty())
+	if (settings.getOutputDirectory().empty())
 	{
 		//Generator can't run without outputDirectory
 		genResult.fileGenerationErrors.emplace_back("", "", "Output directory is empty, it must be specified for the files to be generated.");
@@ -115,16 +115,16 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 	{
 		//Before doing anything, make sure destination folder exists
 		//If it doesn't, create it
-		if (!fs::exists(settings.outputDirectory))
+		if (!fs::exists(settings.getOutputDirectory()))
 		{
 			//Try to create them is it doesn't exist
 			try
 			{
-				genResult.completed = fs::create_directories(settings.outputDirectory);
+				genResult.completed = fs::create_directories(settings.getOutputDirectory());
 				
 				if (logger != nullptr)
 				{
-					logger->log("Specified output directory doesn't exist. Create " + FilesystemHelpers::sanitizePath(settings.outputDirectory).string(), ILogger::ELogSeverity::Info);
+					logger->log("Specified output directory doesn't exist. Create " + FilesystemHelpers::sanitizePath(settings.getOutputDirectory()).string(), ILogger::ELogSeverity::Info);
 				}
 			}
 			catch (fs::filesystem_error const& exception)
@@ -138,11 +138,11 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 			}
 		}
 
-		if (fs::is_directory(settings.outputDirectory))
+		if (fs::is_directory(settings.getOutputDirectory()))
 		{
 			//Start timer here
-			std::chrono::time_point	start			= std::chrono::high_resolution_clock::now();
-			std::set<fs::path>		filesToProcess	= identifyFilesToProcess(genResult, forceRegenerateAll);
+			auto				start			= std::chrono::high_resolution_clock::now();
+			std::set<fs::path>	filesToProcess	= identifyFilesToProcess(genResult, forceRegenerateAll);
 
 			//Don't setup anything if there are no files to generate
 			if (filesToProcess.size() > 0u)

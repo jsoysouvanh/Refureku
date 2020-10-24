@@ -5,6 +5,12 @@
 *	See the README.md file for full license details.
 */
 
+
+inline fs::path const& FileGenerationSettings::getOutputDirectory() const noexcept
+{
+	return _outputDirectory;
+}
+
 inline std::unordered_set<fs::path, PathHash> const& FileGenerationSettings::getToParseFiles() const noexcept
 {
 	return _toParseFiles;

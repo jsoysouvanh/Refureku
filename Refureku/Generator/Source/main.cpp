@@ -10,7 +10,7 @@
 void printGenerationSetup(kodgen::ILogger& logger, rfk::FileGenerator const& fileGenerator, rfk::FileParserFactory const& fileParserFactory)
 {
 	//Output dir
-	logger.log("Output directory: " + kodgen::FilesystemHelpers::sanitizePath(fileGenerator.settings.outputDirectory).string(), kodgen::ILogger::ELogSeverity::Info);
+	logger.log("Output directory: " + kodgen::FilesystemHelpers::sanitizePath(fileGenerator.settings.getOutputDirectory()).string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//ToParseDirs
 	logger.log("Parsed directories:", kodgen::ILogger::ELogSeverity::Info);
@@ -76,9 +76,6 @@ void parseAndGenerate(fs::path&& exePath)
 	//Load settings
 	if (fileGenerator.loadSettings(pathToSettingsFile) && fileParserFactory.loadSettings(pathToSettingsFile))
 	{
-		logger.log("Loaded FileGenerator settings.", kodgen::ILogger::ELogSeverity::Info);
-		logger.log("Loaded FileParser settings.", kodgen::ILogger::ELogSeverity::Info);
-		
 #if RFK_DEV
 		// This part is for travis only
 		fs::path includeDir			= fs::current_path() / "Include";
@@ -94,23 +91,19 @@ void parseAndGenerate(fs::path&& exePath)
 		fileParserFactory.parsingSettings.setCompilerExeName("msvc");
 #endif
 
-		fileGenerator.settings.outputDirectory = generatedDir;
+		fileGenerator.settings.setOutputDirectory(generatedDir);
 		fileGenerator.settings.addToParseDirectory(includeDir);
 		fileGenerator.settings.addIgnoredDirectory(generatedDir);
 		fileParserFactory.parsingSettings.addProjectIncludeDirectory(refurekuIncludeDir);
-#endif
 
 		printGenerationSetup(logger, fileGenerator, fileParserFactory);
+#endif
 
 		//Parse
 		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);
 
 		//Result
 		printGenerationResult(logger, genResult);
-	}
-	else
-	{
-		logger.log("Failed to load the RefurekuSettings file at " + pathToSettingsFile.string(), kodgen::ILogger::ELogSeverity::Error);
 	}
 }
 

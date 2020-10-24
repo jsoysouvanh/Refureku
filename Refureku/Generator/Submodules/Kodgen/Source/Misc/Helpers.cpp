@@ -15,3 +15,4 @@ std::string Helpers::getDebugInfo(CXCursor const& cursor) noexcept
 {
 	return Helpers::getString(clang_getCursorKindSpelling(cursor.kind)) + " -> " + Helpers::getString(clang_getCursorDisplayName(cursor));
 }
+

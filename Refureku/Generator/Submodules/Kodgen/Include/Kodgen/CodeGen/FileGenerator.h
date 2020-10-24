@@ -28,9 +28,12 @@ namespace kodgen
 	class FileGenerator
 	{
 		private:
+			/** Section name used in the toml file for FileGenerator settings. */
+			static constexpr char const*	_tomlSettingsSectionName	= "FileGenerationSettings";
+
 			/** Native property rules. */
-			ParseAllNestedPropertyRule	_parseAllNestedPropertyRule;
-			GenCodeTemplatePropertyRule	_generatedCodeTemplatePropertyRule;
+			ParseAllNestedPropertyRule		_parseAllNestedPropertyRule;
+			GenCodeTemplatePropertyRule		_generatedCodeTemplatePropertyRule;
 
 			/**
 			*	@brief Process all provided files on multiple threads.
@@ -119,9 +122,65 @@ namespace kodgen
 			*/
 			void					setupFileGenerationUnit(FileGenerationUnit& fileGenerationUnit)			const	noexcept;
 
+			/**
+			*	@brief Load the generatedFilesExtension setting from toml.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
+			void					loadGeneratedFilesExtension(toml::value const& tomlGeneratorSettings)			noexcept;
+
+			/**
+			*	@brief Load the entityMacrosFilename setting from toml.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
+			void					loadEntityMacrosFilename(toml::value const& tomlGeneratorSettings)				noexcept;
+
+			/**
+			*	@brief	Load the supportedExtensions setting from toml.
+			*			Loaded extensions completely replace previously supported extensions if any.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
+			void					loadSupportedExtensions(toml::value const& tomlGeneratorSettings)				noexcept;
+
+			/**
+			*	@brief Load the outputDirectory setting from toml.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
+			void					loadOutputDirectory(toml::value const& tomlGeneratorSettings)					noexcept;
+
+			/**
+			*	@brief	Load the toParseFiles setting from toml.
+			*			Loaded files completely replace previous toParseFiles if any.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
 			void					loadToParseFiles(toml::value const& tomlGeneratorSettings)						noexcept;
+
+			/**
+			*	@brief	Load the toParseDirectories setting from toml.
+			*			Loaded directories completely replace previous toParseDirectories if any.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
 			void					loadToParseDirectories(toml::value const& tomlGeneratorSettings)				noexcept;
+
+			/**
+			*	@brief	Load the ignoredFiles setting from toml.
+			*			Loaded files completely replace previous ignoredFiles if any.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
 			void					loadIgnoredFiles(toml::value const& tomlGeneratorSettings)						noexcept;
+
+			/**
+			*	@brief	Load the ignoredDirectories setting from toml.
+			*			Loaded directories completely replace previous ignoredDirectories if any.
+			*
+			*	@param tomlGeneratorSettings Toml content.
+			*/
 			void					loadIgnoredDirectories(toml::value const& tomlGeneratorSettings)				noexcept;
 
 		public:

@@ -41,6 +41,9 @@ projectIncludeDirectories		= [
 #	'''Path/To/Your/Project/Include'''
 ]
 
+# Must be one of "msvc", "clang++", "g++"
+compilerExeName					= "clang++"
+
 [FileParsingSettings.Properties]
 propertySeparator = ","
 subPropertySeparator = ","

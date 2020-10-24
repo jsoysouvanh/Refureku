@@ -28,7 +28,7 @@ namespace kodgen
 			*	
 			*	@return The converted string.
 			*/
-			static std::string getString(CXString&& clangString)	noexcept;
+			static std::string			getString(CXString&& clangString)		noexcept;
 
 			/**
 			*	@brief Get debug info about the provided cursor as string.
@@ -37,6 +37,17 @@ namespace kodgen
 			*	
 			*	@return A string containing debug info.
 			*/
-			static std::string getDebugInfo(CXCursor const& cursor)	noexcept;
+			static std::string			getDebugInfo(CXCursor const& cursor)	noexcept;
+
+			/**
+			*	@brief Convert a boolean to a string value.
+			*	
+			*	@param value The boolean to convert.
+			*	
+			*	@return "true" if the boolean is true, else "false".
+			*/
+			static inline std::string	toString(bool value)					noexcept;
 	};
+
+	#include "Kodgen/Misc/Helpers.inl"
 }
