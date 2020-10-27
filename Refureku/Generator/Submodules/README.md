@@ -50,8 +50,10 @@ inline void function() {}
 ```
 
 ```cpp
-#include <Parsing/FileParser.h>
-#include <CodeGen/FileGenerator.h>
+#include <Kodgen/Parsing/FileParserFactory.h>
+#include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/CodeGen/FileGenerator.h>
+#include <Kodgen/CodeGen/FileGenerationUnit.h>
 
 //...
 
@@ -60,12 +62,12 @@ kodgen::FileGenerator				fileGenerator;
 kodgen::FileGenerationUnit			fileGenerationUnit;
 
 //Setup parsing and generation settings if not done already
-fileParserFactory.parsingSettings.projectIncludeDirectories.emplace("Path/To/Include/Directory");
+fileParserFactory.parsingSettings.addProjectIncludeDirectory("Path/To/Include/Directory");
 
-fileGenerator.settings.outputDirectory = "Path/To/The/Output/Directory";
-fileGenerator.settings.toParseDirectories.emplace("Path/To/A/Directory/To/Parse");
-fileGenerator.settings.ignoredDirectories.emplace("Path/To/A/Directory/To/Ignore");
-fileGenerator.settings.ignoredDirectories.emplace("Path/To/The/Output/Directory"); //Don't parse generated files
+fileGenerator.settings.setOutputDirectory("Path/To/The/Output/Directory");
+fileGenerator.settings.addToParseDirectory("Path/To/A/Directory/To/Parse");
+fileGenerator.settings.addIgnoredDirectory("Path/To/A/Directory/To/Ignore");
+fileGenerator.settings.addIgnoredDirectory("Path/To/The/Output/Directory"); //Don't parse generated files
 
 kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);
 
@@ -172,14 +174,15 @@ Kodgen defines a logger interface in Misc/ILogger.h. You can inherit from it, ov
 > **Note:** Logger is shared among all FileParsers and FileGenerationUnits when the generation process is multithreaded, so make sure to synchronize the stream if you want to log safely.
 
 ```cpp
+//CustomLogger.h
 #pragma once
 
-#include <Misc/ILogger.h>
+#include <Kodgen/Misc/ILogger.h>
 
 class CustomLogger : public kodgen::ILogger
 {
     public:
-        virtual void log(std::string const& message, kodgen::ELogSeverity logSeverity) noexcept
+        virtual void log(std::string const& message, kodgen::ILogger::ELogSeverity logSeverity) noexcept
         {
             //Your implementation
         }
@@ -187,8 +190,9 @@ class CustomLogger : public kodgen::ILogger
 ```
 
 ```cpp
-#include <Parsing/FileParser.h>
-#include <CodeGen/FileGenerator.h>
+#include <Kodgen/Parsing/FileParserFactory.h>
+#include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/CodeGen/FileGenerator.h>
 
 #include "CustomLogger.h"
 
@@ -204,7 +208,7 @@ fileParserFactory.logger = &logger;
 fileGenerator.logger = &logger;
 ```
 
-Providing a logger instance to the FileParser and the FileGenerator is not mandatory, however it is highly recommended if you want to keep track of what's happening. 
+Providing a logger instance to the FileParserFactory and the FileGenerator is not mandatory, however it is highly recommended if you want to keep track of what's happening. 
 
 ### Properties / PropertyRules
 Properties are used to attach some metadata to a parsed entity. There are 2 kinds of properties:
@@ -230,9 +234,10 @@ The DefaultSimplePropertyRule class does most of the job in most cases. It imple
 Let's say we want to make a property called "ExampleSimpleProperty" which is valid only when attached to a namespace, a struct or a class. We would write the following:
 
 ```cpp
+//ExampleSimplePropertyRule.h
 #pragma once
 
-#include <Properties/DefaultSimplePropertyRule.h>
+#include <Kodgen/Properties/DefaultSimplePropertyRule.h>
 
 class ExampleSimplePropertyRule : kodgen::DefaultSimplePropertyRule
 {
@@ -272,7 +277,7 @@ namespace ExampleNamespace Namespace(ExampleSimpleProperty) //#3
 You can still of course override isPropertyGroupValid and isEntityValid if you want to perform additional checks.
 
 #### ComplexPropertyRule
-To make a new valid complex property, we need to inherit from kodgen::ComplexPropertyRule (Properties/ComplexPropertyRule.h). In this new class, we **must** override the isMainPropSyntaxValid method, as well as the isSubPropSyntaxValid method. Both isPropertyGroupValid and isEntityValid return true by default, so it is not necessary to override them if you have no additional checks to perform.
+To make a new valid complex property, we need to inherit from kodgen::ComplexPropertyRule (Kodgen/Properties/ComplexPropertyRule.h). In this new class, we **must** override the isMainPropSyntaxValid method, as well as the isSubPropSyntaxValid method. Both isPropertyGroupValid and isEntityValid return true by default, so it is not necessary to override them if you have no additional checks to perform.
 
 The framework already provides some ComplexPropertyRule implementations which do most of the work for you.
 
@@ -284,9 +289,10 @@ Just like [DefaultSimplePropertyRule](#defaultsimplepropertyrule), DefaultComple
 Let's say we want to make a property called "ExampleComplexProperty" which is valid only when attached to a method, and which has no subproperty constraints. We would write the following:
 
 ```cpp
+//ExampleComplexPropertyRule.h
 #pragma once
 
-#include <Properties/DefaultComplexPropertyRule.h>
+#include <Kodgen/Properties/DefaultComplexPropertyRule.h>
 
 class ExampleComplexPropertyRule : kodgen::DefaultComplexPropertyRule
 {
@@ -337,9 +343,10 @@ class Class() /* #4 */ ExampleClass
 A FixedComplexPropertyRule is a [DefaultComplexPropertyRule](#defaultcomplexpropertyrule) which is designed to accept a fixed number of typed subproperties. Supported types are int32, uint32, float and string. All type checks are already implemented, so it is really easy to create typed complex properties on top of that. Let's say we want to create a Range property which takes 2 floats (min and max) as subproperties, we could write:
 
 ```cpp
+//RangePropertyRule.h
 #pragma once
 
-#include <Properties/FixedComplexPropertyRule.h>
+#include <Kodgen/Properties/FixedComplexPropertyRule.h>
 
 class RangePropertyRule : public kodgen::FixedComplexPropertyRule
 {
@@ -352,9 +359,9 @@ class RangePropertyRule : public kodgen::FixedComplexPropertyRule
 ```
 
 ```cpp
-#include "Properties/RangePropertyRule.h"
+#include "RangePropertyRule.h"
 
-#include <InfoStructures/FieldInfo.h>
+#include <Kodgen/InfoStructures/FieldInfo.h>
 
 RangePropertyRule::RangePropertyRule() noexcept:
     kodgen::FixedComplexPropertyRule("Range",
@@ -463,7 +470,7 @@ To create your own code generation, inherit from GeneratedCodeTemplate and overr
 ```cpp
 #pragma once
 
-#include <CodeGen/GeneratedCodeTemplate.h>
+#include <Kodgen/CodeGen/GeneratedCodeTemplate.h>
 
 class ExampleGeneratedCodeTemplate : public kodgen::GeneratedCodeTemplate
 {
@@ -516,7 +523,7 @@ FileParserFactory is used to generate FileParsers. It contains all the settings 
 #include "ExampleSimplePropertyRule.h"
 #include "ExampleComplexPropertyRule.h"
 
-class ExampleFileParserFactory : public kodgen::FileParserFactory<FileParser>
+class ExampleFileParserFactory : public kodgen::FileParserFactory<ExampleFileParser>
 {
     private:
         ExampleSimplePropertyRule _simplePropertyRule;
@@ -531,7 +538,7 @@ class ExampleFileParserFactory : public kodgen::FileParserFactory<FileParser>
 #include "ExampleFileParserFactory.h"
 
 ExampleFileParserFactory::ExampleFileParserFactory() noexcept:
-    kodgen::FileParserFactory<FileParser>()
+    kodgen::FileParserFactory<ExampleFileParser>()
 {
     //We abort parsing if we encounter a single error during parsing
     parsingSettings.shouldAbortParsingOnFirstError = true;
@@ -569,13 +576,13 @@ ExampleFileParserFactory::ExampleFileParserFactory() noexcept:
 FileParser settings can also be loaded at runtime from a .toml file. A template of this toml file with all editable settings will be available in the repository. It looks like this:
 
 ```ini
-[FileParserSettings]
+[FileParsingSettings]
 shouldAbortParsingOnFirstError = true
 shouldParseAllEntities = false
 
 projectIncludeDirectories = [ '''Path/To/Include/Directory''' ]
 
-[FileParserSettings.Properties]
+[FileParsingSettings.Properties]
 propertySeparator = ","
 subPropertySeparator = ","
 subPropertyStartEncloser = "("
@@ -619,6 +626,7 @@ FileGenerationUnit is the class which will actually generate some code from pars
 The file generator contains a bunch of settings used during file generation. Default settings can be setup in a child class constructor.
 
 ```cpp
+//ExampleFileGenerator.h
 #pragma once
 
 #include <Kodgen/CodeGen/FileGenerator.h>

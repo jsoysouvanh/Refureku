@@ -37,7 +37,7 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 ## Getting started
 **Pre-built binaries for Windows x64 are available [here](https://github.com/jsoysouvanh/Refureku/releases). If you want to use those, you can skip to step 3 (this is true for the [Library Integration part](#library-integration) as well as the [Parser/Generator Integration part](#parsergenerator-integration).**
 
->**Note:** Refureku integration examples are available [here](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples).
+**Refureku integration examples are available [here](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples).**
 
 ### Requirements:
 - CMake 3.15.0+ (if you build the library from source).
@@ -66,7 +66,7 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
     - From source: /Refureku/Library/Include
 
 4.  Add library directories to your projet settings:
-    - From binaries: /Lib
+    - From binaries: /Lib/[Your compiler]/
     - From source: /Build/[Debug|Release]/Lib/
     > Make sure /Build/Debug/Lib/ is only set in debug mode, and /Build/Release/Lib/ only in release mode
 
@@ -85,7 +85,7 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 		> Fill this with the compiler you are using to compile your application. "msvc", "clang++" and "g++" are the only supported compilers. For clang++ and g++, you can specify a version (as long as the command is properly running in a terminal).
 	- **If the specified outputDirectory is in a parsed directory**, you should ignore it (you don't want to waste time parsing generated metadata do you?)
 	[FileGenerationSettings] ignoredDirectories = [ '''Path/To/Output/Directory''' ]
-	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory. Check out the [LibraryIntegration project](https://github.com/jsoysouvanh/RefurekuIntegration/tree/master/LibraryIntegration)'s [RefurekuSettings.toml](https://github.com/jsoysouvanh/RefurekuIntegration/blob/master/ThirdParty/Bin/RefurekuSettings.toml) for a concrete example.
+	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory.
 	
 8. Make the RefurekuGenerator run just before your project's compilation:
 	- With CMake:
@@ -128,9 +128,11 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 	    - /Refureku/Generator/Include
 
 4.  Add library directories to your projet settings:
-    - From binaries: /Lib
+    - From binaries:
+	    - /Lib/Common/
+	    - /Lib/[Your compiler]/
     - From source:
-	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static
+	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static/
 	    - /Build/[Debug|Release]/Lib/
     > Make sure /Build/Debug/Lib/ is only set in debug mode, and /Build/Release/Lib/ only in release mode
 
@@ -144,9 +146,9 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 	    - Kodgen.lib
 	    - RefurekuGeneratorLib.lib
 
-7.  Setup your project C++ compilation version to C++17 or later.
-8.  Compile!
-9.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared, or /Bin from the binaries.
+6.  Setup your project C++ compilation version to C++17 or later.
+7.  Compile!
+8.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared, or /Bin from the binaries.
 
 You should be able to run the following snippet:
 
@@ -180,10 +182,6 @@ int main()
 ### Possible issues
 #### Issue 1
 If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
-
-#### Issue 2
-If you downloaded the binaries, you might get linkage errors. This means the binaries have been compiled with build tools not compatible with yours. You can try to adjust your platform toolset and/or (for Windows/MSVC) your Windows SDK version. If you still get linkage errors, rebuild the library from source.
-
 
 ## Cross-platform compatibility
 This library has been tested and is stable on the following configurations:
