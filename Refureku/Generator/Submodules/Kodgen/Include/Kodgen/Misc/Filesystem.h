@@ -28,4 +28,22 @@ namespace kodgen
 			return std::hash<std::string>()(path.string());
 		}
 	};
+
+	class FilesystemHelpers
+	{
+		public:
+			FilesystemHelpers()							= delete;
+			FilesystemHelpers(FilesystemHelpers const&) = delete;
+			FilesystemHelpers(FilesystemHelpers&&)		= delete;
+			~FilesystemHelpers()						= delete;
+
+			/**
+			*	@brief Make a canonical path from the provided path.
+			*
+			*	@param path The path to sanitize.
+			*	
+			*	@return A canonical path if the provided path was valid, else an empty path.
+			*/
+			static fs::path sanitizePath(fs::path const& path)	noexcept;
+	};
 }

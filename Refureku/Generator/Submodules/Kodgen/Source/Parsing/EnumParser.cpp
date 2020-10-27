@@ -125,18 +125,12 @@ CXChildVisitResult EnumParser::setParsedEntity(CXCursor const& annotationCursor)
 
 void EnumParser::addEnumValueResult(EnumValueParsingResult&& result) noexcept
 {
-	ParsingContext& context = getContext();
-
 	if (result.parsedEnumValue.has_value() && getParsingResult()->parsedEnum.has_value())
 	{
 		getParsingResult()->parsedEnum->enumValues.emplace_back(std::move(result.parsedEnumValue).value());
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }
 
 ParsingContext& EnumParser::pushContext(CXCursor const& enumCursor, ParsingContext const& parentContext, EnumParsingResult& out_result) noexcept

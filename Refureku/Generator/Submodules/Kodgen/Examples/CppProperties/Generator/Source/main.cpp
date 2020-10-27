@@ -4,7 +4,7 @@
 #include <Kodgen/Misc/DefaultLogger.h>
 #include <Kodgen/CodeGen/FileGenerator.h>
 
-#include "CppPropsParser.h"
+#include "CppPropsParserFactory.h"
 #include "CppPropsCodeTemplate.h"
 
 int main(int argc, char** argv)
@@ -23,30 +23,31 @@ int main(int argc, char** argv)
 			fs::path includeDirectory	= workingDirectory / "Include";
 			fs::path generatedDirectory	= includeDirectory / "Generated";
 
-			CppPropsParser parser;
-			kodgen::FileGenerator fileGenerator;
+			CppPropsParserFactory		fileParserFactory;
+			kodgen::FileGenerationUnit	fileGenUnit;
+			kodgen::FileGenerator		fileGenerator;
 
 			//Parser and generator should log through logger
-			parser.logger			= &logger;
-			fileGenerator.logger	= &logger;
+			fileParserFactory.logger	= &logger;
+			fileGenerator.logger		= &logger;
 
 			//Parse WorkingDir/...
-			fileGenerator.toParseDirectories.emplace(includeDirectory.string());
+			fileGenerator.settings.addToParseDirectory(includeDirectory);
 
 			//Ignore generated files...
-			fileGenerator.ignoredDirectories.emplace(generatedDirectory.string());
+			fileGenerator.settings.addIgnoredDirectory(generatedDirectory);
 			
 			//Only parse .h files
-			fileGenerator.supportedExtensions.emplace(".h");
+			fileGenerator.settings.supportedExtensions.emplace(".h");
 
 			//All generated files will be located in WorkingDir/Include/Generated
-			fileGenerator.outputDirectory = generatedDirectory;
+			fileGenerator.settings.setOutputDirectory(generatedDirectory);
 
 			//Generated files will use .myCustomExtension.h extension
-			fileGenerator.generatedFilesExtension = ".myCustomExtension.h";
+			fileGenerator.settings.generatedFilesExtension = ".myCustomExtension.h";
 
 			//Bind the PropertyCodeTemplate name to the CppPropsCodeTemplate class
-			CppPropsCodeTemplate	propsCodeTemplate;
+			CppPropsCodeTemplate propsCodeTemplate;
 			fileGenerator.addGeneratedCodeTemplate("PropertyCodeTemplate", &propsCodeTemplate);
 
 			/**
@@ -55,9 +56,9 @@ int main(int argc, char** argv)
 			*	Now we can simply write:
 			*		class KGClass() MyClass {};
 			*/
-			fileGenerator.setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Class, "PropertyCodeTemplate");
+			fileGenerator.setDefaultGeneratedCodeTemplate(kodgen::EEntityType::Class, "PropertyCodeTemplate");
 
-			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(parser, true);
+			kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenUnit);
 
 			if (genResult.completed)
 			{

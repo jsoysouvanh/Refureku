@@ -7,46 +7,36 @@
 
 #pragma once
 
-#include <iostream>
-#include <vector>
-
 #include <clang-c/Index.h>
 
-#include "Kodgen/InfoStructures/EntityInfo.h"
-#include "Kodgen/InfoStructures/TypeInfo.h"
-#include "Kodgen/InfoStructures/MethodParamInfo.h"
-#include "Kodgen/Misc/FundamentalTypes.h"
+#include "Kodgen/InfoStructures/FunctionInfo.h"
 #include "Kodgen/Misc/EAccessSpecifier.h"
 
 namespace kodgen
 {
-	class MethodInfo : public EntityInfo
+	class MethodInfo final : public FunctionInfo
 	{
 		public:
-			struct MethodQualifiers
-			{
-				bool isDefault		: 1;
-				bool isStatic		: 1;
-				bool isVirtual		: 1;
-				bool isPureVirtual	: 1;
-				bool isInline		: 1;
-				bool isOverride		: 1;
-				bool isFinal		: 1;
-				bool isConst		: 1;
-
-			}								qualifiers;
-
 			/** Access of this method in its outer struct/class. */
-			EAccessSpecifier				accessSpecifier;
+			EAccessSpecifier	accessSpecifier;
 
-			/** Prototype of this method as a string. */
-			std::string						prototype;
+			/** Is this method defaulted or not. */
+			bool				isDefault		: 1;
 
-			/** Return type of this method. */
-			TypeInfo						returnType;
+			/** Is this method virtual or not. */
+			bool				isVirtual		: 1;
 
-			/** Parameters of this method. */
-			std::vector<MethodParamInfo>	parameters;
+			/** Is this method virtual pure or not. */
+			bool				isPureVirtual	: 1;
+
+			/** Is this method overriden or not. */
+			bool				isOverride		: 1;
+
+			/** Is this method final or not. */
+			bool				isFinal			: 1;
+
+			/** Is this method const or not. */
+			bool				isConst			: 1;
 
 			MethodInfo()								= default;
 			MethodInfo(CXCursor const& cursor,
@@ -54,23 +44,5 @@ namespace kodgen
 			MethodInfo(MethodInfo const&)				= default;
 			MethodInfo(MethodInfo&&)					= default;
 			~MethodInfo()								= default;
-
-			/**
-			*	@brief Get the name of this method.
-			*	
-			*	@return Return the name of this method.
-			*/
-			std::string getName()										const noexcept;
-
-			/**
-			*	@brief Get the prototype of this method.
-			*	
-			*	@param removeQualifiers	Should all method qualifiers be removed from the prototype?
-			*	@param removeSpaces		Should all spaces be removed from the prototype?
-			*	
-			*	@return The prototype of the method.
-			*/
-			std::string getPrototype(bool removeQualifiers	= false,
-									 bool removeSpaces		= false)	const noexcept;
 	};
 }

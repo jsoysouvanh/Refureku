@@ -1,384 +1,35 @@
 #include "Kodgen/CodeGen/FileGenerator.h"
 
-#include <cassert>
-
-#include "Kodgen/InfoStructures/NamespaceInfo.h"
-#include "Kodgen/InfoStructures/StructClassInfo.h"
-#include "Kodgen/InfoStructures/NestedStructClassInfo.h"
-#include "Kodgen/InfoStructures/EnumInfo.h"
-#include "Kodgen/InfoStructures/NestedEnumInfo.h"
-#include "Kodgen/InfoStructures/EnumValueInfo.h"
-#include "Kodgen/InfoStructures/FieldInfo.h"
-#include "Kodgen/InfoStructures/MethodInfo.h"
-#include "Kodgen/Properties/NativeProperties/NativeProperties.h"
-#include "Kodgen/Misc/TomlUtility.h"
-
 using namespace kodgen;
 
-void FileGenerator::generateFile(FileGenerationResult& genResult, FileParsingResult const& parsingResult) noexcept
+std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& out_genResult, bool forceRegenerateAll) const noexcept
 {
-	/**
-	*	This constructor actually create the file in the filesystem.
-	*	We create a file even if no entity was found so that we have the file generation timestamp to avoid
-	*	parsing this file again if it hasn't changed.
-	*/
-	GeneratedFile generatedFile(makePathToGeneratedFile(parsingResult.parsedFile), parsingResult.parsedFile);
+	std::set<fs::path> result;
 
-	preGenerateFile();
-
-	//Header
-	writeHeader(generatedFile, parsingResult);
-
-	//Actual file content (per entity)
-	for (NamespaceInfo const& namespaceInfo : parsingResult.namespaces)
-	{
-		writeNamespaceToFile(generatedFile, namespaceInfo, genResult);
-	}
-
-	for (StructClassInfo const& structInfo : parsingResult.structs)
-	{
-		writeStructOrClassToFile(generatedFile, structInfo, genResult);
-	}
-
-	for (StructClassInfo const& classInfo : parsingResult.classes)
-	{
-		writeStructOrClassToFile(generatedFile, classInfo, genResult);
-	}
-
-	for (EnumInfo const& enumInfo : parsingResult.enums)
-	{
-		writeEnumToFile(generatedFile, enumInfo, genResult);
-	}
-
-	/**
-	*	TODO
-	*
-	*	for (FieldInfo const& fieldInfo : parsingResult.fields)
-	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
-	*	}
-	*
-	*	for (MethodInfo const& methodInfo : parsingResult.functions)
-	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, genResult);
-	*	}
-	*/
-
-	//Footer
-	writeFooter(generatedFile, parsingResult);
-
-	postGenerateFile();
-}
-
-GeneratedCodeTemplate* FileGenerator::getEntityGeneratedCodeTemplate(EntityInfo const& entityInfo, EFileGenerationError& out_error) const noexcept
-{
-	GeneratedCodeTemplate* result = nullptr;
-
-	//Find the specified code template
-	decltype(entityInfo.properties.complexProperties)::const_iterator it = std::find_if(entityInfo.properties.complexProperties.cbegin(), entityInfo.properties.complexProperties.cend(),
-																			[](ComplexProperty const& prop) { return prop.mainProperty == NativeProperties::generatedCodeTemplateProperty; });
-
-	if (it == entityInfo.properties.complexProperties.cend())	//No main property corresponding to codeTemplateMainComplexPropertyName found
-	{
-		//Search for the default generated code template corresponding to this kind of entity
-		decltype(_defaultGeneratedCodeTemplates)::const_iterator it2 = _defaultGeneratedCodeTemplates.find(entityInfo.entityType);
-
-		if (it2 != _defaultGeneratedCodeTemplates.cend())
-		{
-			//We found a default generated code template!
-			result = it2->second;
-		}
-		else
-		{
-			//Didn't find a default generated code template, generate no code for this entity
-			return nullptr;
-		}
-	}
-	else if (it->subProperties.empty())	//No sub prop provided to the codeTemplateMainComplexPropertyName main prop
-	{
-		out_error = EFileGenerationError::NoGeneratedCodeTemplateProvided;
-	}
-	else if (it->subProperties.size() > 1)	//More than one prop provided to the codeTemplateMainComplexPropertyName main prop
-	{
-		out_error = EFileGenerationError::TooManyGeneratedCodeTemplateProvided;
-	}
-	else
-	{
-		std::string const& generatedCodeTemplateName = it->subProperties[0];
-
-		//All these preconditions should have already been checked by the GenCodeTemplatePropertyRule during parsing
-		assert(generatedCodeTemplateName.size() >= 2u && generatedCodeTemplateName.front() == '"' && generatedCodeTemplateName.back());
-
-		std::unordered_map<std::string,	GeneratedCodeTemplate*>::const_iterator it2 = _generatedCodeTemplates.find(generatedCodeTemplateName.substr(1u, generatedCodeTemplateName.size() - 2u));	//substr remove start and end "
-
-		if (it2 != _generatedCodeTemplates.cend())
-		{
-			result = it2->second;
-		}
-		else
-		{
-			out_error = EFileGenerationError::UnregisteredGeneratedCodeTemplateProvided;
-		}
-	}
-
-	//make sure an error is set if we have no result
-	assert(result != nullptr || out_error != EFileGenerationError::Count);
-
-	return result;
-}
-
-void FileGenerator::writeEntityToFile(GeneratedFile& generatedFile, EntityInfo const& entityInfo, FileGenerationResult& genResult) noexcept
-{
-	EFileGenerationError	error			= EFileGenerationError::Count;
-	GeneratedCodeTemplate*	codeTemplate	= getEntityGeneratedCodeTemplate(entityInfo, error);
-
-	if (codeTemplate != nullptr)
-	{
-		codeTemplate->generateCode(generatedFile, entityInfo);
-	}
-	else if (error != EFileGenerationError::Count)
-	{
-		genResult.fileGenerationErrors.emplace_back(FileGenerationError(generatedFile.getSourceFilePath(), entityInfo.name, error));
-	}
-}
-
-void FileGenerator::writeNamespaceToFile(GeneratedFile& generatedFile, EntityInfo const& namespaceInfo, FileGenerationResult& genResult) noexcept
-{
-	assert(namespaceInfo.entityType == EntityInfo::EType::Namespace);
-
-	//Write namespace
-	writeEntityToFile(generatedFile, namespaceInfo, genResult);
-
-	NamespaceInfo const& castNamespaceInfo = static_cast<NamespaceInfo const&>(namespaceInfo);
-	
-	//Write recursive namespaces
-	for (NamespaceInfo const& nestedNamespaceInfo : castNamespaceInfo.namespaces)
-	{
-		writeNamespaceToFile(generatedFile, nestedNamespaceInfo, genResult);
-	}
-
-	//Write namespace structs
-	for (StructClassInfo const& structInfo : castNamespaceInfo.structs)
-	{
-		writeStructOrClassToFile(generatedFile, structInfo, genResult);
-	}
-
-	//Write namespace classes
-	for (StructClassInfo const& classInfo : castNamespaceInfo.classes)
-	{
-		writeStructOrClassToFile(generatedFile, classInfo, genResult);
-	}
-
-	//Write namespace enums
-	for (EnumInfo const& enumInfo : castNamespaceInfo.enums)
-	{
-		writeEnumToFile(generatedFile, enumInfo, genResult);
-	}
-
-	/**
-	*	TODO
-	*
-	*	for (FieldInfo const& fieldInfo : castNamespaceInfo.fields)
-	*	{
-	*		writeFieldToFile(generatedFile, fieldInfo, genResult);
-	*	}
-	*
-	*	for (MethodInfo const& methodInfo : castNamespaceInfo.functions)
-	*	{
-	*		writeMethodToFile(generatedFile, methodInfo, genResult);
-	*	}
-	*/
-}
-
-void FileGenerator::writeStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& structClassInfo, FileGenerationResult& genResult) noexcept
-{
-	assert(structClassInfo.entityType == EntityInfo::EType::Struct || structClassInfo.entityType == EntityInfo::EType::Class);
-
-	//Write struct/class
-	writeEntityToFile(generatedFile, structClassInfo, genResult);
-
-	StructClassInfo const& castStructClassInfo = static_cast<StructClassInfo const&>(structClassInfo);
-
-	//Write struct/class nested structs
-	for (std::shared_ptr<NestedStructClassInfo> const& nestedStructInfo : castStructClassInfo.nestedStructs)
-	{
-		writeNestedStructOrClassToFile(generatedFile, *nestedStructInfo, genResult);
-	}
-
-	//Write struct/class nested classes
-	for (std::shared_ptr<NestedStructClassInfo> const& nestedClassInfo : castStructClassInfo.nestedClasses)
-	{
-		writeNestedStructOrClassToFile(generatedFile, *nestedClassInfo, genResult);
-	}
-
-	//Write class nested enums
-	for (NestedEnumInfo const& nestedEnumInfo : castStructClassInfo.nestedEnums)
-	{
-		writeEnumToFile(generatedFile, nestedEnumInfo, genResult);
-	}
-
-	//Write class fields
-	for (FieldInfo const& fieldInfo : castStructClassInfo.fields)
-	{
-		writeFieldToFile(generatedFile, fieldInfo, genResult);
-	}
-	
-	//Write class methods
-	for (MethodInfo const& methodInfo : castStructClassInfo.methods)
-	{
-		writeMethodToFile(generatedFile, methodInfo, genResult);
-	}
-}
-
-void FileGenerator::writeNestedStructOrClassToFile(GeneratedFile& generatedFile, EntityInfo const& nestedStructClassInfo, FileGenerationResult& genResult) noexcept
-{
-	//Might do something else special for nested structs/classes in the future
-	writeStructOrClassToFile(generatedFile, nestedStructClassInfo, genResult);
-}
-
-void FileGenerator::writeEnumToFile(GeneratedFile& generatedFile, EntityInfo const& enumInfo, FileGenerationResult& genResult) noexcept
-{
-	assert(enumInfo.entityType == EntityInfo::EType::Enum);
-
-	//Write enum
-	writeEntityToFile(generatedFile, enumInfo, genResult);
-
-	EnumInfo const& castEnumInfo = static_cast<EnumInfo const&>(enumInfo);
-
-	//Write enum values
-	for (EnumValueInfo const& enumValueInfo : castEnumInfo.enumValues)
-	{
-		writeEnumValueToFile(generatedFile, enumValueInfo, genResult);
-	}
-}
-
-void FileGenerator::writeEnumValueToFile(GeneratedFile& generatedFile, EntityInfo const& enumValueInfo, FileGenerationResult& genResult) noexcept
-{
-	assert(enumValueInfo.entityType == EntityInfo::EType::EnumValue);
-
-	writeEntityToFile(generatedFile, enumValueInfo, genResult);
-}
-
-void FileGenerator::writeFieldToFile(GeneratedFile& generatedFile, EntityInfo const& fieldInfo, FileGenerationResult& genResult) noexcept
-{
-	assert(fieldInfo.entityType == EntityInfo::EType::Field);
-
-	writeEntityToFile(generatedFile, fieldInfo, genResult);
-}
-
-void FileGenerator::writeMethodToFile(GeneratedFile& generatedFile, EntityInfo const& methodInfo, FileGenerationResult& genResult) noexcept
-{
-	assert(methodInfo.entityType == EntityInfo::EType::Method);
-
-	writeEntityToFile(generatedFile, methodInfo, genResult);
-}
-
-bool FileGenerator::shouldRegenerateFile(fs::path const& filePath) const noexcept
-{
-	fs::path pathToGeneratedFile = makePathToGeneratedFile(filePath);
-
-	return !fs::exists(pathToGeneratedFile) || fs::last_write_time(filePath) > fs::last_write_time(pathToGeneratedFile);
-}
-
-fs::path FileGenerator::makePathToGeneratedFile(fs::path const& sourceFilePath) const noexcept
-{
-	assert(fs::exists(sourceFilePath) && fs::is_regular_file(sourceFilePath));
-
-	return (outputDirectory / sourceFilePath.filename()).replace_extension(generatedFilesExtension);
-}
-
-void FileGenerator::preGenerateFile() noexcept
-{
-	//Default implementation does nothing
-}
-
-void FileGenerator::postGenerateFile() noexcept
-{
-	//Default implementation does nothing
-}
-
-void FileGenerator::writeHeader(GeneratedFile& file, FileParsingResult const&) const noexcept
-{
-	file.writeLine("#pragma once\n");
-
-	file.writeLines("/**", "*	Source file: " + file.getSourceFilePath().string(), "*/\n");
-
-	file.writeLine("#include \"" + entityMacrosFilename + "\"\n");
-}
-
-void FileGenerator::writeFooter(GeneratedFile&, FileParsingResult const&) const noexcept
-{
-	//Default implementation has no footer
-}
-
-void FileGenerator::addGeneratedCodeTemplate(std::string const& templateName, GeneratedCodeTemplate* codeTemplate) noexcept
-{
-	if (codeTemplate != nullptr)
-	{
-		_generatedCodeTemplates[templateName] = codeTemplate;
-
-		_generatedCodeTemplatePropertyRule.validTemplateNames.insert(templateName);
-	}
-}
-
-bool FileGenerator::setDefaultGeneratedCodeTemplate(EntityInfo::EType entityType, std::string const& templateName) noexcept
-{
-	decltype(_generatedCodeTemplates)::const_iterator it = _generatedCodeTemplates.find(templateName);
-
-	if (it != _generatedCodeTemplates.cend())
-	{
-		_defaultGeneratedCodeTemplates[entityType] = it->second;
-
-		return true;
-	}
-
-	return false;
-}
-
-void FileGenerator::processFile(FileParser& parser, FileGenerationResult& genResult, fs::path const& pathToFile) noexcept
-{
-	FileParsingResult parsingResult;
-
-	genResult.parsedFiles.push_back(pathToFile);
-
-	//Parse file
-	if (parser.parse(pathToFile, parsingResult))
-	{
-		//Generate file according to parsing result
-		generateFile(genResult, parsingResult);
-	}
-	else
-	{
-		//Transfer parsing errors into the file generation result
-		genResult.parsingErrors.insert(genResult.parsingErrors.cend(), std::make_move_iterator(parsingResult.errors.cbegin()), std::make_move_iterator(parsingResult.errors.cend()));
-	}
-}
-
-void FileGenerator::processIncludedFiles(FileParser& parser, FileGenerationResult& genResult, bool forceRegenerateAll) noexcept
-{
-	for (fs::path path : toParseFiles)
+	//Iterate over all "toParseFiles"
+	for (fs::path path : settings.getToParseFiles())
 	{
 		if (fs::exists(path) && !fs::is_directory(path))
 		{
 			if (forceRegenerateAll || shouldRegenerateFile(path))
 			{
-				processFile(parser, genResult, path);
+				result.emplace(fs::canonical(path.make_preferred()));
 			}
 			else
 			{
-				genResult.upToDateFiles.push_back(path);
+				out_genResult.upToDateFiles.push_back(path);
 			}
 		}
 		else
 		{
-			//TODO: Add FileGenerationFile invalid path
+			//Add FileGenerationFile invalid path
+			out_genResult.fileGenerationErrors.emplace_back(path, "", "This path was find in the toParseFiles list but it doesn't exist or is not a file.");
+			logger->log("File " + path.string() + " doesn't exist", ILogger::ELogSeverity::Warning);
 		}
 	}
-}
 
-void FileGenerator::processIncludedDirectories(FileParser& parser, FileGenerationResult& genResult, bool forceRegenerateAll) noexcept
-{
-	for (fs::path pathToIncludedDir : toParseDirectories)
+	//Iterate over all "toParseDirectories"
+	for (fs::path pathToIncludedDir : settings.getToParseDirectories())
 	{
 		if (fs::exists(pathToIncludedDir) && fs::is_directory(pathToIncludedDir))
 		{
@@ -393,20 +44,20 @@ void FileGenerator::processIncludedDirectories(FileParser& parser, FileGeneratio
 
 					if (entry.is_regular_file())
 					{
-						if (supportedExtensions.find(entryPath.extension().string()) != supportedExtensions.cend() &&
-							ignoredFiles.find(entryPath.string()) == ignoredFiles.cend())
+						if (settings.supportedExtensions.find(entryPath.extension().string()) != settings.supportedExtensions.cend() &&	//supported extension
+							settings.getIgnoredFiles().find(entryPath.string()) == settings.getIgnoredFiles().cend())					//file is not ignored
 						{
 							if (forceRegenerateAll || shouldRegenerateFile(entryPath))
 							{
-								processFile(parser, genResult, entryPath);
+								result.emplace(fs::canonical(entryPath));
 							}
 							else
 							{
-								genResult.upToDateFiles.push_back(entryPath);
+								out_genResult.upToDateFiles.push_back(entryPath);
 							}
 						}
 					}
-					else if (entry.is_directory() && ignoredDirectories.find(entryPath.string()) != ignoredDirectories.cend())
+					else if (entry.is_directory() && settings.getIgnoredDirectories().find(entryPath.string()) != settings.getIgnoredDirectories().cend())	//directory is ignored
 					{
 						//Don't iterate on ignored directory content
 						directoryIt.disable_recursion_pending();
@@ -414,144 +65,331 @@ void FileGenerator::processIncludedDirectories(FileParser& parser, FileGeneratio
 				}
 			}
 		}
+		else
+		{
+			//Add FileGenerationFile invalid path
+			//out_genResult.fileGenerationErrors.emplace_back(pathToIncludedDir, "", "This path was find in the toParseDirectories list but it doesn't exist or is not a directory.");
+			logger->log("Directory " + pathToIncludedDir.string() + " doesn't exist", ILogger::ELogSeverity::Warning);
+		}
+	}
+
+	return result;
+}
+
+bool FileGenerator::shouldRegenerateFile(fs::path const& filePath) const noexcept
+{
+	fs::path pathToGeneratedFile = makePathToGeneratedFile(filePath);
+
+	return !fs::exists(pathToGeneratedFile) || fs::last_write_time(filePath) > fs::last_write_time(pathToGeneratedFile);
+}
+
+fs::path FileGenerator::makePathToGeneratedFile(fs::path const& sourceFilePath) const noexcept
+{
+	assert(fs::exists(sourceFilePath) && fs::is_regular_file(sourceFilePath));
+
+	return (settings.getOutputDirectory() / sourceFilePath.filename()).replace_extension(settings.generatedFilesExtension);
+}
+
+void FileGenerator::addGeneratedCodeTemplate(std::string const& templateName, GeneratedCodeTemplate* codeTemplate) noexcept
+{
+	if (codeTemplate != nullptr)
+	{
+		settings._generatedCodeTemplates[templateName] = codeTemplate;
+
+		_generatedCodeTemplatePropertyRule.validTemplateNames.insert(templateName);
 	}
 }
 
-void FileGenerator::addNativePropertyRules(PropertyParsingSettings& propParsingSettings) noexcept
+bool FileGenerator::setDefaultGeneratedCodeTemplate(EEntityType entityType, std::string const& templateName) noexcept
+{
+	decltype(settings._generatedCodeTemplates)::const_iterator it = settings._generatedCodeTemplates.find(templateName);
+
+	if (it != settings._generatedCodeTemplates.cend())
+	{
+		settings._defaultGeneratedCodeTemplates[entityType] = it->second;
+
+		return true;
+	}
+
+	return false;
+}
+
+void FileGenerator::addNativePropertyRules(PropertyParsingSettings& propParsingSettings) const noexcept
 {
 	propParsingSettings.simplePropertyRules.push_back(&_parseAllNestedPropertyRule);
 	propParsingSettings.complexPropertyRules.push_back(&_generatedCodeTemplatePropertyRule);
 }
 
-void FileGenerator::clearNativePropertyRules(PropertyParsingSettings& propParsingSettings) noexcept
+void FileGenerator::clearNativePropertyRules(PropertyParsingSettings& propParsingSettings) const noexcept
 {
 	propParsingSettings.simplePropertyRules.pop_back();		//Remove _parseAllNestedPropertyRule
 	propParsingSettings.complexPropertyRules.pop_back();	//Remove _generatedCodeTemplatePropertyRule
 }
 
-void FileGenerator::generateMacrosFile(FileParser& parser) const noexcept
+void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory) const noexcept
 {
-	GeneratedFile macrosDefinitionFile(outputDirectory / entityMacrosFilename);
+	GeneratedFile macrosDefinitionFile(settings.getOutputDirectory() / settings.entityMacrosFilename);
 
-	PropertyParsingSettings& pps = parser.parsingSettings.propertyParsingSettings;
+	PropertyParsingSettings& pps = fileParserFactory.parsingSettings.propertyParsingSettings;
 
 	//Define empty entity macros to allow compilation outside of the Kodgen parsing
 	macrosDefinitionFile.writeLines("#pragma once",
 									"",
-									"#ifndef " + parser.parsingMacro,
+									"#ifndef " + FileParserFactoryBase::parsingMacro,
 									"",
 									"#define " + pps.namespaceMacroName	+ "(...)",
 									"#define " + pps.classMacroName		+ "(...)",
 									"#define " + pps.structMacroName	+ "(...)",
+									"#define " + pps.variableMacroName	+ "(...)",
 									"#define " + pps.fieldMacroName		+ "(...)",
 									"#define " + pps.methodMacroName	+ "(...)",
 									"#define " + pps.enumMacroName		+ "(...)",
-									"#define " + pps.enumValueMacroName	+ "(...)");
+									"#define " + pps.enumValueMacroName	+ "(...)",
+									"#define " + pps.functionMacroName	+ "(...)");
 
-	//Generate property rules macros + doc
+	//Generate simple property rules macros + doc
 	std::string macroDefinition;
-	for (kodgen::SimplePropertyRule const* propertyRule : parser.parsingSettings.propertyParsingSettings.simplePropertyRules)
+
+	for (kodgen::SimplePropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.simplePropertyRules)
 	{
 		macroDefinition = propertyRule->getMacroDefinition();
 
 		if (!macroDefinition.empty())
 		{
 			macrosDefinitionFile.writeLines("",
-											propertyRule->getMacroDefinition());
+											macroDefinition);
 		}
 	}
 
-	for (kodgen::ComplexPropertyRule const* propertyRule : parser.parsingSettings.propertyParsingSettings.complexPropertyRules)
+	//Generate complex property rules macros + doc
+	for (kodgen::ComplexPropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.complexPropertyRules)
 	{
 		macroDefinition = propertyRule->getMacroDefinition();
-		
+
 		if (!macroDefinition.empty())
 		{
 			macrosDefinitionFile.writeLines("",
-											propertyRule->getMacroDefinition());
+											macroDefinition);
 		}
 	}
 
-	macrosDefinitionFile.writeLines("",
-									"#endif");
+	macrosDefinitionFile.writeLine("\n#endif");
 }
 
-FileGenerationResult FileGenerator::generateFiles(FileParser& parser, bool forceRegenerateAll) noexcept
+void FileGenerator::setupFileGenerationUnit(FileGenerationUnit& fileGenerationUnit) const noexcept
 {
-	FileGenerationResult genResult;
+	fileGenerationUnit.logger		= logger;
+	fileGenerationUnit._settings	= &settings;
+}
 
-	if (outputDirectory.empty())
+void FileGenerator::loadGeneratedFilesExtension(toml::value const& tomlGeneratorSettings) noexcept
+{
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "generatedFilesExtension", settings.generatedFilesExtension, logger) && logger != nullptr)
 	{
-		if (logger != nullptr)
-		{
-			genResult.fileGenerationErrors.emplace_back(FileGenerationError("", "", EFileGenerationError::UnspecifiedOutputDirectory));
+		logger->log("[TOML] Load generatedFilesExtension: " + settings.generatedFilesExtension);
+	}
+}
 
-			logger->log("Output directory is empty, it must be specified for the files to be generated.", ILogger::ELogSeverity::Error);
+void FileGenerator::loadEntityMacrosFilename(toml::value const& tomlGeneratorSettings) noexcept
+{
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "entityMacrosFilename", settings.entityMacrosFilename, logger) && logger != nullptr)
+	{
+		logger->log("[TOML] Load entityMacrosFilename: " + settings.entityMacrosFilename);
+	}
+}
+
+void FileGenerator::loadSupportedExtensions(toml::value const& tomlGeneratorSettings) noexcept
+{
+	//Clear supported extensions before loading
+	settings.supportedExtensions.clear();
+
+	std::unordered_set<std::string> loadedExtensions;
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "supportedExtensions", loadedExtensions, logger) && logger != nullptr)
+	{
+		for (std::string const& extension : loadedExtensions)
+		{
+			//TODO: might add extension validity check later
+			settings.supportedExtensions.emplace(extension);
+
+			if (logger != nullptr)
+			{
+				logger->log("[TOML] Load new supported extension: " + extension);
+			}
 		}
 	}
-	else
-	{
-		//Before doing anything, make sure destination folder exists
-		if (!fs::exists(outputDirectory))
-		{
-			//Try to create them is it doesn't exist
-			try
-			{
-				genResult.completed = fs::create_directories(outputDirectory);
-			}
-			catch (fs::filesystem_error const& exception)
-			{
-				if (logger != nullptr)
-				{
-					genResult.fileGenerationErrors.emplace_back(FileGenerationError("", "", EFileGenerationError::InvalidOutputDirectory));
+}
 
-					logger->log("Output directory is invalid: " + std::string(exception.what()), ILogger::ELogSeverity::Error);
+void FileGenerator::loadOutputDirectory(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::string loadedOutputDirectory;
+
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "outputDirectory", loadedOutputDirectory, logger))
+	{
+		bool success = settings.setOutputDirectory(loadedOutputDirectory);
+		
+		if (logger != nullptr)
+		{
+			if (success)
+			{
+				logger->log("[TOML] Load output directory: " + settings.getOutputDirectory().string());
+			}
+			else
+			{
+				logger->log("[TOML] Failed to load outputDirectory, file or invalid path: " + loadedOutputDirectory);
+			}
+		}
+	}
+}
+
+void FileGenerator::loadToParseFiles(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> toParseFiles;
+
+	settings.clearToParseFiles();
+
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "toParseFiles", toParseFiles, logger))
+	{
+		bool success;
+
+		for (fs::path const& path : toParseFiles)
+		{
+			success = settings.addToParseFile(path);
+
+			if (logger != nullptr)
+			{
+				if (success)
+				{
+					logger->log("[TOML] Load new file to parse: " + FilesystemHelpers::sanitizePath(path).string());
+				}
+				else
+				{
+					logger->log("[TOML] Failed to add toParseFile as it doesn't exist, is not a file or is already part of the list of files to parse: " + path.string(), ILogger::ELogSeverity::Warning);
 				}
 			}
 		}
+	}
+}
 
-		if (fs::is_directory(outputDirectory))
+void FileGenerator::loadToParseDirectories(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> toParseDirectories;
+
+	settings.clearToParseDirectories();
+
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "toParseDirectories", toParseDirectories, logger))
+	{
+		bool success;
+
+		for (fs::path const& path : toParseDirectories)
 		{
-			addNativePropertyRules(parser.parsingSettings.propertyParsingSettings);
+			success = settings.addToParseDirectory(path);
 
-			generateMacrosFile(parser);
-
-			processIncludedFiles(parser, genResult, forceRegenerateAll);
-			processIncludedDirectories(parser, genResult, forceRegenerateAll);
-
-			clearNativePropertyRules(parser.parsingSettings.propertyParsingSettings);
-
-			genResult.completed = true;
+			if (logger != nullptr)
+			{
+				if (success)
+				{
+					logger->log("[TOML] Load new directory to parse: " + FilesystemHelpers::sanitizePath(path).string());
+				}
+				else
+				{
+					logger->log("[TOML] Failed to add toParseDirectory as it doesn't exist, is not a directory or is already part of the list of directories to parse: " + path.string(), ILogger::ELogSeverity::Warning);
+				}
+			}
 		}
 	}
-	
-	return genResult;
+}
+
+void FileGenerator::loadIgnoredFiles(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> ignoredFiles;
+
+	settings.clearIgnoredFiles();
+
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "ignoredFiles", ignoredFiles, logger))
+	{
+		bool success;
+
+		for (fs::path const& path : ignoredFiles)
+		{
+			success = settings.addIgnoredFile(path);
+
+			if (logger != nullptr)
+			{
+				if (success)
+				{
+					logger->log("[TOML] Load new ignored file: " + FilesystemHelpers::sanitizePath(path).string());
+				}
+				else
+				{
+					logger->log("[TOML] Failed to add ignoredFile as it doesn't exist, is not a file or is already part of the list of ignored files: " + path.string(), ILogger::ELogSeverity::Warning);
+				}
+			}
+		}
+	}
+}
+
+void FileGenerator::loadIgnoredDirectories(toml::value const& tomlGeneratorSettings) noexcept
+{
+	std::unordered_set<fs::path, PathHash> ignoredDirectories;
+
+	settings.clearIgnoredDirectories();
+
+	if (TomlUtility::updateSetting(tomlGeneratorSettings, "ignoredDirectories", ignoredDirectories, logger))
+	{
+		bool success;
+
+		for (fs::path const& path : ignoredDirectories)
+		{
+			success = settings.addIgnoredDirectory(path);
+
+			if (logger != nullptr)
+			{
+				if (success)
+				{
+					logger->log("[TOML] Load new ignored directory: " + FilesystemHelpers::sanitizePath(path).string());
+				}
+				else
+				{
+					logger->log("[TOML] Failed to add ignoredDirectory as it doesn't exist, is not a directory or is already part of the list of ignored directories: " + path.string(), ILogger::ELogSeverity::Warning);
+				}
+			}
+		}
+	}
 }
 
 bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 {
 	try
 	{
-		toml::value settings = toml::parse(pathToSettingsFile.string());
+		toml::value tomlContent = toml::parse(pathToSettingsFile.string());
 
-		if (settings.contains("FileGeneratorSettings"))
+		if (tomlContent.contains(_tomlSettingsSectionName))
 		{
-			toml::value const& generatorSettings = toml::find(settings, "FileGeneratorSettings");
+			toml::value const& tomlGeneratorSettings = toml::find(tomlContent, _tomlSettingsSectionName);
 
-			TomlUtility::updateSetting<std::string>(generatorSettings, "generatedFilesExtension", generatedFilesExtension);
-			TomlUtility::updateSetting<fs::path>(generatorSettings, "outputDirectory", outputDirectory);
-			TomlUtility::updateSetting<std::string>(generatorSettings, "entityMacrosFilename", entityMacrosFilename);
-			TomlUtility::updateSetting(generatorSettings, "toParseFiles", toParseFiles);
-			TomlUtility::updateSetting(generatorSettings, "toParseDirectories", toParseDirectories);
-			TomlUtility::updateSetting(generatorSettings, "ignoredFiles", ignoredFiles);
-			TomlUtility::updateSetting(generatorSettings, "ignoredDirectories", ignoredDirectories);
-			TomlUtility::updateSetting(generatorSettings, "supportedExtensions", supportedExtensions);
+			loadGeneratedFilesExtension(tomlGeneratorSettings);
+			loadEntityMacrosFilename(tomlGeneratorSettings);
+			loadSupportedExtensions(tomlGeneratorSettings);
+			loadOutputDirectory(tomlGeneratorSettings);
+			loadToParseFiles(tomlGeneratorSettings);
+			loadToParseDirectories(tomlGeneratorSettings);
+			loadIgnoredFiles(tomlGeneratorSettings);
+			loadIgnoredDirectories(tomlGeneratorSettings);
+		}
+		else if (logger != nullptr)
+		{
+			logger->log("Could not find the [" + std::string(_tomlSettingsSectionName) + "] section in the TOML file.", ILogger::ELogSeverity::Warning);
 		}
 
 		return true;
 	}
 	catch (std::runtime_error const&)
 	{
+		//Failed to open the file
+		if (logger != nullptr)
+		{
+			logger->log("Failed to load file generation settings at " + pathToSettingsFile.string(), ILogger::ELogSeverity::Error);
+		}
 	}
 	catch (toml::syntax_error const& e)
 	{
@@ -560,6 +398,6 @@ bool FileGenerator::loadSettings(fs::path const& pathToSettingsFile) noexcept
 			logger->log("Syntax error in settings file.\n" + std::string(e.what()), ILogger::ELogSeverity::Error);
 		}
 	}
-	
+
 	return false;
 }

@@ -1,24 +1,27 @@
 #include <iostream>
-#include <vector>
+
+#include <Refureku/Refureku.h>
 
 #include "ExampleClass.h"
-
-#include "Refureku/TypeInfo/Database.h"
+#include "ThirdPartyEnumReflectionCode.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
 void outerEntities()
 {
 	TEST(rfk::Database::getNamespace("namespace3")->outerEntity == nullptr);
-	TEST(rfk::Database::getNamespace("namespace4")->getNestedNamespace("namespace4_nested")->outerEntity == rfk::Database::getNamespace("namespace4"));
+	TEST(rfk::Database::getNamespace("namespace4")->getNamespace("namespace4_nested")->outerEntity == rfk::Database::getNamespace("namespace4"));
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("AnotherClassInNamespace3")->outerEntity == rfk::Database::getNamespace("namespace3"));
 	TEST(namespace3::ExampleClass::staticGetArchetype().getNestedStruct("NestedExampleStruct")->outerEntity == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
-	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->outerEntity == rfk::Database::getNamespace("test1")->getNestedNamespace("test2"));
-	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->outerEntity == rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace"));
+	TEST(rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->outerEntity == rfk::Database::getNamespace("test1")->getNamespace("test2"));
+	TEST(rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->outerEntity == rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace"));
 	TEST(ExampleStruct::staticGetArchetype().getStaticField("staticInt")->outerEntity == &ExampleStruct::staticGetArchetype());
 	TEST(ExampleStruct::staticGetArchetype().getField("i")->outerEntity == &ExampleStruct::staticGetArchetype());
 	TEST(ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->outerEntity == &ExampleStruct::staticGetArchetype());
-	TEST(ExampleStruct::staticGetArchetype().getMethod("method")->outerEntity == &ExampleStruct::staticGetArchetype());
+	TEST(rfk::Database::getFunction("function1")->outerEntity == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction("function1")->outerEntity == rfk::Database::getNamespace("namespace3"));
+	TEST(rfk::Database::getVariable("variableInsideGlobalScope")->outerEntity == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace")->outerEntity == rfk::Database::getNamespace("namespace3"));
 }
 
 void namespaces()
@@ -26,9 +29,23 @@ void namespaces()
 	TEST(rfk::Database::getNamespace("namespace3") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4_nested") == nullptr);
-	TEST(rfk::Database::getNamespace("namespace4")->getNestedNamespace("namespace4_nested") != nullptr);
+	TEST(rfk::Database::getNamespace("namespace4")->getNamespace("namespace4_nested") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("AnotherClassInNamespace3") != nullptr);
-	TEST(rfk::Database::getNamespace("test1")->getNestedNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
+	TEST(rfk::Database::getNamespace("namespace3")->getClass("OtherClass") != nullptr);
+	TEST(rfk::Database::getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value == 42u);
+	
+	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace")->getData<int>() == 42);
+	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideNamespace", rfk::EVarFlags::Static) == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getVariable("variableInsideGlobalScope") == nullptr);
+
+	rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Inline)->invoke(1);
+	rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Default)->invoke(2);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Static) == nullptr);
+
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int)>("function1")->rInvoke<int>(1) == 1);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int, int)>("function1")->rInvoke<int>(1, 2) == 3);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<void(int, int)>("function1") == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int()>("function1") == nullptr);
 }
 
 void classes()
@@ -113,6 +130,12 @@ void enums()
 
 	//Nested enum
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedEnum("NestedExampleEnum")->getEnumValue("Value1")->value == 0);
+
+	//Normal enum (no enum class)
+	TEST(rfk::Database::getEnum("EThisIsANormalEnum") != nullptr);
+
+	//Underlying type
+	TEST(rfk::Database::getEnum("EThisIsANormalEnum")->underlyingType.archetype->name == "int");
 }
 
 void methods()
@@ -129,7 +152,7 @@ void methods()
 	pc.getMethod("parentClassMethod1")->invoke(&p);
 
 	rfk::Method const* pc_method1 = pc.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const);
-	TEST(pc_method1->checkedInvoke<int>(&p) == 1);
+	TEST(pc_method1->checkedRInvoke<int>(&p) == 1);
 	TEST(pc.getMethod("method1", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const) == nullptr);
 
 	//ExampleClass
@@ -137,42 +160,49 @@ void methods()
 	rfk::Class const&			ec = namespace3::ExampleClass::staticGetArchetype();
 
 	rfk::Method const*			ec_method1 = ec.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Override | rfk::EMethodFlags::Final | rfk::EMethodFlags::Virtual);
-	TEST(ec_method1->invoke<int>(&e) != 1);
-	TEST(ec_method1->invoke<int>(&e) == 2);
+	TEST(ec_method1->rInvoke<int>(&e) != 1);
+	TEST(ec_method1->rInvoke<int>(&e) == 2);
 
-	rfk::Method const*			ec_method2 = ec.getMethod("method2", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Const);
+	rfk::Method const* ec_method2 = ec.getMethod("method2", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Const);
 	ec_method2->invoke(&e);
 
-	rfk::Method const*			ec_method3int = ec.getMethod("method3", rfk::EMethodFlags::Protected);
-	TEST(ec_method3int->invoke<int>(&e) == 42);
+	rfk::Method const* ec_method3int = ec.getMethod("method3", rfk::EMethodFlags::Protected);
+	TEST(ec_method3int->rInvoke<int>(&e) == 42);
 
-	rfk::Method const*			ec_method3float	= ec.getMethod("method3", rfk::EMethodFlags::Private);
+	rfk::Method const* ec_method3float	= ec.getMethod("method3", rfk::EMethodFlags::Private);
 	
+	//TODO: Handle functions / variables reflection when they use an incomplete type (forward declared type)
+	//rfk::Method const* ec_methodWithForwardDeclaredParam = ec.getMethod("methodWithForwardDeclaredParam");
+	//ec_methodWithForwardDeclaredParam->invoke(&e);
+
+	rfk::Method const* ec_methodWithClassParam = ec.getMethod("methodWithClassParam");
+	ec_methodWithClassParam->invoke(&e, nullptr);
+
 	#if REFUREKU_DEBUG
 
 	try
 	{
-		ec_method3float->invoke<float>(&e);	// <- Bad number of arguments
+		ec_method3float->invoke(&e);	// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^ in DEBUG only
 	}
 	catch (std::exception const&)
 	{
-		ec_method3float->invoke<float>(&e, 7);	// <- Call with correct arguments count
+		ec_method3float->invoke(&e, 7);	// <- Call with correct arguments count
 	}
 
 	#else
 
-	ec_method3float->invoke<float>(&e);	// <- This should not throw in release eventhough bad arguments count
-	ec_method3float->invoke<float>(&e, 7);
+	ec_method3float->invoke(&e);	// <- This should not throw in release eventhough bad arguments count
+	ec_method3float->invoke(&e, 7);
 
 	#endif
 
 	rfk::Method const*	ec_method4	= ec.getMethod("method4", rfk::EMethodFlags::Public);
-	TEST(ec_method4->invoke<unsigned long long>(&e, nullptr) == 0u);
+	TEST(ec_method4->rInvoke<unsigned long long>(&e, nullptr) == 0u);
 
 	try
 	{
-		ec_method4->checkedInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
+		ec_method4->checkedRInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^
 	}
 	catch (std::exception const&)
@@ -194,6 +224,19 @@ void methods()
 	TEST(ec_parentClassMethod1 != nullptr);
 
 	ec_parentClassMethod1->invoke(&e);
+
+	//Check const / non-const
+	TEST(ec.getMethod("constMethod", rfk::EMethodFlags::Const) != nullptr);
+	TEST(ec.getMethod<void(int)>("constMethod") == nullptr);
+	TEST(ec.getMethod<void(int) const>("constMethod") != nullptr);
+	TEST(ec.getMethod<void(int) const>("constMethod", rfk::EMethodFlags::Const) != nullptr);
+
+	TEST(ec.getMethod("method3") != nullptr);			//We don't know if it's the const or non-const overload
+	TEST(ec.getMethod<int(int)>("method3")->rInvoke<int>(&e, 1) == 1);	//non-const
+	TEST(ec.getMethod<int(int) const>("method3")->rInvoke<int>(&e, 1) == 2);	//const
+	TEST(ec.getMethod("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
+	TEST(ec.getMethod<int(int) const>("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
+	TEST(ec.getMethod<int(int)>("method3", rfk::EMethodFlags::Const) == nullptr);	//Method signature is non const and flag is const -> contradiction
 }
 
 void staticMethods()
@@ -208,14 +251,14 @@ void staticMethods()
 
 	ec.getStaticMethod("staticMethod1", rfk::EMethodFlags::Private)->invoke();
 
-	TEST(ec.getStaticMethod("staticMethod2", rfk::EMethodFlags::Private)->invoke<int>() == 2);
+	TEST(ec.getStaticMethod("staticMethod2", rfk::EMethodFlags::Private)->rInvoke<int>() == 2);
 
 	TEST(ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Public) == nullptr);
 
 	TEST(ec.getStaticMethods("staticMethod3").size() == 2u);
 
 	ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Protected)->invoke("This is a test, and let's try to make sure it works even when it's long");
-	TEST(ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Private)->invoke<int, int, int>(1, 2) == 3);
+	TEST(ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Private)->rInvoke<int>(1, 2) == 3);
 }
 
 void fields()
@@ -274,6 +317,23 @@ void staticFields()
 
 	TEST(namespace3::ExampleClass::someStaticInt == 2);
 	TEST(ec.getStaticField("someStaticParentClass", rfk::EFieldFlags::Public)->getDataAddress() == &namespace3::ExampleClass::someStaticParentClass);
+}
+
+void variables()
+{
+	//Dumb test because of float imprecision...
+	TEST(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Default)->getData<float>() == 10.0f);
+	TEST(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Static)->getData<float>() == 10.0f);
+	
+	TEST(rfk::Database::getVariable("variableInsideNamespace") == nullptr);
+}
+
+void functions()
+{
+	rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Default)->invoke(12.f);
+	rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Static)->invoke(12.f);
+
+	TEST(rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Inline) == nullptr);
 }
 
 void inheritance()
@@ -376,15 +436,12 @@ void parseAllNested()
 	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getClass("NestedClass1") != nullptr);
 	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getStruct("NestedStruct1") != nullptr);
 	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getEnum("NestedEnum1") != nullptr);
-	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getNestedNamespace("parse_all_nested_namespace") != nullptr);
+	TEST(rfk::Database::getNamespace("parse_all_nested_namespace")->getNamespace("parse_all_nested_namespace") != nullptr);
 }
 
 void properties()
 {
 	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
-
-	TEST(ec.properties.getSimpleProperty("dynamicGetArchetype") == nullptr);
-	TEST(ec.properties.getSimpleProperty("DynamicGetArchetype") != nullptr);
 
 	TEST(ec.getStaticMethod("customInstantiator")->properties.getSimpleProperty("CustomInstantiator") != nullptr);
 
@@ -419,7 +476,7 @@ void properties()
 
 void dynamicTypes()
 {
-	std::vector<rfk::ReflectedObject*>	objects;
+	std::vector<rfk::Object*>	objects;
 
 	objects.push_back(new namespace3::ExampleClass());
 	objects.push_back(new namespace3::ParentClass());
@@ -430,7 +487,7 @@ void dynamicTypes()
 	TEST(objects[2]->getArchetype().name == "ParentParentClass");
 
 	//Yummy leak
-	for (rfk::ReflectedObject* o : objects)
+	for (rfk::Object* o : objects)
 	{
 		delete o;
 	}
@@ -478,6 +535,123 @@ void database()
 	}
 	catch (...)
 	{}
+
+	TEST(rfk::Database::getFunction<int(int)>("function1")->rInvoke<int>(1) == 1);
+	TEST(rfk::Database::getFunction<int(int, int)>("function1")->rInvoke<int>(1, 2) == 3);
+	TEST(rfk::Database::getFunction<void(int, int)>("function1") == nullptr);
+	TEST(rfk::Database::getFunction<int()>("function1") == nullptr);
+	TEST(rfk::Database::getFunction<void(namespace3::ExampleClass)>("function1") != nullptr);
+}
+
+void templateEnums()
+{
+	TEST(rfk::getEnum<namespace3::ExampleEnum>() == rfk::Database::getNamespace("namespace3")->getEnum("ExampleEnum"));
+}
+
+void getArchetypes()
+{
+	//From database
+	TEST(rfk::Database::getArchetype("ExampleStruct") != nullptr);
+
+	//Using templated version
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
+	TEST(rfk::getArchetype<namespace3::ExampleClass2>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass2"));
+
+	TEST(rfk::getArchetype<void>() == rfk::getArchetype<void*>());
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::getArchetype<volatile const namespace3::ExampleClass&>());
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::getArchetype<volatile const namespace3::ExampleClass* const>());
+	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::getArchetype<namespace3::ExampleClass****>());
+	TEST(rfk::getArchetype<int>() == rfk::getArchetype<int*&>());
+	TEST(rfk::getArchetype<int>() == rfk::getArchetype<int[2]>());
+	TEST(rfk::getArchetype<int>() == rfk::getArchetype<int[2][3]>());
+
+	TEST(rfk::getArchetype<void(int)>() == nullptr);			//Func prototype
+	TEST(rfk::getArchetype<void(*)(int)>() == nullptr);			//Func ptr
+	TEST(rfk::getArchetype<int(rfk::Class::*)>() == nullptr);	//Ptr to field
+	TEST(rfk::getArchetype<int(rfk::Class::*)()>() == nullptr);	//Ptr to method
+
+	auto l = [](){};
+	TEST(rfk::getArchetype<decltype(l)>() == nullptr);			//Lambda
+}
+
+void entityCast()
+{
+	/*
+	FundamentalArchetype const* entityCast<FundamentalArchetype, void>(Entity const* entity)	noexcept;
+	Variable const*				entityCast<Variable, void>(Entity const* entity)				noexcept;
+	Function const*				entityCast<Function, void>(Entity const* entity)				noexcept;
+	*/
+
+	//FundamentalArchetype
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(rfk::getArchetype<int>()->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::FundamentalArchetype>(rfk::Database::getEntity(rfk::getArchetype<float>()->id)) != nullptr);
+
+	//Enum
+	rfk::Enum const* e = rfk::getEnum<namespace3::ExampleEnum>();
+
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(e->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Enum>(rfk::Database::getEntity(e->id)) != nullptr);
+
+	//EnumValue
+	TEST(rfk::entityCast<rfk::EnumValue>(rfk::Database::getEntity(e->getEnumValue(1)->id)) != nullptr);
+
+	//Struct
+	rfk::Struct const& s = ExampleStruct::staticGetArchetype();
+
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(s.id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Struct>(rfk::Database::getEntity(s.id)) != nullptr);
+
+	//Class
+	rfk::Class const& c = namespace3::ExampleClass::staticGetArchetype();
+
+	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(c.id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Struct>(rfk::Database::getEntity(c.id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Class>(rfk::Database::getEntity(c.id)) != nullptr);
+
+	//Fields
+	rfk::Field const* field = s.getField("i");
+	rfk::StaticField const* sField = s.getStaticField("staticInt");
+
+	TEST(rfk::entityCast<rfk::FieldBase>(rfk::Database::getEntity(field->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Field>(rfk::Database::getEntity(field->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::FieldBase>(rfk::Database::getEntity(sField->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::StaticField>(rfk::Database::getEntity(sField->id)) != nullptr);
+
+	//Methods
+	rfk::Method const* method = s.getMethod("method");
+	rfk::StaticMethod const* sMethod = s.getStaticMethod("staticMethod");
+
+	TEST(rfk::entityCast<rfk::MethodBase>(rfk::Database::getEntity(method->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::Method>(rfk::Database::getEntity(method->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::MethodBase>(rfk::Database::getEntity(sMethod->id)) != nullptr);
+	TEST(rfk::entityCast<rfk::StaticMethod>(rfk::Database::getEntity(sMethod->id)) != nullptr);
+
+	//Namespaces
+	TEST(rfk::entityCast<rfk::Namespace>(rfk::Database::getEntity(rfk::Database::getNamespace("namespace3")->id)) != nullptr);
+
+	//Variables
+	TEST(rfk::entityCast<rfk::Variable>(rfk::Database::getEntity(rfk::Database::getVariable("variableInsideGlobalScope")->id)) != nullptr);
+
+	//Functions
+	TEST(rfk::entityCast<rfk::Function>(rfk::Database::getEntity(rfk::Database::getFunction("function1")->id)) != nullptr);
+}
+
+void fundamentalArchetypes()
+{
+	TEST(rfk::Database::getFundamentalArchetype("int") != nullptr);
+	TEST(rfk::Database::getFundamentalArchetype("void") != nullptr);
+	TEST(rfk::Database::getFundamentalArchetype("nullptr_t") != nullptr);
+}
+
+void enumManualReflection()
+{
+	rfk::Enum const* e = rfk::Database::getEnum("ThirdPartyEnum");
+
+	TEST(e != nullptr);
+	TEST(rfk::getEnum<ThirdPartyEnum>() != nullptr);
+	TEST(e == rfk::getEnum<ThirdPartyEnum>());
+	TEST(e->getEnumValue("Value1")->value == 0);
+	TEST(e->getEnumValue(2)->name == "Value2");
 }
 
 int main()
@@ -485,6 +659,9 @@ int main()
 	database();
 	outerEntities();
 	namespaces();
+	templateEnums();
+	getArchetypes();
+	entityCast();
 	classes();
 	structs();
 	enums();
@@ -492,11 +669,15 @@ int main()
 	staticMethods();
 	fields();
 	staticFields();
+	variables();
+	functions();
 	inheritance();
 	instantiation();
 	properties();
 	dynamicTypes();
 	makeInstance();
+	fundamentalArchetypes();
+	enumManualReflection();
 
 	return EXIT_SUCCESS;
 }

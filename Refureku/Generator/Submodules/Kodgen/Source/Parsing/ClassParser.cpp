@@ -30,7 +30,7 @@ CXChildVisitResult ClassParser::parse(CXCursor const& classCursor, ParsingContex
 		//Check if the parent has the shouldParseAllNested flag set
 		if (shouldParseCurrentEntity())
 		{
-			getParsingResult()->parsedClass.emplace(classCursor, PropertyGroup(), (classCursor.kind == CXCursorKind::CXCursor_ClassDecl) ? EntityInfo::EType::Class : EntityInfo::EType::Struct);
+			getParsingResult()->parsedClass.emplace(classCursor, PropertyGroup(), (classCursor.kind == CXCursorKind::CXCursor_ClassDecl) ? EEntityType::Class : EEntityType::Struct);
 		}
 	}
 
@@ -62,7 +62,7 @@ CXChildVisitResult ClassParser::parseNestedEntity(CXCursor cursor, CXCursor /* p
 		if (parser->shouldParseCurrentEntity() && cursor.kind != CXCursorKind::CXCursor_AnnotateAttr)
 		{
 			//Make it valid right away so init the result
-			parser->getParsingResult()->parsedClass.emplace(context.rootCursor, PropertyGroup(), (context.rootCursor.kind == CXCursorKind::CXCursor_ClassDecl) ? EntityInfo::EType::Class : EntityInfo::EType::Struct);
+			parser->getParsingResult()->parsedClass.emplace(context.rootCursor, PropertyGroup(), (context.rootCursor.kind == CXCursorKind::CXCursor_ClassDecl) ? EEntityType::Class : EEntityType::Struct);
 		}
 		else
 		{
@@ -181,7 +181,7 @@ CXChildVisitResult ClassParser::setParsedEntity(CXCursor const& annotationCursor
 	if (opt::optional<PropertyGroup> propertyGroup = getProperties(annotationCursor))
 	{
 		//Set the parsing entity in the result and update the shouldParseAllNested flag in the context
-		updateShouldParseAllNested(getParsingResult()->parsedClass.emplace(context.rootCursor, std::move(*propertyGroup), (context.rootCursor.kind == CXCursorKind::CXCursor_ClassDecl) ? EntityInfo::EType::Class : EntityInfo::EType::Struct));
+		updateShouldParseAllNested(getParsingResult()->parsedClass.emplace(context.rootCursor, std::move(*propertyGroup), (context.rootCursor.kind == CXCursorKind::CXCursor_ClassDecl) ? EEntityType::Class : EEntityType::Struct));
 
 		return CXChildVisitResult::CXChildVisit_Recurse;
 	}
@@ -235,8 +235,58 @@ void ClassParser::addBaseClass(CXCursor cursor) noexcept
 
 	if (getParsingResult()->parsedClass.has_value())
 	{
-		getParsingResult()->parsedClass->parents.emplace_back(StructClassInfo::ParentInfo{ static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor)), TypeInfo(clang_getCursorType(cursor)) });
+		StructClassInfo&	parsedClass = getParsingResult()->parsedClass.value();
+		CXType				parentType	= clang_getCursorType(cursor);
+
+		parsedClass.parents.emplace_back(StructClassInfo::ParentInfo{ static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor)), TypeInfo(parentType) });
+
+		if (!parsedClass.isObject)
+		{
+			//we haven't confirmed that the current parsed class inherits from Object, search again
+			parsedClass.isObject = isBaseOf("kodgen::Object", parentType);
+		}
 	}
+}
+
+bool ClassParser::isBaseOf(std::string const& baseClassName, CXType const& childClass) noexcept
+{
+	//Check if the base class is actually the child class
+	if (Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(childClass))) == baseClassName)
+	{
+		return true;
+	}
+
+	InheritanceSearch searchData{baseClassName, false};
+
+	//Recursively search in class childClass parents
+	clang_visitChildren(clang_getTypeDeclaration(childClass), [](CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData)
+	{
+		InheritanceSearch& searchData = *reinterpret_cast<InheritanceSearch*>(clientData);
+
+		if (cursor.kind == CXCursorKind::CXCursor_CXXBaseSpecifier)
+		{
+			if (isBaseOf(searchData.baseClassName, clang_getCanonicalType(clang_getCursorType(cursor))))
+			{
+				searchData.doesInherit = true;
+
+				return CXChildVisitResult::CXChildVisit_Break;
+			}
+			else
+			{
+				return CXChildVisitResult::CXChildVisit_Continue;
+			}
+		}
+		else if (cursor.kind == CXCursorKind::CXCursor_CXXFinalAttr || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
+		{
+			return CXChildVisitResult::CXChildVisit_Continue;
+		}
+		else
+		{
+			return CXChildVisitResult::CXChildVisit_Break;
+		}
+	}, &searchData);
+
+	return searchData.doesInherit;
 }
 
 void ClassParser::addFieldResult(FieldParsingResult&& result) noexcept
@@ -251,11 +301,7 @@ void ClassParser::addFieldResult(FieldParsingResult&& result) noexcept
 		getParsingResult()->parsedClass->fields.emplace_back(std::move(result.parsedField).value());
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }
 
 void ClassParser::addMethodResult(MethodParsingResult&& result) noexcept
@@ -270,11 +316,7 @@ void ClassParser::addMethodResult(MethodParsingResult&& result) noexcept
 		getParsingResult()->parsedClass->methods.emplace_back(std::move(result.parsedMethod).value());
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }
 
 void ClassParser::addClassResult(ClassParsingResult&& result) noexcept
@@ -285,11 +327,11 @@ void ClassParser::addClassResult(ClassParsingResult&& result) noexcept
 	{
 		switch (result.parsedClass->entityType)
 		{
-			case EntityInfo::EType::Struct:
+			case EEntityType::Struct:
 				getParsingResult()->parsedClass->nestedStructs.emplace_back(std::make_shared<NestedStructClassInfo>(std::move(result.parsedClass).value(), context.currentAccessSpecifier));
 				break;
 
-			case EntityInfo::EType::Class:
+			case EEntityType::Class:
 				getParsingResult()->parsedClass->nestedClasses.emplace_back(std::make_shared<NestedStructClassInfo>(std::move(result.parsedClass).value(), context.currentAccessSpecifier));
 				break;
 
@@ -299,11 +341,7 @@ void ClassParser::addClassResult(ClassParsingResult&& result) noexcept
 		}
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }
 
 void ClassParser::addEnumResult(EnumParsingResult&& result) noexcept
@@ -315,9 +353,5 @@ void ClassParser::addEnumResult(EnumParsingResult&& result) noexcept
 		getParsingResult()->parsedClass->nestedEnums.emplace_back(NestedEnumInfo(std::move(result.parsedEnum).value(), context.currentAccessSpecifier));
 	}
 
-	//Append errors if any
-	if (!result.errors.empty())
-	{
-		context.parsingResult->errors.insert(getParsingResult()->errors.cend(), std::make_move_iterator(result.errors.cbegin()), std::make_move_iterator(result.errors.cend()));
-	}
+	getParsingResult()->appendResultErrors(result);
 }

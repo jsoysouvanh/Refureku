@@ -11,10 +11,8 @@
 #include <vector>
 #include <type_traits>
 
-#include "Refureku/Utility/TypeTraits.h"
 #include "Refureku/TypeInfo/TypePart.h"
-#include "Refureku/TypeInfo/Archetypes/FundamentalArchetypes.h"
-#include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 
 namespace rfk
 {
@@ -23,9 +21,6 @@ namespace rfk
 		private:
 			template <typename T>
 			static void				fillType(Type& out_type)	noexcept;
-
-			template <typename T>
-			static Archetype const* getArchetype() noexcept;
 
 		public:
 			/** Archetype of this type. */
@@ -115,12 +110,12 @@ namespace rfk
 			inline uint32		getArraySize()				const	noexcept;
 
 			/**
-			*	@param type The other type to compare with.
+			*	@param other The other type to compare with.
 			*
 			*	@return true if two types match together if they represent the same type.
 			*			Pointers and nullptr_t types also match together.
 			*/
-			bool				match(Type const& type)		const	noexcept;
+			bool				match(Type const& other)		const	noexcept;
 
 			/**
 			*	@return a string representation of the content of this type.

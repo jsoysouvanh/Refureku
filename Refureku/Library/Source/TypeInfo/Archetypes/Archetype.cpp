@@ -2,13 +2,12 @@
 
 #include <cassert>
 
-#include "Refureku/TypeInfo/Methods/StaticMethod.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
 
 using namespace rfk;
 
-Archetype::Archetype(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
-	Entity(std::forward<std::string>(newName), newId, EKind::Archetype),
-	category{newCategory},
+Archetype::Archetype(std::string&& newName, uint64 newId, EKind kind, uint64 newMemorySize) noexcept:
+	Entity(std::forward<std::string>(newName), newId, kind),
 	memorySize{newMemorySize}
 {
 }

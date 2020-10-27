@@ -4,9 +4,9 @@
 [![Build Status](https://travis-ci.com/jsoysouvanh/Kodgen.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Kodgen)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0de06d87df194f568e6f4c0f97c00fa8)](https://www.codacy.com/manual/jsoysouvanh/Kodgen?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Kodgen&amp;utm_campaign=Badge_Grade)
 
-Kodgen is a C++17 library based on libclang. It provides tools to parse C++ source files, extract data from it, and generate files from the parsed data. The C++ entities parsed in the current implementation are namespaces, structs/classes, member fields, member methods, enums and enum values.
+Kodgen is a C++17 library based on libclang. It provides tools to parse C++ source files, extract data from it, and generate files from the parsed data. The C++ entities parsed in the current implementation are namespaces, structs/classes, non-member and member variables, non-member and member functions, enums and enum values.
 
-Snippets of this README contain a lot of customizable keywords. All of them will be annotated with a # followed by a number, so that you can find easily which setting to update to change them at the [end of this document](#referenced-settings).
+Snippets in this README contain a lot of customizable keywords. All of them will be annotated with a # followed by a number, so that you can find easily which setting to update to change them at the [end of this document](#referenced-settings).
 
 Usage:
 ```cpp
@@ -28,7 +28,7 @@ namespace ExampleNamespace Namespace()	//#3
         enum class Enum() /* #5 */ ExampleEnum
         {
             EnumValue1 = 0,
-            EnumValue2 EnumValue() = 1  //#6
+            EnumValue2 EnumValue() /* #6 */ = 1
         };
         
         // -v Mark a field for parsing
@@ -39,28 +39,37 @@ namespace ExampleNamespace Namespace()	//#3
         Method() //#8
         void ExampleMethod() {}
     };
+
+    Variable()
+    inline int variable = 3;
 }
+
+Function()
+inline void function() {}
 
 ```
 
 ```cpp
-#include <Parsing/FileParser.h>
-#include <CodeGen/FileGenerator.h>
+#include <Kodgen/Parsing/FileParserFactory.h>
+#include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/CodeGen/FileGenerator.h>
+#include <Kodgen/CodeGen/FileGenerationUnit.h>
 
 //...
 
-kodgen::FileParser	fileParser;
-kodgen::FileGenerator	fileGenerator;
+kodgen::FileParserFactory<kodgen::FileParser>	fileParserFactory;
+kodgen::FileGenerator				fileGenerator;
+kodgen::FileGenerationUnit			fileGenerationUnit;
 
-//Setup parser and generator settings if not done already
-fileParser.parsingSettings.projectIncludeDirectories.emplace("Path/To/Include/Directory");
+//Setup parsing and generation settings if not done already
+fileParserFactory.parsingSettings.addProjectIncludeDirectory("Path/To/Include/Directory");
 
-fileGenerator.outputDirectory = "Path/To/The/Output/Directory";
-fileGenerator.toParseDirectories.emplace("Path/To/A/Directory/To/Parse");
-fileGenerator.ignoredDirectories.emplace("Path/To/A/Directory/To/Ignore");
-fileGenerator.ignoredDirectories.emplace("Path/To/The/Output/Directory"); //Don't parse generated files
+fileGenerator.settings.setOutputDirectory("Path/To/The/Output/Directory");
+fileGenerator.settings.addToParseDirectory("Path/To/A/Directory/To/Parse");
+fileGenerator.settings.addIgnoredDirectory("Path/To/A/Directory/To/Ignore");
+fileGenerator.settings.addIgnoredDirectory("Path/To/The/Output/Directory"); //Don't parse generated files
 
-kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);
 
 if (genResult.completed)
 {
@@ -86,6 +95,8 @@ else
     - [Builtin properties](#builtin-properties)
   - [GeneratedCodeTemplate](#generatedcodetemplate)
   - [FileParser](#fileparser)
+  - [FileParserFactory](#fileparserfactory)
+  - [FileGenerationUnit](#filegenerationunit)
   - [FileGenerator](#filegenerator)
   - [Referenced Settings](#referenced-settings)
 - [Cross-platform compatibility](#cross-platform-compatibility)
@@ -147,26 +158,31 @@ else
     ```
 
 ## Workflow
-To begin with, let's talk a bit about how Kodgen works.  Code generation is based on 3 main classes: [FileParser](#fileparser), [GeneratedCodeTemplate](#generatedcodetemplate) and [FileGenerator](#filegenerator). When the code generation process starts (call to FileGenerator::generateFiles), source files are parsed by the FileParser and the retrieved data are passed to the FileGenerator. From that point, the FileGenerator will check for each parsed entity which GeneratedCodeTemplate to use. If a GeneratedCodeTemplate is found, code is generated for this entity, otherwise nothing is generated. To sum up:
- 1. The FileParser extracts data from source file;
- 2. The FileGenerator choses the right GeneratedCodeTemplate for a given parsed entity;
- 3. The GeneratedCodeTemplate generates the code;
+To begin with, let's talk a bit about how Kodgen works.  Code generation is based on 5 main classes: [FileParser](#fileparser), [FileParserFactory](#) [GeneratedCodeTemplate](#generatedcodetemplate), [FileGenerator](#filegenerator) and [FileGenerationUnit](#). When the code generation process starts (call to FileGenerator::generateFiles), header files are concurrently parsed by FileParsers generated by the FileParserFactory. Each time a file has been parsed,  the retrieved data are forwarded to the a new FileGenerationUnit. This FileGenerationUnit will check for each parsed entity which GeneratedCodeTemplate to use. If a GeneratedCodeTemplate is found for a given entity, code is generated for this entity, otherwise nothing is generated. To sum up:
+ 1. Each file is parsed by a FileParser generated by the FileParserFactory;
+ 2. Parsed data are forwarded to a new FileGenerationUnit;
+ 3. For each entity in the parsed data:
+	 - Select the right GeneratedCodeTemplate;
+	 - If a GeneratedCodeTemplate is found, generates the code;
 
-Each of those 3 classes contain a bunch of settings and overridable methods, which make the process flexible enough for a wide amount of use cases.
+Each of those 5 classes contain a bunch of settings and/or overridable methods, which make the process flexible.
 
 ## Customization
 ### Logger
-Kodgen defines a logger interface in Misc/ILogger.h. You can inherit from it, override the ILogger::log method, and provide an instance of your logger to the FileParser and the FileGenerator. If you don't want to bother with implementing your own logger, you can use kodgen::DefaultLogger (Misc/DefaultLogger.h).
+Kodgen defines a logger interface in Misc/ILogger.h. You can inherit from it, override the ILogger::log method, and provide an instance of your logger to the FileParserFactory and the FileGenerator. If you don't want to bother with implementing your own logger, you can use kodgen::DefaultLogger (Misc/DefaultLogger.h).
+
+> **Note:** Logger is shared among all FileParsers and FileGenerationUnits when the generation process is multithreaded, so make sure to synchronize the stream if you want to log safely.
 
 ```cpp
+//CustomLogger.h
 #pragma once
 
-#include <Misc/ILogger.h>
+#include <Kodgen/Misc/ILogger.h>
 
 class CustomLogger : public kodgen::ILogger
 {
     public:
-        virtual void log(std::string const& message, kodgen::ELogSeverity logSeverity) noexcept
+        virtual void log(std::string const& message, kodgen::ILogger::ELogSeverity logSeverity) noexcept
         {
             //Your implementation
         }
@@ -174,25 +190,25 @@ class CustomLogger : public kodgen::ILogger
 ```
 
 ```cpp
-#include <Parsing/FileParser.h>
-#include <CodeGen/FileGenerator.h>
+#include <Kodgen/Parsing/FileParserFactory.h>
+#include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/CodeGen/FileGenerator.h>
 
 #include "CustomLogger.h"
 
 //...
 
-kodgen::FileParser fileParser;
+kodgen::FileParserFactory<kodgen::FileParser> fileParserFactory;
 kodgen::FileGenerator fileGenerator;
 
-CustomLogger logger; //Can replace CustomLogger by kodgen::DefaultLogger
+CustomLogger logger;
 
-//Provide your logger instance to the file parser and file generator
-fileParser.logger = &logger;
+//Provide your logger to the file parser factory and the file generator
+fileParserFactory.logger = &logger;
 fileGenerator.logger = &logger;
-
 ```
 
-Providing a logger instance to the FileParser and the FileGenerator is not mandatory, however it is highly recommended if you want to keep track of what's happening. 
+Providing a logger instance to the FileParserFactory and the FileGenerator is not mandatory, however it is highly recommended if you want to keep track of what's happening. 
 
 ### Properties / PropertyRules
 Properties are used to attach some metadata to a parsed entity. There are 2 kinds of properties:
@@ -218,9 +234,10 @@ The DefaultSimplePropertyRule class does most of the job in most cases. It imple
 Let's say we want to make a property called "ExampleSimpleProperty" which is valid only when attached to a namespace, a struct or a class. We would write the following:
 
 ```cpp
+//ExampleSimplePropertyRule.h
 #pragma once
 
-#include <Properties/DefaultSimplePropertyRule.h>
+#include <Kodgen/Properties/DefaultSimplePropertyRule.h>
 
 class ExampleSimplePropertyRule : kodgen::DefaultSimplePropertyRule
 {
@@ -234,11 +251,7 @@ class ExampleSimplePropertyRule : kodgen::DefaultSimplePropertyRule
 
 ExampleSimplePropertyRule::ExampleSimplePropertyRule() noexcept:
     kodgen::DefaultSimplePropertyRule("ExampleSimpleProperty",
-                                      {
-                                          kodgen::EntityInfo::EType::Namespace,
-                                          kodgen::EntityInfo::EType::Struct,
-                                          kodgen::EntityInfo::EType::Class
-                                      },
+                                      kodgen::EEntityType::Namespace | kodgen::EEntityType::Struct | kodgen::EEntityType::Class,
                                       "This is a description for this example property rule.")
 {
 }
@@ -264,7 +277,7 @@ namespace ExampleNamespace Namespace(ExampleSimpleProperty) //#3
 You can still of course override isPropertyGroupValid and isEntityValid if you want to perform additional checks.
 
 #### ComplexPropertyRule
-To make a new valid complex property, we need to inherit from kodgen::ComplexPropertyRule (Properties/ComplexPropertyRule.h). In this new class, we **must** override the isMainPropSyntaxValid method, as well as the isSubPropSyntaxValid method. Both isPropertyGroupValid and isEntityValid return true by default, so it is not necessary to override them if you have no additional checks to perform.
+To make a new valid complex property, we need to inherit from kodgen::ComplexPropertyRule (Kodgen/Properties/ComplexPropertyRule.h). In this new class, we **must** override the isMainPropSyntaxValid method, as well as the isSubPropSyntaxValid method. Both isPropertyGroupValid and isEntityValid return true by default, so it is not necessary to override them if you have no additional checks to perform.
 
 The framework already provides some ComplexPropertyRule implementations which do most of the work for you.
 
@@ -276,9 +289,10 @@ Just like [DefaultSimplePropertyRule](#defaultsimplepropertyrule), DefaultComple
 Let's say we want to make a property called "ExampleComplexProperty" which is valid only when attached to a method, and which has no subproperty constraints. We would write the following:
 
 ```cpp
+//ExampleComplexPropertyRule.h
 #pragma once
 
-#include <Properties/DefaultComplexPropertyRule.h>
+#include <Kodgen/Properties/DefaultComplexPropertyRule.h>
 
 class ExampleComplexPropertyRule : kodgen::DefaultComplexPropertyRule
 {
@@ -296,14 +310,14 @@ class ExampleComplexPropertyRule : kodgen::DefaultComplexPropertyRule
 
 ExampleComplexPropertyRule::ExampleComplexPropertyRule() noexcept:
     kodgen::DefaultComplexPropertyRule("ExampleComplexProperty",
-                                      { kodgen::EntityInfo::EType::Method },
+                                      kodgen::EEntityType::Method,
                                       "This is a description for this example property rule.")
 {
 }
 
 bool ExampleComplexPropertyRule::isSubPropSyntaxValid(std::string const& subProperty,
-                                          uint8 subPropIndex,
-                                          std::string& out_errorDescription) const noexcept
+						      uint8 subPropIndex,
+						      std::string& out_errorDescription) const noexcept
 {
     return true;
 }
@@ -329,9 +343,10 @@ class Class() /* #4 */ ExampleClass
 A FixedComplexPropertyRule is a [DefaultComplexPropertyRule](#defaultcomplexpropertyrule) which is designed to accept a fixed number of typed subproperties. Supported types are int32, uint32, float and string. All type checks are already implemented, so it is really easy to create typed complex properties on top of that. Let's say we want to create a Range property which takes 2 floats (min and max) as subproperties, we could write:
 
 ```cpp
+//RangePropertyRule.h
 #pragma once
 
-#include <Properties/FixedComplexPropertyRule.h>
+#include <Kodgen/Properties/FixedComplexPropertyRule.h>
 
 class RangePropertyRule : public kodgen::FixedComplexPropertyRule
 {
@@ -344,15 +359,13 @@ class RangePropertyRule : public kodgen::FixedComplexPropertyRule
 ```
 
 ```cpp
-#include "Properties/RangePropertyRule.h"
+#include "RangePropertyRule.h"
 
-#include <InfoStructures/FieldInfo.h>
+#include <Kodgen/InfoStructures/FieldInfo.h>
 
 RangePropertyRule::RangePropertyRule() noexcept:
     kodgen::FixedComplexPropertyRule("Range",
-                                     {
-                                         kodgen::EntityInfo::EType::Field
-                                     },
+                                     kodgen::EEntityType::Field,
                                      "Defines a float range between min and max.")
 {
     subProperties.emplace_back(kodgen::ComplexPropertySubProperty::EType::Float, "min", "Minimum of the range.");
@@ -438,7 +451,7 @@ class Class(ParseAllNested) /* #4 */ ExampleClass
 ```
 
 ##### GenCodeTemplate (All entities)
-GenCodeTemplate is a complex property used to specify which [GeneratedCodeTemplate](#generatedcodetemplate) to use for a specific entity. Just pass the name of the GeneratedCodeTemplate as a subproperty (between ""), and the FileGenerator will use it to generate the code of the tagged entity.
+GenCodeTemplate is a complex property used to specify which [GeneratedCodeTemplate](#generatedcodetemplate) to use for a specific entity. Just pass the name of the GeneratedCodeTemplate as first subproperty (between ""), and the FileGenerator will use it to generate the code of the tagged entity.
 
 ```cpp
 #pragma once
@@ -451,18 +464,18 @@ class Class(GenCodeTemplate("ExampleGeneratedCodeTemplate")) /* #4 */
 ``` 
 
 ### GeneratedCodeTemplate
-GeneratedCodeTemplate is the class which actually generates the code (or text or whatever) into a file.  It has a single overridable method called GeneratedCodeTemplate::generateCode, which takes a file and a parsed entity data as parameter.
-To create your own code generation, inherit from GeneratedCodeTemplate and override the generateCode method.
+GeneratedCodeTemplate is the class which actually generates the code (or text or whatever) into a file.  It has a single const overridable method called GeneratedCodeTemplate::generateCode, which takes a file, the parsed entity data, the source FileGenerationUnit and an error string as parameter.
+To create your own code generation, inherit from GeneratedCodeTemplate and override the generateCode method. Note that the const qualifier is important because GeneratedCodeTemplates are shared between all threads.
 
 ```cpp
 #pragma once
 
-#include <CodeGen/GeneratedCodeTemplate.h>
+#include <Kodgen/CodeGen/GeneratedCodeTemplate.h>
 
 class ExampleGeneratedCodeTemplate : public kodgen::GeneratedCodeTemplate
 {
     public:
-        virtual void generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept override;
+        virtual void generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept override;
 };
 ```
 
@@ -471,16 +484,16 @@ class ExampleGeneratedCodeTemplate : public kodgen::GeneratedCodeTemplate
 
 using namespace kodgen;
 
-void ExampleGeneratedCodeTemplate::generateCode(GeneratedFile& generatedFile, EntityInfo const& entityInfo) noexcept
+void ExampleGeneratedCodeTemplate::generateCode(GeneratedFile& generatedFile, EntityInfo const& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
 {
-    if (entityInfo.entityType == EntityInfo::EType::Namespace)
+    if (entityInfo.entityType == EEntityType::Namespace)
     {
         NamespaceInfo const& ni = static_cast<NamespaceInfo const&>(entityInfo);
         //Do whatever with the namespace data...
         //ex: generatedFile.writeLine("Namespace : " + ni.name);
     }
-    else if (entityInfo.entityType == EntityInfo::EType::Class ||
-             entityInfo.entityType == EntityInfo::EType::Struct)
+    else if (entityInfo.entityType == EEntityType::Class ||
+             entityInfo.entityType == EEntityType::Struct)
     {
         StructClassInfo const& sci = static_cast<NamespaceInfo const&>(entityInfo);
         //Do whatever with struct/class data...
@@ -490,108 +503,86 @@ void ExampleGeneratedCodeTemplate::generateCode(GeneratedFile& generatedFile, En
 }
 ```
 
+If an error occurs during code generation (you find some unexpected data for example), just fill the out_errorDescription message and return immediately. The generation for this entity file will be aborted and the error will be forwarded to the FileGenerationResult.
+
 ### FileParser
-Most of the settings available in the file parser are public variables, but it is cleaner to make a new class which inherits from kodgen::FileParser to have default settings for you own parser and to be able to override some methods if necessary.
+FileParser only contains 2 overridable methods which are FileParser::preParse and FileParser::postParse which are respectively called just before and after parsing each file, regardless the parsing succeeded or not.
+
+### FileParserFactory
+FileParserFactory is used to generate FileParsers. It contains all the settings used for parsing, as well as some overridable methods. 
 
 ```cpp
 #pragma once
 
-#include <Parsing/FileParser.h>
+#include <Kodgen/Parsing/FileParserFactory.h>
 
-class ExampleFileParser : public kodgen::FileParser
+//Replace this by the header of the file parser you want to use for this factory
+#include "ExampleFileParser.h"
+
+//Include your property rules if you have any
+#include "ExampleSimplePropertyRule.h"
+#include "ExampleComplexPropertyRule.h"
+
+class ExampleFileParserFactory : public kodgen::FileParserFactory<ExampleFileParser>
 {
     private:
-        //Read the Properties section to understand those 2 fields
         ExampleSimplePropertyRule _simplePropertyRule;
         ExampleComplexPropertyRule _complexPropertyRule;
 
-    protected:
-        virtual void preParse(fs::path const& parseFile) noexcept override;
-        virtual void postParse(fs::path const& parseFile, kodgen::FileParsingResult const& result) noexcept override;
-};
-
     public:
-        ExampleFileParser() noexcept;
+        ExampleFileParserFactory() noexcept;
+};
 ```
-
-The preParse method is called before a file is actually parsed by the FileParser, and the postParse method right after (whether the parsing successed or not). You can override them if you want to add a special behaviour at these key points of the program (like logs or whatever).
 
 ```cpp
-#include "ExampleFileParser.h"
+#include "ExampleFileParserFactory.h"
 
-ExampleFileParser::ExampleFileParser() noexcept:
-    kodgen::FileParser()
+ExampleFileParserFactory::ExampleFileParserFactory() noexcept:
+    kodgen::FileParserFactory<ExampleFileParser>()
 {
-    //Here we can setup the file parser settings by accessing the parsingSettings variable
-    
-    //Should the FileParser immediately abort a file parsing when it encounters an error?
+    //We abort parsing if we encounter a single error during parsing
     parsingSettings.shouldAbortParsingOnFirstError = true;
 
-    //Should the FileParser parse all entities whether they are tagged or not?
-    parsingSettings.shouldParseAllEntities = false; //#10
-
-    //Define the property macros for each entity
-    parsingSettings.propertyParsingSettings.namespaceMacroName = "Namespace"; //#3
-    //You can mark a namespace for parsing by writing
-    //namespace some_namespace Namespace() {}
-
-    parsingSettings.propertyParsingSettings.classMacroName = "Class";  //#4
-    //You can mark a class for parsing by writing
-    //class Class() SomeClass {};
-    
-    //Equivalent setting exists for structs, fields, methods, enums and enum values...
-
-    //Ignore and remove any character before collecting properties
+    //Ignore and remove space character before collecting properties
     parsingSettings.propertyParsingSettings.ignoredCharacters = {' '};
-    //Ignoring ' ' will make ExampleClassMacro(a,    b, c) equivalent to ExampleClassMacro(a,b,c)
 
-    //What character should be used to separate entity properties?
+    //Each property will be separated with a , (and potentially some spaces as they are ignored)
     parsingSettings.propertyParsingSettings.propertySeparator = ',';
-    //class ExampleClassMacro(a, b, c) SomeClass {};
-    //-------------------------^--^---------
 
-    //Which delimiter to use to enclose subproperties?
+    //Subproperties are surrounded by ()
     parsingSettings.propertyParsingSettings.subPropertyEnclosers[0] = '(';
     parsingSettings.propertyParsingSettings.subPropertyEnclosers[1] = ')';
-    //class ExampleClassMacro( ExampleProperty(1, 2) ) SomeClass {};
-    //----------------------------------------^----^-----
 
-    //What character should be used to separate a property subproperties?
+    //Each subproperty will be separated with a , (and potentially some spaces as they are ignored)
     parsingSettings.propertyParsingSettings.subPropertySeparator = ',';
-    //class ExampleClassMacro( ExampleProperty(1, 2) ) SomeClass {};
-    //------------------------------------------^------
 
-    //Add property rules
+    //Define the Refureku property macros
+    parsingSettings.propertyParsingSettings.namespaceMacroName = "Namespace";
+    parsingSettings.propertyParsingSettings.classMacroName = "Class";
+    parsingSettings.propertyParsingSettings.structMacroName = "Struct";
+    parsingSettings.propertyParsingSettings.variableMacroName = "Variable";
+    parsingSettings.propertyParsingSettings.fieldMacroName = "Field";
+    parsingSettings.propertyParsingSettings.functionMacroName = "RFKFunction";
+    parsingSettings.propertyParsingSettings.methodMacroName = "Method";
+    parsingSettings.propertyParsingSettings.enumMacroName = "Enum";
+    parsingSettings.propertyParsingSettings.enumValueMacroName = "EnumVal";
+
+    //Setup property rules
     parsingSettings.propertyParsingSettings.simplePropertyRules.emplace_back(&_simplePropertyRule);
     parsingSettings.propertyParsingSettings.complexPropertyRules.emplace_back(&_complexPropertyRule);
-
-    //Add path to project include directories. You might want to setup that somewhere else
-    //parsingSettings.projectIncludeDirectories.emplace("Path/To/Include/Directory");
-}
-
-void ExampleFileParser::preParse() noexcept
-{
-    //Your implementation
-}
-
-void ExampleFileParser::postParse() noexcept
-{
-    //Your implementation
 }
 ```
 
->**Note:** Adding the project include directories is mandatory. Indeed, the parser needs to know where it can find the files you include or it won't be able to resolve all symbols in a translation unit.
-
-FileParser settings can also be loaded at runtime from a .toml file. A template of this toml file with all editable settings will be available in the repository, but it looks like this:
+FileParser settings can also be loaded at runtime from a .toml file. A template of this toml file with all editable settings will be available in the repository. It looks like this:
 
 ```ini
-[FileParserSettings]
+[FileParsingSettings]
 shouldAbortParsingOnFirstError = true
 shouldParseAllEntities = false
 
 projectIncludeDirectories = [ '''Path/To/Include/Directory''' ]
 
-[FileParserSettings.Properties]
+[FileParsingSettings.Properties]
 propertySeparator = ","
 subPropertySeparator = ","
 subPropertyStartEncloser = "("
@@ -628,26 +619,26 @@ else
 }
 ```
 
+### FileGenerationUnit
+FileGenerationUnit is the class which will actually generate some code from parsed data. You can check directly the FileGenerationUnit.h file to have an overview of all overridable methods.
+
 ### FileGenerator
-Just like the FileParser class, FileGenerator settings are public, but to be able to override methods and to keep things clean, it is recommended that you create a new class.
+The file generator contains a bunch of settings used during file generation. Default settings can be setup in a child class constructor.
 
 ```cpp
+//ExampleFileGenerator.h
 #pragma once
 
-#include <CodeGen/FileGenerator.h>
+#include <Kodgen/CodeGen/FileGenerator.h>
 
 class ExampleFileGenerator : public kodgen::FileGenerator
 {
     private:
-        ExampleGeneratedCodeTemplate _exampleGeneratedCodeTemplate;
+        /** Code templates used by this generator. */
+        ExampleGeneratedCodeTemplate	_exampleCodeTemplate;
 
     public:
         ExampleFileGenerator() noexcept;
-
-        virtual void preGenerateFile() noexcept override;
-        virtual void postGenerateFile() noexcept override;
-        virtual void writeHeader(kodgen::GeneratedFile& file, FileParsingResult const& parsingResult) const noexcept override;
-        virtual void writeFooter(kodgen::GeneratedFile& file, FileParsingResult const& parsingResult) const noexcept override;
 };
 ```
 
@@ -657,53 +648,22 @@ class ExampleFileGenerator : public kodgen::FileGenerator
 ExampleFileGenerator::ExampleFileGenerator() noexcept:
     kodgen::FileGenerator()
 {
-    //Extension used by generated files
-    generatedFilesExtension = ".extension.h";
+    //Generated files will use .rfk.h extension
+    settings.generatedFilesExtension = ".rfk.h";
 
-    //Setup extensions to parse
-    supportedExtensions.emplace(".h");
-    supportedExtensions.emplace(".hpp");
+    //Only parse .h and .hpp files
+    settings.supportedExtensions.emplace(".h");
+    settings.supportedExtensions.emplace(".hpp");
 
-    //Name of the file containing all macros
-    entityMacrosFilename = "EntityMacros.h"; //#2
-
-    //Add generated code templates to this generator
-    addGeneratedCodeTemplate("ExampleTemplate", &_exampleGeneratedCodeTemplate);
-    //Can now write namespace ExampleNamespace Namespace(GenCodeTemplate("ExampleTemplate")) {}
-
-    //Use a given GeneratedCodeTemplate by default
-    //when GenCodeTemplate complex property is not specified
-    setDefaultGeneratedCodeTemplate(kodgen::EntityInfo::EType::Namespace, "ExampleTemplate");
-    //Now if we write namespace ExampleNamespace Namespace() {}, ExampleTemplate will be used by default
-
-    //The following settings are contained in the FileGenerator but it is likely that you will want to setup them from the outside
-    //outputDirectory = "Path/To/The/Output/Directory" //#1
-    //toParseFiles.emplace("Path/To/A/File/To/Parse");
-    //toParseDirectories.emplace("Path/To/A/Directory/To/Parse");
-    //ignoredFiles.emplace("Path/To/A/File/To/Ignore");
-    //ignoredDirectories.emplace("Path/To/A/Directory/To/Ignore");
-}
-
-void ExampleFileGenerator::preGenerateFile() const noexcept
-{
-}
-
-void ExampleFileGenerator::postGenerateFile() const noexcept
-{
-}
-
-void ExampleFileGenerator::writeHeader(kodgen::GeneratedFile& file, FileParsingResult const& parsingResult) const noexcept
-{
-}
-
-void ExampleFileGenerator::writeFooter(kodgen::GeneratedFile& file, FileParsingResult const& parsingResult) const noexcept
-{
+    //Bind name -> templates
+    addGeneratedCodeTemplate("Example", &_exampleCodeTemplate);
 }
 ```
 
-FileGenerator settings can also be loaded at runtime from a .toml file. A template of this toml file with all editable settings will be available in the repository, but it looks like this:
+FileGenerator settings can also be loaded at runtime from a .toml file:
 
 ```ini
+[FileGenerationSettings]
 generatedFilesExtension = ".extension.h"
 supportedExtensions	= [".h", ".hpp"]
 entityMacrosFilename 	= "EntityMacros.h"
@@ -738,14 +698,14 @@ All paths specified in the settings should be either absolute (best option), or 
 ### Referenced Settings
 - #1: FileGenerator::outputDirectory
 - #2: FileGenerator::entityMacrosFilename
-- #3: FileParser::parsingSettings.propertyParsingSettings.namespaceMacroName 
-- #4: FileParser::parsingSettings.propertyParsingSettings.classMacroName 
-- #5: FileParser::parsingSettings.propertyParsingSettings.enumMacroName 
-- #6: FileParser::parsingSettings.propertyParsingSettings.enumValueMacroName
-- #7: FileParser::parsingSettings.propertyParsingSettings.fieldMacroName 
-- #8: FileParser::parsingSettings.propertyParsingSettings.methodMacroName 
-- #9: FileParser::parsingSettings.propertyParsingSettings.structMacroName 
-- #10: FileParser::parsingSettings.shouldParseAllEntities
+- #3: FileParserFactory::parsingSettings.propertyParsingSettings.namespaceMacroName 
+- #4: FileParserFactory::parsingSettings.propertyParsingSettings.classMacroName 
+- #5: FileParserFactory::parsingSettings.propertyParsingSettings.enumMacroName 
+- #6: FileParserFactory::parsingSettings.propertyParsingSettings.enumValueMacroName
+- #7: FileParserFactory::parsingSettings.propertyParsingSettings.fieldMacroName 
+- #8: FileParserFactory::parsingSettings.propertyParsingSettings.methodMacroName 
+- #9: FileParserFactory::parsingSettings.propertyParsingSettings.structMacroName 
+- #10: FileParserFactory::parsingSettings.shouldParseAllEntities
 
 ## Cross-platform compatibility
 This library has been tested and is stable on the following configurations:

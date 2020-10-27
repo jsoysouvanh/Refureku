@@ -7,64 +7,74 @@
 
 #pragma once
 
-#include <unordered_map>
-#include <unordered_set>
-#include <string>
+#include <set>
+#include <cassert>
+#include <type_traits>	//std::is_base_of
+#include <chrono>
 
-#include "Kodgen/Misc/Filesystem.h"
 #include "Kodgen/Misc/ILogger.h"
-#include "Kodgen/CodeGen/GeneratedCodeTemplate.h"
+#include "Kodgen/Misc/TomlUtility.h"
+#include "Kodgen/CodeGen/FileGenerationSettings.h"
 #include "Kodgen/CodeGen/FileGenerationResult.h"
-#include "Kodgen/CodeGen/GeneratedFile.h"
-#include "Kodgen/Parsing/FileParser.h"
+#include "Kodgen/CodeGen/FileGenerationUnit.h"
+#include "Kodgen/Parsing/FileParserFactory.h"
 #include "Kodgen/Properties/NativeProperties/ParseAllNestedPropertyRule.h"
 #include "Kodgen/Properties/NativeProperties/GenCodeTemplatePropertyRule.h"
+#include "Kodgen/Threading/ThreadPool.h"
+#include "Kodgen/Threading/TaskHelper.h"
 
 namespace kodgen
 {
 	class FileGenerator
 	{
 		private:
-			/** All generated code templates usable by this generator. */
-			std::unordered_map<std::string,	GeneratedCodeTemplate*>			_generatedCodeTemplates;
-			
-			/** Default generated code templates to use when none is specified in entity property parameters. */
-			std::unordered_map<EntityInfo::EType, GeneratedCodeTemplate*>	_defaultGeneratedCodeTemplates;
-			
+			/** Section name used in the toml file for FileGenerator settings. */
+			static constexpr char const*	_tomlSettingsSectionName	= "FileGenerationSettings";
+
 			/** Native property rules. */
-			ParseAllNestedPropertyRule										_parseAllNestedPropertyRule;
-			GenCodeTemplatePropertyRule										_generatedCodeTemplatePropertyRule;
+			ParseAllNestedPropertyRule		_parseAllNestedPropertyRule;
+			GenCodeTemplatePropertyRule		_generatedCodeTemplatePropertyRule;
 
 			/**
-			*	@brief Parse a file and generate its paired file.
-			*
-			*	@param parser		The file parser to use.
-			*	@param genResult	Reference to the generation result to fill during file generation.
-			*	@param pathToFile	Path to the source file to parse.
+			*	@brief Process all provided files on multiple threads.
+			*	
+			*	@param fileParserFactory	Factory to use to generate a file parser for each thread.
+			*	@param fileGenerationUnit	Generation unit used to generate files. It must have a clean state when this method is called.
+			*	@param toProcessFiles		Collection of all files to process.
+			*	@param out_genResult		Reference to the generation result to fill during file generation.
+			*	@param threadCount			Number of additional threads to use to process the files.
 			*/
-			void					processFile(FileParser&				parser,
-												FileGenerationResult&	genResult,
-												fs::path const&			pathToFile)									noexcept;
+			template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
+			void	processFilesMultithread(FileParserFactoryType<FileParserType>&	fileParserFactory,
+											FileGenerationUnitType&					fileGenerationUnit,
+											std::set<fs::path> const&				toProcessFiles,
+											FileGenerationResult&					out_genResult,
+											uint32									threadCount)		const	noexcept;
 
 			/**
-			*	@brief Generate a file based on the @param genResult.
+			*	@brief Process all provided files on the main thread.
 			*
-			*	@param genResult		Reference to the generation result to fill during file generation.
-			*	@param parsingResult	Result of a file parsing used to generate the new file.
+			*	@param fileParserFactory	Factory to use to generate the file parser.
+			*	@param fileGenerationUnit	Generation unit used to generate files. It must have a clean state when this method is called.
+			*	@param toProcessFiles		Collection of all files to process.
+			*	@param out_genResult		Reference to the generation result to fill during file generation.
 			*/
-			void					generateFile(FileGenerationResult&		genResult,
-												 FileParsingResult const&	parsingResult)							noexcept;
-			
+			template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
+			void	processFilesMonothread(FileParserFactoryType<FileParserType>&	fileParserFactory,
+										   FileGenerationUnitType&					fileGenerationUnit,
+										   std::set<fs::path> const&				toProcessFiles,
+										   FileGenerationResult&					out_genResult)		const	noexcept;
+
 			/**
-			*	@brief Retrieve the appropriate generated code template to use for a given entity.
+			*	@brief Identify all files which will be regenerated.
+			*	
+			*	@param out_genResult		Reference to the generation result to fill during file generation.
+			*	@param forceRegenerateAll	Should all files be regenerated or not (regardless of FileGenerator::shouldRegenerateFile() returned value).
 			*
-			*	@param entityInfo	Information on a parsed entity.
-			*	@param out_error	Reference to a file generation error. It is filled with an error if something wrong happen, else remains unchanged.
-			*
-			*	@return The appropriate generated code template if found, else nullptr.
+			*	@return A collection of all files which will be regenerated.
 			*/
-			GeneratedCodeTemplate*	getEntityGeneratedCodeTemplate(EntityInfo const&		entityInfo,
-																   EFileGenerationError&	out_error)		const	noexcept;
+			std::set<fs::path>		identifyFilesToProcess(FileGenerationResult&	out_genResult,
+														   bool						forceRegenerateAll)		const	noexcept;
 
 			/**
 			*	@brief Provide information on whether the generated code for @param filePath should be regenerated or not.
@@ -85,218 +95,123 @@ namespace kodgen
 			fs::path				makePathToGeneratedFile(fs::path const& sourceFilePath)					const	noexcept;
 			
 			/**
-			*	@brief Parse and generate all included individual files.
-			*
-			*	@param parser				File parser to use.
-			*	@param genResult			Reference to the generation result to fill during file generation.
-			*	@param forceRegenerateAll	Should all files be regenerated or not (regardless of FileGenerator::shouldRegenerateFile() returned value).
-			*/
-			void					processIncludedFiles(FileParser&			parser,
-														 FileGenerationResult&	genResult,
-														 bool					forceRegenerateAll)					noexcept;
-			
-			/**
-			*	@brief Parse and generate files contained in all included directories.
-			*	
-			*	@param parser				File parser to use.
-			*	@param genResult			Reference to the generation result to fill during file generation.
-			*	@param forceRegenerateAll	Should all files be regenerated or not (regardless of FileGenerator::shouldRegenerateFile() returned value).
-			*/
-			void					processIncludedDirectories(FileParser&				parser,
-															   FileGenerationResult&	genResult,
-															   bool						forceRegenerateAll)			noexcept;
-			
-			/**
 			*	@brief Add native property rules to the parsing settings.
 			*	
 			*	@param propParsingSettings Property parsing settings of the file parser.
 			*/
-			void					addNativePropertyRules(PropertyParsingSettings& propParsingSettings)			noexcept;
+			void					addNativePropertyRules(PropertyParsingSettings& propParsingSettings)	const	noexcept;
 			
 			/**
 			*	@brief Remove native property rules from the parsing settings.
 			*	
 			*	@param propParsingSettings Property parsing settings of the file parser.
 			*/
-			void					clearNativePropertyRules(PropertyParsingSettings& propParsingSettings)			noexcept;
+			void					clearNativePropertyRules(PropertyParsingSettings& propParsingSettings)	const	noexcept;
 
 			/**
 			*	@brief Generate / update the entity macros file.
 			*	
-			*	@param parser The file parser.
+			*	@param fileParserFactory FileParserFactory containing parsing settings.
 			*/
-			void					generateMacrosFile(FileParser& parser)									const	noexcept;
-
-		protected:
-			/**
-			*	@brief Called just before generating a file. Can be used to perform any pre-generation initialization.
-			*/
-			virtual void	preGenerateFile()																noexcept;
+			void					generateMacrosFile(FileParserFactoryBase& fileParserFactory)			const	noexcept;
 
 			/**
-			*	@brief Called just after generating a file. Can be used to perform any post-generation cleanup.
+			*	@brief Prepare the file generation unit for generation, forwarding any required generation settings.
+			*	
+			*	@param fileGenerationUnit The generationUnit to setup.
 			*/
-			virtual void	postGenerateFile()																noexcept;
+			void					setupFileGenerationUnit(FileGenerationUnit& fileGenerationUnit)			const	noexcept;
 
 			/**
-			*	@brief Write a header into the provided file.
+			*	@brief Load the generatedFilesExtension setting from toml.
 			*
-			*	@param file Reference to the generated file.
-			*	@param parsingResult Structure containing info about the parsed file.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeHeader(GeneratedFile&				file,
-										FileParsingResult const&	parsingResult)					const	noexcept;
+			void					loadGeneratedFilesExtension(toml::value const& tomlGeneratorSettings)			noexcept;
 
 			/**
-			*	@brief Write a footer into the provided file.
+			*	@brief Load the entityMacrosFilename setting from toml.
 			*
-			*	@param file Reference to the generated file.
-			*	@param parsingResult Structure containing info about the parsed file.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeFooter(GeneratedFile&				file,
-										FileParsingResult const&	parsingResult)					const	noexcept;
+			void					loadEntityMacrosFilename(toml::value const& tomlGeneratorSettings)				noexcept;
 
 			/**
-			*	@brief Generate code for entityInfo in generatedFile.
+			*	@brief	Load the supportedExtensions setting from toml.
+			*			Loaded extensions completely replace previously supported extensions if any.
 			*
-			*	@param generatedFile	Generated file to write in.
-			*	@param entityInfo		Entity we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeEntityToFile(GeneratedFile&		generatedFile,
-											  EntityInfo const&		entityInfo,
-											  FileGenerationResult&	genResult)								noexcept;
+			void					loadSupportedExtensions(toml::value const& tomlGeneratorSettings)				noexcept;
 
 			/**
-			*	@brief Generate code for namespaceInfo in generatedFile.
+			*	@brief Load the outputDirectory setting from toml.
 			*
-			*	@param generatedFile	Generated file to write in.
-			*	@param namespaceInfo	Namespace we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeNamespaceToFile(GeneratedFile&			generatedFile,
-												 EntityInfo const&		namespaceInfo,
-												 FileGenerationResult&	genResult)							noexcept;
+			void					loadOutputDirectory(toml::value const& tomlGeneratorSettings)					noexcept;
 
 			/**
-			*	@brief Generate code for structClassInfo in generatedFile.
+			*	@brief	Load the toParseFiles setting from toml.
+			*			Loaded files completely replace previous toParseFiles if any.
 			*
-			*	@param generatedFile	Generated file to write in.
-			*	@param structClassInfo	Struct/class we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeStructOrClassToFile(GeneratedFile&			generatedFile,
-													 EntityInfo const&		structClassInfo,
-													 FileGenerationResult&	genResult)						noexcept;
+			void					loadToParseFiles(toml::value const& tomlGeneratorSettings)						noexcept;
 
 			/**
-			*	@brief Generate code for nestedStructClassInfo in generatedFile.
+			*	@brief	Load the toParseDirectories setting from toml.
+			*			Loaded directories completely replace previous toParseDirectories if any.
 			*
-			*	@param generatedFile			Generated file to write in.
-			*	@param nestedStructClassInfo	Nested struct/class we generate the code from.
-			*	@param genResult				Reference to the generation result to fill during file generation.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeNestedStructOrClassToFile(GeneratedFile&			generatedFile,
-														   EntityInfo const&		nestedStructClassInfo,
-														   FileGenerationResult&	genResult)				noexcept;
+			void					loadToParseDirectories(toml::value const& tomlGeneratorSettings)				noexcept;
 
 			/**
-			*	@brief Generate code for enumInfo in generatedFile.
+			*	@brief	Load the ignoredFiles setting from toml.
+			*			Loaded files completely replace previous ignoredFiles if any.
 			*
-			*	@param generatedFile	Generated file to write in.
-			*	@param enumInfo			Enum we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeEnumToFile(GeneratedFile&			generatedFile,
-											EntityInfo const&		enumInfo,
-											FileGenerationResult&	genResult)								noexcept;
+			void					loadIgnoredFiles(toml::value const& tomlGeneratorSettings)						noexcept;
 
 			/**
-			*	@brief Generate code for enumValueInfo in generatedFile.
+			*	@brief	Load the ignoredDirectories setting from toml.
+			*			Loaded directories completely replace previous ignoredDirectories if any.
 			*
-			*	@param generatedFile	Generated file to write in.
-			*	@param enumValueInfo	Enum we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
+			*	@param tomlGeneratorSettings Toml content.
 			*/
-			virtual void	writeEnumValueToFile(GeneratedFile&			generatedFile,
-												 EntityInfo const&		enumValueInfo,
-												 FileGenerationResult&	genResult)							noexcept;
-
-			/**
-			*	@brief Generate code for fieldInfo in generatedFile.
-			*
-			*	@param generatedFile	Generated file to write in.
-			*	@param fieldInfo		Field we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
-			*/
-			virtual void	writeFieldToFile(GeneratedFile&			generatedFile,
-											 EntityInfo const&		fieldInfo,
-											 FileGenerationResult&	genResult)								noexcept;
-
-			/**
-			*	@brief Generate code for methodInfo in generatedFile.
-			*
-			*	@param generatedFile	Generated file to write in.
-			*	@param methodInfo		Method we generate the code from.
-			*	@param genResult		Reference to the generation result to fill during file generation.
-			*/
-			virtual void	writeMethodToFile(GeneratedFile&		generatedFile,
-											  EntityInfo const&		methodInfo,
-											  FileGenerationResult&	genResult)								noexcept;
+			void					loadIgnoredDirectories(toml::value const& tomlGeneratorSettings)				noexcept;
 
 		public:
 			/** Logger used to issue logs from the FileGenerator. */
-			ILogger*								logger					= nullptr;
+			ILogger*				logger	= nullptr;
 
-			/** Name of the internally generated header containing empty definitions for entity macros. */
-			std::string								entityMacrosFilename	= "EntityMacros.h";
-
-			/** Extension used for generated files. */
-			std::string								generatedFilesExtension	= ".kodgen.h";
-
-			/**
-			*	Path to the directory all files should be generated (and where existing ones are).
-			*	If the existed directory doesn't exist, it will be created if possible.
-			*/
-			fs::path								outputDirectory;
-
-			/**
-			*	Collection of files to parse.
-			*	These files will be parsed without any further check if they exist.
-			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before).
-			*/
-			std::unordered_set<fs::path, PathHash>	toParseFiles;
-
-			/**
-			*	Collection of directories containing files to parse.
-			*	All directories contained in the given directories will be recursively inspected, except if they are ignored.
-			*	All files contained in any parsed directory will be parsed, except if they are ignored or if their extension is not contained in the supportedExtensions.
-			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before).
-			*/
-			std::unordered_set<fs::path, PathHash>	toParseDirectories;
-
-			/**
-			*	Collection of ignored files.
-			*	These files will never be parsed (except if they are also part of the includedFiles collection).
-			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before).
-			*/
-			std::unordered_set<fs::path, PathHash>	ignoredFiles;
-
-			/**
-			*	Collection of ignored directories.
-			*	All directories contained in the given directories will be ignored, except if they are included.
-			*	All files contained in any ignored directory will be ignored, except if they are included.
-			*	/!\ Make sure all added paths use the os preferred syntax (you should call path.make_preferred() before).
-			*/
-			std::unordered_set<fs::path, PathHash>	ignoredDirectories;
-
-			/** Extensions of files which should be considered for parsing. */
-			std::unordered_set<std::string>			supportedExtensions;
+			/** Struct containing all generation settings. */
+			FileGenerationSettings	settings;
 
 			FileGenerator()						= default;
 			FileGenerator(FileGenerator const&)	= default;
 			FileGenerator(FileGenerator&&)		= default;
 			virtual ~FileGenerator()			= default;
+
+			/**
+			*	@brief Parse registered files if they were changes since last generation.
+			*			and try to generate corresponding files using code templates.
+			*
+			*	@param fileParserFactory	Factory to use to generate the file parser(s).
+			*	@param fileGenerationUnit	Generation unit used to generate files. It must have a clean state when this method is called.
+			*	@param forceRegenerateAll	Ignore the last write time check and reparse / regenerate all files.
+			*	@param threadCount			Number of threads to use for file parsing and generation.
+			*								If 0 is provided, all the process will be handled by the main thread.
+			*
+			*	@return Structure containing file generation report.
+			*/
+			template <template <typename> typename FileParserFactoryType, typename FileParserType, typename FileGenerationUnitType>
+			FileGenerationResult generateFiles(FileParserFactoryType<FileParserType>&	fileParserFactory,
+											   FileGenerationUnitType&					fileGenerationUnit,
+											   bool										forceRegenerateAll	= false,
+											   uint32									threadCount			= std::thread::hardware_concurrency())	noexcept;
 
 			/**
 			*	@brief Add a new template to the list of generated code templates.
@@ -307,7 +222,7 @@ namespace kodgen
 			*						The provided instance has be deleted manually by the user if newed.
 			*/
 			void addGeneratedCodeTemplate(std::string const&		templateName,
-										  GeneratedCodeTemplate*	codeTemplate)			noexcept;
+										  GeneratedCodeTemplate*	codeTemplate)	noexcept;
 
 			/**
 			*	@brief Set the default generated code template to use with the specified entity type when no template is specified in the entity properties.
@@ -319,20 +234,8 @@ namespace kodgen
 			*
 			*	@return true if the new default generated code template was setup successfully, else false.
 			*/
-			bool setDefaultGeneratedCodeTemplate(EntityInfo::EType	entityType,
-												 std::string const&	templateName)		noexcept;
-
-			/**
-			*	@brief Parse registered files if they were changes since last generation.
-			*			and try to generate corresponding files using code templates.
-			*
-			*	@param parser The file parser to use for file parsing.
-			*	@param forceRegenerateAll Ignore the last write time check and reparse / regenerate all files.
-			*
-			*	@return Structure containing file generation report.
-			*/
-			FileGenerationResult generateFiles(FileParser&	parser,
-											   bool			forceRegenerateAll = false)	noexcept;
+			bool setDefaultGeneratedCodeTemplate(EEntityType		entityType,
+												 std::string const&	templateName)	noexcept;
 
 			/**
 			*	@brief Setup this object's parameters with the provided toml file. Unset settings remain unchanged.
@@ -341,6 +244,8 @@ namespace kodgen
 			*
 			*	@return true if a file could be loaded, else false.
 			*/
-			bool				loadSettings(fs::path const& pathToSettingsFile)		noexcept;
+			bool loadSettings(fs::path const& pathToSettingsFile)					noexcept;
 	};
+
+	#include "Kodgen/CodeGen/FileGenerator.inl"
 }

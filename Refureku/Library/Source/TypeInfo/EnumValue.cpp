@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/EnumValue.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 
 using namespace rfk;
 

@@ -13,21 +13,30 @@
 #include <algorithm>
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/EnumValue.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 
 namespace rfk
 {
-	class Enum : public Archetype
+	//Forward declaration
+	class Type;
+
+	class Enum final : public Archetype
 	{
 		public:
-			/** Values contained in this enum */
+			/** Values contained in this enum. */
 			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>	values;
 
-			Enum()													= delete;
-			Enum(std::string&& name, uint64 id, uint64 memorySize)	noexcept;
-			Enum(Enum const&)										= delete;
-			Enum(Enum&&)											= default;
-			~Enum()													= default;
+			/** Underlying type of this enum. */
+			Type const&																underlyingType;
+
+			Enum()								= delete;
+			Enum(std::string&&	name,
+				 uint64			id,
+				 uint64			memorySize,
+				 Type const&	underlyingType)	noexcept;
+			Enum(Enum const&)					= delete;
+			Enum(Enum&&)						= delete;
+			~Enum()								= default;
 
 			/**
 			*	@brief Search an enum value in this enum.
@@ -59,8 +68,7 @@ namespace rfk
 
 	/** Base implementation of getEnum, specialized for each reflected enum */
 	template <typename T, typename = std::enable_if_t<std::is_enum_v<T>>>
-	inline rfk::Enum const* getEnum() noexcept
-	{
-		return nullptr;
-	}
+	inline rfk::Enum const* getEnum() noexcept;
+
+	#include "Refureku/TypeInfo/Archetypes/Enum.inl"
 }

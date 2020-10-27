@@ -4,53 +4,40 @@
 [![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
-Refureku is a powerful C++17 runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
-It allows you to retrieve information on namespaces, structs/classes, fields, methods, enums and enum values at runtime.
+**Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) for more documentation and use examples!**
 
-It is separated into 2 distinct parts:
-- The metadata parser and generator, which parses C++ source code and generates metadata that will be injected back into source code using macros. This tool can either be built as a standalone executable or embeded in a program (for example a game engine) depending on your needs. Last but not least, it is highly customizable (see [Customization](#customization)).
-- The actual library which contains the framework classes to access and manipulate reflected data at runtime.
-
-Here is a non-exhaustive list of Refureku library features:
-- Easy to integrate in a software like a game engine
-- Reflect namespaces, structs, classes, enums, member methods (static or not) and member fields (static or not)
-- Support structs/classes with or without inheritance (multiple inheritance supported)
-- Can look for a struct/class, enum, field or method by name, with additional filtering parameters
-- Method call with any arguments and any return type (public, protected, private, virtual, override)
-- Field get/set any data of any type (public, protected, private)
-- Know at runtime if an instance of a reflected struct/class inherits or is the base of another reflected struct/class
-- Arbitrary properties (like tags) on any entity (namespace, struct, class, field, method, enum, enum value)
-- Reflection metadata is regenerated only when a file changes
-- Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
-- Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
+Refureku is a powerful C++17 RTTI free runtime reflection library based on [Kodgen](https://github.com/jsoysouvanh/Kodgen).
+It allows to retrieve information on namespaces, structs/classes, fields, methods, non-member variables, non-member functions, enums and enum values at runtime.
 
 ## Index
+- [Features](#features)
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
   - [Library integration](#library-integration)
   - [Parser/Generator integration](#parsergenerator-integration)
   - [Possible issues](#possible-issues)
-- [Reflect entities](#reflect-entities)
-- [Framework Overview](#framework-overview)
-  - [Archetype](#archetype)
-    - [Structs / Classes](#structs--classes)
-    - [Enums / Enum values](#enums--enum-values)
-  - [Fields](#fields)
-  - [Methods](#methods)
-  - [Namespaces](#namespaces)
-- [Properties](#properties)
-  - [Overview](#overview)
-  - [Builtin Properties](#builtin-properties)
-- [Customization](#customization)
 - [Cross-platform compatibility](#cross-platform-compatibility)
 - [Planned features](#planned-features)
 - [Known issues](#known-issues)
 - [License](#license)
 
+## Features
+- Easy to integrate in a software like a game engine
+- Reflect namespaces, structs, classes, methods, fields, variables, functions, enums and enum values
+- Support structs/classes with or without inheritance (multiple inheritance supported)
+- Can look for a struct/class, enum, field or method by name, with additional filtering parameters
+- Function/Method call with any arguments and any return type (public, protected, private, virtual, override)
+- Variable/Field get/set any data of any type (public, protected, private)
+- Know at runtime if an instance of a reflected struct/class inherits or is the base of another reflected struct/class
+- Arbitrary properties (like tags) on any entity
+- Reflection metadata is regenerated only when a file changes
+- Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
+- Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
+
 ## Getting started
 **Pre-built binaries for Windows x64 are available [here](https://github.com/jsoysouvanh/Refureku/releases). If you want to use those, you can skip to step 3 (this is true for the [Library Integration part](#library-integration) as well as the [Parser/Generator Integration part](#parsergenerator-integration).**
 
->**Note:** Refureku integration examples are available [here](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples).
+**Refureku integration examples are available [here](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples).**
 
 ### Requirements:
 - CMake 3.15.0+ (if you build the library from source).
@@ -75,26 +62,32 @@ Here is a non-exhaustive list of Refureku library features:
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - Refureku header directory, located at /Refureku/Library/Include, or /Include from the binaries.
+    - From binaries: /Include
+    - From source: /Refureku/Library/Include
 
 4.  Add library directories to your projet settings:
-    - The directory containing Refureku.lib, located at /Build/[Debug|Release]/Lib/, or /Lib from the binaries.
+    - From binaries: /Lib/[Your compiler]/
+    - From source: /Build/[Debug|Release]/Lib/
+    > Make sure /Build/Debug/Lib/ is only set in debug mode, and /Build/Release/Lib/ only in release mode
 
 5.  Link against:
-    - Refureku.lib. Make sure you link against the Debug version of the library if you compile your project in Debug mode to prevent [this issue](#issue-1).
+    - From binaries: RefurekuDebug.lib in debug mode, RefurekuRelease.lib in release mode
+    - From source: Refureku.lib
 
-6. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
-	- [FileGeneratorSettings] outputDirectory = '''Path/To/An/Output/Directory'''
+7. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
+	- [FileGenerationSettings] outputDirectory = '''Path/To/Output/Directory'''
 		> The output directory is the directory where metadata files will be generated. If the directory doesn't exist, the generator will try to create it. 
-	- [FileGeneratorSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
+	- [FileGenerationSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
 		> List of the directories containing header files to parse. These directories are recursively inspected.
-	- [FileParserSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
-		> Paths to your project's additional include directories. They are **absolutely necessary** to make sure the parser can find all included files.
+	- [FileParsingSettings] projectIncludeDirectories = [ '''Path/To/Refureku/Library/Include''', '''Path/To/Your/Project/Include/Dir1''', ... ]
+		> Paths to your project's additional include directories. They are **absolutely necessary** to make sure the parser can find all included files. As you added Refureku include directory at step 3, you must add it to the list.
+	- [FileParsingSettings] compilerExeName = "clang++"
+		> Fill this with the compiler you are using to compile your application. "msvc", "clang++" and "g++" are the only supported compilers. For clang++ and g++, you can specify a version (as long as the command is properly running in a terminal).
 	- **If the specified outputDirectory is in a parsed directory**, you should ignore it (you don't want to waste time parsing generated metadata do you?)
-	[FileGeneratorSettings] ignoredDirectories = [ '''Path/To/An/Output/Directory''' ]
-	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory. Check out the [SimpleIntegration project](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples/SimpleIntegration)'s [RefurekuSettings.toml](https://github.com/jsoysouvanh/Refureku/blob/master/Refureku/Examples/ThirdParty/Bin/RefurekuSettings.toml) for a concrete example.
+	[FileGenerationSettings] ignoredDirectories = [ '''Path/To/Output/Directory''' ]
+	> **Note:** All paths must be written between ''' ''', and be either absolute or relative to your workspace directory.
 	
-7. Make the RefurekuGenerator run just before your project's compilation:
+8. Make the RefurekuGenerator run just before your project's compilation:
 	- With CMake:
 	```cmake
 	# Run generator before compiling our own program
@@ -106,8 +99,8 @@ Here is a non-exhaustive list of Refureku library features:
 	- With Visual Studio:
 		> In Project properties > Build Events > Pre-Build Event, add the command Path\To\Executable\RefurekuGenerator.exe
 
-8. Make sure you compile your project in C++17 or later.
-9. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
+9. Make sure you compile your project in C++17 or later.
+10. Compile your project: you should see build logs from the RefurekuGenerator with a list of parsed files, or error logs if something went wrong. If you encounter errors, see the [Possible issues section](#possible-issues). If it doesn't help, don't hesitate to [open a new issue](https://github.com/jsoysouvanh/Refureku/issues).
 
 ### Parser/Generator integration
 1. Pull the repository
@@ -128,44 +121,59 @@ Here is a non-exhaustive list of Refureku library features:
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - Kodgen header directory, located at /Refureku/Generator/Submodules/Kodgen/Include, or /ThirdParty/Include from the binaries.
-    - Kodgen dependencies header directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include. If you downloaded the binaries, it is the same directory as above so you don't need to redo it.
-    - RefurekuGenerator header directory, located at /Refureku/Generator/Include, or /Include/RefurekuGenerator from the binaries.
+    - From binaries: /Include
+    - From source:
+	    - /Refureku/Generator/Submodules/Kodgen/Include
+	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include
+	    - /Refureku/Generator/Include
 
 4.  Add library directories to your projet settings:
-    - Kodgen.lib directory, located at /Build/[Debug|Release]/Lib/, or /ThirdParty/Lib from the binaries.
-    - Kodgen dependencies library directory, located at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static. If you downloaded the binaries, it is the same directory as above so you don't need to redo it.
-    - RefurekuGeneratorLib.lib directory, located at /Build/[Debug|Release]/Lib/, or /Lib from the binaries.
+    - From binaries:
+	    - /Lib/Common/
+	    - /Lib/[Your compiler]/
+    - From source:
+	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static/
+	    - /Build/[Debug|Release]/Lib/
+    > Make sure /Build/Debug/Lib/ is only set in debug mode, and /Build/Release/Lib/ only in release mode
 
 5.  Link against:
-    - clang.lib
-    - Kodgen.lib: Make sure to use the Debug version if you compile your project in Debug mode
-    - RefurekuGeneratorLib.lib: Make sure to use the Debug version if you compile your project in Debug mode
+    - From binaries:
+	    - clang.lib
+	    - KodgenDebug.lib in debug only, KodgenRelease.lib in release only
+	    - RefurekuGeneratorLibDebug.lib in debug only, RefurekuGeneratorLibRelease.lib in release only
+    - From source:
+	    - clang.lib
+	    - Kodgen.lib
+	    - RefurekuGeneratorLib.lib
 
-7.  Setup your project C++ compilation version to C++17 or later.
-8.  Compile!
-9.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared, or /Bin from the binaries.
+6.  Setup your project C++ compilation version to C++17 or later.
+7.  Compile!
+8.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared, or /Bin from the binaries.
 
 You should be able to run the following snippet:
 
 ```cpp
-#include <Refureku/FileParser.h>
-#include <Refureku/FileGenerator.h>
 #include <Kodgen/Misc/DefaultLogger.h>
+#include <RefurekuGenerator/Parsing/FileParserFactory.h>
+#include <RefurekuGenerator/CodeGen/FileGenerator.h>
+#include <RefurekuGenerator/CodeGen/FileGenerationUnit.h>
 
 int main()
 {
-    rfk::FileParser	fileParser;
-    rfk::FileGenerator	fileGenerator;
+    rfk::FileParserFactory	fileParserFactory;
+    rfk::FileGenerator		fileGenerator;
+    rfk::FileGenerationUnit	fileGenerationUnit;
 
     //Set logger
     kodgen::DefaultLogger logger;
 
-    fileParser.logger = &logger;
-    fileGenerator.logger = &logger;
+    fileParserFactory.logger	= &logger;
+    fileGenerator.logger	= &logger;
 
-    //Parse
-    kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+    //You will need to setup parsing settings and generation settings here.
+    //Either load settings from a settings file, or set them by calling the appropriate methods.
+
+    fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit);
 
     return 0;
 }
@@ -173,531 +181,19 @@ int main()
 
 ### Possible issues
 #### Issue 1
-- If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
-
-## Reflect entities
-Once you've setup the generator as explained in [this part](#library-integration), metadata will be generated for the macroed entities contained in included files.
-To integrate those reflection metadata to your program, you'll have to follow a few steps:
-1. Include the generated file to your header file. For example, if your file is called "Example.h", you'll have to include "Example.rfk.h" (generated file extension and location are customizable). This include **MUST** be the last included file.
-
-	Example:
-	```cpp
-	//This file is Example.h
-	#pragma once
-	
-	#include <string>
-	
-	#include "AnotherExample.h"
-	
-	//The Generated folder depends on the outputDirectory setting
-	//The ".rfk.h" extension depends on the generatedFilesExtension setting
-	#include "Generated/Example.rfk.h"
-	```
-2. Add the reflection macro to any entity you want to reflect. Reflection macros are customizable with the [entityType]MacroName setting. For classes and structs, an additional macro [ClassName]_GENERATED has to be inserted just before closing the struct/class.
-	```cpp
-	namespace ExampleNamespace RFKNamespace() {}
-	
-	class RFKClass() ExampleClass
-	{
-	    RFKField()
-	    int exampleField;
-
-	    RFKMethod()
-	    void exampleMethod() {}
-
-        ExampleClass_GENERATED
-	};
-
-	struct RFKStruct() ExampleStruct
-	{
-        ExampleStruct_GENERATED
-	};
-
-	enum class RFKEnum() ExampleEnum
-	{
-	    ExampleValue RFKEnumValue() = 42
-	};
-	```
-	Some settings also allow to reflect entities without having to bother with these macros. If you set the **shouldParseAllEntities** setting to true, all entities will be reflected whether they have the macro or not. See also the [ParseAllNested property](https://github.com/jsoysouvanh/Kodgen#parseallnested).
-3. 　Write **File_GENERATED** at the end of your file. This macro wraps all reflection registration boilerplate so that the user do not have to care about it.
-
-A typical header file would look like:
-
-```cpp
-//This file is Example.h
-#pragma once
-
-//Some includes
-//...
-
-#include "Generated/Example.rfk.h"
-
-//Some code
-
-File_GENERATED
-```
-
-## Framework overview
-### Archetype
-The archetype class contains information about a model type, like its name for example.
-Each reflected class, struct and enum owns a unique archetype in the program. All C++ fundamental types also have their archetype.
-
-#### Structs / Classes
-The Class and Struct classes inherit from Archetype and contain additional data such as fields and methods. Class and Struct are not different from each other in the current library implementation, but are still separated to allow further development.
-
-Consider the following header file, let's say ExampleClass.h:
-
-```cpp
-#pragma once
-
-#include "Generated/ExampleClass.rfk.h"
-
-struct RFKStruct() ExampleStruct
-{
-    ExampleStruct_GENERATED
-};
-class RFKClass() ExampleClass
-{
-    ExampleClass_GENERATED
-};
-
-File_GENERATED
-
-```
-
-To retrieve those classes, we can write the following:
-
-```cpp
-#include "ExampleClass.h"
-
-//...
-
-rfk::Struct const& exampleStructArchetype = ExampleStruct::staticGetArchetype();
-rfk::Class const& exampleClassArchetype = ExampleClass::staticGetArchetype();
-
-//Iterate over fields
-for (rfk::Field const& field : exampleClassArchetype.fields)
-    //Do something
-
-//Iterate over methods
-for (rfk::Method const& method : exampleClassArchetype.methods)
-    //Do something
-```
-
-You could also retrieve archetypes from the database using the archetype name like so:
-
-```cpp
-#include <Refureku/TypeInfo/Database.h>
-
-rfk::Struct const* exampleStructArchetype = rfk::Database::getStruct("ExampleStruct");
-rfk::Class const* exampleClassArchetype = rfk::Database::getClass("ExampleClass");
-```
-Or even use the getArchetype method on an instance of a reflected archetype having the [DynamicGetArchetype property](#dynamicgetarchetype-struct--class).
-
-#### Enums / Enum values
-Just like structs and classes, we can reflect enums. If an enum is reflected, nested enum values will automatically be reflected too, but it is still possible to add [properties](#properties) to them.
-
-```cpp
-#pragma once
-
-#include "Generated/ExampleEnum.rfk.h"
-
-enum class RFKEnum() ExampleEnum : int
-{
-	ExampleValue1 = 0u,
-	ExampleValue2 RFKEnumVal() = 42u,
-	ExampleValue3
-};
-
-File_GENERATED
-```
-
-```cpp
-#include "ExampleEnum.h"
-
-rfk::Enum const* exampleEnumArchetype = rfk::getEnum<ExampleEnum>();
-
-//Iterate over enum values
-for (rfk::EnumValue const& enumValue : exampleEnumArchetype->values)
-{
-    //Do something
-    std::cout << enumValue.name << " = " << enumValue.value << std::endl;
-}
-
-//Retrieve an EnumValue from name
-exampleEnumArchetype->getEnumValue("ExampleValue1");
-
-//Retrieve an EnumValue from int value
-exampleEnumArchetype->getEnumValue(0u);
-```
-
-From the database:
-
-```cpp
-#include <Refureku/TypeInfo/Database.h>
-
-//...
-
-rfk::Enum const* exampleEnumArchetype = rfk::Database::getEnum("ExampleEnum");
-```
-
-### Fields
-Field and StaticField classes handle information about a class or struct reflected field.
-Usage example:
-
-```cpp
-#pragma once
-
-#include "Generated/ExampleClass.rfk.h"
-
-class RFKClass() ExampleClass
-{
-    protected:
-        RFKField()
-        inline static float exampleFloat = 3.14f;
-
-    public:
-        RFKField()
-        int exampleInt = 0;
-
-    ExampleClass_GENERATED
-};
-
-File_GENERATED
-```
-
-```cpp
-#include "ExampleClass.h"
-
-//...
-
-ExampleClass instance;
-rfk::Class const& classArchetype = ExampleClass::staticGetArchetype();
-
-//Find a field by name - You can filter fields with other arguments
-rfk::Field const* field = classArchetype.getField("exampleInt");
-
-field->getData<int>(&instance); //Get 0
-field->setData(&instance, 42);  //Set 42 in instance
-field->getData<int>(&instance); //Get 42
-
-//Find a static field by name - You can filter static fields with other arguments
-rfk::StaticField const* staticField = classArchetype.getStaticField("exampleFloat");
-
-staticField->getData<float>();  //Get 3.14
-staticField->setData(42.42f);   //Set 42.42
-staticField->getData<float>();  //Get 42.42
-```
-
-### Methods
-Method and StaticMethod classes work just the same way as fields:
-
-```cpp
-#pragma once
-
-#include "Generated/ExampleClass.rfk.h"
-
-class RFKClass() ExampleClass
-{
-    private:
-        RFKMethod()
-        static void staticNoReturnNoParam() {}
-        
-        RFKMethod()
-        void noReturnNoParam() {}
-        
-    protected:
-        RFKMethod()
-        int returnNoParam() const { return 42; }
-
-    public:
-        RFKMethod()
-        int returnWithParams(float a, float b) { return a + b; }
-
-    ExampleClass_GENERATED
-};
-
-File_GENERATED
-```
-
-```cpp
-#include "ExampleClass.h"
-
-//...
-
-ExampleClass const instance;
-rfk::Class const& classArchetype = ExampleClass::staticGetArchetype();
-
-//Get methods and call them
-rfk::Method const* f1 = classArchetype.getMethod("noReturnNoParam");
-f1->invoke(&instance);  //Note that we can call non const method on const instance
-
-rfk::Method const* f2 = classArchetype.getMethod("returnNoParam");
-f2->invoke(&instance);  //If you don't care about the return value, you can omit the template argument
-f2->invoke<int>(&instance); //Return 42
-
-rfk::Method const* f3 = classArchetype.getMethod("returnWithParams");
-f3->invoke<int>(&instance, 21.0f, 21.0f);   //Return 42
-
-//It works exactly the same for static methods, but we don't need to provide an instance
-rfk::StaticMethod const* sf1 = classArchetype.getStaticMethod("staticNoReturnNoParam");
-sf1->invoke();
-```
-
-### Namespaces
-Namespaces can be reflected like this:
-
-```cpp
-#pragma once
-
-#include "Generated/ExampleNamespace.rfk.h"
-
-namespace ExampleNamespace RFKNamespace()
-{
-    namespace ExampleNamespaceNested RFKNamespace()
-    {
-    }
-}
-
-File_GENERATED
-```
-
-C++17 nested namespace declaration is also supported, but note that all namespaces will be assigned the same properties:
-
-```cpp
-#pragma once
-
-#include "Generated/ExampleNamespace.rfk.h"
-
-namespace ExampleNamespace::ExampleNamespaceNested RFKNamespace()
-{
-}
-
-File_GENERATED
-```
-
-Note that declaring the same namespace multiple times in a single file will produce an error. Declaring the same namespaces in different files is however valid.
-
-```cpp
-#pragma once
-
-#include "Generated/ExampleNamespace.rfk.h"
-
-namespace ExampleNamespace RFKNamespace()
-{
-    //Do something
-}
-
-// ---------v This produces an error 
-namespace ExampleNamespace RFKNamespace()
-{
-    //Do something else
-}
-
-// ---------v This also produces an error because ExampleNamespace is already defined above
-namespace ExampleNamespace::ExampleNamespaceNested RFKNamespace()
-{
-    //Do something
-}
-
-File_GENERATED
-```
-
-Use namespace reflected data:
-
-```cpp
-#include <Refureku/TypeInfo/Database.h>
-
-//...
-
-rfk::Namespace const* en = rfk::Database::getNamespace("ExampleNamespace");
-rfk::Namespace const* enn = rfk::Database::getNamespace("ExampleNamespace::ExampleNamespaceNested");
-
-rfk::Struct const* s = en->getStruct("SomeReflectedStruct");
-rfk::Class const* c = en->getClass("SomeReflectedClass");
-rfk::Enum const* e = en->getEnum("SomeReflectedEnum");
-rfk::Namespace const* nn = en->getNestedNamespace("ExampleNamespaceNested");
-```
-
-## Properties
-### Overview
-Properties are additional data that can be attached to any entity through the reflection macro. You can read more about  [how to add new properties here](https://github.com/jsoysouvanh/Kodgen#properties--propertyrules).
-
-```cpp
-#pragma once
-
-#include "Generated/Example.rfk.h"
-
-class RFKClass(CustomSimpleProperty, CustomComplexProperty(SubProp1, SubProp2)) ExampleClass
-{
-    ExampleClass_GENERATED
-};
-
-enum class RFKEnum(EnumProp) ExampleEnum
-{
-    EnumValue1 = 0,
-    EnumValue2 RFKEnumVal(EnumValueProp) = 1
-};
-
-File_GENERATED
-```
-
-And we can retrieve properties like so:
-
-```cpp
-#include "Example.h"
-
-//...
-
-rfk::Class const& classArchetype = ExampleClass::staticGetArchetype();
-
-//Iterate over all simple properties
-for (rfk::SimpleProperty const& simpleProp : classArchetype.properties.simpleProperties)
-    std::cout << simpleProp.mainProperty << std::endl;
-
-//Iterate over all complex properties
-for (rfk::ComplexProperty const& complexProp : classArchetype.properties.complexProperties)
-    std::cout << complexProp.mainProperty << std::endl;
-
-//Check if an entity has a specific simple or complex property
-if (rfk::SimpleProperty const* simpleProp = classArchetype.properties.getSimpleProperty("CustomSimpleProperty"))
-{
-    //Do something
-}
-
-if (rfk::ComplexProperty const* complexProp = classArchetype.properties.getComplexProperty("CustomComplexProperty"))
-{
-    //Iterate over all subproperties of a chosen complex property
-    for (std::string const& subprop : complexProp->subProperties)
-    {
-        //Do something with subprops
-    }
-
-    //Helpers to retrieve a subproperty as int, uint, float or string
-    complexProp->getInt32(0u);	//0 means the first subproperty
-    //This call actually throws an exception because can't convert SubProp1 to an int.
-}
-```
-
-It can be really useful when you want to adapt behaviors depending on specific properties (for a game engine editor for example).
-
-### Builtin Properties
-- [Kodgen Properties](https://github.com/jsoysouvanh/Kodgen#builtin-properties)
-- [DynamicGetArchetype](#dynamicgetarchetype-struct--class)
-- [CustomInstantiator](#custominstantiator-method)
-
-#### DynamicGetArchetype (Struct / Class)
-DynamicGetArchetype is a simple property which should be specified when a class or struct should override the getArchetype() method declared by rfk::ReflectedObject. It allows to retrieve the archetype of a reflected class instance through a virtual call to classInstance->getArchetype().
-
-```cpp
-#pragma once
-
-#include <Refureku/ReflectedObject.h>
-
-#include "Generated/ExampleClass.rfk.h"
-
-class RFKClass(DynamicGetArchetype) ExampleClassBase : public rfk::ReflectedObject
-{
-    ExampleClassBase_GENERATED
-};
-
-//DynamicGetArchetype MUST be specified even if it doesn't inherit directly from rfk::ReflectedObject
-class RFKClass(DynamicGetArchetype) ExampleClass : public ExampleClassBase
-{
-    ExampleClass_GENERATED
-};
-
-File_GENERATED
-```
-
-```cpp
-#include <Refureku/TypeInfo/Database.h>
-
-//...
-
-rfk::ReflectedObject* ecb = rfk::Database::getClass("ExampleClassBase")->makeInstance<rfk::ReflectedObject>();
-rfk::ReflectedObject* ec = rfk::Database::getClass("ExampleClass")->makeInstance<rfk::ReflectedObject>();
-
-std::cout << ecb->getArchetype().name << std::endl;    //Prints ExampleClassBase
-std::cout << ec->getArchetype().name << std::endl;    //Prints ExampleClass
-
-delete ecb;
-delete ec;
-```
-
-> DynamicGetArchetype must be specified eventhough ExampleStruct doesn't directly inherit from rfk::ReflectedObject. If not specified, calling getArchetype on an instance of ExampleClass will call the parent implementation, which will return ExampleClassBase archetype.
-
-#### CustomInstantiator (Method)
-CustomInstantiator is used to provide custom ways of instantiating a struct or class through the rfk::Struct::makeInstance method. By default, we can only call this method without parameters (it will call the default constructor if it is not deleted, otherwise the method will return nullptr). Using the CustomInstantiator property, we can write the following:
-
-```cpp
-#pragma once
-
-#include <iostream>
-
-#include "Generated/ExampleClass.rfk.h"
-
-class RFKClass() ExampleClass
-{
-    protected:
-        RFKMethod(CustomInstantiator)
-        static void* customInstantiateMethod(int i, float f)
-        {
-            std::cout << "Use customInstantiateMethod(int i, float f)" << std::endl;
-
-            return new ExampleClass(i, f);
-        }
-
-    public:
-        ExampleClass() = delete;
-        ExampleClass(int i, float f) {  }
-        
-    ExampleClass_GENERATED
-};
-
-File_GENERATED
-```
-
-```cpp
-#include "ExampleClass.h"
-
-//...
-
-rfk::Class const& c = ExampleClass::staticGetArchetype();
-
-/**
-*    Return nullptr because ExampleClass is not default constructible.
-*    However, if we define a CustomInstantiator tagged method which takes no argument,
-*    it will be used.
-*/
-ExampleClass* instance1 = c.makeInstance<ExampleClass>();
-
-//ExampleClass will be instantiated through customInstantiateMethod
-ExampleClass* instance2 = c.makeInstance<ExampleClass>(42, 3.14f);
-
-delete instance1;
-delete instance2;
-```
-
->**Note:** A CustomInstantiator tagged method **MUST** be static and return void*. If the method doesn't fulfill those requirements, an error will be thrown by the parser/generator.
-
-## Customization
-You can customize a wide range of settings by modifying the FileParser and the FileGenerator classes. However, for a simple use of the library, you will probably not have extra energy to spend in modifying/recompiling the generator source code. For that reason, most of the settings are editable in the RefurekuSettings.toml file. You can have a look at the different settings by reading [this section](https://github.com/jsoysouvanh/Kodgen#fileparser) and [this section](https://github.com/jsoysouvanh/Kodgen#filegenerator).
-
-If you are integrating Refureku generator to your program, you will find all the information you need in [Kodgen's README](https://github.com/jsoysouvanh/Kodgen#kodgen). Just keep in mind that you will need to extend rfk::FileParser and rfk::FileGenerator **instead of** kodgen::FileParser and kodgen::FileGenerator. 
+If you compile your program in debug mode, your compiler might complain about library / debug level mismatchs. In that case, make sure to compile the Refureku library both in Debug and Release, and link against the debug version of the library when compiling your program in debug mode.
 
 ## Cross-platform compatibility
 This library has been tested and is stable on the following configurations:
-- Windows Server version 1809 | MSVC 19.16.27035.0
-- Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0
-- Linux 18.04 | GCC 8.4.0, GCC 9.2.1
+- Windows Server version 1809 | MSVC 19.16.27041.0
+- Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0, Clang 10.0.1
+- Linux 18.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.1.0
 
 ## Planned features
-- Update database to allow entity unregistering, hence making hot reload possible
-- Support global scope (or namespace) fields and functions reflection
-- Support template methods reflection 
+- Property system rework to make it more flexible and easier to extend
 
 ## Known issues
+- Can't reflect a variable / field / function / method using incomplete (forward declared) types
 
 ## License
 MIT License

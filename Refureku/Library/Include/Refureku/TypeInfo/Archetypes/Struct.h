@@ -14,10 +14,11 @@
 #include <type_traits>
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/Fields/Field.h"
-#include "Refureku/TypeInfo/Fields/StaticField.h"
-#include "Refureku/TypeInfo/Methods/Method.h"
-#include "Refureku/TypeInfo/Methods/StaticMethod.h"
+#include "Refureku/TypeInfo/Variables/Field.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
+#include "Refureku/TypeInfo/Functions/Method.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
+#include "Refureku/TypeInfo/Functions/MethodHelper.h"
 #include "Refureku/Utility/TypeTraits.h"
 
 namespace rfk
@@ -29,32 +30,6 @@ namespace rfk
 	class Struct : public Archetype
 	{
 		private:
-			template <typename T>
-			class GetMethodHelper
-			{
-				public:
-					static bool hasSamePrototype(MethodBase const&)
-					{
-						//If the code asserts here, it means there's a call to getMethod or getStaticMethod with an invalid template.
-						//The template must be a method signature.
-						//Example1: void example1Method(int i, float j); -> getMethod<void(int, float)>("example1Method");
-						//Example2: static int example2Method();		 -> getStaticMethod<int()>("example2Method");
-						assert(false);
-
-						return false;
-					}
-			};
-
-			template <typename ReturnType, typename... ArgTypes>
-			class GetMethodHelper<ReturnType(ArgTypes...)>
-			{
-				public:
-					static bool hasSamePrototype(MethodBase const& method)
-					{
-						return method.hasSamePrototype<ReturnType, ArgTypes...>();
-					}
-			};
-
 			/** Pointer to the default method used to make an instance of this archetype. */
 			void*								(*_defaultInstantiator)()	noexcept = nullptr;
 
@@ -63,6 +38,12 @@ namespace rfk
 
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const noexcept;
+
+		protected:
+			Struct(std::string&&	name,
+				   uint64			id,
+				   EKind			kind,
+				   uint64			memorySize)	noexcept;
 
 		public:
 			struct Parent
@@ -88,14 +69,12 @@ namespace rfk
 			};
 
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
-			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
 			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>							directParents;
 
 			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children. */
 			std::unordered_set<Struct const*>													children;
 
 			/** All tagged nested structs/classes/enums contained in this struct. */
-			//TODO: Update this container for better speed/memory (more likely few elements so unordered_set is overkill)
 			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedArchetypes;
 
 			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
@@ -110,10 +89,12 @@ namespace rfk
 			/** All tagged static methods declared in this struct. */
 			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
 
-			Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize)	noexcept;
-			Struct(Struct const&)																		= delete;
-			Struct(Struct&&)																			= default;
-			~Struct()																					= default;
+			Struct(std::string&&	newName,
+				   uint64			newId,
+				   uint64			newMemorySize)	noexcept;
+			Struct(Struct const&)					= delete;
+			Struct(Struct&&)						= delete;
+			~Struct()								= default;
 
 			/**
 			*	@param structName	Name of the nested struct to look for.

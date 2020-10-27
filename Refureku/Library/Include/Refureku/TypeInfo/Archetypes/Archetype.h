@@ -7,58 +7,31 @@
 
 #pragma once
 
-#include <vector>
+#include <type_traits>
 
 #include "Refureku/TypeInfo/Entity.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
 
 namespace rfk
 {
-	class StaticMethod;	//Forward declaration
-
 	class Archetype : public Entity
 	{
+		protected:
+			Archetype(std::string&& newName,
+					  uint64		newId,
+					  EKind			kind,
+					  uint64		newMemorySize)	noexcept;
+			Archetype(Archetype const&)				= delete;
+			Archetype(Archetype&&)					= delete;
+			~Archetype()							= default;
+
 		public:
-			/**
-			*	Category of an archetype.
-			*	Actually represents the class of an archetype instance.
-			*/
-			enum class ECategory : uint8
-			{
-				/** The archetype is a class, can safely be cast to Class. */
-				Class	= 0u,
-
-				/** The archetype is a struct, can safely be cast to Struct. */
-				Struct,
-
-				/** The archetype is an enum, can safely by cast to Enum. */
-				Enum,
-
-				/** The archetype is a fundamental archetype. */
-				Fundamental,
-
-				/** Undefined archetype. Should never happen? */
-				Undefined,
-
-				/** Represent the total number of values in ECategory enum. */
-				Count
-			};
-
 			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */
 			EAccessSpecifier	accessSpecifier	= EAccessSpecifier::Undefined;
 
-			/** Category of this type */
-			ECategory			category		= ECategory::Undefined;
-
 			/** Size in bytes an instance of this archetype takes in memory, basically what sizeof(Type) returns */
 			uint64				memorySize		= 0;
-
-			Archetype(std::string&& newName,
-					  uint64		newId			= 0u,
-					  ECategory		newCategory		= ECategory::Undefined,
-					  uint64		newMemorySize	= 0u)					noexcept;
-			Archetype(Archetype const&)										= delete;
-			Archetype(Archetype&&)											= default;
-			~Archetype()													= default;
 	};
+
+	#include "Refureku/TypeInfo/Archetypes/Archetype.inl"
 }

@@ -3,7 +3,7 @@
 using namespace kodgen;
 
 EnumValueInfo::EnumValueInfo(CXCursor const& cursor) noexcept:
-	EntityInfo(cursor, PropertyGroup(), EType::EnumValue),
+	EntityInfo(cursor, PropertyGroup(), EEntityType::EnumValue),
 	defaultValue{clang_getEnumConstantDeclValue(cursor)}
 {
 }

@@ -23,13 +23,13 @@ namespace kodgen
 			virtual std::string	getMacroDocumentation()	const noexcept override;
 
 		public:
-			FixedComplexPropertyRule()															= delete;
-			FixedComplexPropertyRule(std::string							mainPropName,
-									 std::unordered_set<EntityInfo::EType>	validEntityTypes,
-									 std::string							description = "")	noexcept;
-			FixedComplexPropertyRule(FixedComplexPropertyRule const&)							= default;
-			FixedComplexPropertyRule(FixedComplexPropertyRule&&)								= default;
-			virtual ~FixedComplexPropertyRule()													= default;
+			FixedComplexPropertyRule()									= delete;
+			FixedComplexPropertyRule(std::string	mainPropName,
+									 EEntityType	validEntityTypes,
+									 std::string	description = "")	noexcept;
+			FixedComplexPropertyRule(FixedComplexPropertyRule const&)	= default;
+			FixedComplexPropertyRule(FixedComplexPropertyRule&&)		= default;
+			virtual ~FixedComplexPropertyRule()							= default;
 
 			virtual bool		isSubPropSyntaxValid(std::string const&	subProperty,
 													 uint8					subPropIndex,

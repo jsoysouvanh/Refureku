@@ -2,9 +2,9 @@
 
 using namespace kodgen;
 
-bool SetPropertyRule::isMainPropSyntaxValid(std::string const& mainProperty, EntityInfo::EType entityType) const noexcept
+bool SetPropertyRule::isMainPropSyntaxValid(std::string const& mainProperty, EEntityType entityType) const noexcept
 {
-	return mainProperty == "Set" && entityType == EntityInfo::EType::Field;
+	return mainProperty == "Set" && entityType == EEntityType::Field;
 }
 
 bool SetPropertyRule::isSubPropSyntaxValid(std::string const& subProperty, uint8 /* subPropIndex */, std::string& out_errorDescription) const noexcept

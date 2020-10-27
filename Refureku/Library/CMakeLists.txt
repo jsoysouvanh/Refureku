@@ -16,7 +16,9 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/Entity.cpp
+					Source/TypeInfo/EntityCast.cpp
 					Source/TypeInfo/EnumValue.cpp
+					Source/TypeInfo/DefaultEntityRegisterer.cpp
 					Source/TypeInfo/Database.cpp
 
 					Source/TypeInfo/Properties/SimpleProperty.cpp
@@ -28,20 +30,26 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Namespaces/NamespaceFragmentRegisterer.cpp
 
 					Source/TypeInfo/Archetypes/Archetype.cpp
+					Source/TypeInfo/Archetypes/FundamentalArchetype.cpp
 					Source/TypeInfo/Archetypes/Enum.cpp
 					Source/TypeInfo/Archetypes/Struct.cpp
 					Source/TypeInfo/Archetypes/Class.cpp
 					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
+					Source/TypeInfo/Archetypes/GetArchetype.cpp
 
-					Source/TypeInfo/Fields/FieldBase.cpp
-					Source/TypeInfo/Fields/Field.cpp
-					Source/TypeInfo/Fields/StaticField.cpp
+					Source/TypeInfo/Variables/VariableBase.cpp
+					Source/TypeInfo/Variables/Variable.cpp
+					Source/TypeInfo/Variables/FieldBase.cpp
+					Source/TypeInfo/Variables/Field.cpp
+					Source/TypeInfo/Variables/StaticField.cpp
 
-					Source/TypeInfo/Methods/MethodBase.cpp
-					Source/TypeInfo/Methods/Method.cpp
-					Source/TypeInfo/Methods/StaticMethod.cpp
-					Source/TypeInfo/Methods/MethodParameter.cpp
-			)
+					Source/TypeInfo/Functions/FunctionBase.cpp
+					Source/TypeInfo/Functions/Function.cpp
+					Source/TypeInfo/Functions/MethodBase.cpp
+					Source/TypeInfo/Functions/Method.cpp
+					Source/TypeInfo/Functions/StaticMethod.cpp
+					Source/TypeInfo/Functions/FunctionParameter.cpp
+				)
 
 # Setup compilation flags
 if (MSVC)

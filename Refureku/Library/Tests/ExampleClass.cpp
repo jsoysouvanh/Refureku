@@ -26,11 +26,23 @@ int ExampleClass::method3()
 	return 42;
 }
 
-float ExampleClass::method3(int i) noexcept
+int ExampleClass::method3(int i) noexcept
 {
 	std::cout << "ExampleClass::method3(): " << i << std::endl;
 
-	return 3.14f;
+	return 1;
+}
+
+int ExampleClass::method3(int i) const noexcept
+{
+	std::cout << "ExampleClass::method3() const: " << i << std::endl;
+
+	return 2;
+}
+
+void ExampleClass::constMethod(int i) const	noexcept
+{
+	std::cout << "ExampleClass::constMethod(int i): " << i << std::endl;
 }
 
 unsigned long long ExampleClass::method4(void* ptr)

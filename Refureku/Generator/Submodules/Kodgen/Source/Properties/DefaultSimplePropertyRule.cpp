@@ -2,16 +2,16 @@
 
 using namespace kodgen;
 
-DefaultSimplePropertyRule::DefaultSimplePropertyRule(std::string mainPropName, std::unordered_set<EntityInfo::EType> validEntityTypes, std::string description) noexcept:
+DefaultSimplePropertyRule::DefaultSimplePropertyRule(std::string mainPropName, EEntityType validEntityTypes, std::string description) noexcept:
 	_description{std::move(description)},
 	mainPropName{std::move(mainPropName)},
-	validEntityTypes{std::move(validEntityTypes)}
+	validEntityTypes{validEntityTypes}
 {
 }
 
-bool DefaultSimplePropertyRule::isMainPropSyntaxValid(std::string const& mainProperty, EntityInfo::EType entityType) const noexcept
+bool DefaultSimplePropertyRule::isMainPropSyntaxValid(std::string const& mainProperty, EEntityType entityType) const noexcept
 {
-	return mainProperty == mainPropName && validEntityTypes.find(entityType) != validEntityTypes.cend();
+	return mainProperty == mainPropName && ((validEntityTypes & entityType) != EEntityType::Undefined);
 }
 
 std::string	DefaultSimplePropertyRule::getMacroDocumentation() const noexcept

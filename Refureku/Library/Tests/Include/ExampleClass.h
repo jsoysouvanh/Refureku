@@ -1,25 +1,25 @@
 #pragma once
 
-#include "Refureku/ReflectedObject.h"
+#include <Refureku/Object.h>
 
 #include "Generated/ExampleClass.rfk.h"
 
 namespace namespace1
 {
 	/** Non reflected class */
-	class ParentParentParentClass
+	class ParentParentParentClass 
 	{
 		private:
 			double pppDouble = 0.21;
 
 		public:
-			ParentParentParentClass() noexcept {}
+			ParentParentParentClass() noexcept {} 
 	};
 }
 
 namespace namespace2 RFKNamespace()
 {
-	class RFKClass(DynamicGetArchetype) ParentParentClass : public namespace1::ParentParentParentClass, public rfk::ReflectedObject 
+	class RFKClass() ParentParentClass : public namespace1::ParentParentParentClass, public rfk::Object 
 	{
 		private:
 			RFKField()
@@ -34,13 +34,16 @@ namespace namespace2 RFKNamespace()
 
 namespace namespace3 RFKNamespace()
 {
-	class RFKClass(DynamicGetArchetype) OtherClass : public rfk::ReflectedObject
+	//Forward declaration
+	class AnotherClassInNamespace3;
+
+	class RFKClass() OtherClass : public rfk::Object
 	{
 
 		OtherClass_GENERATED
 	};
 
-	class RFKClass(DynamicGetArchetype) ParentClass : public namespace2::ParentParentClass
+	class RFKClass() ParentClass : public namespace2::ParentParentClass
 	{
 		private:
 			RFKMethod()
@@ -74,7 +77,7 @@ namespace namespace3 RFKNamespace()
 		ParentClass2_GENERATED
 	};
 
-	class RFKClass(DynamicGetArchetype) ExampleClass : public ParentClass, public ParentClass2
+	class RFKClass() ExampleClass : public ParentClass, public ParentClass2
 	{
 		private:
 			class RFKClass() NestedExampleClass
@@ -168,13 +171,25 @@ namespace namespace3 RFKNamespace()
 			static	int		staticMethod3(int p1, int p2)	noexcept;
 
 			RFKMethod()
-			float			method3(int i)				noexcept;
+			int				method3(int i)					noexcept;
+
+			RFKMethod()
+			int				method3(int i)			const	noexcept;
+
+			RFKMethod()
+			void			constMethod(int i)		const	noexcept;
 
 		public:
-			ExampleClass()						noexcept { }
+			ExampleClass()						noexcept: c{nullptr} {}
 			ExampleClass(ExampleClass const&)	= default;
 			ExampleClass(ExampleClass&&)		= default;
 			~ExampleClass()						= default;
+
+			RFKMethod()
+			void	methodWithClassParam(ParentClass pc) {}
+
+			//RFKMethod()
+			//void	methodWithForwardDeclaredParam(AnotherClassInNamespace3*) {}
 
 		ExampleClass_GENERATED
 	};
@@ -223,7 +238,7 @@ struct RFKStruct(ParseAllNested) ExampleStruct
 	ExampleStruct_GENERATED
 };
 
-namespace parse_all_nested_namespace RFKNamespace(ParseAllNested)
+namespace parse_all_nested_namespace RFKNamespace(ParseAllNested) 
 {
 	class NestedClass1
 	{

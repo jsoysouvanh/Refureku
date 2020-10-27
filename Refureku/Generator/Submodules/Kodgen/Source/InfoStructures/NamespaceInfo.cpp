@@ -3,7 +3,7 @@
 using namespace kodgen;
 
 NamespaceInfo::NamespaceInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup) noexcept:
-	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EntityInfo::EType::Namespace)
+	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), EEntityType::Namespace)
 {
 }
 
@@ -31,5 +31,15 @@ void NamespaceInfo::refreshOuterEntity() noexcept
 	{
 		enumInfo.refreshOuterEntity();
 		enumInfo.outerEntity = this;
+	}
+
+	for (FunctionInfo& functionInfo : functions)
+	{
+		functionInfo.outerEntity = this;
+	}
+
+	for (VariableInfo& variableInfo : variables)
+	{
+		variableInfo.outerEntity = this;
 	}
 }

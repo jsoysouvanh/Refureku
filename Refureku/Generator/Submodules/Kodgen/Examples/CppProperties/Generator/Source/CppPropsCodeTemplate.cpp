@@ -5,7 +5,7 @@
 
 #include <Kodgen/InfoStructures/StructClassInfo.h>
 
-void CppPropsCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo) noexcept
+void CppPropsCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit&	/* fgu */, std::string& /* out_errorDescription */) const noexcept
 {
 	static std::string GetterPropName = "Get";
 	static std::string SetterPropName = "Set";
@@ -89,7 +89,7 @@ std::string CppPropsCodeTemplate::generateGetter(kodgen::FieldInfo const& fieldI
 	methodName.insert(0, "get");
 	methodName += "()";
 
-	if (fieldInfo.qualifiers.isStatic)
+	if (fieldInfo.isStatic)
 	{
 		preTypeQualifiers = "static";
 		postQualifiers.clear();	//remove the const
@@ -155,7 +155,7 @@ std::string CppPropsCodeTemplate::generateSetter(kodgen::FieldInfo const& fieldI
 
 	methodName += ")";
 
-	if (fieldInfo.qualifiers.isStatic)
+	if (fieldInfo.isStatic)
 	{
 		preTypeQualifiers = "static";
 	}

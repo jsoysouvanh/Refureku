@@ -15,21 +15,21 @@ namespace kodgen
 	{
 		protected:
 			/** 
-			*	@brief	Log an info message.
+			*	@brief Log an info message.
 			*	
 			*	@param message Message to log.
 			*/
 			virtual void logInfo(std::string const& message)	noexcept;
 
 			/** 
-			*	@brief	Log a warning message.
+			*	@brief Log a warning message.
 			*	
 			*	@param message Message to log.
 			*/
 			virtual void logWarning(std::string const& message) noexcept;
 			
 			/** 
-			*	@brief	Log an error message.
+			*	@brief Log an error message.
 			*	
 			*	@param message Message to log.
 			*/
@@ -42,6 +42,6 @@ namespace kodgen
 			virtual ~DefaultLogger()			= default;
 
 			virtual void log(std::string const&	message,
-							 ELogSeverity		logSeverity)	noexcept override;
+							 ELogSeverity		logSeverity = ELogSeverity::Info)	noexcept override;
 	};
 }

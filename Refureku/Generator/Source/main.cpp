@@ -3,24 +3,31 @@
 #include <Kodgen/Misc/Filesystem.h>
 #include <Kodgen/Misc/DefaultLogger.h>
 
-#include "RefurekuGenerator/FileParser.h"
-#include "RefurekuGenerator/FileGenerator.h"
+#include "RefurekuGenerator/Parsing/FileParserFactory.h"
+#include "RefurekuGenerator/CodeGen/FileGenerator.h"
+#include "RefurekuGenerator/CodeGen/FileGenerationUnit.h"
 
-void printGenerationSetup(kodgen::ILogger& logger, rfk::FileParser const& /*fileParser*/, rfk::FileGenerator const& fileGenerator)
+void printGenerationSetup(kodgen::ILogger& logger, rfk::FileGenerator const& fileGenerator, rfk::FileParserFactory const& fileParserFactory)
 {
 	//Output dir
-	logger.log("Output directory: " + fileGenerator.outputDirectory.string(), kodgen::ILogger::ELogSeverity::Info);
+	logger.log("Output directory: " + kodgen::FilesystemHelpers::sanitizePath(fileGenerator.settings.getOutputDirectory()).string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//ToParseDirs
 	logger.log("Parsed directories:", kodgen::ILogger::ELogSeverity::Info);
-	for (fs::path const& path : fileGenerator.toParseDirectories)
+	for (fs::path const& path : fileGenerator.settings.getToParseDirectories())
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
 
 	//IgnoredDirs
 	logger.log("Ignored directories:", kodgen::ILogger::ELogSeverity::Info);
-	for (fs::path const& path : fileGenerator.ignoredDirectories)
+	for (fs::path const& path : fileGenerator.settings.getIgnoredDirectories())
+	{
+		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
+	}
+
+	logger.log("Project include directories:", kodgen::ILogger::ELogSeverity::Info);
+	for (fs::path const& path : fileParserFactory.parsingSettings.getProjectIncludeDirectories())
 	{
 		logger.log("\t" + path.string(), kodgen::ILogger::ELogSeverity::Info);
 	}
@@ -30,7 +37,7 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::FileGenerationResult
 {
 	if (genResult.completed)
 	{
-		logger.log("(Re)generated metadata for " + std::to_string(genResult.parsedFiles.size()) + " file(s).", kodgen::ILogger::ELogSeverity::Info);
+		logger.log("(Re)generated metadata for " + std::to_string(genResult.parsedFiles.size()) + " file(s) in " + std::to_string(genResult.duration) + " seconds.", kodgen::ILogger::ELogSeverity::Info);
 		logger.log("Metadata of " + std::to_string(genResult.upToDateFiles.size()) + " file(s) up-to-date.", kodgen::ILogger::ELogSeverity::Info);
 
 		//Errors
@@ -52,56 +59,57 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::FileGenerationResult
 
 void parseAndGenerate(fs::path&& exePath)
 {
-	rfk::FileParser		fileParser;
-	rfk::FileGenerator	fileGenerator;
-
+	rfk::FileParserFactory	fileParserFactory;
+	rfk::FileGenerationUnit fileGenerationUnit;
+	rfk::FileGenerator		fileGenerator;
+	
 	//Set logger
 	kodgen::DefaultLogger logger;
 
-	fileParser.logger		= &logger;
-	fileGenerator.logger	= &logger;
+	fileParserFactory.logger	= &logger;
+	fileGenerator.logger		= &logger;
 
 	fs::path pathToSettingsFile = exePath.make_preferred() / "RefurekuSettings.toml";
 
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 
 	//Load settings
-	if (fileGenerator.loadSettings(pathToSettingsFile) && fileParser.loadSettings(pathToSettingsFile))
+	if (fileGenerator.loadSettings(pathToSettingsFile) && fileParserFactory.loadSettings(pathToSettingsFile))
 	{
-		logger.log("Loaded FileGenerator settings.", kodgen::ILogger::ELogSeverity::Info);
-		logger.log("Loaded FileParser settings.", kodgen::ILogger::ELogSeverity::Info);
-
-		#if RFK_DEV
-
+#if RFK_DEV
 		// This part is for travis only
-		fs::path includeDir		= fs::current_path() / "Include";
-		fs::path generatedDir	= includeDir / "Generated";
+		fs::path includeDir			= fs::current_path() / "Include";
+		fs::path generatedDir		= includeDir / "Generated";
+		fs::path refurekuIncludeDir	= fs::current_path().parent_path() / "Include";
 
-		fileGenerator.outputDirectory = generatedDir;
-		fileGenerator.toParseDirectories.emplace(includeDir);
-		fileGenerator.ignoredDirectories.emplace(generatedDir);
+		//Specify used compiler
+#if defined(__GNUC__)
+		fileParserFactory.parsingSettings.setCompilerExeName("g++");
+#elif defined(__clang__)
+		fileParserFactory.parsingSettings.setCompilerExeName("clang++");
+#elif defined(_MSC_VER)
+		fileParserFactory.parsingSettings.setCompilerExeName("msvc");
+#endif
 
-		#endif
+		fileGenerator.settings.setOutputDirectory(generatedDir);
+		fileGenerator.settings.addToParseDirectory(includeDir);
+		fileGenerator.settings.addIgnoredDirectory(generatedDir);
+		fileParserFactory.parsingSettings.addProjectIncludeDirectory(refurekuIncludeDir);
 
-		printGenerationSetup(logger, fileParser, fileGenerator);
+		printGenerationSetup(logger, fileGenerator, fileParserFactory);
+#endif
 
 		//Parse
-		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParser, false);
+		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);
 
 		//Result
 		printGenerationResult(logger, genResult);
 	}
-	else
-	{
-		logger.log("Failed to load the RefurekuSettings file at " + pathToSettingsFile.string(), kodgen::ILogger::ELogSeverity::Error);
-	}
 }
 
-int main(int /*argc*/, char** argv)
+int main(int /* argc */, char** argv)
 {
-	fs::path exeDirectory = fs::path(argv[0]).parent_path();
-
-	parseAndGenerate(std::move(exeDirectory));
+	parseAndGenerate(fs::path(argv[0]).parent_path());
 
 	return EXIT_SUCCESS;
 }

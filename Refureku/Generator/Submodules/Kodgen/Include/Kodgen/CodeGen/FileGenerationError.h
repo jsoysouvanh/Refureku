@@ -11,7 +11,6 @@
 #include <iostream>
 
 #include "Kodgen/Misc/Filesystem.h"
-#include "Kodgen/CodeGen/EFileGenerationError.h"
 
 namespace kodgen
 {
@@ -19,45 +18,54 @@ namespace kodgen
 	{
 		private:
 			/** Name of the file in which the error occured. */
-			std::string				_filename		= "";
+			std::string	_filename		= "";
 
 			/** Name of the entity involved in the error. Can be left empty if no entity. */
-			std::string				_entityName		= "";
+			std::string	_entityName		= "";
 
-			/** Type of error which happened. */
-			EFileGenerationError	_fileGenError	= EFileGenerationError::Count;
+			/** Description of the error. */
+			std::string	_description	= "";
 
 		public:
-			FileGenerationError()										= delete;
-			FileGenerationError(fs::path const&			filepath,
-								std::string const&		entityName,
-								EFileGenerationError	fileGenError)	noexcept;
-			FileGenerationError(FileGenerationError const&)				= default;
-			FileGenerationError(FileGenerationError&&)					= default;
+			FileGenerationError()							= delete;
+			FileGenerationError(fs::path	filepath,
+								std::string	entityName,
+								std::string	description)	noexcept;
+			FileGenerationError(FileGenerationError const&)	= default;
+			FileGenerationError(FileGenerationError&&)	   	= default;
+			~FileGenerationError()							= default;
 
 			/**
-			*	@return The name of the file in which the error occured.
+			*	@brief Getter for _filename;
+			*
+			*	@return _filename.
 			*/
-			std::string const&		getFilename()				const	noexcept;
+			inline std::string const&	getFilename()		const	noexcept;
 
 			/**
-			*	@return The name of the entity involved in the error.
+			*	@brief Getter for _entityName;
+			*
+			*	@return _entityName.
 			*/
-			std::string const&		getEntityName()				const	noexcept;
+			inline std::string const&	getEntityName()		const	noexcept;
 
 			/**
-			*	@return The type of error.
+			*	@brief Getter for _description;
+			*
+			*	@return _description.
 			*/
-			EFileGenerationError	getFileGenerationError()	const	noexcept;
+			inline std::string const&	getDescription()	const	noexcept;
 
 			/**
 			*	@return A string containing all information about this error.
 			*/
-			std::string				toString()					const	noexcept;
+			inline std::string			toString()			const	noexcept;
 
-			FileGenerationError& operator=(FileGenerationError const&)	= default;
-			FileGenerationError& operator=(FileGenerationError&&)		= default;
+			FileGenerationError&	operator=(FileGenerationError const&)	= default;
+			FileGenerationError&	operator=(FileGenerationError&&)		= default;
 	};
 
 	std::ostream& operator<<(std::ostream& out_stream, FileGenerationError const& fileGenerationError) noexcept;
+
+	#include "Kodgen/CodeGen/FileGenerationError.inl"
 }

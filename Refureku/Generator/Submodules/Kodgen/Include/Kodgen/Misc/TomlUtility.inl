@@ -1,6 +1,6 @@
 
 template <typename T>
-bool TomlUtility::getValueFromTable(toml::value const& table, std::string const& entryName, T& out_value) noexcept
+bool TomlUtility::getValueFromTable(toml::value const& table, std::string const& entryName, T& out_value, ILogger* logger) noexcept
 {
 	if (table.contains(entryName))
 	{
@@ -11,8 +11,10 @@ bool TomlUtility::getValueFromTable(toml::value const& table, std::string const&
 		}
 		catch (toml::type_error const& e)
 		{
-			std::cerr << entryName << " value is of incorrect type." << std::endl
-				<< e.what() << std::endl;
+			if (logger != nullptr)
+			{
+				logger->log("TOML " + entryName + " value is of incorrect type. " + e.what(), ILogger::ELogSeverity::Error);
+			}
 		}
 	}
 
@@ -20,90 +22,16 @@ bool TomlUtility::getValueFromTable(toml::value const& table, std::string const&
 }
 
 template <typename T>
-void TomlUtility::updateSetting(toml::value const& table, std::string const& entryName, T& out_toUpdateSetting) noexcept
+bool TomlUtility::updateSetting(toml::value const& table, std::string const& entryName, T& out_toUpdateSetting, ILogger* logger) noexcept
 {
 	T foundSetting;
 
-	if (TomlUtility::getValueFromTable<T>(table, entryName, foundSetting))
+	if (TomlUtility::getValueFromTable<T>(table, entryName, foundSetting, logger))
 	{
 		out_toUpdateSetting = foundSetting;
+
+		return true;
 	}
-}
 
-template <>
-inline void TomlUtility::updateSetting<fs::path>(toml::value const& table, std::string const& entryName, fs::path& out_toUpdateSetting) noexcept
-{
-	std::string foundSetting;
-
-	if (TomlUtility::getValueFromTable<std::string>(table, entryName, foundSetting))
-	{
-		out_toUpdateSetting = fs::path(foundSetting).make_preferred().string();
-	}
-}
-
-template <>
-inline void TomlUtility::updateSetting<char>(toml::value const& table, std::string const& entryName, char& out_toUpdateSetting) noexcept
-{
-	std::string foundSetting;
-
-	if (TomlUtility::getValueFromTable<std::string>(table, entryName, foundSetting))
-	{
-		if (foundSetting.size() == 1)
-		{
-			out_toUpdateSetting = foundSetting[0];
-		}
-		else
-		{
-			std::cerr << foundSetting << " is of incorrect type, should be a char." << std::endl;
-		}
-	}
-}
-
-template <>
-inline void TomlUtility::updateSetting<std::unordered_set<std::string>>(toml::value const& table, std::string const& entryName, std::unordered_set<std::string>& out_toUpdateSetting) noexcept
-{
-	std::vector<std::string> foundStringVector;
-
-	if (TomlUtility::getValueFromTable<std::vector<std::string>>(table, entryName, foundStringVector))
-	{
-		for (std::string value : foundStringVector)
-		{
-			out_toUpdateSetting.emplace(std::move(value));
-		}
-	}
-}
-
-template <>
-inline void TomlUtility::updateSetting<std::unordered_set<fs::path, PathHash>>(toml::value const& table, std::string const& entryName, std::unordered_set<fs::path, PathHash>& out_toUpdateSetting) noexcept
-{
-	std::vector<std::string> foundStringVector;
-
-	if (TomlUtility::getValueFromTable<std::vector<std::string>>(table, entryName, foundStringVector))
-	{
-		for (std::string value : foundStringVector)
-		{
-			out_toUpdateSetting.emplace(fs::path(value).make_preferred());
-		}
-	}
-}
-
-template <>
-inline void TomlUtility::updateSetting<std::unordered_set<char>>(toml::value const& table, std::string const& entryName, std::unordered_set<char>& out_toUpdateSetting) noexcept
-{
-	std::vector<std::string> foundStringVector;
-
-	if (TomlUtility::getValueFromTable<std::vector<std::string>>(table, entryName, foundStringVector))
-	{
-		for (std::string value : foundStringVector)
-		{
-			if (value.size() == 1)
-			{
-				out_toUpdateSetting.emplace(value[0]);
-			}
-			else
-			{
-				std::cerr << entryName << "." << value << " is of incorrect type, should be a char." << std::endl;
-			}
-		}
-	}
+	return false;
 }

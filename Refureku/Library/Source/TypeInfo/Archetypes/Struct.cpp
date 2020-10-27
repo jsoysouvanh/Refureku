@@ -4,8 +4,13 @@
 
 using namespace rfk;
 
-Struct::Struct(std::string&& newName, uint64 newId, ECategory newCategory, uint64 newMemorySize) noexcept:
-	Archetype(std::forward<std::string>(newName), newId, newCategory, newMemorySize)
+Struct::Struct(std::string&& name, uint64 id, EKind kind, uint64 memorySize) noexcept:
+	Archetype(std::forward<std::string>(name), id, kind, memorySize)
+{
+}
+
+Struct::Struct(std::string&& newName, uint64 newId, uint64 newMemorySize) noexcept:
+	Struct(std::forward<std::string>(newName), newId, EKind::Struct, newMemorySize)
 {
 }
 
@@ -18,7 +23,7 @@ Struct const* Struct::getNestedStruct(std::string structName, EAccessSpecifier a
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingStruct));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->category == ECategory::Struct &&
+			(*it)->kind == EKind::Struct &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Struct const*>(*it) : nullptr;
 }
@@ -32,7 +37,7 @@ Class const* Struct::getNestedClass(std::string className, EAccessSpecifier acce
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingClass));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->category == ECategory::Class &&
+			(*it)->kind == EKind::Class &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Class const*>(*it) : nullptr;
 }
@@ -46,7 +51,7 @@ Enum const* Struct::getNestedEnum(std::string enumName, EAccessSpecifier access)
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingEnum));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->category == ECategory::Enum &&
+			(*it)->kind == EKind::Enum &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Enum const*>(*it) : nullptr;
 }

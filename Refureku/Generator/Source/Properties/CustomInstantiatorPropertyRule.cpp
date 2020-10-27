@@ -7,7 +7,7 @@
 using namespace rfk;
 
 CustomInstantiatorPropertyRule::CustomInstantiatorPropertyRule() noexcept:
-	kodgen::DefaultSimplePropertyRule(NativeProperties::customInstantiatorProperty, { kodgen::EntityInfo::EType::Method }, "Method property. Used to make a custom way to instantiate this class through the Struct::makeInstance() method. The method must be static and return void*.")
+	kodgen::DefaultSimplePropertyRule(NativeProperties::customInstantiatorProperty, kodgen::EEntityType::Method, "Method property. Used to make a custom way to instantiate this class through the Struct::makeInstance() method. The method must be static and return void*.")
 {
 }
 
@@ -21,7 +21,7 @@ bool CustomInstantiatorPropertyRule::isEntityValid(kodgen::EntityInfo const& ent
 	kodgen::MethodInfo const& methodInfo = static_cast<kodgen::MethodInfo const&>(entity);
 
 	//Check that the method is static
-	if (!methodInfo.qualifiers.isStatic)
+	if (!methodInfo.isStatic)
 	{
 		out_errorDescription = "A method tagged with " + NativeProperties::customInstantiatorProperty + " must be static.";
 
