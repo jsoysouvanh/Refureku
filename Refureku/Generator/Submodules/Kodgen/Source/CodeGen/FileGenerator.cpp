@@ -13,7 +13,7 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 		{
 			if (forceRegenerateAll || shouldRegenerateFile(path))
 			{
-				result.emplace(fs::canonical(path.make_preferred()));
+				result.emplace(path);
 			}
 			else
 			{
@@ -40,24 +40,22 @@ std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& o
 				//Just to make sure the entry hasn't been deleted since beginning of directory iteration
 				if (entry.exists())
 				{
-					fs::path entryPath = entry.path();
-
 					if (entry.is_regular_file())
 					{
-						if (settings.supportedExtensions.find(entryPath.extension().string()) != settings.supportedExtensions.cend() &&	//supported extension
-							settings.getIgnoredFiles().find(entryPath.string()) == settings.getIgnoredFiles().cend())					//file is not ignored
+						if (settings.supportedExtensions.find(entry.path().extension().string()) != settings.supportedExtensions.cend() &&	//supported extension
+							settings.getIgnoredFiles().find(entry.path()) == settings.getIgnoredFiles().cend())								//file is not ignored
 						{
-							if (forceRegenerateAll || shouldRegenerateFile(entryPath))
+							if (forceRegenerateAll || shouldRegenerateFile(entry.path()))
 							{
-								result.emplace(fs::canonical(entryPath));
+								result.emplace(entry.path());
 							}
 							else
 							{
-								out_genResult.upToDateFiles.push_back(entryPath);
+								out_genResult.upToDateFiles.push_back(entry.path());
 							}
 						}
 					}
-					else if (entry.is_directory() && settings.getIgnoredDirectories().find(entryPath.string()) != settings.getIgnoredDirectories().cend())	//directory is ignored
+					else if (entry.is_directory() && settings.getIgnoredDirectories().find(entry.path()) != settings.getIgnoredDirectories().cend())	//directory is ignored
 					{
 						//Don't iterate on ignored directory content
 						directoryIt.disable_recursion_pending();
@@ -180,6 +178,30 @@ void FileGenerator::setupFileGenerationUnit(FileGenerationUnit& fileGenerationUn
 {
 	fileGenerationUnit.logger		= logger;
 	fileGenerationUnit._settings	= &settings;
+}
+
+void FileGenerator::checkGenerationSettings() const noexcept
+{
+	auto& ignoredDirectories = settings.getIgnoredDirectories();
+
+	//Emit a warning if the output directory content is going to be parsed
+	if (fs::exists(settings.getOutputDirectory()) &&											//abort check if the output directory doesn't exist
+		!fs::is_empty(settings.getOutputDirectory()) &&											//abort check if the output directory is empty
+		ignoredDirectories.find(settings.getOutputDirectory()) == ignoredDirectories.cend())	//abort check if the output directory is already ignored
+	{
+		for (fs::path const& parsedDirectory : settings.getToParseDirectories())
+		{
+			if (FilesystemHelpers::isChildPath(settings.getOutputDirectory(), parsedDirectory))
+			{
+				if (logger != nullptr)
+				{
+					logger->log("Output directory is contained in a parsed directory, hence generated files will be parsed. If this is not intended, add the output directory to the list of ignored directories.", ILogger::ELogSeverity::Warning);
+				}
+
+				break;
+			}
+		}
+	}
 }
 
 void FileGenerator::loadGeneratedFilesExtension(toml::value const& tomlGeneratorSettings) noexcept

@@ -129,10 +129,10 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 			}
 			catch (fs::filesystem_error const& exception)
 			{
+				genResult.fileGenerationErrors.emplace_back("", "", "Output directory is invalid: " + std::string(exception.what()));
+				
 				if (logger != nullptr)
 				{
-					genResult.fileGenerationErrors.emplace_back("", "", "Output directory is invalid: " + std::string(exception.what()));
-
 					logger->log("Output directory is invalid: " + std::string(exception.what()), ILogger::ELogSeverity::Error);
 				}
 			}
@@ -140,6 +140,8 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 
 		if (fs::is_directory(settings.getOutputDirectory()))
 		{
+			checkGenerationSettings();
+
 			//Start timer here
 			auto				start			= std::chrono::high_resolution_clock::now();
 			std::set<fs::path>	filesToProcess	= identifyFilesToProcess(genResult, forceRegenerateAll);

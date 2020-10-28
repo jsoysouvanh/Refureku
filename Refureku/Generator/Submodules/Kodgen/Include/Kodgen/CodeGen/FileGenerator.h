@@ -49,7 +49,7 @@ namespace kodgen
 											FileGenerationUnitType&					fileGenerationUnit,
 											std::set<fs::path> const&				toProcessFiles,
 											FileGenerationResult&					out_genResult,
-											uint32									threadCount)		const	noexcept;
+											uint32									threadCount)			const	noexcept;
 
 			/**
 			*	@brief Process all provided files on the main thread.
@@ -63,7 +63,7 @@ namespace kodgen
 			void	processFilesMonothread(FileParserFactoryType<FileParserType>&	fileParserFactory,
 										   FileGenerationUnitType&					fileGenerationUnit,
 										   std::set<fs::path> const&				toProcessFiles,
-										   FileGenerationResult&					out_genResult)		const	noexcept;
+										   FileGenerationResult&					out_genResult)			const	noexcept;
 
 			/**
 			*	@brief Identify all files which will be regenerated.
@@ -121,6 +121,11 @@ namespace kodgen
 			*	@param fileGenerationUnit The generationUnit to setup.
 			*/
 			void					setupFileGenerationUnit(FileGenerationUnit& fileGenerationUnit)			const	noexcept;
+
+			/**
+			*	@brief Check that all generation settings are valid.
+			*/
+			void					checkGenerationSettings()												const	noexcept;
 
 			/**
 			*	@brief Load the generatedFilesExtension setting from toml.
