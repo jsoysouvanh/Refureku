@@ -282,7 +282,8 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 		}
 
 		//Add properties
-		properties = fillEntityProperties(field, "	currField->");
+		properties = fillEntityProperties2(field, "	currField->");
+		//properties = fillEntityProperties(field, "	currField->");
 		if (!properties.empty())
 			generatedFile.writeLine("	" + properties + "\t\\");
 

@@ -17,3 +17,4 @@
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Namespaces/Namespace.h"
+#include "Refureku/TypeInfo/Properties/Property.h"

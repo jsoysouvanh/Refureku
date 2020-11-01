@@ -8,6 +8,9 @@ Generated/
 enc_temp_folder/
 out/
 
+#Internal file settings
+LibraryGenerationSettings.toml
+
 #Settings
 *.json
 

@@ -50,3 +50,5 @@ add_custom_command(	TARGET ${RefurekuGeneratorExeTarget} PRE_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy
 					${PROJECT_SOURCE_DIR}/RefurekuSettings.toml
 					$<IF:$<BOOL:${MSVC}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/RefurekuSettings.toml,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RefurekuSettings.toml>)
+
+add_subdirectory(LibraryGenerator)

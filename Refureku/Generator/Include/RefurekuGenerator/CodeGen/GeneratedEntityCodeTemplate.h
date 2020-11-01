@@ -14,6 +14,34 @@ namespace rfk
 {
 	class GeneratedEntityCodeTemplate : public kodgen::GeneratedCodeTemplate
 	{
+		private:
+			/**
+			*	@brief Generate the name of a property.
+			*	
+			*	@param info			Entity the property is attached to.
+			*	@param propIndex	Index of the property in the list of all properties.
+			*	
+			*	@return A name for the property.
+			*/
+			std::string	generatePropertyVariableName(kodgen::EntityInfo const&	info,
+													 kodgen::uint8				propIndex)		const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			std::string addSimplePropertyToEntity(kodgen::EntityInfo const&	info,
+												  std::string const&		entityVarName,
+												  std::string const&		propName,
+												  kodgen::uint8				propIndex)			const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			std::string addComplexPropertyToEntity(kodgen::EntityInfo const&		info,
+												  std::string const&				entityVarName,
+												  kodgen::ComplexProperty const&	prop,
+												  kodgen::uint8						propIndex)	const	noexcept;
+
 		protected:
 			/** Prefix used to build internal macros. */
 			static constexpr char const* const	internalPrefix = "__RFK";
@@ -43,6 +71,9 @@ namespace rfk
 			*/
 			std::string					fillEntityProperties(kodgen::EntityInfo const&	info,
 															 std::string const&			entityVarName)	const	noexcept;
+
+			std::string					fillEntityProperties2(kodgen::EntityInfo const&	info,
+															  std::string const&		entityVarName)	const	noexcept;
 
 			/**
 			*	@brief Write in the generated file #ifdef macroName #undef macroName #endif

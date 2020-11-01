@@ -8,13 +8,18 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "Refureku/Config.h"
 #include "Refureku/Misc/FundamentalTypes.h"
+#include "Refureku/Utility/EnumMacros.h"
 #include "Refureku/TypeInfo/Properties/PropertyGroup.h"
 
 namespace rfk
 {
+	//Forward declaration
+	struct Property;
+
 	class Entity
 	{
 		public:
@@ -129,22 +134,25 @@ namespace rfk
 			};
 
 			/** Name qualifying this entity. */
-			std::string		name		= "";
+			std::string				name		= "";
 
 			/** Program-unique ID given for this entity. */
-			uint64			id			= 0u;
+			uint64					id			= 0u;
 
 			/** Kind of this entity. */
-			EKind			kind		= EKind::Undefined;
+			EKind					kind		= EKind::Undefined;
 
 			/**
 			*	The outer entity is the entity in which this entity has been declared.
 			*	If this entity is declared at file level, outerEntity will be nullptr.
 			*/
-			Entity const*	outerEntity	= nullptr;
+			Entity const*			outerEntity	= nullptr;
 
 			/** Properties contained by this entity. */
-			PropertyGroup	properties;
+			PropertyGroup			properties;
+
+			/** Properties contained by this entity. */
+			std::vector<Property*>	properties2;
 
 			Entity()											= delete;
 			Entity(std::string&&	name,
@@ -154,4 +162,6 @@ namespace rfk
 			Entity(Entity&&)									= default;
 			~Entity()											= default;
 	};
+
+	GENERATE_ENUM_OPERATORS(Entity::EKind)
 }

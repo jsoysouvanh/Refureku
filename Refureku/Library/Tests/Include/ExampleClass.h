@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Refureku/Object.h>
+#include <Refureku/TypeInfo/Properties/Property.h>
 
 #include "Generated/ExampleClass.rfk.h"
 
@@ -269,5 +270,59 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 		}
 	}
 }
+
+//struct RFKStruct() Property
+//{
+//	public:
+//		static constexpr rfk::Entity::EKind targetEntity	= rfk::Entity::EKind::Class | rfk::Entity::EKind::Struct;
+//		static constexpr bool				shouldInherit	= true;
+//		static constexpr bool				allowMultiple	= false;
+//
+//	Property_GENERATED
+//};
+
+struct RFKStruct() CustomProperty : public rfk::Property
+{
+	public:
+		static constexpr rfk::Entity::EKind targetEntity = rfk::Entity::EKind::Field;
+
+		CustomProperty() noexcept {}
+		CustomProperty(int i, int j) noexcept {  }
+
+	CustomProperty_GENERATED
+};
+
+struct RFKStruct() CustomProperty2 : public CustomProperty
+{
+	CustomProperty2_GENERATED
+};
+
+class RFKClass() A
+{
+	RFKField(CustomProperty(1, 456), CustomProperty)
+	int field;
+
+	/*static rfk::Class const& staticGetArchetype() noexcept
+	{
+		static rfk::Class	type("A", 0u, sizeof(A));
+		static bool			initialized = false;
+
+		static std::vector<Property const*> properties;
+
+		if (!initialized)
+		{
+			initialized = true;
+
+			static_assert((CustomProperty::targetEntity & rfk::Entity::EKind::Field) != rfk::Entity::EKind::Undefined, "A::field: CustomProperty can't be applied to a Field.");
+			static CustomProperty cp = CustomProperty(1, 2);
+
+			properties.emplace_back(&cp);
+		}
+
+		return type;
+	}*/
+
+	A_GENERATED
+};
 
 File_GENERATED

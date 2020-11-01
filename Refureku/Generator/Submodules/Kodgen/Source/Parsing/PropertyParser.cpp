@@ -13,31 +13,33 @@ opt::optional<PropertyGroup> PropertyParser::getProperties(std::string&& annotat
 	{
 		if (splitProperties(annotateMessage.substr(annotationId.size())))
 		{
-			if (opt::optional<PropertyGroup> propertyGroup = checkAndFillPropertyGroup(_splitProps, entityType))
-			{
-				//Check whole propertyGroup validity
-				for (uint8 i = 0u; i < propertyGroup->simpleProperties.size(); i++)
-				{
-					if (!propertyGroup->simpleProperties[i].boundPropertyRule->isPropertyGroupValid(*propertyGroup, i, _parsingErrorDescription))
-					{
-						return opt::nullopt;
-					}
-				}
+			PropertyGroup				propertyGroup	= checkAndFillPropertyGroup(_splitProps, entityType);
+			SimplePropertyRule const*	propertyRule	= nullptr;
 
-				for (uint8 i = 0u; i < propertyGroup->complexProperties.size(); i++)
-				{
-					if (!propertyGroup->complexProperties[i].boundPropertyRule->isPropertyGroupValid(*propertyGroup, i, _parsingErrorDescription))
-					{
-						return opt::nullopt;
-					}
-				}
-
-				return propertyGroup;
-			}
-			else
+			//Check each property validity
+			for (uint8 i = 0u; i < propertyGroup.simpleProperties.size(); i++)
 			{
-				return opt::nullopt;
+				propertyRule = propertyGroup.simpleProperties[i].boundPropertyRule;
+
+				//If the property group is not valid, unbind the property rule
+				if (propertyRule != nullptr && !propertyRule->isPropertyGroupValid(propertyGroup, i, _parsingErrorDescription))
+				{
+					propertyGroup.simpleProperties[i].boundPropertyRule = nullptr;
+				}
 			}
+
+			for (uint8 i = 0u; i < propertyGroup.complexProperties.size(); i++)
+			{
+				propertyRule = propertyGroup.complexProperties[i].boundPropertyRule;
+
+				//If the property group is not valid, unbind the property rule
+				if (propertyRule != nullptr && !propertyRule->isPropertyGroupValid(propertyGroup, i, _parsingErrorDescription))
+				{
+					propertyGroup.complexProperties[i].boundPropertyRule = nullptr;
+				}
+			}
+
+			return propertyGroup;
 		}
 	}
 	else
@@ -215,7 +217,7 @@ void PropertyParser::cleanString(std::string& toCleanString) const noexcept
 	}
 }
 
-opt::optional<PropertyGroup> PropertyParser::checkAndFillPropertyGroup(std::vector<std::vector<std::string>>& splitProps, EEntityType entityType) noexcept
+PropertyGroup PropertyParser::checkAndFillPropertyGroup(std::vector<std::vector<std::string>>& splitProps, EEntityType entityType) noexcept
 {
 	PropertyGroup propertyGroup;
 
@@ -224,22 +226,19 @@ opt::optional<PropertyGroup> PropertyParser::checkAndFillPropertyGroup(std::vect
 		//Expect a simple prop
 		if (props.size() == 1u)
 		{
-			if (!addSimpleProperty(props, entityType, propertyGroup))
-			{
-				return opt::nullopt;
-			}
+			addSimpleProperty(props, entityType, propertyGroup);
 		}
 		//Expect a complex prop
-		else if (!addComplexProperty(props, entityType, propertyGroup))
+		else
 		{
-			return opt::nullopt;
+			addComplexProperty(props, entityType, propertyGroup);
 		}
 	}
 
 	return propertyGroup;
 }
 
-bool PropertyParser::addSimpleProperty(std::vector<std::string>& propertyAsVector, EEntityType entityType, PropertyGroup& out_propertyGroup) noexcept
+void PropertyParser::addSimpleProperty(std::vector<std::string>& propertyAsVector, EEntityType entityType, PropertyGroup& out_propertyGroup) noexcept
 {
 	std::string propName = std::move(propertyAsVector[0]);
 
@@ -249,20 +248,27 @@ bool PropertyParser::addSimpleProperty(std::vector<std::string>& propertyAsVecto
 	{
 		if ((*it)->isMainPropSyntaxValid(propName, entityType))
 		{
-			out_propertyGroup.simpleProperties.emplace_back(std::move(propName), (*it));
+			out_propertyGroup.simpleProperties.emplace_back(std::move(propName), *it);
 
-			return true;
+			return;
 		}
 	}
 
-	_parsingErrorDescription = "Invalid simple property: " + std::move(propName);
-
-	return false;
+	out_propertyGroup.simpleProperties.emplace_back(std::move(propName), nullptr);
 }
 
-bool PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVector, EEntityType entityType, PropertyGroup& out_propertyGroup) noexcept
+void PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVector, EEntityType entityType, PropertyGroup& out_propertyGroup) noexcept
 {
-	std::string mainProp = std::move(propertyAsVector[0]);
+	assert(propertyAsVector.size() >= 2);
+
+	std::string		mainProp = std::move(propertyAsVector[0]);
+	ComplexProperty	complexProp(std::move(mainProp), nullptr);
+	std::string		subProp;
+
+	//Add all subproperties to the complex property
+	//If propertyAsVector has 2 elements and the 2nd element is empty, there are no subprops
+	if (propertyAsVector.size() != 2 || !propertyAsVector[1].empty())
+		complexProp.subProperties.insert(complexProp.subProperties.cend(), std::make_move_iterator(propertyAsVector.begin() + 1), std::make_move_iterator(propertyAsVector.end()));
 
 	//Search the first complex property rule matching with the given mainProp and entity type
 	//Iterate backwards because native properties are at the end and a user rule should never override a native rule
@@ -271,38 +277,31 @@ bool PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVect
 		if ((*it)->isMainPropSyntaxValid(mainProp, entityType))
 		{
 			//Found a matching property rule
-
-			ComplexProperty	complexProp(std::move(mainProp), (*it));
-			std::string		subProp;
+			complexProp.boundPropertyRule = *it;
 
 			//Check syntax validity of each subproperty
-			for (uint8 i = 1u; i < propertyAsVector.size(); i++)
+			for (uint8 i = 0u; i < complexProp.subProperties.size(); i++)
 			{
-				subProp = std::move(propertyAsVector[i]);
+				subProp = complexProp.subProperties[i];
 
-				if ((*it)->isSubPropSyntaxValid(subProp, i - 1u, _parsingErrorDescription))	// - 1 so that first subprop has index 0
+				if (!(*it)->isSubPropSyntaxValid(subProp, i, _parsingErrorDescription))
 				{
-					complexProp.subProperties.emplace_back(std::move(subProp));
-				}
-				else if (subProp.empty() && propertyAsVector.size() == 2)
-				{
-					//If there is a single empty subprop, means there is no subprop at all
-				}
-				else
-				{
-					return false;
+					//The subproperty doesn't match the native property
+					complexProp.boundPropertyRule = nullptr;
+	
+					break;
 				}
 			}
 
-			out_propertyGroup.complexProperties.emplace_back(std::move(complexProp));
-
-			return true;
+			//If there is still a bound property at this point, all subproperties were valid
+			if (complexProp.boundPropertyRule != nullptr)
+			{
+				break;
+			}
 		}
 	}
 
-	_parsingErrorDescription = "Invalid complex main property: " + std::move(mainProp);
-
-	return false;
+	out_propertyGroup.complexProperties.emplace_back(std::move(complexProp));
 }
 
 void PropertyParser::setup(PropertyParsingSettings const& propertyParsingSettings) noexcept
