@@ -7,20 +7,24 @@
 
 #pragma once
 
-#include <string>
-
 #include "Refureku/Object.h"
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/EEntityKind.h"
 
-#include "Refureku/Generated/Property.rfk.h"
-
-namespace rfk RFKNamespace()
+namespace rfk
 {
-	struct RFKStruct() Property : public Object
+	/**
+	*	@brief Base struct to inherit from to define new properties.
+	*/
+	struct Property : public Object
 	{
+		protected:
+			Property()	= default;
+
 		public:
 			/** Kind of entity this property can be attached to. */
-			static constexpr rfk::Entity::EKind targetEntityKind	= rfk::Entity::EKind::Class | rfk::Entity::EKind::Struct;
+			static constexpr rfk::EEntityKind	targetEntityKind	=	rfk::EEntityKind::Class | rfk::EEntityKind::Enum | rfk::EEntityKind::EnumValue |
+																		rfk::EEntityKind::Field |rfk::EEntityKind::Function | rfk::EEntityKind::Method |
+																		rfk::EEntityKind::Namespace | rfk::EEntityKind::Struct | rfk::EEntityKind::Variable;
 
 			/** Should this property be inherited? */
 			static constexpr bool				shouldInherit		= true;
@@ -28,13 +32,7 @@ namespace rfk RFKNamespace()
 			/** Is this property allowed to be attached multiple times to the same entity? */
 			static constexpr bool				allowMultiple		= false;
 
-			Property()					= default;
 			Property(Property const&)	= delete;
 			Property(Property&&)		= delete;
-			virtual ~Property()			= default;
-
-		Property_GENERATED
 	};
 }
-
-File_GENERATED

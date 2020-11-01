@@ -443,7 +443,7 @@ void properties()
 {
 	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
-	TEST(ec.getStaticMethod("customInstantiator")->properties.getSimpleProperty("CustomInstantiator") != nullptr);
+	TEST(ec.getStaticMethod("customInstantiator")->getProperty<CustomInstantiator>() != nullptr);
 
 	//rfk::Class const& ppc = namespace2::ParentParentClass::staticGetArchetype();
 
@@ -576,12 +576,6 @@ void getArchetypes()
 
 void entityCast()
 {
-	/*
-	FundamentalArchetype const* entityCast<FundamentalArchetype, void>(Entity const* entity)	noexcept;
-	Variable const*				entityCast<Variable, void>(Entity const* entity)				noexcept;
-	Function const*				entityCast<Function, void>(Entity const* entity)				noexcept;
-	*/
-
 	//FundamentalArchetype
 	TEST(rfk::entityCast<rfk::Archetype>(rfk::Database::getEntity(rfk::getArchetype<int>()->id)) != nullptr);
 	TEST(rfk::entityCast<rfk::FundamentalArchetype>(rfk::Database::getEntity(rfk::getArchetype<float>()->id)) != nullptr);
@@ -656,7 +650,7 @@ void enumManualReflection()
 
 int main()
 {
-	database();
+	/*database();
 	outerEntities();
 	namespaces();
 	templateEnums();
@@ -677,7 +671,15 @@ int main()
 	dynamicTypes();
 	makeInstance();
 	fundamentalArchetypes();
-	enumManualReflection();
+	enumManualReflection();*/
+
+	rfk::Struct const& c = CustomProperty2::staticGetArchetype();
+
+	c.getProperty<CustomInstantiator>();
+	c.getProperty([](rfk::Property const*) { return true; });
+
+	c.getProperties<CustomProperty>();
+	c.getProperties([](rfk::Property const*) { return true; });
 
 	return EXIT_SUCCESS;
 }

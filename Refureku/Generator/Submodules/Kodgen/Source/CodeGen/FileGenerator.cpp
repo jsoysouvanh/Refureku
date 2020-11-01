@@ -148,28 +148,28 @@ void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory)
 	//Generate simple property rules macros + doc
 	std::string macroDefinition;
 
-	for (kodgen::SimplePropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.simplePropertyRules)
-	{
-		macroDefinition = propertyRule->getMacroDefinition();
+	//for (kodgen::SimplePropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.simplePropertyRules)
+	//{
+	//	macroDefinition = propertyRule->getMacroDefinition();
 
-		if (!macroDefinition.empty())
-		{
-			macrosDefinitionFile.writeLines("",
-											macroDefinition);
-		}
-	}
+	//	if (!macroDefinition.empty())
+	//	{
+	//		macrosDefinitionFile.writeLines("",
+	//										macroDefinition);
+	//	}
+	//}
 
-	//Generate complex property rules macros + doc
-	for (kodgen::ComplexPropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.complexPropertyRules)
-	{
-		macroDefinition = propertyRule->getMacroDefinition();
+	////Generate complex property rules macros + doc
+	//for (kodgen::ComplexPropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.complexPropertyRules)
+	//{
+	//	macroDefinition = propertyRule->getMacroDefinition();
 
-		if (!macroDefinition.empty())
-		{
-			macrosDefinitionFile.writeLines("",
-											macroDefinition);
-		}
-	}
+	//	if (!macroDefinition.empty())
+	//	{
+	//		macrosDefinitionFile.writeLines("",
+	//										macroDefinition);
+	//	}
+	//}
 
 	macrosDefinitionFile.writeLine("\n#endif");
 }

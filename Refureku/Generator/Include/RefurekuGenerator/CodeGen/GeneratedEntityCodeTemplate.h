@@ -27,7 +27,14 @@ namespace rfk
 													 kodgen::uint8				propIndex)		const	noexcept;
 
 			/**
-			*	TODO
+			*	@brief Generate a string which adds a simple property to an entity.
+			*	
+			*	@param info				Entity to to add the property to.
+			*	@param entityVarName	Name of the entity variable in the generated code.
+			*	@param propName			Name of the property (class name).
+			*	@param propIndex		Index of the property in the list of properties of the entity.
+			*	
+			*	@return The generated code.
 			*/
 			std::string addSimplePropertyToEntity(kodgen::EntityInfo const&	info,
 												  std::string const&		entityVarName,
@@ -35,7 +42,14 @@ namespace rfk
 												  kodgen::uint8				propIndex)			const	noexcept;
 
 			/**
-			*	TODO
+			*	@brief Generate a string which adds a compelx property to an entity.
+			*	
+			*	@param info				Entity to to add the property to.
+			*	@param entityVarName	Name of the entity variable in the generated code.
+			*	@param prop				Complex property to add.
+			*	@param propIndex		Index of the property in the list of properties of the entity.
+			*	
+			*	@return The generated code.
 			*/
 			std::string addComplexPropertyToEntity(kodgen::EntityInfo const&		info,
 												  std::string const&				entityVarName,
@@ -62,7 +76,7 @@ namespace rfk
 			static inline std::string	getEntityId(kodgen::EntityInfo const& entity)							noexcept;
 
 			/**
-			*	@brief Generates a string containing the code which adds properties to the entity.
+			*	@brief Generates a string containing the code which adds properties to an entity.
 			*
 			*	@param info				Source entity.
 			*	@param entityVarName	Target entity variable name in the generated code.
@@ -70,9 +84,6 @@ namespace rfk
 			*	@return The generated code which adds the properties to the entity.
 			*/
 			std::string					fillEntityProperties(kodgen::EntityInfo const&	info,
-															 std::string const&			entityVarName)	const	noexcept;
-
-			std::string					fillEntityProperties2(kodgen::EntityInfo const&	info,
 															  std::string const&		entityVarName)	const	noexcept;
 
 			/**

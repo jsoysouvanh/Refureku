@@ -9,65 +9,18 @@
 
 #include <string>
 #include <vector>
+#include <type_traits>
 
 #include "Refureku/Config.h"
 #include "Refureku/Misc/FundamentalTypes.h"
-#include "Refureku/Utility/EnumMacros.h"
-#include "Refureku/TypeInfo/Properties/PropertyGroup.h"
+#include "Refureku/TypeInfo/Entity/EEntityKind.h"
+#include "Refureku/TypeInfo/Properties/Property.h"
 
 namespace rfk
 {
-	//Forward declaration
-	struct Property;
-
 	class Entity
 	{
 		public:
-			/**
-			*	Describe the kind of an entity
-			*/
-			enum class EKind : uint16
-			{
-				/** This entity is... what? Should never happen... */
-				Undefined				= 0u,
-
-				/** The entity is a namespace, it can safely be cast to rfk::Namespace type. */
-				Namespace				= 1 << 0,
-				
-				/** The entity is a class, it can safely be cast to rfk::Class. */
-				Class					= 1 << 1,
-
-				/** The archetype is a struct, it can safely be cast to rfk::Struct. */
-				Struct					= 1 << 2,
-
-				/** The archetype is an enum, it can safely by cast to rfk::Enum. */
-				Enum					= 1 << 3,
-
-				/** The archetype is a fundamental archetype. it can safely by cast to rfk::FundamentalArchetype. */
-				FundamentalArchetype	= 1 << 4,
-
-				/** This entity is a (non-member) variable, it can safely be cast to rfk::Variable. */
-				Variable				= 1 << 5,
-
-				/**
-				*	The entity is a field, it can safely be cast to rfk::FieldBase type.
-				*	More specific info can be retrieved from the entity by checking rfk::FieldBase::flags.
-				*/
-				Field					= 1 << 6,
-
-				/** This entity is a (non-member) function, is can safely be cast to rfk::Function. */
-				Function				= 1 << 7,
-
-				/**
-				*	The entity is a method, it can safely be cast to rfk::MethodBase type.
-				*	More specific info can be retrieved from the entity by checking rfk::MethodBase::flags.
-				*/
-				Method					= 1 << 8,
-
-				/** The entity is an enum value, it can safely be cast to rfk::EnumValue. */
-				EnumValue				= 1 << 9
-			};
-
 			/** Helper structs for hashing / equal */
 			struct NameHasher
 			{
@@ -140,7 +93,7 @@ namespace rfk
 			uint64					id			= 0u;
 
 			/** Kind of this entity. */
-			EKind					kind		= EKind::Undefined;
+			EEntityKind				kind		= EEntityKind::Undefined;
 
 			/**
 			*	The outer entity is the entity in which this entity has been declared.
@@ -149,19 +102,96 @@ namespace rfk
 			Entity const*			outerEntity	= nullptr;
 
 			/** Properties contained by this entity. */
-			PropertyGroup			properties;
+			std::vector<Property*>	properties;
 
-			/** Properties contained by this entity. */
-			std::vector<Property*>	properties2;
-
-			Entity()											= delete;
+			Entity()												= delete;
 			Entity(std::string&&	name,
 				   uint64			id,
-				   EKind			kind = EKind::Undefined)	noexcept;
-			Entity(Entity const&)								= default;
-			Entity(Entity&&)									= default;
-			~Entity()											= default;
-	};
+				   EEntityKind		kind = EEntityKind::Undefined)	noexcept;
+			Entity(Entity const&)									= default;
+			Entity(Entity&&)										= default;
+			~Entity()												= default;
 
-	GENERATE_ENUM_OPERATORS(Entity::EKind)
+			/**
+			*	@brief	Retrieve a property of a given type from this entity.
+			*	
+			*	@tparam PropertyType					Type of the property to retrieve. rfk::Property must be a base class of T.
+			*	@tparam ConsiderInheritingProperties	Should properties inheriting from PropertyType be considered as valid?
+			*	
+			*	@return The first found property matching the given PropertyType if any, else nullptr.
+			*/
+			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
+			PropertyType const* getProperty() const noexcept
+			{
+				static_assert(!std::is_abstract_v<PropertyType>, "Can't get an abstract property.");
+
+				Struct const* queriedPropertyArchetype = &PropertyType::staticGetArchetype();
+
+				//Iterate over all props to find a matching property
+				for (Property const* p : properties)
+				{
+					if (queriedPropertyArchetype == &p->getArchetype())
+					{
+						return reinterpret_cast<PropertyType const*>(p);
+					}
+				}
+
+				return nullptr;
+			}
+
+			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
+			std::vector<PropertyType const*> getProperties() const noexcept
+			{
+				static_assert(!std::is_abstract_v<PropertyType>, "Can't get an abstract property.");
+
+				std::vector<PropertyType const*> result;
+
+				Struct const* queriedPropertyArchetype = &PropertyType::staticGetArchetype();
+
+				//Iterate over all props to find a matching property
+				for (Property const* p : properties)
+				{
+					if (queriedPropertyArchetype == &p->getArchetype())
+					{
+						result.emplace_back(reinterpret_cast<PropertyType const*>(p));
+					}
+				}
+
+				return result;
+			}
+
+			Property const* getProperty(bool (*predicate)(Property const*)) const noexcept
+			{
+				if (predicate != nullptr)
+				{
+					for (Property const* property : properties)
+					{
+						if (predicate(property))
+						{
+							return property;
+						}
+					}
+				}
+
+				return nullptr;
+			}
+
+			std::vector<Property const*> getProperties(bool (*predicate)(Property const*)) const noexcept
+			{
+				std::vector<Property const*> result;
+
+				if (predicate != nullptr)
+				{
+					for (Property const* property : properties)
+					{
+						if (predicate(property))
+						{
+							result.emplace_back(property);
+						}
+					}
+				}
+
+				return result;
+			}
+	};
 }

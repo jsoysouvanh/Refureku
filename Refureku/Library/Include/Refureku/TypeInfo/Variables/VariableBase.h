@@ -22,7 +22,7 @@ namespace rfk
 			VariableBase()							= delete;
 			VariableBase(std::string&&	name,
 						 uint64			id,
-						 EKind			newKind,
+						 EEntityKind	newKind,
 						 Type const&	type)		noexcept;
 			VariableBase(VariableBase const&)		= delete;
 			VariableBase(VariableBase&&)			= delete;

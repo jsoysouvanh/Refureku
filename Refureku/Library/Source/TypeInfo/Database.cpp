@@ -61,41 +61,41 @@ void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegister
 	//Register by name
 	switch (entity.kind)
 	{
-		case Entity::EKind::Namespace:
+		case EEntityKind::Namespace:
 			_fileLevelNamespacesByName.emplace(reinterpret_cast<Namespace const*>(&entity));
 			break;
 
-		case Entity::EKind::Struct:
+		case EEntityKind::Struct:
 			_fileLevelStructsByName.emplace(reinterpret_cast<Struct const*>(&entity));
 			break;
 
-		case Entity::EKind::Class:
+		case EEntityKind::Class:
 			_fileLevelClassesByName.emplace(reinterpret_cast<Class const*>(&entity));
 			break;
 
-		case Entity::EKind::Enum:
+		case EEntityKind::Enum:
 			_fileLevelEnumsByName.emplace(reinterpret_cast<Enum const*>(&entity));
 			break;
 
-		case Entity::EKind::Variable:
+		case EEntityKind::Variable:
 			_fileLevelVariablesByName.emplace(reinterpret_cast<Variable const*>(&entity));
 			break;
 
-		case Entity::EKind::Function:
+		case EEntityKind::Function:
 			_fileLevelFunctionsByName.emplace(reinterpret_cast<Function const*>(&entity));
 			break;
 
-		case Entity::EKind::FundamentalArchetype:
+		case EEntityKind::FundamentalArchetype:
 			_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetype const*>(&entity));
 			break;
 
-		case Entity::EKind::EnumValue:
+		case EEntityKind::EnumValue:
 			[[fallthrough]];
-		case Entity::EKind::Field:
+		case EEntityKind::Field:
 			[[fallthrough]];
-		case Entity::EKind::Method:
+		case EEntityKind::Method:
 			[[fallthrough]];
-		case Entity::EKind::Undefined:
+		case EEntityKind::Undefined:
 			[[fallthrough]];
 		default:
 			//Should never reach this point
@@ -112,35 +112,35 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 	{
 		switch (entity.kind)
 		{
-			case Entity::EKind::Namespace:
+			case EEntityKind::Namespace:
 				registerSubEntities(static_cast<Namespace const&>(entity));
 				break;
 
-			case Entity::EKind::Struct:
+			case EEntityKind::Struct:
 				[[fallthrough]];
-			case Entity::EKind::Class:
+			case EEntityKind::Class:
 				registerSubEntities(static_cast<Struct const&>(entity));
 				break;
 
-			case Entity::EKind::Enum:
+			case EEntityKind::Enum:
 				registerSubEntities(static_cast<Enum const&>(entity));
 				break;
 
-			case Entity::EKind::FundamentalArchetype:
+			case EEntityKind::FundamentalArchetype:
 				[[fallthrough]];
-			case Entity::EKind::Variable:
+			case EEntityKind::Variable:
 				[[fallthrough]];
-			case Entity::EKind::Field:
+			case EEntityKind::Field:
 				[[fallthrough]];
-			case Entity::EKind::Function:
+			case EEntityKind::Function:
 				[[fallthrough]];
-			case Entity::EKind::Method:
+			case EEntityKind::Method:
 				[[fallthrough]];
-			case Entity::EKind::EnumValue:
+			case EEntityKind::EnumValue:
 				//No sub entity to register
 				break;
 
-			case Entity::EKind::Undefined:
+			case EEntityKind::Undefined:
 				[[fallthrough]];
 			default:
 				assert(false);	//Should never register a bad kind
@@ -155,35 +155,35 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 	{
 		switch (entity.kind)
 		{
-			case Entity::EKind::Namespace:
+			case EEntityKind::Namespace:
 				assert(false); //This situation should never happen
 				break;
 
-			case Entity::EKind::Struct:
+			case EEntityKind::Struct:
 				[[fallthrough]];
-			case Entity::EKind::Class:
+			case EEntityKind::Class:
 				unregisterSubEntities(static_cast<Struct const&>(entity));
 				break;
 
-			case Entity::EKind::Enum:
+			case EEntityKind::Enum:
 				unregisterSubEntities(static_cast<Enum const&>(entity));
 				break;
 
-			case Entity::EKind::Variable:
+			case EEntityKind::Variable:
 				[[fallthrough]];
-			case Entity::EKind::Field:
+			case EEntityKind::Field:
 				[[fallthrough]];
-			case Entity::EKind::Function:
+			case EEntityKind::Function:
 				[[fallthrough]];
-			case Entity::EKind::Method:
+			case EEntityKind::Method:
 				[[fallthrough]];
-			case Entity::EKind::EnumValue:
+			case EEntityKind::EnumValue:
 				[[fallthrough]];
-			case Entity::EKind::FundamentalArchetype:
+			case EEntityKind::FundamentalArchetype:
 				//No sub entity to unregister
 				break;
 
-			case Entity::EKind::Undefined:
+			case EEntityKind::Undefined:
 				[[fallthrough]];
 			default:
 				assert(false);	//Should never register a bad kind
@@ -198,41 +198,41 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 	{
 		switch (entity.kind)
 		{
-			case Entity::EKind::Namespace:
+			case EEntityKind::Namespace:
 				_fileLevelNamespacesByName.erase(reinterpret_cast<Namespace const*>(&entity));
 				break;
 
-			case Entity::EKind::Struct:
+			case EEntityKind::Struct:
 				_fileLevelStructsByName.erase(reinterpret_cast<Struct const*>(&entity));
 				break;
 
-			case Entity::EKind::Class:
+			case EEntityKind::Class:
 				_fileLevelClassesByName.erase(reinterpret_cast<Class const*>(&entity));
 				break;
 
-			case Entity::EKind::Enum:
+			case EEntityKind::Enum:
 				_fileLevelEnumsByName.erase(reinterpret_cast<Enum const*>(&entity));
 				break;
 
-			case Entity::EKind::Variable:
+			case EEntityKind::Variable:
 				_fileLevelVariablesByName.erase(reinterpret_cast<Variable const*>(&entity));
 				break;
 
-			case Entity::EKind::Function:
+			case EEntityKind::Function:
 				_fileLevelFunctionsByName.erase(reinterpret_cast<Function const*>(&entity));
 				break;
 
-			case Entity::EKind::FundamentalArchetype:
+			case EEntityKind::FundamentalArchetype:
 				_fundamentalArchetypes.erase(reinterpret_cast<FundamentalArchetype const*>(&entity));
 				break;
 
-			case Entity::EKind::EnumValue:
+			case EEntityKind::EnumValue:
 				[[fallthrough]];
-			case Entity::EKind::Field:
+			case EEntityKind::Field:
 				[[fallthrough]];
-			case Entity::EKind::Method:
+			case EEntityKind::Method:
 				[[fallthrough]];
-			case Entity::EKind::Undefined:
+			case EEntityKind::Undefined:
 				[[fallthrough]];
 			default:
 				//Those entities can't be at file level.

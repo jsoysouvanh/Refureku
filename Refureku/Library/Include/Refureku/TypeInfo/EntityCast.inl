@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-template <typename T, Entity::EKind CheckKind, typename>
+template <typename T, EEntityKind CheckKind, typename>
 T const* rfk::internal::entityCast(Entity const* entity) noexcept
 {
 	return (entity != nullptr && entity->kind == CheckKind) ? reinterpret_cast<T const*>(entity) : nullptr;

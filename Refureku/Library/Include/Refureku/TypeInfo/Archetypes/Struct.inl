@@ -87,7 +87,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType* Struct::makeInstanceFromCustomInstantiator(ArgTypes&&... args) const noexcept
+ReturnType* Struct::makeInstanceFromCustomInstantiator(ArgTypes&&... args) const
 {
 	for (StaticMethod const* instantiator : customInstantiators)
 	{
@@ -101,7 +101,7 @@ ReturnType* Struct::makeInstanceFromCustomInstantiator(ArgTypes&&... args) const
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType* Struct::makeInstance(ArgTypes&&... args) const noexcept
+ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 {
 	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>);
 

@@ -31,18 +31,18 @@ namespace rfk
 	{
 		private:
 			/** Pointer to the default method used to make an instance of this archetype. */
-			void*								(*_defaultInstantiator)()	noexcept = nullptr;
+			void*								(*_defaultInstantiator)() = nullptr;
 
 			/** List of all custom instantiators for this archetype. */
 			std::vector<StaticMethod const*>	customInstantiators;
 
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const noexcept;
+			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const;
 
 		protected:
 			Struct(std::string&&	name,
 				   uint64			id,
-				   EKind			kind,
+				   EEntityKind		kind,
 				   uint64			memorySize)	noexcept;
 
 		public:
@@ -297,7 +297,7 @@ namespace rfk
 			*	In case the class isn't default constructible, the matching user-specified custom instantiator will be used.
 			*	If one or more arguments are provided, the matching user-specified custom instantiator will be used.
 			*	
-			*	For more information about custom instantiators, see https://github.com/jsoysouvanh/Refureku#custominstantiator-method.
+			*	For more information about custom instantiators, see https://github.com/jsoysouvanh/Refureku/wiki/Properties#custominstantiator-method.
 			*
 			*	@note Memory is not auto-managed and must be freed manually by the user.
 			*
@@ -305,7 +305,7 @@ namespace rfk
 			*			else nullptr.
 			*/
 			template <typename ReturnType = void, typename... ArgTypes>
-			ReturnType*	makeInstance(ArgTypes&&... args)													const	noexcept;
+			ReturnType*	makeInstance(ArgTypes&&... args)													const;
 
 			/**
 			*	@return true if this type inherits from the provided type, else false.

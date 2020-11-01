@@ -63,45 +63,45 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 
 		switch (entity->kind)
 		{
-			case Entity::EKind::Namespace:
+			case EEntityKind::Namespace:
 				_namespaceInstance->namespaces.emplace(reinterpret_cast<Namespace const*>(entity));
 
 				//Register the nested namespace but don't register sub entities
 				Database::registerEntity(*entity, false);
 				break;
 
-			case Entity::EKind::Struct:
+			case EEntityKind::Struct:
 				[[fallthrough]];
-			case Entity::EKind::Class:
+			case EEntityKind::Class:
 				[[fallthrough]];
-			case Entity::EKind::Enum:
+			case EEntityKind::Enum:
 				_namespaceInstance->archetypes.emplace(reinterpret_cast<Archetype const*>(entity));
 				
 				//Register the archetype and its sub entities to the database.
 				Database::registerEntity(*entity, true);
 				break;
 
-			case Entity::EKind::Variable:
+			case EEntityKind::Variable:
 				_namespaceInstance->variables.emplace(reinterpret_cast<Variable const*>(entity));
 
 				//Register the variable to the database, a variable doesn't have sub entities so can write false right away
 				Database::registerEntity(*entity, false);
 				break;
 
-			case Entity::EKind::Function:
+			case EEntityKind::Function:
 				_namespaceInstance->functions.emplace(reinterpret_cast<Function const*>(entity));
 
 				//Register the function to the database, a function doesn't have sub entities so can write false right away
 				Database::registerEntity(*entity, false);
 				break;
 
-			case Entity::EKind::EnumValue:
+			case EEntityKind::EnumValue:
 				[[fallthrough]];
-			case Entity::EKind::Field:
+			case EEntityKind::Field:
 				[[fallthrough]];
-			case Entity::EKind::Method:
+			case EEntityKind::Method:
 				[[fallthrough]];
-			case Entity::EKind::Undefined:
+			case EEntityKind::Undefined:
 				[[fallthrough]];
 			default:
 				assert(false);	//None of these kind of entities should ever be a namespace nested entity
@@ -112,25 +112,34 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 
 void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(NamespaceFragment const* fragment) noexcept
 {
-	//Append simple properties
-	for (SimpleProperty const& simpleProperty : fragment->properties.simpleProperties)
-	{
-		//Add the simple prop only if it's not there yet
-		if (_namespaceInstance->properties.getSimpleProperty(simpleProperty.mainProperty) == nullptr)
-		{
-			_namespaceInstance->properties.simpleProperties.push_back(simpleProperty);
-		}
-	}
+	//Append properties
+	//for (Property const* property : fragment->properties)
+	//{
+	//	//Don't add the prop if the same prop is already added
+	//	if (_namespaceInstance->get)
+	//}
 
-	//Append complex properties
-	for (ComplexProperty const& complexProperty : fragment->properties.complexProperties)
-	{
-		//Add the complex prop only if it's not there yet
-		if (_namespaceInstance->properties.getComplexProperty(complexProperty.mainProperty) == nullptr)
-		{
-			_namespaceInstance->properties.complexProperties.push_back(complexProperty);
-		}
-	}
+	//
+	//
+	//
+	//for (SimpleProperty const& simpleProperty : fragment->properties.simpleProperties)
+	//{
+	//	//Add the simple prop only if it's not there yet
+	//	if (_namespaceInstance->properties.getSimpleProperty(simpleProperty.mainProperty) == nullptr)
+	//	{
+	//		_namespaceInstance->properties.simpleProperties.push_back(simpleProperty);
+	//	}
+	//}
+
+	////Append complex properties
+	//for (ComplexProperty const& complexProperty : fragment->properties.complexProperties)
+	//{
+	//	//Add the complex prop only if it's not there yet
+	//	if (_namespaceInstance->properties.getComplexProperty(complexProperty.mainProperty) == nullptr)
+	//	{
+	//		_namespaceInstance->properties.complexProperties.push_back(complexProperty);
+	//	}
+	//}
 }
 
 void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment const* /* fragment */) noexcept
@@ -141,44 +150,44 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 	{
 		switch (entity->kind)
 		{
-			case Entity::EKind::Namespace:
+			case EEntityKind::Namespace:
 				_namespaceInstance->namespaces.erase(reinterpret_cast<Namespace const*>(entity));
 
 				//Namespaces unregister automatically from the database, don't need to do it here
 				break;
 
-			case Entity::EKind::Struct:
+			case EEntityKind::Struct:
 				[[fallthrough]];
-			case Entity::EKind::Class:
+			case EEntityKind::Class:
 				[[fallthrough]];
-			case Entity::EKind::Enum:
+			case EEntityKind::Enum:
 				_namespaceInstance->archetypes.erase(reinterpret_cast<Archetype const*>(entity));
 
 				//Unregister archetypes and their sub entities from the database
 				Database::unregisterEntity(*entity, true);
 				break;
 
-			case Entity::EKind::Variable:
+			case EEntityKind::Variable:
 				_namespaceInstance->variables.erase(reinterpret_cast<Variable const*>(entity));
 
 				//Unregister the variable from the database, a variable doesn't have sub entities so can write false right away
 				Database::unregisterEntity(*entity, false);
 				break;
 
-			case Entity::EKind::Function:
+			case EEntityKind::Function:
 				_namespaceInstance->functions.erase(reinterpret_cast<Function const*>(entity));
 
 				//Unregister the function from the database, a function doesn't have sub entities so can write false right away
 				Database::unregisterEntity(*entity, false);
 				break;
 
-			case Entity::EKind::EnumValue:
+			case EEntityKind::EnumValue:
 				[[fallthrough]];
-			case Entity::EKind::Field:
+			case EEntityKind::Field:
 				[[fallthrough]];
-			case Entity::EKind::Method:
+			case EEntityKind::Method:
 				[[fallthrough]];
-			case Entity::EKind::Undefined:
+			case EEntityKind::Undefined:
 				[[fallthrough]];
 			default:
 				assert(false);	//None of these kind of entities should ever be a namespace nested entity

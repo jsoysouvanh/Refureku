@@ -19,7 +19,7 @@ namespace rfk
 		protected:
 			Archetype(std::string&& newName,
 					  uint64		newId,
-					  EKind			kind,
+					  EEntityKind	kind,
 					  uint64		newMemorySize)	noexcept;
 			Archetype(Archetype const&)				= delete;
 			Archetype(Archetype&&)					= delete;

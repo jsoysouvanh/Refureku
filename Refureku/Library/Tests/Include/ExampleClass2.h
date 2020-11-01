@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ExampleClass.h"
+#include "Refureku/TypeInfo/Properties/ParseAllNested.h"
 
 #include "Generated/ExampleClass2.rfk.h"
 

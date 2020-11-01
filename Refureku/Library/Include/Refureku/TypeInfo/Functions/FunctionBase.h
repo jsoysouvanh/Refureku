@@ -50,7 +50,7 @@ namespace rfk
 			FunctionBase()												= delete;
 			FunctionBase(std::string&&					name, 
 						 uint64							id,
-						 EKind							kind,
+						 EEntityKind					kind,
 						 Type const&					returnType,
 						 std::unique_ptr<ICallable>&&	internalMethod)	noexcept;
 			FunctionBase(FunctionBase const&)							= delete;

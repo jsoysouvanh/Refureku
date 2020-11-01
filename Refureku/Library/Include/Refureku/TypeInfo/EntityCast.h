@@ -38,7 +38,7 @@ namespace rfk
 		*	
 		*	@return The casted entity if the entity concrete type was correct, else nullptr.
 		*/
-		template <typename T, Entity::EKind CheckKind, typename = isValidEntityType<T>>
+		template <typename T, EEntityKind CheckKind, typename = isValidEntityType<T>>
 		T const* entityCast(Entity const* entity) noexcept;
 	}
 

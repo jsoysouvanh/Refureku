@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <type_traits>
+
 #define GENERATE_ENUM_OPERATORS(EnumName)																		\
 constexpr EnumName operator|(EnumName flags1, EnumName flags2) noexcept											\
 {																												\

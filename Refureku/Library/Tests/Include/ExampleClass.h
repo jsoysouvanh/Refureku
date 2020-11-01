@@ -2,6 +2,8 @@
 
 #include <Refureku/Object.h>
 #include <Refureku/TypeInfo/Properties/Property.h>
+#include <Refureku/TypeInfo/Properties/ParseAllNested.h>
+#include <Refureku/TypeInfo/Properties/CustomInstantiator.h>
 
 #include "Generated/ExampleClass.rfk.h"
 
@@ -284,10 +286,14 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 struct RFKStruct() CustomProperty : public rfk::Property
 {
 	public:
-		static constexpr rfk::Entity::EKind targetEntity = rfk::Entity::EKind::Field;
+		static constexpr rfk::EEntityKind targetEntity = rfk::EEntityKind::Field;
+
+		int i = 0;
+		int j = 0;
 
 		CustomProperty() noexcept {}
-		CustomProperty(int i, int j) noexcept {  }
+		CustomProperty(int i, int j) noexcept: i{i}, j{j}
+		{}
 
 	CustomProperty_GENERATED
 };
@@ -297,7 +303,7 @@ struct RFKStruct() CustomProperty2 : public CustomProperty
 	CustomProperty2_GENERATED
 };
 
-class RFKClass() A
+class RFKClass(CustomProperty2) A
 {
 	RFKField(CustomProperty(1, 456), CustomProperty)
 	int field;

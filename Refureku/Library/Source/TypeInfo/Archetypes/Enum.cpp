@@ -5,7 +5,7 @@
 using namespace rfk;
 
 Enum::Enum(std::string&& name, uint64 id, uint64 memorySize, Type const& underlyingType) noexcept:
-	Archetype(std::forward<std::string>(name), id, EKind::Enum, memorySize),
+	Archetype(std::forward<std::string>(name), id, EEntityKind::Enum, memorySize),
 	underlyingType{underlyingType}
 {
 }
