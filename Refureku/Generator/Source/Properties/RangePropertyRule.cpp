@@ -5,7 +5,7 @@
 using namespace rfk;
 
 RangePropertyRule::RangePropertyRule() noexcept:
-	kodgen::FixedComplexPropertyRule("Range", kodgen::EEntityType::Field, "Defines a float range between min and max.")
+	kodgen::FixedComplexPropertyRule("Range", kodgen::EEntityType::Field)
 {
 	subProperties.emplace_back(kodgen::ComplexPropertySubProperty::EType::Float, "min", "Minimum of the range.");
 	subProperties.emplace_back(kodgen::ComplexPropertySubProperty::EType::Float, "max", "Maximum of the range.");

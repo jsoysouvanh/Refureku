@@ -16,10 +16,6 @@ namespace kodgen
 {
 	class DefaultSimplePropertyRule : public SimplePropertyRule
 	{
-		private:
-			/** Description of this property rule. */
-			std::string	_description;
-
 		protected:
 			/** Name the property should have to be considered valid. */
 			std::string	mainPropName;
@@ -27,20 +23,15 @@ namespace kodgen
 			/** EEntityType bitmask defining valid entities (bit it set for valid entities). */
 			EEntityType	validEntityTypes;
 
-			virtual std::string	getMacroDocumentation()	const noexcept override;
-
 		public:
 			DefaultSimplePropertyRule()									= delete;
 			DefaultSimplePropertyRule(std::string	mainPropName,
-									  EEntityType	validEntityTypes,
-									  std::string	description = "")	noexcept;
+									  EEntityType	validEntityTypes)	noexcept;
 			DefaultSimplePropertyRule(DefaultSimplePropertyRule const&)	= default;
 			DefaultSimplePropertyRule(DefaultSimplePropertyRule&&)		= default;
 			virtual ~DefaultSimplePropertyRule()						= default;
 
 			virtual bool		isMainPropSyntaxValid(std::string const&	mainProperty,
 													  EEntityType			entityType)	const noexcept override;
-
-			virtual std::string	getMacroDefinition()									const noexcept override;
 	};
 }

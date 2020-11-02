@@ -6,8 +6,7 @@ using namespace kodgen;
 
 ParseAllNestedPropertyRule::ParseAllNestedPropertyRule() noexcept:
 	DefaultSimplePropertyRule(NativeProperties::parseAllNestedProperty,
-							  EEntityType::Namespace | EEntityType::Struct | EEntityType::Class,
-							  "Namespace, Struct and Class property. Indicates the generator to parse all direct nested entities without having to explicitly mark them with the macro.")
+							  EEntityType::Namespace | EEntityType::Struct | EEntityType::Class)
 {
 }
 

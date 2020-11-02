@@ -145,32 +145,6 @@ void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory)
 									"#define " + pps.enumValueMacroName	+ "(...)",
 									"#define " + pps.functionMacroName	+ "(...)");
 
-	//Generate simple property rules macros + doc
-	std::string macroDefinition;
-
-	//for (kodgen::SimplePropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.simplePropertyRules)
-	//{
-	//	macroDefinition = propertyRule->getMacroDefinition();
-
-	//	if (!macroDefinition.empty())
-	//	{
-	//		macrosDefinitionFile.writeLines("",
-	//										macroDefinition);
-	//	}
-	//}
-
-	////Generate complex property rules macros + doc
-	//for (kodgen::ComplexPropertyRule const* propertyRule : fileParserFactory.parsingSettings.propertyParsingSettings.complexPropertyRules)
-	//{
-	//	macroDefinition = propertyRule->getMacroDefinition();
-
-	//	if (!macroDefinition.empty())
-	//	{
-	//		macrosDefinitionFile.writeLines("",
-	//										macroDefinition);
-	//	}
-	//}
-
 	macrosDefinitionFile.writeLine("\n#endif");
 }
 

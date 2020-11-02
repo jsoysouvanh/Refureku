@@ -20,13 +20,10 @@ namespace kodgen
 			/** Vector of this property rule subproperties. */
 			std::vector<ComplexPropertySubProperty>	subProperties;
 
-			virtual std::string	getMacroDocumentation()	const noexcept override;
-
 		public:
 			FixedComplexPropertyRule()									= delete;
 			FixedComplexPropertyRule(std::string	mainPropName,
-									 EEntityType	validEntityTypes,
-									 std::string	description = "")	noexcept;
+									 EEntityType	validEntityTypes)	noexcept;
 			FixedComplexPropertyRule(FixedComplexPropertyRule const&)	= default;
 			FixedComplexPropertyRule(FixedComplexPropertyRule&&)		= default;
 			virtual ~FixedComplexPropertyRule()							= default;
@@ -38,7 +35,5 @@ namespace kodgen
 			virtual bool		isPropertyGroupValid(PropertyGroup const&	propertyGroup,
 													 uint8					propertyIndex,
 													 std::string&					out_errorDescription)	const noexcept override;
-
-			virtual std::string	getMacroDefinition()														const noexcept override;
 	};
 }

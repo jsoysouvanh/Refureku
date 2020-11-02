@@ -2,22 +2,9 @@
 
 using namespace kodgen;
 
-FixedComplexPropertyRule::FixedComplexPropertyRule(std::string mainPropName, EEntityType validEntityTypes, std::string description) noexcept:
-	DefaultComplexPropertyRule(std::move(mainPropName), std::move(validEntityTypes), description)
+FixedComplexPropertyRule::FixedComplexPropertyRule(std::string mainPropName, EEntityType validEntityTypes) noexcept:
+	DefaultComplexPropertyRule(std::move(mainPropName), std::move(validEntityTypes))
 {
-}
-
-std::string	FixedComplexPropertyRule::getMacroDocumentation() const noexcept
-{
-	std::string documentation = "/**\n"
-								"*\t@brief " + getDescription() + "\n*\n";
-
-	for (ComplexPropertySubProperty const& subprop : subProperties)
-	{
-		documentation += "*\t@param " + subprop.getName() + "\t" + toString(subprop.getType()) + " " + subprop.getDescription() + "\n";
-	}
-
-	return documentation + "*/";
 }
 
 bool FixedComplexPropertyRule::isSubPropSyntaxValid(std::string const& subProperty, uint8 subPropIndex, std::string& out_errorDescription) const noexcept
@@ -42,19 +29,4 @@ bool FixedComplexPropertyRule::isPropertyGroupValid(PropertyGroup const& propert
 	}
 
 	return true;
-}
-
-std::string	FixedComplexPropertyRule::getMacroDefinition() const noexcept
-{
-	std::string macroDefinition = "#define " + mainPropName + "(";
-
-	for (size_t i = 0u; i < subProperties.size(); i++)
-	{
-		macroDefinition += subProperties[i].getName() + ",";
-	}
-
-	//Replace last , by closing )
-	macroDefinition.back() = ')';
-
-	return	getMacroDocumentation() + "\n" + macroDefinition;
 }
