@@ -11,7 +11,7 @@ std::string GeneratedFunctionCodeTemplate::generateGetFunctionDefinition(kodgen:
 	std::string entityId	= getEntityId(funcInfo);
 	std::string macroName	= internalPrefix + entityId + "_GenerateGetFunctionDefinition";
 	std::string properties;
-	std::string nonMemberFuncType = "rfk::NonMemberFunction<" + funcInfo.getPrototype(true, true) + ">";
+	std::string nonMemberFuncType = "rfk::NonMemberFunction<" + funcInfo.getPrototype(true) + ">";
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							 "	inline rfk::Function const& " + getGetFunctionFunctionName(funcInfo) + "() noexcept\t\\",
