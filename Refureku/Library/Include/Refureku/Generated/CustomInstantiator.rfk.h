@@ -12,7 +12,7 @@
 #include <Refureku/TypeInfo/Archetypes/Class.h>
 #include <Refureku/TypeInfo/Archetypes/Enum.h>
 #include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
-#include <Refureku/TypeInfo/DefaultEntityRegisterer.h>
+#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
 #include <Refureku/Misc/DisableWarningMacros.h>
 
 

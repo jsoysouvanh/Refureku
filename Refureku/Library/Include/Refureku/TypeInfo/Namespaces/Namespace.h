@@ -9,7 +9,7 @@
 
 #include <unordered_set>
 
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Variables/Variable.h"
 #include "Refureku/TypeInfo/Functions/Function.h"

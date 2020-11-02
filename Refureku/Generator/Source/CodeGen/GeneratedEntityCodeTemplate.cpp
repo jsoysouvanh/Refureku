@@ -47,7 +47,7 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 
 std::string GeneratedEntityCodeTemplate::generatePropertyVariableName(kodgen::EntityInfo const& info, kodgen::uint8 propIndex) const noexcept
 {
-	return "property" + std::to_string(stringHasher(info.id)) + "_" + std::to_string(propIndex);
+	return "property_" + info.name + "_" + std::to_string(propIndex) + "_" + std::to_string(stringHasher(info.id));
 }
 
 std::string GeneratedEntityCodeTemplate::addSimplePropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, std::string const& propName, kodgen::uint8 propIndex) const noexcept

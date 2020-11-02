@@ -11,7 +11,7 @@
 
 #include "Refureku/TypeInfo/Database.h"
 
-#include "Refureku/TypeInfo/EntityCast.h"
+#include "Refureku/TypeInfo/Entity/EntityCast.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"

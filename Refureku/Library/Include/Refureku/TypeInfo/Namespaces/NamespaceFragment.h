@@ -9,7 +9,7 @@
 
 #include <vector>
 
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/Entity.h"
 
 namespace rfk
 {

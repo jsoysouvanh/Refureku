@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
 
 namespace rfk

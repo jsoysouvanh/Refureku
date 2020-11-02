@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/EntityCast.h"
+#include "Refureku/TypeInfo/Entity/EntityCast.h"
 
 using namespace rfk;
 

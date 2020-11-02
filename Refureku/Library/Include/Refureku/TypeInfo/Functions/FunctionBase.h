@@ -10,7 +10,7 @@
 #include <memory>	//unique_ptr
 #include <vector>
 
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Functions/FunctionParameter.h"
 #include "Refureku/TypeInfo/Functions/ICallable.h"
 #include "Refureku/Exceptions/ArgCountMismatch.h"

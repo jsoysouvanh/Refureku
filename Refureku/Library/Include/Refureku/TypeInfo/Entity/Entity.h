@@ -87,22 +87,22 @@ namespace rfk
 			};
 
 			/** Name qualifying this entity. */
-			std::string				name		= "";
+			std::string						name		= "";
 
 			/** Program-unique ID given for this entity. */
-			uint64					id			= 0u;
+			uint64							id			= 0u;
 
 			/** Kind of this entity. */
-			EEntityKind				kind		= EEntityKind::Undefined;
+			EEntityKind						kind		= EEntityKind::Undefined;
 
 			/**
 			*	The outer entity is the entity in which this entity has been declared.
 			*	If this entity is declared at file level, outerEntity will be nullptr.
 			*/
-			Entity const*			outerEntity	= nullptr;
+			Entity const*					outerEntity	= nullptr;
 
 			/** Properties contained by this entity. */
-			std::vector<Property*>	properties;
+			std::vector<Property const*>	properties;
 
 			Entity()												= delete;
 			Entity(std::string&&	name,
@@ -114,84 +114,46 @@ namespace rfk
 
 			/**
 			*	@brief	Retrieve a property of a given type from this entity.
+			*			The provided property type must be non-abstract.
 			*	
-			*	@tparam PropertyType					Type of the property to retrieve. rfk::Property must be a base class of T.
-			*	@tparam ConsiderInheritingProperties	Should properties inheriting from PropertyType be considered as valid?
+			*	@tparam PropertyType Type of the property to retrieve. It must be a child class of rfk::Property.
 			*	
-			*	@return The first found property matching the given PropertyType if any, else nullptr.
+			*	@return The first found property of type PropertyType if any, else nullptr.
 			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
-			PropertyType const* getProperty() const noexcept
-			{
-				static_assert(!std::is_abstract_v<PropertyType>, "Can't get an abstract property.");
+			PropertyType const*					getProperty()						const	noexcept;
 
-				Struct const* queriedPropertyArchetype = &PropertyType::staticGetArchetype();
+			/**
+			*	@brief Retrieve a property matching with a predicate.
+			*	
+			*	@param predicate Condition that the searched property must fulfill.
+			*	
+			*	@return The first found property fulfilling the provided predicate if any, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
+			Property const*						getProperty(Predicate predicate)	const;
 
-				//Iterate over all props to find a matching property
-				for (Property const* p : properties)
-				{
-					if (queriedPropertyArchetype == &p->getArchetype())
-					{
-						return reinterpret_cast<PropertyType const*>(p);
-					}
-				}
-
-				return nullptr;
-			}
-
+			/**
+			*	@brief	Retrieve properties of a given type from this entity.
+			*			The provided property type must be non-abstract.
+			*	
+			*	@tparam PropertyType Type of the property to retrieve. It must be a child class of rfk::Property.
+			*	
+			*	@return A collection of all properties of type PropertyType contained in this entity.
+			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
-			std::vector<PropertyType const*> getProperties() const noexcept
-			{
-				static_assert(!std::is_abstract_v<PropertyType>, "Can't get an abstract property.");
+			std::vector<PropertyType const*>	getProperties()						const	noexcept;
 
-				std::vector<PropertyType const*> result;
-
-				Struct const* queriedPropertyArchetype = &PropertyType::staticGetArchetype();
-
-				//Iterate over all props to find a matching property
-				for (Property const* p : properties)
-				{
-					if (queriedPropertyArchetype == &p->getArchetype())
-					{
-						result.emplace_back(reinterpret_cast<PropertyType const*>(p));
-					}
-				}
-
-				return result;
-			}
-
-			Property const* getProperty(bool (*predicate)(Property const*)) const noexcept
-			{
-				if (predicate != nullptr)
-				{
-					for (Property const* property : properties)
-					{
-						if (predicate(property))
-						{
-							return property;
-						}
-					}
-				}
-
-				return nullptr;
-			}
-
-			std::vector<Property const*> getProperties(bool (*predicate)(Property const*)) const noexcept
-			{
-				std::vector<Property const*> result;
-
-				if (predicate != nullptr)
-				{
-					for (Property const* property : properties)
-					{
-						if (predicate(property))
-						{
-							result.emplace_back(property);
-						}
-					}
-				}
-
-				return result;
-			}
+			/**
+			*	@brief Retrieve all properties matching with a predicate in this entity.
+			*	
+			*	@param predicate Condition that the searched properties must fulfill.
+			*	
+			*	@return A collection of all properties fulfilling the provided predicate contained in this entity.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
+			std::vector<Property const*>		getProperties(Predicate predicate)	const;
 	};
+
+	#include "Refureku/TypeInfo/Entity/Entity.inl"
 }

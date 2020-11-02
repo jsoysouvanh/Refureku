@@ -113,33 +113,17 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(NamespaceFragment const* fragment) noexcept
 {
 	//Append properties
-	//for (Property const* property : fragment->properties)
-	//{
-	//	//Don't add the prop if the same prop is already added
-	//	if (_namespaceInstance->get)
-	//}
-
-	//
-	//
-	//
-	//for (SimpleProperty const& simpleProperty : fragment->properties.simpleProperties)
-	//{
-	//	//Add the simple prop only if it's not there yet
-	//	if (_namespaceInstance->properties.getSimpleProperty(simpleProperty.mainProperty) == nullptr)
-	//	{
-	//		_namespaceInstance->properties.simpleProperties.push_back(simpleProperty);
-	//	}
-	//}
-
-	////Append complex properties
-	//for (ComplexProperty const& complexProperty : fragment->properties.complexProperties)
-	//{
-	//	//Add the complex prop only if it's not there yet
-	//	if (_namespaceInstance->properties.getComplexProperty(complexProperty.mainProperty) == nullptr)
-	//	{
-	//		_namespaceInstance->properties.complexProperties.push_back(complexProperty);
-	//	}
-	//}
+	for (Property const* fragmentProperty : fragment->properties)
+	{
+		//Don't add the prop if the same prop is already added
+		if (!_namespaceInstance->getProperty([fragmentProperty](Property const* namespaceProperty)
+			{
+				return &namespaceProperty->getArchetype() == &fragmentProperty->getArchetype();
+			}))
+		{
+			_namespaceInstance->properties.emplace_back(fragmentProperty);
+		}
+	}
 }
 
 void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment const* /* fragment */) noexcept
