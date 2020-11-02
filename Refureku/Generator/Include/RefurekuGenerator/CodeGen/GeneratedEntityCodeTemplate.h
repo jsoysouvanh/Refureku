@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <unordered_map>
+
 #include <Kodgen/CodeGen/GeneratedCodeTemplate.h>
 #include <Kodgen/InfoStructures/EntityInfo.h>
 
@@ -16,15 +18,83 @@ namespace rfk
 	{
 		private:
 			/**
-			*	@brief Generate the name of a property.
+			*	@brief Add a property to the record.
+			*	
+			*	@param record	Record we add the property to.
+			*	@param propName Name of the property to add.
+			*	
+			*	@return Number of occurences (after insert) of the added entity in the properties record.
+			*/
+			uint8_t		addToPropertiesRecord(std::unordered_map<std::string, uint8_t>&	record,
+											  std::string const&						propName)					const	noexcept;
+
+			/**
+			*	@brief Get the rfk::EEntityKind corresponding to a kodgen::EEntityType.
+			*	
+			*	@param entityType kodgen::EEntityType to convert.
+			*	
+			*	@return The corresponding rfk::EEntityKind.
+			*/
+			std::string getRefurekuEntityKind(kodgen::EEntityType entityType)										const	noexcept;
+
+			/**
+			*	@brief Get the kind name of an entity.
+			*	
+			*	@param entityType kodgen::EEntityType to convert.
+			*	
+			*	@return The kind name of the provided entity type.
+			*/
+			std::string getEntityKindName(kodgen::EEntityType entityType)											const	noexcept;
+
+			/**
+			*	@brief Generate the variable name of a property.
 			*	
 			*	@param info			Entity the property is attached to.
+			*	@param propName		Name of the property.
 			*	@param propIndex	Index of the property in the list of all properties.
 			*	
-			*	@return A name for the property.
+			*	@return A variable name for the property.
 			*/
 			std::string	generatePropertyVariableName(kodgen::EntityInfo const&	info,
-													 kodgen::uint8				propIndex)		const	noexcept;
+													 std::string const&			propName, 
+													 kodgen::uint8				propIndex)							const	noexcept;
+
+			/**
+			*	@brief Generate static asserts relative to a property.
+			*	
+			*	@param info								Entity the property is attached to.
+			*	@param propName							Name of the property asserts are generated for.
+			*	@param generateTargetEntityKindAssert	Should the targetEntityKind assert be generated?
+			*	@param generateAllowMultipleAssert		Should the allowMultiple assert be generated?
+			*	
+			*	@return The static_assert generated code.
+			*/
+			std::string generateStaticAsserts(kodgen::EntityInfo const&	info,
+											  std::string const&		propName,
+											  bool						generateTargetEntityKindAssert,
+											  bool						generateAllowMultipleAssert)				const	noexcept;
+
+			/**
+			*	@brief Generate static_assert code to make sure a property can be attached to a specific entity.
+			*	
+			*	@param info		Entity the property is attached to.
+			*	@param propName	Name of the property.
+			*
+			*	@return The static_assert generated code.
+			*/
+			std::string generatePropertyTargetEntityKindAssert(kodgen::EntityInfo const&	info,
+															   std::string const&			propName)				const	noexcept;
+
+			/**
+			*	@brief Generate static_assert code to make sure a property can be used multiple times in a single entity.
+			*	
+			*	@param info		Entity the property is attached to.
+			*	@param propName	Name of the property.
+			*
+			*	@return The static_assert generated code.
+			*/
+			std::string generatePropertyAllowMultipleAssert(kodgen::EntityInfo const&	info,
+															std::string const&			propName)					const	noexcept;
 
 			/**
 			*	@brief Generate a string which adds a simple property to an entity.
@@ -39,7 +109,8 @@ namespace rfk
 			std::string addSimplePropertyToEntity(kodgen::EntityInfo const&	info,
 												  std::string const&		entityVarName,
 												  std::string const&		propName,
-												  kodgen::uint8				propIndex)			const	noexcept;
+												  kodgen::uint8				propIndex,
+												  bool						generateAllowMultipleAssert)			const	noexcept;
 
 			/**
 			*	@brief Generate a string which adds a compelx property to an entity.
@@ -54,7 +125,8 @@ namespace rfk
 			std::string addComplexPropertyToEntity(kodgen::EntityInfo const&		info,
 												  std::string const&				entityVarName,
 												  kodgen::ComplexProperty const&	prop,
-												  kodgen::uint8						propIndex)	const	noexcept;
+												  kodgen::uint8						propIndex,
+												  bool								generateAllowMultipleAssert)	const	noexcept;
 
 		protected:
 			/** Prefix used to build internal macros. */

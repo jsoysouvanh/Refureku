@@ -15,13 +15,16 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 
 	if (propsCount > 0)
 	{
+		//Keep track of all added properties, propName -> count
+		std::unordered_map<std::string, uint8_t> propertiesRecord;
+
 		//Reserve space to avoid reallocation
 		result += entityVarName + "properties.reserve(" + std::to_string(propsCount) + ");";
 
 		//Add simple props
 		for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
 		{
-			result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index);
+			result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
 
 			index++;
 		}
@@ -31,11 +34,11 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 		{
 			if (prop.subProperties.empty())
 			{
-				result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index);
+				result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
 			}
 			else
 			{
-				result += addComplexPropertyToEntity(info, entityVarName, prop, index);
+				result += addComplexPropertyToEntity(info, entityVarName, prop, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
 			}
 
 			index++;
@@ -45,37 +48,160 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 	return result;
 }
 
-std::string GeneratedEntityCodeTemplate::generatePropertyVariableName(kodgen::EntityInfo const& info, kodgen::uint8 propIndex) const noexcept
+uint8_t GeneratedEntityCodeTemplate::addToPropertiesRecord(std::unordered_map<std::string, uint8_t>& record, std::string const& propName) const noexcept
 {
-	return "property_" + info.name + "_" + std::to_string(propIndex) + "_" + std::to_string(stringHasher(info.id));
+	std::unordered_map<std::string, uint8_t>::iterator it = record.find(propName);
+
+	if (it != record.end())
+	{
+		return ++it->second;
+	}
+	else
+	{
+		record.emplace(propName, 1u);
+
+		return 1u;
+	}
 }
 
-std::string GeneratedEntityCodeTemplate::addSimplePropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, std::string const& propName, kodgen::uint8 propIndex) const noexcept
+std::string GeneratedEntityCodeTemplate::getRefurekuEntityKind(kodgen::EEntityType entityType) const noexcept
 {
-	std::string propVarName = generatePropertyVariableName(info, propIndex);
+	switch (entityType)
+	{
+		case kodgen::EEntityType::Struct:
+			return "rfk::EEntityKind::Struct";
+
+		case kodgen::EEntityType::Class:
+			return "rfk::EEntityKind::Class";
+
+		case kodgen::EEntityType::Enum:
+			return "rfk::EEntityKind::Enum";
+
+		case kodgen::EEntityType::EnumValue:
+			return "rfk::EEntityKind::EnumValue";
+
+		case kodgen::EEntityType::Field:
+			return "rfk::EEntityKind::Field";
+
+		case kodgen::EEntityType::Method:
+			return "rfk::EEntityKind::Method";
+
+		case kodgen::EEntityType::Variable:
+			return "rfk::EEntityKind::Variable";
+
+		case kodgen::EEntityType::Function:
+			return "rfk::EEntityKind::Function";
+
+		case kodgen::EEntityType::Namespace:
+			return "rfk::EEntityKind::Namespace";
+
+		case kodgen::EEntityType::Undefined:
+			return "rfk::EEntityKind::Undefined";
+			break;
+	}
+
+	//Should never reach this point
+	assert(false);
+	
+	return "";
+}
+
+std::string GeneratedEntityCodeTemplate::getEntityKindName(kodgen::EEntityType entityType) const noexcept
+{
+	switch (entityType)
+	{
+		case kodgen::EEntityType::Struct:
+			return "struct";
+
+		case kodgen::EEntityType::Class:
+			return "class";
+
+		case kodgen::EEntityType::Enum:
+			return "enum";
+
+		case kodgen::EEntityType::EnumValue:
+			return "enum value";
+
+		case kodgen::EEntityType::Field:
+			return "field";
+
+		case kodgen::EEntityType::Method:
+			return "method";
+
+		case kodgen::EEntityType::Variable:
+			return "variable";
+
+		case kodgen::EEntityType::Function:
+			return "function";
+
+		case kodgen::EEntityType::Namespace:
+			return "namespace";
+
+		case kodgen::EEntityType::Undefined:
+			break;
+	}
+
+	//Should never reach this point
+	assert(false);
+
+	return "";
+}
+
+std::string GeneratedEntityCodeTemplate::generatePropertyVariableName(kodgen::EntityInfo const& info, std::string const& propName, kodgen::uint8 propIndex) const noexcept
+{
+	return "property_" + info.name + "_" + propName + "_" + std::to_string(propIndex) + "_" + std::to_string(stringHasher(info.id));
+}
+
+std::string GeneratedEntityCodeTemplate::generateStaticAsserts(kodgen::EntityInfo const& info, std::string const& propName, bool generateTargetEntityKindAssert, bool generateAllowMultipleAssert) const noexcept
+{
 	std::string result;
 
-	//static_assert((CustomProperty::targetEntityKind & rfk::Entity::EKind::Field) != rfk::Entity::EKind::Undefined, "A::field: CustomProperty can't be applied to a Field.");
-	//TODO: static_assert targetEntityKind
-	//TODO: static_assert allowMultiple
+	if (generateTargetEntityKindAssert)
+	{
+		result += generatePropertyTargetEntityKindAssert(info, propName);
+	}
 
-	//This static_assert is here just to issue an error if the propName doesn't exist or is not included
-	result += "static_assert(sizeof(" + propName + ") != 0u, \"\");";
+	if (generateAllowMultipleAssert)
+	{
+		result += generatePropertyAllowMultipleAssert(info, propName);
+	}
+
+	return result;
+}
+
+std::string GeneratedEntityCodeTemplate::generatePropertyTargetEntityKindAssert(kodgen::EntityInfo const& info, std::string const& propName) const noexcept
+{
+	return	"static_assert((" + propName + "::targetEntityKind & " + getRefurekuEntityKind(info.entityType) + ") != " + getRefurekuEntityKind(kodgen::EEntityType::Undefined) +
+			", \"" + propName + " can't be applied to a " + getEntityKindName(info.entityType) + "\");";
+}
+
+std::string GeneratedEntityCodeTemplate::generatePropertyAllowMultipleAssert(kodgen::EntityInfo const& info, std::string const& propName) const noexcept
+{
+	return "static_assert(" + propName + "::allowMultiple, \"" + info.getFullName() + ": " + propName + " can't be attached multiple times to a single entity.\");";
+}
+
+std::string GeneratedEntityCodeTemplate::addSimplePropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, std::string const& propName, kodgen::uint8 propIndex, bool generateAllowMultipleAssert) const noexcept
+{
+	std::string propVarName = generatePropertyVariableName(info, propName, propIndex);
+	std::string result;
+
+	//Generate static_asserts relative to this entity/property
+	result += generateStaticAsserts(info, propName, true, generateAllowMultipleAssert);
 
 	result += "static " + propName + " " + propVarName + "; " + entityVarName + "properties.emplace_back(&" + propVarName + "); ";
 
 	return result;
 }
 
-std::string GeneratedEntityCodeTemplate::addComplexPropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, kodgen::ComplexProperty const& prop, kodgen::uint8 propIndex) const noexcept
+std::string GeneratedEntityCodeTemplate::addComplexPropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, kodgen::ComplexProperty const& prop, kodgen::uint8 propIndex, bool generateAllowMultipleAssert) const noexcept
 {
 	assert(!prop.subProperties.empty());
 
-	std::string propVarName = generatePropertyVariableName(info, propIndex);
+	std::string propVarName = generatePropertyVariableName(info, prop.mainProperty, propIndex);
 	std::string result;
 	
-	//TODO: static_assert targetEntityKind
-	//TODO: static_assert allowMultiple
+	//Generate static_asserts relative to this entity/property
+	result += generateStaticAsserts(info, prop.mainProperty, true, generateAllowMultipleAssert);
 
 	result += "static " + prop.mainProperty + " " + propVarName + "{";
 

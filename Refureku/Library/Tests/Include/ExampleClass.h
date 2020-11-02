@@ -35,10 +35,10 @@ namespace namespace2 RFKNamespace()
 	};
 }
 
-namespace namespace3 RFKNamespace()
+namespace namespace3 RFKNamespace(ParseAllNested)
 {
 	//Forward declaration
-	class AnotherClassInNamespace3;
+	//class AnotherClassInNamespace3;
 
 	class RFKClass() OtherClass : public rfk::Object
 	{
@@ -286,7 +286,8 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 struct RFKStruct() CustomProperty : public rfk::Property
 {
 	public:
-		static constexpr rfk::EEntityKind targetEntity = rfk::EEntityKind::Field;
+		static constexpr rfk::EEntityKind	targetEntityKind	= rfk::EEntityKind::Field | rfk::EEntityKind::Class; 
+		static constexpr bool				allowMultiple		= true;
 
 		int i = 0;
 		int j = 0;
@@ -300,33 +301,15 @@ struct RFKStruct() CustomProperty : public rfk::Property
 
 struct RFKStruct() CustomProperty2 : public CustomProperty
 {
+	static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Class;
+
 	CustomProperty2_GENERATED
 };
 
-class RFKClass(CustomProperty2) A
+class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A
 {
-	RFKField(CustomProperty(1, 456), CustomProperty)
+	RFKField(CustomProperty(1, 456), CustomProperty) 
 	int field;
-
-	/*static rfk::Class const& staticGetArchetype() noexcept
-	{
-		static rfk::Class	type("A", 0u, sizeof(A));
-		static bool			initialized = false;
-
-		static std::vector<Property const*> properties;
-
-		if (!initialized)
-		{
-			initialized = true;
-
-			static_assert((CustomProperty::targetEntity & rfk::Entity::EKind::Field) != rfk::Entity::EKind::Undefined, "A::field: CustomProperty can't be applied to a Field.");
-			static CustomProperty cp = CustomProperty(1, 2);
-
-			properties.emplace_back(&cp);
-		}
-
-		return type;
-	}*/
 
 	A_GENERATED
 };
