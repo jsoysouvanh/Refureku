@@ -28,3 +28,9 @@ bool SimplePropertyRule::isUsedOnlyOnce(PropertyGroup const& propertyGroup, uint
 
 	return true;
 }
+
+std::string	SimplePropertyRule::generateCode(EntityInfo const& /* entity */, Property const& /* property */, void* /* userData */) const noexcept
+{
+	//Default implementation does not generate any code
+	return "";
+}

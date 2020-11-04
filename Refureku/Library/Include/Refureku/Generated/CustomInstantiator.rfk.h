@@ -49,7 +49,7 @@ public:	\
 	type.__RFKaddRequiredMethods<CustomInstantiator>();	\
 
 #define __RFK291713889535622996u_GenerateArchetypeProperties	\
-	
+	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, CustomInstantiator>, "[Refureku] Can't attach PropertySettings property to CustomInstantiator as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_CustomInstantiator_PropertySettings_0_291713889535622996{rfk::EEntityKind::Method};type.properties.emplace_back(&property_CustomInstantiator_PropertySettings_0_291713889535622996); 
 
 #define __RFK291713889535622996u_GetTypeDeclaration	\
 	__RFK291713889535622996u_GenerateFieldHelperMethods	\
@@ -97,6 +97,10 @@ public:	\
 		static inline rfk::ArchetypeRegisterer __rfkArchetypeRegisterer = &staticGetArchetype();
 
 
+#define __RFK291713889535622996u_NativeProperties	\
+	public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Method;virtual rfk::EEntityKind getTargetEntityKind() const noexcept override { return targetEntityKind; }	\
+	
+
 #ifdef KODGEN_PARSING
 #define CustomInstantiator_GENERATED
 #else
@@ -106,19 +110,23 @@ public:	\
 	__RFK291713889535622996u_DefaultInstantiateDefinition	\
 	__RFK291713889535622996u_GetTypeDeclaration	\
 	__RFK291713889535622996u_RegisterArchetype	\
+	__RFK291713889535622996u_NativeProperties	\
 	private:
 
 #endif
 
-#ifdef File_GENERATED
-	#undef File_GENERATED
+#ifdef __RFKNativeProperties_GENERATED
+	#undef __RFKNativeProperties_GENERATED
 #endif
+
+#define __RFKNativeProperties_GENERATED	\
+	
 
 #ifdef File_GENERATED
 	#undef File_GENERATED
 #endif
-
 #define File_GENERATED	\
 	__RFK291713889535622996u_GetTypeDefinition	\
+	__RFKNativeProperties_GENERATED	\
 
 

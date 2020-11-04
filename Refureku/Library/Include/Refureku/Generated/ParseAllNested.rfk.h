@@ -49,7 +49,7 @@ public:	\
 	type.__RFKaddRequiredMethods<ParseAllNested>();	\
 
 #define __RFK17636175816175907530u_GenerateArchetypeProperties	\
-	
+	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_ParseAllNested_PropertySettings_0_17636175816175907530{rfk::EEntityKind::Namespace|rfk::EEntityKind::Class|rfk::EEntityKind::Struct};type.properties.emplace_back(&property_ParseAllNested_PropertySettings_0_17636175816175907530); 
 
 #define __RFK17636175816175907530u_GetTypeDeclaration	\
 	__RFK17636175816175907530u_GenerateFieldHelperMethods	\
@@ -97,6 +97,10 @@ public:	\
 		static inline rfk::ArchetypeRegisterer __rfkArchetypeRegisterer = &staticGetArchetype();
 
 
+#define __RFK17636175816175907530u_NativeProperties	\
+	public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Namespace|rfk::EEntityKind::Class|rfk::EEntityKind::Struct;virtual rfk::EEntityKind getTargetEntityKind() const noexcept override { return targetEntityKind; }	\
+	
+
 #ifdef KODGEN_PARSING
 #define ParseAllNested_GENERATED
 #else
@@ -106,19 +110,23 @@ public:	\
 	__RFK17636175816175907530u_DefaultInstantiateDefinition	\
 	__RFK17636175816175907530u_GetTypeDeclaration	\
 	__RFK17636175816175907530u_RegisterArchetype	\
+	__RFK17636175816175907530u_NativeProperties	\
 	private:
 
 #endif
 
-#ifdef File_GENERATED
-	#undef File_GENERATED
+#ifdef __RFKNativeProperties_GENERATED
+	#undef __RFKNativeProperties_GENERATED
 #endif
+
+#define __RFKNativeProperties_GENERATED	\
+	
 
 #ifdef File_GENERATED
 	#undef File_GENERATED
 #endif
-
 #define File_GENERATED	\
 	__RFK17636175816175907530u_GetTypeDefinition	\
+	__RFKNativeProperties_GENERATED	\
 
 

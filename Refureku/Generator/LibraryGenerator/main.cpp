@@ -30,7 +30,7 @@ int main()
 
 	if (fileParserFactory.loadSettings(path / "LibraryGenerationSettings.toml") && fileGenerator.loadSettings(path / "LibraryGenerationSettings.toml"))
 	{
-		kodgen::FileGenerationResult result = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit);
+		kodgen::FileGenerationResult result = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, true);
 
 		for (kodgen::ParsingError const& error : result.parsingErrors)
 		{

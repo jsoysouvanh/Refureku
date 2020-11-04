@@ -8,6 +8,7 @@
 #include <Kodgen/InfoStructures/NestedEnumInfo.h>
 #include <Kodgen/Misc/FundamentalTypes.h>
 
+#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
 #include "RefurekuGenerator/Properties/NativeProperties.h"
 #include "RefurekuGenerator/Misc/Helpers.h"
 
@@ -37,6 +38,7 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	std::string getTypeMacroName				= generateGetArchetypeMacro(generatedFile, classInfo);
 	std::string defaultInstantiateMacro			= generateDefaultInstantiateMacro(generatedFile, classInfo);
 	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
+	std::string generateNativePropsMacroName	= generateNativePropsMacro(generatedFile, classInfo);
 
 	//Use parsing macro to avoid parsing generated data
 	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
@@ -51,6 +53,7 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 							 std::move(defaultInstantiateMacro),
 							 std::move(getTypeMacroName),
 							 std::move(generateRegistrationMacroName),
+							 std::move(generateNativePropsMacroName),
 							 "private:");
 
 	generatedFile.writeLine("#endif\n");
@@ -502,4 +505,46 @@ std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::Genera
 	generatedFile.writeLine("");
 
 	return macroName;
+}
+
+std::string GeneratedClassCodeTemplate::generateNativePropsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+{
+	std::string			macroName = internalPrefix + getEntityId(info) + "_NativeProperties";
+	std::string			generatedCode;
+	PropertyCodeGenData	data{ECodeGenLocation::ClassFooter};
+
+	//Find all native properties in entities nested directly in this class
+	generatedCode += generateNativePropertiesCode(info, &data);
+	
+	//Fields
+	for (kodgen::EntityInfo const& entityInfo : info.fields)
+	{
+		generatedCode += generateNativePropertiesCode(entityInfo, &data);
+	}
+
+	//Methods
+	for (kodgen::EntityInfo const& entityInfo : info.methods)
+	{
+		generatedCode += generateNativePropertiesCode(entityInfo, &data);
+	}
+
+	//Nested enums
+	for (kodgen::EntityInfo const& entityInfo : info.nestedEnums)
+	{
+		generatedCode += generateNativePropertiesCode(entityInfo, &data);
+	}
+
+	//Don't generate native properties code for nested structs and classes as it will be generated in their own footer
+
+	if (generatedCode.empty())
+	{
+		//Don't generate the macro if there's no generated code
+		return "";
+	}
+	else
+	{
+		generatedFile.writeMacro(std::string(macroName), std::move(generatedCode), "");
+
+		return macroName;
+	}
 }

@@ -125,8 +125,6 @@ void Struct::__RFKaddRequiredMethods() noexcept
 template <typename ReturnType>
 void Struct::__RFKaddCustomInstantiator(StaticMethod const* instantiator) noexcept
 {
-	static_assert(std::is_same_v<ReturnType, void*>, "A CustomInstantiator method must return void*");
-
 	assert(instantiator != nullptr);
 
 	//Make sure the instantiator is valid - i.e. its return type is a pointer type

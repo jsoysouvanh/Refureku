@@ -2,16 +2,22 @@
 
 #include <cassert>
 
+#include <Kodgen/Properties/SimplePropertyRule.h>
+#include <Kodgen/Properties/ComplexPropertyRule.h>
+
+#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
+
 using namespace rfk;
 
 std::hash<std::string> const GeneratedEntityCodeTemplate::stringHasher;
 
 std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName) const noexcept
 {
-	std::string		result;
-	std::string		propVarName;
-	size_t			propsCount	= info.properties.simpleProperties.size() + info.properties.complexProperties.size();
-	kodgen::uint8	index		= 0u;
+	std::string			result;
+	std::string			propVarName;
+	size_t				propsCount	= info.properties.simpleProperties.size() + info.properties.complexProperties.size();
+	kodgen::uint8		index		= 0u;
+	PropertyCodeGenData	data{ECodeGenLocation::PropertyAdd};
 
 	if (propsCount > 0)
 	{
@@ -24,6 +30,10 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 		//Add simple props
 		for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
 		{
+			//Generate property relative code
+			if (prop.boundPropertyRule != nullptr)
+				result += prop.boundPropertyRule->generateCode(info, prop, &data);
+
 			result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
 
 			index++;
@@ -32,6 +42,10 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 		//Add complex props
 		for (kodgen::ComplexProperty const& prop : info.properties.complexProperties)
 		{
+			//Generate property relative code
+			if (prop.boundPropertyRule != nullptr)
+				result += prop.boundPropertyRule->generateCode(info, prop, &data);
+
 			if (prop.subProperties.empty())
 			{
 				result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
@@ -58,7 +72,8 @@ uint8_t GeneratedEntityCodeTemplate::addToPropertiesRecord(std::unordered_map<st
 	}
 	else
 	{
-		record.emplace(propName, 1u);
+		//static_cast to get rid of warning
+		record.emplace(propName, static_cast<uint8_t>(1u));
 
 		return 1u;
 	}
@@ -172,12 +187,12 @@ std::string GeneratedEntityCodeTemplate::generateStaticAsserts(kodgen::EntityInf
 std::string GeneratedEntityCodeTemplate::generatePropertyTargetEntityKindAssert(kodgen::EntityInfo const& info, std::string const& propName) const noexcept
 {
 	return	"static_assert((" + propName + "::targetEntityKind & " + getRefurekuEntityKind(info.entityType) + ") != " + getRefurekuEntityKind(kodgen::EEntityType::Undefined) +
-			", \"" + propName + " can't be applied to a " + getEntityKindName(info.entityType) + "\");";
+			", \"[Refureku] " + propName + " can't be applied to a " + getEntityKindName(info.entityType) + "\");";
 }
 
 std::string GeneratedEntityCodeTemplate::generatePropertyAllowMultipleAssert(kodgen::EntityInfo const& info, std::string const& propName) const noexcept
 {
-	return "static_assert(" + propName + "::allowMultiple, \"" + info.getFullName() + ": " + propName + " can't be attached multiple times to a single entity.\");";
+	return "static_assert(" + propName + "::allowMultiple, \"[Refureku] " + info.getFullName() + ": " + propName + " can't be attached multiple times to a single entity.\");";
 }
 
 std::string GeneratedEntityCodeTemplate::addSimplePropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, std::string const& propName, kodgen::uint8 propIndex, bool generateAllowMultipleAssert) const noexcept
@@ -220,9 +235,25 @@ std::string GeneratedEntityCodeTemplate::addComplexPropertyToEntity(kodgen::Enti
 	return result;
 }
 
-void GeneratedEntityCodeTemplate::ifDefUndefMacro(kodgen::GeneratedFile& generatedFile, std::string const& macroName) const noexcept
+std::string GeneratedEntityCodeTemplate::generateNativePropertiesCode(kodgen::EntityInfo const& entityInfo, void* propCodeGenData) noexcept
 {
-	generatedFile.writeLines("#ifdef " + macroName,
-							 "\t#undef " + macroName,
-							 "#endif\n");
+	std::string result;
+
+	for (kodgen::SimpleProperty const& prop : entityInfo.properties.simpleProperties)
+	{
+		if (prop.boundPropertyRule != nullptr)
+		{
+			result += prop.boundPropertyRule->generateCode(entityInfo, prop, propCodeGenData);
+		}
+	}
+
+	for (kodgen::ComplexProperty const& prop : entityInfo.properties.complexProperties)
+	{
+		if (prop.boundPropertyRule != nullptr)
+		{
+			result += prop.boundPropertyRule->generateCode(entityInfo, prop, propCodeGenData);
+		}
+	}
+
+	return result;
 }

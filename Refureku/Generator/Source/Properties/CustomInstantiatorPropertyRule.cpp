@@ -3,6 +3,7 @@
 #include <Kodgen/InfoStructures/MethodInfo.h>
 
 #include "RefurekuGenerator/Properties/NativeProperties.h"
+#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
 
 using namespace rfk;
 
@@ -11,30 +12,27 @@ CustomInstantiatorPropertyRule::CustomInstantiatorPropertyRule() noexcept:
 {
 }
 
-bool CustomInstantiatorPropertyRule::isPropertyGroupValid(kodgen::PropertyGroup const& propertyGroup, kodgen::uint8 propertyIndex, std::string& out_errorDescription) const noexcept
+std::string	CustomInstantiatorPropertyRule::generateCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, void* userData) const noexcept
 {
-	return isUsedOnlyOnce(propertyGroup, propertyIndex, out_errorDescription);
-}
+	PropertyCodeGenData* data = reinterpret_cast<PropertyCodeGenData*>(userData);
 
-bool CustomInstantiatorPropertyRule::isEntityValid(kodgen::EntityInfo const& entity, kodgen::uint8 /* propertyIndex */, std::string& out_errorDescription) const noexcept
-{
-	kodgen::MethodInfo const& methodInfo = static_cast<kodgen::MethodInfo const&>(entity);
-
-	//Check that the method is static
-	if (!methodInfo.isStatic)
+	if (data->codeGenLocation == ECodeGenLocation::ClassFooter)
 	{
-		out_errorDescription = "A method tagged with " + NativeProperties::customInstantiatorProperty + " must be static.";
+		kodgen::MethodInfo const&	method		= static_cast<kodgen::MethodInfo const&>(entity);
+		std::string					className	= entity.outerEntity->getFullName();
+		std::string					parameters	= method.getParameterTypes();
+		std::string					methodPtr	= "&" + className + "::" + method.name;
 
-		return false;
+		if (parameters.empty())
+		{
+			//CustomIntantiator with no parameters
+			return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + ")>, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "* .\");";
+		}
+		else
+		{
+			return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + "), " + std::move(parameters) + ">, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");";
+		}
 	}
-
-	//Check that method return type is void*
-	if (methodInfo.returnType.getCanonicalName(false, false) != "void *")
-	{
-		out_errorDescription = "A method tagged with " + NativeProperties::customInstantiatorProperty + " must return void*.";
-
-		return false;
-	}
-
-	return true;
+	
+	return "";
 }

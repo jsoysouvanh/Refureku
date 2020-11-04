@@ -1,8 +1,12 @@
 #include "RefurekuGenerator/CodeGen/FileGenerationUnit.h"
 
+#include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.h"	//generateNativePropertiesCode
+#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
+
 using namespace rfk;
 
-std::string const				FileGenerationUnit::_endFileMacroName = "File_GENERATED";
+std::string const				FileGenerationUnit::_endFileMacroName		= "File_GENERATED";
+std::string const				FileGenerationUnit::_nativePropsMacroName	= std::string(_internalPrefix) + "NativeProperties_GENERATED";
 std::hash<std::string> const	FileGenerationUnit::_stringHasher;
 
 void FileGenerationUnit::postGenerateFile() noexcept
@@ -12,6 +16,8 @@ void FileGenerationUnit::postGenerateFile() noexcept
 	_generatedEnums.clear();
 	_generatedVariables.clear();
 	_generatedFunctions.clear();
+
+	_entitiesUsingNativeProperties.clear();
 }
 
 void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
@@ -35,11 +41,23 @@ void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FilePa
 	//Always call base class
 	kodgen::FileGenerationUnit::writeFooter(file, parsingResult);
 
-	file.writeLines("#ifdef " + _endFileMacroName,
-					"	#undef " + _endFileMacroName,
-					"#endif\n");
+	file.undefMacro(_nativePropsMacroName);
+	generateNativePropertiesCode(file, parsingResult);
 
+	file.undefMacro(_endFileMacroName);
 	generateEndFileMacro(file);
+}
+
+bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationResult& out_genResult) noexcept
+{
+	if (kodgen::FileGenerationUnit::writeEntityToFile(generatedFile, entityInfo, out_genResult))
+	{
+		saveEntityUsingNativeProperties(entityInfo);
+
+		return true;
+	}
+
+	return false;
 }
 
 bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
@@ -104,10 +122,7 @@ bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFil
 
 void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept
 {
-	file.writeLines("#ifdef " + _endFileMacroName,
-					"\t#undef " + _endFileMacroName,
-					"#endif\n",
-					"#define " + _endFileMacroName + "\t\\");
+	file.writeLine("#define " + _endFileMacroName + "\t\\");
 
 	//Enum first because structs/classes and namespaces can have nested (and then reference to) enums
 	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)
@@ -138,6 +153,61 @@ void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const
 		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(namespaceInfo->id)) + "u_GENERATED\t\\");
 	}
 
+	//Native properties footer code
+	file.writeLine("	" + _nativePropsMacroName + "\t\\");
+
 	//New line to avoid "warning: backslash-newline at end of file"
 	file.writeLine("\n");
+}
+
+void FileGenerationUnit::saveEntityUsingNativeProperties(kodgen::EntityInfo const& entityInfo) noexcept
+{
+	for (kodgen::SimpleProperty const& prop : entityInfo.properties.simpleProperties)
+	{
+		if (prop.boundPropertyRule != nullptr)
+		{
+			_entitiesUsingNativeProperties.push_back(&entityInfo);
+			return;
+		}
+	}
+
+	for (kodgen::ComplexProperty const& prop : entityInfo.properties.complexProperties)
+	{
+		if (prop.boundPropertyRule != nullptr)
+		{
+			_entitiesUsingNativeProperties.push_back(&entityInfo);
+			return;
+		}
+	}
+}
+
+void FileGenerationUnit::generateNativePropertiesCode(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& /* parsingResult */) const noexcept
+{
+	std::string			generatedCode;
+	PropertyCodeGenData data;
+
+	//Generate native properties header code
+	data.codeGenLocation = ECodeGenLocation::FileHeader;
+
+	for (kodgen::EntityInfo const* entityInfo : _entitiesUsingNativeProperties)
+	{
+		assert(entityInfo != nullptr);
+
+		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &data);
+	}
+
+	file.writeLine(generatedCode);
+
+	//Generate native properties footer code inside a macro
+	data.codeGenLocation = ECodeGenLocation::FileFooter;
+
+	generatedCode.clear();
+	for (kodgen::EntityInfo const* entityInfo : _entitiesUsingNativeProperties)
+	{
+		assert(entityInfo != nullptr);
+
+		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &data);
+	}
+
+	file.writeMacro(std::string(_nativePropsMacroName), std::move(generatedCode));
 }

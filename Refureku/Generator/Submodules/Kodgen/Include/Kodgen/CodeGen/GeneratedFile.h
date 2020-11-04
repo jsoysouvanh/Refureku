@@ -94,6 +94,11 @@ namespace kodgen
 			void writeMacro(std::string&& macroName)			noexcept;
 
 			/**
+			*	@brief Undefine a macro if it is defined.
+			*/
+			void undefMacro(std::string macroName)				noexcept;
+
+			/**
 			*	@return The path to this generated file
 			*/
 			fs::path const& getPath()					const	noexcept;

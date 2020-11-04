@@ -445,31 +445,24 @@ void properties()
 
 	TEST(ec.getStaticMethod("customInstantiator")->getProperty<CustomInstantiator>() != nullptr);
 
-	//rfk::Class const& ppc = namespace2::ParentParentClass::staticGetArchetype();
+	rfk::Struct const& a = A::staticGetArchetype();
 
-	//Range
-	//TEST(ppc.getField("ppFloat")->properties.getComplexProperty("Range") != nullptr);
+	TEST(a.getProperty<CustomProperty2>() != nullptr);
+	TEST(a.getProperty<CustomProperty>() != nullptr);
+	TEST(a.getProperties<CustomProperty2>().size() == 2u);
+	
+	//with predicate
+	TEST(a.getProperty([](rfk::Property const* prop) { return CustomProperty::staticGetArchetype().isBaseOf(prop->getArchetype()); }) != nullptr);
 
-	//TEST(ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getInt32(0) == 1);
-	//TEST(ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getInt32(1) == 2);
+	//Get all properties inheriting from CustomProperty (including CustomProperty)
+	TEST(a.getProperties([](rfk::Property const* prop) { return CustomProperty::staticGetArchetype().isBaseOf(prop->getArchetype()); }).size() == 3u);
 
-	//try
-	//{
-	//	ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getInt32(2);
-	//	TEST(false);	//Should throw here ..................................... ^
-	//}
-	//catch (rfk::OutOfRange const& /* exception */)
-	//{
-	//}
+	rfk::Field const* f = a.getField("field");
 
-	//try
-	//{
-	//	ppc.getField("ppFloat")->properties.getComplexProperty("Range")->getString(0);
-	//	TEST(false);	//Should throw here ................................ ^
-	//}
-	//catch (rfk::TypeMismatch const& /* exception */)
-	//{
-	//}
+	TEST(f->getProperty([](rfk::Property const* prop){ return	prop->getArchetype() == CustomProperty::staticGetArchetype() && 
+																reinterpret_cast<CustomProperty const*>(prop)->i == 1 &&
+																reinterpret_cast<CustomProperty const*>(prop)->j == 456; }) != nullptr);
+	TEST(f->getProperties<CustomProperty2>().empty());
 
 	parseAllNested();
 }
@@ -650,7 +643,7 @@ void enumManualReflection()
 
 int main()
 {
-	/*database();
+	database();
 	outerEntities();
 	namespaces();
 	templateEnums();
@@ -671,15 +664,7 @@ int main()
 	dynamicTypes();
 	makeInstance();
 	fundamentalArchetypes();
-	enumManualReflection();*/
-
-	rfk::Struct const& c = CustomProperty2::staticGetArchetype();
-
-	c.getProperty<CustomInstantiator>();
-	c.getProperty([](rfk::Property const*) { return true; });
-
-	c.getProperties<CustomProperty>();
-	c.getProperties([](rfk::Property const*) { return true; });
+	enumManualReflection();
 
 	return EXIT_SUCCESS;
 }

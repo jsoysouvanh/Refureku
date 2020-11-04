@@ -23,7 +23,7 @@ void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generat
 	std::string registerMacroName					= generateRegistrationMacro(generatedFile, namespaceInfo);
 
 	//Hide namespace macro redefinition warning as it is likely to happen often
-	ifDefUndefMacro(generatedFile, mainMacroName);
+	generatedFile.undefMacro(mainMacroName);
 
 	//Use parsing macro to avoid parsing generated data
 	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
@@ -46,7 +46,7 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDeclarat
 {
 	std::string macroName = internalPrefix + getEntityId(namespaceInfo) + "_DeclareGetNamespaceFragment";
 
-	ifDefUndefMacro(generatedFile, macroName);
+	generatedFile.undefMacro(macroName);
 
 	generatedFile.writeLines("#define " + macroName + " inline rfk::NamespaceFragment const& " + getGetNamespaceFragmentFunctionName(generatedFile, namespaceInfo) + "() noexcept;",
 							 "");
@@ -59,7 +59,7 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 	std::string entityId	= getEntityId(namespaceInfo);
 	std::string macroName	= internalPrefix + entityId + "_DefineGetNamespaceFragment";
 
-	ifDefUndefMacro(generatedFile, macroName);
+	generatedFile.undefMacro(macroName);
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							 "	inline rfk::NamespaceFragment const& " + getGetNamespaceFragmentFunctionName(generatedFile, namespaceInfo) + "() noexcept\t\\",
@@ -141,7 +141,7 @@ std::string GeneratedNamespaceCodeTemplate::generateRegistrationMacro(kodgen::Ge
 	std::string entityId	= getEntityId(namespaceInfo);
 	std::string macroName	= internalPrefix + entityId + "_RegisterNamespace";
 
-	ifDefUndefMacro(generatedFile, macroName);
+	generatedFile.undefMacro(macroName);
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 								"	inline rfk::NamespaceFragmentRegisterer " + getNamespaceFragmentRegistererName(generatedFile, namespaceInfo) +

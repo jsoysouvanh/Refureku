@@ -73,6 +73,17 @@ namespace rfk
 																  kodgen::StructClassInfo const&	info)					const	noexcept;
 			
 			/**
+			*	@brief Generate the macro containing all the code relative to native properties used within this class.
+			*	
+			*	@param generatedFile	File to write into.
+			*	@param info				Struct/Class info.
+			*	
+			*	@return The name of the generated macro.
+			*/
+			std::string					generateNativePropsMacro(kodgen::GeneratedFile&			generatedFile,
+																 kodgen::StructClassInfo const&	info)						const	noexcept;
+
+			/**
 			*	@brief Generate the macro containing the parents definition.
 			*
 			*	@param generatedFile	File to write into.

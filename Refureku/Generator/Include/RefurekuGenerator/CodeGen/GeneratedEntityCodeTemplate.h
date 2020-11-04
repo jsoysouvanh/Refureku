@@ -158,20 +158,22 @@ namespace rfk
 			std::string					fillEntityProperties(kodgen::EntityInfo const&	info,
 															  std::string const&		entityVarName)	const	noexcept;
 
-			/**
-			*	@brief Write in the generated file #ifdef macroName #undef macroName #endif
-			*	
-			*	@param generatedFile	File to write into.
-			*	@param macroName		Macro to undef if defined.
-			*/
-			void						ifDefUndefMacro(kodgen::GeneratedFile&	generatedFile,
-														std::string const&		macroName)				const	noexcept;
-
 		public:
 			GeneratedEntityCodeTemplate()									= default;
 			GeneratedEntityCodeTemplate(GeneratedEntityCodeTemplate const&)	= default;
 			GeneratedEntityCodeTemplate(GeneratedEntityCodeTemplate&&)		= default;
 			virtual ~GeneratedEntityCodeTemplate()							= default;
+
+			/**
+			*	@brief Generate code for an entity native properties.
+			*	
+			*	@param entityInfo		EntityInfo containing properties
+			*	@param propCodeGenData	User data to pass to the native properties generation code.
+			*	
+			*	@return The generated code as a string.
+			*/
+			static std::string generateNativePropertiesCode(kodgen::EntityInfo const&	entityInfo,
+															void*						propCodeGenData)	noexcept;
 	};
 
 	#include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.inl"

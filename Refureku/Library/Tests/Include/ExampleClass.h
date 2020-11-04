@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Refureku/Object.h>
-#include <Refureku/TypeInfo/Properties/Property.h>
-#include <Refureku/TypeInfo/Properties/ParseAllNested.h>
-#include <Refureku/TypeInfo/Properties/CustomInstantiator.h>
+#include <Refureku/NativeProperties.h>
+
+#include "CustomProperties.h"
 
 #include "Generated/ExampleClass.rfk.h"
 
@@ -148,7 +148,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			virtual int	method1() const noexcept override final;
 
 			RFKMethod(CustomInstantiator)
-			static void*	customInstantiator(int, float) noexcept { return new ExampleClass(); }
+			static ExampleClass*	customInstantiator(int, float) noexcept { return new ExampleClass(); }
 
 		protected:
 			RFKMethod()
@@ -161,7 +161,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			static	int		staticMethod3(char const* param);
 
 			RFKMethod()
-			static	ExampleClass const* staticMethod4(char const*) noexcept { return nullptr; };
+			static	ExampleClass const* staticMethod4(char const*) noexcept { return nullptr; }; 
 
 		private:
 			RFKMethod()
@@ -200,7 +200,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 	class RFKClass() ExampleClass2
 	{
 		RFKMethod(CustomInstantiator)
-		static void* customInstantiator(int i) noexcept { return new ExampleClass2(i); }
+		static ExampleClass2* customInstantiator(int i) noexcept { return new ExampleClass2(i); }
 
 		ExampleClass2() = delete;
 		ExampleClass2(int i) noexcept:
@@ -273,39 +273,6 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 	}
 }
 
-//struct RFKStruct() Property
-//{
-//	public:
-//		static constexpr rfk::Entity::EKind targetEntity	= rfk::Entity::EKind::Class | rfk::Entity::EKind::Struct;
-//		static constexpr bool				shouldInherit	= true;
-//		static constexpr bool				allowMultiple	= false;
-//
-//	Property_GENERATED
-//};
-
-struct RFKStruct() CustomProperty : public rfk::Property
-{
-	public:
-		static constexpr rfk::EEntityKind	targetEntityKind	= rfk::EEntityKind::Field | rfk::EEntityKind::Class; 
-		static constexpr bool				allowMultiple		= true;
-
-		int i = 0;
-		int j = 0;
-
-		CustomProperty() noexcept {}
-		CustomProperty(int i, int j) noexcept: i{i}, j{j}
-		{}
-
-	CustomProperty_GENERATED
-};
-
-struct RFKStruct() CustomProperty2 : public CustomProperty
-{
-	static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Class;
-
-	CustomProperty2_GENERATED
-};
-
 class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A
 {
 	RFKField(CustomProperty(1, 456), CustomProperty) 
@@ -314,4 +281,4 @@ class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A
 	A_GENERATED
 };
 
-File_GENERATED
+File_GENERATED 

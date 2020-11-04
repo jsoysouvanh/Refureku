@@ -32,6 +32,10 @@ namespace kodgen
 			virtual ~DefaultComplexPropertyRule()							= default;
 
 			virtual bool		isMainPropSyntaxValid(std::string const&	mainProperty,
-													  EEntityType			entityType)	const noexcept override;
+													  EEntityType			entityType)			const noexcept override;
+
+			virtual bool		isSubPropSyntaxValid(std::string const&	subProperty,
+													 uint8				subPropIndex,
+													 std::string&		out_errorDescription)	const noexcept override;
 	};
 }

@@ -22,10 +22,6 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Entity/EntityCast.cpp
 					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
 
-					Source/TypeInfo/Properties/SimpleProperty.cpp
-					Source/TypeInfo/Properties/ComplexProperty.cpp
-					Source/TypeInfo/Properties/PropertyGroup.cpp
-
 					Source/TypeInfo/Namespaces/Namespace.cpp
 					Source/TypeInfo/Namespaces/NamespaceFragment.cpp
 					Source/TypeInfo/Namespaces/NamespaceFragmentRegisterer.cpp
@@ -50,6 +46,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Functions/Method.cpp
 					Source/TypeInfo/Functions/StaticMethod.cpp
 					Source/TypeInfo/Functions/FunctionParameter.cpp
+
+					Source/TypeInfo/Properties/Property.cpp
 				)
 
 # Setup compilation flags

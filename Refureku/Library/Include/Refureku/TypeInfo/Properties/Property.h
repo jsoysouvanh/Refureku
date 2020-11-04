@@ -21,7 +21,7 @@ namespace rfk
 			Property()	= default;
 
 		public:
-			/** Kind of entity this property can be attached to. */
+			/** Kind of entity this property can be attached to. By default, a property can be attached to any kind of entity. */
 			static constexpr rfk::EEntityKind	targetEntityKind	=	rfk::EEntityKind::Class | rfk::EEntityKind::Enum | rfk::EEntityKind::EnumValue |
 																		rfk::EEntityKind::Field |rfk::EEntityKind::Function | rfk::EEntityKind::Method |
 																		rfk::EEntityKind::Namespace | rfk::EEntityKind::Struct | rfk::EEntityKind::Variable;
@@ -31,6 +31,27 @@ namespace rfk
 			
 			/** Is this property allowed to be attached multiple times to the same entity? */
 			static constexpr bool				allowMultiple		= false;
+
+			/**
+			*	@brief Getter for targetEntityKind.
+			*	
+			*	@return targetEntityKind.
+			*/
+			virtual rfk::EEntityKind	getTargetEntityKind()	const noexcept;
+
+			/**
+			*	@brief Getter for shouldInherit.
+			*	
+			*	@return shouldInherit.
+			*/
+			virtual bool				getShouldInherit()		const noexcept;
+
+			/**
+			*	@brief Getter for allowMultiple.
+			*	
+			*	@return allowMultiple.
+			*/
+			virtual bool				getAllowMultiple()		const noexcept;
 
 			Property(Property const&)	= delete;
 			Property(Property&&)		= delete;

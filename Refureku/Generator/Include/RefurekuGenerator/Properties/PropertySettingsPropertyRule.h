@@ -7,17 +7,17 @@
 
 #pragma once
 
-#include <Kodgen/Properties/DefaultSimplePropertyRule.h>
+#include <Kodgen/Properties/DefaultComplexPropertyRule.h>
 
 namespace rfk
 {
-	class CustomInstantiatorPropertyRule : public kodgen::DefaultSimplePropertyRule
+	class PropertySettingsPropertyRule : public kodgen::DefaultComplexPropertyRule
 	{
 		public:
-			CustomInstantiatorPropertyRule()										noexcept;
-			CustomInstantiatorPropertyRule(CustomInstantiatorPropertyRule const&)	= default;
-			CustomInstantiatorPropertyRule(CustomInstantiatorPropertyRule&&)		= default;
-			virtual ~CustomInstantiatorPropertyRule()								= default;
+			PropertySettingsPropertyRule()										noexcept;
+			PropertySettingsPropertyRule(PropertySettingsPropertyRule const&)	= default;
+			PropertySettingsPropertyRule(PropertySettingsPropertyRule&&)		= default;
+			virtual ~PropertySettingsPropertyRule()								= default;
 
 			virtual std::string	generateCode(kodgen::EntityInfo const&	entity,
 											 kodgen::Property const&	property,

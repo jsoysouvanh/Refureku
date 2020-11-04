@@ -8,7 +8,7 @@
 template <typename PropertyType, typename>
 PropertyType const* Entity::getProperty() const noexcept
 {
-	static_assert(!std::is_abstract_v<PropertyType>, "Can't get an abstract property.");
+	static_assert(!std::is_abstract_v<PropertyType>, "[Refureku] Can't get an abstract property.");
 
 	Struct const* queriedPropertyArchetype = &PropertyType::staticGetArchetype();
 
@@ -41,7 +41,7 @@ Property const* Entity::getProperty(Predicate predicate) const
 template <typename PropertyType, typename>
 std::vector<PropertyType const*> Entity::getProperties() const noexcept
 {
-	static_assert(!std::is_abstract_v<PropertyType>, "Can't get an abstract property.");
+	static_assert(!std::is_abstract_v<PropertyType>, "[Refureku] Can't get an abstract property.");
 
 	std::vector<PropertyType const*> result;
 
@@ -73,4 +73,14 @@ std::vector<Property const*> Entity::getProperties(Predicate predicate) const
 	}
 
 	return result;
+}
+
+inline bool Entity::operator==(Entity const& other) const noexcept
+{
+	return &other == this;
+}
+
+inline bool Entity::operator!=(Entity const& other) const noexcept
+{
+	return &other != this;
 }

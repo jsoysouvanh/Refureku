@@ -61,3 +61,17 @@ std::string FunctionInfo::getPrototype(bool removeQualifiers, bool removeSpaces)
 
 	return result;
 }
+
+std::string FunctionInfo::getParameterTypes() const noexcept
+{
+	std::string result(prototype);
+
+	//Get the content between ()
+	//Remove everything before ( including (
+	result = result.substr(result.find_first_of('(') + 1);
+
+	//Remove everything after ) including )
+	result.erase(result.find_first_of(')'));
+
+	return result;
+}

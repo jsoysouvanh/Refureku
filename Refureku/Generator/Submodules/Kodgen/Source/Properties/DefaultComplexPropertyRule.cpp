@@ -12,3 +12,8 @@ bool DefaultComplexPropertyRule::isMainPropSyntaxValid(std::string const& mainPr
 {
 	return mainProperty == mainPropName && ((validEntityTypes & entityType) != EEntityType::Undefined);
 }
+
+bool DefaultComplexPropertyRule::isSubPropSyntaxValid(std::string const& /* subProperty */, uint8 /* subPropIndex */, std::string& /* out_errorDescription */) const noexcept
+{
+	return true;
+}

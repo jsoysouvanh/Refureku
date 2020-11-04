@@ -153,6 +153,9 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
 			std::vector<Property const*>		getProperties(Predicate predicate)	const;
+
+			inline bool operator==(Entity const& other) const noexcept;
+			inline bool operator!=(Entity const& other) const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Entity/Entity.inl"

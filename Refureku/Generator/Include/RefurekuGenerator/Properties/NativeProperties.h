@@ -20,6 +20,12 @@ namespace rfk
 			*/
 			inline static std::string const customInstantiatorProperty		= "CustomInstantiator";
 
+			/**
+			*	Struct/Class property used to define settings of a property.
+			*	The struct or class must be a child class of rfk::Property.
+			*/
+			inline static std::string const	propertySettingsProperty		= "PropertySettings";
+
 			NativeProperties()							= delete;
 			NativeProperties(NativeProperties const&)	= delete;
 			NativeProperties(NativeProperties&&)		= delete;

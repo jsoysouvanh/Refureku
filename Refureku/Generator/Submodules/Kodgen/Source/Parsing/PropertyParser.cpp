@@ -261,8 +261,7 @@ void PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVect
 {
 	assert(propertyAsVector.size() >= 2);
 
-	std::string		mainProp = std::move(propertyAsVector[0]);
-	ComplexProperty	complexProp(std::move(mainProp), nullptr);
+	ComplexProperty	complexProp(std::move(propertyAsVector[0]), nullptr);
 	std::string		subProp;
 
 	//Add all subproperties to the complex property
@@ -274,7 +273,7 @@ void PropertyParser::addComplexProperty(std::vector<std::string>& propertyAsVect
 	//Iterate backwards because native properties are at the end and a user rule should never override a native rule
 	for (decltype(_propertyParsingSettings->complexPropertyRules)::const_reverse_iterator it = _propertyParsingSettings->complexPropertyRules.crbegin(); it != _propertyParsingSettings->complexPropertyRules.crend(); it++)
 	{
-		if ((*it)->isMainPropSyntaxValid(mainProp, entityType))
+		if ((*it)->isMainPropSyntaxValid(complexProp.mainProperty, entityType))
 		{
 			//Found a matching property rule
 			complexProp.boundPropertyRule = *it;

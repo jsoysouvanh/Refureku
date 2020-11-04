@@ -45,6 +45,11 @@ void GeneratedFile::writeMacro(std::string&& macroName) noexcept
 	writeLine("#define " + std::forward<std::string>(macroName));
 }
 
+void GeneratedFile::undefMacro(std::string macroName) noexcept
+{
+	writeLine("#ifdef " + macroName + "\n\t#undef " + std::move(macroName) + "\n#endif");
+}
+
 fs::path const& GeneratedFile::getPath() const noexcept
 {
 	return _path;

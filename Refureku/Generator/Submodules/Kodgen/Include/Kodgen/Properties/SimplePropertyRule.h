@@ -48,7 +48,7 @@ namespace kodgen
 			*	@return true if the property syntax is valid, else false.
 			*/
 			virtual bool		isMainPropSyntaxValid(std::string const&	mainProperty,
-													  EEntityType			entityType)		const noexcept = 0;
+													  EEntityType			entityType)				const	noexcept = 0;
 
 			/**
 			*	@brief	Check that a property is valid inside a given property group.
@@ -64,7 +64,7 @@ namespace kodgen
 			*/
 			virtual bool		isPropertyGroupValid(PropertyGroup const&	propertyGroup,
 													 uint8					propertyIndex,
-													 std::string&			out_errorDescription)	const noexcept;
+													 std::string&			out_errorDescription)	const	noexcept;
 
 			/**
 			*	@brief	Check that the attached entity of a given property is valid.
@@ -80,6 +80,18 @@ namespace kodgen
 			*/
 			virtual bool		isEntityValid(EntityInfo const& entity,
 											  uint8				propertyIndex,
-											  std::string&		out_errorDescription)				const noexcept;
+											  std::string&		out_errorDescription)				const	noexcept;
+			/**
+			*	@brief Entry point to generate code for a given entity and property.
+			*	
+			*	@param entity	Entity the property is attached to.
+			*	@param property	Property bound to this rule.
+			*	@param userData	Any data the user might want to pass.
+			*	
+			*	@return Generated code as string.
+			*/
+			virtual std::string	generateCode(EntityInfo const&	entity,
+											 Property const&	property,
+											 void*				userData)							const	noexcept;
 	};
 }

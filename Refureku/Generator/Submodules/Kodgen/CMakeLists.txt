@@ -12,6 +12,7 @@ set(KodgenTargetLibrary Kodgen)
 add_library(${KodgenTargetLibrary}
 				STATIC
 					Source/Properties/PropertyParsingSettings.cpp
+					Source/Properties/Property.cpp
 					Source/Properties/SimpleProperty.cpp
 					Source/Properties/ComplexProperty.cpp
 					Source/Properties/SimplePropertyRule.cpp
@@ -63,13 +64,13 @@ add_library(${KodgenTargetLibrary}
 					Source/CodeGen/FileGenerationUnit.cpp
 					Source/CodeGen/FileGenerationResult.cpp
 					Source/CodeGen/FileGenerationError.cpp
-					Source/CodeGen/GeneratedFile.cpp
 					Source/CodeGen/FileGenerator.cpp
 					Source/CodeGen/FileGenerationSettings.cpp
+					Source/CodeGen/GeneratedFile.cpp
 			 
 					Source/Threading/ThreadPool.cpp
 					Source/Threading/TaskBase.cpp
-			)
+				)
 
 # Setup warning level
 if (MSVC)

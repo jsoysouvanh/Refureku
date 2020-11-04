@@ -24,6 +24,9 @@ namespace rfk
 			/** Name of the end file macro. */
 			static std::string const					_endFileMacroName;
 
+			/** Name of the macro containing all native properties generated code. */
+			static std::string const					_nativePropsMacroName;
+
 			/** Class global string hasher. */
 			static std::hash<std::string> const			_stringHasher;
 
@@ -42,12 +45,31 @@ namespace rfk
 			/** List of all functions we have generated metadata for. */
 			std::vector<kodgen::FunctionInfo const*>	_generatedFunctions;
 
+			/** List of all entities containing native properties. */
+			std::vector<kodgen::EntityInfo const*>		_entitiesUsingNativeProperties;
+
 			/**
 			*	@brief Write the end file macro
 			*
 			*	@param file File to write to.
 			*/
-			void generateEndFileMacro(kodgen::GeneratedFile& file)	const	noexcept;
+			void generateEndFileMacro(kodgen::GeneratedFile& file)								const	noexcept;
+
+			/**
+			*	@brief Save the entity to _entitiesUsingNativeProperties if it uses at least one native property.
+			*	
+			*	@param entityInfo Entity containing the properties to save.
+			*/
+			void saveEntityUsingNativeProperties(kodgen::EntityInfo const& entityInfo)					noexcept;
+
+			/**
+			*	@brief Generate code relative to attached native entities.
+			*	
+			*	@param file				File to write to.
+			*	@param parsingResult	Structure containing info about the parsed file.
+			*/
+			void generateNativePropertiesCode(kodgen::GeneratedFile&			file,
+											  kodgen::FileParsingResult const&	parsingResult)	const	noexcept;
 
 		protected:
 			virtual void postGenerateFile()																	noexcept override;
@@ -57,6 +79,10 @@ namespace rfk
 
 			virtual void writeFooter(kodgen::GeneratedFile&				file,
 									 kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
+
+			virtual bool writeEntityToFile(kodgen::GeneratedFile&		generatedFile,
+										   kodgen::EntityInfo const&		entityInfo,
+										   kodgen::FileGenerationResult&	out_genResult)					noexcept override;
 
 			virtual bool writeNamespaceToFile(kodgen::GeneratedFile&		generatedFile,
 											  kodgen::EntityInfo const&		namespaceInfo,
