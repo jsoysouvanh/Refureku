@@ -56,7 +56,7 @@ namespace rfk
 			*	@return A variable name for the property.
 			*/
 			std::string	generatePropertyVariableName(kodgen::EntityInfo const&	info,
-													 std::string const&			propName, 
+													 std::string				propName, 
 													 kodgen::uint8				propIndex)							const	noexcept;
 
 			/**

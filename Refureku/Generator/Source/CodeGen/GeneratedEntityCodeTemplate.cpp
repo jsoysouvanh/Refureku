@@ -1,6 +1,7 @@
 #include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.h"
 
 #include <cassert>
+#include <algorithm>	//std::remove
 
 #include <Kodgen/Properties/SimplePropertyRule.h>
 #include <Kodgen/Properties/ComplexPropertyRule.h>
@@ -162,9 +163,12 @@ std::string GeneratedEntityCodeTemplate::getEntityKindName(kodgen::EEntityType e
 	return "";
 }
 
-std::string GeneratedEntityCodeTemplate::generatePropertyVariableName(kodgen::EntityInfo const& info, std::string const& propName, kodgen::uint8 propIndex) const noexcept
+std::string GeneratedEntityCodeTemplate::generatePropertyVariableName(kodgen::EntityInfo const& info, std::string propName, kodgen::uint8 propIndex) const noexcept
 {
-	return "property_" + info.name + "_" + propName + "_" + std::to_string(propIndex) + "_" + std::to_string(stringHasher(info.id));
+	//Remove spaces from the property name
+	propName.erase(std::remove(propName.begin(), propName.end(), ' '), propName.end());
+
+	return "property_" + info.name + "_" + std::move(propName) + "_" + std::to_string(propIndex) + "_" + std::to_string(stringHasher(info.id));
 }
 
 std::string GeneratedEntityCodeTemplate::generateStaticAsserts(kodgen::EntityInfo const& info, std::string const& propName, bool generateTargetEntityKindAssert, bool generateAllowMultipleAssert) const noexcept

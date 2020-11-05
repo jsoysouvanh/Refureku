@@ -8,9 +8,6 @@ FileParserFactory::FileParserFactory() noexcept:
 	//We abort parsing if we encounter a single error during parsing
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 
-	//Ignore and remove space character before collecting properties
-	parsingSettings.propertyParsingSettings.ignoredCharacters = {' '};
-
 	//Each property will be separated with a , (and potentially some spaces as they are ignored)
 	parsingSettings.propertyParsingSettings.propertySeparator = ',';
 

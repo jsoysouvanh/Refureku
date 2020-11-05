@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>	//std::move
+
 #include <Refureku/NativeProperties.h>
 
 #include "Generated/CustomProperties.rfk.h"
@@ -21,6 +23,17 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Cl
 struct RFKStruct(PropertySettings(rfk::EEntityKind::Class, true, true)) CustomProperty2 : public CustomProperty
 {
 	CustomProperty2_GENERATED 
+};
+
+struct RFKStruct(PropertySettings(rfk::EEntityKind::Method)) Tooltip : public rfk::Property 
+{
+	std::string message;
+
+	Tooltip(std::string _message) noexcept:
+		message{std::move(_message)}
+	{}
+
+	Tooltip_GENERATED
 };
 
 File_GENERATED
