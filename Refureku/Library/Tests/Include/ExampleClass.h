@@ -273,7 +273,7 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 	}
 }
 
-class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A
+class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A 
 {
 	RFKField(CustomProperty(1, 456), CustomProperty) 
 	int field;

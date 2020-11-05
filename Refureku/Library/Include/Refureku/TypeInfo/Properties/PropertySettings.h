@@ -12,12 +12,12 @@
 #include "Refureku/Generated/PropertySettings.rfk.h"
 
 /**
-*	@brief	Property used to define basic settings of a property.
+*	@brief	Property used to define basic settings of a property. Can't be used on structs or classes not inheriting from rfk::Property.
 */
 struct RFKStruct(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : public rfk::Property
 {
 	public:
-		PropertySettings()													= delete;
+		PropertySettings()	= delete;
 
 		/**
 		*	@param _targetEntityKind	Kind of entities the property can be attached to. Use the | operator to specify multiple entity kinds.

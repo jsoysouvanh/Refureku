@@ -83,9 +83,9 @@ script:
   # Debug build & test
   - |
     if [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
-        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Visual Studio 15 2017" -A x64
+        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 15 2017" -A x64
     else
-        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -G "Ninja"
+        cmake -B Build/Debug -DCMAKE_BUILD_TYPE=Debug -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
     fi
 
   - cmake --build Build/Debug --config Debug --verbose
@@ -96,9 +96,9 @@ script:
   # Release build & test
   - |
     if [[ "${TRAVIS_OS_NAME}" == "windows" ]]; then
-        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Visual Studio 15 2017" -A x64
+        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 15 2017" -A x64
     else
-        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -G "Ninja"
+        cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
     fi
 
   - cmake --build Build/Release --config Release --verbose

@@ -4,15 +4,15 @@ using namespace rfk;
 
 rfk::EEntityKind Property::getTargetEntityKind() const noexcept
 {
-	return targetEntityKind;
+	return Property::targetEntityKind;
 }
 
 bool Property::getShouldInherit() const noexcept
 {
-	return shouldInherit;
+	return Property::shouldInherit;
 }
 
 bool Property::getAllowMultiple() const noexcept
 {
-	return allowMultiple;
+	return Property::allowMultiple;
 }

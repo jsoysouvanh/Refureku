@@ -26,7 +26,7 @@ namespace rfk
 																		rfk::EEntityKind::Field |rfk::EEntityKind::Function | rfk::EEntityKind::Method |
 																		rfk::EEntityKind::Namespace | rfk::EEntityKind::Struct | rfk::EEntityKind::Variable;
 
-			/** Should this property be inherited? */
+			/** Should this property be inherited in child struct/class? Relevant only for properties targeting structs/classes. */
 			static constexpr bool				shouldInherit		= true;
 			
 			/** Is this property allowed to be attached multiple times to the same entity? */

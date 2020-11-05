@@ -52,10 +52,22 @@ add_library(${RefurekuLibraryTarget}
 
 # Setup compilation flags
 if (MSVC)
-	string(REGEX REPLACE " /W[0-4]" " /W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
-	string(REGEX REPLACE " /GR" " /GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
+	string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
+	string(REGEX REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
+
+	# Use rtti on Property file if specified
+	if (GEN_PROPERTY_RTTI)
+		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS /GR)
+	endif()
+
 else()	# Clang or GCC
 	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fno-rtti)
+
+	# Use rtti on Property file if specified
+	if (GEN_PROPERTY_RTTI)
+		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS -frtti)
+	endif()
+
 endif()
 
 # Setup language requirements
