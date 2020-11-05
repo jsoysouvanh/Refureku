@@ -464,6 +464,8 @@ void properties()
 																reinterpret_cast<CustomProperty const*>(prop)->j == 456; }) != nullptr);
 	TEST(f->getProperties<CustomProperty2>().empty());
 
+	TEST(a.getMethod("testMethod")->getProperty<Tooltip>()->message == "This is a test");
+
 	parseAllNested();
 }
 
@@ -643,7 +645,7 @@ void enumManualReflection()
 
 int main()
 {
-	database();
+	/*database();
 	outerEntities();
 	namespaces();
 	templateEnums();
@@ -664,7 +666,12 @@ int main()
 	dynamicTypes();
 	makeInstance();
 	fundamentalArchetypes();
-	enumManualReflection();
+	enumManualReflection();*/
+
+	for (rfk::Property const* prop : B::staticGetArchetype().properties)
+	{
+		std::cout << prop->getArchetype().name << std::endl;
+	}
 
 	return EXIT_SUCCESS;
 }

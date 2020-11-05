@@ -37,15 +37,15 @@ std::string	PropertySettingsPropertyRule::generateCode(kodgen::EntityInfo const&
 
 			if (propertySettings.subProperties.size() >= 2)
 			{
-				//generate shouldInherit
-				result += "static constexpr bool shouldInherit = " + propertySettings.subProperties[1] + ";";
-				result += "virtual bool getShouldInherit() const noexcept override { return shouldInherit; }";
+				//generate allowMultiple
+				result += "static constexpr bool allowMultiple = " + propertySettings.subProperties[1] + ";";
+				result += "virtual bool getAllowMultiple() const noexcept override { return allowMultiple; }";
 
 				if (propertySettings.subProperties.size() >= 3)
 				{
-					//generate allowMultiple
-					result += "static constexpr bool allowMultiple = " + propertySettings.subProperties[2] + ";";
-					result += "virtual bool getAllowMultiple() const noexcept override { return allowMultiple; }";
+					//generate shouldInherit
+					result += "static constexpr bool shouldInherit = " + propertySettings.subProperties[2] + ";";
+					result += "virtual bool getShouldInherit() const noexcept override { return shouldInherit; }";					
 				}
 			}
 		}

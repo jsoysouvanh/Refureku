@@ -278,10 +278,17 @@ class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A
 	RFKField(CustomProperty(1, 456), CustomProperty) 
 	int field;
 
-	RFKMethod(Tooltip("This is a test")) 
+	RFKMethod(Tooltip("This is a test"))
 	void testMethod() noexcept {}
 
 	A_GENERATED
+};
+
+class RFKClass() B : public A
+{
+
+
+	B_GENERATED
 };
 
 File_GENERATED 

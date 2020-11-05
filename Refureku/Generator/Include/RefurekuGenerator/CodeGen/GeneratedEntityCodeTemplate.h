@@ -113,7 +113,7 @@ namespace rfk
 												  bool						generateAllowMultipleAssert)			const	noexcept;
 
 			/**
-			*	@brief Generate a string which adds a compelx property to an entity.
+			*	@brief Generate a string which adds a complex property to an entity.
 			*	
 			*	@param info				Entity to to add the property to.
 			*	@param entityVarName	Name of the entity variable in the generated code.
