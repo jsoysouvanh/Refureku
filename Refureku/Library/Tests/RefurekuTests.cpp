@@ -466,6 +466,12 @@ void properties()
 
 	TEST(a.getMethod("testMethod")->getProperty<Tooltip>()->message == "This is a test");
 
+	//Properties inheritance
+	rfk::Struct const& b = B::staticGetArchetype();
+
+	TEST(b.getProperty<CustomProperty2>() == nullptr);											//CustomProperty2 is not a inherited property
+	TEST(b.getProperty<CustomProperty>()->i == 3 && b.getProperty<CustomProperty>()->j == 4);	//Inherited property in overriden in child
+
 	parseAllNested();
 }
 
@@ -645,7 +651,7 @@ void enumManualReflection()
 
 int main()
 {
-	/*database();
+	database();
 	outerEntities();
 	namespaces();
 	templateEnums();
@@ -666,12 +672,7 @@ int main()
 	dynamicTypes();
 	makeInstance();
 	fundamentalArchetypes();
-	enumManualReflection();*/
-
-	for (rfk::Property const* prop : B::staticGetArchetype().properties)
-	{
-		std::cout << prop->getArchetype().name << std::endl;
-	}
+	enumManualReflection();
 
 	return EXIT_SUCCESS;
 }

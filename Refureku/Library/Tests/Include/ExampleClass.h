@@ -273,7 +273,7 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 	}
 }
 
-class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A 
+class RFKClass(CustomProperty2, CustomProperty(1, 2), CustomProperty2) A 
 {
 	RFKField(CustomProperty(1, 456), CustomProperty) 
 	int field;
@@ -284,7 +284,7 @@ class RFKClass(CustomProperty2, CustomProperty, CustomProperty2) A
 	A_GENERATED
 };
 
-class RFKClass() B : public A
+class RFKClass(CustomProperty(3, 4)) B : public A
 {
 
 

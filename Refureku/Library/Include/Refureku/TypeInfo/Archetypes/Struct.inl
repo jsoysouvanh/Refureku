@@ -10,9 +10,18 @@ void Struct::__RFKaddToParents([[maybe_unused]] EAccessSpecifier inheritanceAcce
 {
 	if constexpr (rfk::isReflectedClass<T>)
 	{
-		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, &T::staticGetArchetype() });
+		Struct const* parentArchetype = &T::staticGetArchetype();
 
-		//TODO: inherit parent properties
+		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, parentArchetype });
+
+		//Inherit parent properties
+		for (Property const* property : parentArchetype->properties)
+		{
+			if (property->getShouldInherit())
+			{
+				addProperty(property);
+			}
+		}
 	}
 }
 

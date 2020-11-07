@@ -154,6 +154,16 @@ namespace rfk
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
 			std::vector<Property const*>		getProperties(Predicate predicate)	const;
 
+			/**
+			*	@brief Add a property to this entity.
+			*	
+			*	@param property The property to add.
+			*	
+			*	@return	true if the property was added,
+			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
+			*/
+			bool								addProperty(Property const* property)		noexcept;
+
 			inline bool operator==(Entity const& other) const noexcept;
 			inline bool operator!=(Entity const& other) const noexcept;
 	};

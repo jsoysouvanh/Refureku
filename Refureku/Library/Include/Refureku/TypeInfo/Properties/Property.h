@@ -33,21 +33,21 @@ namespace rfk
 			static constexpr bool				allowMultiple		= false;
 
 			/**
-			*	@brief Getter for targetEntityKind.
+			*	@brief Getter for targetEntityKind of the concrete Property type.
 			*	
 			*	@return targetEntityKind.
 			*/
 			virtual rfk::EEntityKind	getTargetEntityKind()	const noexcept;
 
 			/**
-			*	@brief Getter for shouldInherit.
+			*	@brief Getter for shouldInherit of the concrete Property type.
 			*	
 			*	@return shouldInherit.
 			*/
 			virtual bool				getShouldInherit()		const noexcept;
 
 			/**
-			*	@brief Getter for allowMultiple.
+			*	@brief Getter for allowMultiple of the concrete Property type.
 			*	
 			*	@return allowMultiple.
 			*/

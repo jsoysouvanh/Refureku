@@ -6,7 +6,7 @@
 
 #include "Generated/CustomProperties.rfk.h"
 
-struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Class, true, true)) CustomProperty : public rfk::Property
+struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Class, false, true)) CustomProperty : public rfk::Property
 {
 	RFKField()
 	int i = 0;
@@ -20,7 +20,7 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Cl
 	CustomProperty_GENERATED
 };
 
-struct RFKStruct(PropertySettings(rfk::EEntityKind::Class, true, true)) CustomProperty2 : public CustomProperty
+struct RFKStruct(PropertySettings(rfk::EEntityKind::Class, true, false)) CustomProperty2 : public CustomProperty
 {
 	CustomProperty2_GENERATED 
 };
