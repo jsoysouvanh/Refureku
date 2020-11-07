@@ -18,26 +18,26 @@
 
 #define __RFK2708994343965683583u_GenerateParentsMetadata	\
 	type.directParents.reserve(1);	\
-	type.__RFKaddToParents<rfk::Property>(static_cast<rfk::EAccessSpecifier>(1));	\
+	type.addToParents<rfk::Property>(static_cast<rfk::EAccessSpecifier>(1));	\
 
 #define __RFK2708994343965683583u_GenerateFieldsMetadata	\
-	__RFKregisterChild<PropertySettings>(&type);	\
+	registerChild<PropertySettings>(&type);	\
 
 #define __RFK2708994343965683583u_GenerateFieldHelperMethods	\
 private:	\
 	template <typename ParentType, typename ChildType>	\
-	static constexpr void __RFKrecurseRegisterChild([[maybe_unused]] rfk::Struct* childArchetype)	\
+	static constexpr void recurseRegisterChild([[maybe_unused]] rfk::Struct* childArchetype)	\
 	{	\
 		if constexpr (rfk::isReflectedClass<ParentType>)	\
 		{	\
-			ParentType::template __RFKregisterChild<ChildType>(childArchetype);	\
+			ParentType::template registerChild<ChildType>(childArchetype);	\
 		}	\
 	}	\
 public:	\
 	template <typename ChildType>	\
-	static void __RFKregisterChild(rfk::Struct* childArchetype) noexcept	\
+	static void registerChild(rfk::Struct* childArchetype) noexcept	\
 	{	\
-		__RFKrecurseRegisterChild<rfk::Property, ChildType>(childArchetype);	\
+		recurseRegisterChild<rfk::Property, ChildType>(childArchetype);	\
 		rfk::Struct const& thisArchetype = staticGetArchetype();	\
 		if (childArchetype != &thisArchetype)	\
 		{	\
@@ -46,10 +46,10 @@ public:	\
 	}
 
 #define __RFK2708994343965683583u_GenerateMethodsMetadata	\
-	type.__RFKaddRequiredMethods<PropertySettings>();	\
+	type.addRequiredMethods<PropertySettings>();	\
 
 #define __RFK2708994343965683583u_GenerateArchetypeProperties	\
-	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_PropertySettings_PropertySettings_0_2708994343965683583{rfk::EEntityKind::Struct|rfk::EEntityKind::Class};type.properties.emplace_back(&property_PropertySettings_PropertySettings_0_2708994343965683583); 
+	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_PropertySettings_PropertySettings_0_2708994343965683583{rfk::EEntityKind::Struct | rfk::EEntityKind::Class};type.properties.emplace_back(&property_PropertySettings_PropertySettings_0_2708994343965683583); 
 
 #define __RFK2708994343965683583u_GetTypeDeclaration	\
 	__RFK2708994343965683583u_GenerateFieldHelperMethods	\
@@ -84,7 +84,7 @@ public:	\
 #define __RFK2708994343965683583u_DefaultInstantiateDefinition	\
 	private:	\
 		template <typename T>	\
-		static void* __RFKinstantiate() noexcept	\
+		static void* instantiate() noexcept	\
 		{	\
 			if constexpr (std::is_default_constructible_v<T>)	\
 				return new T();	\
@@ -98,7 +98,7 @@ public:	\
 
 
 #define __RFK2708994343965683583u_NativeProperties	\
-	public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct|rfk::EEntityKind::Class;virtual rfk::EEntityKind getTargetEntityKind() const noexcept override { return targetEntityKind; }	\
+	public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;virtual rfk::EEntityKind getTargetEntityKind() const noexcept override { return targetEntityKind; }	\
 	
 
 #ifdef KODGEN_PARSING

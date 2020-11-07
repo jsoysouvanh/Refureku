@@ -305,41 +305,41 @@ namespace rfk
 			*			else nullptr.
 			*/
 			template <typename ReturnType = void, typename... ArgTypes>
-			ReturnType*	makeInstance(ArgTypes&&... args)													const;
+			ReturnType*	makeInstance(ArgTypes&&... args)				const;
 
 			/**
 			*	@return true if this type inherits from the provided type, else false.
 			*/
-			bool		inheritsFrom(Struct const& otherType)												const	noexcept;
+			bool		inheritsFrom(Struct const& otherType)			const	noexcept;
 			
 			/**
 			*	@return true if this type is a parent (direct or not) of the provided type, else false.
 			*/
-			bool		isBaseOf(Struct const& otherType)													const	noexcept;
+			bool		isBaseOf(Struct const& otherType)				const	noexcept;
 
 			/**
 			*	Add the type T to this type's parents if possible.
 			*	Internal use only.
 			*/
 			template <typename T>
-			void __RFKaddToParents(EAccessSpecifier inheritanceAccess)			noexcept;
+			void		addToParents(EAccessSpecifier inheritanceAccess)			noexcept;
 
 			/**
 			*	Internal use only.
 			*/
 			template <typename T>
-			void __RFKaddRequiredMethods()										noexcept;
+			void		addRequiredMethods()										noexcept;
 
 			/**
 			*	Internal use only.
 			*/
 			template <typename ReturnType>
-			void __RFKaddCustomInstantiator(StaticMethod const* instantiator)	noexcept;
+			void		addCustomInstantiator(StaticMethod const* instantiator)	noexcept;
 
 			/**
 			*	Internal use only.
 			*/
-			void __RFKsetDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
+			void		setDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Struct.inl"

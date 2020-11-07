@@ -6,7 +6,7 @@
 */
 
 template <typename T>
-void Struct::__RFKaddToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) noexcept
+void Struct::addToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) noexcept
 {
 	if constexpr (rfk::isReflectedClass<T>)
 	{
@@ -128,13 +128,13 @@ ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 }
 
 template <typename T>
-void Struct::__RFKaddRequiredMethods() noexcept
+void Struct::addRequiredMethods() noexcept
 {
-	__RFKsetDefaultInstantiationMethod(&T::template __RFKinstantiate<T>);
+	setDefaultInstantiationMethod(&T::template instantiate<T>);
 }
 
 template <typename ReturnType>
-void Struct::__RFKaddCustomInstantiator(StaticMethod const* instantiator) noexcept
+void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 {
 	assert(instantiator != nullptr);
 

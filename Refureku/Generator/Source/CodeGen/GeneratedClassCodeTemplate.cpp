@@ -156,7 +156,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 			if (std::find_if(method.properties.simpleProperties.cbegin(), method.properties.simpleProperties.cend(), [](kodgen::SimpleProperty const& sp){ return sp.mainProperty == NativeProperties::customInstantiatorProperty; })
 					!= method.properties.simpleProperties.cend())
 			{
-				generatedFile.writeLine("	type.__RFKaddCustomInstantiator<" + method.returnType.getCanonicalName() + ">(&*staticMethodsIt);\t\\");
+				generatedFile.writeLine("	type.addCustomInstantiator<" + method.returnType.getCanonicalName() + ">(&*staticMethodsIt);\t\\");
 			}
 
 			generatedFile.writeLine("	currMethod = const_cast<rfk::StaticMethod*>(&*staticMethodsIt);\t\\");
@@ -193,7 +193,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 	}
 
 	//Add required methods (instantiate....)
-	generatedFile.writeLine("	type.__RFKaddRequiredMethods<" + info.name + ">();\t\\");
+	generatedFile.writeLine("	type.addRequiredMethods<" + info.name + ">();\t\\");
 
 	generatedFile.writeLine("");
 
@@ -206,7 +206,7 @@ std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMac
 
 	generatedFile.writeLine("#define " + macroNames[0] + "\t\\");
 
-	generatedFile.writeLine("	__RFKregisterChild<" + info.name + ">(&type);\t\\");
+	generatedFile.writeLine("	registerChild<" + info.name + ">(&type);\t\\");
 	generatedFile.writeLine("");
 
 	//Wrap this part in a method so that children classes can use it too
@@ -223,21 +223,21 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							"private:\t\\",
 							 "	template <typename ParentType, typename ChildType>\t\\",
-							 "	static constexpr void __RFKrecurseRegisterChild([[maybe_unused]] rfk::Struct* childArchetype)\t\\",
+							 "	static constexpr void recurseRegisterChild([[maybe_unused]] rfk::Struct* childArchetype)\t\\",
 							 "	{\t\\",
 							 "		if constexpr (rfk::isReflectedClass<ParentType>)\t\\",
 							 "		{\t\\",
-							 "			ParentType::template __RFKregisterChild<ChildType>(childArchetype);\t\\",
+							 "			ParentType::template registerChild<ChildType>(childArchetype);\t\\",
 							 "		}\t\\",
 							 "	}\t\\",
 							 "public:\t\\",
 							 "	template <typename ChildType>\t\\",
-							 "	static void __RFKregisterChild(rfk::Struct* childArchetype) noexcept\t\\",
+							 "	static void registerChild(rfk::Struct* childArchetype) noexcept\t\\",
 							 "	{\t\\");
 
 	for (kodgen::StructClassInfo::ParentInfo const& parent : info.parents)
 	{
-		generatedFile.writeLine("		__RFKrecurseRegisterChild<" + parent.type.getName(true) + ", ChildType>(childArchetype);\t\\");
+		generatedFile.writeLine("		recurseRegisterChild<" + parent.type.getName(true) + ", ChildType>(childArchetype);\t\\");
 	}
 
 	//Add a child to list of children
@@ -316,7 +316,7 @@ std::string GeneratedClassCodeTemplate::generateParentsMetadataMacro(kodgen::Gen
 
 		for (kodgen::StructClassInfo::ParentInfo parent : info.parents)
 		{
-			generatedFile.writeLine("	type.__RFKaddToParents<" + parent.type.getName(true) + ">(static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
+			generatedFile.writeLine("	type.addToParents<" + parent.type.getName(true) + ">(static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
 		}
 
 		generatedFile.writeLine("");
@@ -478,7 +478,7 @@ std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::
 	generatedFile.writeMacro(std::string(macroName),
 								"private:",
 								"	template <typename T>",
-								"	static void* __RFKinstantiate() noexcept",
+								"	static void* instantiate() noexcept",
 								"	{",
 								"		if constexpr (std::is_default_constructible_v<T>)",
 								"			return new T();",
