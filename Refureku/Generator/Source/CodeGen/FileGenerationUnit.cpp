@@ -9,7 +9,7 @@ std::string const				FileGenerationUnit::_endFileMacroName		= "File_GENERATED";
 std::string const				FileGenerationUnit::_nativePropsMacroName	= std::string(_internalPrefix) + "NativeProperties_GENERATED";
 std::hash<std::string> const	FileGenerationUnit::_stringHasher;
 
-void FileGenerationUnit::postGenerateFile() noexcept
+void FileGenerationUnit::postGenerateFile(kodgen::FileParsingResult& /* parsingResult */) noexcept
 {
 	_generatedNamespaces.clear();
 	_generatedClasses.clear();
@@ -20,7 +20,7 @@ void FileGenerationUnit::postGenerateFile() noexcept
 	_entitiesUsingNativeProperties.clear();
 }
 
-void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
+void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult& parsingResult) const noexcept
 {
 	//Always call base class
 	kodgen::FileGenerationUnit::writeHeader(file, parsingResult);
@@ -36,7 +36,7 @@ void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FilePa
 					"\n");
 }
 
-void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
+void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsingResult& parsingResult) const noexcept
 {
 	//Always call base class
 	kodgen::FileGenerationUnit::writeFooter(file, parsingResult);
@@ -48,11 +48,11 @@ void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FilePa
 	generateEndFileMacro(file);
 }
 
-bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationResult& out_genResult) noexcept
+bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationResult& out_genResult) noexcept
 {
 	if (kodgen::FileGenerationUnit::writeEntityToFile(generatedFile, entityInfo, out_genResult))
 	{
-		saveEntityUsingNativeProperties(entityInfo);
+		saveEntitiesUsingNativeProperties(entityInfo);
 
 		return true;
 	}
@@ -60,7 +60,7 @@ bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile,
 	return false;
 }
 
-bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	if (kodgen::FileGenerationUnit::writeNamespaceToFile(generatedFile, namespaceInfo, genResult))
 	{
@@ -72,7 +72,7 @@ bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFi
 	return false;
 }
 
-bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& structClassInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& structClassInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	if (kodgen::FileGenerationUnit::writeStructOrClassToFile(generatedFile, structClassInfo, genResult))
 	{
@@ -84,7 +84,7 @@ bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generat
 	return false;
 }
 
-bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& enumInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& enumInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	if (kodgen::FileGenerationUnit::writeEnumToFile(generatedFile, enumInfo, genResult))
 	{
@@ -96,7 +96,7 @@ bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, k
 	return false;
 }
 
-bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& variableInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& variableInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	if (kodgen::FileGenerationUnit::writeVariableToFile(generatedFile, variableInfo, genResult))
 	{
@@ -108,7 +108,7 @@ bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFil
 	return false;
 }
 
-bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& functionInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& functionInfo, kodgen::FileGenerationResult& genResult) noexcept
 {
 	if (kodgen::FileGenerationUnit::writeFunctionToFile(generatedFile, functionInfo, genResult))
 	{
@@ -160,7 +160,7 @@ void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const
 	file.writeLine("\n");
 }
 
-void FileGenerationUnit::saveEntityUsingNativeProperties(kodgen::EntityInfo const& entityInfo) noexcept
+void FileGenerationUnit::saveEntitiesUsingNativeProperties(kodgen::EntityInfo const& entityInfo) noexcept
 {
 	for (kodgen::SimpleProperty const& prop : entityInfo.properties.simpleProperties)
 	{

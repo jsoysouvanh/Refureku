@@ -9,21 +9,22 @@
 #include <Kodgen/Misc/FundamentalTypes.h>
 
 #include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
-#include "RefurekuGenerator/Properties/NativeProperties.h"
 #include "RefurekuGenerator/Misc/Helpers.h"
 
 using namespace rfk;
 
-void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, out_errorDescription);
+
 	switch (entityInfo.entityType)
 	{
 		case kodgen::EEntityType::Class:
-			generateClassCode(generatedFile, static_cast<kodgen::StructClassInfo const&>(entityInfo));
+			generateClassCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo));
 			break;
 
 		case kodgen::EEntityType::Struct:
-			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo const&>(entityInfo));
+			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo));
 			break;
 
 		default:
@@ -31,7 +32,7 @@ void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFi
 	}
 }
 
-void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
+void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& classInfo) const noexcept
 {
 	std::string mainMacroName					= externalPrefix + classInfo.name + "_GENERATED";
 
@@ -59,12 +60,12 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	generatedFile.writeLine("#endif\n");
 }
 
-void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
+void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& structInfo) const noexcept
 {
 	generateClassCode(generatedFile, structInfo);
 }
 
-std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::string					entityId								= getEntityId(info);
 	std::string					getTypeMacroDeclaration					= internalPrefix + entityId + "_GetTypeDeclaration";
@@ -128,7 +129,7 @@ std::string GeneratedClassCodeTemplate::generateArchetypePropertiesMacro(kodgen:
 	return macroName;
 }
 
-std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::string macroName = internalPrefix + getEntityId(info) + "_GenerateMethodsMetadata";
 
@@ -142,7 +143,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 	}
 
 	std::string properties;
-	for (kodgen::MethodInfo const& method : info.methods)
+	for (kodgen::MethodInfo& method : info.methods)
 	{
 		if (method.isStatic)
 		{
@@ -166,6 +167,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 		}
 
 		//Add method properties
+		method.properties.removeStartAndTrailSpaces();
 		properties = fillEntityProperties(method, "currMethod->");
 		if (!properties.empty())
 			generatedFile.writeLine("	" + properties + "\t\\");
@@ -193,7 +195,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 	return macroName;
 }
 
-std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::array<std::string, 2> macroNames = { internalPrefix + getEntityId(info) + "_GenerateFieldsMetadata" };
 
@@ -208,7 +210,7 @@ std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMac
 	return macroNames;
 }
 
-std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::string macroName = internalPrefix + getEntityId(info) + "_GenerateFieldHelperMethods";
 
@@ -252,7 +254,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 	}
 
 	std::string properties;
-	for (kodgen::FieldInfo const& field : info.fields)
+	for (kodgen::FieldInfo& field : info.fields)
 	{
 		if (field.isStatic)
 		{
@@ -278,6 +280,7 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 		}
 
 		//Add properties
+		field.properties.removeStartAndTrailSpaces();
 		properties = fillEntityProperties(field, "	currField->");
 		if (!properties.empty())
 			generatedFile.writeLine("	" + properties + "\t\\");
@@ -321,7 +324,7 @@ std::string GeneratedClassCodeTemplate::generateParentsMetadataMacro(kodgen::Gen
 	return std::string();
 }
 
-std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	kodgen::uint64 nestedArchetypesCount = info.nestedStructs.size() + info.nestedClasses.size() + info.nestedEnums.size();
 
@@ -507,6 +510,8 @@ std::string GeneratedClassCodeTemplate::generateNativePropsMacro(kodgen::Generat
 	PropertyCodeGenData	data{ECodeGenLocation::ClassFooter};
 
 	//Find all native properties in entities nested directly in this class
+	
+	//Self properties
 	generatedCode += generateNativePropertiesCode(info, &data);
 	
 	//Fields

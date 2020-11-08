@@ -60,7 +60,7 @@ namespace rfk
 			*	
 			*	@param entityInfo Entity containing the properties to save.
 			*/
-			void saveEntityUsingNativeProperties(kodgen::EntityInfo const& entityInfo)					noexcept;
+			void saveEntitiesUsingNativeProperties(kodgen::EntityInfo const& entityInfo)				noexcept;
 
 			/**
 			*	@brief Generate code relative to attached native entities.
@@ -72,36 +72,36 @@ namespace rfk
 											  kodgen::FileParsingResult const&	parsingResult)	const	noexcept;
 
 		protected:
-			virtual void postGenerateFile()																	noexcept override;
+			virtual void postGenerateFile(kodgen::FileParsingResult& parsingResult)							noexcept override;
 
 			virtual void writeHeader(kodgen::GeneratedFile&				file,
-									 kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
+									 kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
 
 			virtual void writeFooter(kodgen::GeneratedFile&				file,
-									 kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
+									 kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
 
-			virtual bool writeEntityToFile(kodgen::GeneratedFile&		generatedFile,
-										   kodgen::EntityInfo const&		entityInfo,
+			virtual bool writeEntityToFile(kodgen::GeneratedFile&			generatedFile,
+										   kodgen::EntityInfo&				entityInfo,
 										   kodgen::FileGenerationResult&	out_genResult)					noexcept override;
 
 			virtual bool writeNamespaceToFile(kodgen::GeneratedFile&		generatedFile,
-											  kodgen::EntityInfo const&		namespaceInfo,
+											  kodgen::EntityInfo&			namespaceInfo,
 											  kodgen::FileGenerationResult&	genResult)						noexcept override;
 
 			virtual bool writeStructOrClassToFile(kodgen::GeneratedFile&		generatedFile,
-												  kodgen::EntityInfo const&		structClassInfo,
+												  kodgen::EntityInfo&			structClassInfo,
 												  kodgen::FileGenerationResult&	genResult)					noexcept override;
 
 			virtual bool writeEnumToFile(kodgen::GeneratedFile&			generatedFile,
-										 kodgen::EntityInfo const&		enumInfo,
+										 kodgen::EntityInfo&			enumInfo,
 										 kodgen::FileGenerationResult&	genResult)							noexcept override;
 
 			virtual bool writeVariableToFile(kodgen::GeneratedFile&			generatedFile,
-											 kodgen::EntityInfo const&		variableInfo,
+											 kodgen::EntityInfo&			variableInfo,
 											 kodgen::FileGenerationResult&	genResult)						noexcept override;
 
 			virtual bool writeFunctionToFile(kodgen::GeneratedFile&			generatedFile,
-											 kodgen::EntityInfo const&		functionInfo,
+											 kodgen::EntityInfo&			functionInfo,
 											 kodgen::FileGenerationResult&	genResult)						noexcept override;
 
 		public:

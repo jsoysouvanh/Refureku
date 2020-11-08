@@ -34,7 +34,7 @@ namespace kodgen
 			*	@param out_errorDescription	If any error occurs, out_errorMessage must be filled with the error description.
 			*/
 			virtual void generateCode(GeneratedFile&		generatedFile,
-									  EntityInfo const&		entityInfo,
+									  EntityInfo&			entityInfo,
 									  FileGenerationUnit&	generationUnit,
 									  std::string&			out_errorDescription)	const noexcept = 0;
 	};

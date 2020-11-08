@@ -145,7 +145,12 @@ namespace rfk
 			*
 			*	@return The provided entity id as string.
 			*/
-			static inline std::string	getEntityId(kodgen::EntityInfo const& entity)							noexcept;
+			static inline std::string	getEntityId(kodgen::EntityInfo const& entity)								noexcept;
+
+			virtual void				generateCode(kodgen::GeneratedFile&			generatedFile,
+													 kodgen::EntityInfo&			entityInfo,
+													 kodgen::FileGenerationUnit&	fgu,
+													 std::string&					out_errorDescription)	const	noexcept	override;
 
 			/**
 			*	@brief Generates a string containing the code which adds properties to an entity.

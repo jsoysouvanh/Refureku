@@ -61,8 +61,10 @@ std::string GeneratedVariableCodeTemplate::generateRegistrationMacro(kodgen::Gen
 	}
 }
 
-void GeneratedVariableCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedVariableCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, out_errorDescription);
+
 	assert(entityInfo.entityType == kodgen::EEntityType::Variable);
 
 	kodgen::VariableInfo const& varInfo = static_cast<kodgen::VariableInfo const&>(entityInfo);

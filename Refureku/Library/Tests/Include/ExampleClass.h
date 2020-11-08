@@ -3,8 +3,6 @@
 #include <Refureku/Object.h>
 #include <Refureku/NativeProperties.h>
 
-#include "CustomProperties.h"
-
 #include "Generated/ExampleClass.rfk.h"
 
 namespace namespace1
@@ -272,23 +270,5 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 		}
 	}
 }
-
-class RFKClass(CustomProperty2, CustomProperty(1, 2), CustomProperty2) A 
-{
-	RFKField(CustomProperty(1, 456), CustomProperty) 
-	int field;
-
-	RFKMethod(Tooltip("This is a test"))
-	void testMethod() noexcept {}
-
-	A_GENERATED
-};
-
-class RFKClass(CustomProperty(3, 4)) B : public A
-{
-
-
-	B_GENERATED
-};
 
 File_GENERATED 
