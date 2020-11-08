@@ -45,7 +45,7 @@ namespace rfk
 			*	
 			*	@return The EnumValue corresponding to the provided name if any, else nullptr.
 			*/
-			EnumValue const*				getEnumValue(std::string enumValueName)	const noexcept;
+			EnumValue const*				getEnumValue(std::string enumValueName)	const	noexcept;
 			
 			/**
 			*	@brief Search an enum value in this enum.
@@ -54,7 +54,7 @@ namespace rfk
 			*
 			*	@return The first found EnumValue equals to the provided value if any, else nullptr.
 			*/
-			EnumValue const*				getEnumValue(int64 value)				const noexcept;
+			EnumValue const*				getEnumValue(int64 value)				const	noexcept;
 
 			/**
 			*	@brief Search all enum values in this enum holding the provided value.
@@ -63,7 +63,21 @@ namespace rfk
 
 			*	@return All the EnumValues equal to the provided value.
 			*/
-			std::vector<EnumValue const*>	getEnumValues(int64 value)				const noexcept;
+			std::vector<EnumValue const*>	getEnumValues(int64 value)				const	noexcept;
+
+			/**
+			*	@brief Add an enum value to this enum.
+			*	
+			*	@param enumValueName	Name of the enum value.
+			*	@param entityId			Unique entity id of the added enum value.
+			*	@param value			Integer value of the enum value.
+			*	
+			*	@return A pointer to the added enum value. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the enum value **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
+			*/
+			EnumValue*						addEnumValue(std::string	enumValueName,
+														 uint64			entityId,
+														 int64			value)				noexcept;
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */

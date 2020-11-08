@@ -39,3 +39,14 @@ std::vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 
 	return result;
 }
+
+EnumValue* Enum::addEnumValue(std::string enumValueName, uint64 entityId, int64 value) noexcept
+{
+	//Add the enum value to the container
+	EnumValue* result = const_cast<EnumValue*>(&*values.emplace(std::move(enumValueName), entityId, value).first);
+
+	//Set outer entity
+	result->outerEntity = this;
+
+	return result;
+}

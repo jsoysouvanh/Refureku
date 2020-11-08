@@ -18,11 +18,11 @@ namespace rfk
 	{
 		private:
 			void generateEnumCode(kodgen::GeneratedFile&	generatedFile,
-								  kodgen::EnumInfo const&	enumInfo)							const	noexcept;
+								  kodgen::EnumInfo&			enumInfo)							const	noexcept;
 
 			/** Return generated macro name */
 			std::string generateGetEnumSpecialization(kodgen::GeneratedFile&	generatedFile,
-													  kodgen::EnumInfo const&	enumInfo)		const	noexcept;
+													  kodgen::EnumInfo&			enumInfo)		const	noexcept;
 			
 			std::string generateRegistrationMacro(kodgen::GeneratedFile&	generatedFile,
 												  kodgen::EnumInfo const&	enumInfo)			const	noexcept;
