@@ -152,13 +152,6 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 									"std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
-			//Check if this static method is a custom instantiator, in which case we should add it to the list of custom instantiators of this class
-			if (std::find_if(method.properties.simpleProperties.cbegin(), method.properties.simpleProperties.cend(), [](kodgen::SimpleProperty const& sp){ return sp.mainProperty == NativeProperties::customInstantiatorProperty; })
-					!= method.properties.simpleProperties.cend())
-			{
-				generatedFile.writeLine("	type.addCustomInstantiator<" + method.returnType.getCanonicalName() + ">(&*staticMethodsIt);\t\\");
-			}
-
 			generatedFile.writeLine("	currMethod = const_cast<rfk::StaticMethod*>(&*staticMethodsIt);\t\\");
 		}
 		else
@@ -172,7 +165,7 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 			generatedFile.writeLine("	currMethod = const_cast<rfk::Method*>(&*methodsIt);\t\\");
 		}
 
-		//Add properties
+		//Add method properties
 		properties = fillEntityProperties(method, "currMethod->");
 		if (!properties.empty())
 			generatedFile.writeLine("	" + properties + "\t\\");

@@ -33,6 +33,10 @@ std::string	CustomInstantiatorPropertyRule::generateCode(kodgen::EntityInfo cons
 			return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + "), " + std::move(parameters) + ">, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");";
 		}
 	}
+	else if (data->codeGenLocation == ECodeGenLocation::PropertyAdd)
+	{
+		return "type.addCustomInstantiator<" + static_cast<kodgen::MethodInfo const&>(entity).returnType.getCanonicalName() + ">(&*staticMethodsIt); ";
+	}
 	
 	return "";
 }
