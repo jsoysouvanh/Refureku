@@ -255,51 +255,46 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 
 	if (hasFields)
 	{
-		generatedFile.writeLine("		std::unordered_multiset<rfk::Field, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			fieldsIt;\t\\");
-		generatedFile.writeLine("		std::unordered_multiset<rfk::StaticField, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticFieldsIt;\t\\");
-		generatedFile.writeLine("		rfk::FieldBase*																							currField = nullptr;\t\\");
+		generatedFile.writeLine("		[[maybe_unused]] rfk::Field*		field		= nullptr; \t\\");
+		generatedFile.writeLine("		[[maybe_unused]] rfk::StaticField*	staticField = nullptr; \t\\");
+
 		generatedFile.writeLines("		__RFK_DISABLE_WARNING_PUSH\t\\",
 								 "		__RFK_DISABLE_WARNING_OFFSETOF\t\\");
-	}
 
-	std::string properties;
-	for (kodgen::FieldInfo& field : info.fields)
-	{
-		if (field.isStatic)
+		std::string properties;
+		std::string currentFieldVariable;
+		for (kodgen::FieldInfo& field : info.fields)
 		{
-			generatedFile.writeLine("		staticFieldsIt = childArchetype->staticFields.emplace(\"" + field.name + "\", " +
-											std::to_string(stringHasher(field.id)) + "u, "
-											"rfk::Type::getType<" + field.type.getName() + ">(), "
-											"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
-											"childArchetype, "
-											"&" + info.name + "::" + field.name + ");\t\\");
+			if (field.isStatic)
+			{
+				generatedFile.writeLine("		staticField = childArchetype->addStaticField(\"" + field.name + "\", " +
+										std::to_string(stringHasher(field.id)) + "u, "
+										"rfk::Type::getType<" + field.type.getName() + ">(), "
+										"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
+										"&thisArchetype, "
+										"&" + info.name + "::" + field.name + ");\t\\");
 
-			generatedFile.writeLine("		currField = const_cast<rfk::StaticField*>(&*staticFieldsIt);\t\\");
+				currentFieldVariable = "staticField->";
+			}
+			else
+			{
+				generatedFile.writeLine("		field = childArchetype->addField(\"" + field.name + "\", " +
+										std::to_string(stringHasher(field.id)) + "u, "
+										"rfk::Type::getType<" + field.type.getName() + ">(), "
+										"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
+										"&thisArchetype, "
+										"offsetof(ChildType, " + field.name + "));\t\\");
+
+				currentFieldVariable = "field->";
+			}
+
+			//Add properties
+			field.properties.removeStartAndTrailSpaces();
+			properties = fillEntityProperties(field, currentFieldVariable);
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
 		}
-		else
-		{
-			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
-											std::to_string(stringHasher(field.id)) + "u, "
-											"rfk::Type::getType<" + field.type.getName() + ">(), "
-											"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
-											"childArchetype, "
-											"offsetof(ChildType, " + field.name + "));\t\\");
 
-			generatedFile.writeLine("		currField = const_cast<rfk::Field*>(&*fieldsIt);\t\\");
-		}
-
-		//Add properties
-		field.properties.removeStartAndTrailSpaces();
-		properties = fillEntityProperties(field, "	currField->");
-		if (!properties.empty())
-			generatedFile.writeLine("	" + properties + "\t\\");
-
-		//Setup the outer entity
-		generatedFile.writeLine("		currField->outerEntity = &thisArchetype;\t\\");
-	}
-
-	if (hasFields)
-	{
 		generatedFile.writeLine("		__RFK_DISABLE_WARNING_POP\t\\");
 	}
 

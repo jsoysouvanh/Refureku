@@ -323,7 +323,7 @@ void Struct::setDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
 
 Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
 {
-	assert((flags & EMethodFlags::Static) == EMethodFlags::Default);
+	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
 
 	//Add the method to the container
 	Method* result = const_cast<Method*>(&*methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags));
@@ -343,6 +343,32 @@ StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, T
 
 	//Set outer entity
 	result->outerEntity = this;
+
+	return result;
+}
+
+Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, uint64 memoryOffset) noexcept
+{
+	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
+
+	//Add the field to the container
+	Field* result = const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset));
+
+	//Set outer entity
+	result->outerEntity = outerEntity_;
+
+	return result;
+}
+
+StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void* fieldPtr) noexcept
+{
+	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
+
+	//Add the static field to the container
+	StaticField* result = const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr));
+
+	//Set outer entity
+	result->outerEntity = outerEntity_;
 
 	return result;
 }

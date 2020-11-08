@@ -337,6 +337,25 @@ namespace rfk
 			void		addToParents(EAccessSpecifier inheritanceAccess)			noexcept;
 
 			/**
+			*	Internal use only.
+			*/
+			template <typename T>
+			void		addRequiredMethods()										noexcept;
+
+			/**
+			*	@brief Add a new way to instantiate this struct through the makeInstance method.
+			*	
+			*	@param instantiator Pointer to the static method.
+			*/
+			template <typename ReturnType>
+			void		addCustomInstantiator(StaticMethod const* instantiator)		noexcept;
+
+			/**
+			*	Internal use only.
+			*/
+			void		setDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
+
+			/**
 			*	@brief Add a method to the struct.
 			*	
 			*	@param methodName		Name of the method.
@@ -352,7 +371,7 @@ namespace rfk
 									  uint64						entityId,
 									  Type const&					returnType,
 									  std::unique_ptr<ICallable>	internalMethod,
-									  EMethodFlags					flags)		noexcept;
+									  EMethodFlags					flags)				noexcept;
 
 			/**
 			*	@brief Add a static method to the struct.
@@ -370,29 +389,47 @@ namespace rfk
 											uint64						entityId,
 											Type const&					returnType,
 											std::unique_ptr<ICallable>	internalMethod,
-											EMethodFlags				flags)	noexcept;
-
-			Field*			addField()													noexcept;
-			StaticField*	addStaticField()											noexcept;
+											EMethodFlags				flags)			noexcept;
 
 			/**
-			*	Internal use only.
-			*/
-			template <typename T>
-			void		addRequiredMethods()										noexcept;
-
-			/**
-			*	@brief Add a new way to instantiate this struct through the makeInstance method.
+			*	@brief Add a field to the struct.
 			*	
-			*	@param instantiator Pointer to the static method.
+			*	@param fieldName	Name of the field.
+			*	@param entityId		Unique entity if of the field.
+			*	@param type			Type of the field.
+			*	@param flags		Field flags.
+			*	@param outerEntity_	Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
+			*	@param memoryOffset	Offset in bytes of the field in the struct (obtained from offsetof).
+			*	
+			*	@return A pointer to the added field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			template <typename ReturnType>
-			void		addCustomInstantiator(StaticMethod const* instantiator)	noexcept;
+			Field*			addField(std::string	fieldName,
+									 uint64			entityId,
+									 Type const&	type,
+									 EFieldFlags	flags,
+									 Struct const*	outerEntity_,
+									 uint64			memoryOffset)						noexcept;
 
 			/**
-			*	Internal use only.
+			*	@brief Add a static field to the struct.
+			*	
+			*	@param fieldName	Name of the static field.
+			*	@param entityId		Unique entity if of the static field.
+			*	@param type			Type of the static field.
+			*	@param flags		Field flags.
+			*	@param outerEntity_	Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
+			*	@param fieldPtr		Pointer to the static field memory.
+			*	
+			*	@return A pointer to the added static field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the static field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			void		setDefaultInstantiationMethod(void*(*func)() noexcept)	noexcept;
+			StaticField*	addStaticField(std::string		fieldName,
+										   uint64			entityId,
+										   Type const&		type,
+										   EFieldFlags		flags,
+										   Struct const*	outerEntity_,
+										   void*			fieldPtr)					noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Struct.inl"
