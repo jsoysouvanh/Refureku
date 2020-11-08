@@ -35,7 +35,7 @@ std::string	CustomInstantiatorPropertyRule::generateCode(kodgen::EntityInfo cons
 	}
 	else if (data->codeGenLocation == ECodeGenLocation::PropertyAdd)
 	{
-		return "type.addCustomInstantiator<" + static_cast<kodgen::MethodInfo const&>(entity).returnType.getCanonicalName() + ">(&*staticMethodsIt); ";
+		return "type.addCustomInstantiator<" + static_cast<kodgen::MethodInfo const&>(entity).returnType.getCanonicalName() + ">(staticMethod); ";
 	}
 	
 	return "";

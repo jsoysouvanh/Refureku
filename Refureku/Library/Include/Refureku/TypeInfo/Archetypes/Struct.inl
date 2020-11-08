@@ -15,13 +15,7 @@ void Struct::addToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) n
 		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, parentArchetype });
 
 		//Inherit parent properties
-		for (Property const* property : parentArchetype->properties)
-		{
-			if (property->getShouldInherit())
-			{
-				addProperty(property);
-			}
-		}
+		inheritProperties(*parentArchetype);
 	}
 }
 
@@ -50,6 +44,37 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 		for (Struct::Parent const& parent : directParents)
 		{
 			result = parent.type->getMethod(methodName, minFlags, true);
+
+			if (result != nullptr)
+			{
+				return result;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Method const* Struct::getMethod(Predicate predicate, bool shouldInspectParents) const noexcept
+{
+	//Iterate over this struct's methods
+	for (Method const& method : methods)
+	{
+		if (predicate(&method))
+		{
+			return &method;
+		}
+	}
+
+	//Check in parent's methods
+	if (shouldInspectParents)
+	{
+		Method const* result = nullptr;
+
+		for (Struct::Parent const& parent : directParents)
+		{
+			result = parent.type->getMethod<Predicate>(predicate, true);
 
 			if (result != nullptr)
 			{

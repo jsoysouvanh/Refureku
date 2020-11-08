@@ -8,3 +8,28 @@ FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type
 	returnType{returnType}
 {
 }
+
+bool FunctionBase::hasSamePrototype(FunctionBase const* other) const noexcept
+{
+	//Compare return type
+	if (returnType != other->returnType)
+	{
+		return false;
+	}
+
+	//Compare parameters
+	if (parameters.size() != other->parameters.size())
+	{
+		return false;
+	}
+
+	for (int i = 0; i < parameters.size(); i++)
+	{
+		if (parameters[i].type != other->parameters[i].type)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}

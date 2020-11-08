@@ -446,7 +446,7 @@ void properties()
 
 	TEST(ec.getStaticMethod("customInstantiator")->getProperty<CustomInstantiator>() != nullptr);
 
-	rfk::Struct const& a = A::staticGetArchetype();
+	rfk::Class const& a = A::staticGetArchetype();
 
 	TEST(a.getProperty<CustomProperty2>() != nullptr);
 	TEST(a.getProperty<CustomProperty>() != nullptr);
@@ -465,13 +465,16 @@ void properties()
 																reinterpret_cast<CustomProperty const*>(prop)->j == 456; }) != nullptr);
 	TEST(f->getProperties<CustomProperty2>().empty());
 
-	TEST(a.getMethod("testMethod")->getProperty<Tooltip>()->message == "This is a test");
+	TEST(a.getMethod([](rfk::Method const* method) { return method->name == "testMethod" && method->parameters.empty(); })->getProperty<Tooltip>()->message == "This is a test");
 
 	//Properties inheritance
-	rfk::Struct const& b = B::staticGetArchetype();
+	rfk::Class const& b = B::staticGetArchetype();
+	rfk::Class const& c = C::staticGetArchetype();
 
 	TEST(b.getProperty<CustomProperty2>() == nullptr);											//CustomProperty2 is not a inherited property
-	TEST(b.getProperty<CustomProperty>()->i == 3 && b.getProperty<CustomProperty>()->j == 4);	//Inherited property in overriden in child
+	TEST(b.getProperty<CustomProperty>()->i == 3 && b.getProperty<CustomProperty>()->j == 4);	//Overriden inherited property
+	TEST(c.getProperty<CustomProperty>()->j == 2);												//Inherited property
+	TEST(c.getMethod("testMethod")->getProperty<Tooltip>()->message == "This is a test");		//Overriden method inherit from base method
 
 	parseAllNested();
 }

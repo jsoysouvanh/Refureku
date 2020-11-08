@@ -320,3 +320,29 @@ void Struct::setDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
 {
 	_defaultInstantiator = func;
 }
+
+Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+{
+	assert((flags & EMethodFlags::Static) == EMethodFlags::Default);
+
+	//Add the method to the container
+	Method* result = const_cast<Method*>(&*methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags));
+
+	//Set outer entity
+	result->outerEntity = this;
+
+	return result;
+}
+
+StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+{
+	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
+
+	//Add the static method to the container
+	StaticMethod* result = const_cast<StaticMethod*>(&*staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags));
+
+	//Set outer entity
+	result->outerEntity = this;
+
+	return result;
+}

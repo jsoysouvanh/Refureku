@@ -137,52 +137,61 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 
 	if (!info.methods.empty())
 	{
-		generatedFile.writeLine("	std::unordered_multiset<rfk::Method, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			methodsIt;\t\\");
-		generatedFile.writeLine("	std::unordered_multiset<rfk::StaticMethod, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticMethodsIt;\t\\");
-		generatedFile.writeLine("	rfk::MethodBase*																						currMethod = nullptr;\t\\");
+		generatedFile.writeLine("	[[maybe_unused]] rfk::Method*		method			= nullptr;\t\\");
+		generatedFile.writeLine("	[[maybe_unused]] rfk::StaticMethod*	staticMethod	= nullptr;\t\\");
 	}
 
 	std::string properties;
+	std::string currentMethodVariable;
 	for (kodgen::MethodInfo& method : info.methods)
 	{
 		if (method.isStatic)
 		{
-			generatedFile.writeLine("	staticMethodsIt = type.staticMethods.emplace(\"" + method.name + "\", " +
+			generatedFile.writeLine("	staticMethod = type.addStaticMethod(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
-			generatedFile.writeLine("	currMethod = const_cast<rfk::StaticMethod*>(&*staticMethodsIt);\t\\");
+			//Add method properties
+			method.properties.removeStartAndTrailSpaces();
+			properties = fillEntityProperties(method, "staticMethod->");
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
+
+			currentMethodVariable = "staticMethod->";
 		}
 		else
 		{
-			generatedFile.writeLine("	methodsIt = type.methods.emplace(\"" + method.name + "\", " +
+			generatedFile.writeLine("	method = type.addMethod(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::MemberFunction<" + info.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
-			generatedFile.writeLine("	currMethod = const_cast<rfk::Method*>(&*methodsIt);\t\\");
+			//Add method properties
+			method.properties.removeStartAndTrailSpaces();
+			properties = fillEntityProperties(method, "method->");
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
+
+			//Base method properties must be inherited AFTER this method properties have been added
+			if (method.isOverride)
+			{
+				generatedFile.writeLine("	method->inheritBaseMethodProperties();\t\\");
+			}
+
+			currentMethodVariable = "method->";
 		}
-
-		//Add method properties
-		method.properties.removeStartAndTrailSpaces();
-		properties = fillEntityProperties(method, "currMethod->");
-		if (!properties.empty())
-			generatedFile.writeLine("	" + properties + "\t\\");
-
-		//Setup the outer entity
-		generatedFile.writeLine("	currMethod->outerEntity = &type;\t\\");
 
 		//Setup parameters
 		if (!method.parameters.empty())
 		{
-			generatedFile.writeLine("	currMethod->parameters.reserve(" + std::to_string(method.parameters.size()) + ");\t\\");
+			generatedFile.writeLine("	" + currentMethodVariable + "parameters.reserve(" + std::to_string(method.parameters.size()) + ");\t\\");
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
-				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">());\t\\");
+				generatedFile.writeLine("	" + currentMethodVariable + "parameters.emplace_back(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">());\t\\");
 			}
 		}
 	}

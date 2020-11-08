@@ -208,6 +208,19 @@ namespace rfk
 														  bool					shouldInspectParents	= false)					const	noexcept;
 
 			/**
+			*	@brief Retrieve a method from this struct matching with a given predicate.
+			*	
+			*	@param predicate				Predicate defining the matching method.
+			*	@param shouldInspectInherited	Should inherited methods be considered as well in the search process?
+			*									If false, only methods introduced by this struct will be considered.
+			*	
+			*	@return The first method matching with the predicate, nullptr if none was found. 
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const*>>>
+			Method const*						getMethod(Predicate predicate,
+														  bool		shouldInspectParents = false)									const	noexcept;
+
+			/**
 			*	@param methodName Name of the method to retrieve.
 			*	@param minFlags Requirements the queried method should fulfill.
 			*					Keep in mind that the returned method should contain all of the specified flags,
@@ -318,11 +331,49 @@ namespace rfk
 			bool		isBaseOf(Struct const& otherType)				const	noexcept;
 
 			/**
-			*	Add the type T to this type's parents if possible.
-			*	Internal use only.
+			*	@brief Add the type T to this type's parents if possible.
 			*/
 			template <typename T>
 			void		addToParents(EAccessSpecifier inheritanceAccess)			noexcept;
+
+			/**
+			*	@brief Add a method to the struct.
+			*	
+			*	@param methodName		Name of the method.
+			*	@param entityId			Unique entity id of the method.
+			*	@param returnType		Return type of the method call.
+			*	@param internalMethod	Pointer to the actual method.
+			*	@param flags			Method flags.
+			*
+			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
+			*/
+			Method*			addMethod(std::string					methodName,
+									  uint64						entityId,
+									  Type const&					returnType,
+									  std::unique_ptr<ICallable>	internalMethod,
+									  EMethodFlags					flags)		noexcept;
+
+			/**
+			*	@brief Add a static method to the struct.
+			*	
+			*	@param methodName		Name of the static method.
+			*	@param entityId			Unique entity id of the static method.
+			*	@param returnType		Return type of the static method call.
+			*	@param internalMethod	Pointer to the actual static method.
+			*	@param flags			Method flags.
+			*
+			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the static method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
+			*/
+			StaticMethod*	addStaticMethod(std::string					methodName,
+											uint64						entityId,
+											Type const&					returnType,
+											std::unique_ptr<ICallable>	internalMethod,
+											EMethodFlags				flags)	noexcept;
+
+			Field*			addField()													noexcept;
+			StaticField*	addStaticField()											noexcept;
 
 			/**
 			*	Internal use only.
@@ -331,7 +382,9 @@ namespace rfk
 			void		addRequiredMethods()										noexcept;
 
 			/**
-			*	Internal use only.
+			*	@brief Add a new way to instantiate this struct through the makeInstance method.
+			*	
+			*	@param instantiator Pointer to the static method.
 			*/
 			template <typename ReturnType>
 			void		addCustomInstantiator(StaticMethod const* instantiator)	noexcept;

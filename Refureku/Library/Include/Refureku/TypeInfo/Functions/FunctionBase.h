@@ -106,6 +106,13 @@ namespace rfk
 			*/
 			template <typename... ArgTypes>
 			bool				hasSameArguments()	const	noexcept;
+
+			/**
+			*	@brief Check that another function has the same prototype as this function.
+			*	
+			*	@param other Function to compare the prototype with.
+			*/
+			bool	hasSamePrototype(FunctionBase const* other)	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBase.inl"

@@ -28,3 +28,14 @@ bool Entity::addProperty(Property const* toAddProperty) noexcept
 
 	return true;
 }
+
+void Entity::inheritProperties(Entity const& from) noexcept
+{
+	for (Property const* property : from.properties)
+	{
+		if (property->getShouldInherit())
+		{
+			addProperty(property);
+		}
+	}
+}

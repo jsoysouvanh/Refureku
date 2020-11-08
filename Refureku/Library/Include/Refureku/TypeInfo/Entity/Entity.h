@@ -164,6 +164,13 @@ namespace rfk
 			*/
 			bool								addProperty(Property const* property)		noexcept;
 
+			/**
+			*	@brief Inherit from another entity inheritable properties.
+			*	
+			*	@param from The entity this entity should inherit the properties from.
+			*/
+			void								inheritProperties(Entity const& from)		noexcept;
+
 			inline bool operator==(Entity const& other) const noexcept;
 			inline bool operator!=(Entity const& other) const noexcept;
 	};

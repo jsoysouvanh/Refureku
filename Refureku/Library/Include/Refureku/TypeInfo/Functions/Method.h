@@ -55,8 +55,8 @@ namespace rfk
 			*	If it is incorrect, a MethodError exception is thrown.
 			*	Type checks are not performed so calling this method with bad parameters might lead to a crash.
 			*
-			*	\tparam ReturnType Return type of the method
-			*	\tparam... ArgTypes Type of all arguments
+			*	@tparam ReturnType Return type of the method
+			*	@tparam... ArgTypes Type of all arguments
 			*
 			*	@param caller Pointer to the instance of the class the method will be called.
 			*	@param arguments Arguments provided to the method call. This can in some cases be omitted thanks to template deduction.
@@ -74,10 +74,10 @@ namespace rfk
 			*	If it is incorrect, a MethodError exception is thrown.
 			*	Type checks are not performed so calling this method with bad parameters might lead to a crash.
 			*
-			*	\note This is only an overload of the other invoke method.
+			*	@note This is only an overload of the other invoke method.
 			*		  This allows to conveniently call methods when we don't care about the returned value.
 			*
-			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction.
+			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
 			*	@param caller Pointer to the instance of the class the method will be called.
 			*	@param arguments Arguments provided to the method call.
@@ -91,8 +91,8 @@ namespace rfk
 			*	Checks the argument count and the type of each argument before actually invoking the underlying method.
 			*	If any of those is incorrect, a MethodError exception is thrown.
 			*
-			*	\tparam ReturnType Return type of the method
-			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
+			*	@tparam ReturnType Return type of the method
+			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
 			*		but it is always safer to explicitly specify each template type to avoid type mismatches (a char* could
 			*		be template deducted as a char[], and as they are different types a MethodError exception will be thrown).
 			*
@@ -110,10 +110,10 @@ namespace rfk
 			*	Checks the argument count and the type of each argument before actually invoking the underlying method.
 			*	If any of those is incorrect, a MethodError exception is thrown.
 			*
-			*	\note This is only an overload of the other checkedInvoke method.
+			*	@note This is only an overload of the other checkedInvoke method.
 			*		  This allows to conveniently call methods when we don't care about the returned value.
 			*
-			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
+			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction,
 			*		but it is always safer to explicitly specify each template type to avoid type mismatches (a char* could
 			*		be template deducted as a char[], and as they are different types a MethodError exception will be thrown).
 			*
@@ -122,6 +122,11 @@ namespace rfk
 			*/
 			template <typename... ArgTypes>
 			void		checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
+
+			/**
+			*	@brief Inherit from the properties this method overrides (if it has the override method flag).
+			*/
+			void		inheritBaseMethodProperties()	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/Method.inl"
