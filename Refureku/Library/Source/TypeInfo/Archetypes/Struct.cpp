@@ -372,3 +372,17 @@ StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type
 
 	return result;
 }
+
+Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier_) noexcept
+{
+	//Add the archetype to the container
+	Archetype* result = const_cast<Archetype*>(*nestedArchetypes.emplace(nestedArchetype).first);
+
+	//Set the access specifier
+	result->accessSpecifier = accessSpecifier_;
+
+	//Set outer entity
+	result->outerEntity = this;
+
+	return result;
+}

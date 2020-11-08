@@ -430,6 +430,18 @@ namespace rfk
 										   EFieldFlags		flags,
 										   Struct const*	outerEntity_,
 										   void*			fieldPtr)					noexcept;
+
+			/**
+			*	@brief Add a nested archetype to the struct.
+			*	
+			*	@param nestedArchetype	Nested archetype.
+			*	@param accessSpeficier_	Access of the nested archetype in the struct.
+			*	
+			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the archetype **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
+			*/
+			Archetype*		addNestedArchetype(Archetype const* nestedArchetype,
+											   EAccessSpecifier	accessSpecifier_)		noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Struct.inl"

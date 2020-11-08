@@ -342,7 +342,7 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
-	generatedFile.writeLine("	std::pair<decltype(type.nestedArchetypes)::iterator, bool> it;\t\\");
+	generatedFile.writeLine("	rfk::Archetype* archetype = nullptr;\t\\");
 
 	//Reserve memory first
 	generatedFile.writeLine("	type.nestedArchetypes.reserve(" + std::to_string(nestedArchetypesCount) + ");\t\\");
@@ -350,25 +350,22 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 	//Add nested structs
 	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStruct : info.nestedStructs)
 	{
-		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(&" + nestedStruct->name + "::staticGetArchetype());\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + ");\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
+		generatedFile.writeLine("	archetype = type.addNestedArchetype(&" + nestedStruct->name + "::staticGetArchetype(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + "));\t\\");
 	}
 
 	//Add nested classes
 	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedClass : info.nestedClasses)
 	{
-		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(&" + nestedClass->name + "::staticGetArchetype());\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + ");\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
+		generatedFile.writeLine("	archetype = type.addNestedArchetype(&" + nestedClass->name + "::staticGetArchetype(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + "));\t\\");
 	}
 
 	//Add nested enums
 	for (kodgen::NestedEnumInfo const& nestedEnum : info.nestedEnums)
 	{
-		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + ");\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
+		generatedFile.writeLine("	archetype = type.addNestedArchetype(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));\t\\");
 	}
 
 	generatedFile.writeLine("");
