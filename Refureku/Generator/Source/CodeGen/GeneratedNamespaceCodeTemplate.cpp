@@ -90,50 +90,53 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 	//Fill nested namespaces
 	if (totalSize != 0u)
 	{
+		//Generate whole data in a single string and write that string at the very end
 		//Reserve space first
-		generatedFile.writeLine("			fragment.nestedEntities.reserve(" + std::to_string(totalSize) + "u);\t\\");
+		std::string addNestedEntitiesGeneratedCode = "\t\t\tfragment.nestedEntities.reserve(" + std::to_string(totalSize) + "u); rfk::NamespaceFragment* fragmentPtr = &fragment; fragmentPtr";
 
 		//Fill nested namespaces
 		for (kodgen::NamespaceInfo const& nestedNamespace : namespaceInfo.namespaces)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(" + getNamespaceFragmentRegistererName(generatedFile, nestedNamespace) + ".getNamespaceInstance());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(" + getNamespaceFragmentRegistererName(generatedFile, nestedNamespace) + ".getNamespaceInstance())";
 		}
 
 		//Fill nested structs
 		for (kodgen::StructClassInfo const& nestedStruct : namespaceInfo.structs)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype())";
 		}
 
 		//Fill nested classes
 		for (kodgen::StructClassInfo const& nestedClass : namespaceInfo.classes)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype())";
 		}
 
 		//Fill nested enums
 		for (kodgen::EnumInfo const& nestedEnum : namespaceInfo.enums)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">())";
 		}
 
 		//Fill nested variables
 		for (kodgen::VariableInfo const& variable : namespaceInfo.variables)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + GeneratedVariableCodeTemplate::getGetVariableFunctionName(variable) + "());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + GeneratedVariableCodeTemplate::getGetVariableFunctionName(variable) + "())";
 		}
 
 		//Fill nested functions
 		for (kodgen::FunctionInfo const& function : namespaceInfo.functions)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + GeneratedFunctionCodeTemplate::getGetFunctionFunctionName(function) + "());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + GeneratedFunctionCodeTemplate::getGetFunctionFunctionName(function) + "())";
 		}
+
+		//Write into file
+		generatedFile.writeLine(addNestedEntitiesGeneratedCode + ";\t\\");
 	}
 
-	generatedFile.writeLines("		}\t\\",
-							 "	return fragment;\t\\",
-							 "	}",
-							 "");
+	generatedFile.writeLines("\t\t}\t\\",
+							 "\treturn fragment;\t\\",
+							 "\t}\n");
 
 	return macroName;
 }
