@@ -10,46 +10,50 @@ std::string GeneratedFunctionCodeTemplate::generateGetFunctionDefinition(kodgen:
 {
 	std::string entityId	= getEntityId(funcInfo);
 	std::string macroName	= internalPrefix + entityId + "_GenerateGetFunctionDefinition";
-	std::string properties;
+	std::string generatedCode;
 	std::string nonMemberFuncType = "rfk::NonMemberFunction<" + funcInfo.getPrototype(true) + ">";
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
-							 "	inline rfk::Function const& " + getGetFunctionFunctionName(funcInfo) + "() noexcept\t\\",
-							 "	{\t\\",
-							 "		static bool				initialized = false;\t\\",
-							 "		static rfk::Function	function(\"" + funcInfo.name + "\", " +
+							 "\tinline rfk::Function const& " + getGetFunctionFunctionName(funcInfo) + "() noexcept\t\\",
+							 "\t{\t\\",
+							 "\t\tstatic bool				initialized = false;\t\\",
+							 "\t\tstatic rfk::Function	function(\"" + funcInfo.name + "\", " +
 																	 entityId + ", "
 																	 "rfk::Type::getType<" + funcInfo.returnType.getCanonicalName() + ">(), "
 																	 "std::unique_ptr<" + nonMemberFuncType + ">(new " + nonMemberFuncType + "(&" + funcInfo.getFullName() + ")), "
 																	 "static_cast<rfk::EFunctionFlags>(" + std::to_string(computeFunctionFlags(funcInfo)) + ")"
 																	 ");\t\\");
 
-	generatedFile.writeLines("		if (!initialized)\t\\",
-							 "		{\t\\",
-							 "			initialized = true;\t\\");
+	generatedFile.writeLines("\t\tif (!initialized)\t\\",
+							 "\t\t{\t\\",
+							 "\t\t\tinitialized = true;\t\\");
 
 	//Fill enum properties
-	properties = fillEntityProperties(funcInfo, "function.");
-	if (!properties.empty())
+	generatedCode = fillEntityProperties(funcInfo, "function.");
+	if (!generatedCode.empty())
 	{
-		generatedFile.writeLine("			" + properties + "\t\\");
+		generatedFile.writeLine("\t\t\t" + generatedCode + "\t\\");
 	}
 
 	//Setup parameters
 	if (!funcInfo.parameters.empty())
 	{
-		generatedFile.writeLine("	function.parameters.reserve(" + std::to_string(funcInfo.parameters.size()) + ");\t\\");
+		generatedFile.writeLine("\t\t\tfunction.parameters.reserve(" + std::to_string(funcInfo.parameters.size()) + ");\t\\");
+
+		generatedCode = "\t\t\trfk::Function* functionPtr = &function; functionPtr";
 
 		for (kodgen::FunctionParamInfo const& param : funcInfo.parameters)
 		{
-			generatedFile.writeLine("	function.parameters.emplace_back(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">());\t\\");
+			generatedCode += "->addParameter(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">())";
 		}
+
+		generatedFile.writeLine(generatedCode + ";\t\\");
 	}
 
-	generatedFile.writeLine("		}\t\\");
+	generatedFile.writeLine("\t\t}\t\\");
 
-	generatedFile.writeLines("		return function;\t\\",
-							 "	}\n");
+	generatedFile.writeLines("\t\treturn function;\t\\",
+							 "\t}\n");
 
 	return macroName;
 }

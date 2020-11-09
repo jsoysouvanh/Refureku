@@ -33,3 +33,10 @@ bool FunctionBase::hasSamePrototype(FunctionBase const* other) const noexcept
 
 	return true;
 }
+
+FunctionBase* FunctionBase::addParameter(std::string parameterName, Type const& parameterType) noexcept
+{
+	parameters.emplace_back(std::move(parameterName), parameterType);
+
+	return this;
+}

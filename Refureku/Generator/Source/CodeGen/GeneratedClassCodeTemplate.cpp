@@ -137,17 +137,17 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 
 	if (!info.methods.empty())
 	{
-		generatedFile.writeLine("	[[maybe_unused]] rfk::Method*		method			= nullptr;\t\\");
-		generatedFile.writeLine("	[[maybe_unused]] rfk::StaticMethod*	staticMethod	= nullptr;\t\\");
+		generatedFile.writeLine("\t[[maybe_unused]] rfk::Method*		method			= nullptr;\t\\");
+		generatedFile.writeLine("\t[[maybe_unused]] rfk::StaticMethod*	staticMethod	= nullptr;\t\\");
 	}
 
-	std::string properties;
+	std::string generatedCode;
 	std::string currentMethodVariable;
 	for (kodgen::MethodInfo& method : info.methods)
 	{
 		if (method.isStatic)
 		{
-			generatedFile.writeLine("	staticMethod = type.addStaticMethod(\"" + method.name + "\", " +
+			generatedFile.writeLine("\tstaticMethod = type.addStaticMethod(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
@@ -155,15 +155,15 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 
 			//Add method properties
 			method.properties.removeStartAndTrailSpaces();
-			properties = fillEntityProperties(method, "staticMethod->");
-			if (!properties.empty())
-				generatedFile.writeLine("	" + properties + "\t\\");
+			generatedCode = fillEntityProperties(method, "staticMethod->");
+			if (!generatedCode.empty())
+				generatedFile.writeLine("	" + generatedCode + "\t\\");
 
-			currentMethodVariable = "staticMethod->";
+			currentMethodVariable = "staticMethod";
 		}
 		else
 		{
-			generatedFile.writeLine("	method = type.addMethod(\"" + method.name + "\", " +
+			generatedFile.writeLine("\tmethod = type.addMethod(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::MemberFunction<" + info.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
@@ -171,33 +171,37 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 
 			//Add method properties
 			method.properties.removeStartAndTrailSpaces();
-			properties = fillEntityProperties(method, "method->");
-			if (!properties.empty())
-				generatedFile.writeLine("	" + properties + "\t\\");
+			generatedCode = fillEntityProperties(method, "method->");
+			if (!generatedCode.empty())
+				generatedFile.writeLine("\t" + generatedCode + "\t\\");
 
 			//Base method properties must be inherited AFTER this method properties have been added
 			if (method.isOverride)
 			{
-				generatedFile.writeLine("	method->inheritBaseMethodProperties();\t\\");
+				generatedFile.writeLine("\tmethod->inheritBaseMethodProperties();\t\\");
 			}
 
-			currentMethodVariable = "method->";
+			currentMethodVariable = "method";
 		}
 
 		//Setup parameters
 		if (!method.parameters.empty())
 		{
-			generatedFile.writeLine("	" + currentMethodVariable + "parameters.reserve(" + std::to_string(method.parameters.size()) + ");\t\\");
+			//Add all parameters in a single string
+			generatedCode = "\t" + currentMethodVariable + "->parameters.reserve(" + std::to_string(method.parameters.size()) + "); " + currentMethodVariable;
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
-				generatedFile.writeLine("	" + currentMethodVariable + "parameters.emplace_back(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">());\t\\");
+				generatedCode += "->addParameter(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">())";
 			}
+
+			//Write generated parameters string to file
+			generatedFile.writeLine(generatedCode + ";\t\\");
 		}
 	}
 
 	//Add required methods (instantiate....)
-	generatedFile.writeLine("	type.addRequiredMethods<" + info.name + ">();\t\\");
+	generatedFile.writeLine("\ttype.addRequiredMethods<" + info.name + ">();\t\\");
 
 	generatedFile.writeLine("");
 

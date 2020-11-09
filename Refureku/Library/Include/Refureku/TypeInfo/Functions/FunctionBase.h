@@ -97,7 +97,7 @@ namespace rfk
 			*			parameter types as ArgTypes, else false.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			bool				hasSamePrototype()	const	noexcept;
+			bool			hasSamePrototype()							const	noexcept;
 
 			/**
 			*	@tparam... ArgTypes Argument types to compare with.
@@ -105,14 +105,27 @@ namespace rfk
 			*	@return true if this function has the same parameter types as ArgTypes, else false.
 			*/
 			template <typename... ArgTypes>
-			bool				hasSameArguments()	const	noexcept;
+			bool			hasSameArguments()							const	noexcept;
 
 			/**
 			*	@brief Check that another function has the same prototype as this function.
 			*	
 			*	@param other Function to compare the prototype with.
 			*/
-			bool	hasSamePrototype(FunctionBase const* other)	const	noexcept;
+			bool			hasSamePrototype(FunctionBase const* other)	const	noexcept;
+
+			/**
+			*	@brief Add a parameter to the function.
+			*	
+			*	@param parameterName Name of the parameter, can be empty.
+			*	@param parameterType Type of the parameter.
+			*	
+			*	@return this.
+			*/
+			FunctionBase*	addParameter(std::string parameterName,
+										 Type const& parameterType)				noexcept;
+
+
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBase.inl"
