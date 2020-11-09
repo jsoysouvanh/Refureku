@@ -19,8 +19,140 @@ void Struct::addToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) n
 	}
 }
 
+template <typename Predicate, typename>
+Archetype const* Struct::getNestedArchetype(Predicate predicate) const noexcept
+{
+	for (Archetype const* archetype : nestedArchetypes)
+	{
+		if (predicate(archetype))
+		{
+			return archetype;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Struct const* Struct::getNestedStruct(Predicate predicate) const noexcept
+{
+	for (Archetype const* archetype : nestedArchetypes)
+	{
+		if (archetype->kind == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
+		{
+			return reinterpret_cast<Struct const*>(archetype);
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Class const* Struct::getNestedClass(Predicate predicate) const noexcept
+{
+	for (Archetype const* archetype : nestedArchetypes)
+	{
+		if (archetype->kind == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
+		{
+			return reinterpret_cast<Class const*>(archetype);
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Enum const* Struct::getNestedEnum(Predicate predicate) const noexcept
+{
+	for (Archetype const* archetype : nestedArchetypes)
+	{
+		if (archetype->kind == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
+		{
+			return reinterpret_cast<Enum const*>(archetype);
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) const noexcept
+{
+	for (Field const& field : fields)
+	{
+		/**
+		*	fields collection contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if ((shouldInspectInherited || field.outerEntity == this) && predicate(&field))
+		{
+			return &field;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInspectInherited) const noexcept
+{
+	std::vector<Field const*> result;
+
+	for (Field const& field : fields)
+	{
+		/**
+		*	fields collection contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if ((shouldInspectInherited || field.outerEntity == this) && predicate(&field))
+		{
+			result.emplace_back(&field);
+		}
+	}
+
+	return result;
+}
+
+template <typename Predicate, typename>
+StaticField const* Struct::getStaticField(Predicate predicate, bool shouldInspectInherited) const noexcept
+{
+	for (StaticField const& staticField : staticFields)
+	{
+		/**
+		*	staticFields collection contains both this struct static fields and inherited static fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if ((shouldInspectInherited || staticField.outerEntity == this) && predicate(&staticField))
+		{
+			return &staticField;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+std::vector<StaticField const*> Struct::getStaticFields(Predicate predicate, bool shouldInspectInherited) const noexcept
+{
+	std::vector<StaticField const*> result;
+
+	for (StaticField const& staticField : staticFields)
+	{
+		/**
+		*	staticFields collection contains both this struct static fields and inherited static fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if ((shouldInspectInherited || staticField.outerEntity == this) && predicate(&staticField))
+		{
+			result.emplace_back(&staticField);
+		}
+	}
+
+	return result;
+}
+
 template <typename MethodSignature>
-Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
+Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	static_assert(std::is_function_v<MethodSignature>, "Struct::getMethod<> must be called with a function signature as template argument.");
 
@@ -37,7 +169,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	}
 
 	//If we reach this point, couldn't find a valid method
-	if (shouldInspectParents)
+	if (shouldInspectInherited)
 	{
 		Method const* result = nullptr;
 
@@ -56,7 +188,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 }
 
 template <typename Predicate, typename>
-Method const* Struct::getMethod(Predicate predicate, bool shouldInspectParents) const noexcept
+Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited) const noexcept
 {
 	//Iterate over this struct's methods
 	for (Method const& method : methods)
@@ -68,7 +200,7 @@ Method const* Struct::getMethod(Predicate predicate, bool shouldInspectParents) 
 	}
 
 	//Check in parent's methods
-	if (shouldInspectParents)
+	if (shouldInspectInherited)
 	{
 		Method const* result = nullptr;
 
@@ -86,8 +218,38 @@ Method const* Struct::getMethod(Predicate predicate, bool shouldInspectParents) 
 	return nullptr;
 }
 
+template <typename Predicate, typename>
+std::vector<Method const*> Struct::getMethods(Predicate	predicate, bool shouldInspectInherited) const noexcept
+{
+	std::vector<Method const*> result;
+
+	//Retrieve methods declared in this struct first
+	for (Method const& method : methods)
+	{
+		if (predicate(&method))
+		{
+			result.emplace_back(&method);
+		}
+	}
+
+	//Add parent's method matching the predicate if queried
+	if (shouldInspectInherited)
+	{
+		std::vector<Method const*> parentResult;
+
+		for (Struct::Parent const& parent : directParents)
+		{
+			parentResult = parent.type->getMethods(predicate, true);
+
+			result.insert(result.end(), parentResult.begin(), parentResult.end());
+		}
+	}
+
+	return result;
+}
+
 template <typename MethodSignature>
-StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
+StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	static_assert(std::is_function_v<MethodSignature>, "Struct::getStaticMethod<> must be called with a function signature as template argument.");
 
@@ -104,7 +266,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	}
 
 	//If we reach this point, couldn't find a valid method
-	if (shouldInspectParents)
+	if (shouldInspectInherited)
 	{
 		StaticMethod const* result = nullptr;
 
@@ -120,6 +282,67 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	}
 
 	return nullptr;
+}
+
+template <typename Predicate, typename>
+StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInspectInherited) const noexcept
+{
+	//Iterate over this struct's static methods
+	for (StaticMethod const& staticMethod : staticMethods)
+	{
+		if (predicate(&staticMethod))
+		{
+			return &staticMethod;
+		}
+	}
+
+	//Check in parent's static methods
+	if (shouldInspectInherited)
+	{
+		StaticMethod const* result = nullptr;
+
+		for (Struct::Parent const& parent : directParents)
+		{
+			result = parent.type->getStaticMethod(predicate, true);
+
+			if (result != nullptr)
+			{
+				return result;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, bool shouldInspectInherited) const noexcept
+{
+	std::vector<StaticMethod const*> result;
+
+	//Iterate over this struct's static methods
+	for (StaticMethod const& staticMethod : staticMethods)
+	{
+		if (predicate(&staticMethod))
+		{
+			result.emplace_back(&staticMethod);
+		}
+	}
+
+	//Check in parent's static methods
+	if (shouldInspectInherited)
+	{
+		std::vector<StaticMethod const*> parentResult;
+
+		for (Struct::Parent const& parent : directParents)
+		{
+			parentResult = parent.type->getStaticMethods(predicate, true);
+
+			result.insert(result.end(), parentResult.begin(), parentResult.end());
+		}
+	}
+
+	return result;
 }
 
 template <typename ReturnType, typename... ArgTypes>

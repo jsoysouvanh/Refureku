@@ -40,7 +40,6 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 
 	class RFKClass() OtherClass : public rfk::Object
 	{
-
 		OtherClass_GENERATED
 	};
 
@@ -224,16 +223,12 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 
 struct RFKStruct(ParseAllNested) ExampleStruct
 {
-	RFKField()
 	static int staticInt;
 
-	RFKField()
 	int i = 2;
 
-	RFKMethod()
 	static void staticMethod() { std::cout << "ExampleStruct::staticMethod()" << std::endl; } 
 
-	RFKMethod()
 	void method(int a, float b) { std::cout << "ExampleStruct::method(" << a << ", " << b << ")" << std::endl; }
 
 	ExampleStruct_GENERATED

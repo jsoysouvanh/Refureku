@@ -104,6 +104,20 @@ void structs()
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedStruct("NestedExampleStruct", rfk::EAccessSpecifier::Public) == nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedStruct("NestedExampleStruct")->getMethod<void()>("foo") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedClass("NestedExampleStruct") == nullptr);
+
+	//Get struct content by predicate
+	TEST(ExampleStruct::staticGetArchetype().getNestedArchetype([](rfk::Archetype const*) { return true; }) == nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getNestedStruct([](rfk::Struct const*) { return true; }) == nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getNestedClass([](rfk::Class const*) { return true; }) == nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getNestedEnum([](rfk::Enum const*) { return true; }) == nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getField([](rfk::Field const* f) { return f->type == rfk::Type::getType<int>(); }) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getFields([](rfk::Field const*) { return true; }, true).size() == 1u);
+	TEST(ExampleStruct::staticGetArchetype().getStaticField([](rfk::StaticField const* sf) { return sf->type == rfk::Type::getType<int>(); }) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getStaticFields([](rfk::StaticField const*) { return true; }, true).size() == 1u);
+	TEST(ExampleStruct::staticGetArchetype().getMethod([](rfk::Method const* m) { return m->parameters.size() == 2u; }, true) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getMethods([](rfk::Method const*) { return true; }).size() == 1u);
+	TEST(ExampleStruct::staticGetArchetype().getStaticMethod([](rfk::StaticMethod const* sm) { return sm->parameters.size() == 0u; }) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getStaticMethods([](rfk::StaticMethod const*) { return true; }).size() == 1u);
 }
 
 void enums()
