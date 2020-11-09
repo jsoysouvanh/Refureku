@@ -39,6 +39,16 @@ namespace rfk
 			~Enum()								= default;
 
 			/**
+			*	@brief Retrieve from this enum an enum value matching with a given predicate.
+			*
+			*	@param predicate Predicate returning true for any matching enum value.
+			*	
+			*	@return The first matching enum value if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
+			EnumValue const*				getEnumValue(Predicate predicate)		const	noexcept;
+
+			/**
 			*	@brief Search an enum value in this enum.
 			*
 			*	@param enumValueName Name of the enum value to search for.
@@ -57,10 +67,20 @@ namespace rfk
 			EnumValue const*				getEnumValue(int64 value)				const	noexcept;
 
 			/**
+			*	@brief Retrieve from this enum all enum values matching with a given predicate.
+			*
+			*	@param predicate Predicate returning true for any matching enum value.
+			*	
+			*	@return All the enum values matching with the given predicate.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
+			std::vector<EnumValue const*>	getEnumValues(Predicate predicate)		const	noexcept;
+
+			/**
 			*	@brief Search all enum values in this enum holding the provided value.
 			*
 			*	@param value Numerical value of the EnumValues to look for.
-
+			*
 			*	@return All the EnumValues equal to the provided value.
 			*/
 			std::vector<EnumValue const*>	getEnumValues(int64 value)				const	noexcept;

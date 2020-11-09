@@ -143,6 +143,10 @@ void enums()
 	TEST(e->getEnumValue(1 << 2)->name == "ExampleValue3");
 	TEST(e->getEnumValues(1 << 3).size() == 2);
 
+	//By predicate
+	TEST(e->getEnumValue([](rfk::EnumValue const* v){ return v->value == 1 << 3 && v->name == "ExampleValue4"; }) != nullptr);
+	TEST(e->getEnumValues([](rfk::EnumValue const* v){ return v->value == 10; }).empty());
+
 	//Nested enum
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedEnum("NestedExampleEnum")->getEnumValue("Value1")->value == 0);
 
