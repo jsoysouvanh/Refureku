@@ -47,6 +47,15 @@ void namespaces()
 	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int(int, int)>("function1")->rInvoke<int>(1, 2) == 3);
 	TEST(rfk::Database::getNamespace("namespace3")->getFunction<void(int, int)>("function1") == nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getFunction<int()>("function1") == nullptr);
+
+	//By predicate
+	TEST(rfk::Database::getNamespace("namespace3")->getNamespace([](rfk::Namespace const*) { return true; }) == nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getArchetype([](rfk::Archetype const* a) { return a->memorySize == sizeof(namespace3::ParentClass); }) != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getStruct([](rfk::Struct const*) { return true; }) == nullptr );
+	TEST(rfk::Database::getNamespace("namespace3")->getClass([](rfk::Class const* c) { return c->name == "AnotherClassInNamespace3"; }) != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getEnum([](rfk::Enum const* e) { return e->values.size() == 5; }) != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getVariable([](rfk::Variable const* v) { return v->getData<int>() == 42; }) != nullptr);
+	TEST(rfk::Database::getNamespace("namespace3")->getFunction([](rfk::Function const* f) { return f->returnType == rfk::Type::getType<int>() && f->parameters.size() == 2; }) != nullptr);
 }
 
 void classes()
