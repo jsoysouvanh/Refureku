@@ -487,42 +487,6 @@ namespace rfk
 			void		setDefaultInstantiationMethod(void*(*func)() noexcept)			noexcept;
 
 			/**
-			*	@brief Add a method to the struct.
-			*	
-			*	@param methodName		Name of the method.
-			*	@param entityId			Unique entity id of the method.
-			*	@param returnType		Return type of the method call.
-			*	@param internalMethod	Pointer to the actual method.
-			*	@param flags			Method flags.
-			*
-			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
-			*			The name of the method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
-			*/
-			Method*			addMethod(std::string					methodName,
-									  uint64						entityId,
-									  Type const&					returnType,
-									  std::unique_ptr<ICallable>	internalMethod,
-									  EMethodFlags					flags)				noexcept;
-
-			/**
-			*	@brief Add a static method to the struct.
-			*	
-			*	@param methodName		Name of the static method.
-			*	@param entityId			Unique entity id of the static method.
-			*	@param returnType		Return type of the static method call.
-			*	@param internalMethod	Pointer to the actual static method.
-			*	@param flags			Method flags.
-			*
-			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
-			*			The name of the static method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
-			*/
-			StaticMethod*	addStaticMethod(std::string					methodName,
-											uint64						entityId,
-											Type const&					returnType,
-											std::unique_ptr<ICallable>	internalMethod,
-											EMethodFlags				flags)			noexcept;
-
-			/**
 			*	@brief Add a field to the struct.
 			*	
 			*	@param fieldName	Name of the field.
@@ -561,6 +525,42 @@ namespace rfk
 										   EFieldFlags		flags,
 										   Struct const*	outerEntity_,
 										   void*			fieldPtr)					noexcept;
+
+			/**
+			*	@brief Add a method to the struct.
+			*	
+			*	@param methodName		Name of the method.
+			*	@param entityId			Unique entity id of the method.
+			*	@param returnType		Return type of the method call.
+			*	@param internalMethod	Pointer to the actual method.
+			*	@param flags			Method flags.
+			*
+			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
+			*/
+			Method*			addMethod(std::string					methodName,
+									  uint64						entityId,
+									  Type const&					returnType,
+									  std::unique_ptr<ICallable>	internalMethod,
+									  EMethodFlags					flags)				noexcept;
+
+			/**
+			*	@brief Add a static method to the struct.
+			*	
+			*	@param methodName		Name of the static method.
+			*	@param entityId			Unique entity id of the static method.
+			*	@param returnType		Return type of the static method call.
+			*	@param internalMethod	Pointer to the actual static method.
+			*	@param flags			Method flags.
+			*
+			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the static method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
+			*/
+			StaticMethod*	addStaticMethod(std::string					methodName,
+											uint64						entityId,
+											Type const&					returnType,
+											std::unique_ptr<ICallable>	internalMethod,
+											EMethodFlags				flags)			noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.

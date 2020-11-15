@@ -573,6 +573,16 @@ void database()
 	TEST(rfk::Database::getFunction<void(int, int)>("function1") == nullptr);
 	TEST(rfk::Database::getFunction<int()>("function1") == nullptr);
 	TEST(rfk::Database::getFunction<void(namespace3::ExampleClass)>("function1") != nullptr);
+
+	//By predicate
+	TEST(rfk::Database::getEntity([](rfk::Entity const* e) { return e->id == namespace3::ExampleClass::staticGetArchetype().id; }) != nullptr);
+	TEST(rfk::Database::getArchetype([](rfk::Archetype const* a) { return a->getProperty<PropertySettings>() != nullptr; }) != nullptr);
+	TEST(rfk::Database::getStruct([](rfk::Struct const* s) { return s->getMethod("method") != nullptr; })->name == "ExampleStruct");
+	TEST(rfk::Database::getClass([](rfk::Class const* c){ CustomProperty const* prop = c->getProperty<CustomProperty>(); return prop != nullptr && prop->i == 3 && prop->j == 4; })->name == "B");
+	TEST(rfk::Database::getEnum([](rfk::Enum const* e) { rfk::EnumValue const* ev = e->getEnumValue("Value2"); return ev != nullptr && ev->value == 1; })->name == "EThisIsANormalEnum");
+	TEST(rfk::Database::getFundamentalArchetype([](rfk::FundamentalArchetype const* ft) { return ft->memorySize == 4; }) != nullptr);
+	TEST(rfk::Database::getVariable([](rfk::Variable const* v) { return v->type == rfk::Type::getType<float>() && v->getData<float>() == 10.0f; })->name == "variableInsideGlobalScope");
+	TEST(rfk::Database::getFunction([](rfk::Function const* f) { return f->returnType == rfk::Type::getType<void>() && f->parameters.size() == 1 && f->parameters[0].type == rfk::Type::getType<namespace3::ExampleClass>(); })->name == "function1");
 }
 
 void templateEnums()

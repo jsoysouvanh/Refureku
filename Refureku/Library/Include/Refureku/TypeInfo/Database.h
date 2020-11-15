@@ -45,7 +45,7 @@ namespace rfk
 			static	NamespacesByName			_fileLevelNamespacesByName;
 
 			/** Collection of all fundamental archetypes hashed by name. */
-			static FundamentalArchetypesByName	_fundamentalArchetypes;
+			static	FundamentalArchetypesByName	_fundamentalArchetypes;
 
 			/** Collection of all file level structs hashed by name. */
 			static	StructsByName				_fileLevelStructsByName;
@@ -153,19 +153,14 @@ namespace rfk
 			~Database()					= delete;
 
 			/**
-			*	@brief Retrieve a file level (non-member) function by name and signature.
+			*	@brief Retrieve any entity of the program matching with a given predicate.
 			*	
-			*	@tparam FunctionSignature Signature of the function to look for.
-			*
-			*	@param functionName The name of the function.
-			*	@param flags		Flags describing the queried function.
-			*						The result function will have at least the provided flags.
+			*	@param predicate Predicate returning true for any matching entity.
 			*	
-			*	@return A constant pointer to the function matching the signature, name and flags if it exists, else nullptr.
+			*	@return The first matching entity if any is found, else nullptr.
 			*/
-			template <typename FunctionSignature>
-			static Function const*						getFunction(std::string		functionName,
-																	EFunctionFlags	flags = EFunctionFlags::Default)	noexcept;
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Entity const*>>>
+			static Entity const*						getEntity(Predicate predicate)									noexcept;
 
 			/**
 			*	@brief Retrieve an entity by id.
@@ -175,6 +170,16 @@ namespace rfk
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
 			static Entity const*						getEntity(uint64 id)											noexcept;
+
+			/**
+			*	@brief Retrieve a file level namespace matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching namespace.
+			*	
+			*	@return The first matching namespace if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Namespace const*>>>
+			static Namespace const*						getNamespace(Predicate predicate)								noexcept;
 
 			/**
 			*	@brief	Retrieve a namespace by name.
@@ -190,6 +195,16 @@ namespace rfk
 			static Namespace const*						getNamespace(std::string namespaceName);
 
 			/**
+			*	@brief Retrieve a file level archetype matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching archetype.
+			*	
+			*	@return The first matching archetype if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Archetype const*>>>
+			static Archetype const*						getArchetype(Predicate predicate)								noexcept;
+
+			/**
 			*	@brief	Retrieve a file level archetype by name.
 			*			This method costs heavier performance as it will basically call getClass, getStruct, getEnum and then getFundamentalArchetype to find
 			*			the queried archetype.
@@ -201,6 +216,16 @@ namespace rfk
 			static Archetype const*						getArchetype(std::string archetypeName)							noexcept;
 
 			/**
+			*	@brief Retrieve a file level struct matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching struct.
+			*	
+			*	@return The first matching struct if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
+			static Struct const*						getStruct(Predicate predicate)									noexcept;
+
+			/**
 			*	@brief Retrieve a file level struct by name.
 			*
 			*	@param structName The name of the struct.
@@ -208,6 +233,16 @@ namespace rfk
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
 			static Struct const*						getStruct(std::string structName)								noexcept;
+
+			/**
+			*	@brief Retrieve a file level class matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching class.
+			*	
+			*	@return The first matching class if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Class const*>>>
+			static Class const*							getClass(Predicate predicate)									noexcept;
 
 			/**
 			*	@brief Retrieve a file level class by name.
@@ -219,6 +254,16 @@ namespace rfk
 			static Class const*							getClass(std::string className)									noexcept;
 
 			/**
+			*	@brief Retrieve a file level enum matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching enum.
+			*	
+			*	@return The first matching enum if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const*>>>
+			static Enum const*							getEnum(Predicate predicate)									noexcept;
+
+			/**
 			*	@brief Retrieve a file level enum by name.
 			*
 			*	@param enumName The name of the enum.
@@ -228,6 +273,16 @@ namespace rfk
 			static Enum const*							getEnum(std::string enumName)									noexcept;
 
 			/**
+			*	@brief Retrieve a fundamental archetype matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching fundamental archetype.
+			*	
+			*	@return The first matching fundamental archetype if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, FundamentalArchetype const*>>>
+			static FundamentalArchetype const*			getFundamentalArchetype(Predicate predicate)					noexcept;
+
+			/**
 			*	@brief Retrieve a fundamental archetype by name.
 			*
 			*	@param archetypeName The name of the fundamental archetype.
@@ -235,6 +290,16 @@ namespace rfk
 			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
 			*/
 			static FundamentalArchetype const*			getFundamentalArchetype(std::string archetypeName)				noexcept;
+
+			/**
+			*	@brief Retrieve a file level variable matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching variable.
+			*	
+			*	@return The first matching variable if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Variable const*>>>
+			static Variable const*						getVariable(Predicate predicate)								noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) variable by name.
@@ -247,6 +312,31 @@ namespace rfk
 			*/
 			static Variable const*						getVariable(std::string variableName,
 																	EVarFlags	flags = EVarFlags::Default)				noexcept;
+
+			/**
+			*	@brief Retrieve a file level function matching with a given predicate.
+			*	
+			*	@param predicate Predicate returning true for any matching function.
+			*	
+			*	@return The first matching function if any is found, else nullptr.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Function const*>>>
+			static Function const*						getFunction(Predicate predicate)								noexcept;
+
+			/**
+			*	@brief Retrieve a file level (non-member) function by name and signature.
+			*	
+			*	@tparam FunctionSignature Signature of the function to look for.
+			*
+			*	@param functionName The name of the function.
+			*	@param flags		Flags describing the queried function.
+			*						The result function will have at least the provided flags.
+			*	
+			*	@return A constant pointer to the function matching the signature, name and flags if it exists, else nullptr.
+			*/
+			template <typename FunctionSignature>
+			static Function const*						getFunction(std::string		functionName,
+																	EFunctionFlags	flags = EFunctionFlags::Default)	noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) function by name.
