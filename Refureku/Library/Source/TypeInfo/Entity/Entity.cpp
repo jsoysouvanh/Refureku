@@ -3,6 +3,8 @@
 #include <utility>		//std::forward
 #include <algorithm>	//std::find
 
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
+
 using namespace rfk;
 
 Entity::Entity(std::string&& name, uint64 id, EEntityKind kind)	noexcept:
@@ -10,6 +12,66 @@ Entity::Entity(std::string&& name, uint64 id, EEntityKind kind)	noexcept:
 	id{id},
 	kind{kind}
 {
+}
+
+Property const* Entity::getProperty(Struct const& archetype, bool isChildClassValid) const noexcept
+{
+	//Iterate over all props to find a matching property
+	if (isChildClassValid)
+	{
+		for (Property const* p : properties)
+		{
+			//Consider child classes as valid
+			if (archetype.isBaseOf(p->getArchetype()))
+			{
+				return p;
+			}
+		}
+	}
+	else
+	{
+		for (Property const* p : properties)
+		{
+			//Child classes are not considered
+			if (archetype == p->getArchetype())
+			{
+				return p;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+std::vector<Property const*> Entity::getProperties(Struct const& archetype, bool isChildClassValid) const noexcept
+{
+	std::vector<Property const*> result;
+
+	//Iterate over all props to find a matching property
+	if (isChildClassValid)
+	{
+		for (Property const* p : properties)
+		{
+			//Consider child classes as valid
+			if (archetype.isBaseOf(p->getArchetype()))
+			{
+				result.emplace_back(p);
+			}
+		}
+	}
+	else
+	{
+		for (Property const* p : properties)
+		{
+			//Child classes are not considered
+			if (archetype == p->getArchetype())
+			{
+				result.emplace_back(p);
+			}
+		}
+	}
+
+	return result;
 }
 
 bool Entity::addProperty(Property const* toAddProperty) noexcept

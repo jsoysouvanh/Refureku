@@ -476,7 +476,9 @@ void properties()
 	rfk::Class const& a = A::staticGetArchetype();
 
 	TEST(a.getProperty<CustomProperty2>() != nullptr);
-	TEST(a.getProperty<CustomProperty>() != nullptr);
+	TEST(a.getProperty(CustomProperty::staticGetArchetype()) != nullptr);
+	TEST(a.getProperties(CustomProperty::staticGetArchetype(), false).size() == 1u);
+	TEST(a.getProperties(CustomProperty::staticGetArchetype(), true).size() == 3u);
 	TEST(a.getProperties<CustomProperty2>().size() == 2u);
 	
 	//with predicate

@@ -18,6 +18,9 @@
 
 namespace rfk
 {
+	//Forward declaration
+	class Struct;
+
 	class Entity
 	{
 		public:
@@ -121,17 +124,28 @@ namespace rfk
 			*	@return The first found property of type PropertyType if any, else nullptr.
 			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
-			PropertyType const*					getProperty()						const	noexcept;
+			PropertyType const*					getProperty(bool isChildClassValid = true)				const	noexcept;
 
 			/**
 			*	@brief Retrieve a property matching with a predicate.
 			*	
-			*	@param predicate Condition that the searched property must fulfill.
+			*	@param predicate Predicate returning true for any matching property.
 			*	
 			*	@return The first found property fulfilling the provided predicate if any, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
-			Property const*						getProperty(Predicate predicate)	const;
+			Property const*						getProperty(Predicate predicate)						const;
+
+			/**
+			*	@brief Retrieve the first property matching with the provided archetype.
+			*	
+			*	@param archetype			Archetype of the property to look for.
+			*	@param isChildClassValid	If true, all properties inheriting from the provided archetype are considered valid.
+			*	
+			*	@return The first property matching the provided archetype in this entity, nullptr if none is found.
+			*/
+			Property const*						getProperty(Struct const&	archetype,
+															bool			isChildClassValid = true)	const	noexcept;
 
 			/**
 			*	@brief	Retrieve properties of a given type from this entity.
@@ -142,17 +156,28 @@ namespace rfk
 			*	@return A collection of all properties of type PropertyType contained in this entity.
 			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
-			std::vector<PropertyType const*>	getProperties()						const	noexcept;
+			std::vector<PropertyType const*>	getProperties(bool isChildClassValid = true)			const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with a predicate in this entity.
 			*	
-			*	@param predicate Condition that the searched properties must fulfill.
+			*	@param predicate Predicate returning true for any matching property.
 			*	
 			*	@return A collection of all properties fulfilling the provided predicate contained in this entity.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
-			std::vector<Property const*>		getProperties(Predicate predicate)	const;
+			std::vector<Property const*>		getProperties(Predicate predicate)						const;
+
+			/**
+			*	@brief Retrieve all properties matching with the provided archetype.
+			*	
+			*	@param archetype			Archetype of the properties to look for.
+			*	@param isChildClassValid	If true, all properties inheriting from the provided archetype are considered valid.
+			*	
+			*	@return A collection of all properties matching the provided archetype in this entity.
+			*/
+			std::vector<Property const*>		getProperties(Struct const&	archetype,
+															  bool			isChildClassValid = true)	const	noexcept;
 
 			/**
 			*	@brief Add a property to this entity.
@@ -162,14 +187,14 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
 			*/
-			bool								addProperty(Property const* property)		noexcept;
+			bool								addProperty(Property const* property)							noexcept;
 
 			/**
 			*	@brief Inherit from another entity inheritable properties.
 			*	
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			void								inheritProperties(Entity const& from)		noexcept;
+			void								inheritProperties(Entity const& from)							noexcept;
 
 			inline bool operator==(Entity const& other) const noexcept;
 			inline bool operator!=(Entity const& other) const noexcept;

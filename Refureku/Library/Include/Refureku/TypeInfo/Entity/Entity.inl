@@ -6,22 +6,9 @@
 */
 
 template <typename PropertyType, typename>
-PropertyType const* Entity::getProperty() const noexcept
+PropertyType const* Entity::getProperty(bool isChildClassValid) const noexcept
 {
-	static_assert(!std::is_abstract_v<PropertyType>, "[Refureku] Can't get an abstract property.");
-
-	Struct const* queriedPropertyArchetype = &PropertyType::staticGetArchetype();
-
-	//Iterate over all props to find a matching property
-	for (Property const* p : properties)
-	{
-		if (queriedPropertyArchetype == &p->getArchetype())
-		{
-			return reinterpret_cast<PropertyType const*>(p);
-		}
-	}
-
-	return nullptr;
+	return reinterpret_cast<PropertyType const*>(getProperty(PropertyType::staticGetArchetype(), isChildClassValid));
 }
 
 template <typename Predicate, typename>
@@ -39,24 +26,11 @@ Property const* Entity::getProperty(Predicate predicate) const
 }
 
 template <typename PropertyType, typename>
-std::vector<PropertyType const*> Entity::getProperties() const noexcept
+std::vector<PropertyType const*> Entity::getProperties(bool isChildClassValid) const noexcept
 {
-	static_assert(!std::is_abstract_v<PropertyType>, "[Refureku] Can't get an abstract property.");
+	std::vector<Property const*> result = getProperties(PropertyType::staticGetArchetype(), isChildClassValid);
 
-	std::vector<PropertyType const*> result;
-
-	Struct const* queriedPropertyArchetype = &PropertyType::staticGetArchetype();
-
-	//Iterate over all props to find a matching property
-	for (Property const* p : properties)
-	{
-		if (queriedPropertyArchetype == &p->getArchetype())
-		{
-			result.emplace_back(reinterpret_cast<PropertyType const*>(p));
-		}
-	}
-
-	return result;
+	return reinterpret_cast<std::vector<PropertyType const*>&>(result);
 }
 
 template <typename Predicate, typename>
@@ -77,6 +51,7 @@ std::vector<Property const*> Entity::getProperties(Predicate predicate) const
 
 inline bool Entity::operator==(Entity const& other) const noexcept
 {
+	//2 entities are equal if they have the same address
 	return &other == this;
 }
 
