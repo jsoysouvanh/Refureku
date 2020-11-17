@@ -104,7 +104,7 @@ namespace rfk
 			*	@return The first matching archetype if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Archetype const*>>>
-			Archetype const*					getNestedArchetype(Predicate predicate)												const	noexcept;
+			Archetype const*					getNestedArchetype(Predicate predicate)												const;
 
 			/**
 			*	@brief Retrieve from this struct a nested struct matching with a given predicate.
@@ -114,7 +114,7 @@ namespace rfk
 			*	@return The first matching struct if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
-			Struct const*						getNestedStruct(Predicate predicate)												const	noexcept;
+			Struct const*						getNestedStruct(Predicate predicate)												const;
 
 			/**
 			*	@param structName	Name of the nested struct to look for.
@@ -133,7 +133,7 @@ namespace rfk
 			*	@return The first matching class if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Class const*>>>
-			Class const*						getNestedClass(Predicate predicate)													const	noexcept;
+			Class const*						getNestedClass(Predicate predicate)													const;
 
 			/**
 			*	@param className	Name of the nested class to look for.
@@ -152,7 +152,7 @@ namespace rfk
 			*	@return The first matching enum if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const*>>>
-			Enum const*							getNestedEnum(Predicate predicate)													const	noexcept;
+			Enum const*							getNestedEnum(Predicate predicate)													const;
 
 			/**
 			*	@param enumName	Name of the nested enum to look for.
@@ -174,7 +174,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Field const*>>>
 			Field const*						getField(Predicate	predicate,
-														 bool		shouldInspectInherited	= false)								const	noexcept;
+														 bool		shouldInspectInherited	= false)								const;
 
 			/**
 			*	@param fieldName Name of the field to retrieve.
@@ -203,7 +203,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Field const*>>>
 			std::vector<Field const*>			getFields(Predicate	predicate,
-														  bool		shouldInspectInherited	= false)								const	noexcept;
+														  bool		shouldInspectInherited	= false)								const;
 
 			/**
 			*	@param fieldName Name of the fields to retrieve.
@@ -231,7 +231,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticField const*>>>
 			StaticField const*					getStaticField(Predicate	predicate,
-															   bool			shouldInspectInherited	= false)						const	noexcept;
+															   bool			shouldInspectInherited	= false)						const;
 
 			/**
 			*	@param fieldName Name of the static field to retrieve.
@@ -261,7 +261,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticField const*>>>
 			std::vector<StaticField const*>		getStaticFields(Predicate	predicate,
-																bool		shouldInspectInherited	= false)						const	noexcept;
+																bool		shouldInspectInherited	= false)						const;
 
 			/**
 			*	@param fieldName Name of the static fields to retrieve.
@@ -290,7 +290,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const*>>>
 			Method const*						getMethod(Predicate predicate,
-														  bool		shouldInspectInherited = false)									const	noexcept;
+														  bool		shouldInspectInherited = false)									const;
 
 			/**
 			*	@tparam MethodSignature Signature (prototype) of the method to look for.
@@ -338,7 +338,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const*>>>
 			std::vector<Method const*>			getMethods(Predicate	predicate,
-														   bool			shouldInspectInherited = false)								const	noexcept;
+														   bool			shouldInspectInherited = false)								const;
 
 			/**
 			*	@param methodName Name of the methods to retrieve.
@@ -366,7 +366,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const*>>>
 			StaticMethod const*					getStaticMethod(Predicate	predicate,
-																bool		shouldInspectInherited = false)							const	noexcept;
+																bool		shouldInspectInherited = false)							const;
 
 			/**
 			*	@tparam MethodSignature Signature (prototype) of the static method to look for.
@@ -416,7 +416,7 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const*>>>
 			std::vector<StaticMethod const*>	getStaticMethods(Predicate	predicate,
-																 bool		shouldInspectInherited = false)							const	noexcept;
+																 bool		shouldInspectInherited = false)							const;
 
 			/**
 			*	@param methodName Name of the static methods to retrieve.

@@ -20,7 +20,7 @@ void Struct::addToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) n
 }
 
 template <typename Predicate, typename>
-Archetype const* Struct::getNestedArchetype(Predicate predicate) const noexcept
+Archetype const* Struct::getNestedArchetype(Predicate predicate) const
 {
 	for (Archetype const* archetype : nestedArchetypes)
 	{
@@ -34,7 +34,7 @@ Archetype const* Struct::getNestedArchetype(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Struct const* Struct::getNestedStruct(Predicate predicate) const noexcept
+Struct const* Struct::getNestedStruct(Predicate predicate) const
 {
 	for (Archetype const* archetype : nestedArchetypes)
 	{
@@ -48,7 +48,7 @@ Struct const* Struct::getNestedStruct(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Class const* Struct::getNestedClass(Predicate predicate) const noexcept
+Class const* Struct::getNestedClass(Predicate predicate) const
 {
 	for (Archetype const* archetype : nestedArchetypes)
 	{
@@ -62,7 +62,7 @@ Class const* Struct::getNestedClass(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Enum const* Struct::getNestedEnum(Predicate predicate) const noexcept
+Enum const* Struct::getNestedEnum(Predicate predicate) const
 {
 	for (Archetype const* archetype : nestedArchetypes)
 	{
@@ -76,7 +76,7 @@ Enum const* Struct::getNestedEnum(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) const noexcept
+Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) const
 {
 	for (Field const& field : fields)
 	{
@@ -94,7 +94,7 @@ Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) 
 }
 
 template <typename Predicate, typename>
-std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInspectInherited) const noexcept
+std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInspectInherited) const
 {
 	std::vector<Field const*> result;
 
@@ -114,7 +114,7 @@ std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInsp
 }
 
 template <typename Predicate, typename>
-StaticField const* Struct::getStaticField(Predicate predicate, bool shouldInspectInherited) const noexcept
+StaticField const* Struct::getStaticField(Predicate predicate, bool shouldInspectInherited) const
 {
 	for (StaticField const& staticField : staticFields)
 	{
@@ -132,7 +132,7 @@ StaticField const* Struct::getStaticField(Predicate predicate, bool shouldInspec
 }
 
 template <typename Predicate, typename>
-std::vector<StaticField const*> Struct::getStaticFields(Predicate predicate, bool shouldInspectInherited) const noexcept
+std::vector<StaticField const*> Struct::getStaticFields(Predicate predicate, bool shouldInspectInherited) const
 {
 	std::vector<StaticField const*> result;
 
@@ -188,7 +188,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 }
 
 template <typename Predicate, typename>
-Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited) const noexcept
+Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited) const
 {
 	//Iterate over this struct's methods
 	for (Method const& method : methods)
@@ -219,7 +219,7 @@ Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited
 }
 
 template <typename Predicate, typename>
-std::vector<Method const*> Struct::getMethods(Predicate	predicate, bool shouldInspectInherited) const noexcept
+std::vector<Method const*> Struct::getMethods(Predicate	predicate, bool shouldInspectInherited) const
 {
 	std::vector<Method const*> result;
 
@@ -285,7 +285,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 }
 
 template <typename Predicate, typename>
-StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInspectInherited) const noexcept
+StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInspectInherited) const
 {
 	//Iterate over this struct's static methods
 	for (StaticMethod const& staticMethod : staticMethods)
@@ -316,7 +316,7 @@ StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInsp
 }
 
 template <typename Predicate, typename>
-std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, bool shouldInspectInherited) const noexcept
+std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, bool shouldInspectInherited) const
 {
 	std::vector<StaticMethod const*> result;
 

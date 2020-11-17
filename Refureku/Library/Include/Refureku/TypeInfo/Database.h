@@ -160,7 +160,7 @@ namespace rfk
 			*	@return The first matching entity if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Entity const*>>>
-			static Entity const*						getEntity(Predicate predicate)									noexcept;
+			static Entity const*						getEntity(Predicate predicate);
 
 			/**
 			*	@brief Retrieve an entity by id.
@@ -179,7 +179,7 @@ namespace rfk
 			*	@return The first matching namespace if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Namespace const*>>>
-			static Namespace const*						getNamespace(Predicate predicate)								noexcept;
+			static Namespace const*						getNamespace(Predicate predicate);
 
 			/**
 			*	@brief	Retrieve a namespace by name.
@@ -202,7 +202,7 @@ namespace rfk
 			*	@return The first matching archetype if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Archetype const*>>>
-			static Archetype const*						getArchetype(Predicate predicate)								noexcept;
+			static Archetype const*						getArchetype(Predicate predicate);
 
 			/**
 			*	@brief	Retrieve a file level archetype by name.
@@ -223,7 +223,7 @@ namespace rfk
 			*	@return The first matching struct if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
-			static Struct const*						getStruct(Predicate predicate)									noexcept;
+			static Struct const*						getStruct(Predicate predicate);
 
 			/**
 			*	@brief Retrieve a file level struct by name.
@@ -242,7 +242,7 @@ namespace rfk
 			*	@return The first matching class if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Class const*>>>
-			static Class const*							getClass(Predicate predicate)									noexcept;
+			static Class const*							getClass(Predicate predicate);
 
 			/**
 			*	@brief Retrieve a file level class by name.
@@ -261,7 +261,7 @@ namespace rfk
 			*	@return The first matching enum if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const*>>>
-			static Enum const*							getEnum(Predicate predicate)									noexcept;
+			static Enum const*							getEnum(Predicate predicate);
 
 			/**
 			*	@brief Retrieve a file level enum by name.
@@ -280,7 +280,7 @@ namespace rfk
 			*	@return The first matching fundamental archetype if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, FundamentalArchetype const*>>>
-			static FundamentalArchetype const*			getFundamentalArchetype(Predicate predicate)					noexcept;
+			static FundamentalArchetype const*			getFundamentalArchetype(Predicate predicate);
 
 			/**
 			*	@brief Retrieve a fundamental archetype by name.
@@ -299,7 +299,7 @@ namespace rfk
 			*	@return The first matching variable if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Variable const*>>>
-			static Variable const*						getVariable(Predicate predicate)								noexcept;
+			static Variable const*						getVariable(Predicate predicate);
 
 			/**
 			*	@brief Retrieve a file level (non-member) variable by name.
@@ -321,7 +321,7 @@ namespace rfk
 			*	@return The first matching function if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Function const*>>>
-			static Function const*						getFunction(Predicate predicate)								noexcept;
+			static Function const*						getFunction(Predicate predicate);
 
 			/**
 			*	@brief Retrieve a file level (non-member) function by name and signature.

@@ -6,7 +6,7 @@
 */
 
 template <typename Predicate, typename>
-Namespace const* Namespace::getNamespace(Predicate predicate) const noexcept
+Namespace const* Namespace::getNamespace(Predicate predicate) const
 {
 	for (Namespace const* n : namespaces)
 	{
@@ -20,7 +20,7 @@ Namespace const* Namespace::getNamespace(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Archetype const* Namespace::getArchetype(Predicate predicate) const noexcept
+Archetype const* Namespace::getArchetype(Predicate predicate) const
 {
 	for (Archetype const* archetype : archetypes)
 	{
@@ -34,7 +34,7 @@ Archetype const* Namespace::getArchetype(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Struct const* Namespace::getStruct(Predicate predicate) const noexcept
+Struct const* Namespace::getStruct(Predicate predicate) const
 {
 	for (Archetype const* archetype : archetypes)
 	{
@@ -48,7 +48,7 @@ Struct const* Namespace::getStruct(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Class const* Namespace::getClass(Predicate predicate) const noexcept
+Class const* Namespace::getClass(Predicate predicate) const
 {
 	for (Archetype const* archetype : archetypes)
 	{
@@ -62,7 +62,7 @@ Class const* Namespace::getClass(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Enum const* Namespace::getEnum(Predicate predicate) const noexcept
+Enum const* Namespace::getEnum(Predicate predicate) const
 {
 	for (Archetype const* archetype : archetypes)
 	{
@@ -76,7 +76,7 @@ Enum const* Namespace::getEnum(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Variable const* Namespace::getVariable(Predicate predicate) const noexcept
+Variable const* Namespace::getVariable(Predicate predicate) const
 {
 	for (Variable const* v : variables)
 	{
@@ -90,7 +90,7 @@ Variable const* Namespace::getVariable(Predicate predicate) const noexcept
 }
 
 template <typename Predicate, typename>
-Function const* Namespace::getFunction(Predicate predicate) const noexcept
+Function const* Namespace::getFunction(Predicate predicate) const
 {
 	for (Function const* function : functions)
 	{

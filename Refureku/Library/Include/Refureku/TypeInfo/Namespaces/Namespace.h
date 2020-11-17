@@ -51,7 +51,7 @@ namespace rfk
 			*	@return The first matching archetype if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Archetype const*>>>
-			Archetype const*	getArchetype(Predicate predicate)								const noexcept;
+			Archetype const*	getArchetype(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a function from this namespace with a specific prototype.
@@ -67,7 +67,7 @@ namespace rfk
 			*/
 			template <typename FunctionSignature>
 			Function const*		getFunction(std::string		functionName,
-											EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
+											EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
 			*	@brief Retrieve from this namespace a nested namespace matching with a given predicate.
@@ -77,7 +77,7 @@ namespace rfk
 			*	@return The first matching nested namespace if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Namespace const*>>>
-			Namespace const*	getNamespace(Predicate predicate)								const noexcept;
+			Namespace const*	getNamespace(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a namespace contained in this namespace.
@@ -86,7 +86,7 @@ namespace rfk
 			*
 			*	@return The found nested namespace if it exists, else nullptr.
 			*/
-			Namespace const*	getNamespace(std::string namespaceName)							const noexcept;
+			Namespace const*	getNamespace(std::string namespaceName)							const	noexcept;
 
 			/**
 			*	@brief Retrieve from this namespace a struct matching with a given predicate.
@@ -96,7 +96,7 @@ namespace rfk
 			*	@return The first matching struct if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
-			Struct const*		getStruct(Predicate predicate)									const noexcept;
+			Struct const*		getStruct(Predicate predicate)									const;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.
@@ -105,7 +105,7 @@ namespace rfk
 			*
 			*	@return The found struct if it exists, else nullptr.
 			*/
-			Struct const*		getStruct(std::string structName)								const noexcept;
+			Struct const*		getStruct(std::string structName)								const	noexcept;
 
 			/**
 			*	@brief Retrieve from this namespace a class matching with a given predicate.
@@ -115,7 +115,7 @@ namespace rfk
 			*	@return The first matching class if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Class const*>>>
-			Class const*		getClass(Predicate predicate)									const noexcept;
+			Class const*		getClass(Predicate predicate)									const;
 
 			/**
 			*	@brief Retrieve a class from this namespace.
@@ -124,7 +124,7 @@ namespace rfk
 			*
 			*	@return The found class if it exists, else nullptr.
 			*/
-			Class const*		getClass(std::string className)									const noexcept;
+			Class const*		getClass(std::string className)									const	noexcept;
 
 			/**
 			*	@brief Retrieve from this namespace an enum matching with a given predicate.
@@ -134,7 +134,7 @@ namespace rfk
 			*	@return The first matching enum if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const*>>>
-			Enum const*			getEnum(Predicate predicate)									const noexcept;
+			Enum const*			getEnum(Predicate predicate)									const;
 
 			/**
 			*	@brief Retrieve an enum from this namespace.
@@ -143,7 +143,7 @@ namespace rfk
 			*
 			*	@return The found enum if it exists, else nullptr.
 			*/
-			Enum const*			getEnum(std::string enumName)									const noexcept;
+			Enum const*			getEnum(std::string enumName)									const	noexcept;
 
 			/**
 			*	@brief Retrieve from this namespace a variable matching with a given predicate.
@@ -153,7 +153,7 @@ namespace rfk
 			*	@return The first matching variable if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Variable const*>>>
-			Variable const*		getVariable(Predicate predicate)								const noexcept;
+			Variable const*		getVariable(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a variable from this namespace.
@@ -165,7 +165,7 @@ namespace rfk
 			*	@return The found variable if it exists, else nullptr.
 			*/
 			Variable const*		getVariable(std::string variableName,
-											EVarFlags	flags = EVarFlags::Default)				const noexcept;
+											EVarFlags	flags = EVarFlags::Default)				const	noexcept;
 
 			/**
 			*	@brief Retrieve from this namespace a function matching with a given predicate.
@@ -175,7 +175,7 @@ namespace rfk
 			*	@return The first matching function if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Function const*>>>
-			Function const*		getFunction(Predicate predicate)								const noexcept;
+			Function const*		getFunction(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a function from this namespace.

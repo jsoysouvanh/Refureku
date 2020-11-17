@@ -6,7 +6,7 @@
 */
 
 template <typename Predicate, typename>
-Entity const* Database::getEntity(Predicate predicate) noexcept
+Entity const* Database::getEntity(Predicate predicate)
 {
 	for (Entity const* entity : _entitiesById)
 	{
@@ -20,7 +20,7 @@ Entity const* Database::getEntity(Predicate predicate) noexcept
 }
 
 template <typename Predicate, typename>
-Namespace const* Database::getNamespace(Predicate predicate) noexcept
+Namespace const* Database::getNamespace(Predicate predicate)
 {
 	for (Namespace const* n : _fileLevelNamespacesByName)
 	{
@@ -34,7 +34,7 @@ Namespace const* Database::getNamespace(Predicate predicate) noexcept
 }
 
 template <typename Predicate, typename>
-Archetype const* Database::getArchetype(Predicate predicate) noexcept
+Archetype const* Database::getArchetype(Predicate predicate)
 {
 	Archetype const* result = nullptr;
 
@@ -53,7 +53,7 @@ Archetype const* Database::getArchetype(Predicate predicate) noexcept
 }
 
 template <typename Predicate, typename>
-Struct const* Database::getStruct(Predicate predicate) noexcept
+Struct const* Database::getStruct(Predicate predicate)
 {
 	for (Struct const* s : _fileLevelStructsByName)
 	{
@@ -67,7 +67,7 @@ Struct const* Database::getStruct(Predicate predicate) noexcept
 }
 
 template <typename Predicate, typename>
-Class const* Database::getClass(Predicate predicate) noexcept
+Class const* Database::getClass(Predicate predicate)
 {
 	for (Class const* c : _fileLevelClassesByName)
 	{
@@ -81,7 +81,7 @@ Class const* Database::getClass(Predicate predicate) noexcept
 }
 
 template <typename Predicate, typename>
-Enum const* Database::getEnum(Predicate predicate) noexcept
+Enum const* Database::getEnum(Predicate predicate)
 {
 	for (Enum const* e : _fileLevelEnumsByName)
 	{
@@ -95,7 +95,7 @@ Enum const* Database::getEnum(Predicate predicate) noexcept
 }
 
 template <typename Predicate, typename>
-FundamentalArchetype const* Database::getFundamentalArchetype(Predicate predicate) noexcept
+FundamentalArchetype const* Database::getFundamentalArchetype(Predicate predicate)
 {
 	for (FundamentalArchetype const* fundamentalArchetype : _fundamentalArchetypes)
 	{
@@ -109,7 +109,7 @@ FundamentalArchetype const* Database::getFundamentalArchetype(Predicate predicat
 }
 
 template <typename Predicate, typename>
-Variable const* Database::getVariable(Predicate predicate) noexcept
+Variable const* Database::getVariable(Predicate predicate)
 {
 	for (Variable const* variable : _fileLevelVariablesByName)
 	{
@@ -123,7 +123,7 @@ Variable const* Database::getVariable(Predicate predicate) noexcept
 }
 
 template <typename Predicate, typename>
-Function const* Database::getFunction(Predicate predicate) noexcept
+Function const* Database::getFunction(Predicate predicate)
 {
 	for (Function const* function : _fileLevelFunctionsByName)
 	{
