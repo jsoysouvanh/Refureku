@@ -23,7 +23,7 @@ bool FunctionBase::hasSamePrototype(FunctionBase const* other) const noexcept
 		return false;
 	}
 
-	for (int i = 0; i < parameters.size(); i++)
+	for (size_t i = 0u; i < parameters.size(); i++)
 	{
 		if (parameters[i].type != other->parameters[i].type)
 		{
