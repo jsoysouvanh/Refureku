@@ -452,9 +452,9 @@ namespace rfk
 			ReturnType*	makeInstance(ArgTypes&&... args)						const;
 
 			/**
-			*	@return true if this type inherits from the provided type, else false.
+			*	@return true if this type is a subclass from the provided type, else false.
 			*/
-			bool		inheritsFrom(Struct const& otherType)					const	noexcept;
+			bool		isSubclassOf(Struct const& otherType)					const	noexcept;
 			
 			/**
 			*	@return true if this type is a parent (direct or not) of the provided type, else false.

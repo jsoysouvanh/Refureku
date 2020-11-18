@@ -298,11 +298,11 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	return result;
 }
 
-bool Struct::inheritsFrom(Struct const& otherType) const noexcept
+bool Struct::isSubclassOf(Struct const& otherType) const noexcept
 {
 	for (Parent const& parent : directParents)
 	{
-		if (parent.type == &otherType || parent.type->inheritsFrom(otherType))
+		if (parent.type == &otherType || parent.type->isSubclassOf(otherType))
 		{
 			return true;
 		}

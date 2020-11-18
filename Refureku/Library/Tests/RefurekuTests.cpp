@@ -405,35 +405,35 @@ void inheritance()
 	TEST(!pc2.isBaseOf(oc));
 
 	//InheritsFrom
-	TEST(!ppc.inheritsFrom(ppc));
-	TEST(!ppc.inheritsFrom(pc));
-	TEST(!ppc.inheritsFrom(pc2));
-	TEST(!ppc.inheritsFrom(ec));
-	TEST(!ppc.inheritsFrom(oc));
+	TEST(!ppc.isSubclassOf(ppc));
+	TEST(!ppc.isSubclassOf(pc));
+	TEST(!ppc.isSubclassOf(pc2));
+	TEST(!ppc.isSubclassOf(ec));
+	TEST(!ppc.isSubclassOf(oc));
 
-	TEST(pc.inheritsFrom(ppc));
-	TEST(!pc.inheritsFrom(pc));
-	TEST(!pc.inheritsFrom(pc2));
-	TEST(!pc.inheritsFrom(ec));
-	TEST(!pc.inheritsFrom(oc));
+	TEST(pc.isSubclassOf(ppc));
+	TEST(!pc.isSubclassOf(pc));
+	TEST(!pc.isSubclassOf(pc2));
+	TEST(!pc.isSubclassOf(ec));
+	TEST(!pc.isSubclassOf(oc));
 
-	TEST(ec.inheritsFrom(ppc));
-	TEST(ec.inheritsFrom(pc));
-	TEST(ec.inheritsFrom(pc2));
-	TEST(!ec.inheritsFrom(ec));
-	TEST(!ec.inheritsFrom(oc));
+	TEST(ec.isSubclassOf(ppc));
+	TEST(ec.isSubclassOf(pc));
+	TEST(ec.isSubclassOf(pc2));
+	TEST(!ec.isSubclassOf(ec));
+	TEST(!ec.isSubclassOf(oc));
 
-	TEST(!oc.inheritsFrom(ppc));
-	TEST(!oc.inheritsFrom(pc));
-	TEST(!oc.inheritsFrom(pc2));
-	TEST(!oc.inheritsFrom(ec));
-	TEST(!oc.inheritsFrom(oc));
+	TEST(!oc.isSubclassOf(ppc));
+	TEST(!oc.isSubclassOf(pc));
+	TEST(!oc.isSubclassOf(pc2));
+	TEST(!oc.isSubclassOf(ec));
+	TEST(!oc.isSubclassOf(oc));
 
-	TEST(!pc2.inheritsFrom(ppc));
-	TEST(!pc2.inheritsFrom(pc));
-	TEST(!pc2.inheritsFrom(pc2));
-	TEST(!pc2.inheritsFrom(ec));
-	TEST(!pc2.inheritsFrom(oc));
+	TEST(!pc2.isSubclassOf(ppc));
+	TEST(!pc2.isSubclassOf(pc));
+	TEST(!pc2.isSubclassOf(pc2));
+	TEST(!pc2.isSubclassOf(ec));
+	TEST(!pc2.isSubclassOf(oc));
 }
 
 void instantiation()
