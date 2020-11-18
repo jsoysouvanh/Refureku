@@ -46,10 +46,12 @@ public:	\
 	}
 
 #define __RFK17636175816175907530u_GenerateMethodsMetadata	\
-	type.addRequiredMethods<ParseAllNested>();	\
 
 #define __RFK17636175816175907530u_GenerateArchetypeProperties	\
 	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_ParseAllNested_PropertySettings_0_17636175816175907530{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.properties.emplace_back(&property_ParseAllNested_PropertySettings_0_17636175816175907530); 
+
+#define __RFK17636175816175907530u_GenerateDefaultInstantiatorSetup	\
+	type.setDefaultInstantiator(&rfk::defaultInstantiator<ParseAllNested>);
 
 #define __RFK17636175816175907530u_GetTypeDeclaration	\
 	__RFK17636175816175907530u_GenerateFieldHelperMethods	\
@@ -74,6 +76,7 @@ public:	\
 				__RFK17636175816175907530u_GenerateParentsMetadata	\
 					\
 				__RFK17636175816175907530u_GenerateFieldsMetadata	\
+				__RFK17636175816175907530u_GenerateDefaultInstantiatorSetup	\
 				__RFK17636175816175907530u_GenerateMethodsMetadata	\
 			}	\
 			\
@@ -81,17 +84,6 @@ public:	\
 		}
 
 #endif
-#define __RFK17636175816175907530u_DefaultInstantiateDefinition	\
-	private:	\
-		template <typename T>	\
-		static void* instantiate() noexcept	\
-		{	\
-			if constexpr (std::is_default_constructible_v<T>)	\
-				return new T();	\
-			else	\
-				return nullptr;	\
-		}
-
 #define __RFK17636175816175907530u_RegisterArchetype	\
 	private:	\
 		static inline rfk::ArchetypeRegisterer __rfkArchetypeRegisterer = &staticGetArchetype();
@@ -107,7 +99,6 @@ public:	\
 #define ParseAllNested_GENERATED	\
 	friend rfk::Struct;	\
 	friend rfk::hasField___rfkArchetypeRegisterer<ParseAllNested, rfk::ArchetypeRegisterer>;	\
-	__RFK17636175816175907530u_DefaultInstantiateDefinition	\
 	__RFK17636175816175907530u_GetTypeDeclaration	\
 	__RFK17636175816175907530u_RegisterArchetype	\
 	__RFK17636175816175907530u_NativeProperties	\

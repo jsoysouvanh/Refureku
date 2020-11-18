@@ -40,3 +40,8 @@ FunctionBase* FunctionBase::addParameter(std::string parameterName, Type const& 
 
 	return this;
 }
+
+ICallable const* FunctionBase::getInternalFunction() const noexcept
+{
+	return internalMethod.get();
+}

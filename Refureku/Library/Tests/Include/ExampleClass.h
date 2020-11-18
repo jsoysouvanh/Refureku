@@ -147,6 +147,16 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			RFKMethod(CustomInstantiator)
 			static ExampleClass*	customInstantiator(int, float) noexcept { return new ExampleClass(); }
 
+			RFKMethod(CustomInstantiator)
+			static ExampleClass* replaceDefaultInstantiator() noexcept
+			{
+				ExampleClass* result = new ExampleClass();
+
+				result->someInt = 1;	//Change default value
+
+				return result;
+			}
+
 		protected:
 			RFKMethod()
 			void			method2() const;

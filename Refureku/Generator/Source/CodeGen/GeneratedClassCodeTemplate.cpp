@@ -37,7 +37,6 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	std::string mainMacroName					= externalPrefix + classInfo.name + "_GENERATED";
 
 	std::string getTypeMacroName				= generateGetArchetypeMacro(generatedFile, classInfo);
-	std::string defaultInstantiateMacro			= generateDefaultInstantiateMacro(generatedFile, classInfo);
 	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
 	std::string generateNativePropsMacroName	= generateNativePropsMacro(generatedFile, classInfo);
 
@@ -51,7 +50,6 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	generatedFile.writeMacro(std::move(mainMacroName),
 							 "friend rfk::Struct;",
 							 "friend rfk::hasField___rfkArchetypeRegisterer<" + classInfo.name + ", rfk::ArchetypeRegisterer>;",
-							 std::move(defaultInstantiateMacro),
 							 std::move(getTypeMacroName),
 							 std::move(generateRegistrationMacroName),
 							 std::move(generateNativePropsMacroName),
@@ -75,6 +73,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 	std::string					generateMethodsMetadataMacroName		= generateMethodsMetadataMacro(generatedFile, info);
 	std::string					generateArchetypePropertiesMacroName	= generateArchetypePropertiesMacro(generatedFile, info);
 	std::string					generatedNestedClassesMetadataMacroName	= generateNestedArchetypesMetadataMacro(generatedFile, info);
+	std::string					generatedInstantiatorMacroName			= generateRegisterDefaultInstantiator(generatedFile, info);
 
 	std::string returnedType = (info.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
@@ -108,6 +107,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"			" + std::move(generateParentsMetadataMacroName),
 								"			" + std::move(generatedNestedClassesMetadataMacroName),
 								"			" + std::move(generateFieldsMetadataMacroName[0]),
+								"			" + std::move(generatedInstantiatorMacroName),
 								"			" + std::move(generateMethodsMetadataMacroName),
 								"		}",
 								"	",
@@ -153,12 +153,6 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 									"std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
-			//Add method properties
-			method.properties.removeStartAndTrailSpaces();
-			generatedCode = fillEntityProperties(method, "staticMethod->");
-			if (!generatedCode.empty())
-				generatedFile.writeLine("	" + generatedCode + "\t\\");
-
 			currentMethodVariable = "staticMethod";
 		}
 		else
@@ -168,18 +162,6 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::MemberFunction<" + info.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
-
-			//Add method properties
-			method.properties.removeStartAndTrailSpaces();
-			generatedCode = fillEntityProperties(method, "method->");
-			if (!generatedCode.empty())
-				generatedFile.writeLine("\t" + generatedCode + "\t\\");
-
-			//Base method properties must be inherited AFTER this method properties have been added
-			if (method.isOverride)
-			{
-				generatedFile.writeLine("\tmethod->inheritBaseMethodProperties();\t\\");
-			}
 
 			currentMethodVariable = "method";
 		}
@@ -198,10 +180,32 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 			//Write generated parameters string to file
 			generatedFile.writeLine(generatedCode + ";\t\\");
 		}
-	}
 
-	//Add required methods (instantiate....)
-	generatedFile.writeLine("\ttype.addRequiredMethods<" + info.name + ">();\t\\");
+		//Add properties after the method has been fully setup
+		//Parameters have been added at this point, so properties generated code can safely add additional checks
+		if (method.isStatic)
+		{
+			//Add method properties
+			method.properties.removeStartAndTrailSpaces();
+			generatedCode = fillEntityProperties(method, "staticMethod->");
+			if (!generatedCode.empty())
+				generatedFile.writeLine("	" + generatedCode + "\t\\");
+		}
+		else
+		{
+			//Add method properties
+			method.properties.removeStartAndTrailSpaces();
+			generatedCode = fillEntityProperties(method, "method->");
+			if (!generatedCode.empty())
+				generatedFile.writeLine("\t" + generatedCode + "\t\\");
+
+			//Base method properties must be inherited AFTER this method properties have been added
+			if (method.isOverride)
+			{
+				generatedFile.writeLine("\tmethod->inheritBaseMethodProperties();\t\\");
+			}
+		}
+	}
 
 	generatedFile.writeLine("");
 
@@ -377,6 +381,15 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 	return macroName;
 }
 
+std::string GeneratedClassCodeTemplate::generateRegisterDefaultInstantiator(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
+{
+	std::string macroName = internalPrefix + getEntityId(info) + "_GenerateDefaultInstantiatorSetup";
+
+	generatedFile.writeMacro(std::string(macroName), "type.setDefaultInstantiator(&rfk::defaultInstantiator<" + info.name + ">);");
+
+	return macroName;
+}
+
 kodgen::uint16 GeneratedClassCodeTemplate::computeMethodFlags(kodgen::MethodInfo const& method) const noexcept
 {
 	kodgen::uint16 result = 0;
@@ -470,24 +483,6 @@ std::string GeneratedClassCodeTemplate::getFullMethodPrototype(kodgen::StructCla
 	}
 
 	return result;
-}
-
-std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
-{
-	std::string macroName = internalPrefix + getEntityId(info) + "_DefaultInstantiateDefinition";
-
-	generatedFile.writeMacro(std::string(macroName),
-								"private:",
-								"	template <typename T>",
-								"	static void* instantiate() noexcept",
-								"	{",
-								"		if constexpr (std::is_default_constructible_v<T>)",
-								"			return new T();",
-								"		else",
-								"			return nullptr;",
-								"	}");
-
-	return macroName;
 }
 
 std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept

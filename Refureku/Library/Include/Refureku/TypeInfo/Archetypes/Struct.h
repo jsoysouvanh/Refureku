@@ -462,19 +462,14 @@ namespace rfk
 			bool		isBaseOf(Struct const& otherType)						const	noexcept;
 
 			/**
-			*	@brief Add the type T to this type's parents if possible.
+			*	@brief Add the type T to this type's parents if T is a reflected class.
 			*/
 			template <typename T>
 			void		addToParents(EAccessSpecifier inheritanceAccess)				noexcept;
 
 			/**
-			*	Internal use only.
-			*/
-			template <typename T>
-			void		addRequiredMethods()											noexcept;
-
-			/**
-			*	@brief Add a new way to instantiate this struct through the makeInstance method.
+			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
+			*			If the provided static method takes no parameter, it will override the default instantiator.
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
@@ -482,9 +477,12 @@ namespace rfk
 			void		addCustomInstantiator(StaticMethod const* instantiator)			noexcept;
 			
 			/**
-			*	Internal use only.
+			*	@brief	Setup the default instantiator to use when a Struct::makeInstance is called without parameters.
+			*			If a call to Struct::addCustomInstantiator is made with a static method taking no parameter, the previously set default instantiator will be overriden.
+			*
+			*	@param defaultInstantiator Pointer to the instantiator method.
 			*/
-			void		setDefaultInstantiationMethod(void*(*func)() noexcept)			noexcept;
+			void		setDefaultInstantiator(void*(*defaultInstantiator)())			noexcept;
 
 			/**
 			*	@brief Add a field to the struct.
@@ -574,6 +572,16 @@ namespace rfk
 			Archetype*		addNestedArchetype(Archetype const* nestedArchetype,
 											   EAccessSpecifier	accessSpecifier_)		noexcept;
 	};
+
+	/**
+	*	@brief	Instantiate a class if it is default constructible.
+	*			This is the default method used to instantiate classes through Struct::makeInstance.
+	*			This method is not noexcept as the provided type T constructor is not guaranteed to be noexcept.
+	*	
+	*	@return A pointer to a newly allocated instance of the class if the class is default constructible, else nullptr.
+	*/
+	template <typename T>
+	void* defaultInstantiator();
 
 	#include "Refureku/TypeInfo/Archetypes/Struct.inl"
 }

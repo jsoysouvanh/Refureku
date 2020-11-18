@@ -316,9 +316,9 @@ bool Struct::isBaseOf(Struct const& otherType) const noexcept
 	return &otherType == this || children.find(&otherType) != children.cend();
 }
 
-void Struct::setDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
+void Struct::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
 {
-	_defaultInstantiator = func;
+	_defaultInstantiator = defaultInstantiator;
 }
 
 Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept

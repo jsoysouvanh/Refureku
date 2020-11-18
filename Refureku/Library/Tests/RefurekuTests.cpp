@@ -451,7 +451,7 @@ void instantiation()
 	TEST(&ecI->getArchetype() == &ec);
 
 	TEST(pcI->pInt64 == 666u);
-	TEST(ecI->someInt == 42);
+	TEST(ecI->someInt == 1);	//ExampleClass has a custom instantiator without parameters, which sets someInt to 1
 
 	//This leaks :) Should clean pcI, pc2I & ecI
 	delete pcI;
@@ -530,13 +530,24 @@ void dynamicTypes()
 void makeInstance()
 {
 	//ExampleClass has a default constructor, can call makeInstance()
-	TEST(namespace3::ExampleClass::staticGetArchetype().makeInstance() != nullptr);
-	TEST(namespace3::ExampleClass::staticGetArchetype().makeInstance(1, 3.14f) != nullptr);		//use customInstantiator method
+	namespace3::ExampleClass* instance1 = namespace3::ExampleClass::staticGetArchetype().makeInstance<namespace3::ExampleClass>();
+	TEST(instance1 != nullptr && instance1->someInt == 1);
+	delete instance1;
+
+	//Use customInstantiator method
+	rfk::Object* instance2 = namespace3::ExampleClass::staticGetArchetype().makeInstance<rfk::Object>(1, 3.14f);
+	TEST(instance2 != nullptr);
+	delete instance2;
+
 	TEST(namespace3::ExampleClass::staticGetArchetype().makeInstance(10.0f, 3.14f) == nullptr);
 
 	//ExampleClass2 has a deleted default constructor, makeInstance should return nullptr
 	TEST(namespace3::ExampleClass2::staticGetArchetype().makeInstance() == nullptr);
-	TEST(namespace3::ExampleClass2::staticGetArchetype().makeInstance<namespace3::ExampleClass2>(42)->i == 42);		//use customInstantiator method
+
+	//Use customInstantiator method
+	namespace3::ExampleClass2* instance3 = namespace3::ExampleClass2::staticGetArchetype().makeInstance<namespace3::ExampleClass2>(42);
+	TEST(instance3->i == 42);
+	delete instance3;
 }
 
 void database()

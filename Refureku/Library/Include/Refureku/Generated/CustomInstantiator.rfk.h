@@ -46,10 +46,12 @@ public:	\
 	}
 
 #define __RFK291713889535622996u_GenerateMethodsMetadata	\
-	type.addRequiredMethods<CustomInstantiator>();	\
 
 #define __RFK291713889535622996u_GenerateArchetypeProperties	\
 	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, CustomInstantiator>, "[Refureku] Can't attach PropertySettings property to CustomInstantiator as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_CustomInstantiator_PropertySettings_0_291713889535622996{rfk::EEntityKind::Method};type.properties.emplace_back(&property_CustomInstantiator_PropertySettings_0_291713889535622996); 
+
+#define __RFK291713889535622996u_GenerateDefaultInstantiatorSetup	\
+	type.setDefaultInstantiator(&rfk::defaultInstantiator<CustomInstantiator>);
 
 #define __RFK291713889535622996u_GetTypeDeclaration	\
 	__RFK291713889535622996u_GenerateFieldHelperMethods	\
@@ -74,6 +76,7 @@ public:	\
 				__RFK291713889535622996u_GenerateParentsMetadata	\
 					\
 				__RFK291713889535622996u_GenerateFieldsMetadata	\
+				__RFK291713889535622996u_GenerateDefaultInstantiatorSetup	\
 				__RFK291713889535622996u_GenerateMethodsMetadata	\
 			}	\
 			\
@@ -81,17 +84,6 @@ public:	\
 		}
 
 #endif
-#define __RFK291713889535622996u_DefaultInstantiateDefinition	\
-	private:	\
-		template <typename T>	\
-		static void* instantiate() noexcept	\
-		{	\
-			if constexpr (std::is_default_constructible_v<T>)	\
-				return new T();	\
-			else	\
-				return nullptr;	\
-		}
-
 #define __RFK291713889535622996u_RegisterArchetype	\
 	private:	\
 		static inline rfk::ArchetypeRegisterer __rfkArchetypeRegisterer = &staticGetArchetype();
@@ -107,7 +99,6 @@ public:	\
 #define CustomInstantiator_GENERATED	\
 	friend rfk::Struct;	\
 	friend rfk::hasField___rfkArchetypeRegisterer<CustomInstantiator, rfk::ArchetypeRegisterer>;	\
-	__RFK291713889535622996u_DefaultInstantiateDefinition	\
 	__RFK291713889535622996u_GetTypeDeclaration	\
 	__RFK291713889535622996u_RegisterArchetype	\
 	__RFK291713889535622996u_NativeProperties	\

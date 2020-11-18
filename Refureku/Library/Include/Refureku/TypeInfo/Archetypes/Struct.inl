@@ -375,17 +375,33 @@ ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 	}
 }
 
-template <typename T>
-void Struct::addRequiredMethods() noexcept
-{
-	setDefaultInstantiationMethod(&T::template instantiate<T>);
-}
-
 template <typename ReturnType>
 void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 {
+	//Make sure the instantiator is valid
 	assert(instantiator != nullptr);
+	assert(instantiator->returnType.isPointer());
 
-	//Make sure the instantiator is valid - i.e. its return type is a pointer type
-	customInstantiators.emplace_back(instantiator);
+	//If it is a parameterless custom instantiator, replace the default instantiator
+	if (instantiator->parameters.size() == 0u)
+	{
+		_defaultInstantiator = reinterpret_cast<rfk::NonMemberFunction<void*()> const*>(instantiator->getInternalFunction())->getFunctionHandle();
+	}
+	else
+	{
+		customInstantiators.emplace_back(instantiator);
+	}
+}
+
+template <typename T>
+void* rfk::defaultInstantiator()
+{
+	if constexpr (std::is_default_constructible_v<T>)
+	{
+		return new T();
+	}
+	else
+	{
+		return nullptr;
+	}
 }

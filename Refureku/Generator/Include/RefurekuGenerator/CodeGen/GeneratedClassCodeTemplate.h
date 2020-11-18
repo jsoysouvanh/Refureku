@@ -51,17 +51,6 @@ namespace rfk
 																		 kodgen::EntityInfo const&	info)					const	noexcept;
 			
 			/**
-			*	@brief Generate the macro containing the default instantiation definition of this struct/class.
-			*
-			*	@param generatedFile	File to write into.
-			*	@param info				Struct/Class info.
-			*
-			*	@return The name of the generated macro.
-			*/
-			std::string					generateDefaultInstantiateMacro(kodgen::GeneratedFile&			generatedFile,
-																		kodgen::StructClassInfo const&	info)				const	noexcept;
-			
-			/**
 			*	@brief Generate the macro containing the database registration logic.
 			*
 			*	@param generatedFile	File to write into.
@@ -104,6 +93,17 @@ namespace rfk
 			*/
 			std::string					generateNestedArchetypesMetadataMacro(kodgen::GeneratedFile&			generatedFile,
 																			  kodgen::StructClassInfo&	info)			const	noexcept;
+
+			/**
+			*	@brief Generate the macro containing the default instantiator setup.
+			*
+			*	@param generatedFile	File to write into.
+			*	@param info				Struct/Class info.
+			*
+			*	@return The name of the generated macro.
+			*/
+			std::string					generateRegisterDefaultInstantiator(kodgen::GeneratedFile&		generatedFile,
+																			kodgen::StructClassInfo&	info)			const	noexcept;
 
 			/**
 			*	@brief Generate the (2) macros containing fields definition.
