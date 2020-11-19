@@ -1,5 +1,7 @@
 #include "Kodgen/CodeGen/FileGenerator.h"
 
+#include <fstream>	//fstream
+
 using namespace kodgen;
 
 std::set<fs::path> FileGenerator::identifyFilesToProcess(FileGenerationResult& out_genResult, bool forceRegenerateAll) const noexcept
@@ -146,6 +148,22 @@ void FileGenerator::generateMacrosFile(FileParserFactoryBase& fileParserFactory)
 									"#define " + pps.functionMacroName	+ "(...)");
 
 	macrosDefinitionFile.writeLine("\n#endif");
+}
+
+void FileGenerator::generateMissingMetadataFiles(std::set<fs::path> const& files) const noexcept
+{
+	for (fs::path const& file : files)
+	{
+		assert(fs::exists(file) && fs::is_regular_file(file));
+
+		fs::path generatedFile = makePathToGeneratedFile(file);
+
+		//Generate metadata file if it doesn't exist yet
+		if (!fs::exists(generatedFile))
+		{
+			std::fstream file(generatedFile, std::ios::out);
+		}
+	}
 }
 
 void FileGenerator::setupFileGenerationUnit(FileGenerationUnit& fileGenerationUnit) const noexcept

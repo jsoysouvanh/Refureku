@@ -7,7 +7,5 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Properties/Property.h"
-#include "Refureku/TypeInfo/Properties/PropertySettings.h"
 #include "Refureku/TypeInfo/Properties/ParseAllNested.h"
 #include "Refureku/TypeInfo/Properties/CustomInstantiator.h"

@@ -159,6 +159,9 @@ FileGenerationResult FileGenerator::generateFiles(FileParserFactoryType<FilePars
 
 				generateMacrosFile(fileParserFactory);
 
+				//Generate missing metadata files (empty) just to make sure we do not encounter "inexistant header file" fatal error during parsing
+				//generateMissingMetadataFiles(filesToProcess);
+
 				if (threadCount == 0u)
 				{
 					processFilesMonothread(fileParserFactory, fileGenerationUnit, filesToProcess, genResult);

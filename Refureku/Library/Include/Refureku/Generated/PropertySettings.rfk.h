@@ -6,6 +6,7 @@
 
 #include "EntityMacros.h"
 
+#include <Refureku/Misc/DisableWarningMacros.h>
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
@@ -13,7 +14,6 @@
 #include <Refureku/TypeInfo/Archetypes/Enum.h>
 #include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
 #include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
-#include <Refureku/Misc/DisableWarningMacros.h>
 
 
 #define __RFK2708994343965683583u_GenerateParentsMetadata	\

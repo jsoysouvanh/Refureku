@@ -116,6 +116,13 @@ namespace kodgen
 			void					generateMacrosFile(FileParserFactoryBase& fileParserFactory)			const	noexcept;
 
 			/**
+			*	@brief Create (empty) metadata files that don't exist yet.
+			*	
+			*	@param files Collection of files that should have affiliated metadata file.
+			*/
+			void					generateMissingMetadataFiles(std::set<fs::path> const& files)			const	noexcept;
+
+			/**
 			*	@brief Prepare the file generation unit for generation, forwarding any required generation settings.
 			*	
 			*	@param fileGenerationUnit The generationUnit to setup.

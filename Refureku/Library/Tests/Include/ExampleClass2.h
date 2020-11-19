@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Refureku/NativeProperties.h>
-
 #include "ExampleClass.h"
 
 #include "Generated/ExampleClass2.rfk.h"

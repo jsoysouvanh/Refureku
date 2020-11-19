@@ -2,7 +2,7 @@
 
 #include <utility>	//std::move
 
-#include <Refureku/NativeProperties.h>
+#include <Refureku/TypeInfo/Properties/PropertySettings.h>
 
 #include "Generated/CustomProperties.rfk.h"
 
@@ -34,6 +34,21 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Method)) Tooltip : public rf
 	{}
 
 	Tooltip_GENERATED
+};
+
+struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Variable, false)) Slider : public rfk::Property
+{
+	float min;
+	float max;
+	float step;
+
+	Slider(float min, float max, float step) noexcept:
+		min{min},
+		max{max},
+		step{step}
+	{}
+
+	Slider_GENERATED
 };
 
 File_GENERATED

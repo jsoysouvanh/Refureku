@@ -7,16 +7,19 @@
 class RFKClass(CustomProperty2, CustomProperty(1, 2), CustomProperty2) A 
 {
 	RFKField(CustomProperty(1, 456)) 
-	int field;
+	int field = 0;
+
+	RFKField(Slider(0.0f, 10.0f, 0.1f))
+	float sliderFloat = 5.0f;
 
 	RFKMethod()
 	virtual void testMethod(int i) noexcept {}
 
 	RFKMethod(Tooltip("This is a test"))
-	virtual void testMethod() noexcept {}
+	virtual void testMethod() noexcept {} 
 
 	A_GENERATED
-};
+}; 
 
 class RFKClass(CustomProperty(3, 4)) B : public A
 {

@@ -25,14 +25,14 @@ void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FilePa
 	//Always call base class
 	kodgen::FileGenerationUnit::writeHeader(file, parsingResult);
 
-	file.writeLines("#include <Refureku/TypeInfo/Namespaces/Namespace.h>",
+	file.writeLines("#include <Refureku/Misc/DisableWarningMacros.h>",
+					"#include <Refureku/TypeInfo/Namespaces/Namespace.h>",
 					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>",
 					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>",
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>",
 					"#include <Refureku/TypeInfo/Archetypes/Enum.h>",
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>",
 					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>",
-					"#include <Refureku/Misc/DisableWarningMacros.h>",
 					"\n");
 }
 

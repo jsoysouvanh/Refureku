@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Refureku/Object.h>
 #include <Refureku/NativeProperties.h>
+#include <Refureku/Object.h>
 
 #include "Generated/ExampleClass.rfk.h"
 
@@ -145,7 +145,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			virtual int	method1() const noexcept override final;
 
 			RFKMethod(CustomInstantiator)
-			static ExampleClass*	customInstantiator(int, float) noexcept { return new ExampleClass(); }
+			static ExampleClass* customInstantiator(int, float) noexcept { return new ExampleClass(); }
 
 			RFKMethod(CustomInstantiator)
 			static ExampleClass* replaceDefaultInstantiator() noexcept
