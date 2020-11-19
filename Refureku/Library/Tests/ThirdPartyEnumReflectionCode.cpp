@@ -15,8 +15,8 @@ rfk::Enum const* rfk::getEnum<ThirdPartyEnum>() noexcept
 
 		type.values.reserve(2);
 
-		const_cast<rfk::EnumValue&>(*type.values.emplace("Value1", std::hash<std::string>()("ThirdPartyEnum@Value1"), 0u).first).outerEntity = &type;
-		const_cast<rfk::EnumValue&>(*type.values.emplace("Value2", std::hash<std::string>()("ThirdPartyEnum@Value2"), 2u).first).outerEntity = &type;
+		type.addEnumValue("Value1", std::hash<std::string>()("ThirdPartyEnum@Value1"), 0u);
+		type.addEnumValue("Value2", std::hash<std::string>()("ThirdPartyEnum@Value2"), 2u);
 	}
 
 	return &type;

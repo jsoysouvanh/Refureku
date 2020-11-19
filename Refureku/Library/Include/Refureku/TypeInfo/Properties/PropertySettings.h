@@ -22,7 +22,7 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::C
 		/**
 		*	@param _targetEntityKind	Kind of entities the property can be attached to. Use the | operator to specify multiple entity kinds.
 		*	@param _allowMultiple		Is this property allowed to be attached multiple times to the same entity?
-		*	@param _shouldInherit		Should this property be inherited by children when used on structs/classes?
+		*	@param _shouldInherit		Should this property be inherited by children when used on structs/classes or virtual methods.
 		*/
 		PropertySettings(rfk::EEntityKind		_targetEntityKind [[maybe_unused]],		//first [[maybe_unused]] is written after the variable name for pre-gcc 9.3 compatibility
 						 [[maybe_unused]] bool	_allowMultiple = false,
