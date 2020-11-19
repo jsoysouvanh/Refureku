@@ -394,7 +394,7 @@ void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 }
 
 template <typename T>
-void* rfk::defaultInstantiator()
+void* defaultInstantiator()
 {
 	if constexpr (std::is_default_constructible_v<T>)
 	{
