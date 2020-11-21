@@ -25,7 +25,7 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Class, true, false)) CustomP
 	CustomProperty2_GENERATED 
 };
 
-struct RFKStruct(PropertySettings(rfk::EEntityKind::Method)) Tooltip : public rfk::Property 
+struct RFKStruct(PropertySettings(rfk::EEntityKind::Method | rfk::EEntityKind::Function)) Tooltip : public rfk::Property 
 {
 	std::string message;
 

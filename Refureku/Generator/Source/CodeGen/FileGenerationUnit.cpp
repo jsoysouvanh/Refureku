@@ -1,7 +1,8 @@
 #include "RefurekuGenerator/CodeGen/FileGenerationUnit.h"
 
 #include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.h"	//generateNativePropertiesCode
-#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
+#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenFileHeaderData.h"
+#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenFileFooterData.h"
 
 using namespace rfk;
 
@@ -183,30 +184,29 @@ void FileGenerationUnit::saveEntitiesUsingNativeProperties(kodgen::EntityInfo co
 
 void FileGenerationUnit::generateNativePropertiesCode(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& /* parsingResult */) const noexcept
 {
-	std::string			generatedCode;
-	PropertyCodeGenData data;
+	std::string generatedCode;
 
 	//Generate native properties header code
-	data.codeGenLocation = ECodeGenLocation::FileHeader;
-
+	PropertyCodeGenFileHeaderData headerData;
+	
 	for (kodgen::EntityInfo const* entityInfo : _entitiesUsingNativeProperties)
 	{
 		assert(entityInfo != nullptr);
 
-		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &data);
+		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &headerData);
 	}
 
 	file.writeLine(generatedCode);
 
 	//Generate native properties footer code inside a macro
-	data.codeGenLocation = ECodeGenLocation::FileFooter;
+	PropertyCodeGenFileHeaderData footerData;
 
 	generatedCode.clear();
 	for (kodgen::EntityInfo const* entityInfo : _entitiesUsingNativeProperties)
 	{
 		assert(entityInfo != nullptr);
 
-		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &data);
+		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &footerData);
 	}
 
 	file.writeMacro(std::string(_nativePropsMacroName), std::move(generatedCode));

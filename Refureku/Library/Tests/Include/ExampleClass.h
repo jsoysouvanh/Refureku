@@ -276,4 +276,9 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 	}
 }
 
+class RFKClass(ParseAllNested) ABC
+{
+	ABC_GENERATED
+};
+
 File_GENERATED 

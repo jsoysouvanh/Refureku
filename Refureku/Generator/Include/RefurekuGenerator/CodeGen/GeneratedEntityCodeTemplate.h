@@ -101,16 +101,16 @@ namespace rfk
 			*	
 			*	@param info				Entity to to add the property to.
 			*	@param entityVarName	Name of the entity variable in the generated code.
-			*	@param propName			Name of the property (class name).
+			*	@param prop				Simple property to add.
 			*	@param propIndex		Index of the property in the list of properties of the entity.
 			*	
 			*	@return The generated code.
 			*/
-			std::string addSimplePropertyToEntity(kodgen::EntityInfo const&	info,
-												  std::string const&		entityVarName,
-												  std::string const&		propName,
-												  kodgen::uint8				propIndex,
-												  bool						generateAllowMultipleAssert)			const	noexcept;
+			std::string addSimplePropertyToEntity(kodgen::EntityInfo const&		info,
+												  std::string const&			entityVarName,
+												  kodgen::SimpleProperty const&	prop,
+												  kodgen::uint8					propIndex,
+												  bool							generateAllowMultipleAssert)		const	noexcept;
 
 			/**
 			*	@brief Generate a string which adds a complex property to an entity.
@@ -127,6 +127,25 @@ namespace rfk
 												  kodgen::ComplexProperty const&	prop,
 												  kodgen::uint8						propIndex,
 												  bool								generateAllowMultipleAssert)	const	noexcept;
+
+			/**
+			*	@brief Generate a entity/property related code.
+			*	
+			*	@param propertyRule The detected property rule. It can be nullptr, in which case an empty string is returned immediately.
+			*	@param entity		The entity the property is being added to.
+			*	@param property		The property added to the entity
+			*	@param isPreAdd		Should the PreAddProperty code be generated? If false, the PostAddProperty code will be generated.
+			*	@param entityVar	Name of the entity variable in the generated code + its accessor.
+			*	@param propertyVar	Name of the property variable in the generated code + its accessor.
+			*
+			*	@return The generated code.
+			*/
+			std::string	generatePropertyCode(kodgen::SimplePropertyRule const*	propertyRule,
+											 kodgen::EntityInfo const&			entity,
+											 kodgen::Property const&			property,
+											 bool								isPreAdd,
+											 std::string						entityVar,
+											 std::string						propertyVar)						const	noexcept;
 
 		protected:
 			/** Prefix used to build internal macros. */

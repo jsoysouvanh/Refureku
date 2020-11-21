@@ -6,7 +6,7 @@
 #include <Kodgen/Properties/ComplexProperty.h>
 
 #include "RefurekuGenerator/Properties/NativeProperties.h"
-#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
+#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenData.h"
 
 using namespace rfk;
 
@@ -20,11 +20,11 @@ std::string	PropertySettingsPropertyRule::generateCode(kodgen::EntityInfo const&
 	PropertyCodeGenData*			data				= reinterpret_cast<PropertyCodeGenData*>(userData);
 	kodgen::ComplexProperty	const&	propertySettings	= static_cast<kodgen::ComplexProperty const&>(property);
 
-	if (data->codeGenLocation == rfk::ECodeGenLocation::PropertyAdd)
+	if (data->getCodeGenLocation() == rfk::ECodeGenLocation::PrePropertyAdd)
 	{
 		return "static_assert(std::is_base_of_v<rfk::Property, " + entity.name + ">, \"[Refureku] Can't attach " + mainPropName + " property to " + entity.getFullName() + " as it doesn't inherit from rfk::Property.\");";
 	}
-	else if (data->codeGenLocation == rfk::ECodeGenLocation::ClassFooter)
+	else if (data->getCodeGenLocation() == rfk::ECodeGenLocation::ClassFooter)
 	{
 		std::string result;
 

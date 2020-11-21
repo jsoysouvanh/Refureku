@@ -9,33 +9,23 @@
 
 namespace rfk
 {
-	/**
-	*	Enum describing where generated code will be inserted.
-	*
-	*	//Example.h
-	*	#pragma once
-	*
-	*	#include "Example.rfk.h"	<- FileHeader value inserts code here
-	*
-	*	class RFKClass() Example
-	*	{
-	*		Example_GENERATED		<- ClassFooter value inserts code here
-	*	};
-	*
-	*	File_GENERATED				<- FileFooter value inserts code here
-	*/
 	enum class ECodeGenLocation
 	{
 		/**
-		*	Code will be inserted where the generated file is included,
-		*	i.e. where #include "GeneratedFile.rfk.h" is included.
+		*	Code will be generated in the generated file (without macro),
+		*	so it will be injected as soon as the generated file is included.
 		*/
-		FileHeader,
+		FileHeader = 0,
 
 		/**
 		*	Code will be inserted just before the property is added to the entity.
 		*/
-		PropertyAdd,
+		PrePropertyAdd,
+
+		/**
+		*	Code will be inserted just after the property is added to the entity.
+		*/
+		PostPropertyAdd,
 
 		/**
 		*	Code will be inserted in the ClassName_GENERATED macro (also works for structs).

@@ -8,7 +8,7 @@
 #include <Kodgen/InfoStructures/NestedEnumInfo.h>
 #include <Kodgen/Misc/FundamentalTypes.h>
 
-#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
+#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenClassFooterData.h"
 #include "RefurekuGenerator/Misc/Helpers.h"
 
 using namespace rfk;
@@ -505,12 +505,11 @@ std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::Genera
 
 std::string GeneratedClassCodeTemplate::generateNativePropsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
-	std::string			macroName = internalPrefix + getEntityId(info) + "_NativeProperties";
-	std::string			generatedCode;
-	PropertyCodeGenData	data{ECodeGenLocation::ClassFooter};
+	std::string						macroName = internalPrefix + getEntityId(info) + "_NativeProperties";
+	std::string						generatedCode;
+	PropertyCodeGenClassFooterData	data;
 
 	//Find all native properties in entities nested directly in this class
-	
 	//Self properties
 	generatedCode += generateNativePropertiesCode(info, &data);
 	

@@ -12,6 +12,7 @@
 #include "RefurekuGenerator/Parsing/FileParser.h"
 #include "RefurekuGenerator/Properties/CustomInstantiatorPropertyRule.h"
 #include "RefurekuGenerator/Properties/PropertySettingsPropertyRule.h"
+#include "RefurekuGenerator/Properties/TestPropertyRule.h"
 
 namespace rfk
 {
@@ -21,6 +22,7 @@ namespace rfk
 			/** Native properties. */
 			CustomInstantiatorPropertyRule	_customInstantiatorPropertyRule;
 			PropertySettingsPropertyRule	_propertySettingsPropertyRule;
+			TestPropertyRule				_testPropertyRule;
 
 		public:
 			FileParserFactory()							noexcept;

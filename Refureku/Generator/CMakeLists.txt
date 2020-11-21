@@ -10,8 +10,14 @@ set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
 add_library(${RefurekuGeneratorLibTarget}
 				STATIC
 					Source/Properties/CustomInstantiatorPropertyRule.cpp
-					Source/Properties/RangePropertyRule.cpp
 					Source/Properties/PropertySettingsPropertyRule.cpp
+					Source/Properties/TestPropertyRule.cpp
+
+					Source/Properties/CodeGenData/PropertyCodeGenData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenFileHeaderData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenPropertyAddData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenClassFooterData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenFileFooterData.cpp
 
 					Source/Parsing/FileParser.cpp
 					Source/Parsing/FileParserFactory.cpp

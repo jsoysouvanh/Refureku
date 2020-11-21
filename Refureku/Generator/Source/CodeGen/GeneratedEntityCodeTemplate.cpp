@@ -6,7 +6,7 @@
 #include <Kodgen/Properties/SimplePropertyRule.h>
 #include <Kodgen/Properties/ComplexPropertyRule.h>
 
-#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
+#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenPropertyAddData.h"
 
 using namespace rfk;
 
@@ -20,11 +20,9 @@ void GeneratedEntityCodeTemplate::generateCode(kodgen::GeneratedFile& /* generat
 
 std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName) const noexcept
 {
-	std::string			result;
-	std::string			propVarName;
-	size_t				propsCount	= info.properties.simpleProperties.size() + info.properties.complexProperties.size();
-	kodgen::uint8		index		= 0u;
-	PropertyCodeGenData	data{ECodeGenLocation::PropertyAdd};
+	std::string		result;
+	size_t			propsCount	= info.properties.simpleProperties.size() + info.properties.complexProperties.size();
+	kodgen::uint8	index		= 0u;
 
 	if (propsCount > 0)
 	{
@@ -37,11 +35,7 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 		//Add simple props
 		for (kodgen::SimpleProperty const& prop : info.properties.simpleProperties)
 		{
-			//Generate property relative code
-			if (prop.boundPropertyRule != nullptr)
-				result += prop.boundPropertyRule->generateCode(info, prop, &data);
-
-			result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
+			result += addSimplePropertyToEntity(info, entityVarName, prop, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
 
 			index++;
 		}
@@ -49,21 +43,24 @@ std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo
 		//Add complex props
 		for (kodgen::ComplexProperty const& prop : info.properties.complexProperties)
 		{
-			//Generate property relative code
-			if (prop.boundPropertyRule != nullptr)
-				result += prop.boundPropertyRule->generateCode(info, prop, &data);
-
-			if (prop.subProperties.empty())
-			{
-				result += addSimplePropertyToEntity(info, entityVarName, prop.mainProperty, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
-			}
-			else
-			{
-				result += addComplexPropertyToEntity(info, entityVarName, prop, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
-			}
+			result += addComplexPropertyToEntity(info, entityVarName, prop, index, addToPropertiesRecord(propertiesRecord, prop.mainProperty) > 1u);
 
 			index++;
 		}
+	}
+
+	return result;
+}
+
+std::string	GeneratedEntityCodeTemplate::generatePropertyCode(kodgen::SimplePropertyRule const* propertyRule, kodgen::EntityInfo const& entity, kodgen::Property const& property, bool isPreAdd, std::string entityVar, std::string propertyVar) const noexcept
+{
+	std::string result;
+
+	if (propertyRule != nullptr)
+	{
+		PropertyCodeGenPropertyAddData data(isPreAdd, std::move(entityVar), std::move(propertyVar));
+
+		result = propertyRule->generateCode(entity, property, &data);
 	}
 
 	return result;
@@ -205,42 +202,66 @@ std::string GeneratedEntityCodeTemplate::generatePropertyAllowMultipleAssert(kod
 	return "static_assert(" + propName + "::allowMultiple, \"[Refureku] " + info.getFullName() + ": " + propName + " can't be attached multiple times to a single entity.\");";
 }
 
-std::string GeneratedEntityCodeTemplate::addSimplePropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, std::string const& propName, kodgen::uint8 propIndex, bool generateAllowMultipleAssert) const noexcept
+std::string GeneratedEntityCodeTemplate::addSimplePropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, kodgen::SimpleProperty const& prop, kodgen::uint8 propIndex, bool generateAllowMultipleAssert) const noexcept
 {
-	std::string propVarName = generatePropertyVariableName(info, propName, propIndex);
+	std::string propVarName = generatePropertyVariableName(info, prop.mainProperty, propIndex);
 	std::string result;
 
 	//Generate static_asserts relative to this entity/property
-	result += generateStaticAsserts(info, propName, true, generateAllowMultipleAssert);
+	result += generateStaticAsserts(info, prop.mainProperty, true, generateAllowMultipleAssert);
 
-	result += "static " + propName + " " + propVarName + "; " + entityVarName + "properties.emplace_back(&" + propVarName + "); ";
+	//Declare the property
+	result += "static " + prop.mainProperty + " " + propVarName + "; ";
+	
+	//Generate property relative code (pre add)
+	result += generatePropertyCode(prop.boundPropertyRule, info, prop, true, entityVarName, propVarName + ".");
+
+	//Add the property to the list of the entity properties
+	result += entityVarName + "properties.emplace_back(&" + propVarName + "); ";
+
+	//Generate property relative code (post add)
+	result += generatePropertyCode(prop.boundPropertyRule, info, prop, false, entityVarName, propVarName + ".");
 
 	return result;
 }
 
 std::string GeneratedEntityCodeTemplate::addComplexPropertyToEntity(kodgen::EntityInfo const& info, std::string const& entityVarName, kodgen::ComplexProperty const& prop, kodgen::uint8 propIndex, bool generateAllowMultipleAssert) const noexcept
 {
-	assert(!prop.subProperties.empty());
-
 	std::string propVarName = generatePropertyVariableName(info, prop.mainProperty, propIndex);
 	std::string result;
 	
 	//Generate static_asserts relative to this entity/property
 	result += generateStaticAsserts(info, prop.mainProperty, true, generateAllowMultipleAssert);
 
-	result += "static " + prop.mainProperty + " " + propVarName + "{";
-
-	for (std::string subProp : prop.subProperties)
+	if (prop.subProperties.empty())
 	{
-		result += subProp + ",";
+		//Complex property constructor without argument
+		result += "static " + prop.mainProperty + " " + propVarName + "; ";
+	}
+	else
+	{
+		//Complex property constructor with arguments
+		result += "static " + prop.mainProperty + " " + propVarName + "{";
+
+		for (std::string subProp : prop.subProperties)
+		{
+			result += subProp + ",";
+		}
+
+		//Replace last , by closing }
+		result.back() = '}';
+
+		result.push_back(';');
 	}
 
-	//Replace last , by closing }
-	result.back() = '}';
+	//Generate property relative code (pre add)
+	result += generatePropertyCode(prop.boundPropertyRule, info, prop, true, entityVarName, propVarName + ".");
 
-	result.push_back(';');
-
+	//Add the property to the list of the entity properties
 	result += entityVarName + "properties.emplace_back(&" + propVarName + "); ";
+
+	//Generate property relative code (post add)
+	result += generatePropertyCode(prop.boundPropertyRule, info, prop, false, entityVarName, propVarName + ".");
 
 	return result;
 }

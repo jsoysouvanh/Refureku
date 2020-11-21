@@ -3,7 +3,7 @@
 #include <Kodgen/InfoStructures/MethodInfo.h>
 
 #include "RefurekuGenerator/Properties/NativeProperties.h"
-#include "RefurekuGenerator/Properties/PropertyCodeGenData.h"
+#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenPropertyAddData.h"
 
 using namespace rfk;
 
@@ -16,7 +16,7 @@ std::string	CustomInstantiatorPropertyRule::generateCode(kodgen::EntityInfo cons
 {
 	PropertyCodeGenData* data = reinterpret_cast<PropertyCodeGenData*>(userData);
 
-	if (data->codeGenLocation == ECodeGenLocation::ClassFooter)
+	if (data->getCodeGenLocation() == ECodeGenLocation::ClassFooter)
 	{
 		kodgen::MethodInfo const&	method		= static_cast<kodgen::MethodInfo const&>(entity);
 		std::string					className	= entity.outerEntity->getFullName();
@@ -33,9 +33,11 @@ std::string	CustomInstantiatorPropertyRule::generateCode(kodgen::EntityInfo cons
 			return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + "), " + std::move(parameters) + ">, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");";
 		}
 	}
-	else if (data->codeGenLocation == ECodeGenLocation::PropertyAdd)
+	else if (data->getCodeGenLocation() == ECodeGenLocation::PrePropertyAdd)
 	{
-		return "type.addCustomInstantiator<" + static_cast<kodgen::MethodInfo const&>(entity).returnType.getCanonicalName() + ">(staticMethod); ";
+		PropertyCodeGenPropertyAddData* concreteData = reinterpret_cast<PropertyCodeGenPropertyAddData*>(data);
+
+		return "type.addCustomInstantiator<" + static_cast<kodgen::MethodInfo const&>(entity).returnType.getCanonicalName() + ">(" + concreteData->getEntityVariableName() + "); ";
 	}
 	
 	return "";
