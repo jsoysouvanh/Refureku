@@ -48,7 +48,7 @@ public:	\
 #define __RFK2708994343965683583u_GenerateMethodsMetadata	\
 
 #define __RFK2708994343965683583u_GenerateArchetypeProperties	\
-	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_PropertySettings_PropertySettings_0_2708994343965683583{rfk::EEntityKind::Struct | rfk::EEntityKind::Class};type.properties.emplace_back(&property_PropertySettings_PropertySettings_0_2708994343965683583); 
+	type.properties.reserve(1);static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_PropertySettings_PropertySettings_0_2708994343965683583{rfk::EEntityKind::Struct | rfk::EEntityKind::Class};static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");type.properties.emplace_back(&property_PropertySettings_PropertySettings_0_2708994343965683583); 
 
 #define __RFK2708994343965683583u_GenerateDefaultInstantiatorSetup	\
 	type.setDefaultInstantiator(&rfk::defaultInstantiator<PropertySettings>);

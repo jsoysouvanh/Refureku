@@ -48,7 +48,7 @@ public:	\
 #define __RFK291713889535622996u_GenerateMethodsMetadata	\
 
 #define __RFK291713889535622996u_GenerateArchetypeProperties	\
-	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, CustomInstantiator>, "[Refureku] Can't attach PropertySettings property to CustomInstantiator as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_CustomInstantiator_PropertySettings_0_291713889535622996{rfk::EEntityKind::Method};type.properties.emplace_back(&property_CustomInstantiator_PropertySettings_0_291713889535622996); 
+	type.properties.reserve(1);static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_CustomInstantiator_PropertySettings_0_291713889535622996{rfk::EEntityKind::Method};static_assert(std::is_base_of_v<rfk::Property, CustomInstantiator>, "[Refureku] Can't attach PropertySettings property to CustomInstantiator as it doesn't inherit from rfk::Property.");type.properties.emplace_back(&property_CustomInstantiator_PropertySettings_0_291713889535622996); 
 
 #define __RFK291713889535622996u_GenerateDefaultInstantiatorSetup	\
 	type.setDefaultInstantiator(&rfk::defaultInstantiator<CustomInstantiator>);

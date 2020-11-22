@@ -48,7 +48,7 @@ public:	\
 #define __RFK17636175816175907530u_GenerateMethodsMetadata	\
 
 #define __RFK17636175816175907530u_GenerateArchetypeProperties	\
-	type.properties.reserve(1);static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_ParseAllNested_PropertySettings_0_17636175816175907530{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.properties.emplace_back(&property_ParseAllNested_PropertySettings_0_17636175816175907530); 
+	type.properties.reserve(1);static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a struct");static PropertySettings property_ParseAllNested_PropertySettings_0_17636175816175907530{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");type.properties.emplace_back(&property_ParseAllNested_PropertySettings_0_17636175816175907530); 
 
 #define __RFK17636175816175907530u_GenerateDefaultInstantiatorSetup	\
 	type.setDefaultInstantiator(&rfk::defaultInstantiator<ParseAllNested>);
