@@ -20,8 +20,7 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/Properties/CodeGenData/PropertyCodeGenFileFooterData.cpp
 
 					Source/Parsing/FileParser.cpp
-					Source/Parsing/FileParserFactory.cpp
-
+					
 					Source/CodeGen/GeneratedEntityCodeTemplate.cpp
 					Source/CodeGen/GeneratedNamespaceCodeTemplate.cpp
 					Source/CodeGen/GeneratedClassCodeTemplate.cpp

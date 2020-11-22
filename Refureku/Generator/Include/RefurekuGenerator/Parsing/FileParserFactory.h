@@ -9,14 +9,14 @@
 
 #include <Kodgen/Parsing/FileParserFactory.h>
 
-#include "RefurekuGenerator/Parsing/FileParser.h"
 #include "RefurekuGenerator/Properties/CustomInstantiatorPropertyRule.h"
 #include "RefurekuGenerator/Properties/PropertySettingsPropertyRule.h"
 #include "RefurekuGenerator/Properties/TestPropertyRule.h"
 
 namespace rfk
 {
-	class FileParserFactory : public kodgen::FileParserFactory<FileParser>
+	template <typename FileParserType>
+	class FileParserFactory : public kodgen::FileParserFactory<FileParserType>
 	{
 		private:
 			/** Native properties. */
@@ -30,4 +30,6 @@ namespace rfk
 			FileParserFactory(FileParserFactory&&)		= default;
 			~FileParserFactory()						= default;
 	};
+
+	#include "RefurekuGenerator/Parsing/FileParserFactory.inl"
 }
