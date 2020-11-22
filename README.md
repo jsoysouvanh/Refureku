@@ -25,12 +25,12 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 - Easy to integrate in a software like a game engine
 - Reflect namespaces, structs, classes, methods, fields, variables, functions, enums and enum values
 - Support structs/classes with or without inheritance (multiple inheritance supported)
-- Can look for a struct/class, enum, field or method by name, with additional filtering parameters
+- Can get an entity by name, with additional filtering parameters
 - Function/Method call with any arguments and any return type (public, protected, private, virtual, override)
 - Variable/Field get/set any data of any type (public, protected, private)
-- Know at runtime if an instance of a reflected struct/class inherits or is the base of another reflected struct/class
-- Arbitrary properties (like tags) on any entity
-- Reflection metadata is regenerated only when a file changes
+- Know at runtime if an instance of a reflected struct/class is the base or a subclass of another reflected struct/class
+- Powerful property system allowing to attach metadata on any entity and generate custom code
+- Reflection metadata is regenerated only when a file has changed
 - Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
 - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
 
@@ -154,15 +154,16 @@ You should be able to run the following snippet:
 
 ```cpp
 #include <Kodgen/Misc/DefaultLogger.h>
+#include <RefurekuGenerator/Parsing/FileParser.h>
 #include <RefurekuGenerator/Parsing/FileParserFactory.h>
 #include <RefurekuGenerator/CodeGen/FileGenerator.h>
 #include <RefurekuGenerator/CodeGen/FileGenerationUnit.h>
 
 int main()
 {
-    rfk::FileParserFactory	fileParserFactory;
-    rfk::FileGenerator		fileGenerator;
-    rfk::FileGenerationUnit	fileGenerationUnit;
+    rfk::FileParserFactory<rfk::FileParser> fileParserFactory;
+    rfk::FileGenerator                      fileGenerator;
+    rfk::FileGenerationUnit                 fileGenerationUnit;
 
     //Set logger
     kodgen::DefaultLogger logger;
@@ -172,7 +173,6 @@ int main()
 
     //You will need to setup parsing settings and generation settings here.
     //Either load settings from a settings file, or set them by calling the appropriate methods.
-
     fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit);
 
     return 0;
@@ -190,7 +190,6 @@ This library has been tested and is stable on the following configurations:
 - Linux 18.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.1.0
 
 ## Planned features
-- Property system rework to make it more flexible and easier to extend
 
 ## Known issues
 - Can't reflect a variable / field / function / method using incomplete (forward declared) types
