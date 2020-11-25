@@ -7,20 +7,25 @@
 
 #pragma once
 
-#include <Kodgen/Properties/DefaultComplexPropertyRule.h>
+#include "RefurekuGenerator/Properties/DefaultComplexPropertyRule.h"
 
 namespace rfk
 {
-	class PropertySettingsPropertyRule : public kodgen::DefaultComplexPropertyRule
+	class PropertySettingsPropertyRule : public DefaultComplexPropertyRule
 	{
+		protected:
+			virtual std::string generatePrePropertyAddCode(kodgen::EntityInfo const&		entity,
+														   kodgen::ComplexProperty const&	property,
+														   PropertyCodeGenPropertyAddData&	data)		const noexcept override;
+
+			virtual std::string generateClassFooterCode(kodgen::EntityInfo const&		entity,
+														kodgen::ComplexProperty const&	property,
+														PropertyCodeGenClassFooterData&	data)			const noexcept override;
+
 		public:
 			PropertySettingsPropertyRule()										noexcept;
 			PropertySettingsPropertyRule(PropertySettingsPropertyRule const&)	= default;
 			PropertySettingsPropertyRule(PropertySettingsPropertyRule&&)		= default;
 			virtual ~PropertySettingsPropertyRule()								= default;
-
-			virtual std::string	generateCode(kodgen::EntityInfo const&	entity,
-											 kodgen::Property const&	property,
-											 void*						userData)	const noexcept override;
 	};
 }

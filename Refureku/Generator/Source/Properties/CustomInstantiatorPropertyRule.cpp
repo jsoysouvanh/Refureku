@@ -8,37 +8,29 @@
 using namespace rfk;
 
 CustomInstantiatorPropertyRule::CustomInstantiatorPropertyRule() noexcept:
-	kodgen::DefaultSimplePropertyRule(NativeProperties::customInstantiatorProperty, kodgen::EEntityType::Method)
+	DefaultSimplePropertyRule(NativeProperties::customInstantiatorProperty, kodgen::EEntityType::Method)
 {
 }
 
-std::string	CustomInstantiatorPropertyRule::generateCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, void* userData) const noexcept
+std::string CustomInstantiatorPropertyRule::generatePrePropertyAddCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, PropertyCodeGenPropertyAddData& data) const noexcept
 {
-	PropertyCodeGenData* data = reinterpret_cast<PropertyCodeGenData*>(userData);
+	return "type.addCustomInstantiator<" + static_cast<kodgen::MethodInfo const&>(entity).returnType.getCanonicalName() + ">(" + data.getEntityVariableName() + "); ";
+}
 
-	if (data->getCodeGenLocation() == ECodeGenLocation::ClassFooter)
+std::string CustomInstantiatorPropertyRule::generateClassFooterCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, PropertyCodeGenClassFooterData& /* data */) const noexcept
+{
+	kodgen::MethodInfo const&	method		= static_cast<kodgen::MethodInfo const&>(entity);
+	std::string					className	= entity.outerEntity->getFullName();
+	std::string					parameters	= method.getParameterTypes();
+	std::string					methodPtr	= "&" + className + "::" + method.name;
+
+	if (parameters.empty())
 	{
-		kodgen::MethodInfo const&	method		= static_cast<kodgen::MethodInfo const&>(entity);
-		std::string					className	= entity.outerEntity->getFullName();
-		std::string					parameters	= method.getParameterTypes();
-		std::string					methodPtr	= "&" + className + "::" + method.name;
-
-		if (parameters.empty())
-		{
-			//CustomIntantiator with no parameters
-			return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + ")>, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "* .\");";
-		}
-		else
-		{
-			return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + "), " + std::move(parameters) + ">, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");";
-		}
+		//CustomIntantiator with no parameters
+		return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + ")>, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "* .\");";
 	}
-	else if (data->getCodeGenLocation() == ECodeGenLocation::PrePropertyAdd)
+	else
 	{
-		PropertyCodeGenPropertyAddData* concreteData = reinterpret_cast<PropertyCodeGenPropertyAddData*>(data);
-
-		return "type.addCustomInstantiator<" + static_cast<kodgen::MethodInfo const&>(entity).returnType.getCanonicalName() + ">(" + concreteData->getEntityVariableName() + "); ";
+		return "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + "), " + std::move(parameters) + ">, \"[Refureku] CustomInstantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");";
 	}
-	
-	return "";
 }
