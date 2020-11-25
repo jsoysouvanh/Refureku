@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CustomProperties.h"
+#include "Test.h"
 
 #include "Generated/AB.rfk.h"
 
@@ -9,8 +10,8 @@ class RFKClass(CustomProperty2, CustomProperty(1, 2), CustomProperty2) A
 	RFKField(CustomProperty(1, 456)) 
 	int field = 0;
 
-	RFKField(Slider(0.0f, 10.0f, 0.1f))
-	float sliderFloat = 5.0f;
+	RFKField(Slider(0.0f, 10.0f))
+	float sliderFloat = 5.0f; 
 
 	RFKMethod()
 	virtual void testMethod(int i) noexcept {}

@@ -36,19 +36,4 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Method | rfk::EEntityKind::F
 	Tooltip_GENERATED
 };
 
-struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Variable, false)) Slider : public rfk::Property
-{
-	float min;
-	float max;
-	float step;
-
-	Slider(float min, float max, float step) noexcept:
-		min{min},
-		max{max},
-		step{step}
-	{}
-
-	Slider_GENERATED
-};
-
 File_GENERATED

@@ -156,12 +156,12 @@ void FileGenerator::generateMissingMetadataFiles(std::set<fs::path> const& files
 	{
 		assert(fs::exists(file) && fs::is_regular_file(file));
 
-		fs::path generatedFile = makePathToGeneratedFile(file);
+		fs::path generatedFilePath = makePathToGeneratedFile(file);
 
 		//Generate metadata file if it doesn't exist yet
-		if (!fs::exists(generatedFile))
+		if (!fs::exists(generatedFilePath))
 		{
-			std::fstream file(generatedFile, std::ios::out);
+			std::fstream generatedFile(generatedFilePath, std::ios::out);
 		}
 	}
 }

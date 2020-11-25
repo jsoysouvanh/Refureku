@@ -199,7 +199,7 @@ void FileGenerationUnit::generateNativePropertiesCode(kodgen::GeneratedFile& fil
 	file.writeLine(generatedCode);
 
 	//Generate native properties footer code inside a macro
-	PropertyCodeGenFileHeaderData footerData;
+	PropertyCodeGenFileFooterData footerData;
 
 	generatedCode.clear();
 	for (kodgen::EntityInfo const* entityInfo : _entitiesUsingNativeProperties)
