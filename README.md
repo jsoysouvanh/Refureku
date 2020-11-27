@@ -25,12 +25,12 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 - Easy to integrate in a software like a game engine
 - Reflect namespaces, structs, classes, methods, fields, variables, functions, enums and enum values
 - Support structs/classes with or without inheritance (multiple inheritance supported)
-- Can look for a struct/class, enum, field or method by name, with additional filtering parameters
+- Can get an entity by name, with additional filtering parameters
 - Function/Method call with any arguments and any return type (public, protected, private, virtual, override)
 - Variable/Field get/set any data of any type (public, protected, private)
-- Know at runtime if an instance of a reflected struct/class inherits or is the base of another reflected struct/class
-- Arbitrary properties (like tags) on any entity
-- Reflection metadata is regenerated only when a file changes
+- Know at runtime if an instance of a reflected struct/class is the base or a subclass of another reflected struct/class
+- Powerful property system allowing to attach metadata on any entity and generate custom code
+- Reflection metadata is regenerated only when a file has changed
 - Can instantiate any objects just from an archetype (which is obtainable by name or id), with arbitrary parameters
 - Know at compile-time if a struct/class is reflected or not (can be combined with if constexpr expression)
 
@@ -62,11 +62,11 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - From binaries: /Include
-    - From source: /Refureku/Library/Include
+    - From binaries: /Include/
+    - From source: /Refureku/Library/Include/
 
 4.  Add library directories to your projet settings:
-    - From binaries: /Lib/[Your compiler]/
+    - From binaries: /Lib/
     - From source: /Build/[Debug|Release]/Lib/
     > Make sure /Build/Debug/Lib/ is only set in debug mode, and /Build/Release/Lib/ only in release mode
 
@@ -74,7 +74,7 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
     - From binaries: RefurekuDebug.lib in debug mode, RefurekuRelease.lib in release mode
     - From source: Refureku.lib
 
-7. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin if you downloaded the binaries. You must at least specify:
+7. Update RefurekuSettings.toml located in /Build/Release/Bin/, or /Bin/ if you downloaded the binaries. You must at least specify:
 	- [FileGenerationSettings] outputDirectory = '''Path/To/Output/Directory'''
 		> The output directory is the directory where metadata files will be generated. If the directory doesn't exist, the generator will try to create it. 
 	- [FileGenerationSettings] toParseDirectories = [ '''Path/To/Dir/To/Parse1''', ... ]
@@ -121,16 +121,15 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 		> **Note:** On multiple configuration generators such as Visual Studio or XCode, an additional Debug/Release folder is generated.
 
 3.  Add necessary header directories to your project settings:
-    - From binaries: /Include
+    - From binaries: /Include/
     - From source:
-	    - /Refureku/Generator/Submodules/Kodgen/Include
-	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include
-	    - /Refureku/Generator/Include
+	    - /Refureku/Generator/Submodules/Kodgen/Include/
+	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/Include/
+	    - /Refureku/Generator/Include/
 
 4.  Add library directories to your projet settings:
     - From binaries:
-	    - /Lib/Common/
-	    - /Lib/[Your compiler]/
+	    - /Lib/
     - From source:
 	    - /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Static/
 	    - /Build/[Debug|Release]/Lib/
@@ -148,21 +147,22 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 
 6.  Setup your project C++ compilation version to C++17 or later.
 7.  Compile!
-8.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared, or /Bin from the binaries.
+8.  Before running your program, make sure that the libclang dynamic library is located next to your executable. You should find it at /Refureku/Generator/Submodules/Kodgen/ThirdParty/x64/Shared/, or /Bin/ from the binaries.
 
 You should be able to run the following snippet:
 
 ```cpp
 #include <Kodgen/Misc/DefaultLogger.h>
+#include <RefurekuGenerator/Parsing/FileParser.h>
 #include <RefurekuGenerator/Parsing/FileParserFactory.h>
 #include <RefurekuGenerator/CodeGen/FileGenerator.h>
 #include <RefurekuGenerator/CodeGen/FileGenerationUnit.h>
 
 int main()
 {
-    rfk::FileParserFactory	fileParserFactory;
-    rfk::FileGenerator		fileGenerator;
-    rfk::FileGenerationUnit	fileGenerationUnit;
+    rfk::FileParserFactory<rfk::FileParser> fileParserFactory;
+    rfk::FileGenerator                      fileGenerator;
+    rfk::FileGenerationUnit                 fileGenerationUnit;
 
     //Set logger
     kodgen::DefaultLogger logger;
@@ -172,7 +172,6 @@ int main()
 
     //You will need to setup parsing settings and generation settings here.
     //Either load settings from a settings file, or set them by calling the appropriate methods.
-
     fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit);
 
     return 0;
@@ -190,7 +189,6 @@ This library has been tested and is stable on the following configurations:
 - Linux 18.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.1.0
 
 ## Planned features
-- Property system rework to make it more flexible and easier to extend
 
 ## Known issues
 - Can't reflect a variable / field / function / method using incomplete (forward declared) types

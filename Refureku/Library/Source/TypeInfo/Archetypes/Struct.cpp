@@ -4,13 +4,13 @@
 
 using namespace rfk;
 
-Struct::Struct(std::string&& name, uint64 id, EKind kind, uint64 memorySize) noexcept:
+Struct::Struct(std::string&& name, uint64 id, EEntityKind kind, uint64 memorySize) noexcept:
 	Archetype(std::forward<std::string>(name), id, kind, memorySize)
 {
 }
 
 Struct::Struct(std::string&& newName, uint64 newId, uint64 newMemorySize) noexcept:
-	Struct(std::forward<std::string>(newName), newId, EKind::Struct, newMemorySize)
+	Struct(std::forward<std::string>(newName), newId, EEntityKind::Struct, newMemorySize)
 {
 }
 
@@ -23,7 +23,7 @@ Struct const* Struct::getNestedStruct(std::string structName, EAccessSpecifier a
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingStruct));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->kind == EKind::Struct &&
+			(*it)->kind == EEntityKind::Struct &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Struct const*>(*it) : nullptr;
 }
@@ -37,7 +37,7 @@ Class const* Struct::getNestedClass(std::string className, EAccessSpecifier acce
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingClass));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->kind == EKind::Class &&
+			(*it)->kind == EEntityKind::Class &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Class const*>(*it) : nullptr;
 }
@@ -51,7 +51,7 @@ Enum const* Struct::getNestedEnum(std::string enumName, EAccessSpecifier access)
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingEnum));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->kind == EKind::Enum &&
+			(*it)->kind == EEntityKind::Enum &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Enum const*>(*it) : nullptr;
 }
@@ -298,11 +298,11 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	return result;
 }
 
-bool Struct::inheritsFrom(Struct const& otherType) const noexcept
+bool Struct::isSubclassOf(Struct const& otherType) const noexcept
 {
 	for (Parent const& parent : directParents)
 	{
-		if (parent.type == &otherType || parent.type->inheritsFrom(otherType))
+		if (parent.type == &otherType || parent.type->isSubclassOf(otherType))
 		{
 			return true;
 		}
@@ -316,7 +316,73 @@ bool Struct::isBaseOf(Struct const& otherType) const noexcept
 	return &otherType == this || children.find(&otherType) != children.cend();
 }
 
-void Struct::__RFKsetDefaultInstantiationMethod(void* (*func)() noexcept) noexcept
+void Struct::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
 {
-	_defaultInstantiator = func;
+	_defaultInstantiator = defaultInstantiator;
+}
+
+Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+{
+	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
+
+	//Add the method to the container
+	Method* result = const_cast<Method*>(&*methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags));
+
+	//Set outer entity
+	result->outerEntity = this;
+
+	return result;
+}
+
+StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+{
+	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
+
+	//Add the static method to the container
+	StaticMethod* result = const_cast<StaticMethod*>(&*staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags));
+
+	//Set outer entity
+	result->outerEntity = this;
+
+	return result;
+}
+
+Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, uint64 memoryOffset) noexcept
+{
+	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
+
+	//Add the field to the container
+	Field* result = const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset));
+
+	//Set outer entity
+	result->outerEntity = outerEntity_;
+
+	return result;
+}
+
+StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void* fieldPtr) noexcept
+{
+	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
+
+	//Add the static field to the container
+	StaticField* result = const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr));
+
+	//Set outer entity
+	result->outerEntity = outerEntity_;
+
+	return result;
+}
+
+Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier_) noexcept
+{
+	//Add the archetype to the container
+	Archetype* result = const_cast<Archetype*>(*nestedArchetypes.emplace(nestedArchetype).first);
+
+	//Set the access specifier
+	result->accessSpecifier = accessSpecifier_;
+
+	//Set outer entity
+	result->outerEntity = this;
+
+	return result;
 }

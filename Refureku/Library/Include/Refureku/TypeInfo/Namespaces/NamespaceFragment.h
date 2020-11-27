@@ -9,7 +9,7 @@
 
 #include <vector>
 
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/Entity.h"
 
 namespace rfk
 {
@@ -24,5 +24,14 @@ namespace rfk
 			NamespaceFragment(NamespaceFragment const&)		= delete;
 			NamespaceFragment(NamespaceFragment&&)			= default;
 			~NamespaceFragment()							= default;
+
+			/**
+			*	@brief Add a nested entity to the namespace.
+			*	
+			*	@param nestedEntity The nested entity to add to the namespace fragment.
+			*	
+			*	@param this.
+			*/
+			NamespaceFragment* addNestedEntity(Entity const* nestedEntity) noexcept;
 	};
 }

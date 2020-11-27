@@ -14,30 +14,30 @@ std::string GeneratedVariableCodeTemplate::generateGetVariableDefinition(kodgen:
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							 "	inline rfk::Variable const& " + getGetVariableFunctionName(varInfo) + "() noexcept\t\\",
-							 "	{\t\\",
-							 "		static bool				initialized = false;\t\\",
-							 "		static rfk::Variable	variable(\"" + varInfo.name + "\", " +
+							 "\t{\t\\",
+							 "\t\tstatic bool initialized = false;\t\\",
+							 "\t\tstatic rfk::Variable variable(\"" + varInfo.name + "\", " +
 																	 entityId + ", "
 																	 "rfk::Type::getType<" + varInfo.type.getCanonicalName() + ">(), "
 																	 "&" + varInfo.getFullName() + ", "
 																	 "static_cast<rfk::EVarFlags>(" + std::to_string(computeVarFlags(varInfo)) + ")"
 																	 ");\t\\");
 
-	generatedFile.writeLines("		if (!initialized)\t\\",
-							 "		{\t\\",
-							 "			initialized = true;\t\\");
+	generatedFile.writeLines("\t\tif (!initialized)\t\\",
+							 "\t\t{\t\\",
+							 "\t\t\tinitialized = true;\t\\");
 
 	//Fill enum properties
 	properties = fillEntityProperties(varInfo, "variable.");
 	if (!properties.empty())
 	{
-		generatedFile.writeLine("			" + properties + "\t\\");
+		generatedFile.writeLine("\t\t\t" + properties + "\t\\");
 	}
 
-	generatedFile.writeLine("		}\t\\");
+	generatedFile.writeLine("\t\t}\t\\");
 
-	generatedFile.writeLines("		return variable;\t\\",
-							 "	}\n");
+	generatedFile.writeLines("\t\treturn variable;\t\\",
+							 "\t}\n");
 
 	return macroName;
 }
@@ -61,8 +61,10 @@ std::string GeneratedVariableCodeTemplate::generateRegistrationMacro(kodgen::Gen
 	}
 }
 
-void GeneratedVariableCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedVariableCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, out_errorDescription);
+
 	assert(entityInfo.entityType == kodgen::EEntityType::Variable);
 
 	kodgen::VariableInfo const& varInfo = static_cast<kodgen::VariableInfo const&>(entityInfo);

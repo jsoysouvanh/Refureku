@@ -5,6 +5,104 @@
 *	See the README.md file for full license details.
 */
 
+template <typename Predicate, typename>
+Namespace const* Namespace::getNamespace(Predicate predicate) const
+{
+	for (Namespace const* n : namespaces)
+	{
+		if (predicate(n))
+		{
+			return n;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Archetype const* Namespace::getArchetype(Predicate predicate) const
+{
+	for (Archetype const* archetype : archetypes)
+	{
+		if (predicate(archetype))
+		{
+			return archetype;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Struct const* Namespace::getStruct(Predicate predicate) const
+{
+	for (Archetype const* archetype : archetypes)
+	{
+		if (archetype->kind == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
+		{
+			return reinterpret_cast<Struct const*>(archetype);
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Class const* Namespace::getClass(Predicate predicate) const
+{
+	for (Archetype const* archetype : archetypes)
+	{
+		if (archetype->kind == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
+		{
+			return reinterpret_cast<Class const*>(archetype);
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Enum const* Namespace::getEnum(Predicate predicate) const
+{
+	for (Archetype const* archetype : archetypes)
+	{
+		if (archetype->kind == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
+		{
+			return reinterpret_cast<Enum const*>(archetype);
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Variable const* Namespace::getVariable(Predicate predicate) const
+{
+	for (Variable const* v : variables)
+	{
+		if (predicate(v))
+		{
+			return v;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Function const* Namespace::getFunction(Predicate predicate) const
+{
+	for (Function const* function : functions)
+	{
+		if (predicate(function))
+		{
+			return function;
+		}
+	}
+
+	return nullptr;
+}
+
 template <typename FunctionSignature>
 Function const* Namespace::getFunction(std::string functionName, EFunctionFlags flags) const noexcept
 {

@@ -66,5 +66,13 @@ namespace kodgen
 			*/
 			std::string getPrototype(bool removeQualifiers	= false,
 									 bool removeSpaces		= false)	const noexcept;
+
+			/**
+			*	@brief	Get the parameter types of the function separated by a coma.
+			*			If the function takes no parameter, an empty string is returned.
+			*	
+			*	@return The parameter types of the function.
+			*/
+			std::string getParameterTypes()								const noexcept;
 	};
 }

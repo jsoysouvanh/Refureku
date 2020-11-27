@@ -6,14 +6,16 @@
 
 using namespace rfk;
 
-void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedEnumCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, out_errorDescription);
+
 	assert(entityInfo.entityType == kodgen::EEntityType::Enum);
 
-	generateEnumCode(generatedFile, static_cast<kodgen::EnumInfo const&>(entityInfo));
+	generateEnumCode(generatedFile, static_cast<kodgen::EnumInfo&>(entityInfo));
 }
 
-void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
+void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo& enumInfo) const noexcept
 {
 	std::string	mainMacroName			= internalPrefix + getEntityId(enumInfo) + "_GENERATED";
 
@@ -36,7 +38,7 @@ void GeneratedEnumCodeTemplate::generateEnumCode(kodgen::GeneratedFile& generate
 	generatedFile.writeLine("#endif\n");
 }
 
-std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo const& enumInfo) const noexcept
+std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::GeneratedFile& generatedFile, kodgen::EnumInfo& enumInfo) const noexcept
 {
 	std::string entityId	= getEntityId(enumInfo);
 	std::string macroName	= internalPrefix + entityId + "_GenerateGetEnumSpecialization";
@@ -66,19 +68,16 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 
 	if (!enumInfo.enumValues.empty())
 	{
-		generatedFile.writeLines("			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>::iterator	valueIt;\t\\",
-								 "			rfk::EnumValue*																	ev;\t\\",
+		generatedFile.writeLines("			rfk::EnumValue*	enumValue = nullptr;\t\\",
 								 "			type.values.reserve(" + std::to_string(enumInfo.enumValues.size()) + ");\t\\");
 
-		for (kodgen::EnumValueInfo const& ev : enumInfo.enumValues)
+		for (kodgen::EnumValueInfo& enumValue : enumInfo.enumValues)
 		{
-			generatedFile.writeLine("			valueIt = type.values.emplace(\"" + ev.name + "\", " + std::to_string(stringHasher(ev.id)) + "u, " + std::to_string(ev.defaultValue) + "u).first;\t\\");
-
-			generatedFile.writeLines("			ev = const_cast<rfk::EnumValue*>(&*valueIt);\t\\",
-									 "			ev->outerEntity = &type;\t\\");
+			generatedFile.writeLine("			enumValue = type.addEnumValue(\"" + enumValue.name + "\", " + std::to_string(stringHasher(enumValue.id)) + "u, " + std::to_string(enumValue.defaultValue) + ");\t\\");
 
 			//Fill enum value properties
-			properties = fillEntityProperties(ev, "ev->");
+			enumValue.properties.removeStartAndTrailSpaces();
+			properties = fillEntityProperties(enumValue, "enumValue->");
 			if (!properties.empty())
 			{
 				generatedFile.writeLine("			" + properties + "\t\\");

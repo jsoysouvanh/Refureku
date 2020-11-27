@@ -9,12 +9,20 @@ add_subdirectory(Submodules/Kodgen)
 set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
 add_library(${RefurekuGeneratorLibTarget}
 				STATIC
+					Source/Properties/DefaultSimplePropertyRule.cpp
+					Source/Properties/DefaultComplexPropertyRule.cpp
 					Source/Properties/CustomInstantiatorPropertyRule.cpp
-					Source/Properties/RangePropertyRule.cpp
+					Source/Properties/PropertySettingsPropertyRule.cpp
+					Source/Properties/TestPropertyRule.cpp
+
+					Source/Properties/CodeGenData/PropertyCodeGenData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenFileHeaderData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenPropertyAddData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenClassFooterData.cpp
+					Source/Properties/CodeGenData/PropertyCodeGenFileFooterData.cpp
 
 					Source/Parsing/FileParser.cpp
-					Source/Parsing/FileParserFactory.cpp
-
+					
 					Source/CodeGen/GeneratedEntityCodeTemplate.cpp
 					Source/CodeGen/GeneratedNamespaceCodeTemplate.cpp
 					Source/CodeGen/GeneratedClassCodeTemplate.cpp
@@ -50,3 +58,5 @@ add_custom_command(	TARGET ${RefurekuGeneratorExeTarget} PRE_BUILD
 					COMMAND ${CMAKE_COMMAND} -E copy
 					${PROJECT_SOURCE_DIR}/RefurekuSettings.toml
 					$<IF:$<BOOL:${MSVC}>,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/RefurekuSettings.toml,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RefurekuSettings.toml>)
+
+add_subdirectory(LibraryGenerator)

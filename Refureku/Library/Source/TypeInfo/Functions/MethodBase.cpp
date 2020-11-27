@@ -3,7 +3,7 @@
 using namespace rfk;
 
 MethodBase::MethodBase(std::string&& name, uint64 id, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod, EMethodFlags flags) noexcept:
-	FunctionBase(std::forward<std::string>(name), id, EKind::Method, returnType, std::forward<std::unique_ptr<ICallable>>(internalMethod)),
+	FunctionBase(std::forward<std::string>(name), id, EEntityKind::Method, returnType, std::forward<std::unique_ptr<ICallable>>(internalMethod)),
 	flags{flags}
 {
 }

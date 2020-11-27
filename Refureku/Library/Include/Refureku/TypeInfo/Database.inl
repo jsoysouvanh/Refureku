@@ -5,6 +5,137 @@
 *	See the README.md file for full license details.
 */
 
+template <typename Predicate, typename>
+Entity const* Database::getEntity(Predicate predicate)
+{
+	for (Entity const* entity : _entitiesById)
+	{
+		if (predicate(entity))
+		{
+			return entity;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Namespace const* Database::getNamespace(Predicate predicate)
+{
+	for (Namespace const* n : _fileLevelNamespacesByName)
+	{
+		if (predicate(n))
+		{
+			return n;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Archetype const* Database::getArchetype(Predicate predicate)
+{
+	Archetype const* result = nullptr;
+
+	if ((result = getStruct(predicate)) == nullptr)
+	{
+		if ((result = getClass(predicate)) == nullptr)
+		{
+			if ((result = getEnum(predicate)) == nullptr)
+			{
+				result = getFundamentalArchetype(predicate);
+			}
+		}
+	}
+
+	return result;
+}
+
+template <typename Predicate, typename>
+Struct const* Database::getStruct(Predicate predicate)
+{
+	for (Struct const* s : _fileLevelStructsByName)
+	{
+		if (predicate(s))
+		{
+			return s;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Class const* Database::getClass(Predicate predicate)
+{
+	for (Class const* c : _fileLevelClassesByName)
+	{
+		if (predicate(c))
+		{
+			return c;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Enum const* Database::getEnum(Predicate predicate)
+{
+	for (Enum const* e : _fileLevelEnumsByName)
+	{
+		if (predicate(e))
+		{
+			return e;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+FundamentalArchetype const* Database::getFundamentalArchetype(Predicate predicate)
+{
+	for (FundamentalArchetype const* fundamentalArchetype : _fundamentalArchetypes)
+	{
+		if (predicate(fundamentalArchetype))
+		{
+			return fundamentalArchetype;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Variable const* Database::getVariable(Predicate predicate)
+{
+	for (Variable const* variable : _fileLevelVariablesByName)
+	{
+		if (predicate(variable))
+		{
+			return variable;
+		}
+	}
+
+	return nullptr;
+}
+
+template <typename Predicate, typename>
+Function const* Database::getFunction(Predicate predicate)
+{
+	for (Function const* function : _fileLevelFunctionsByName)
+	{
+		if (predicate(function))
+		{
+			return function;
+		}
+	}
+
+	return nullptr;
+}
+
 template <typename FunctionSignature>
 Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) noexcept
 {

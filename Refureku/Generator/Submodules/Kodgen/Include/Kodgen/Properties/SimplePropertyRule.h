@@ -32,12 +32,6 @@ namespace kodgen
 											   uint8				propertyIndex,
 											   std::string&			out_errorDescription)	const noexcept;
 
-			/**
-			*	@return The documentation of the macro defined by this rule.
-			*			Can return an empty string.
-			*/
-			virtual std::string	getMacroDocumentation()										const noexcept;
-
 		public:
 			SimplePropertyRule()							= default;
 			SimplePropertyRule(SimplePropertyRule const&)	= default;
@@ -54,7 +48,7 @@ namespace kodgen
 			*	@return true if the property syntax is valid, else false.
 			*/
 			virtual bool		isMainPropSyntaxValid(std::string const&	mainProperty,
-													  EEntityType			entityType)		const noexcept = 0;
+													  EEntityType			entityType)				const	noexcept = 0;
 
 			/**
 			*	@brief	Check that a property is valid inside a given property group.
@@ -70,7 +64,7 @@ namespace kodgen
 			*/
 			virtual bool		isPropertyGroupValid(PropertyGroup const&	propertyGroup,
 													 uint8					propertyIndex,
-													 std::string&			out_errorDescription)	const noexcept;
+													 std::string&			out_errorDescription)	const	noexcept;
 
 			/**
 			*	@brief	Check that the attached entity of a given property is valid.
@@ -86,13 +80,18 @@ namespace kodgen
 			*/
 			virtual bool		isEntityValid(EntityInfo const& entity,
 											  uint8				propertyIndex,
-											  std::string&		out_errorDescription)				const noexcept;
-
+											  std::string&		out_errorDescription)				const	noexcept;
 			/**
-			*	@return The macro definition for properties accepted by this rule.
-			*			This macro is only used for auto completion and documentation and is therefore not mandatory.
-			*			Can return an empty string.
+			*	@brief Entry point to generate code for a given entity and property.
+			*	
+			*	@param entity	Entity the property is attached to.
+			*	@param property	Property bound to this rule.
+			*	@param userData	Any data the user might want to pass.
+			*	
+			*	@return Generated code as string.
 			*/
-			virtual std::string	getMacroDefinition()												const	noexcept;
+			virtual std::string	generateCode(EntityInfo const&	entity,
+											 Property const&	property,
+											 void*				userData)							const	noexcept;
 	};
 }

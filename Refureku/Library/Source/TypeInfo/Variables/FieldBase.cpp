@@ -5,7 +5,7 @@
 using namespace rfk;
 
 FieldBase::FieldBase(std::string&& name, uint64 id, Type const& type, EFieldFlags flags, Struct const* ownerStruct) noexcept:
-	VariableBase(std::forward<std::string>(name), id, EKind::Field, type),
+	VariableBase(std::forward<std::string>(name), id, EEntityKind::Field, type),
 	flags{flags},
 	ownerStruct{ownerStruct}
 {

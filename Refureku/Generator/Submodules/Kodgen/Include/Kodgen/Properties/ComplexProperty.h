@@ -7,20 +7,18 @@
 
 #pragma once
 
-#include <string>
 #include <vector>
+
+#include "Kodgen/Properties/Property.h"
 
 namespace kodgen
 {
 	//Forward declaration
 	class ComplexPropertyRule;
 
-	class ComplexProperty
+	class ComplexProperty : public Property
 	{
 		public:
-			/** Name of this property. */
-			std::string					mainProperty;
-
 			/** Collection of all subproperties. */
 			std::vector<std::string>	subProperties;
 
@@ -29,7 +27,7 @@ namespace kodgen
 
 			ComplexProperty()													= default;
 			ComplexProperty(std::string					mainProperty,
-							 ComplexPropertyRule const*	matchingPropertyRule)	noexcept;
+							ComplexPropertyRule const*	matchingPropertyRule)	noexcept;
 			ComplexProperty(ComplexProperty const&)								= default;
 			ComplexProperty(ComplexProperty&&)									= default;
 			~ComplexProperty()													= default;

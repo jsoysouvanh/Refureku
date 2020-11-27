@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Refureku/NativeProperties.h>
 #include <Refureku/Object.h>
 
 #include "Generated/ExampleClass.rfk.h"
@@ -32,14 +33,13 @@ namespace namespace2 RFKNamespace()
 	};
 }
 
-namespace namespace3 RFKNamespace()
+namespace namespace3 RFKNamespace(ParseAllNested)
 {
 	//Forward declaration
-	class AnotherClassInNamespace3;
+	//class AnotherClassInNamespace3;
 
 	class RFKClass() OtherClass : public rfk::Object
 	{
-
 		OtherClass_GENERATED
 	};
 
@@ -145,7 +145,17 @@ namespace namespace3 RFKNamespace()
 			virtual int	method1() const noexcept override final;
 
 			RFKMethod(CustomInstantiator)
-			static void*	customInstantiator(int, float) noexcept { return new ExampleClass(); }
+			static ExampleClass* customInstantiator(int, float) noexcept { return new ExampleClass(); }
+
+			RFKMethod(CustomInstantiator)
+			static ExampleClass* replaceDefaultInstantiator() noexcept
+			{
+				ExampleClass* result = new ExampleClass();
+
+				result->someInt = 1;	//Change default value
+
+				return result;
+			}
 
 		protected:
 			RFKMethod()
@@ -158,7 +168,7 @@ namespace namespace3 RFKNamespace()
 			static	int		staticMethod3(char const* param);
 
 			RFKMethod()
-			static	ExampleClass const* staticMethod4(char const*) noexcept { return nullptr; };
+			static	ExampleClass const* staticMethod4(char const*) noexcept { return nullptr; }; 
 
 		private:
 			RFKMethod()
@@ -197,7 +207,7 @@ namespace namespace3 RFKNamespace()
 	class RFKClass() ExampleClass2
 	{
 		RFKMethod(CustomInstantiator)
-		static void* customInstantiator(int i) noexcept { return new ExampleClass2(i); }
+		static ExampleClass2* customInstantiator(int i) noexcept { return new ExampleClass2(i); }
 
 		ExampleClass2() = delete;
 		ExampleClass2(int i) noexcept:
@@ -223,16 +233,12 @@ namespace namespace3 RFKNamespace()
 
 struct RFKStruct(ParseAllNested) ExampleStruct
 {
-	RFKField()
 	static int staticInt;
 
-	RFKField()
 	int i = 2;
 
-	RFKMethod()
 	static void staticMethod() { std::cout << "ExampleStruct::staticMethod()" << std::endl; } 
 
-	RFKMethod()
 	void method(int a, float b) { std::cout << "ExampleStruct::method(" << a << ", " << b << ")" << std::endl; }
 
 	ExampleStruct_GENERATED
@@ -270,4 +276,9 @@ namespace namespace4 RFKNamespace(ParseAllNested)
 	}
 }
 
-File_GENERATED
+class RFKClass(ParseAllNested) ABC
+{
+	ABC_GENERATED
+};
+
+File_GENERATED 

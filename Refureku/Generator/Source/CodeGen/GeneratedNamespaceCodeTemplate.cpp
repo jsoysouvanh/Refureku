@@ -10,8 +10,10 @@
 
 using namespace rfk;
 
-void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, out_errorDescription);
+
 	assert(entityInfo.entityType == kodgen::EEntityType::Namespace);
 
 	kodgen::NamespaceInfo const& namespaceInfo = static_cast<kodgen::NamespaceInfo const&>(entityInfo);
@@ -23,7 +25,7 @@ void GeneratedNamespaceCodeTemplate::generateCode(kodgen::GeneratedFile& generat
 	std::string registerMacroName					= generateRegistrationMacro(generatedFile, namespaceInfo);
 
 	//Hide namespace macro redefinition warning as it is likely to happen often
-	ifDefUndefMacro(generatedFile, mainMacroName);
+	generatedFile.undefMacro(mainMacroName);
 
 	//Use parsing macro to avoid parsing generated data
 	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
@@ -46,7 +48,7 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDeclarat
 {
 	std::string macroName = internalPrefix + getEntityId(namespaceInfo) + "_DeclareGetNamespaceFragment";
 
-	ifDefUndefMacro(generatedFile, macroName);
+	generatedFile.undefMacro(macroName);
 
 	generatedFile.writeLines("#define " + macroName + " inline rfk::NamespaceFragment const& " + getGetNamespaceFragmentFunctionName(generatedFile, namespaceInfo) + "() noexcept;",
 							 "");
@@ -59,7 +61,7 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 	std::string entityId	= getEntityId(namespaceInfo);
 	std::string macroName	= internalPrefix + entityId + "_DefineGetNamespaceFragment";
 
-	ifDefUndefMacro(generatedFile, macroName);
+	generatedFile.undefMacro(macroName);
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							 "	inline rfk::NamespaceFragment const& " + getGetNamespaceFragmentFunctionName(generatedFile, namespaceInfo) + "() noexcept\t\\",
@@ -88,50 +90,53 @@ std::string GeneratedNamespaceCodeTemplate::generateGetNamespaceFragmentDefiniti
 	//Fill nested namespaces
 	if (totalSize != 0u)
 	{
+		//Generate whole data in a single string and write that string at the very end
 		//Reserve space first
-		generatedFile.writeLine("			fragment.nestedEntities.reserve(" + std::to_string(totalSize) + "u);\t\\");
+		std::string addNestedEntitiesGeneratedCode = "\t\t\tfragment.nestedEntities.reserve(" + std::to_string(totalSize) + "u); rfk::NamespaceFragment* fragmentPtr = &fragment; fragmentPtr";
 
 		//Fill nested namespaces
 		for (kodgen::NamespaceInfo const& nestedNamespace : namespaceInfo.namespaces)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(" + getNamespaceFragmentRegistererName(generatedFile, nestedNamespace) + ".getNamespaceInstance());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(" + getNamespaceFragmentRegistererName(generatedFile, nestedNamespace) + ".getNamespaceInstance())";
 		}
 
 		//Fill nested structs
 		for (kodgen::StructClassInfo const& nestedStruct : namespaceInfo.structs)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype())";
 		}
 
 		//Fill nested classes
 		for (kodgen::StructClassInfo const& nestedClass : namespaceInfo.classes)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype())";
 		}
 
 		//Fill nested enums
 		for (kodgen::EnumInfo const& nestedEnum : namespaceInfo.enums)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">())";
 		}
 
 		//Fill nested variables
 		for (kodgen::VariableInfo const& variable : namespaceInfo.variables)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + GeneratedVariableCodeTemplate::getGetVariableFunctionName(variable) + "());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + GeneratedVariableCodeTemplate::getGetVariableFunctionName(variable) + "())";
 		}
 
 		//Fill nested functions
 		for (kodgen::FunctionInfo const& function : namespaceInfo.functions)
 		{
-			generatedFile.writeLine("			fragment.nestedEntities.emplace_back(&" + GeneratedFunctionCodeTemplate::getGetFunctionFunctionName(function) + "());\t\\");
+			addNestedEntitiesGeneratedCode += "->addNestedEntity(&" + GeneratedFunctionCodeTemplate::getGetFunctionFunctionName(function) + "())";
 		}
+
+		//Write into file
+		generatedFile.writeLine(addNestedEntitiesGeneratedCode + ";\t\\");
 	}
 
-	generatedFile.writeLines("		}\t\\",
-							 "	return fragment;\t\\",
-							 "	}",
-							 "");
+	generatedFile.writeLines("\t\t}\t\\",
+							 "\treturn fragment;\t\\",
+							 "\t}\n");
 
 	return macroName;
 }
@@ -141,7 +146,7 @@ std::string GeneratedNamespaceCodeTemplate::generateRegistrationMacro(kodgen::Ge
 	std::string entityId	= getEntityId(namespaceInfo);
 	std::string macroName	= internalPrefix + entityId + "_RegisterNamespace";
 
-	ifDefUndefMacro(generatedFile, macroName);
+	generatedFile.undefMacro(macroName);
 
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 								"	inline rfk::NamespaceFragmentRegisterer " + getNamespaceFragmentRegistererName(generatedFile, namespaceInfo) +

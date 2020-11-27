@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
 
 namespace rfk
@@ -19,7 +19,7 @@ namespace rfk
 		protected:
 			Archetype(std::string&& newName,
 					  uint64		newId,
-					  EKind			kind,
+					  EEntityKind	kind,
 					  uint64		newMemorySize)	noexcept;
 			Archetype(Archetype const&)				= delete;
 			Archetype(Archetype&&)					= delete;

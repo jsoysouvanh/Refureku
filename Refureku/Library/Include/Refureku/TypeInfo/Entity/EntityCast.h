@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#include "Refureku/TypeInfo/Entity.h"
+#include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Variables/Variable.h"
 #include "Refureku/TypeInfo/Variables/Field.h"
 #include "Refureku/TypeInfo/Variables/StaticField.h"
@@ -38,7 +38,7 @@ namespace rfk
 		*	
 		*	@return The casted entity if the entity concrete type was correct, else nullptr.
 		*/
-		template <typename T, Entity::EKind CheckKind, typename = isValidEntityType<T>>
+		template <typename T, EEntityKind CheckKind, typename = isValidEntityType<T>>
 		T const* entityCast(Entity const* entity) noexcept;
 	}
 
@@ -100,5 +100,5 @@ namespace rfk
 	template <>
 	Function const*				entityCast<Function, void>(Entity const* entity)				noexcept;
 
-	#include "Refureku/TypeInfo/EntityCast.inl"
+	#include "Refureku/TypeInfo/Entity/EntityCast.inl"
 }

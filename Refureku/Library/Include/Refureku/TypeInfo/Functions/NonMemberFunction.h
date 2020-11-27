@@ -39,6 +39,11 @@ namespace rfk
 
 			~NonMemberFunction() = default;
 
+			inline FunctionPrototype getFunctionHandle() const noexcept
+			{
+				return _function;
+			}
+
 			inline ReturnType operator()(ArgTypes&&... args) const noexcept
 			{
 				return _function(std::forward<ArgTypes>(args)...);

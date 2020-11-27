@@ -9,10 +9,11 @@
 
 #include <Kodgen/Object.h>
 
-#include "Refureku/TypeInfo/Archetypes/Struct.h"
-
 namespace rfk
 {
+	//Forward declaration
+	class Struct;
+
 	/**
 	*	Base class which implements the virtual getArchetype method.
 	*/
@@ -24,6 +25,6 @@ namespace rfk
 			Object(Object&&)		= default;
 			virtual ~Object()		= default;
 
-			virtual	Struct const& getArchetype()	const noexcept = 0;
+			virtual	Struct const& getArchetype() const noexcept = 0;
 	};
 }

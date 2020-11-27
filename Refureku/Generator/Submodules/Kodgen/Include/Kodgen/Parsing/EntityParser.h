@@ -37,7 +37,7 @@ namespace kodgen
 			*	
 			*	@param entity The entity to check.
 			*/
-			void	performFinalPropertiesCheck(EntityInfo const& entity)	const	noexcept;
+			void	performFinalPropertiesCheck(EntityInfo& entity)			const	noexcept;
 
 			/**
 			*	@brief Check if the current entity (stored in the current context) should be parsed.

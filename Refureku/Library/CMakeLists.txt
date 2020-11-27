@@ -15,15 +15,12 @@ add_library(${RefurekuLibraryTarget}
 
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
-					Source/TypeInfo/Entity.cpp
-					Source/TypeInfo/EntityCast.cpp
 					Source/TypeInfo/EnumValue.cpp
-					Source/TypeInfo/DefaultEntityRegisterer.cpp
 					Source/TypeInfo/Database.cpp
 
-					Source/TypeInfo/Properties/SimpleProperty.cpp
-					Source/TypeInfo/Properties/ComplexProperty.cpp
-					Source/TypeInfo/Properties/PropertyGroup.cpp
+					Source/TypeInfo/Entity/Entity.cpp
+					Source/TypeInfo/Entity/EntityCast.cpp
+					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
 
 					Source/TypeInfo/Namespaces/Namespace.cpp
 					Source/TypeInfo/Namespaces/NamespaceFragment.cpp
@@ -49,14 +46,28 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Functions/Method.cpp
 					Source/TypeInfo/Functions/StaticMethod.cpp
 					Source/TypeInfo/Functions/FunctionParameter.cpp
+
+					Source/TypeInfo/Properties/Property.cpp
 				)
 
 # Setup compilation flags
 if (MSVC)
-	string(REGEX REPLACE " /W[0-4]" " /W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
-	string(REGEX REPLACE " /GR" " /GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
+	string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
+	string(REGEX REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
+
+	# Use rtti on Property file if specified
+	if (GEN_PROPERTY_RTTI)
+		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS /GR)
+	endif()
+
 else()	# Clang or GCC
 	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fno-rtti)
+
+	# Use rtti on Property file if specified
+	if (GEN_PROPERTY_RTTI)
+		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS -frtti)
+	endif()
+
 endif()
 
 # Setup language requirements

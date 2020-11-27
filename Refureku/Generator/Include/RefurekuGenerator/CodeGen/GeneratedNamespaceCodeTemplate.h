@@ -74,7 +74,7 @@ namespace rfk
 
 		protected:
 			virtual void generateCode(kodgen::GeneratedFile&		generatedFile,
-									  kodgen::EntityInfo const&		entityInfo,
+									  kodgen::EntityInfo&			entityInfo,
 									  kodgen::FileGenerationUnit&	fgu,
 									  std::string&					out_errorDescription)	const noexcept override;
 

@@ -7,22 +7,18 @@
 
 #pragma once
 
-#include <string>
+#include "Kodgen/Properties/Property.h"
 
 namespace kodgen
 {
 	//Forward declaration
 	class SimplePropertyRule;
 
-	class SimpleProperty
+	class SimpleProperty : public Property
 	{
 		public:
-			/** Name of this property. */
-			std::string					mainProperty;
-
 			/** Pointer to the rule which validated this property syntax. */
 			SimplePropertyRule const*	boundPropertyRule	= nullptr;
-
 
 			SimpleProperty()													= default;
 			SimpleProperty(std::string					mainProperty,

@@ -8,21 +8,23 @@
 #include <Kodgen/InfoStructures/NestedEnumInfo.h>
 #include <Kodgen/Misc/FundamentalTypes.h>
 
-#include "RefurekuGenerator/Properties/NativeProperties.h"
+#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenClassFooterData.h"
 #include "RefurekuGenerator/Misc/Helpers.h"
 
 using namespace rfk;
 
-void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo const& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
 {
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, out_errorDescription);
+
 	switch (entityInfo.entityType)
 	{
 		case kodgen::EEntityType::Class:
-			generateClassCode(generatedFile, static_cast<kodgen::StructClassInfo const&>(entityInfo));
+			generateClassCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo));
 			break;
 
 		case kodgen::EEntityType::Struct:
-			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo const&>(entityInfo));
+			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo));
 			break;
 
 		default:
@@ -30,13 +32,13 @@ void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFi
 	}
 }
 
-void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& classInfo) const noexcept
+void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& classInfo) const noexcept
 {
 	std::string mainMacroName					= externalPrefix + classInfo.name + "_GENERATED";
 
 	std::string getTypeMacroName				= generateGetArchetypeMacro(generatedFile, classInfo);
-	std::string defaultInstantiateMacro			= generateDefaultInstantiateMacro(generatedFile, classInfo);
 	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
+	std::string generateNativePropsMacroName	= generateNativePropsMacro(generatedFile, classInfo);
 
 	//Use parsing macro to avoid parsing generated data
 	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
@@ -48,20 +50,20 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 	generatedFile.writeMacro(std::move(mainMacroName),
 							 "friend rfk::Struct;",
 							 "friend rfk::hasField___rfkArchetypeRegisterer<" + classInfo.name + ", rfk::ArchetypeRegisterer>;",
-							 std::move(defaultInstantiateMacro),
 							 std::move(getTypeMacroName),
 							 std::move(generateRegistrationMacroName),
+							 std::move(generateNativePropsMacroName),
 							 "private:");
 
 	generatedFile.writeLine("#endif\n");
 }
 
-void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& structInfo) const noexcept
+void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& structInfo) const noexcept
 {
 	generateClassCode(generatedFile, structInfo);
 }
 
-std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::string					entityId								= getEntityId(info);
 	std::string					getTypeMacroDeclaration					= internalPrefix + entityId + "_GetTypeDeclaration";
@@ -71,6 +73,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 	std::string					generateMethodsMetadataMacroName		= generateMethodsMetadataMacro(generatedFile, info);
 	std::string					generateArchetypePropertiesMacroName	= generateArchetypePropertiesMacro(generatedFile, info);
 	std::string					generatedNestedClassesMetadataMacroName	= generateNestedArchetypesMetadataMacro(generatedFile, info);
+	std::string					generatedInstantiatorMacroName			= generateRegisterDefaultInstantiator(generatedFile, info);
 
 	std::string returnedType = (info.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 	
@@ -104,6 +107,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 								"			" + std::move(generateParentsMetadataMacroName),
 								"			" + std::move(generatedNestedClassesMetadataMacroName),
 								"			" + std::move(generateFieldsMetadataMacroName[0]),
+								"			" + std::move(generatedInstantiatorMacroName),
 								"			" + std::move(generateMethodsMetadataMacroName),
 								"		}",
 								"	",
@@ -125,7 +129,7 @@ std::string GeneratedClassCodeTemplate::generateArchetypePropertiesMacro(kodgen:
 	return macroName;
 }
 
-std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::string macroName = internalPrefix + getEntityId(info) + "_GenerateMethodsMetadata";
 
@@ -133,77 +137,88 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 
 	if (!info.methods.empty())
 	{
-		generatedFile.writeLine("	std::unordered_multiset<rfk::Method, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			methodsIt;\t\\");
-		generatedFile.writeLine("	std::unordered_multiset<rfk::StaticMethod, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticMethodsIt;\t\\");
-		generatedFile.writeLine("	rfk::MethodBase*																						currMethod = nullptr;\t\\");
+		generatedFile.writeLine("\t[[maybe_unused]] rfk::Method*		method			= nullptr;\t\\");
+		generatedFile.writeLine("\t[[maybe_unused]] rfk::StaticMethod*	staticMethod	= nullptr;\t\\");
 	}
 
-	std::string properties;
-	for (kodgen::MethodInfo const& method : info.methods)
+	std::string generatedCode;
+	std::string currentMethodVariable;
+	for (kodgen::MethodInfo& method : info.methods)
 	{
 		if (method.isStatic)
 		{
-			generatedFile.writeLine("	staticMethodsIt = type.staticMethods.emplace(\"" + method.name + "\", " +
+			generatedFile.writeLine("\tstaticMethod = type.addStaticMethod(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
-			//Check if this static method is a custom instantiator, in which case we should add it to the list of custom instantiators of this class
-			if (std::find_if(method.properties.simpleProperties.cbegin(), method.properties.simpleProperties.cend(), [](kodgen::SimpleProperty const& sp){ return sp.mainProperty == NativeProperties::customInstantiatorProperty; })
-					!= method.properties.simpleProperties.cend())
-			{
-				generatedFile.writeLine("	type.__RFKaddCustomInstantiator<" + method.returnType.getCanonicalName() + ">(&*staticMethodsIt);\t\\");
-			}
-
-			generatedFile.writeLine("	currMethod = const_cast<rfk::StaticMethod*>(&*staticMethodsIt);\t\\");
+			currentMethodVariable = "staticMethod";
 		}
 		else
 		{
-			generatedFile.writeLine("	methodsIt = type.methods.emplace(\"" + method.name + "\", " +
+			generatedFile.writeLine("\tmethod = type.addMethod(\"" + method.name + "\", " +
 									std::to_string(stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::MemberFunction<" + info.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + getFullMethodPrototype(info, method) + ">(& " + info.name + "::" + method.name + ")), "
 									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeMethodFlags(method)) + "));\t\\");
 
-			generatedFile.writeLine("	currMethod = const_cast<rfk::Method*>(&*methodsIt);\t\\");
+			currentMethodVariable = "method";
 		}
-
-		//Add properties
-		properties = fillEntityProperties(method, "currMethod->");
-		if (!properties.empty())
-			generatedFile.writeLine("	" + properties + "\t\\");
-
-		//Setup the outer entity
-		generatedFile.writeLine("	currMethod->outerEntity = &type;\t\\");
 
 		//Setup parameters
 		if (!method.parameters.empty())
 		{
-			generatedFile.writeLine("	currMethod->parameters.reserve(" + std::to_string(method.parameters.size()) + ");\t\\");
+			//Add all parameters in a single string
+			generatedCode = "\t" + currentMethodVariable + "->parameters.reserve(" + std::to_string(method.parameters.size()) + "); " + currentMethodVariable;
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
-				generatedFile.writeLine("	currMethod->parameters.emplace_back(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">());\t\\");
+				generatedCode += "->addParameter(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">())";
+			}
+
+			//Write generated parameters string to file
+			generatedFile.writeLine(generatedCode + ";\t\\");
+		}
+
+		//Add properties after the method has been fully setup
+		//Parameters have been added at this point, so properties generated code can safely add additional checks
+		if (method.isStatic)
+		{
+			//Add method properties
+			method.properties.removeStartAndTrailSpaces();
+			generatedCode = fillEntityProperties(method, "staticMethod->");
+			if (!generatedCode.empty())
+				generatedFile.writeLine("	" + generatedCode + "\t\\");
+		}
+		else
+		{
+			//Add method properties
+			method.properties.removeStartAndTrailSpaces();
+			generatedCode = fillEntityProperties(method, "method->");
+			if (!generatedCode.empty())
+				generatedFile.writeLine("\t" + generatedCode + "\t\\");
+
+			//Base method properties must be inherited AFTER this method properties have been added
+			if (method.isOverride)
+			{
+				generatedFile.writeLine("\tmethod->inheritBaseMethodProperties();\t\\");
 			}
 		}
 	}
-
-	//Add required methods (instantiate....)
-	generatedFile.writeLine("	type.__RFKaddRequiredMethods<" + info.name + ">();\t\\");
 
 	generatedFile.writeLine("");
 
 	return macroName;
 }
 
-std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::array<std::string, 2> macroNames = { internalPrefix + getEntityId(info) + "_GenerateFieldsMetadata" };
 
 	generatedFile.writeLine("#define " + macroNames[0] + "\t\\");
 
-	generatedFile.writeLine("	__RFKregisterChild<" + info.name + ">(&type);\t\\");
+	generatedFile.writeLine("	registerChild<" + info.name + ">(&type);\t\\");
 	generatedFile.writeLine("");
 
 	//Wrap this part in a method so that children classes can use it too
@@ -212,7 +227,7 @@ std::array<std::string, 2> GeneratedClassCodeTemplate::generateFieldsMetadataMac
 	return macroNames;
 }
 
-std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	std::string macroName = internalPrefix + getEntityId(info) + "_GenerateFieldHelperMethods";
 
@@ -220,21 +235,21 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 	generatedFile.writeLines("#define " + macroName + "\t\\",
 							"private:\t\\",
 							 "	template <typename ParentType, typename ChildType>\t\\",
-							 "	static constexpr void __RFKrecurseRegisterChild([[maybe_unused]] rfk::Struct* childArchetype)\t\\",
+							 "	static constexpr void recurseRegisterChild([[maybe_unused]] rfk::Struct* childArchetype)\t\\",
 							 "	{\t\\",
 							 "		if constexpr (rfk::isReflectedClass<ParentType>)\t\\",
 							 "		{\t\\",
-							 "			ParentType::template __RFKregisterChild<ChildType>(childArchetype);\t\\",
+							 "			ParentType::template registerChild<ChildType>(childArchetype);\t\\",
 							 "		}\t\\",
 							 "	}\t\\",
 							 "public:\t\\",
 							 "	template <typename ChildType>\t\\",
-							 "	static void __RFKregisterChild(rfk::Struct* childArchetype) noexcept\t\\",
+							 "	static void registerChild(rfk::Struct* childArchetype) noexcept\t\\",
 							 "	{\t\\");
 
 	for (kodgen::StructClassInfo::ParentInfo const& parent : info.parents)
 	{
-		generatedFile.writeLine("		__RFKrecurseRegisterChild<" + parent.type.getName(true) + ", ChildType>(childArchetype);\t\\");
+		generatedFile.writeLine("		recurseRegisterChild<" + parent.type.getName(true) + ", ChildType>(childArchetype);\t\\");
 	}
 
 	//Add a child to list of children
@@ -248,50 +263,46 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 
 	if (hasFields)
 	{
-		generatedFile.writeLine("		std::unordered_multiset<rfk::Field, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator			fieldsIt;\t\\");
-		generatedFile.writeLine("		std::unordered_multiset<rfk::StaticField, rfk::Entity::NameHasher, rfk::Entity::EqualName>::iterator	staticFieldsIt;\t\\");
-		generatedFile.writeLine("		rfk::FieldBase*																							currField = nullptr;\t\\");
+		generatedFile.writeLine("		[[maybe_unused]] rfk::Field*		field		= nullptr; \t\\");
+		generatedFile.writeLine("		[[maybe_unused]] rfk::StaticField*	staticField = nullptr; \t\\");
+
 		generatedFile.writeLines("		__RFK_DISABLE_WARNING_PUSH\t\\",
 								 "		__RFK_DISABLE_WARNING_OFFSETOF\t\\");
-	}
 
-	std::string properties;
-	for (kodgen::FieldInfo const& field : info.fields)
-	{
-		if (field.isStatic)
+		std::string properties;
+		std::string currentFieldVariable;
+		for (kodgen::FieldInfo& field : info.fields)
 		{
-			generatedFile.writeLine("		staticFieldsIt = childArchetype->staticFields.emplace(\"" + field.name + "\", " +
-											std::to_string(stringHasher(field.id)) + "u, "
-											"rfk::Type::getType<" + field.type.getName() + ">(), "
-											"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
-											"childArchetype, "
-											"&" + info.name + "::" + field.name + ");\t\\");
+			if (field.isStatic)
+			{
+				generatedFile.writeLine("		staticField = childArchetype->addStaticField(\"" + field.name + "\", " +
+										std::to_string(stringHasher(field.id)) + "u, "
+										"rfk::Type::getType<" + field.type.getName() + ">(), "
+										"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
+										"&thisArchetype, "
+										"&" + info.name + "::" + field.name + ");\t\\");
 
-			generatedFile.writeLine("		currField = const_cast<rfk::StaticField*>(&*staticFieldsIt);\t\\");
+				currentFieldVariable = "staticField->";
+			}
+			else
+			{
+				generatedFile.writeLine("		field = childArchetype->addField(\"" + field.name + "\", " +
+										std::to_string(stringHasher(field.id)) + "u, "
+										"rfk::Type::getType<" + field.type.getName() + ">(), "
+										"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
+										"&thisArchetype, "
+										"offsetof(ChildType, " + field.name + "));\t\\");
+
+				currentFieldVariable = "field->";
+			}
+
+			//Add properties
+			field.properties.removeStartAndTrailSpaces();
+			properties = fillEntityProperties(field, currentFieldVariable);
+			if (!properties.empty())
+				generatedFile.writeLine("	" + properties + "\t\\");
 		}
-		else
-		{
-			generatedFile.writeLine("		fieldsIt = childArchetype->fields.emplace(\"" + field.name + "\", " +
-											std::to_string(stringHasher(field.id)) + "u, "
-											"rfk::Type::getType<" + field.type.getName() + ">(), "
-											"static_cast<rfk::EFieldFlags>(" + std::to_string(computeFieldFlags(field)) + "), "
-											"childArchetype, "
-											"offsetof(ChildType, " + field.name + "));\t\\");
 
-			generatedFile.writeLine("		currField = const_cast<rfk::Field*>(&*fieldsIt);\t\\");
-		}
-
-		//Add properties
-		properties = fillEntityProperties(field, "	currField->");
-		if (!properties.empty())
-			generatedFile.writeLine("	" + properties + "\t\\");
-
-		//Setup the outer entity
-		generatedFile.writeLine("		currField->outerEntity = &thisArchetype;\t\\");
-	}
-
-	if (hasFields)
-	{
 		generatedFile.writeLine("		__RFK_DISABLE_WARNING_POP\t\\");
 	}
 
@@ -313,7 +324,7 @@ std::string GeneratedClassCodeTemplate::generateParentsMetadataMacro(kodgen::Gen
 
 		for (kodgen::StructClassInfo::ParentInfo parent : info.parents)
 		{
-			generatedFile.writeLine("	type.__RFKaddToParents<" + parent.type.getName(true) + ">(static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
+			generatedFile.writeLine("	type.addToParents<" + parent.type.getName(true) + ">(static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));\t\\");
 		}
 
 		generatedFile.writeLine("");
@@ -325,7 +336,7 @@ std::string GeneratedClassCodeTemplate::generateParentsMetadataMacro(kodgen::Gen
 	return std::string();
 }
 
-std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
 {
 	kodgen::uint64 nestedArchetypesCount = info.nestedStructs.size() + info.nestedClasses.size() + info.nestedEnums.size();
 
@@ -339,7 +350,7 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 
 	generatedFile.writeLine("#define " + macroName + "\t\\");
 
-	generatedFile.writeLine("	std::pair<decltype(type.nestedArchetypes)::iterator, bool> it;\t\\");
+	generatedFile.writeLine("	rfk::Archetype* archetype = nullptr;\t\\");
 
 	//Reserve memory first
 	generatedFile.writeLine("	type.nestedArchetypes.reserve(" + std::to_string(nestedArchetypesCount) + ");\t\\");
@@ -347,28 +358,34 @@ std::string GeneratedClassCodeTemplate::generateNestedArchetypesMetadataMacro(ko
 	//Add nested structs
 	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStruct : info.nestedStructs)
 	{
-		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(&" + nestedStruct->name + "::staticGetArchetype());\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + ");\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
+		generatedFile.writeLine("	archetype = type.addNestedArchetype(&" + nestedStruct->name + "::staticGetArchetype(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + "));\t\\");
 	}
 
 	//Add nested classes
 	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedClass : info.nestedClasses)
 	{
-		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(&" + nestedClass->name + "::staticGetArchetype());\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + ");\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
+		generatedFile.writeLine("	archetype = type.addNestedArchetype(&" + nestedClass->name + "::staticGetArchetype(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + "));\t\\");
 	}
 
 	//Add nested enums
 	for (kodgen::NestedEnumInfo const& nestedEnum : info.nestedEnums)
 	{
-		generatedFile.writeLine("	it = type.nestedArchetypes.emplace(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->accessSpecifier = static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + ");\t\\");
-		generatedFile.writeLine("	const_cast<rfk::Archetype*>((*it.first))->outerEntity = &type;\t\\");
+		generatedFile.writeLine("	archetype = type.addNestedArchetype(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));\t\\");
 	}
 
 	generatedFile.writeLine("");
+
+	return macroName;
+}
+
+std::string GeneratedClassCodeTemplate::generateRegisterDefaultInstantiator(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
+{
+	std::string macroName = internalPrefix + getEntityId(info) + "_GenerateDefaultInstantiatorSetup";
+
+	generatedFile.writeMacro(std::string(macroName), "type.setDefaultInstantiator(&rfk::defaultInstantiator<" + info.name + ">);");
 
 	return macroName;
 }
@@ -468,24 +485,6 @@ std::string GeneratedClassCodeTemplate::getFullMethodPrototype(kodgen::StructCla
 	return result;
 }
 
-std::string GeneratedClassCodeTemplate::generateDefaultInstantiateMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
-{
-	std::string macroName = internalPrefix + getEntityId(info) + "_DefaultInstantiateDefinition";
-
-	generatedFile.writeMacro(std::string(macroName),
-								"private:",
-								"	template <typename T>",
-								"	static void* __RFKinstantiate() noexcept",
-								"	{",
-								"		if constexpr (std::is_default_constructible_v<T>)",
-								"			return new T();",
-								"		else",
-								"			return nullptr;",
-								"	}");
-
-	return macroName;
-}
-
 std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
 {
 	std::string macroName = internalPrefix + getEntityId(info) + "_RegisterArchetype";
@@ -502,4 +501,47 @@ std::string GeneratedClassCodeTemplate::generateRegistrationMacro(kodgen::Genera
 	generatedFile.writeLine("");
 
 	return macroName;
+}
+
+std::string GeneratedClassCodeTemplate::generateNativePropsMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo const& info) const noexcept
+{
+	std::string						macroName = internalPrefix + getEntityId(info) + "_NativeProperties";
+	std::string						generatedCode;
+	PropertyCodeGenClassFooterData	data;
+
+	//Find all native properties in entities nested directly in this class
+	//Self properties
+	generatedCode += generateNativePropertiesCode(info, &data);
+	
+	//Fields
+	for (kodgen::EntityInfo const& entityInfo : info.fields)
+	{
+		generatedCode += generateNativePropertiesCode(entityInfo, &data);
+	}
+
+	//Methods
+	for (kodgen::EntityInfo const& entityInfo : info.methods)
+	{
+		generatedCode += generateNativePropertiesCode(entityInfo, &data);
+	}
+
+	//Nested enums
+	for (kodgen::EntityInfo const& entityInfo : info.nestedEnums)
+	{
+		generatedCode += generateNativePropertiesCode(entityInfo, &data);
+	}
+
+	//Don't generate native properties code for nested structs and classes as it will be generated in their own footer
+
+	if (generatedCode.empty())
+	{
+		//Don't generate the macro if there's no generated code
+		return "";
+	}
+	else
+	{
+		generatedFile.writeMacro(std::string(macroName), std::move(generatedCode), "");
+
+		return macroName;
+	}
 }

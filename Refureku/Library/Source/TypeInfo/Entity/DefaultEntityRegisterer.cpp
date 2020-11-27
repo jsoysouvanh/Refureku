@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/DefaultEntityRegisterer.h"
+#include "Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h"
 
 #include "Refureku/TypeInfo/Database.h"
 

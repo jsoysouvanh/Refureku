@@ -3,7 +3,7 @@
 using namespace kodgen;
 
 ComplexProperty::ComplexProperty(std::string mainProperty, ComplexPropertyRule const* matchingPropertyRule) noexcept:
-	mainProperty{std::move(mainProperty)},
+	Property(std::move(mainProperty)),
 	boundPropertyRule{matchingPropertyRule}
 {
 }

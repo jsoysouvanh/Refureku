@@ -18,10 +18,10 @@ namespace rfk
 	class GeneratedClassCodeTemplate : public GeneratedEntityCodeTemplate
 	{
 		private:
-			void						generateClassCode(kodgen::GeneratedFile&			generatedFile,
-														  kodgen::StructClassInfo const&	classInfo)						const	noexcept;
-			void						generateStructCode(kodgen::GeneratedFile&			generatedFile,
-														   kodgen::StructClassInfo const&	structInfo)						const	noexcept;
+			void						generateClassCode(kodgen::GeneratedFile&	generatedFile,
+														  kodgen::StructClassInfo&	classInfo)								const	noexcept;
+			void						generateStructCode(kodgen::GeneratedFile&	generatedFile,
+														   kodgen::StructClassInfo&	structInfo)								const	noexcept;
 
 			kodgen::uint16				computeMethodFlags(kodgen::MethodInfo const& method)								const	noexcept;
 			kodgen::uint16				computeFieldFlags(kodgen::FieldInfo const& field)									const	noexcept;
@@ -37,7 +37,7 @@ namespace rfk
 			*	@return The name of the generated macro.
 			*/
 			std::string					generateGetArchetypeMacro(kodgen::GeneratedFile&			generatedFile,
-																  kodgen::StructClassInfo const&	info)					const	noexcept;
+																  kodgen::StructClassInfo&	info)							const	noexcept;
 			
 			/**
 			*	@brief Generate the macro containing the properties definition of this struct/class.
@@ -51,17 +51,6 @@ namespace rfk
 																		 kodgen::EntityInfo const&	info)					const	noexcept;
 			
 			/**
-			*	@brief Generate the macro containing the default instantiation definition of this struct/class.
-			*
-			*	@param generatedFile	File to write into.
-			*	@param info				Struct/Class info.
-			*
-			*	@return The name of the generated macro.
-			*/
-			std::string					generateDefaultInstantiateMacro(kodgen::GeneratedFile&			generatedFile,
-																		kodgen::StructClassInfo const&	info)				const	noexcept;
-			
-			/**
 			*	@brief Generate the macro containing the database registration logic.
 			*
 			*	@param generatedFile	File to write into.
@@ -73,6 +62,17 @@ namespace rfk
 																  kodgen::StructClassInfo const&	info)					const	noexcept;
 			
 			/**
+			*	@brief Generate the macro containing all the code relative to native properties used within this class.
+			*	
+			*	@param generatedFile	File to write into.
+			*	@param info				Struct/Class info.
+			*	
+			*	@return The name of the generated macro.
+			*/
+			std::string					generateNativePropsMacro(kodgen::GeneratedFile&			generatedFile,
+																 kodgen::StructClassInfo const&	info)						const	noexcept;
+
+			/**
 			*	@brief Generate the macro containing the parents definition.
 			*
 			*	@param generatedFile	File to write into.
@@ -81,7 +81,7 @@ namespace rfk
 			*	@return The name of the generated macro.
 			*/
 			std::string					generateParentsMetadataMacro(kodgen::GeneratedFile&			generatedFile,
-																	 kodgen::StructClassInfo const&	info)					const	noexcept;
+																	 kodgen::StructClassInfo const&	info)				const	noexcept;
 			
 			/**
 			*	@brief Generate the macro containing the nested structs/classes/enums definition.
@@ -92,7 +92,18 @@ namespace rfk
 			*	@return The name of the generated macro.
 			*/
 			std::string					generateNestedArchetypesMetadataMacro(kodgen::GeneratedFile&			generatedFile,
-																			  kodgen::StructClassInfo const&	info)		const	noexcept;
+																			  kodgen::StructClassInfo&	info)			const	noexcept;
+
+			/**
+			*	@brief Generate the macro containing the default instantiator setup.
+			*
+			*	@param generatedFile	File to write into.
+			*	@param info				Struct/Class info.
+			*
+			*	@return The name of the generated macro.
+			*/
+			std::string					generateRegisterDefaultInstantiator(kodgen::GeneratedFile&		generatedFile,
+																			kodgen::StructClassInfo&	info)			const	noexcept;
 
 			/**
 			*	@brief Generate the (2) macros containing fields definition.
@@ -102,8 +113,8 @@ namespace rfk
 			*
 			*	@return The names of the (2) generated macros.
 			*/
-			std::array<std::string, 2>	generateFieldsMetadataMacros(kodgen::GeneratedFile&			generatedFile,
-																	 kodgen::StructClassInfo const&	info)					const	noexcept;
+			std::array<std::string, 2>	generateFieldsMetadataMacros(kodgen::GeneratedFile&		generatedFile,
+																	 kodgen::StructClassInfo&	info)					const	noexcept;
 			
 			/**
 			*	@brief Generate the macro containing the methods definition.
@@ -113,8 +124,8 @@ namespace rfk
 			*
 			*	@return The name of the generated macro.
 			*/
-			std::string					generateMethodsMetadataMacro(kodgen::GeneratedFile&			generatedFile,
-																	 kodgen::StructClassInfo const&	info)					const	noexcept;
+			std::string					generateMethodsMetadataMacro(kodgen::GeneratedFile&		generatedFile,
+																	 kodgen::StructClassInfo&	info)					const	noexcept;
 			
 			/**
 			*	@brief Generate the macro containing field inheritance function definition.
@@ -124,12 +135,12 @@ namespace rfk
 			*
 			*	@return The name of the generated macro.
 			*/
-			std::string					generateFieldHelperMethodsMacro(kodgen::GeneratedFile&			generatedFile,
-																		 kodgen::StructClassInfo const&	info)				const	noexcept;
+			std::string					generateFieldHelperMethodsMacro(kodgen::GeneratedFile&		generatedFile,
+																		 kodgen::StructClassInfo&	info)				const	noexcept;
 
 		protected:
 			virtual void generateCode(kodgen::GeneratedFile&		generatedFile,
-									  kodgen::EntityInfo const&		entityInfo,
+									  kodgen::EntityInfo&			entityInfo,
 									  kodgen::FileGenerationUnit&	fgu,
 									  std::string&					out_errorDescription)	const noexcept override;
 

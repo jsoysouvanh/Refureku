@@ -4,7 +4,7 @@
 
 #include "Generated/ExampleClass2.rfk.h"
 
-namespace namespace3 RFKNamespace()
+namespace namespace3 RFKNamespace(ParseAllNested)
 {
 	class RFKClass(ParseAllNested) AnotherClassInNamespace3
 	{
