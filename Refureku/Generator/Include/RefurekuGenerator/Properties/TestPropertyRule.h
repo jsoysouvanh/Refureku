@@ -1,13 +1,30 @@
 #pragma once
 
-#include <Kodgen/Properties/DefaultComplexPropertyRule.h>
+#include "RefurekuGenerator/Properties/DefaultComplexPropertyRule.h"
 
-class TestPropertyRule : public kodgen::DefaultComplexPropertyRule
+class TestPropertyRule : public rfk::DefaultComplexPropertyRule
 {
+	protected:
+		virtual std::string generateFileHeaderCode(kodgen::EntityInfo const&			entity,
+												   kodgen::ComplexProperty const&		property,
+												   rfk::PropertyCodeGenFileHeaderData&	data)				const noexcept override;
+
+		virtual std::string generatePrePropertyAddCode(kodgen::EntityInfo const&			entity,
+													   kodgen::ComplexProperty const&		property,
+													   rfk::PropertyCodeGenPropertyAddData&	data)			const noexcept override;
+
+		virtual std::string generatePostPropertyAddCode(kodgen::EntityInfo const&				entity,
+														kodgen::ComplexProperty const&			property,
+														rfk::PropertyCodeGenPropertyAddData&	data)		const noexcept override;
+
+		virtual std::string generateClassFooterCode(kodgen::EntityInfo const&				entity,
+													kodgen::ComplexProperty const&			property,
+													rfk::PropertyCodeGenClassFooterData&	data)			const noexcept override;
+
+		virtual std::string generateFileFooterCode(kodgen::EntityInfo const&			entity,
+												   kodgen::ComplexProperty const&		property,
+												   rfk::PropertyCodeGenFileFooterData&	data)				const noexcept override;
+
 	public:
 		TestPropertyRule() noexcept;
-
-		virtual std::string	generateCode(kodgen::EntityInfo const&	entity,
-										 kodgen::Property const&	property,
-										 void*						userData) const	noexcept override;
 };

@@ -1,36 +1,33 @@
 #include "RefurekuGenerator/Properties/TestPropertyRule.h"
 
-#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenData.h"
-#include "RefurekuGenerator/Properties/CodeGenData/PropertyCodeGenPropertyAddData.h"
-
 using namespace rfk;
 
 TestPropertyRule::TestPropertyRule() noexcept:
-	kodgen::DefaultComplexPropertyRule("TestProperty", (kodgen::EEntityType)~0)
+	DefaultComplexPropertyRule("TestProperty", (kodgen::EEntityType)~0) //~0 means all entity types
 {
 }
 
-std::string	TestPropertyRule::generateCode(kodgen::EntityInfo const& /* entity */, kodgen::Property const& /* property */, void* userData) const noexcept
+std::string TestPropertyRule::generateFileHeaderCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& /* property */, PropertyCodeGenFileHeaderData& /* data */) const noexcept
 {
-	PropertyCodeGenData* data = reinterpret_cast<PropertyCodeGenData*>(userData);
+	return "/* FileHeader */";
+}
 
-	switch (data->getCodeGenLocation())
-	{
-		case ECodeGenLocation::FileHeader:
-			return "/* FileHeader */";
+std::string TestPropertyRule::generatePrePropertyAddCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& /* property */,  PropertyCodeGenPropertyAddData& data) const noexcept
+{
+	return "/* PrePropertyAdd  " + data.accessEntityVariable() + " : " + data.accessPropertyVariable() + " */";
+}
 
-		case ECodeGenLocation::PrePropertyAdd:
-			return "/* PrePropertyAdd  " + reinterpret_cast<PropertyCodeGenPropertyAddData*>(userData)->accessEntityVariable() + " : " + reinterpret_cast<PropertyCodeGenPropertyAddData*>(userData)->accessPropertyVariable() + " */";
+std::string TestPropertyRule::generatePostPropertyAddCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& /* property */,  PropertyCodeGenPropertyAddData& data) const noexcept
+{
+	return "/* PostPropertyAdd " + data.accessEntityVariable() + " : " + data.accessPropertyVariable() + " */";
+}
 
-		case ECodeGenLocation::PostPropertyAdd:
-			return "/* PostPropertyAdd " + reinterpret_cast<PropertyCodeGenPropertyAddData*>(userData)->accessEntityVariable() + " : " + reinterpret_cast<PropertyCodeGenPropertyAddData*>(userData)->accessPropertyVariable() + " */";
+std::string TestPropertyRule::generateClassFooterCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& /* property */, PropertyCodeGenClassFooterData& /* data */) const noexcept
+{
+	return "/* ClassFooter */";
+}
 
-		case ECodeGenLocation::ClassFooter:
-			return "/* ClassFooter */";
-
-		case ECodeGenLocation::FileFooter:
-			return "/* FileFooter */";
-	}
-
-	return "/* WHAT???? */";
+std::string TestPropertyRule::generateFileFooterCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& /* property */, PropertyCodeGenFileFooterData& data) const noexcept
+{
+	return "/* FileFooter */";
 }
