@@ -8,8 +8,9 @@ Generated/
 enc_temp_folder/
 out/
 
-#Internal file settings
+#Internal files
 LibraryGenerationSettings.toml
+build.bat
 
 #Settings
 *.json

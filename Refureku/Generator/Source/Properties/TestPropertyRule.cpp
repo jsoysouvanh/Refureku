@@ -27,7 +27,7 @@ std::string TestPropertyRule::generateClassFooterCode(kodgen::EntityInfo const& 
 	return "/* ClassFooter */";
 }
 
-std::string TestPropertyRule::generateFileFooterCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& /* property */, PropertyCodeGenFileFooterData& data) const noexcept
+std::string TestPropertyRule::generateFileFooterCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& /* property */, PropertyCodeGenFileFooterData& /* data */) const noexcept
 {
 	return "/* FileFooter */";
 }
