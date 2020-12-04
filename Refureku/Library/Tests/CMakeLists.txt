@@ -13,6 +13,7 @@ add_executable(${RefurekuTestsTarget}
 					CustomString.cpp
 					ThirdPartyEnumReflectionCode.cpp
 					Test.cpp
+					GeneratedCodeInCpp.cpp
 
 					RefurekuTests.cpp
 				)
