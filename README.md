@@ -37,7 +37,7 @@ It allows to retrieve information on namespaces, structs/classes, fields, method
 ## Getting started
 **Pre-built binaries for Windows x64 are available [here](https://github.com/jsoysouvanh/Refureku/releases). If you want to use those, you can skip to step 3 (this is true for the [Library Integration part](#library-integration) as well as the [Parser/Generator Integration part](#parsergenerator-integration).**
 
-**Refureku integration examples are available [here](https://github.com/jsoysouvanh/Refureku/tree/master/Refureku/Examples).**
+**Refureku integration examples are available [here](https://github.com/jsoysouvanh/RefurekuIntegration).**
 
 ### Requirements:
 - CMake 3.15.0+ (if you build the library from source).
