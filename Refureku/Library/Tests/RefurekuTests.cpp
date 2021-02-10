@@ -405,7 +405,7 @@ void inheritance()
 	TEST(pc2.isBaseOf(ec));
 	TEST(!pc2.isBaseOf(oc));
 
-	//InheritsFrom
+	//isSubclassOf
 	TEST(!ppc.isSubclassOf(ppc));
 	TEST(!ppc.isSubclassOf(pc));
 	TEST(!ppc.isSubclassOf(pc2));

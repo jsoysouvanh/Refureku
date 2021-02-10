@@ -6,7 +6,6 @@
 
 using namespace rfk;
 
-std::string const				FileGenerationUnit::_endFileMacroName		= "File_GENERATED";
 std::string const				FileGenerationUnit::_nativePropsMacroName	= std::string(_internalPrefix) + "NativeProperties_GENERATED";
 std::hash<std::string> const	FileGenerationUnit::_stringHasher;
 
@@ -19,6 +18,11 @@ void FileGenerationUnit::postGenerateFile(kodgen::FileParsingResult& /* parsingR
 	_generatedFunctions.clear();
 
 	_entitiesUsingNativeProperties.clear();
+}
+
+std::string FileGenerationUnit::getEndFileMacroName() const noexcept
+{
+	return "File_GENERATED";
 }
 
 void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult& parsingResult) const noexcept
@@ -45,7 +49,7 @@ void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FilePa
 	file.undefMacro(_nativePropsMacroName);
 	generateNativePropertiesCode(file, parsingResult);
 
-	file.undefMacro(_endFileMacroName);
+	file.undefMacro(getEndFileMacroName());
 	generateEndFileMacro(file);
 }
 
@@ -123,7 +127,7 @@ bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFil
 
 void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept
 {
-	file.writeLine("#define " + _endFileMacroName + "\t\\");
+	file.writeLine("#define " + getEndFileMacroName() + "\t\\");
 
 	//Enum first because structs/classes and namespaces can have nested (and then reference to) enums
 	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)

@@ -32,13 +32,35 @@ void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFi
 	}
 }
 
+std::string GeneratedClassCodeTemplate::generateCustomCodeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
+{
+	/**
+	EXAMPLE: Generate a public method called customCode() in every class
+	
+	std::string macroName = internalPrefix + getEntityId(info) + "_ThisIsATest";
+	
+	generatedFile.writeMacro(std::string(macroName),
+							"public: void customCode(){}");
+	
+	return macroName;
+	*/
+
+	return "";
+}
+
+std::string GeneratedClassCodeTemplate::getMainMacroName(kodgen::StructClassInfo& info) const noexcept
+{
+	return externalPrefix + info.name + "_GENERATED";
+}
+
 void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& classInfo) const noexcept
 {
-	std::string mainMacroName					= externalPrefix + classInfo.name + "_GENERATED";
+	std::string mainMacroName					= getMainMacroName(classInfo);
 
 	std::string getTypeMacroName				= generateGetArchetypeMacro(generatedFile, classInfo);
 	std::string generateRegistrationMacroName	= generateRegistrationMacro(generatedFile, classInfo);
 	std::string generateNativePropsMacroName	= generateNativePropsMacro(generatedFile, classInfo);
+	std::string generateCustomCodeMacroName		= generateCustomCodeMacro(generatedFile, classInfo);
 
 	//Use parsing macro to avoid parsing generated data
 	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
@@ -53,6 +75,7 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 							 std::move(getTypeMacroName),
 							 std::move(generateRegistrationMacroName),
 							 std::move(generateNativePropsMacroName),
+							 std::move(generateCustomCodeMacroName),
 							 "private:");
 
 	generatedFile.writeLine("#endif\n");

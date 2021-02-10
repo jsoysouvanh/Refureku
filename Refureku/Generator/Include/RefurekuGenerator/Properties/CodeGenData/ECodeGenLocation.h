@@ -15,7 +15,7 @@ namespace rfk
 		*	Code will be generated in the generated file (without macro),
 		*	so it will be injected as soon as the generated file is included.
 		*/
-		FileHeader = 0,
+		FileHeader = 0,	//TODO: Rename in HeaderFileHeader
 
 		/**
 		*	Code will be inserted just before the property is added to the entity.
@@ -35,6 +35,11 @@ namespace rfk
 		/**
 		*	Code will be inserted in the File_GENERATED macro (at the very end of a file).
 		*/
-		FileFooter
+		FileFooter,	//TODO: Rename in HeaderFileFooter
+
+		/**
+		*	Code will be inserted in the macro going just after the include in a source file.
+		*/
+		//SourceFileHeader
 	};
 }

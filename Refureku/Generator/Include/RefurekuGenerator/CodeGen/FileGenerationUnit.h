@@ -21,9 +21,6 @@ namespace rfk
 			/** Prefix used to build internal macros. Must match with GeneratedEntityCodeTemplate::internalPrefix. */
 			static constexpr char const* const			_internalPrefix		= "__RFK";
 
-			/** Name of the end file macro. */
-			static std::string const					_endFileMacroName;
-
 			/** Name of the macro containing all native properties generated code. */
 			static std::string const					_nativePropsMacroName;
 
@@ -72,37 +69,42 @@ namespace rfk
 											  kodgen::FileParsingResult const&	parsingResult)	const	noexcept;
 
 		protected:
-			virtual void postGenerateFile(kodgen::FileParsingResult& parsingResult)							noexcept override;
+			/**
+			*	@return The name of the macro generated for the footer of each generated file.
+			*/
+			virtual std::string		getEndFileMacroName()														const	noexcept;
 
-			virtual void writeHeader(kodgen::GeneratedFile&				file,
-									 kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
+			virtual void			postGenerateFile(kodgen::FileParsingResult& parsingResult)							noexcept override;
 
-			virtual void writeFooter(kodgen::GeneratedFile&				file,
-									 kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
+			virtual void			writeHeader(kodgen::GeneratedFile&				file,
+												kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
 
-			virtual bool writeEntityToFile(kodgen::GeneratedFile&			generatedFile,
-										   kodgen::EntityInfo&				entityInfo,
-										   kodgen::FileGenerationResult&	out_genResult)					noexcept override;
+			virtual void			writeFooter(kodgen::GeneratedFile&				file,
+												kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
 
-			virtual bool writeNamespaceToFile(kodgen::GeneratedFile&		generatedFile,
-											  kodgen::EntityInfo&			namespaceInfo,
-											  kodgen::FileGenerationResult&	genResult)						noexcept override;
+			virtual bool			writeEntityToFile(kodgen::GeneratedFile&			generatedFile,
+													  kodgen::EntityInfo&				entityInfo,
+													  kodgen::FileGenerationResult&		out_genResult)					noexcept override;
 
-			virtual bool writeStructOrClassToFile(kodgen::GeneratedFile&		generatedFile,
-												  kodgen::EntityInfo&			structClassInfo,
-												  kodgen::FileGenerationResult&	genResult)					noexcept override;
+			virtual bool			writeNamespaceToFile(kodgen::GeneratedFile&			generatedFile,
+														 kodgen::EntityInfo&			namespaceInfo,
+														 kodgen::FileGenerationResult&	genResult)						noexcept override;
 
-			virtual bool writeEnumToFile(kodgen::GeneratedFile&			generatedFile,
-										 kodgen::EntityInfo&			enumInfo,
-										 kodgen::FileGenerationResult&	genResult)							noexcept override;
+			virtual bool			writeStructOrClassToFile(kodgen::GeneratedFile&			generatedFile,
+															 kodgen::EntityInfo&			structClassInfo,
+															 kodgen::FileGenerationResult&	genResult)					noexcept override;
 
-			virtual bool writeVariableToFile(kodgen::GeneratedFile&			generatedFile,
-											 kodgen::EntityInfo&			variableInfo,
-											 kodgen::FileGenerationResult&	genResult)						noexcept override;
+			virtual bool			writeEnumToFile(kodgen::GeneratedFile&			generatedFile,
+													kodgen::EntityInfo&				enumInfo,
+													kodgen::FileGenerationResult&	genResult)							noexcept override;
 
-			virtual bool writeFunctionToFile(kodgen::GeneratedFile&			generatedFile,
-											 kodgen::EntityInfo&			functionInfo,
-											 kodgen::FileGenerationResult&	genResult)						noexcept override;
+			virtual bool			writeVariableToFile(kodgen::GeneratedFile&			generatedFile,
+														kodgen::EntityInfo&				variableInfo,
+														kodgen::FileGenerationResult&	genResult)						noexcept override;
+
+			virtual bool			writeFunctionToFile(kodgen::GeneratedFile&			generatedFile,
+														kodgen::EntityInfo&				functionInfo,
+														kodgen::FileGenerationResult&	genResult)						noexcept override;
 
 		public:
 			FileGenerationUnit()							= default;
