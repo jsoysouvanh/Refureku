@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <array>
+#include <vector>
 
 #include <Kodgen/InfoStructures/StructClassInfo.h>
 
@@ -139,28 +139,28 @@ namespace rfk
 																		 kodgen::StructClassInfo&	info)				const	noexcept;
 
 		protected:
-			virtual void			generateCode(kodgen::GeneratedFile&			generatedFile,
-												 kodgen::EntityInfo&			entityInfo,
-												 kodgen::FileGenerationUnit&	fgu,
-												 std::string&					out_errorDescription)	const	noexcept override;
+			virtual void						generateCode(kodgen::GeneratedFile&			generatedFile,
+															 kodgen::EntityInfo&			entityInfo,
+															 kodgen::FileGenerationUnit&	fgu,
+															 std::string&					out_errorDescription)	const	noexcept override;
 
 			/**
-			*	@brief Generate a macro containing code that will be injected in the main macro.
-			*			/!\ The macro name must be unique to avoid collision with other generated macros,
+			*	@brief Generate macros containing code that will be injected in the main macro.
+			*			/!\ All generated macro names must be unique to avoid collision with other generated macros,
 			*				thus it is recommended that it contains the entity id in its name (retrieved with getEntityId(info)).
 			*	
 			*	@param generatedFile	File to write into.
 			*	@param info				Struct/Class info.
 			*	
-			*	@return The name of the generated macro. If no custom code is generated, the method might return an empty string.
+			*	@return A collection of all generated macro names.
 			*/
-			virtual std::string		generateCustomCodeMacro(kodgen::GeneratedFile&		generatedFile,
-															kodgen::StructClassInfo&	info)			const	noexcept;
+			virtual std::vector<std::string>	generateCustomCodeMacros(kodgen::GeneratedFile&		generatedFile,
+																		 kodgen::StructClassInfo&	info)			const	noexcept;
 
 			/**
 			*	@return The name of the main macro which will be generated and injected in the class.
 			*/
-			virtual std::string		getMainMacroName(kodgen::StructClassInfo& info)						const	noexcept;
+			virtual std::string					getMainMacroName(kodgen::StructClassInfo& info)						const	noexcept;
 
 		public:
 			GeneratedClassCodeTemplate()									= default;

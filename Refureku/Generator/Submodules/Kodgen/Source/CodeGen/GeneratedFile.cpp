@@ -16,12 +16,12 @@ GeneratedFile::~GeneratedFile() noexcept
 
 void GeneratedFile::writeLine(std::string const& line) noexcept
 {
-	_streamToFile << line << std::endl;
+	_streamToFile << line << "\n";
 }
 
 void GeneratedFile::writeLine(std::string&& line) noexcept
 {
-	_streamToFile << std::forward<std::string>(line) << std::endl;
+	_streamToFile << std::forward<std::string>(line) << "\n";
 }
 
 void GeneratedFile::writeLines(std::string const& line) noexcept
