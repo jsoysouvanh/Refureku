@@ -206,7 +206,6 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 		if (method.isStatic)
 		{
 			//Add method properties
-			method.properties.removeStartAndTrailSpaces();
 			generatedCode = fillEntityProperties(method, "staticMethod->");
 			if (!generatedCode.empty())
 				generatedFile.writeLine("	" + generatedCode + "\t\\");
@@ -214,7 +213,6 @@ std::string GeneratedClassCodeTemplate::generateMethodsMetadataMacro(kodgen::Gen
 		else
 		{
 			//Add method properties
-			method.properties.removeStartAndTrailSpaces();
 			generatedCode = fillEntityProperties(method, "method->");
 			if (!generatedCode.empty())
 				generatedFile.writeLine("\t" + generatedCode + "\t\\");
@@ -317,7 +315,6 @@ std::string GeneratedClassCodeTemplate::generateFieldHelperMethodsMacro(kodgen::
 			}
 
 			//Add properties
-			field.properties.removeStartAndTrailSpaces();
 			properties = fillEntityProperties(field, currentFieldVariable);
 			if (!properties.empty())
 				generatedFile.writeLine("	" + properties + "\t\\");

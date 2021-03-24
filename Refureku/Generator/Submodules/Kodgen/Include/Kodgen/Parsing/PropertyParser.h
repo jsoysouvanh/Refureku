@@ -45,9 +45,23 @@ namespace kodgen
 			/**
 			*	@brief Remove all ignored characters from the string.
 			*
-			*	@param toCleanString The string we want to clean.
+			*	@param toCleanString The string to clean.
 			*/
 			void cleanString(std::string& toCleanString)											const	noexcept;
+
+			/**
+			*	@brief Remove all starting space characters.
+			*
+			*	@param toCleanString The string to clean.
+			*/
+			void removeStartSpaces(std::string& toCleanString)										const	noexcept;
+
+			/**
+			*	@brief Remove all trailing space characters.
+			*
+			*	@param toCleanString The string to clean.
+			*/
+			void removeTrailSpaces(std::string& toCleanString)										const	noexcept;
 
 			/**
 			*	@brief	Search the next property.

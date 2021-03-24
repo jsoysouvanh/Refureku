@@ -76,7 +76,6 @@ std::string GeneratedEnumCodeTemplate::generateGetEnumSpecialization(kodgen::Gen
 			generatedFile.writeLine("			enumValue = type.addEnumValue(\"" + enumValue.name + "\", " + std::to_string(stringHasher(enumValue.id)) + "u, " + std::to_string(enumValue.defaultValue) + ");\t\\");
 
 			//Fill enum value properties
-			enumValue.properties.removeStartAndTrailSpaces();
 			properties = fillEntityProperties(enumValue, "enumValue->");
 			if (!properties.empty())
 			{

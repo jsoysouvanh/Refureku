@@ -170,6 +170,10 @@ bool PropertyParser::lookForNextProp(std::string& inout_parsingProps, bool& out_
 		inout_parsingProps.erase(0, index + 1);
 	}
 
+	//Remove start and trail spaces from the added property
+	removeStartSpaces(_splitProps.back().front());
+	removeTrailSpaces(_splitProps.back().front());
+
 	return true;
 }
 
@@ -188,22 +192,44 @@ bool PropertyParser::lookForNextSubProp(std::string& inout_parsingProps, bool& o
 	else if (inout_parsingProps[index] == _propertyParsingSettings->subPropertySeparator)
 	{
 		_splitProps.back().push_back(std::string(inout_parsingProps.cbegin(), inout_parsingProps.cbegin() + index));
+
+		//Remove start and trail spaces from the added sub property
+		removeStartSpaces(_splitProps.back().back());
+		removeTrailSpaces(_splitProps.back().back());
+
 		inout_parsingProps.erase(0, index + 1);
 	}
 	else	//_propertyParsingSettings->subPropertyEnclosers[1]
 	{
-		//Make sure there is a property separator after the end encloser if is not the last char of the string
-		if (index != inout_parsingProps.size() - 1 && inout_parsingProps[index + 1] != _propertyParsingSettings->propertySeparator)
-		{
-			_parsingErrorDescription = "Property separator \"" + std::string(1, _propertyParsingSettings->propertySeparator) + "\" is missing between two properties.";
-			
-			return false;
-		}
-
 		out_isParsingSubProp = false;
 
 		_splitProps.back().push_back(std::string(inout_parsingProps.cbegin(), inout_parsingProps.cbegin() + index));
-		inout_parsingProps.erase(0, index + 2);	// + 2 to consume subprop end encloser and prop separator
+
+		//Remove start and trail spaces from the added sub property
+		removeStartSpaces(_splitProps.back().back());
+		removeTrailSpaces(_splitProps.back().back());
+
+		//Make sure there is a property separator after the end encloser if is not the last char of the string
+		if (index != inout_parsingProps.size() - 1)
+		{
+			size_t propSeparatorIndex = inout_parsingProps.find_first_not_of(' ', index + 1);
+
+			if (inout_parsingProps[propSeparatorIndex] != _propertyParsingSettings->propertySeparator)
+			{
+				_parsingErrorDescription = "Property separator \"" + std::string(1, _propertyParsingSettings->propertySeparator) + "\" is missing between two properties.";
+
+				return false;
+			}
+			else
+			{
+				inout_parsingProps.erase(0, propSeparatorIndex + 1); // + 1 to consume prop separator
+			}
+		}
+		else
+		{
+			//index is the last character, so consume the rest of the string
+			inout_parsingProps.clear();
+		}
 	}
 
 	return true;
@@ -215,6 +241,16 @@ void PropertyParser::cleanString(std::string& toCleanString) const noexcept
 	{
 		toCleanString.erase(std::remove(toCleanString.begin(), toCleanString.end(), toRemoveChar), toCleanString.end());
 	}
+}
+
+void PropertyParser::removeStartSpaces(std::string& toCleanString) const noexcept
+{
+	toCleanString.erase(0, toCleanString.find_first_not_of(' '));
+}
+
+void PropertyParser::removeTrailSpaces(std::string& toCleanString) const noexcept
+{
+	toCleanString.erase(toCleanString.find_last_not_of(' ') + 1);
 }
 
 PropertyGroup PropertyParser::checkAndFillPropertyGroup(std::vector<std::vector<std::string>>& splitProps, EEntityType entityType) noexcept

@@ -5,7 +5,7 @@
 
 #include "Generated/AB.rfk.h"
 
-class RFKClass(CustomProperty2, CustomProperty(1, 2), CustomProperty2) A 
+class RFKClass(CustomProperty2   , CustomProperty(1, 2) ,CustomProperty2) A
 {
 	RFKField(CustomProperty(1, 456)) 
 	int field = 0;
@@ -17,18 +17,21 @@ class RFKClass(CustomProperty2, CustomProperty(1, 2), CustomProperty2) A
 	virtual void testMethod(int i) noexcept {}
 
 	RFKMethod(Tooltip("This is a test"))
-	virtual void testMethod() noexcept {} 
+	virtual void testMethod() noexcept {}
 
 	A_GENERATED
 }; 
 
-class RFKClass(CustomProperty(3, 4)) B : public A
+class RFKClass(CustomProperty(3 , 4)) B : public A
 {
 	B_GENERATED
 };
 
-class RFKClass() C : public A
+class RFKClass() C : public A 
 {
+	RFKField()
+	int i = 0;
+
 	RFKMethod()
 	virtual void testMethod() noexcept override {}
 

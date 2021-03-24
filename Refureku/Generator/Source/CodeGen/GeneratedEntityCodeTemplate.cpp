@@ -12,10 +12,8 @@ using namespace rfk;
 
 std::hash<std::string> const GeneratedEntityCodeTemplate::stringHasher;
 
-void GeneratedEntityCodeTemplate::generateCode(kodgen::GeneratedFile& /* generatedFile */, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedEntityCodeTemplate::generateCode(kodgen::GeneratedFile& /* generatedFile */, kodgen::EntityInfo& /* entityInfo */, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
 {
-	//Sanitize property names
-	entityInfo.properties.removeStartAndTrailSpaces();
 }
 
 std::string GeneratedEntityCodeTemplate::fillEntityProperties(kodgen::EntityInfo const& info, std::string const& entityVarName) const noexcept

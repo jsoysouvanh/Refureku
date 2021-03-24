@@ -22,7 +22,10 @@ namespace rfk
 			/** Native properties. */
 			CustomInstantiatorPropertyRule	_customInstantiatorPropertyRule;
 			PropertySettingsPropertyRule	_propertySettingsPropertyRule;
+			
 			//TestPropertyRule				_testPropertyRule;
+			//TestPropertyRule2				_testPropertyRule2;
+			//TestPropertyRule3				_testPropertyRule3;
 
 		public:
 			FileParserFactory()							noexcept;

@@ -12,6 +12,18 @@ struct RFKStruct(PropertySettings(all))
 	TestProperty_GENERATED
 };
 
+struct RFKStruct(PropertySettings(all))
+    TestProperty2 : public rfk::Property
+{
+    TestProperty2_GENERATED 
+};
+
+struct RFKStruct(PropertySettings(all))
+    TestProperty3 : public rfk::Property
+{
+    TestProperty3_GENERATED
+};
+
 struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Variable))
     Slider : public rfk::Property
 {
