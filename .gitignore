@@ -10,7 +10,6 @@ out/
 
 #Internal files
 LibraryGenerationSettings.toml
-build.bat
 
 #Settings
 *.json
