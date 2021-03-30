@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cfloat> //FLT_EPSILON
 
 #include <Refureku/Refureku.h>
 
@@ -6,8 +7,14 @@
 #include "AB.h"
 #include "ThirdPartyEnumReflectionCode.h"
 #include "TestPropertyUsage.h"
+#include "Vector3.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
+
+bool approximatelyEqual(float value1, float value2, float epsilon = FLT_EPSILON)
+{
+	return std::fabs(value1 - value2) <= epsilon;
+}
 
 void outerEntities()
 {
@@ -704,6 +711,24 @@ void enumManualReflection()
 	TEST(e->getEnumValue(2)->name == "Value2");
 }
 
+void classManualReflection()
+{
+	rfk::Class const* c = rfk::Database::getClass("Vector3f");
+
+	TEST(c != nullptr);
+	TEST(c->getField("x") != nullptr);
+	TEST(c->getField("y") != nullptr);
+	TEST(c->getField("z") != nullptr);
+	TEST(c->getMethod("sqrSize", rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline | rfk::EMethodFlags::Const) != nullptr);
+	TEST(c->getStaticMethod<float(Vector3f const&, Vector3f const&)>("dot", rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline) != nullptr);
+
+	Vector3f vec{3.14f, 42.0f, 0.0f};
+
+	TEST(approximatelyEqual(c->getField("x")->getData<float>(&vec), 3.14f));
+	TEST(approximatelyEqual(c->getField("y")->getData<float>(&vec), 42.0f));
+	TEST(approximatelyEqual(c->getField("z")->getData<float>(&vec), 0.0f));
+}
+
 int main()
 {
 	database();
@@ -728,6 +753,7 @@ int main()
 	makeInstance();
 	fundamentalArchetypes();
 	enumManualReflection();
+	classManualReflection();
 
 	return EXIT_SUCCESS;
 }
