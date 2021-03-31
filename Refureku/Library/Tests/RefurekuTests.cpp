@@ -7,7 +7,6 @@
 #include "AB.h"
 #include "ThirdPartyEnumReflectionCode.h"
 #include "TestPropertyUsage.h"
-#include "Vector3.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -713,20 +712,24 @@ void enumManualReflection()
 
 void classManualReflection()
 {
-	rfk::Class const* c = rfk::Database::getClass("Vector3f");
+	rfk::Class const* vec3archetype = rfk::Database::getClass("Vector3f");
 
-	TEST(c != nullptr);
-	TEST(c->getField("x") != nullptr);
-	TEST(c->getField("y") != nullptr);
-	TEST(c->getField("z") != nullptr);
-	TEST(c->getMethod("sqrSize", rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline | rfk::EMethodFlags::Const) != nullptr);
-	TEST(c->getStaticMethod<float(Vector3f const&, Vector3f const&)>("dot", rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline) != nullptr);
+	TEST(vec3archetype != nullptr);
+	TEST(vec3archetype->getField("x") != nullptr);
+	TEST(vec3archetype->getField("y") != nullptr);
+	TEST(vec3archetype->getField("z") != nullptr);
+	TEST(vec3archetype->getMethod("sqrSize", rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline | rfk::EMethodFlags::Const) != nullptr);
+	TEST(vec3archetype->getStaticMethod<float(Vector3f const&, Vector3f const&)>("dot", rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline) != nullptr);
 
 	Vector3f vec{3.14f, 42.0f, 0.0f};
 
-	TEST(approximatelyEqual(c->getField("x")->getData<float>(&vec), 3.14f));
-	TEST(approximatelyEqual(c->getField("y")->getData<float>(&vec), 42.0f));
-	TEST(approximatelyEqual(c->getField("z")->getData<float>(&vec), 0.0f));
+	TEST(approximatelyEqual(vec3archetype->getField("x")->getData<float>(&vec), 3.14f));
+	TEST(approximatelyEqual(vec3archetype->getField("y")->getData<float>(&vec), 42.0f));
+	TEST(approximatelyEqual(vec3archetype->getField("z")->getData<float>(&vec), 0.0f));
+
+	rfk::Class const& exampleClassArchetype = namespace3::ExampleClass::staticGetArchetype();
+	TEST(exampleClassArchetype.getField("vec3")->type.archetype == vec3archetype);
+	TEST(exampleClassArchetype.getField("vec3ptr")->type.archetype == vec3archetype);
 }
 
 int main()

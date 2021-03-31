@@ -3,6 +3,7 @@
 #include <type_traits>
 
 #include "Refureku/TypeInfo/Archetypes/Class.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h" //To specialize rfk::getArchetype
 
 namespace some_namespace
 {
@@ -28,9 +29,12 @@ namespace some_namespace
 				return x * x + y * y + z * z;
 			}
 	};
-
-	//Define a method which will contain the vector3f metadata
-	rfk::Class const& vector3fStaticGetArchetype();
 }
 
 using Vector3f = some_namespace::Vector3<float>;
+
+namespace rfk
+{
+	template <>
+	Archetype const* getArchetype<Vector3f>() noexcept;
+}

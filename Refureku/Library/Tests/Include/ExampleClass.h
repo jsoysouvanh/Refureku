@@ -3,6 +3,8 @@
 #include <Refureku/NativeProperties.h>
 #include <Refureku/Object.h>
 
+#include "Vector3.h"
+
 #include "Generated/ExampleClass.rfk.h"
 
 namespace namespace1
@@ -137,6 +139,12 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 
 			RFKField()
 			int const*		c[2][3];
+
+			RFKField()
+			Vector3f		vec3;
+
+			RFKField()
+			Vector3f const*	vec3ptr				= nullptr;
 
 			RFKMethod()
 			unsigned long long	method4(void* ptr);

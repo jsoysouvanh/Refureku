@@ -4,7 +4,8 @@
 
 std::hash<std::string> stringHasher;
 
-rfk::Class const& some_namespace::vector3fStaticGetArchetype()
+template <>
+rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 {
 	static bool			initialized = false;
 	static rfk::Class	type("Vector3f", stringHasher("some_namespace::Vector3<float>"), sizeof(Vector3f));
@@ -44,8 +45,8 @@ rfk::Class const& some_namespace::vector3fStaticGetArchetype()
 		staticMethod->addParameter("lhs", rfk::Type::getType<Vector3f const&>())->addParameter("rhs", rfk::Type::getType<Vector3f const&>());
 	}
 
-	return type;
+	return &type;
 }
 
-//Register the class at file level
-rfk::ArchetypeRegisterer vector3fRegisterer = &some_namespace::vector3fStaticGetArchetype();
+//Register the class to the database (note that it is not registered in any namespace, so it's accessible at file level)
+rfk::ArchetypeRegisterer vector3fRegisterer = rfk::getArchetype<Vector3f>();
