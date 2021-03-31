@@ -8,7 +8,7 @@ on:
       - CI-setup
 
 jobs:
-  build:
+  build_ubuntu_clang:
     name: Build Ubuntu | Clang
     runs-on: ubuntu-latest
 
@@ -27,6 +27,48 @@ jobs:
 
       - name: Install clang
         run: sudo apt-get install clang-${{ matrix.clang_version }}
+
+      - name: Install ninja
+        run: sudo apt-get install ninja-build
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
+
+      - name: Check config
+        run: |
+          ${CC} --version
+          ${CXX} --version
+          cmake --version
+
+      - name: Build Refureku
+        run: |
+          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
+          cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+
+      - name: Run tests
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+
+  build_ubuntu_gcc:
+    name: Build Ubuntu | GCC
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        build_config: [Release, Debug]
+        gcc_version: [8, 9, 10]
+
+    env:
+      CC: gcc-${{ matrix.gcc_version }}
+      CXX: g++-${{ matrix.gcc_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install GCC
+        run: sudo apt-get install g++-${{ matrix.gcc_version }}
 
       - name: Install ninja
         run: sudo apt-get install ninja-build
