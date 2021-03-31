@@ -8,13 +8,13 @@ on:
       - CI-setup
 
 jobs:
-  build_ubuntu_clang:
+  build_unix_clang:
     name: Build Unix | Clang
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [ubuntu-latest] # macos-latest
         build_config: [Release, Debug]
         clang_version: [7, 8, 9, 10]
 
@@ -30,7 +30,7 @@ jobs:
         run: sudo apt-get install clang-${{ matrix.clang_version }}
 
       - name: Install ninja
-        run: sudo apt-get install ninja-build
+        uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.8
@@ -51,13 +51,13 @@ jobs:
       - name: Run tests
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
-  build_ubuntu_gcc:
+  build_unix_gcc:
     name: Build Unix | GCC
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [ubuntu-latest] # macos-latest
         build_config: [Release, Debug]
         gcc_version: [8, 9, 10]
 
@@ -73,7 +73,7 @@ jobs:
         run: sudo apt-get install g++-${{ matrix.gcc_version }}
 
       - name: Install ninja
-        run: sudo apt-get install ninja-build
+        uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.8
@@ -100,21 +100,16 @@ jobs:
 
     strategy:
       matrix:
+        msvc_version: [15 2017, 16 2019]
         build_config: [Release, Debug]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-#      - name: Check config
-#        run: |
-#          ${CC} --version
-#          ${CXX} --version
-#          cmake --version
-
       - name: Build Refureku
         run: |
-          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 16 2019" -A x64
+          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio ${{ matrix.msvc_version }}" -A x64
           cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
 
       - name: Run tests
