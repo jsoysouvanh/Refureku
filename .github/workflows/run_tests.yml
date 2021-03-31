@@ -100,7 +100,6 @@ jobs:
 
     strategy:
       matrix:
-        msvc_version: [15 2017, 16 2019]
         build_config: [Release, Debug]
 
     steps:
@@ -109,7 +108,7 @@ jobs:
 
       - name: Build Refureku
         run: |
-          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio ${{ matrix.msvc_version }}" -A x64
+          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 16 2019" -A x64
           cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
 
       - name: Run tests
