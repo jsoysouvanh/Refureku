@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cfloat> //FLT_EPSILON
+#include <cmath>  //std::fabs
 
 #include <Refureku/Refureku.h>
 
