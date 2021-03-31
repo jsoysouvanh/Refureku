@@ -8,15 +8,36 @@ on:
 
 jobs:
   build:
-    name: Build Refureku
+    name: Build Ubuntu | Clang
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
         configs: [Release, Debug]
+        clangversion: [7]
     
     runs-on: ${{ matrix.os }}
+
+    env:
+      CC: clang-${{ matrix.clangversion }}
+      CXX: clang++-${{ matrix.clangversion }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Install clang
+        run: sudo apt-get install clang-${{ matrix.clangversion }}
+
+      - name: Install ninja
+        run: sudo apt-get install ninja-build
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
+
+      - name: Check config
+        run:
+          - ${CC} --version
+          - ${CXX} --version
+          - cmake --version
