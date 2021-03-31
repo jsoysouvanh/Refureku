@@ -182,6 +182,15 @@ namespace rfk
 			static Namespace const*						getNamespace(Predicate predicate);
 
 			/**
+			*	@brief Retrieve a namespace by id.
+			*
+			*	@param id The id of the namespace.
+			*
+			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
+			*/
+			static Namespace const*						getNamespace(uint64 id)											noexcept;
+
+			/**
 			*	@brief	Retrieve a namespace by name.
 			*			Can search nested namespaces directly using :: separator.
 			*			Example: getNamespace("namespace1::namespace2") will get the namespace2 nested inside namespace1 if it exists.
@@ -205,6 +214,15 @@ namespace rfk
 			static Archetype const*						getArchetype(Predicate predicate);
 
 			/**
+			*	@brief Retrieve an archetype by id.
+			*
+			*	@param id The id of the archetype.
+			*
+			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
+			*/
+			static Archetype const*						getArchetype(uint64 id)											noexcept;
+
+			/**
 			*	@brief	Retrieve a file level archetype by name.
 			*			This method costs heavier performance as it will basically call getClass, getStruct, getEnum and then getFundamentalArchetype to find
 			*			the queried archetype.
@@ -226,6 +244,15 @@ namespace rfk
 			static Struct const*						getStruct(Predicate predicate);
 
 			/**
+			*	@brief Retrieve a struct by id.
+			*
+			*	@param id The id of the struct.
+			*
+			*	@return A constant pointer to the queried struct if it exists, else nullptr.
+			*/
+			static Struct const*						getStruct(uint64 id)											noexcept;
+
+			/**
 			*	@brief Retrieve a file level struct by name.
 			*
 			*	@param structName The name of the struct.
@@ -243,6 +270,15 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Class const*>>>
 			static Class const*							getClass(Predicate predicate);
+
+			/**
+			*	@brief Retrieve a class by id.
+			*
+			*	@param id The id of the class.
+			*
+			*	@return A constant pointer to the queried class if it exists, else nullptr.
+			*/
+			static Class const*							getClass(uint64 id)												noexcept;
 
 			/**
 			*	@brief Retrieve a file level class by name.
@@ -264,6 +300,15 @@ namespace rfk
 			static Enum const*							getEnum(Predicate predicate);
 
 			/**
+			*	@brief Retrieve an enum by id.
+			*
+			*	@param id The id of the enum.
+			*
+			*	@return A constant pointer to the queried enum if it exists, else nullptr.
+			*/
+			static Enum const*							getEnum(uint64 id)												noexcept;
+
+			/**
 			*	@brief Retrieve a file level enum by name.
 			*
 			*	@param enumName The name of the enum.
@@ -283,6 +328,15 @@ namespace rfk
 			static FundamentalArchetype const*			getFundamentalArchetype(Predicate predicate);
 
 			/**
+			*	@brief Retrieve a fundamental archetype by id.
+			*
+			*	@param id The id of the fundamental archetype.
+			*
+			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
+			*/
+			static FundamentalArchetype const*			getFundamentalArchetype(uint64 id)								noexcept;
+
+			/**
 			*	@brief Retrieve a fundamental archetype by name.
 			*
 			*	@param archetypeName The name of the fundamental archetype.
@@ -300,6 +354,15 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Variable const*>>>
 			static Variable const*						getVariable(Predicate predicate);
+
+			/**
+			*	@brief Retrieve a variable by id.
+			*
+			*	@param id The id of the variable.
+			*
+			*	@return A constant pointer to the queried variable if it exists, else nullptr.
+			*/
+			static Variable const*						getVariable(uint64 id)											noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) variable by name.
@@ -339,6 +402,15 @@ namespace rfk
 																	EFunctionFlags	flags = EFunctionFlags::Default)	noexcept;
 
 			/**
+			*	@brief Retrieve a function by id.
+			*
+			*	@param id The id of the function.
+			*
+			*	@return A constant pointer to the queried function if it exists, else nullptr.
+			*/
+			static Function const*						getFunction(uint64 id)											noexcept;
+
+			/**
 			*	@brief Retrieve a file level (non-member) function by name.
 			*	
 			*	@param functionName The name of the function.
@@ -351,7 +423,52 @@ namespace rfk
 																	EFunctionFlags	flags = EFunctionFlags::Default)	noexcept;
 
 			/**
-			*	@brief Clear the whole database of any registered entity
+			*	@brief Retrieve a method by id.
+			*
+			*	@param id The id of the method.
+			*
+			*	@return A constant pointer to the queried method if it exists, else nullptr.
+			*/
+			static Method const*						getMethod(uint64 id)											noexcept;
+
+			/**
+			*	@brief Retrieve a static method by id.
+			*
+			*	@param id The id of the static method.
+			*
+			*	@return A constant pointer to the queried static method if it exists, else nullptr.
+			*/
+			static StaticMethod const*					getStaticMethod(uint64 id)										noexcept;
+
+			/**
+			*	@brief Retrieve a field by id.
+			*
+			*	@param id The id of the field.
+			*
+			*	@return A constant pointer to the queried field if it exists, else nullptr.
+			*/
+			static Field const*							getField(uint64 id)												noexcept;
+
+			/**
+			*	@brief Retrieve a static field by id.
+			*
+			*	@param id The id of the static field.
+			*
+			*	@return A constant pointer to the queried static field if it exists, else nullptr.
+			*/
+			static StaticField const*					getStaticField(uint64 id)										noexcept;
+
+			/**
+			*	@brief Retrieve an enum value by id.
+			*
+			*	@param id The id of the enum value.
+			*
+			*	@return A constant pointer to the queried enum value if it exists, else nullptr.
+			*/
+			static EnumValue const*						getEnumValue(uint64 id)											noexcept;
+
+			/**
+			*	@brief Clear the whole database
 			*/
 			static void									clear()															noexcept;
 

@@ -35,6 +35,7 @@ void outerEntities()
 void namespaces()
 {
 	TEST(rfk::Database::getNamespace("namespace3") != nullptr);
+	TEST(rfk::Database::getNamespace(rfk::Database::getNamespace("namespace3")->id) != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace4_nested") == nullptr);
 	TEST(rfk::Database::getNamespace("namespace4")->getNamespace("namespace4_nested") != nullptr);
@@ -68,6 +69,7 @@ void namespaces()
 void classes()
 {
 	TEST(rfk::Database::getClass("ParentParentParentClass") == nullptr);
+	TEST(rfk::Database::getClass(namespace3::ExampleClass::staticGetArchetype().id) != nullptr);
 	TEST(rfk::Database::getNamespace("namespace2")->getClass("ParentParentClass") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("OtherClass") != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ParentClass") != nullptr);
@@ -87,6 +89,7 @@ void classes()
 void structs()
 {
 	TEST(rfk::Database::getStruct("ExampleStruct") != nullptr);
+	TEST(rfk::Database::getStruct(ExampleStruct::staticGetArchetype().id) != nullptr);
 	TEST(rfk::Database::getEnum("ExampleStruct") == nullptr);
 	TEST(rfk::Database::getClass("ExampleStruct") == nullptr);
 
@@ -140,6 +143,7 @@ void enums()
 {
 	TEST(rfk::Database::getEnum("UnexistantEnum") == nullptr);
 
+	TEST(rfk::Database::getEnum(rfk::getEnum<namespace3::ExampleEnum>()->id) != nullptr);
 	TEST(rfk::Database::getNamespace("namespace3")->getEnum("ExampleEnum") != nullptr);
 	TEST(rfk::Database::getClass("ExampleEnum") == nullptr);
 	TEST(rfk::Database::getStruct("ExampleEnum") == nullptr);
@@ -158,6 +162,7 @@ void enums()
 	TEST(e->getEnumValue(1 << 1)->name == "ExampleValue2");
 	TEST(e->getEnumValue(1 << 2)->name == "ExampleValue3");
 	TEST(e->getEnumValues(1 << 3).size() == 2);
+	TEST(e->getEnumValue("ExampleValue1") == rfk::Database::getEnumValue(e->getEnumValue("ExampleValue1")->id));
 
 	//By predicate
 	TEST(e->getEnumValue([](rfk::EnumValue const* v){ return v->value == 1 << 3 && v->name == "ExampleValue4"; }) != nullptr);
@@ -189,6 +194,7 @@ void methods()
 	rfk::Method const* pc_method1 = pc.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const);
 	TEST(pc_method1->checkedRInvoke<int>(&p) == 1);
 	TEST(pc.getMethod("method1", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const) == nullptr);
+	TEST(pc_method1 == rfk::Database::getMethod(pc_method1->id));
 
 	//ExampleClass
 	namespace3::ExampleClass	e;
@@ -286,6 +292,7 @@ void staticMethods()
 
 	ec.getStaticMethod("staticMethod1", rfk::EMethodFlags::Private)->invoke();
 
+	TEST(ec.getStaticMethod("staticMethod1") == rfk::Database::getStaticMethod(ec.getStaticMethod("staticMethod1")->id));
 	TEST(ec.getStaticMethod("staticMethod2", rfk::EMethodFlags::Private)->rInvoke<int>() == 2);
 
 	TEST(ec.getStaticMethod("staticMethod3", rfk::EMethodFlags::Public) == nullptr);
@@ -305,6 +312,7 @@ void fields()
 	TEST(ppc.getField("pFloat") == nullptr);
 	TEST(ppc.getField("ppFloat", rfk::EFieldFlags::Public) == nullptr);
 	TEST(static_cast<int>(ppc.getField("ppFloat", rfk::EFieldFlags::Private)->getData<float>(&pp)) == 123456);
+	TEST(ppc.getField("ppFloat", rfk::EFieldFlags::Private) == rfk::Database::getField(ppc.getField("ppFloat", rfk::EFieldFlags::Private)->id));
 
 	ppc.getField("ppFloat", rfk::EFieldFlags::Private)->setData(&pp, 3.14f);
 
@@ -345,6 +353,7 @@ void staticFields()
 	TEST(ec.getField("someStaticInt") == nullptr);
 	TEST(ec.getStaticField("someStaticInt") != nullptr);
 	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public) != nullptr);
+	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public) == rfk::Database::getStaticField(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->id));
 	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->getDataAddress() == &namespace3::ExampleClass::someStaticInt);
 	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->getData<int>() == namespace3::ExampleClass::someStaticInt);
 
@@ -356,10 +365,10 @@ void staticFields()
 
 void variables()
 {
-	//Dumb test because of float imprecision...
-	TEST(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Default)->getData<float>() == 10.0f);
-	TEST(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Static)->getData<float>() == 10.0f);
-	
+	TEST(approximatelyEqual(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Default)->getData<float>(), 10.0f));
+	TEST(approximatelyEqual(rfk::Database::getVariable("variableInsideGlobalScope", rfk::EVarFlags::Static)->getData<float>(), 10.0f));
+	TEST(rfk::Database::getVariable("variableInsideGlobalScope") == rfk::Database::getVariable(rfk::Database::getVariable("variableInsideGlobalScope")->id));
+
 	TEST(rfk::Database::getVariable("variableInsideNamespace") == nullptr);
 }
 
@@ -368,6 +377,7 @@ void functions()
 	rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Default)->invoke(12.f);
 	rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Static)->invoke(12.f);
 
+	TEST(rfk::Database::getFunction("functionInsideGlobalScope") == rfk::Database::getFunction(rfk::Database::getFunction("functionInsideGlobalScope")->id));
 	TEST(rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Inline) == nullptr);
 }
 
@@ -618,6 +628,7 @@ void getArchetypes()
 	//Using templated version
 	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass"));
 	TEST(rfk::getArchetype<namespace3::ExampleClass2>() == rfk::Database::getNamespace("namespace3")->getClass("ExampleClass2"));
+	TEST(rfk::Database::getArchetype(rfk::getArchetype<Vector3f>()->id) == rfk::getArchetype<Vector3f>());
 
 	TEST(rfk::getArchetype<void>() == rfk::getArchetype<void*>());
 	TEST(rfk::getArchetype<namespace3::ExampleClass>() == rfk::getArchetype<volatile const namespace3::ExampleClass&>());
