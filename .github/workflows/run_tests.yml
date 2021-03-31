@@ -14,19 +14,19 @@ jobs:
 
     strategy:
       matrix:
-        configs: [Release, Debug]
-        clangversion: [7]
+        build_config: [Release, Debug]
+        clang_version: [7]
 
     env:
-      CC: clang-${{ matrix.clangversion }}
-      CXX: clang++-${{ matrix.clangversion }}
+      CC: clang-${{ matrix.clang_version }}
+      CXX: clang++-${{ matrix.clang_version }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Install clang
-        run: sudo apt-get install clang-${{ matrix.clangversion }}
+        run: sudo apt-get install clang-${{ matrix.clang_version }}
 
       - name: Install ninja
         run: sudo apt-get install ninja-build
@@ -41,3 +41,11 @@ jobs:
           ${CC} --version
           ${CXX} --version
           cmake --version
+
+      - name: Build Refureku
+        run: |
+          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
+          cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+
+      - name: Run tests
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
