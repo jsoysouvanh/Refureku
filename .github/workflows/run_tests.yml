@@ -94,8 +94,8 @@ jobs:
       - name: Run tests
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
-  build_windows_msvc2019:
-    name: Build Windows | MSVC 2019
+  build_windows_msvc:
+    name: Build Windows | MSVC
     runs-on: windows-latest
 
     strategy:
