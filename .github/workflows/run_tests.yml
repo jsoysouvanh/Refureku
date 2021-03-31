@@ -9,11 +9,12 @@ on:
 
 jobs:
   build_ubuntu_clang:
-    name: Build Ubuntu | Clang
-    runs-on: ubuntu-latest
+    name: Build Unix | Clang
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
+        os: [macos-latest, ubuntu-latest]
         build_config: [Release, Debug]
         clang_version: [7, 8, 9, 10]
 
@@ -51,11 +52,12 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
   build_ubuntu_gcc:
-    name: Build Ubuntu | GCC
-    runs-on: ubuntu-latest
+    name: Build Unix | GCC
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
+        os: [macos-latest, ubuntu-latest]
         build_config: [Release, Debug]
         gcc_version: [8, 9, 10]
 
@@ -104,11 +106,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check config
-        run: |
-          ${CC} --version
-          ${CXX} --version
-          cmake --version
+#      - name: Check config
+#        run: |
+#          ${CC} --version
+#          ${CXX} --version
+#          cmake --version
 
       - name: Build Refureku
         run: |
