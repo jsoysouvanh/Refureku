@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         build_config: [Release, Debug]
-        clang_version: [7]
+        clang_version: [7, 8, 9, 10]
 
     env:
       CC: clang-${{ matrix.clang_version }}
