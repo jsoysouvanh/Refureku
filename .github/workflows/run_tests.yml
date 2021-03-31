@@ -10,13 +10,12 @@ on:
 jobs:
   build:
     name: Build Ubuntu | Clang
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
         configs: [Release, Debug]
         clangversion: [7]
-    
-    runs-on: ${{ matrix.os }}
 
     env:
       CC: clang-${{ matrix.clangversion }}
