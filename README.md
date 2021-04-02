@@ -1,7 +1,8 @@
 # Refureku
 
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FRefureku.svg)](https://github.com/jsoysouvanh/Refureku/releases/latest)
-[![Build & Tests Status](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests.yml/badge.svg?branch=dev)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests.yml)
+[![Linux](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_linux.yml/badge.svg)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_linux.yml)
+[![Windows](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_windows.yml/badge.svg)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_windows.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
 **Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) for more documentation and use examples!**
