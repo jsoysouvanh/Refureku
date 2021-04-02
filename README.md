@@ -185,9 +185,9 @@ If you compile your program in debug mode, your compiler might complain about li
 
 ## Cross-platform compatibility
 This library has been tested and is stable on the following configurations:
-- Windows Server version 1809 | MSVC 19.16.27041.0
-- Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0, Clang 10.0.1
-- Linux 18.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.1.0
+- Microsoft Windows Server 2019 | MSVC 19.28.29912.0
+- Linux 20.04 | Clang 7.0.1, Clang 8.0.1, Clang 9.0.1, Clang 10.0.0
+- Linux 20.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.2.0
 
 ## Planned features
 

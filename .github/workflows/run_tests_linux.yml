@@ -53,4 +53,4 @@ jobs:
         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
 
       - name: Run Tests
-        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V 
