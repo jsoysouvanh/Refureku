@@ -18,37 +18,37 @@ jobs:
         build_config: [Release, Debug]
         compiler: [clang++-7, clang++-8, clang++-9, clang++-10, g++-8, g++-9, g++-10]
 
-      env:
-        CXX: ${{matrix.compiler}}
+    env:
+      CXX: ${{matrix.compiler}}
 
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-        - name: Install suitable compiler
-          run: sudo apt-get install ${{ matrix.compiler }}
+      - name: Install suitable compiler
+        run: sudo apt-get install ${{ matrix.compiler }}
 
-        - name: Install ninja
-          uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
 
-        - name: Install CMake
-          uses: jwlawson/actions-setup-cmake@v1.8
-          with:
-            cmake-version: '3.15.0'
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
 
-        - name: Check config
-          run: |
-            ${CC} --version
-            ${CXX} --version
-            cmake --version
+      - name: Check config
+        run: |
+          ${CC} --version
+          ${CXX} --version
+          cmake --version
 
-        - name: Build Refureku
-          run: |
-            cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
-            cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+      - name: Build Refureku
+        run: |
+          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
+          cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
 
-        - name: Run tests
-          run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+      - name: Run tests
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
 #jobs:
 #  build_linux_clang:
