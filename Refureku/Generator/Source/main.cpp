@@ -78,7 +78,7 @@ void parseAndGenerate(fs::path&& exePath)
 	if (fileGenerator.loadSettings(pathToSettingsFile) && fileParserFactory.loadSettings(pathToSettingsFile))
 	{
 #if RFK_DEV
-		// This part is for travis only
+		// This part is for continuous integration system only
 		fs::path includeDir			= fs::current_path() / "Include";
 		fs::path generatedDir		= includeDir / "Generated";
 		fs::path refurekuIncludeDir	= fs::current_path().parent_path() / "Include";

@@ -1,0 +1,30 @@
+name: Build & Tests
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - CI-setup
+
+jobs:
+  build_windows_msvc:
+    name: Build Windows | MSVC
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Refureku
+        run: |
+          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 16 2019" -A x64
+          cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+
+      - name: Run tests
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
