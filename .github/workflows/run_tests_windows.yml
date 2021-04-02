@@ -1,4 +1,4 @@
-name: Build & Tests
+name: Windows Build & Tests
 
 on:
   push:
@@ -21,10 +21,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Build Refureku
-        run: |
-          cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 16 2019" -A x64
-          cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+      - name: Generate Project
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 16 2019" -A x64
 
-      - name: Run tests
+      - name: Build Refureku
+        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+
+      - name: Run Tests
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
