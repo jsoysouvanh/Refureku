@@ -159,9 +159,13 @@ std::vector<fs::path> CompilerHelpers::getClangNativeIncludeDirectories(std::str
 			//All paths start with a ' ' character
 			if (!line.empty() && line[0] == ' ')
 			{
-				result.emplace_back(line.substr(1));
+				//Strip the ' ' character
+				line = line.substr(1);
 
-				assert(fs::exists(result.back()) && fs::is_directory(result.back()));
+				if (fs::exists(line) && fs::is_directory(line))
+				{
+					result.emplace_back(line);
+				}
 			}
 			else
 			{

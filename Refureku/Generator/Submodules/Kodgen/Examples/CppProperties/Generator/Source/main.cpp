@@ -31,6 +31,8 @@ int main(int argc, char** argv)
 			fileParserFactory.logger	= &logger;
 			fileGenerator.logger		= &logger;
 
+			fileParserFactory.parsingSettings.setCompilerExeName("clang++");
+
 			//Parse WorkingDir/...
 			fileGenerator.settings.addToParseDirectory(includeDirectory);
 
