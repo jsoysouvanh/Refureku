@@ -746,9 +746,7 @@ void classManualReflection()
 
 int main()
 {
-	std::cout << "Start tests..." << std::endl;
-
-	/*database();
+	database();
 	outerEntities();
 	namespaces();
 	templateEnums();
@@ -770,7 +768,7 @@ int main()
 	makeInstance();
 	fundamentalArchetypes();
 	enumManualReflection();
-	classManualReflection();*/
+	classManualReflection();
 
 	return EXIT_SUCCESS;
 }
