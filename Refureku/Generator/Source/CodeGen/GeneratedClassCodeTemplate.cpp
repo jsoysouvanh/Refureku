@@ -13,18 +13,18 @@
 
 using namespace rfk;
 
-void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, std::string& out_errorDescription) const noexcept
+void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationUnit& fgu, kodgen::FileParsingResult const& parsingResult, std::string& out_errorDescription) const noexcept
 {
-	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, out_errorDescription);
+	GeneratedEntityCodeTemplate::generateCode(generatedFile, entityInfo, fgu, parsingResult, out_errorDescription);
 
 	switch (entityInfo.entityType)
 	{
 		case kodgen::EEntityType::Class:
-			generateClassCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo));
+			generateClassCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo), parsingResult);
 			break;
 
 		case kodgen::EEntityType::Struct:
-			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo));
+			generateStructCode(generatedFile, static_cast<kodgen::StructClassInfo&>(entityInfo), parsingResult);
 			break;
 
 		default:
@@ -32,11 +32,11 @@ void GeneratedClassCodeTemplate::generateCode(kodgen::GeneratedFile& generatedFi
 	}
 }
 
-std::vector<std::string> GeneratedClassCodeTemplate::generateCustomCodeMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
+std::vector<std::string> GeneratedClassCodeTemplate::generateCustomCodeMacros(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info, kodgen::FileParsingResult const&	parsingResult) const noexcept
 {
 	std::vector<std::string> result;
 
-	result.emplace_back(generateGetArchetypeMacro(generatedFile, info));
+	result.emplace_back(generateGetArchetypeMacro(generatedFile, info, parsingResult));
 	result.emplace_back(generateRegistrationMacro(generatedFile, info));
 
 	std::string nativePropsMacro = generateNativePropsMacro(generatedFile, info);
@@ -51,10 +51,10 @@ std::string GeneratedClassCodeTemplate::getMainMacroName(kodgen::StructClassInfo
 	return externalPrefix + info.name + "_GENERATED";
 }
 
-void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& classInfo) const noexcept
+void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& classInfo, kodgen::FileParsingResult const& parsingResult) const noexcept
 {
 	std::string mainMacroName								= getMainMacroName(classInfo);
-	std::vector<std::string> generateCustomCodeMacroNames	= generateCustomCodeMacros(generatedFile, classInfo);
+	std::vector<std::string> generateCustomCodeMacroNames	= generateCustomCodeMacros(generatedFile, classInfo, parsingResult);
 
 	//Use parsing macro to avoid parsing generated data
 	generatedFile.writeLine("#ifdef " + kodgen::FileParserFactoryBase::parsingMacro);
@@ -78,12 +78,12 @@ void GeneratedClassCodeTemplate::generateClassCode(kodgen::GeneratedFile& genera
 							 "#endif\n");
 }
 
-void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& structInfo) const noexcept
+void GeneratedClassCodeTemplate::generateStructCode(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& structInfo, kodgen::FileParsingResult const& parsingResult) const noexcept
 {
-	generateClassCode(generatedFile, structInfo);
+	generateClassCode(generatedFile, structInfo, parsingResult);
 }
 
-std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info) const noexcept
+std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::GeneratedFile& generatedFile, kodgen::StructClassInfo& info, kodgen::FileParsingResult const&	parsingResult) const noexcept
 {
 	std::string					entityId								= getEntityId(info);
 	std::string					getTypeMacroDeclaration					= internalPrefix + entityId + "_GetTypeDeclaration";
@@ -101,7 +101,7 @@ std::string GeneratedClassCodeTemplate::generateGetArchetypeMacro(kodgen::Genera
 							 std::move(generateFieldsMetadataMacroName[1]),
 							 "public:",
 							 "	inline static " + returnedType + " const& staticGetArchetype() noexcept;",
-							 (info.isObject) ? "	" + returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" : ""
+							 (parsingResult.structClassTree.isBaseOf("rfk::Object", info.getFullName())) ? "	" + returnedType + " const& getArchetype() const noexcept override { return " + info.name + "::staticGetArchetype(); }" : ""
 	);
 
 	//Use parsing macro to avoid parsing generated data

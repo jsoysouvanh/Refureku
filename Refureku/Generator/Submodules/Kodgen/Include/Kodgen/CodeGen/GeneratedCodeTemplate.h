@@ -10,6 +10,7 @@
 #include <string>
 
 #include "Kodgen/InfoStructures/EntityInfo.h"
+#include "Kodgen/Parsing/ParsingResults/FileParsingResult.h"
 #include "Kodgen/CodeGen/GeneratedFile.h"
 
 namespace kodgen
@@ -31,11 +32,13 @@ namespace kodgen
 			*	@param generatedFile		Object used to write in the generated file.
 			*	@param entityInfo			Structure containing info about the entity. You may static cast this into the derived class you expect.
 			*	@param generationUnit		FileGenerationUnit generating this entity.
+			*	@param parsingResult		Result of the whole file parsing.
 			*	@param out_errorDescription	If any error occurs, out_errorMessage must be filled with the error description.
 			*/
-			virtual void generateCode(GeneratedFile&		generatedFile,
-									  EntityInfo&			entityInfo,
-									  FileGenerationUnit&	generationUnit,
-									  std::string&			out_errorDescription)	const noexcept = 0;
+			virtual void generateCode(GeneratedFile&			generatedFile,
+									  EntityInfo&				entityInfo,
+									  FileGenerationUnit&		generationUnit,
+									  FileParsingResult const&	parsingResult,
+									  std::string&				out_errorDescription)	const noexcept = 0;
 	};
 }

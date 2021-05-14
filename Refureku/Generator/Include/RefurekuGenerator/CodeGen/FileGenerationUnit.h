@@ -74,37 +74,43 @@ namespace rfk
 			*/
 			virtual std::string		getEndFileMacroName()														const	noexcept;
 
-			virtual void			postGenerateFile(kodgen::FileParsingResult& parsingResult)							noexcept override;
+			virtual void			postGenerateFile(kodgen::FileParsingResult const& parsingResult)					noexcept override;
 
 			virtual void			writeHeader(kodgen::GeneratedFile&				file,
-												kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
+												kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
 
 			virtual void			writeFooter(kodgen::GeneratedFile&				file,
-												kodgen::FileParsingResult&			parsingResult)				const	noexcept override;
+												kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
 
 			virtual bool			writeEntityToFile(kodgen::GeneratedFile&			generatedFile,
 													  kodgen::EntityInfo&				entityInfo,
+													  kodgen::FileParsingResult const&	parsingResult,
 													  kodgen::FileGenerationResult&		out_genResult)					noexcept override;
 
-			virtual bool			writeNamespaceToFile(kodgen::GeneratedFile&			generatedFile,
-														 kodgen::EntityInfo&			namespaceInfo,
-														 kodgen::FileGenerationResult&	genResult)						noexcept override;
+			virtual bool			writeNamespaceToFile(kodgen::GeneratedFile&				generatedFile,
+														 kodgen::EntityInfo&				namespaceInfo,
+														 kodgen::FileParsingResult const&	parsingResult,
+														 kodgen::FileGenerationResult&		genResult)					noexcept override;
 
-			virtual bool			writeStructOrClassToFile(kodgen::GeneratedFile&			generatedFile,
-															 kodgen::EntityInfo&			structClassInfo,
-															 kodgen::FileGenerationResult&	genResult)					noexcept override;
+			virtual bool			writeStructOrClassToFile(kodgen::GeneratedFile&				generatedFile,
+															 kodgen::EntityInfo&				structClassInfo,
+															 kodgen::FileParsingResult const&	parsingResult,
+															 kodgen::FileGenerationResult&		genResult)				noexcept override;
 
-			virtual bool			writeEnumToFile(kodgen::GeneratedFile&			generatedFile,
-													kodgen::EntityInfo&				enumInfo,
-													kodgen::FileGenerationResult&	genResult)							noexcept override;
+			virtual bool			writeEnumToFile(kodgen::GeneratedFile&				generatedFile,
+													kodgen::EntityInfo&					enumInfo,
+													kodgen::FileParsingResult const&	parsingResult,
+													kodgen::FileGenerationResult&		genResult)						noexcept override;
 
-			virtual bool			writeVariableToFile(kodgen::GeneratedFile&			generatedFile,
-														kodgen::EntityInfo&				variableInfo,
-														kodgen::FileGenerationResult&	genResult)						noexcept override;
+			virtual bool			writeVariableToFile(kodgen::GeneratedFile&				generatedFile,
+														kodgen::EntityInfo&					variableInfo,
+														kodgen::FileParsingResult const&	parsingResult,
+														kodgen::FileGenerationResult&		genResult)					noexcept override;
 
-			virtual bool			writeFunctionToFile(kodgen::GeneratedFile&			generatedFile,
-														kodgen::EntityInfo&				functionInfo,
-														kodgen::FileGenerationResult&	genResult)						noexcept override;
+			virtual bool			writeFunctionToFile(kodgen::GeneratedFile&				generatedFile,
+														kodgen::EntityInfo&					functionInfo,
+														kodgen::FileParsingResult const&	parsingResult,
+														kodgen::FileGenerationResult&		genResult)					noexcept override;
 
 		public:
 			FileGenerationUnit()							= default;

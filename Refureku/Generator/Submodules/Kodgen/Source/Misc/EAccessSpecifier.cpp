@@ -2,11 +2,11 @@
 
 using namespace kodgen;
 
-std::string kodgen::toString(EAccessSpecifier error) noexcept
+std::string kodgen::toString(EAccessSpecifier accessSpecifier) noexcept
 {
 	std::string result;
 
-	switch (error)
+	switch (accessSpecifier)
 	{
 		case EAccessSpecifier::Public:
 			result = "Public";

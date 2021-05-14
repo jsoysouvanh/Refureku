@@ -8,7 +8,6 @@ void PropertyParsingSettings::loadSettings(toml::value const& table, ILogger* lo
 	TomlUtility::updateSetting(table, "subPropertySeparator", subPropertySeparator, logger);
 	TomlUtility::updateSetting(table, "subPropertyStartEncloser", subPropertyEnclosers[0], logger);
 	TomlUtility::updateSetting(table, "subPropertyEndEncloser", subPropertyEnclosers[1], logger);
-	TomlUtility::updateSetting(table, "ignoredCharacters", ignoredCharacters, logger);
 
 	TomlUtility::updateSetting(table, "namespaceMacroName", namespaceMacroName, logger);
 	TomlUtility::updateSetting(table, "classMacroName", classMacroName, logger);

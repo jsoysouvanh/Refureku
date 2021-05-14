@@ -133,6 +133,7 @@ ParsingContext& NamespaceParser::pushContext(CXCursor const& namespaceCursor, Pa
 	newContext.shouldCheckProperties	= true;
 	newContext.propertyParser			= parentContext.propertyParser;
 	newContext.parsingSettings			= parentContext.parsingSettings;
+	newContext.structClassTree			= parentContext.structClassTree;
 	newContext.parsingResult			= &out_result;
 
 	contextsStack.push(std::move(newContext));

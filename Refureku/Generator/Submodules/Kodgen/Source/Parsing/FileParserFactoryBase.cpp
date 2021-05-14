@@ -149,6 +149,14 @@ void FileParserFactoryBase::loadShouldAbortParsingOnFirstError(toml::value const
 	}
 }
 
+void FileParserFactoryBase::loadShouldLogDiagnostic(toml::value const& tomlFileParsingSettings) noexcept
+{
+	if (TomlUtility::updateSetting(tomlFileParsingSettings, "shouldLogDiagnostic", parsingSettings.shouldLogDiagnostic, logger) && logger != nullptr)
+	{
+		logger->log("[TOML] Load shouldLogDiagnostic: " + Helpers::toString(parsingSettings.shouldLogDiagnostic));
+	}
+}
+
 void FileParserFactoryBase::loadProjectIncludeDirectories(toml::value const& tomlFileParsingSettings) noexcept
 {
 	std::unordered_set<fs::path, PathHash> includeDirectories;
@@ -211,6 +219,7 @@ bool FileParserFactoryBase::loadSettings(fs::path const& pathToSettingsFile) noe
 			//Load settings from the table
 			loadShouldParseAllEntities(tomlFileParsingSettings);
 			loadShouldAbortParsingOnFirstError(tomlFileParsingSettings);
+			loadShouldLogDiagnostic(tomlFileParsingSettings);
 			loadProjectIncludeDirectories(tomlFileParsingSettings);
 			loadCompilerExeName(tomlFileParsingSettings);
 

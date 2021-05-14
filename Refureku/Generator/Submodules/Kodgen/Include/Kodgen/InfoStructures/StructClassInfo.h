@@ -66,9 +66,6 @@ namespace kodgen
 			/** List of all methods contained in this class. */
 			std::vector<MethodInfo>								methods;
 
-			/** Does this class inherits from kodgen::Object. */
-			bool												isObject;
-
 			StructClassInfo()								noexcept;
 			StructClassInfo(CXCursor const&	cursor,
 							PropertyGroup&&	propertyGroup,

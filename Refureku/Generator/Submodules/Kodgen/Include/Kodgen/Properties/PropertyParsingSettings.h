@@ -29,9 +29,6 @@ namespace kodgen
 			/** Chars used to respectively start and close a group of sub properties. */
 			char									subPropertyEnclosers[2]	= { '[', ']' };
 
-			/** Collection of chars which will be ignored by the property parser. */
-			std::unordered_set<char>				ignoredCharacters;
-
 			/** Collection of all simple property rules. */
 			std::vector<SimplePropertyRule const*>	simplePropertyRules;
 

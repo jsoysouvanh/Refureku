@@ -12,7 +12,7 @@ using namespace rfk;
 
 std::hash<std::string> const GeneratedEntityCodeTemplate::stringHasher;
 
-void GeneratedEntityCodeTemplate::generateCode(kodgen::GeneratedFile& /* generatedFile */, kodgen::EntityInfo& /* entityInfo */, kodgen::FileGenerationUnit& /* fgu */, std::string& /* out_errorDescription */) const noexcept
+void GeneratedEntityCodeTemplate::generateCode(kodgen::GeneratedFile& /* generatedFile */, kodgen::EntityInfo& /* entityInfo */, kodgen::FileGenerationUnit& /* fgu */, kodgen::FileParsingResult const& /* parsingResult */, std::string& /* out_errorDescription */) const noexcept
 {
 }
 

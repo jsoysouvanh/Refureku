@@ -17,6 +17,7 @@ namespace kodgen
 	//Forward declarations
 	class	PropertyParser;
 	class	ParsingSettings;
+	class	StructClassTree;
 
 	struct ParsingContext
 	{
@@ -41,6 +42,9 @@ namespace kodgen
 
 			/** ParsingSettings used. */
 			ParsingSettings const*	parsingSettings			= nullptr;
+
+			/** Inheritance tree of all structs/classes contained in the translation unit. */
+			StructClassTree*		structClassTree			= nullptr;
 
 			/** Result of the parsing. */
 			ParsingResultBase*		parsingResult			= nullptr;

@@ -100,11 +100,13 @@ namespace kodgen
 			void						refreshOuterEntity(FileParsingResult& out_result)		const	noexcept;
 
 			/**
-			*	@brief Log the diagnostic of the provided translation units.
+			*	@brief Log the diagnostic of the provided translation unit.
 			*
 			*	@param translationUnit Translation unit we want to log the diagnostic of.
+			* 
+			*	@return true if the diagnostic could be logged, else false (logger is nullptr).
 			*/
-			void						logDiagnostic(CXTranslationUnit const& translationUnit)	const	noexcept;
+			bool						logDiagnostic(CXTranslationUnit const& translationUnit)	const	noexcept;
 
 			/**
 			*	@brief Helper to get the ParsingResult contained in the context as a FileParsingResult.

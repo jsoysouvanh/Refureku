@@ -43,13 +43,6 @@ namespace kodgen
 			bool splitProperties(std::string&& propertiesString)											noexcept;
 
 			/**
-			*	@brief Remove all ignored characters from the string.
-			*
-			*	@param toCleanString The string to clean.
-			*/
-			void cleanString(std::string& toCleanString)											const	noexcept;
-
-			/**
 			*	@brief Remove all starting space characters.
 			*
 			*	@param toCleanString The string to clean.

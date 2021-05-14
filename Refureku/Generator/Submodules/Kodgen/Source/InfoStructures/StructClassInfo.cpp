@@ -6,16 +6,14 @@ using namespace kodgen;
 
 StructClassInfo::StructClassInfo() noexcept:
 	EntityInfo(),
-	qualifiers{false},
-	isObject{false}
+	qualifiers{false}
 {
 }
 
 StructClassInfo::StructClassInfo(CXCursor const& cursor, PropertyGroup&& propertyGroup, EEntityType&& entityType) noexcept:
 	EntityInfo(cursor, std::forward<PropertyGroup>(propertyGroup), std::forward<EEntityType>(entityType)),
 	qualifiers{false},
-	type{clang_getCursorType(cursor)},
-	isObject{false}
+	type{clang_getCursorType(cursor)}
 {
 }
 

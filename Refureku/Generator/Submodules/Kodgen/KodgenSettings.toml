@@ -49,7 +49,6 @@ propertySeparator = ","
 subPropertySeparator = ","
 subPropertyStartEncloser = "("
 subPropertyEndEncloser = ")"
-ignoredCharacters = [ " " ]
 
 namespaceMacroName = "Namespace"
 classmacroName = "Class"

@@ -73,10 +73,11 @@ namespace rfk
 														   kodgen::NamespaceInfo const&	namespaceInfo)					const	noexcept;
 
 		protected:
-			virtual void generateCode(kodgen::GeneratedFile&		generatedFile,
-									  kodgen::EntityInfo&			entityInfo,
-									  kodgen::FileGenerationUnit&	fgu,
-									  std::string&					out_errorDescription)	const noexcept override;
+			virtual void generateCode(kodgen::GeneratedFile&			generatedFile,
+									  kodgen::EntityInfo&				entityInfo,
+									  kodgen::FileGenerationUnit&		fgu,
+									  kodgen::FileParsingResult const&	parsingResult,
+									  std::string&						out_errorDescription)	const noexcept override;
 
 		public:
 			GeneratedNamespaceCodeTemplate()										= default;

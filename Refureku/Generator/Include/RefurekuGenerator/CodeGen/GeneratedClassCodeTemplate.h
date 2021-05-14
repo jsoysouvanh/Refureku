@@ -18,10 +18,12 @@ namespace rfk
 	class GeneratedClassCodeTemplate : public GeneratedEntityCodeTemplate
 	{
 		private:
-			void						generateClassCode(kodgen::GeneratedFile&	generatedFile,
-														  kodgen::StructClassInfo&	classInfo)								const	noexcept;
-			void						generateStructCode(kodgen::GeneratedFile&	generatedFile,
-														   kodgen::StructClassInfo&	structInfo)								const	noexcept;
+			void						generateClassCode(kodgen::GeneratedFile&			generatedFile,
+														  kodgen::StructClassInfo&			classInfo,
+														  kodgen::FileParsingResult const&	parsingResult)					const	noexcept;
+			void						generateStructCode(kodgen::GeneratedFile&			generatedFile,
+														   kodgen::StructClassInfo&			structInfo,
+														   kodgen::FileParsingResult const&	parsingResult)					const	noexcept;
 
 			kodgen::uint16				computeMethodFlags(kodgen::MethodInfo const& method)								const	noexcept;
 			kodgen::uint16				computeFieldFlags(kodgen::FieldInfo const& field)									const	noexcept;
@@ -37,7 +39,8 @@ namespace rfk
 			*	@return The name of the generated macro.
 			*/
 			std::string					generateGetArchetypeMacro(kodgen::GeneratedFile&			generatedFile,
-																  kodgen::StructClassInfo&	info)							const	noexcept;
+																  kodgen::StructClassInfo&			info,
+																  kodgen::FileParsingResult const&	parsingResult)			const	noexcept;
 			
 			/**
 			*	@brief Generate the macro containing the properties definition of this struct/class.
@@ -139,10 +142,11 @@ namespace rfk
 																		 kodgen::StructClassInfo&	info)				const	noexcept;
 
 		protected:
-			virtual void						generateCode(kodgen::GeneratedFile&			generatedFile,
-															 kodgen::EntityInfo&			entityInfo,
-															 kodgen::FileGenerationUnit&	fgu,
-															 std::string&					out_errorDescription)	const	noexcept override;
+			virtual void						generateCode(kodgen::GeneratedFile&				generatedFile,
+															 kodgen::EntityInfo&				entityInfo,
+															 kodgen::FileGenerationUnit&		fgu,
+															 kodgen::FileParsingResult const&	parsingResult,
+															 std::string&						out_errorDescription)	const	noexcept override;
 
 			/**
 			*	@brief Generate macros containing code that will be injected in the main macro.
@@ -154,13 +158,14 @@ namespace rfk
 			*	
 			*	@return A collection of all generated macro names.
 			*/
-			virtual std::vector<std::string>	generateCustomCodeMacros(kodgen::GeneratedFile&		generatedFile,
-																		 kodgen::StructClassInfo&	info)			const	noexcept;
+			virtual std::vector<std::string>	generateCustomCodeMacros(kodgen::GeneratedFile&				generatedFile,
+																		 kodgen::StructClassInfo&			info,
+																		 kodgen::FileParsingResult const&	parsingResult)	const	noexcept;
 
 			/**
 			*	@return The name of the main macro which will be generated and injected in the class.
 			*/
-			virtual std::string					getMainMacroName(kodgen::StructClassInfo& info)						const	noexcept;
+			virtual std::string					getMainMacroName(kodgen::StructClassInfo& info)								const	noexcept;
 
 		public:
 			GeneratedClassCodeTemplate()									= default;

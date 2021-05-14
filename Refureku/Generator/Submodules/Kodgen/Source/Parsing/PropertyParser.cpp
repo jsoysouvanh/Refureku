@@ -116,8 +116,6 @@ opt::optional<PropertyGroup> PropertyParser::getEnumValueProperties(std::string 
 
 bool PropertyParser::splitProperties(std::string&& propertiesString) noexcept
 {
-	cleanString(propertiesString);
-
 	bool isParsingSubproperty = false;
 
 	while (!propertiesString.empty())
@@ -233,14 +231,6 @@ bool PropertyParser::lookForNextSubProp(std::string& inout_parsingProps, bool& o
 	}
 
 	return true;
-}
-
-void PropertyParser::cleanString(std::string& toCleanString) const noexcept
-{
-	for (char toRemoveChar : _propertyParsingSettings->ignoredCharacters)
-	{
-		toCleanString.erase(std::remove(toCleanString.begin(), toCleanString.end(), toRemoveChar), toCleanString.end());
-	}
 }
 
 void PropertyParser::removeStartSpaces(std::string& toCleanString) const noexcept

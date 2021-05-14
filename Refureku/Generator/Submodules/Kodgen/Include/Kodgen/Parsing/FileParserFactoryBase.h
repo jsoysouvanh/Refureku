@@ -64,6 +64,13 @@ namespace kodgen
 			void	loadShouldParseAllEntities(toml::value const& table)			noexcept;
 
 			/**
+			*	@brief Load the shouldLogDiagnostic setting from toml.
+			*
+			*	@param table Toml content.
+			*/
+			void	loadShouldLogDiagnostic(toml::value const& table)				noexcept;
+
+			/**
 			*	@brief Load the shouldAbortParsingOnFirstError setting from toml.
 			*
 			*	@param table Toml content.

@@ -6,9 +6,6 @@ CppPropsParserFactory::CppPropsParserFactory() noexcept:
 	//We abort parsing if we encounter a single error while parsing
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 
-	//Ignore and remove space character before collecting properties
-	parsingSettings.propertyParsingSettings.ignoredCharacters = {' '};
-
 	//Each property will be separed by a ,
 	parsingSettings.propertyParsingSettings.propertySeparator = ',';
 

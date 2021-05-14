@@ -11,6 +11,7 @@
 #include "Kodgen/InfoStructures/MethodInfo.h"
 #include "Kodgen/InfoStructures/EntityInfo.h"
 #include "Kodgen/InfoStructures/NestedEnumInfo.h"
+#include "Kodgen/InfoStructures/StructClassTree.h"
 #include "Kodgen/Misc/Helpers.h"
 #include "Kodgen/Misc/DisableWarningMacros.h"
 
@@ -87,6 +88,7 @@ CXChildVisitResult ClassParser::parseNestedEntity(CXCursor cursor, CXCursor /* p
 			break;
 
 		case CXCursorKind::CXCursor_CXXBaseSpecifier:
+			parser->updateStructClassTree(cursor);
 			parser->addBaseClass(cursor);
 			break;
 
@@ -166,6 +168,7 @@ ParsingContext& ClassParser::pushContext(CXCursor const& classCursor, ParsingCon
 	newContext.shouldCheckProperties	= true;
 	newContext.propertyParser			= parentContext.propertyParser;
 	newContext.parsingSettings			= parentContext.parsingSettings;
+	newContext.structClassTree			= parentContext.structClassTree;
 	newContext.parsingResult			= &out_result;
 	newContext.currentAccessSpecifier	= (classCursor.kind == CXCursorKind::CXCursor_ClassDecl) ? EAccessSpecifier::Private : EAccessSpecifier::Public;
 
@@ -229,6 +232,46 @@ void ClassParser::updateAccessSpecifier(CXCursor const& cursor) noexcept
 	getContext().currentAccessSpecifier = static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor));
 }
 
+void ClassParser::updateStructClassTree(CXCursor cursor) noexcept
+{
+	ParsingContext& context = getContext();
+
+	updateStructClassTreeRecursion(clang_getCanonicalType(clang_getCursorType(context.rootCursor)), cursor, *context.structClassTree);
+}
+
+void ClassParser::updateStructClassTreeRecursion(CXType childType, CXCursor baseOfCursor, StructClassTree& out_structClassTree) noexcept
+{
+	//Make sure the baseOf cursor is indeed a CXCursor_CXXBaseSpecifier
+	assert(clang_getCursorKind(baseOfCursor) == CXCursorKind::CXCursor_CXXBaseSpecifier);
+
+	if (out_structClassTree.addInheritanceLink(Helpers::getString(clang_getTypeSpelling(childType)),
+											   Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(clang_getCursorType(baseOfCursor)))),
+											   static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(baseOfCursor))))
+	{
+		//Recursively fill inheritance tree
+		clang_visitChildren(clang_getTypeDeclaration(clang_getCursorType(baseOfCursor)), [](CXCursor cursor, CXCursor parentCursor, CXClientData clientData)
+		{
+			StructClassTree& structClassTree = *reinterpret_cast<StructClassTree*>(clientData);
+
+			if (cursor.kind == CXCursorKind::CXCursor_CXXBaseSpecifier)
+			{
+				//Recurse on parentType's parents
+				updateStructClassTreeRecursion(clang_getCanonicalType(clang_getCursorType(parentCursor)), cursor, structClassTree);
+
+				return CXChildVisitResult::CXChildVisit_Continue;
+			}
+			else if (cursor.kind == CXCursorKind::CXCursor_CXXFinalAttr || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
+			{
+				return CXChildVisitResult::CXChildVisit_Continue;
+			}
+			else
+			{
+				return CXChildVisitResult::CXChildVisit_Break;
+			}
+		}, &out_structClassTree);
+	}
+}
+
 void ClassParser::addBaseClass(CXCursor cursor) noexcept
 {
 	assert(clang_getCursorKind(cursor) == CXCursorKind::CXCursor_CXXBaseSpecifier);
@@ -239,54 +282,7 @@ void ClassParser::addBaseClass(CXCursor cursor) noexcept
 		CXType				parentType	= clang_getCursorType(cursor);
 
 		parsedClass.parents.emplace_back(StructClassInfo::ParentInfo{ static_cast<EAccessSpecifier>(clang_getCXXAccessSpecifier(cursor)), TypeInfo(parentType) });
-
-		if (!parsedClass.isObject)
-		{
-			//we haven't confirmed that the current parsed class inherits from Object, search again
-			parsedClass.isObject = isBaseOf("kodgen::Object", parentType);
-		}
 	}
-}
-
-bool ClassParser::isBaseOf(std::string const& baseClassName, CXType const& childClass) noexcept
-{
-	//Check if the base class is actually the child class
-	if (Helpers::getString(clang_getTypeSpelling(clang_getCanonicalType(childClass))) == baseClassName)
-	{
-		return true;
-	}
-
-	InheritanceSearch searchData{baseClassName, false};
-
-	//Recursively search in class childClass parents
-	clang_visitChildren(clang_getTypeDeclaration(childClass), [](CXCursor cursor, CXCursor /* parentCursor */, CXClientData clientData)
-	{
-		InheritanceSearch& searchData = *reinterpret_cast<InheritanceSearch*>(clientData);
-
-		if (cursor.kind == CXCursorKind::CXCursor_CXXBaseSpecifier)
-		{
-			if (isBaseOf(searchData.baseClassName, clang_getCanonicalType(clang_getCursorType(cursor))))
-			{
-				searchData.doesInherit = true;
-
-				return CXChildVisitResult::CXChildVisit_Break;
-			}
-			else
-			{
-				return CXChildVisitResult::CXChildVisit_Continue;
-			}
-		}
-		else if (cursor.kind == CXCursorKind::CXCursor_CXXFinalAttr || cursor.kind == CXCursorKind::CXCursor_AnnotateAttr)
-		{
-			return CXChildVisitResult::CXChildVisit_Continue;
-		}
-		else
-		{
-			return CXChildVisitResult::CXChildVisit_Break;
-		}
-	}, &searchData);
-
-	return searchData.doesInherit;
 }
 
 void ClassParser::addFieldResult(FieldParsingResult&& result) noexcept

@@ -27,12 +27,6 @@ namespace kodgen
 	class ClassParser : public EntityParser
 	{
 		private:
-			struct InheritanceSearch
-			{
-				std::string	baseClassName;
-				bool		doesInherit = false;
-			};
-
 			/** Parser used to parse enums. */
 			EnumParser		_enumParser;	
 
@@ -53,18 +47,18 @@ namespace kodgen
 			*/
 			static CXChildVisitResult		parseNestedEntity(CXCursor		cursor,
 															  CXCursor		parentCursor,
-															  CXClientData	clientData)					noexcept;
+															  CXClientData	clientData)								noexcept;
 
 			/**
-			*	@brief Check if a class inherits from another class.
-			*	
-			*	@param childClass		The child class to check.
-			*	@param parentClassName	Name of the potential base class to check.
-			*	
-			*	@return true if childClass inherits from baseClassName, else false.
+			*	@brief Update the context structClassTree recursively.
+			* 
+			*	@param childType			type of the child struct/class.
+			*	@param baseOfCursor			AST cursor to the base class.
+			*	@param out_structClassTree	StructClassTree to update.
 			*/
-			static bool						isBaseOf(std::string const& baseClassName,
-													 CXType const&		childClass)						noexcept;
+			static void						updateStructClassTreeRecursion(CXType			childType,
+																		   CXCursor			baseOfCursor,
+																		   StructClassTree& out_structClassTree)	noexcept;
 
 			/**
 			*	@brief Push a new clean context to prepare struct/class parsing.
@@ -104,6 +98,13 @@ namespace kodgen
 			*/
 			void							updateAccessSpecifier(CXCursor const& cursor)				noexcept;
 			
+			/**
+			*	@brief Update the context structClassTree according to the provided inheritance cursor.
+			* 
+			*	@param cursor AST cursor to the base class.
+			*/
+			void							updateStructClassTree(CXCursor cursor)						noexcept;
+
 			/**
 			*	@brief Add a base class (parent class) to the currently parsed struct/class info.
 			*

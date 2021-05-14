@@ -9,7 +9,7 @@ using namespace rfk;
 std::string const				FileGenerationUnit::_nativePropsMacroName	= std::string(_internalPrefix) + "NativeProperties_GENERATED";
 std::hash<std::string> const	FileGenerationUnit::_stringHasher;
 
-void FileGenerationUnit::postGenerateFile(kodgen::FileParsingResult& /* parsingResult */) noexcept
+void FileGenerationUnit::postGenerateFile(kodgen::FileParsingResult const& /* parsingResult */) noexcept
 {
 	_generatedNamespaces.clear();
 	_generatedClasses.clear();
@@ -25,7 +25,7 @@ std::string FileGenerationUnit::getEndFileMacroName() const noexcept
 	return "File_GENERATED";
 }
 
-void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult& parsingResult) const noexcept
+void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
 {
 	//Always call base class
 	kodgen::FileGenerationUnit::writeHeader(file, parsingResult);
@@ -41,7 +41,7 @@ void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FilePa
 					"\n");
 }
 
-void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsingResult& parsingResult) const noexcept
+void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
 {
 	//Always call base class
 	kodgen::FileGenerationUnit::writeFooter(file, parsingResult);
@@ -53,9 +53,9 @@ void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FilePa
 	generateEndFileMacro(file);
 }
 
-bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileGenerationResult& out_genResult) noexcept
+bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& out_genResult) noexcept
 {
-	if (kodgen::FileGenerationUnit::writeEntityToFile(generatedFile, entityInfo, out_genResult))
+	if (kodgen::FileGenerationUnit::writeEntityToFile(generatedFile, entityInfo, parsingResult, out_genResult))
 	{
 		saveEntitiesUsingNativeProperties(entityInfo);
 
@@ -65,9 +65,9 @@ bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile,
 	return false;
 }
 
-bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& namespaceInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& namespaceInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
 {
-	if (kodgen::FileGenerationUnit::writeNamespaceToFile(generatedFile, namespaceInfo, genResult))
+	if (kodgen::FileGenerationUnit::writeNamespaceToFile(generatedFile, namespaceInfo, parsingResult, genResult))
 	{
 		_generatedNamespaces.push_back(reinterpret_cast<kodgen::NamespaceInfo const*>(&namespaceInfo));
 
@@ -77,9 +77,9 @@ bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFi
 	return false;
 }
 
-bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& structClassInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& structClassInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
 {
-	if (kodgen::FileGenerationUnit::writeStructOrClassToFile(generatedFile, structClassInfo, genResult))
+	if (kodgen::FileGenerationUnit::writeStructOrClassToFile(generatedFile, structClassInfo, parsingResult, genResult))
 	{
 		_generatedClasses.push_back(reinterpret_cast<kodgen::StructClassInfo const*>(&structClassInfo));
 
@@ -89,9 +89,9 @@ bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generat
 	return false;
 }
 
-bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& enumInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& enumInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
 {
-	if (kodgen::FileGenerationUnit::writeEnumToFile(generatedFile, enumInfo, genResult))
+	if (kodgen::FileGenerationUnit::writeEnumToFile(generatedFile, enumInfo, parsingResult, genResult))
 	{
 		_generatedEnums.push_back(reinterpret_cast<kodgen::EnumInfo const*>(&enumInfo));
 
@@ -101,9 +101,9 @@ bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, k
 	return false;
 }
 
-bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& variableInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& variableInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
 {
-	if (kodgen::FileGenerationUnit::writeVariableToFile(generatedFile, variableInfo, genResult))
+	if (kodgen::FileGenerationUnit::writeVariableToFile(generatedFile, variableInfo, parsingResult, genResult))
 	{
 		_generatedVariables.push_back(reinterpret_cast<kodgen::VariableInfo const*>(&variableInfo));
 
@@ -113,9 +113,9 @@ bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFil
 	return false;
 }
 
-bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& functionInfo, kodgen::FileGenerationResult& genResult) noexcept
+bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& functionInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
 {
-	if (kodgen::FileGenerationUnit::writeFunctionToFile(generatedFile, functionInfo, genResult))
+	if (kodgen::FileGenerationUnit::writeFunctionToFile(generatedFile, functionInfo, parsingResult, genResult))
 	{
 		_generatedFunctions.push_back(reinterpret_cast<kodgen::FunctionInfo const*>(&functionInfo));
 
