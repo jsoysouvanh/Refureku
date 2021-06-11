@@ -58,7 +58,7 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::FileGenerationResult
 	}
 }
 
-void parseAndGenerate(fs::path&& exePath)
+void parseAndGenerate(fs::path&& exePath, fs::path&& settingsFilePath)
 {
 	rfk::FileParserFactory<rfk::FileParser>	fileParserFactory;
 	rfk::FileGenerationUnit					fileGenerationUnit;
@@ -70,19 +70,18 @@ void parseAndGenerate(fs::path&& exePath)
 	fileParserFactory.logger	= &logger;
 	fileGenerator.logger		= &logger;
 
-	fs::path pathToSettingsFile = exePath.make_preferred() / "RefurekuSettings.toml";
-
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
-
-	//Load settings
-	if (fileGenerator.loadSettings(pathToSettingsFile) && fileParserFactory.loadSettings(pathToSettingsFile))
+	
+	if (!settingsFilePath.empty())
 	{
-#if RFK_DEV
-		// This part is for continuous integration system only
-		fs::path includeDir			= fs::current_path() / "Include";
-		fs::path generatedDir		= includeDir / "Generated";
-		fs::path refurekuIncludeDir	= fs::current_path().parent_path() / "Include";
+		//Load settings from settings file
+		if (!(fileGenerator.loadSettings(settingsFilePath) && fileParserFactory.loadSettings(settingsFilePath)))
+		{
+			return;
+		}
+	}
 
+#if RFK_DEV
 		//Specify used compiler
 #if defined(__GNUC__)
 		fileParserFactory.parsingSettings.setCompilerExeName("g++");
@@ -92,25 +91,20 @@ void parseAndGenerate(fs::path&& exePath)
 		fileParserFactory.parsingSettings.setCompilerExeName("msvc");
 #endif
 
-		fileGenerator.settings.setOutputDirectory(generatedDir);
-		fileGenerator.settings.addToParseDirectory(includeDir);
-		fileGenerator.settings.addIgnoredDirectory(generatedDir);
-		fileParserFactory.parsingSettings.addProjectIncludeDirectory(refurekuIncludeDir);
-
 		printGenerationSetup(logger, fileGenerator, fileParserFactory);
 #endif
 
-		//Parse
-		kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);
+	//Parse
+	kodgen::FileGenerationResult genResult = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, false);
 
-		//Result
-		printGenerationResult(logger, genResult);
-	}
+	//Result
+	printGenerationResult(logger, genResult);
 }
 
-int main(int /* argc */, char** argv)
+/** Can provide the path to the settings file as 1st parameter */
+int main(int argc, char** argv)
 {
-	parseAndGenerate(fs::path(argv[0]).parent_path());
+	parseAndGenerate(fs::path(argv[0]).parent_path(), (argc > 1) ? fs::path(argv[1]) : fs::path());
 
 	return EXIT_SUCCESS;
 }
