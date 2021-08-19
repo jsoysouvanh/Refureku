@@ -6,6 +6,7 @@ on:
       - master
       - dev
       - CI-setup
+      - rework
 
 jobs:
   build_windows_msvc:

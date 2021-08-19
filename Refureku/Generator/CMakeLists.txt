@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13.5)
 project(RefurekuGenerator)
 
 # Build dependencies
-add_subdirectory(Submodules/Kodgen)
+add_subdirectory(Submodules_Old/Kodgen)	#TODO: Update that with a valid Kodgen submodule
 
 # Add Refureku generator executable
 set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
