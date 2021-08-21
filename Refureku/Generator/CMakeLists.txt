@@ -3,26 +3,21 @@ cmake_minimum_required(VERSION 3.13.5)
 project(RefurekuGenerator)
 
 # Build dependencies
-add_subdirectory(Submodules_Old/Kodgen)	#TODO: Update that with a valid Kodgen submodule
+#add_subdirectory(Submodules_Old/Kodgen)	#TODO: Update that with a valid Kodgen submodule
+add_subdirectory(Submodules/Kodgen)
 
 # Add Refureku generator executable
 set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
 add_library(${RefurekuGeneratorLibTarget}
 				STATIC
-					Source/Properties/DefaultSimplePropertyRule.cpp
-					Source/Properties/DefaultComplexPropertyRule.cpp
 					Source/Properties/CustomInstantiatorPropertyRule.cpp
 					Source/Properties/PropertySettingsPropertyRule.cpp
-					Source/Properties/TestPropertyRule.cpp
-
-					Source/Properties/CodeGenData/PropertyCodeGenData.cpp
-					Source/Properties/CodeGenData/PropertyCodeGenFileHeaderData.cpp
-					Source/Properties/CodeGenData/PropertyCodeGenPropertyAddData.cpp
-					Source/Properties/CodeGenData/PropertyCodeGenClassFooterData.cpp
-					Source/Properties/CodeGenData/PropertyCodeGenFileFooterData.cpp
+#					Source/Properties/TestPropertyRule.cpp
 
 					Source/Parsing/FileParser.cpp
 					
+					Source/CodeGen/CodeGenManager.cpp
+					Source/CodeGen/MacroCodeGenUnitSettings.cpp
 					Source/CodeGen/GeneratedEntityCodeTemplate.cpp
 					Source/CodeGen/GeneratedNamespaceCodeTemplate.cpp
 					Source/CodeGen/GeneratedClassCodeTemplate.cpp
@@ -30,7 +25,6 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/CodeGen/GeneratedVariableCodeTemplate.cpp
 					Source/CodeGen/GeneratedFunctionCodeTemplate.cpp
 					Source/CodeGen/FileGenerationUnit.cpp
-					Source/CodeGen/FileGenerator.cpp
 				)
 
 # Warning level

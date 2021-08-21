@@ -7,25 +7,28 @@
 
 #pragma once
 
-#include "RefurekuGenerator/Properties/DefaultSimplePropertyRule.h"
+#include <Kodgen/CodeGen/Macro/MacroPropertyCodeGen.h>
 
 namespace rfk
 {
-	class CustomInstantiatorPropertyRule : public DefaultSimplePropertyRule
+	class CustomInstantiatorPropertyRule : public kodgen::MacroPropertyCodeGen
 	{
 		protected:
-			virtual std::string generatePrePropertyAddCode(kodgen::EntityInfo const&		entity,
+			virtual bool	generateClassFooterCode(kodgen::EntityInfo const&	entity,
+													kodgen::Property const&		property,
+													kodgen::uint8				propertyIndex,
+													kodgen::MacroCodeGenEnv&	env,
+													std::string&				inout_result)		noexcept override;
+
+			/*virtual std::string generatePrePropertyAddCode(kodgen::EntityInfo const&		entity,
 														   kodgen::Property const&			property,
 														   PropertyCodeGenPropertyAddData&	data)		const noexcept override;
 
 			virtual std::string generateClassFooterCode(kodgen::EntityInfo const&		entity,
 														kodgen::Property const&			property,
-														PropertyCodeGenClassFooterData&	data)			const noexcept override;
+														PropertyCodeGenClassFooterData&	data)			const noexcept override;*/
 
 		public:
-			CustomInstantiatorPropertyRule()										noexcept;
-			CustomInstantiatorPropertyRule(CustomInstantiatorPropertyRule const&)	= default;
-			CustomInstantiatorPropertyRule(CustomInstantiatorPropertyRule&&)		= default;
-			virtual ~CustomInstantiatorPropertyRule()								= default;
+			virtual ~CustomInstantiatorPropertyRule() = default;
 	};
 }
