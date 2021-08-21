@@ -1,15 +1,9 @@
-[FileGenerationSettings]
-# Generated files will use this extension
-generatedFilesExtension = ".rfk.h"
-
+[CodeGenManagerSettings]
 # List of supported extensions
 supportedExtensions = [".h", ".hpp"]
 
-# Generated files will be located here
-outputDirectory = '''Include/Generated'''
-
 # Files contained in the directories of this list will be parsed
-toParseDirectories = [
+toProcessDirectories = [
 	'''Include/'''
 ]
 
@@ -25,7 +19,12 @@ ignoredDirectories = [
 ignoredFiles = []
 
 
-[FileParsingSettings]
+[CodeGenUnitSettings]
+# Generated files will be located here
+outputDirectory = '''Include/Generated'''
+
+
+[ParsingSettings]
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError = true
 
@@ -40,7 +39,6 @@ projectIncludeDirectories = [
 # Must be one of "msvc", "clang++", "g++"
 compilerExeName = "clang++"
 
-[FileParsingSettings.Properties]
 namespaceMacroName = "RFKNamespace"
 classmacroName = "RFKClass"
 structMacroName = "RFKStruct"

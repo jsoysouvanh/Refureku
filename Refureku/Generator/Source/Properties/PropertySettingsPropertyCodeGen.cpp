@@ -1,4 +1,4 @@
-#include "RefurekuGenerator/Properties/PropertySettingsPropertyRule.h"
+#include "RefurekuGenerator/Properties/PropertySettingsPropertyCodeGen.h"
 
 #include <Kodgen/InfoStructures/MethodInfo.h>
 
@@ -6,10 +6,16 @@
 
 using namespace rfk;
 
-bool PropertySettingsPropertyRule::generateClassFooterCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, kodgen::uint8 propertyIndex, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+bool PropertySettingsPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, kodgen::uint8 propertyIndex, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	//TODO
 	return true;
+}
+
+bool PropertySettingsPropertyCodeGen::shouldGenerateCode(kodgen::EntityInfo const& entity, kodgen::Property const& property, kodgen::uint8 propertyIndex) const noexcept
+{
+	//TODO
+	return false;
 }
 
 //std::string PropertySettingsPropertyRule::generatePrePropertyAddCode(kodgen::EntityInfo const& entity, kodgen::ComplexProperty const& /* property */, PropertyCodeGenPropertyAddData& /* data */) const noexcept

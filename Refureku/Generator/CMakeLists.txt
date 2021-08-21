@@ -3,28 +3,21 @@ cmake_minimum_required(VERSION 3.13.5)
 project(RefurekuGenerator)
 
 # Build dependencies
-#add_subdirectory(Submodules_Old/Kodgen)	#TODO: Update that with a valid Kodgen submodule
 add_subdirectory(Submodules/Kodgen)
 
 # Add Refureku generator executable
 set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
 add_library(${RefurekuGeneratorLibTarget}
 				STATIC
-					Source/Properties/CustomInstantiatorPropertyRule.cpp
-					Source/Properties/PropertySettingsPropertyRule.cpp
+					Source/Properties/CustomInstantiatorPropertyCodeGen.cpp
+					Source/Properties/PropertySettingsPropertyCodeGen.cpp
 #					Source/Properties/TestPropertyRule.cpp
 
 					Source/Parsing/FileParser.cpp
 					
 					Source/CodeGen/CodeGenManager.cpp
 					Source/CodeGen/MacroCodeGenUnitSettings.cpp
-					Source/CodeGen/GeneratedEntityCodeTemplate.cpp
-					Source/CodeGen/GeneratedNamespaceCodeTemplate.cpp
-					Source/CodeGen/GeneratedClassCodeTemplate.cpp
-					Source/CodeGen/GeneratedEnumCodeTemplate.cpp
-					Source/CodeGen/GeneratedVariableCodeTemplate.cpp
-					Source/CodeGen/GeneratedFunctionCodeTemplate.cpp
-					Source/CodeGen/FileGenerationUnit.cpp
+					Source/CodeGen/ReflectionCodeGenModule.cpp
 				)
 
 # Warning level

@@ -11,24 +11,28 @@
 
 namespace rfk
 {
-	class PropertySettingsPropertyRule : public kodgen::MacroPropertyCodeGen
+	class CustomInstantiatorPropertyCodeGen : public kodgen::MacroPropertyCodeGen
 	{
 		protected:
 			virtual bool	generateClassFooterCode(kodgen::EntityInfo const&	entity,
 													kodgen::Property const&		property,
 													kodgen::uint8				propertyIndex,
 													kodgen::MacroCodeGenEnv&	env,
-													std::string&				inout_result)		noexcept override;
+													std::string&				inout_result)			noexcept	override;
+
+			virtual bool	shouldGenerateCode(kodgen::EntityInfo const&	entity,
+											   kodgen::Property const&		property,
+											   kodgen::uint8				propertyIndex)		const	noexcept	override;
 
 			/*virtual std::string generatePrePropertyAddCode(kodgen::EntityInfo const&		entity,
-														   kodgen::ComplexProperty const&	property,
+														   kodgen::Property const&			property,
 														   PropertyCodeGenPropertyAddData&	data)		const noexcept override;
 
 			virtual std::string generateClassFooterCode(kodgen::EntityInfo const&		entity,
-														kodgen::ComplexProperty const&	property,
+														kodgen::Property const&			property,
 														PropertyCodeGenClassFooterData&	data)			const noexcept override;*/
 
 		public:
-			virtual ~PropertySettingsPropertyRule() = default;
+			virtual ~CustomInstantiatorPropertyCodeGen() = default;
 	};
 }

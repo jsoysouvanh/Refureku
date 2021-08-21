@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>	//std::forward
 
 #include <Kodgen/Misc/Filesystem.h>
 #include <Kodgen/Misc/DefaultLogger.h>
@@ -7,6 +8,7 @@
 
 #include "RefurekuGenerator/CodeGen/CodeGenManager.h"
 #include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
+#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
 
 void printGenerationSetup(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings const& codeGenMgrSettings, kodgen::ParsingSettings const& parsingSettings,
 						  kodgen::MacroCodeGenUnitSettings const& codeGenUnitSettings)
@@ -36,6 +38,44 @@ void printGenerationSetup(kodgen::ILogger& logger, kodgen::CodeGenManagerSetting
 	}
 }
 
+bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::ParsingSettings& parsingSettings,
+				  kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings, fs::path&& settingsFilePath)
+{
+	if (!settingsFilePath.empty())
+	{
+		//Load settings from settings file
+		//All settings are localized in a single file for ease of use
+		if (!parsingSettings.loadFromFile(settingsFilePath, &logger))
+		{
+			return false;
+		}
+		else if (!codeGenMgrSettings.loadFromFile(settingsFilePath, &logger))
+		{
+			return false;
+		}
+		else if (!codeGenUnitSettings.loadFromFile(settingsFilePath, &logger))
+		{
+			return false;
+		}
+	}
+
+#if RFK_DEV
+	//Specify used compiler
+#if defined(__GNUC__)
+	fileParser.getSettings().setCompilerExeName("g++");
+#elif defined(__clang__)
+	fileParser.getSettings().setCompilerExeName("clang++");
+#elif defined(_MSC_VER)
+	fileParser.getSettings().setCompilerExeName("msvc");
+#endif
+
+#endif
+
+	printGenerationSetup(logger, codeGenMgrSettings, parsingSettings, codeGenUnitSettings);
+
+	return true;
+}
+
 void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const& genResult)
 {
 	if (genResult.completed)
@@ -59,36 +99,18 @@ void parseAndGenerate(fs::path&& exePath, fs::path&& settingsFilePath)
 	rfk::CodeGenManager codeGenMgr;
 	codeGenMgr.logger = &logger;
 
+	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
+
 	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
 	kodgen::MacroCodeGenUnit codeGenUnit;
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
+	codeGenUnit.addModule(reflectionCodeGenModule);
 
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 	
-	if (!settingsFilePath.empty())
-	{
-		//Load settings from settings file
-		//All settings are localized in a single file for ease of use
-		if (!fileParser.getSettings().loadFromFile(settingsFilePath) || !codeGenMgr.settings.loadFromFile(settingsFilePath) || !codeGenUnitSettings.loadFromFile(settingsFilePath))
-		{
-			return;
-		}
-	}
-	
-#if RFK_DEV
-		//Specify used compiler
-#if defined(__GNUC__)
-		fileParser.getSettings().setCompilerExeName("g++");
-#elif defined(__clang__)
-		fileParser.getSettings().setCompilerExeName("clang++");
-#elif defined(_MSC_VER)
-		fileParser.getSettings().setCompilerExeName("msvc");
-#endif
-
-		printGenerationSetup(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings);
-#endif
+	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(settingsFilePath));
 
 	//Parse
 	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
