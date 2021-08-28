@@ -2,7 +2,7 @@
 
 #include <Refureku/TypeInfo/Properties/PropertySettings.h>
 
-#include "Generated/Test.rfk.h"
+#include "Generated/Test.rfkh.h"
 
 constexpr rfk::EEntityKind all = (rfk::EEntityKind)~0; 
 
@@ -38,4 +38,4 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Va
     Slider_GENERATED
 };
 
-File_GENERATED
+File_Test_GENERATED

@@ -6,16 +6,15 @@
 
 using namespace rfk;
 
+CustomInstantiatorPropertyCodeGen::CustomInstantiatorPropertyCodeGen() noexcept:
+	kodgen::MacroPropertyCodeGen("CustomInstantiator", kodgen::EEntityType::Method)
+{
+}
+
 bool CustomInstantiatorPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, kodgen::uint8 propertyIndex, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	//TODO
 	return true;
-}
-
-bool CustomInstantiatorPropertyCodeGen::shouldGenerateCode(kodgen::EntityInfo const& entity, kodgen::Property const& property, kodgen::uint8 propertyIndex) const noexcept
-{
-	//TODO
-	return false;
 }
 
 //std::string CustomInstantiatorPropertyRule::generatePrePropertyAddCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, PropertyCodeGenPropertyAddData& data) const noexcept

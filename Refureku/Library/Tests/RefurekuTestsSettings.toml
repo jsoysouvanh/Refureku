@@ -1,6 +1,6 @@
 [CodeGenManagerSettings]
 # List of supported extensions
-supportedExtensions = [".h", ".hpp"]
+supportedFileExtensions = [".h", ".hpp"]
 
 # Files contained in the directories of this list will be parsed
 toProcessDirectories = [
@@ -8,7 +8,7 @@ toProcessDirectories = [
 ]
 
 # Files to parse which are not included in any directory of toParseDirectories
-toParseFiles = []
+toProcessFiles = []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories = [
@@ -37,10 +37,10 @@ projectIncludeDirectories = [
 ]
 
 # Must be one of "msvc", "clang++", "g++"
-compilerExeName = "clang++"
+compilerExeName = "msvc"
 
 namespaceMacroName = "RFKNamespace"
-classmacroName = "RFKClass"
+classMacroName = "RFKClass"
 structMacroName = "RFKStruct"
 fieldMacroName = "RFKField"
 methodMacroName = "RFKMethod"

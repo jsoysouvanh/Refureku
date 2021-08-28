@@ -8,13 +8,13 @@ project(RefurekuTests)
 
 set(RefurekuTestsTarget RefurekuTests)
 add_executable(${RefurekuTestsTarget}
-					ExampleClass.cpp
-					ExampleClass2.cpp
-					CustomString.cpp
+#					ExampleClass.cpp
+#					ExampleClass2.cpp
+#					CustomString.cpp
 					ThirdPartyEnumReflectionCode.cpp
-					Test.cpp
-					Vector3.cpp
-					GeneratedCodeInCpp.cpp
+#					Test.cpp
+#					Vector3.cpp
+#					GeneratedCodeInCpp.cpp
 
 					RefurekuTests.cpp
 				)

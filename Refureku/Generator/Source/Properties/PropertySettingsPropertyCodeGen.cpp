@@ -6,16 +6,15 @@
 
 using namespace rfk;
 
+PropertySettingsPropertyCodeGen::PropertySettingsPropertyCodeGen() noexcept:
+	kodgen::MacroPropertyCodeGen("PropertySettings", kodgen::EEntityType::Class | kodgen::EEntityType::Struct)
+{
+}
+
 bool PropertySettingsPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, kodgen::uint8 propertyIndex, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	//TODO
 	return true;
-}
-
-bool PropertySettingsPropertyCodeGen::shouldGenerateCode(kodgen::EntityInfo const& entity, kodgen::Property const& property, kodgen::uint8 propertyIndex) const noexcept
-{
-	//TODO
-	return false;
 }
 
 //std::string PropertySettingsPropertyRule::generatePrePropertyAddCode(kodgen::EntityInfo const& entity, kodgen::ComplexProperty const& /* property */, PropertyCodeGenPropertyAddData& /* data */) const noexcept

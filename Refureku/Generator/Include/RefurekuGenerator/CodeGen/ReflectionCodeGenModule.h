@@ -116,15 +116,22 @@ namespace rfk
 		//												kodgen::FileGenerationResult&		genResult)					noexcept override;
 
 		private:
-			CustomInstantiatorPropertyCodeGen	customInstantiatorProperty;
-			PropertySettingsPropertyCodeGen		propertySettingsProperty;
+			CustomInstantiatorPropertyCodeGen	_customInstantiatorProperty;
+			PropertySettingsPropertyCodeGen		_propertySettingsProperty;
 
 		protected:
-			virtual ReflectionCodeGenModule* clone() const noexcept override;
+			virtual ReflectionCodeGenModule*	clone()												const	noexcept	override;
+
+			virtual bool						preGenerateCode(kodgen::EntityInfo const*	entity,
+																kodgen::MacroCodeGenEnv&	env)			noexcept;
+
+			virtual kodgen::ETraversalBehaviour generateHeaderFileHeaderCode(kodgen::EntityInfo const* /* entity */, kodgen::MacroCodeGenEnv& /* env */, std::string& /* inout_result */) noexcept override
+			{
+				return kodgen::ETraversalBehaviour::Recurse;
+			}
 
 		public:
 			ReflectionCodeGenModule()								noexcept;
 			ReflectionCodeGenModule(ReflectionCodeGenModule const&)	noexcept;
-			virtual ~ReflectionCodeGenModule()						= default;
 	};
 }

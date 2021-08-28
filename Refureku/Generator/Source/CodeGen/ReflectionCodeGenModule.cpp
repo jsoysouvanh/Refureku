@@ -6,8 +6,8 @@ using namespace rfk;
 
 ReflectionCodeGenModule::ReflectionCodeGenModule() noexcept
 {
-	addPropertyCodeGen(customInstantiatorProperty);
-	addPropertyCodeGen(propertySettingsProperty);
+	addPropertyCodeGen(_customInstantiatorProperty);
+	addPropertyCodeGen(_propertySettingsProperty);
 }
 
 ReflectionCodeGenModule::ReflectionCodeGenModule(ReflectionCodeGenModule const&) noexcept:
@@ -18,6 +18,13 @@ ReflectionCodeGenModule::ReflectionCodeGenModule(ReflectionCodeGenModule const&)
 ReflectionCodeGenModule* ReflectionCodeGenModule::clone() const noexcept
 {
 	return new ReflectionCodeGenModule(*this);
+}
+
+bool ReflectionCodeGenModule::preGenerateCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env) noexcept
+{
+	//env.getLogger()->log(env.getFileParsingResult()->parsedFile.string() + ": " + entity->name);
+
+	return true;
 }
 
 //std::string const				ReflectionCodeGenModule::_nativePropsMacroName	= std::string(_internalPrefix) + "NativeProperties_GENERATED";

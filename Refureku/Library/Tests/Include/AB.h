@@ -3,7 +3,8 @@
 #include "CustomProperties.h"
 #include "Test.h"
 
-#include "Generated/AB.rfk.h"
+//#include "Generated/AB.rfk.h"
+#include "Generated/AB.rfkh.h"
 
 class RFKClass(CustomProperty2   , CustomProperty(1, 2) ,CustomProperty2) A
 {
@@ -38,4 +39,4 @@ class RFKClass() C : public A
 	C_GENERATED
 };
 
-File_GENERATED
+File_AB_GENERATED

@@ -5,6 +5,6 @@ using namespace rfk;
 CodeGenManager::CodeGenManager() noexcept
 {
 	//Only parse .h and .hpp files
-	settings.addSupportedExtension(".h");
-	settings.addSupportedExtension(".hpp");
+	settings.addSupportedFileExtension(".h");
+	settings.addSupportedFileExtension(".hpp");
 }

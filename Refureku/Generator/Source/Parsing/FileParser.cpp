@@ -10,7 +10,7 @@ void FileParser::preParse(fs::path const& parseFile) noexcept
 	}
 }
 
-void FileParser::postParse(fs::path const&, kodgen::FileParsingResult const& result) noexcept
+void FileParser::postParse(fs::path const& parseFile, kodgen::FileParsingResult const& result) noexcept
 {
 	if (logger != nullptr)
 	{
@@ -19,7 +19,7 @@ void FileParser::postParse(fs::path const&, kodgen::FileParsingResult const& res
 			logger->log(parsingError.toString(), kodgen::ILogger::ELogSeverity::Error);
 		}
 
-		logger->log("Found " + std::to_string(result.namespaces.size()) + " namespace(s), " +
+		logger->log(parseFile.string() + ": Found " + std::to_string(result.namespaces.size()) + " namespace(s), " +
 					std::to_string(result.structs.size()) + " struct(s), " +
 					std::to_string(result.classes.size()) + " classe(s) and " +
 					std::to_string(result.enums.size()) + " enum(s).", kodgen::ILogger::ELogSeverity::Info);
