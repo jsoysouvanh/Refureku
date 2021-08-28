@@ -1,7 +1,7 @@
-#include "ExampleClass.h"
-
 #include <iostream>
 #include <cstdint>
+
+#include "Generated/ExampleClass.rfks.h"
 
 using namespace namespace1;
 using namespace namespace2;

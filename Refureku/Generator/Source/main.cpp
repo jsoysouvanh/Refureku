@@ -6,6 +6,7 @@
 #include <Kodgen/Parsing/FileParser.h>
 #include <Kodgen/CodeGen/Macro/MacroCodeGenUnit.h>
 
+#include "RefurekuGenerator/Parsing/FileParser.h"
 #include "RefurekuGenerator/CodeGen/CodeGenManager.h"
 #include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
 #include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
@@ -62,11 +63,11 @@ bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeG
 #if RFK_DEV
 	//Specify used compiler
 #if defined(__GNUC__)
-	fileParser.getSettings().setCompilerExeName("g++");
+	parsingSettings.setCompilerExeName("g++");
 #elif defined(__clang__)
-	fileParser.getSettings().setCompilerExeName("clang++");
+	parsingSettings.setCompilerExeName("clang++");
 #elif defined(_MSC_VER)
-	fileParser.getSettings().setCompilerExeName("msvc");
+	parsingSettings.setCompilerExeName("msvc");
 #endif
 
 #endif
@@ -89,11 +90,11 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const&
 	}
 }
 
-void parseAndGenerate(fs::path&& exePath, fs::path&& settingsFilePath)
+void parseAndGenerate(fs::path&& settingsFilePath)
 {
 	kodgen::DefaultLogger logger;
 
-	kodgen::FileParser fileParser;
+	rfk::FileParser fileParser;
 	fileParser.logger = &logger;
 
 	rfk::CodeGenManager codeGenMgr;
@@ -113,7 +114,7 @@ void parseAndGenerate(fs::path&& exePath, fs::path&& settingsFilePath)
 	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(settingsFilePath));
 
 	//Parse
-	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
+	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true); //TODO: Set this to false
 
 	//Result
 	printGenerationResult(logger, genResult);
@@ -122,7 +123,7 @@ void parseAndGenerate(fs::path&& exePath, fs::path&& settingsFilePath)
 /** Can provide the path to the settings file as 1st parameter */
 int main(int argc, char** argv)
 {
-	parseAndGenerate(fs::path(argv[0]).parent_path(), (argc > 1) ? fs::path(argv[1]) : fs::path());
+	parseAndGenerate((argc > 1) ? fs::path(argv[1]) : "RefurekuTestsSettings.toml" /*fs::path()*/);
 
 	return EXIT_SUCCESS;
 }

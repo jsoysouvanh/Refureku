@@ -5,8 +5,8 @@
 #include <Refureku/Refureku.h>
 
 #include "AB.h"
-//#include "ExampleClass.h"
-//#include "TestPropertyUsage.h"
+#include "ExampleClass.h"
+#include "TestPropertyUsage.h"
 #include "ThirdPartyEnumReflectionCode.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }

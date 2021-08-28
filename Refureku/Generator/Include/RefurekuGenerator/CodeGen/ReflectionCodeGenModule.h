@@ -1,5 +1,5 @@
 /**
-*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
 *	See the README.md file for full license details.
@@ -116,22 +116,61 @@ namespace rfk
 		//												kodgen::FileGenerationResult&		genResult)					noexcept override;
 
 		private:
+			/** Code generator for the CustomInstantiator property. */
 			CustomInstantiatorPropertyCodeGen	_customInstantiatorProperty;
+
+			/** Code generator for the PropertySettings property. */
 			PropertySettingsPropertyCodeGen		_propertySettingsProperty;
 
+			static std::hash<std::string>	_stringHasher;
+
+			//Helper methods
+			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)	noexcept;
+
+			//Generation methods
+			/**
+			*	TODO
+			*/
+			void	declareStaticGetArchetypeMethod(kodgen::StructClassInfo const&	structClass,
+													kodgen::MacroCodeGenEnv&		env,
+													std::string&					inout_result)				const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineStaticGetArchetypeMethod(kodgen::StructClassInfo const&	structClass,
+													kodgen::MacroCodeGenEnv&		env,
+													std::string&					inout_result)				const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const&	structClass,
+																 kodgen::MacroCodeGenEnv&		env,
+																 std::string&					inout_result)	const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const&	structClass,
+																 kodgen::MacroCodeGenEnv&		env,
+																 std::string&					inout_result)	const	noexcept;
+
 		protected:
-			virtual ReflectionCodeGenModule*	clone()												const	noexcept	override;
+			virtual ReflectionCodeGenModule*	clone()																const	noexcept	override;
 
-			virtual bool						preGenerateCode(kodgen::EntityInfo const*	entity,
-																kodgen::MacroCodeGenEnv&	env)			noexcept;
+			virtual kodgen::ETraversalBehaviour	generateClassFooterCode(kodgen::EntityInfo const*	entity,
+																		kodgen::MacroCodeGenEnv&	env,
+																		std::string&				inout_result)			noexcept	override;
 
-			virtual kodgen::ETraversalBehaviour generateHeaderFileHeaderCode(kodgen::EntityInfo const* /* entity */, kodgen::MacroCodeGenEnv& /* env */, std::string& /* inout_result */) noexcept override
-			{
-				return kodgen::ETraversalBehaviour::Recurse;
-			}
+			virtual kodgen::ETraversalBehaviour	generateSourceFileHeaderCode(kodgen::EntityInfo const*	entity,
+																			 kodgen::MacroCodeGenEnv&	env,
+																			 std::string&				inout_result)		noexcept	override;
 
 		public:
 			ReflectionCodeGenModule()								noexcept;
 			ReflectionCodeGenModule(ReflectionCodeGenModule const&)	noexcept;
 	};
+
+	#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.inl"
 }

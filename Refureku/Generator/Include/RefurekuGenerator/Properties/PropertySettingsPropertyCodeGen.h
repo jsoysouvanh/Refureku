@@ -14,8 +14,8 @@ namespace rfk
 	class PropertySettingsPropertyCodeGen : public kodgen::MacroPropertyCodeGen
 	{
 		protected:
-			virtual bool	generateClassFooterCode(kodgen::EntityInfo const&	entity,
-													kodgen::Property const&		property,
+			virtual bool	generateClassFooterCode(kodgen::EntityInfo const*	entity,
+													kodgen::Property const*		property,
 													kodgen::uint8				propertyIndex,
 													kodgen::MacroCodeGenEnv&	env,
 													std::string&				inout_result)			noexcept	override;

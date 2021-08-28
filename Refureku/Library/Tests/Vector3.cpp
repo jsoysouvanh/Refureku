@@ -1,8 +1,8 @@
-#include "Vector3.h"
-
 #include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
 
 #include "CustomProperties.h"
+
+#include "Generated/Vector3.rfks.h"
 
 std::hash<std::string> stringHasher;
 

@@ -2,14 +2,13 @@
 
 #include "ExampleClass.h"
 
-#include "Generated/ExampleClass2.rfk.h"
+#include "Generated/ExampleClass2.rfkh.h"
 
 namespace namespace3 RFKNamespace(ParseAllNested)
 {
 	class RFKClass(ParseAllNested) AnotherClassInNamespace3
 	{
-
-		AnotherClassInNamespace3_GENERATED
+		namespace3_AnotherClassInNamespace3_GENERATED
 	};
 
 	RFKFunction()
@@ -63,4 +62,4 @@ namespace ExampleNamespace RFKNamespace()
 	void functionInsideNamespace() { }
 }
 
-File_GENERATED
+File_ExampleClass2_GENERATED

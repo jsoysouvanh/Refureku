@@ -2,7 +2,7 @@
 
 #include "Test.h"
 
-#include "Generated/TestPropertyUsage.rfk.h"
+#include "Generated/TestPropertyUsage.rfkh.h"
 
 namespace testPropertyUsageNamespace RFKNamespace(TestProperty())
 {
@@ -38,4 +38,4 @@ inline void function(){}
 RFKVariable(TestProperty())
 inline int var = 0;
 
-File_GENERATED
+File_TestPropertyUsage_GENERATED

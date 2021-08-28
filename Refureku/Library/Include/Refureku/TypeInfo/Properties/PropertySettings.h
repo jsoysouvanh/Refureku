@@ -18,13 +18,13 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::C
 {
 	public:
 		/**
-		*	@param targetEntityKind	Kind of entities the property can be attached to. Use the | operator to specify multiple entity kinds.
-		*	@param allowMultiple	Is this property allowed to be attached multiple times to the same entity?
-		*	@param shouldInherit	Should this property be inherited by children when used on structs/classes or virtual methods.
+		*	@param targetEntityKind_	Kind of entities the property can be attached to. Use the | operator to specify multiple entity kinds.
+		*	@param allowMultiple_		Is this property allowed to be attached multiple times to the same entity?
+		*	@param shouldInherit_		Should this property be inherited by children when used on structs/classes or virtual methods.
 		*/
-		PropertySettings(rfk::EEntityKind		targetEntityKind [[maybe_unused]],		//first [[maybe_unused]] is written after the variable name for pre-gcc 9.3 compatibility
-						 [[maybe_unused]] bool	allowMultiple = false,
-						 [[maybe_unused]] bool	shouldInherit = true)	noexcept
+		PropertySettings(rfk::EEntityKind		_targetEntityKind_ [[maybe_unused]],		//first [[maybe_unused]] is written after the variable name for pre-gcc 9.3 compatibility
+						 [[maybe_unused]] bool	_allowMultiple_ = false,
+						 [[maybe_unused]] bool	_shouldInherit_ = true)	noexcept
 		{
 		}
 

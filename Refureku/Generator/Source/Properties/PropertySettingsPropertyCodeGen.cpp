@@ -11,7 +11,7 @@ PropertySettingsPropertyCodeGen::PropertySettingsPropertyCodeGen() noexcept:
 {
 }
 
-bool PropertySettingsPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const& entity, kodgen::Property const& /* property */, kodgen::uint8 propertyIndex, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+bool PropertySettingsPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::Property const* /* property */, kodgen::uint8 propertyIndex, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	//TODO
 	return true;

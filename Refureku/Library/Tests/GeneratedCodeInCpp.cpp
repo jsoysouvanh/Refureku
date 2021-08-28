@@ -2,8 +2,7 @@
 
 #include "AB.h"
 
-#include "GeneratedCodeInCpp.h"
-File_GENERATED
+#include "Generated/GeneratedCodeInCpp.rfks.h"
 
 void GeneratedCodeInCpp::testMethod(A* aptr)
 {
