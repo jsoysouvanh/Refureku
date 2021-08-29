@@ -747,14 +747,15 @@
 
 int main()
 {
-	/*database();
+	/*
+	classes();
+	structs();
+	database();
 	outerEntities();
 	namespaces();
 	templateEnums();
 	getArchetypes();
 	entityCast();
-	classes();
-	structs();
 	enums();
 	methods();
 	staticMethods();
@@ -769,7 +770,8 @@ int main()
 	makeInstance();
 	fundamentalArchetypes();
 	enumManualReflection();
-	classManualReflection();*/
+	classManualReflection();
+	*/
 
 	return EXIT_SUCCESS;
 }

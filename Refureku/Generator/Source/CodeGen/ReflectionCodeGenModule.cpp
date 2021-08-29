@@ -47,7 +47,28 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
+		case kodgen::EEntityType::Enum:
+			[[fallthrough]];
+		case kodgen::EEntityType::Variable:
+			[[fallthrough]];
+		case kodgen::EEntityType::Field:
+			[[fallthrough]];
+		case kodgen::EEntityType::Function:
+			[[fallthrough]];
+		case kodgen::EEntityType::Method:
+			[[fallthrough]];
+		case kodgen::EEntityType::EnumValue:
+			[[fallthrough]];
+		case kodgen::EEntityType::Namespace:
 			break;
+
+		case kodgen::EEntityType::Undefined:
+			[[fallthrough]];
+
+		default:
+			assert(false); //This should never happen
+			env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+			return kodgen::ETraversalBehaviour::AbortWithFailure;
 	}
 
 	return kodgen::ETraversalBehaviour::Recurse;
@@ -65,7 +86,28 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
+			case kodgen::EEntityType::Enum:
+				[[fallthrough]];
+			case kodgen::EEntityType::Variable:
+				[[fallthrough]];
+			case kodgen::EEntityType::Field:
+				[[fallthrough]];
+			case kodgen::EEntityType::Function:
+				[[fallthrough]];
+			case kodgen::EEntityType::Method:
+				[[fallthrough]];
+			case kodgen::EEntityType::EnumValue:
+				[[fallthrough]];
+			case kodgen::EEntityType::Namespace:
 				break;
+
+			case kodgen::EEntityType::Undefined:
+				[[fallthrough]];
+
+			default:
+				assert(false); //This should never happen
+				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+				return kodgen::ETraversalBehaviour::AbortWithFailure;
 		}
 	}
 	else
@@ -116,7 +158,7 @@ void ReflectionCodeGenModule::declareGetArchetypeMethodIfInheritFromObject(kodge
 	{
 		inout_result += "virtual ";
 		inout_result += (structClass.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
-		inout_result += " const& getArchetype() const noexcept;" + env.getSeparator();
+		inout_result += " const& getArchetype() const noexcept override;" + env.getSeparator();
 	}
 }
 
@@ -124,13 +166,17 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 {
 	std::string returnType = (structClass.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 
-	inout_result += returnType + " const& " + structClass.type.getCanonicalName() + "::staticGetArchetype() noexcept {" + env.getSeparator();
-	inout_result += "static bool initialized = false;" + env.getSeparator();
-	inout_result += "static " + std::move(returnType) + " type(\"" + structClass.name + "\", " +
+	inout_result += returnType + " const& " + structClass.type.getCanonicalName() + "::staticGetArchetype() noexcept {" + env.getSeparator() +
+						"static bool initialized = false;" + env.getSeparator() +
+						"static " + returnType + " type(\"" + structClass.name + "\", " +
 											getEntityId(structClass) + ", "
 											"sizeof(" + structClass.name + "), " +
 											((structClass.entityType == kodgen::EEntityType::Class) ? "true" : "false") +
-											");" + env.getSeparator();;
+											");" + env.getSeparator() +
+						"if (!initialized) {" + env.getSeparator() +
+						"initialized = true;" + env.getSeparator() +
+						"}" + env.getSeparator();
+						
 
 	inout_result += "return type; }" + env.getSeparator() + env.getSeparator();
 }
