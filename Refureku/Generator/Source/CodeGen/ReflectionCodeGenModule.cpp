@@ -31,6 +31,42 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCod
 		//Called once at the very beginning of the generation with nullptr entity
 		forwardDeclareHeaderTypes(env, inout_result);
 	}
+	else
+	{
+		switch (entity->entityType)
+		{
+			case kodgen::EEntityType::Struct:
+				[[fallthrough]];
+			case kodgen::EEntityType::Class:
+				break;
+
+			case kodgen::EEntityType::Enum:
+				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
+
+			case kodgen::EEntityType::Variable:
+				[[fallthrough]];
+			case kodgen::EEntityType::Function:
+				break;
+
+			case kodgen::EEntityType::Field:
+				[[fallthrough]];
+			case kodgen::EEntityType::Method:
+				[[fallthrough]];
+			case kodgen::EEntityType::EnumValue:
+				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+
+			case kodgen::EEntityType::Namespace:
+				break;
+
+			case kodgen::EEntityType::Undefined:
+				[[fallthrough]];
+
+			default:
+				assert(false); //This should never happen
+				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+				return kodgen::ETraversalBehaviour::AbortWithFailure;
+		}
+	}
 
 	return kodgen::ETraversalBehaviour::Recurse; 
 }
@@ -48,18 +84,23 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
+			break;
+
 		case kodgen::EEntityType::Enum:
-			[[fallthrough]];
+			return kodgen::ETraversalBehaviour::Continue; //Go to next enum
+
 		case kodgen::EEntityType::Variable:
 			[[fallthrough]];
-		case kodgen::EEntityType::Field:
-			[[fallthrough]];
 		case kodgen::EEntityType::Function:
+			break;
+
+		case kodgen::EEntityType::Field:
 			[[fallthrough]];
 		case kodgen::EEntityType::Method:
 			[[fallthrough]];
 		case kodgen::EEntityType::EnumValue:
-			[[fallthrough]];
+			return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+
 		case kodgen::EEntityType::Namespace:
 			break;
 
@@ -77,7 +118,12 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 
 kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	if (entity != nullptr)
+	if (entity == nullptr)
+	{
+		//Called once at the very beginning of the generation with nullptr entity
+		includeRefurekuHeaders(env, inout_result);
+	}
+	else
 	{
 		switch (entity->entityType)
 		{
@@ -87,18 +133,23 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
+				break;
+
 			case kodgen::EEntityType::Enum:
-				[[fallthrough]];
+				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
+
 			case kodgen::EEntityType::Variable:
 				[[fallthrough]];
-			case kodgen::EEntityType::Field:
-				[[fallthrough]];
 			case kodgen::EEntityType::Function:
+				break;
+
+			case kodgen::EEntityType::Field:
 				[[fallthrough]];
 			case kodgen::EEntityType::Method:
 				[[fallthrough]];
 			case kodgen::EEntityType::EnumValue:
-				[[fallthrough]];
+				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+
 			case kodgen::EEntityType::Namespace:
 				break;
 
@@ -110,11 +161,6 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
 				return kodgen::ETraversalBehaviour::AbortWithFailure;
 		}
-	}
-	else
-	{
-		//Called once at the very beginning of the generation with nullptr entity
-		includeRefurekuHeaders(env, inout_result);
 	}
 
 	return kodgen::ETraversalBehaviour::Recurse;
@@ -184,6 +230,7 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 
 	//Inside the if statement, initialize the Struct metadata
 	fillEntityProperties(structClass, env, "type.", inout_result);
+	fillClassParentsMetadata(structClass, env, "type.", inout_result);
 
 	//End of the initialization if statement
 	inout_result += "}" + env.getSeparator();
@@ -267,6 +314,20 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 	}
 }
 
+void ReflectionCodeGenModule::fillClassParentsMetadata(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string&& generatedEntityVarName, std::string& inout_result) noexcept
+{
+	if (!structClass.parents.empty())
+	{
+		inout_result += generatedEntityVarName + "directParents.reserve(" + std::to_string(structClass.parents.size()) + ");" + env.getSeparator();
+
+		for (kodgen::StructClassInfo::ParentInfo parent : structClass.parents)
+		{
+			inout_result += generatedEntityVarName + "addToParents<" + parent.type.getName(true) + 
+				">(static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
+		}
+	}
+}
+
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
@@ -323,25 +384,6 @@ std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEnti
 	return "";
 }
 
-//std::string const				ReflectionCodeGenModule::_nativePropsMacroName	= std::string(_internalPrefix) + "NativeProperties_GENERATED";
-//std::hash<std::string> const	ReflectionCodeGenModule::_stringHasher;
-
-//void FileGenerationUnit::postGenerateFile(kodgen::FileParsingResult const& /* parsingResult */) noexcept
-//{
-//	_generatedNamespaces.clear();
-//	_generatedClasses.clear();
-//	_generatedEnums.clear();
-//	_generatedVariables.clear();
-//	_generatedFunctions.clear();
-//
-//	_entitiesUsingNativeProperties.clear();
-//}
-//
-//std::string FileGenerationUnit::getEndFileMacroName() const noexcept
-//{
-//	return "File_GENERATED";
-//}
-//
 //void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
 //{
 //	//Always call base class
@@ -356,90 +398,6 @@ std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEnti
 //					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>",
 //					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>",
 //					"\n");
-//}
-//
-//void FileGenerationUnit::writeFooter(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
-//{
-//	//Always call base class
-//	kodgen::FileGenerationUnit::writeFooter(file, parsingResult);
-//
-//	file.undefMacro(_nativePropsMacroName);
-//	generateNativePropertiesCode(file, parsingResult);
-//
-//	file.undefMacro(getEndFileMacroName());
-//	generateEndFileMacro(file);
-//}
-//
-//bool FileGenerationUnit::writeEntityToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& entityInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& out_genResult) noexcept
-//{
-//	if (kodgen::FileGenerationUnit::writeEntityToFile(generatedFile, entityInfo, parsingResult, out_genResult))
-//	{
-//		saveEntitiesUsingNativeProperties(entityInfo);
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-//
-//bool FileGenerationUnit::writeNamespaceToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& namespaceInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
-//{
-//	if (kodgen::FileGenerationUnit::writeNamespaceToFile(generatedFile, namespaceInfo, parsingResult, genResult))
-//	{
-//		_generatedNamespaces.push_back(reinterpret_cast<kodgen::NamespaceInfo const*>(&namespaceInfo));
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-//
-//bool FileGenerationUnit::writeStructOrClassToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& structClassInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
-//{
-//	if (kodgen::FileGenerationUnit::writeStructOrClassToFile(generatedFile, structClassInfo, parsingResult, genResult))
-//	{
-//		_generatedClasses.push_back(reinterpret_cast<kodgen::StructClassInfo const*>(&structClassInfo));
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-//
-//bool FileGenerationUnit::writeEnumToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& enumInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
-//{
-//	if (kodgen::FileGenerationUnit::writeEnumToFile(generatedFile, enumInfo, parsingResult, genResult))
-//	{
-//		_generatedEnums.push_back(reinterpret_cast<kodgen::EnumInfo const*>(&enumInfo));
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-//
-//bool FileGenerationUnit::writeVariableToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& variableInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
-//{
-//	if (kodgen::FileGenerationUnit::writeVariableToFile(generatedFile, variableInfo, parsingResult, genResult))
-//	{
-//		_generatedVariables.push_back(reinterpret_cast<kodgen::VariableInfo const*>(&variableInfo));
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-//
-//bool FileGenerationUnit::writeFunctionToFile(kodgen::GeneratedFile& generatedFile, kodgen::EntityInfo& functionInfo, kodgen::FileParsingResult const& parsingResult, kodgen::FileGenerationResult& genResult) noexcept
-//{
-//	if (kodgen::FileGenerationUnit::writeFunctionToFile(generatedFile, functionInfo, parsingResult, genResult))
-//	{
-//		_generatedFunctions.push_back(reinterpret_cast<kodgen::FunctionInfo const*>(&functionInfo));
-//
-//		return true;
-//	}
-//
-//	return false;
 //}
 //
 //void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept

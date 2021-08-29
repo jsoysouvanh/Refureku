@@ -112,6 +112,14 @@ namespace rfk
 													std::string&					inout_result)						noexcept;
 
 			/**
+			*	TODO
+			*/
+			void	fillClassParentsMetadata(kodgen::StructClassInfo const&	structClass,
+											 kodgen::MacroCodeGenEnv&		env,
+											 std::string&&					generatedEntityVarName,
+											 std::string&					inout_result)								noexcept;
+
+			/**
 			*	@brief Generate the getArchetype method declaration if the provided class inherits from rfk::Object.
 			* 
 			*	@param structClass	Target struct/class.
