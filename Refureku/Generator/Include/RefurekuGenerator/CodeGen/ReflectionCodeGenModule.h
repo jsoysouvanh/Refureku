@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <functional>	//std::hash
+#include <unordered_map>
 
 #include <Kodgen/CodeGen/Macro/MacroCodeGenModule.h>
 
@@ -20,153 +21,113 @@ namespace rfk
 {
 	class ReflectionCodeGenModule : public kodgen::MacroCodeGenModule
 	{
-		//private:
-		//	/** Prefix used to build internal macros. Must match with GeneratedEntityCodeTemplate::internalPrefix. */
-		//	static constexpr char const* const			_internalPrefix		= "__RFK";
-
-		//	/** Name of the macro containing all native properties generated code. */
-		//	static std::string const					_nativePropsMacroName;
-
-		//	/** Class global string hasher. */
-		//	static std::hash<std::string> const			_stringHasher;
-
-		//	/** List of all namespaces we have generated metadata for. */
-		//	std::vector<kodgen::NamespaceInfo const*>	_generatedNamespaces;
-
-		//	/** List of all structs/classes we have generated metadata for. */
-		//	std::vector<kodgen::StructClassInfo const*>	_generatedClasses;
-
-		//	/** List of all enums we have generated metadata for. */
-		//	std::vector<kodgen::EnumInfo const*>		_generatedEnums;
-
-		//	/** List of all variables we have generated metadata for. */
-		//	std::vector<kodgen::VariableInfo const*>	_generatedVariables;
-
-		//	/** List of all functions we have generated metadata for. */
-		//	std::vector<kodgen::FunctionInfo const*>	_generatedFunctions;
-
-		//	/** List of all entities containing native properties. */
-		//	std::vector<kodgen::EntityInfo const*>		_entitiesUsingNativeProperties;
-
-		//	/**
-		//	*	@brief Write the end file macro
-		//	*
-		//	*	@param file File to write to.
-		//	*/
-		//	void generateEndFileMacro(kodgen::GeneratedFile& file)								const	noexcept;
-
-		//	/**
-		//	*	@brief Save the entity to _entitiesUsingNativeProperties if it uses at least one native property.
-		//	*	
-		//	*	@param entityInfo Entity containing the properties to save.
-		//	*/
-		//	void saveEntitiesUsingNativeProperties(kodgen::EntityInfo const& entityInfo)				noexcept;
-
-		//	/**
-		//	*	@brief Generate code relative to attached native entities.
-		//	*	
-		//	*	@param file				File to write to.
-		//	*	@param parsingResult	Structure containing info about the parsed file.
-		//	*/
-		//	void generateNativePropertiesCode(kodgen::GeneratedFile&			file,
-		//									  kodgen::FileParsingResult const&	parsingResult)	const	noexcept;
-
-		//protected:
-		//	/**
-		//	*	@return The name of the macro generated for the footer of each generated file.
-		//	*/
-		//	virtual std::string		getEndFileMacroName()														const	noexcept;
-
-		//	virtual void			postGenerateFile(kodgen::FileParsingResult const& parsingResult)					noexcept override;
-
-		//	virtual void			writeHeader(kodgen::GeneratedFile&				file,
-		//										kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
-
-		//	virtual void			writeFooter(kodgen::GeneratedFile&				file,
-		//										kodgen::FileParsingResult const&	parsingResult)				const	noexcept override;
-
-		//	virtual bool			writeEntityToFile(kodgen::GeneratedFile&			generatedFile,
-		//											  kodgen::EntityInfo&				entityInfo,
-		//											  kodgen::FileParsingResult const&	parsingResult,
-		//											  kodgen::FileGenerationResult&		out_genResult)					noexcept override;
-
-		//	virtual bool			writeNamespaceToFile(kodgen::GeneratedFile&				generatedFile,
-		//												 kodgen::EntityInfo&				namespaceInfo,
-		//												 kodgen::FileParsingResult const&	parsingResult,
-		//												 kodgen::FileGenerationResult&		genResult)					noexcept override;
-
-		//	virtual bool			writeStructOrClassToFile(kodgen::GeneratedFile&				generatedFile,
-		//													 kodgen::EntityInfo&				structClassInfo,
-		//													 kodgen::FileParsingResult const&	parsingResult,
-		//													 kodgen::FileGenerationResult&		genResult)				noexcept override;
-
-		//	virtual bool			writeEnumToFile(kodgen::GeneratedFile&				generatedFile,
-		//											kodgen::EntityInfo&					enumInfo,
-		//											kodgen::FileParsingResult const&	parsingResult,
-		//											kodgen::FileGenerationResult&		genResult)						noexcept override;
-
-		//	virtual bool			writeVariableToFile(kodgen::GeneratedFile&				generatedFile,
-		//												kodgen::EntityInfo&					variableInfo,
-		//												kodgen::FileParsingResult const&	parsingResult,
-		//												kodgen::FileGenerationResult&		genResult)					noexcept override;
-
-		//	virtual bool			writeFunctionToFile(kodgen::GeneratedFile&				generatedFile,
-		//												kodgen::EntityInfo&					functionInfo,
-		//												kodgen::FileParsingResult const&	parsingResult,
-		//												kodgen::FileGenerationResult&		genResult)					noexcept override;
-
 		private:
 			/** Code generator for the CustomInstantiator property. */
-			CustomInstantiatorPropertyCodeGen	_customInstantiatorProperty;
+			CustomInstantiatorPropertyCodeGen		_customInstantiatorProperty;
 
 			/** Code generator for the PropertySettings property. */
-			PropertySettingsPropertyCodeGen		_propertySettingsProperty;
+			PropertySettingsPropertyCodeGen			_propertySettingsProperty;
 
-			static std::hash<std::string>	_stringHasher;
+			/** Class global string hasher. */
+			static std::hash<std::string>			_stringHasher;
 
-			//Helper methods
-			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)	noexcept;
+			/** Dictionnary used to generate properties code. */
+			std::unordered_map<std::string, int>	_propertiesCount;
 
-			//Generation methods
+			/**
+			*	@brief Compute the unique id of an entity. The returned string contains an unsigned integer.
+			*
+			*	@param entity The target entity.
+			* 
+			*	@return The unique ID of an entity as a string.
+			*/
+			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)					noexcept;
+
+			/**
+			*	Convert the name of a kodgen::EEntityType to its equivalent rfk::EEntityKind name.
+			* 
+			*	@param entityType The kodgen::EEntityType value to convert.
+			* 
+			*	@return The name of the equivalent rfk::EEntityKind value.
+			*/
+			static std::string			convertEntityTypeToEntityKind(kodgen::EEntityType entityType)	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	fillEntityProperties(kodgen::EntityInfo const&	entity,
+										 kodgen::MacroCodeGenEnv&	env,
+										 std::string&&				generatedEntityVarName,
+										 std::string&				inout_result)										noexcept;
+
 			/**
 			*	@brief Generate the forward declaration for all refureku types used in the generated header file.
 			* 
-			*	TODO
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
 			*/
-			void	forwardDeclareHeaderTypes(kodgen::MacroCodeGenEnv&			env,
-											  std::string&						inout_result)					const	noexcept;
+			void	forwardDeclareHeaderTypes(kodgen::MacroCodeGenEnv&	env,
+											  std::string&				inout_result)							const	noexcept;
 
 			/**
 			*	@brief Generate the header include lines necessary for generated code definitions.
 			* 
-			*	TODO
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
 			*/
-			void	includeRefurekuHeaders(kodgen::MacroCodeGenEnv&			env,
-										   std::string&						inout_result)						const	noexcept;
+			void	includeRefurekuHeaders(kodgen::MacroCodeGenEnv&	env,
+										   std::string&				inout_result)								const	noexcept;
 
 			/**
-			*	TODO
+			*	@brief Generate the friend statements for the provided class.
+			* 
+			*	@param structClass	Target struct/class.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
+			*/
+			void	declareFriendClasses(kodgen::StructClassInfo const&	structClass,
+										 kodgen::MacroCodeGenEnv&		env,
+										 std::string&					inout_result)							const	noexcept;
+
+			/**
+			*	@brief Generate the staticGetArchetype method declaration.
+			* 
+			*	@param structClass	Target struct/class.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
 			*/
 			void	declareStaticGetArchetypeMethod(kodgen::StructClassInfo const&	structClass,
 													kodgen::MacroCodeGenEnv&		env,
 													std::string&					inout_result)				const	noexcept;
 
 			/**
-			*	TODO
+			*	@brief Generate the staticGetArchetype method definition.
+			* 
+			*	@param structClass	Target struct/class.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
 			*/
 			void	defineStaticGetArchetypeMethod(kodgen::StructClassInfo const&	structClass,
 													kodgen::MacroCodeGenEnv&		env,
-													std::string&					inout_result)				const	noexcept;
+													std::string&					inout_result)						noexcept;
 
 			/**
-			*	TODO
+			*	@brief Generate the getArchetype method declaration if the provided class inherits from rfk::Object.
+			* 
+			*	@param structClass	Target struct/class.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
 			*/
 			void	declareGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const&	structClass,
 																 kodgen::MacroCodeGenEnv&		env,
 																 std::string&					inout_result)	const	noexcept;
 
 			/**
-			*	TODO
+			*	@brief Generate the getArchetype method definition if the provided class inherits from rfk::Object.
+			* 
+			*	@param structClass	Target struct/class.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
 			*/
 			void	defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const&	structClass,
 																 kodgen::MacroCodeGenEnv&		env,

@@ -44,6 +44,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 		case kodgen::EEntityType::Struct:
 			[[fallthrough]];
 		case kodgen::EEntityType::Class:
+			declareFriendClasses(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
@@ -145,6 +146,11 @@ void ReflectionCodeGenModule::includeRefurekuHeaders(kodgen::MacroCodeGenEnv& en
 	//				"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>\n";
 }
 
+void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	inout_result += "friend rfk::Struct;" + env.getSeparator();
+}
+
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "static ";
@@ -162,7 +168,7 @@ void ReflectionCodeGenModule::declareGetArchetypeMethodIfInheritFromObject(kodge
 	}
 }
 
-void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	std::string returnType = (structClass.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 
@@ -174,11 +180,91 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 											((structClass.entityType == kodgen::EEntityType::Class) ? "true" : "false") +
 											");" + env.getSeparator() +
 						"if (!initialized) {" + env.getSeparator() +
-						"initialized = true;" + env.getSeparator() +
-						"}" + env.getSeparator();
+						"initialized = true;" + env.getSeparator();
+
+	//Inside the if statement, initialize the Struct metadata
+	fillEntityProperties(structClass, env, "type.", inout_result);
+
+	//End of the initialization if statement
+	inout_result += "}" + env.getSeparator();
 						
 
 	inout_result += "return type; }" + env.getSeparator() + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string&& generatedEntityVarName, std::string& inout_result) noexcept
+{
+	auto getPropertyVariableName = [&entity](int propertyIndex) -> std::string
+	{
+		return "property_" + entity.name + "_" + entity.properties[propertyIndex].name + "_" + std::to_string(propertyIndex) + "_" + std::to_string(_stringHasher(entity.id));
+	};
+
+	auto generatePropertyStaticAsserts = [this, &entity](kodgen::Property const& property) -> std::string
+	{
+		std::string result;
+
+		//Generate AllowMultiple assert only if a property apprears for the second time
+		auto it = _propertiesCount.find(property.name);
+
+		if (it != _propertiesCount.end())
+		{
+			if (it->second == 1)
+			{
+				//Second apparition of the property, generate
+				result += "static_assert(" + property.name + "::allowMultiple, \"[Refureku] " + entity.getFullName() + ": " + property.name + " can't be attached multiple times to a single entity.\"); ";
+			}
+
+			++it->second;
+		}
+		else
+		{
+			_propertiesCount[property.name] = 1;
+		}
+
+		//Generate entity kind check
+		std::string entityKindName = convertEntityTypeToEntityKind(entity.entityType);
+		result += "static_assert((" + property.name + "::targetEntityKind & " + entityKindName + ") != " + convertEntityTypeToEntityKind(kodgen::EEntityType::Undefined) +
+			", \"[Refureku] " + property.name + " can't be applied to a " + entityKindName + "\");";
+
+		return result;
+	};
+
+	std::string generatedPropertyVariableName;
+
+	//Reserve space to avoid reallocation
+	inout_result += generatedEntityVarName + "properties.reserve(" + std::to_string(entity.properties.size()) + ");" + env.getSeparator();
+
+	//Add all properties
+	_propertiesCount.clear();
+	for (int i = 0; i < entity.properties.size(); i++)
+	{
+		generatedPropertyVariableName = getPropertyVariableName(i);
+
+		//Generate static_asserts bound to this property
+		inout_result += generatePropertyStaticAsserts(entity.properties[i]);
+
+		//Declare property
+		inout_result += "static " + entity.properties[i].name + " " + generatedPropertyVariableName;
+
+		//Construct the property with the provided arguments
+		if (!entity.properties[i].arguments.empty())
+		{
+			inout_result += "{";
+
+			for (std::string const& argument : entity.properties[i].arguments)
+			{
+				inout_result += argument + ",";
+			}
+
+			inout_result.back() = '}';	//Replace the last , by a }
+		}
+
+		inout_result.push_back(';');
+
+		//TODO: Insert per property generated code?
+
+		inout_result += generatedEntityVarName + "properties.emplace_back(&" + generatedPropertyVariableName + ");" + env.getSeparator();
+	}
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -189,6 +275,52 @@ void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen
 
 		inout_result += std::move(returnType) + " const& " + structClass.type.getCanonicalName() + "::getArchetype() const noexcept { return " + structClass.name + "::staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
+}
+
+
+
+
+
+std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEntityType entityType) noexcept
+{
+	switch (entityType)
+	{
+		case kodgen::EEntityType::Struct:
+			return "rfk::EEntityKind::Struct";
+
+		case kodgen::EEntityType::Class:
+			return "rfk::EEntityKind::Class";
+
+		case kodgen::EEntityType::Enum:
+			return "rfk::EEntityKind::Enum";
+
+		case kodgen::EEntityType::EnumValue:
+			return "rfk::EEntityKind::EnumValue";
+
+		case kodgen::EEntityType::Field:
+			return "rfk::EEntityKind::Field";
+
+		case kodgen::EEntityType::Method:
+			return "rfk::EEntityKind::Method";
+
+		case kodgen::EEntityType::Variable:
+			return "rfk::EEntityKind::Variable";
+
+		case kodgen::EEntityType::Function:
+			return "rfk::EEntityKind::Function";
+
+		case kodgen::EEntityType::Namespace:
+			return "rfk::EEntityKind::Namespace";
+
+		case kodgen::EEntityType::Undefined:
+			return "rfk::EEntityKind::Undefined";
+			break;
+	}
+
+	//Should never reach this point
+	assert(false);
+
+	return "";
 }
 
 //std::string const				ReflectionCodeGenModule::_nativePropsMacroName	= std::string(_internalPrefix) + "NativeProperties_GENERATED";
