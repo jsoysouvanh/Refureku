@@ -4,15 +4,16 @@
 
 #include "Generated/GeneratedCodeInCpp.rfkh.h"
 
+class A; //forward declaration
+
 class RFKClass() GeneratedCodeInCpp : rfk::Object
 {
 	public:
+		RFKField()
+		A* /* incomplete type */ i = nullptr;
 
-	RFKField()
-	class A* /* incomplete type */ i = nullptr;
-
-	RFKMethod()
-	void testMethod(class A* /* incomplete type */ aptr);
+		RFKMethod()
+		void testMethod(A* /* incomplete type */ aptr);
 
 	GeneratedCodeInCpp_GENERATED
 };

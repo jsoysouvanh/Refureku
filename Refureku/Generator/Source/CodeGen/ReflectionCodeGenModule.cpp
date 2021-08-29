@@ -81,6 +81,8 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 			[[fallthrough]];
 		case kodgen::EEntityType::Class:
 			declareFriendClasses(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			
+			inout_result += "public:" + env.getSeparator();
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
@@ -116,6 +118,53 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 	return kodgen::ETraversalBehaviour::Recurse;
 }
 
+kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	if (entity == nullptr)
+	{
+		//Called once at the very beginning of the generation with nullptr entity
+	}
+	else
+	{
+		switch (entity->entityType)
+		{
+			case kodgen::EEntityType::Struct:
+				[[fallthrough]];
+			case kodgen::EEntityType::Class:
+				declareGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+				break;
+
+			case kodgen::EEntityType::Enum:
+				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
+
+			case kodgen::EEntityType::Variable:
+				[[fallthrough]];
+			case kodgen::EEntityType::Function:
+				break;
+
+			case kodgen::EEntityType::Field:
+				[[fallthrough]];
+			case kodgen::EEntityType::Method:
+				[[fallthrough]];
+			case kodgen::EEntityType::EnumValue:
+				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+
+			case kodgen::EEntityType::Namespace:
+				break;
+
+			case kodgen::EEntityType::Undefined:
+				[[fallthrough]];
+
+			default:
+				assert(false); //This should never happen
+				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+				return kodgen::ETraversalBehaviour::AbortWithFailure;
+		}
+	}
+
+	return kodgen::ETraversalBehaviour::Recurse;
+}
+
 kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	if (entity == nullptr)
@@ -132,6 +181,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			case kodgen::EEntityType::Class:
 				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+				defineGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
 				break;
 
@@ -168,6 +218,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 
 void ReflectionCodeGenModule::forwardDeclareHeaderTypes(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
+	inout_result += "#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator();
 	inout_result +=	"namespace rfk"
 					" { "
 					"class Struct; "
@@ -338,9 +389,22 @@ void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen
 	}
 }
 
+void ReflectionCodeGenModule::declareGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	inout_result += "namespace rfk { template <> rfk::Archetype const* getArchetype<" + structClass.getFullName() + ">() noexcept; }" + env.getSeparator();
+}
 
-
-
+void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	//Generate the getArchetype specialization only if the class is non-nested, namespace nested or publicly nested in a struct/class
+	if (structClass.outerEntity == nullptr ||
+		structClass.outerEntity->entityType == kodgen::EEntityType::Namespace ||
+		(structClass.outerEntity->entityType && (kodgen::EEntityType::Struct | kodgen::EEntityType::Class)) && reinterpret_cast<kodgen::NestedStructClassInfo const&>(structClass).accessSpecifier == kodgen::EAccessSpecifier::Public)
+	{
+		inout_result += "template <> rfk::Archetype const* rfk::getArchetype<" + structClass.getFullName() + ">() noexcept { " +
+			"return &" + structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator();
+	}
+}
 
 std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEntityType entityType) noexcept
 {

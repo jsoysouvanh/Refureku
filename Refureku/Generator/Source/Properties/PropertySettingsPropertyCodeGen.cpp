@@ -11,42 +11,77 @@ PropertySettingsPropertyCodeGen::PropertySettingsPropertyCodeGen() noexcept:
 {
 }
 
-bool PropertySettingsPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const* /*entity*/, kodgen::Property const* /* property */, kodgen::uint8 /*propertyIndex*/, kodgen::MacroCodeGenEnv& /*env*/, std::string& /*inout_result*/) noexcept
+bool PropertySettingsPropertyCodeGen::generateHeaderFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::Property const* property, kodgen::uint8 /* propertyIndex */,
+																   kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	//TODO
+	if (entity == nullptr)
+	{
+		inout_result += "#include <Refureku/TypeInfo/Entity/EEntityKind.h>" + env.getSeparator();
+	}
+
 	return true;
 }
 
-//std::string PropertySettingsPropertyRule::generatePrePropertyAddCode(kodgen::EntityInfo const& entity, kodgen::ComplexProperty const& /* property */, PropertyCodeGenPropertyAddData& /* data */) const noexcept
-//{
-//	return "static_assert(std::is_base_of_v<rfk::Property, " + entity.name + ">, \"[Refureku] Can't attach " + mainPropName + " property to " + entity.getFullName() + " as it doesn't inherit from rfk::Property.\");";
-//}
-//
-//std::string PropertySettingsPropertyRule::generateClassFooterCode(kodgen::EntityInfo const& /* entity */, kodgen::ComplexProperty const& property, PropertyCodeGenClassFooterData& /* data */) const noexcept
-//{
-//	std::string result;
-//
-//	//Generate constexpr fields + get overrides
-//	if (!property.subProperties.empty())
-//	{
-//		//generate targetEntityKind
-//		result += "public: static constexpr rfk::EEntityKind targetEntityKind = " + property.subProperties[0] + ";";
-//		result += "virtual rfk::EEntityKind getTargetEntityKind() const noexcept override { return targetEntityKind; }";
-//
-//		if (property.subProperties.size() >= 2)
-//		{
-//			//generate allowMultiple
-//			result += "static constexpr bool allowMultiple = " + property.subProperties[1] + ";";
-//			result += "virtual bool getAllowMultiple() const noexcept override { return allowMultiple; }";
-//
-//			if (property.subProperties.size() >= 3)
-//			{
-//				//generate shouldInherit
-//				result += "static constexpr bool shouldInherit = " + property.subProperties[2] + ";";
-//				result += "virtual bool getShouldInherit() const noexcept override { return shouldInherit; }";
-//			}
-//		}
-//	}
-//
-//	return result;
-//}
+bool PropertySettingsPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::Property const* property, kodgen::uint8 /* propertyIndex */,
+															  kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	if (property->arguments.empty())
+	{
+		if (env.getLogger() != nullptr)
+		{
+			env.getLogger()->log("The PropertySettings class first constructor parameter is mandatory: " + entity->getFullName(), kodgen::ILogger::ELogSeverity::Error);
+		}
+
+		return false;
+	}
+
+	//Generate constexpr fields + get overrides
+	//generate targetEntityKind
+	inout_result += "public: static constexpr rfk::EEntityKind targetEntityKind = " + property->arguments[0] + ";" + env.getSeparator();
+	inout_result += "virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;" + env.getSeparator();
+	
+	if (property->arguments.size() >= 2)
+	{
+		//generate allowMultiple
+		inout_result += "static constexpr bool allowMultiple = " + property->arguments[1] + ";" + env.getSeparator();
+		inout_result += "virtual bool getAllowMultiple() const noexcept override;" + env.getSeparator();
+	
+		if (property->arguments.size() >= 3)
+		{
+			//generate shouldInherit
+			inout_result += "static constexpr bool shouldInherit = " + property->arguments[2] + ";" + env.getSeparator();
+			inout_result += "virtual bool getShouldInherit() const noexcept override;" + env.getSeparator();
+		}
+	}
+
+	return true;
+}
+
+bool PropertySettingsPropertyCodeGen::generateSourceFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::Property const* property, kodgen::uint8 /* propertyIndex **/,
+																   kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	if (entity == nullptr)
+	{
+		inout_result += "#include <type_traits>" + env.getSeparator(); //std::is_base_of
+	}
+	else
+	{
+		//Define getTargetEntityKind override
+		inout_result += "rfk::EEntityKind " + entity->getFullName() + "::getTargetEntityKind() const noexcept { return targetEntityKind; }" + env.getSeparator();
+
+		if (property->arguments.size() >= 2)
+		{
+			inout_result += "bool " + entity->getFullName() + "::getAllowMultiple() const noexcept { return allowMultiple; }" + env.getSeparator();
+
+			if (property->arguments.size() >= 3)
+			{
+				inout_result += "bool " + entity->getFullName() + "::getShouldInherit() const noexcept { return shouldInherit; }" + env.getSeparator();
+			}
+		}
+		
+		//Static assert to make sure the property is attached to a class inheriting from rfk::Property.
+		inout_result += "static_assert(std::is_base_of_v<rfk::Property, " + entity->getFullName() + ">, \"[Refureku] Can't attach " + property->name + " property to " + entity->getFullName() + " as it doesn't inherit from rfk::Property.\");";
+	}
+
+	return true;
+}

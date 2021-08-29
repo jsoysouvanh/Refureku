@@ -141,6 +141,20 @@ namespace rfk
 																 kodgen::MacroCodeGenEnv&		env,
 																 std::string&					inout_result)	const	noexcept;
 
+			/**
+			*	TODO
+			*/
+			void	declareGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const&	structClass,
+															  kodgen::MacroCodeGenEnv&			env,
+															  std::string&						inout_result)	const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const&	structClass,
+															 kodgen::MacroCodeGenEnv&		env,
+															 std::string&					inout_result)				noexcept;
+
 		protected:
 			virtual ReflectionCodeGenModule*	clone()																const	noexcept	override;
 
@@ -151,6 +165,10 @@ namespace rfk
 			virtual kodgen::ETraversalBehaviour	generateClassFooterCode(kodgen::EntityInfo const*	entity,
 																		kodgen::MacroCodeGenEnv&	env,
 																		std::string&				inout_result)			noexcept	override;
+
+			virtual kodgen::ETraversalBehaviour	generateHeaderFileFooterCode(kodgen::EntityInfo const*	entity,
+																			 kodgen::MacroCodeGenEnv&	env,
+																			 std::string&				inout_result)		noexcept	override;
 
 			virtual kodgen::ETraversalBehaviour	generateSourceFileHeaderCode(kodgen::EntityInfo const*	entity,
 																			 kodgen::MacroCodeGenEnv&	env,

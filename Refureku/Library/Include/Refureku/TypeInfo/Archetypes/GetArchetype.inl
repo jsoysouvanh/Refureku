@@ -24,14 +24,16 @@ Archetype const* getArchetype() noexcept
 		}
 		else if constexpr (std::is_class_v<RawType>)
 		{
-			if constexpr (isReflectedClass<RawType>)
+			return nullptr;
+
+			/*if constexpr (isReflectedClass<RawType>)
 			{
 				return &RawType::staticGetArchetype();
 			}
 			else
 			{
 				return nullptr;
-			}
+			}*/
 		}
 		else if constexpr (std::is_enum_v<RawType>)
 		{

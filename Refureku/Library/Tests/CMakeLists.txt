@@ -15,6 +15,7 @@ add_executable(${RefurekuTestsTarget}
 					ThirdPartyEnumReflectionCode.cpp
 					Test.cpp
 					Vector3.cpp
+					AB.cpp
 					GeneratedCodeInCpp.cpp
 
 					RefurekuTests.cpp
