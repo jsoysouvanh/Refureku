@@ -10,7 +10,7 @@ template <>
 rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 {
 	static bool			initialized = false;
-	static rfk::Class	type("Vector3f", stringHasher("some_namespace::Vector3<float>"), sizeof(Vector3f));
+	static rfk::Class	type("Vector3f", stringHasher("some_namespace::Vector3<float>"), sizeof(Vector3f), true);
 
 	if (!initialized)
 	{

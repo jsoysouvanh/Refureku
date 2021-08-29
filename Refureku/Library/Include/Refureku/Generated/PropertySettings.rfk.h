@@ -66,7 +66,7 @@ public:	\
 		inline rfk::Struct const& PropertySettings::staticGetArchetype() noexcept	\
 		{	\
 			static bool			initialized = false;	\
-			static rfk::Struct	type("PropertySettings", 2708994343965683583u, sizeof(PropertySettings));	\
+			static rfk::Struct	type("PropertySettings", 2708994343965683583u, sizeof(PropertySettings), false);	\
 			\
 			if (!initialized)	\
 			{	\

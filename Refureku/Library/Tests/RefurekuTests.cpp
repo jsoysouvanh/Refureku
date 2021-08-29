@@ -8,6 +8,7 @@
 #include "ExampleClass.h"
 #include "TestPropertyUsage.h"
 #include "ThirdPartyEnumReflectionCode.h"
+#include "CustomString.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 

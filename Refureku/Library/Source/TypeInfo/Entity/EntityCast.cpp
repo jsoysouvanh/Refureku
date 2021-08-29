@@ -23,12 +23,6 @@ Struct const* rfk::entityCast<Struct, void>(Entity const* entity) noexcept
 }
 
 template <>
-Class const* rfk::entityCast<Class, void>(Entity const* entity) noexcept
-{
-	return internal::entityCast<Class, EEntityKind::Class>(entity);
-}
-
-template <>
 FieldBase const* rfk::entityCast<FieldBase, void>(Entity const* entity) noexcept
 {
 	return internal::entityCast<FieldBase, EEntityKind::Field>(entity);

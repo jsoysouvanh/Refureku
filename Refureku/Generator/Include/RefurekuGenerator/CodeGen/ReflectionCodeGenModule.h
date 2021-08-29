@@ -129,6 +129,22 @@ namespace rfk
 
 			//Generation methods
 			/**
+			*	@brief Generate the forward declaration for all refureku types used in the generated header file.
+			* 
+			*	TODO
+			*/
+			void	forwardDeclareHeaderTypes(kodgen::MacroCodeGenEnv&			env,
+											  std::string&						inout_result)					const	noexcept;
+
+			/**
+			*	@brief Generate the header include lines necessary for generated code definitions.
+			* 
+			*	TODO
+			*/
+			void	includeRefurekuHeaders(kodgen::MacroCodeGenEnv&			env,
+										   std::string&						inout_result)						const	noexcept;
+
+			/**
 			*	TODO
 			*/
 			void	declareStaticGetArchetypeMethod(kodgen::StructClassInfo const&	structClass,

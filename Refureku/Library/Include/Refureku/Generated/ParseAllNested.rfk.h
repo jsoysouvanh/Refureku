@@ -66,7 +66,7 @@ public:	\
 		inline rfk::Struct const& ParseAllNested::staticGetArchetype() noexcept	\
 		{	\
 			static bool			initialized = false;	\
-			static rfk::Struct	type("ParseAllNested", 17636175816175907530u, sizeof(ParseAllNested));	\
+			static rfk::Struct	type("ParseAllNested", 17636175816175907530u, sizeof(ParseAllNested), false);	\
 			\
 			if (!initialized)	\
 			{	\

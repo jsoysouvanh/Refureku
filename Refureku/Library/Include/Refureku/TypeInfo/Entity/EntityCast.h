@@ -61,11 +61,12 @@ namespace rfk
 	template <>
 	FundamentalArchetype const* entityCast<FundamentalArchetype, void>(Entity const* entity)	noexcept;
 
+	/**
+	*	This entity cast specialization doesn't work to check if an entity is a class (it will return a non-nullptr pointer when it is a struct as well).
+	*	Make sure to check if the result's kind is EEntityKind::Class.
+	*/
 	template <>
 	Struct const*				entityCast<Struct, void>(Entity const* entity)					noexcept;
-
-	template <>
-	Class const*				entityCast<Class, void>(Entity const* entity)					noexcept;
 
 	template <>
 	FieldBase const*			entityCast<FieldBase, void>(Entity const* entity)				noexcept;

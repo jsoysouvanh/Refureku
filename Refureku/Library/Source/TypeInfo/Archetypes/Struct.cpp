@@ -9,8 +9,8 @@ Struct::Struct(std::string&& name, uint64 id, EEntityKind kind, uint64 memorySiz
 {
 }
 
-Struct::Struct(std::string&& newName, uint64 newId, uint64 newMemorySize) noexcept:
-	Struct(std::forward<std::string>(newName), newId, EEntityKind::Struct, newMemorySize)
+Struct::Struct(std::string&& newName, uint64 newId, uint64 newMemorySize, bool isClass) noexcept:
+	Struct(std::forward<std::string>(newName), newId, isClass ? EEntityKind::Class : EEntityKind::Struct, newMemorySize)
 {
 }
 

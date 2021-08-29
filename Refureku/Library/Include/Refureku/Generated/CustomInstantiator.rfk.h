@@ -66,7 +66,7 @@ public:	\
 		inline rfk::Struct const& CustomInstantiator::staticGetArchetype() noexcept	\
 		{	\
 			static bool			initialized = false;	\
-			static rfk::Struct	type("CustomInstantiator", 291713889535622996u, sizeof(CustomInstantiator));	\
+			static rfk::Struct	type("CustomInstantiator", 291713889535622996u, sizeof(CustomInstantiator), false);	\
 			\
 			if (!initialized)	\
 			{	\

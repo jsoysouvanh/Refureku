@@ -11,14 +11,5 @@
 
 namespace rfk
 {
-	class Class final : public Struct
-	{
-		public:
-			Class(std::string&&	name,
-				  uint64		id,
-				  uint64		memorySize)	noexcept;
-			Class(Class const&)				= delete;
-			Class(Class&&)					= delete;
-			~Class()						= default;
-	};
+	using Class = Struct;
 }

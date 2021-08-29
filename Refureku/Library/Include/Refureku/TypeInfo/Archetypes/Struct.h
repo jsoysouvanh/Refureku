@@ -24,7 +24,6 @@
 namespace rfk
 {
 	//Forward declarations
-	class Class;
 	class Enum;
 
 	class Struct : public Archetype
@@ -91,10 +90,10 @@ namespace rfk
 
 			Struct(std::string&&	newName,
 				   uint64			newId,
-				   uint64			newMemorySize)	noexcept;
+				   uint64			newMemorySize,
+				   bool				isClass)		noexcept;
 			Struct(Struct const&)					= delete;
 			Struct(Struct&&)						= delete;
-			~Struct()								= default;
 
 			/**
 			*	@brief Retrieve from this struct a nested archetype matching with a given predicate.
@@ -132,8 +131,8 @@ namespace rfk
 			*	
 			*	@return The first matching class if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Class const*>>>
-			Class const*						getNestedClass(Predicate predicate)													const;
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
+			Struct const*						getNestedClass(Predicate predicate)													const;
 
 			/**
 			*	@param className	Name of the nested class to look for.
@@ -141,7 +140,7 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			Class const*						getNestedClass(std::string			className,
+			Struct const*						getNestedClass(std::string			className,
 																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
 
 			/**
@@ -582,6 +581,9 @@ namespace rfk
 	*/
 	template <typename T>
 	void* defaultInstantiator();
+
+	/* In C++, a struct and a class contains exactly the same data. Alias for convenience. */
+	using Class = Struct;
 
 	#include "Refureku/TypeInfo/Archetypes/Struct.inl"
 }

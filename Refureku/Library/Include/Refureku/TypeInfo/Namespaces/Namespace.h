@@ -19,8 +19,9 @@ namespace rfk
 {
 	//Forward declarations
 	class Struct;
-	class Class;
 	class Enum;
+
+	using Class = Struct;
 
 	class Namespace final : public Entity
 	{
