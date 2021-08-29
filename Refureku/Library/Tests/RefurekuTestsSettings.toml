@@ -37,12 +37,14 @@ projectIncludeDirectories = [
 ]
 
 # Must be one of "msvc", "clang++", "g++"
-compilerExeName = "msvc"
+compilerExeName = "clang++"
 
 namespaceMacroName = "RFKNamespace"
 classMacroName = "RFKClass"
 structMacroName = "RFKStruct"
+variableMacroName = "RFKVariable"
 fieldMacroName = "RFKField"
+functionMacroName = "RFKFunction"
 methodMacroName = "RFKMethod"
 enumMacroName = "RFKEnum"
 enumValueMacroName = "RFKEnumVal"

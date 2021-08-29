@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <Kodgen/Object.h>
-
 namespace rfk
 {
 	//Forward declaration
@@ -17,7 +15,7 @@ namespace rfk
 	/**
 	*	Base class which implements the virtual getArchetype method.
 	*/
-	class Object : public kodgen::Object
+	class Object
 	{
 		public:
 			Object()				= default;

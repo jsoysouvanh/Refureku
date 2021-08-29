@@ -22,9 +22,9 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::C
 		*	@param allowMultiple_		Is this property allowed to be attached multiple times to the same entity?
 		*	@param shouldInherit_		Should this property be inherited by children when used on structs/classes or virtual methods.
 		*/
-		PropertySettings(rfk::EEntityKind		_targetEntityKind_ [[maybe_unused]],		//first [[maybe_unused]] is written after the variable name for pre-gcc 9.3 compatibility
-						 [[maybe_unused]] bool	_allowMultiple_ = false,
-						 [[maybe_unused]] bool	_shouldInherit_ = true)	noexcept
+		PropertySettings(rfk::EEntityKind		targetEntityKind_ [[maybe_unused]],		//first [[maybe_unused]] is written after the variable name for pre-gcc 9.3 compatibility
+						 [[maybe_unused]] bool	allowMultiple_ = false,
+						 [[maybe_unused]] bool	shouldInherit_ = true)	noexcept
 		{
 		}
 

@@ -1,11 +1,63 @@
-#include <iostream>
+#include <utility>	//std::forward
 
-#include "Kodgen/Misc/Filesystem.h"
+#include <Kodgen/Misc/Filesystem.h>
+#include <Kodgen/Misc/DefaultLogger.h>
+#include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/CodeGen/Macro/MacroCodeGenUnit.h>
+
 #include "RefurekuGenerator/Parsing/FileParser.h"
-#include "RefurekuGenerator/Parsing/FileParserFactory.h"
-#include "RefurekuGenerator/CodeGen/FileGenerator.h"
-#include "RefurekuGenerator/CodeGen/FileGenerationUnit.h"
-#include "Kodgen/Misc/DefaultLogger.h"
+#include "RefurekuGenerator/CodeGen/CodeGenManager.h"
+#include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
+#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
+
+bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::ParsingSettings& parsingSettings,
+				  kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings, fs::path&& settingsFilePath)
+{
+	if (!settingsFilePath.empty())
+	{
+		//Load settings from settings file
+		//All settings are localized in a single file for ease of use
+		if (!parsingSettings.loadFromFile(settingsFilePath, &logger))
+		{
+			return false;
+		}
+		else if (!codeGenMgrSettings.loadFromFile(settingsFilePath, &logger))
+		{
+			return false;
+		}
+		else if (!codeGenUnitSettings.loadFromFile(settingsFilePath, &logger))
+		{
+			return false;
+		}
+	}
+
+#if RFK_DEV
+	//Specify used compiler
+#if defined(__GNUC__)
+	parsingSettings.setCompilerExeName("g++");
+#elif defined(__clang__)
+	parsingSettings.setCompilerExeName("clang++");
+#elif defined(_MSC_VER)
+	parsingSettings.setCompilerExeName("msvc");
+#endif
+
+#endif
+
+	return true;
+}
+
+void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const& genResult)
+{
+	if (genResult.completed)
+	{
+		logger.log("(Re)generated metadata for " + std::to_string(genResult.parsedFiles.size()) + " file(s) in " + std::to_string(genResult.duration) + " seconds.", kodgen::ILogger::ELogSeverity::Info);
+		logger.log("Metadata of " + std::to_string(genResult.upToDateFiles.size()) + " file(s) up-to-date.", kodgen::ILogger::ELogSeverity::Info);
+	}
+	else
+	{
+		logger.log("Generation failed to complete successfully.", kodgen::ILogger::ELogSeverity::Error);
+	}
+}
 
 int main()
 {
@@ -20,29 +72,32 @@ int main()
 	path = path / "Refureku" / "Generator" / "LibraryGenerator";
 
 	//----------------------------------------
-	rfk::FileParserFactory<rfk::FileParser>	fileParserFactory;
-	rfk::FileGenerator						fileGenerator;
-	rfk::FileGenerationUnit					fileGenerationUnit;
-
 	kodgen::DefaultLogger logger;
-	
-	fileParserFactory.logger	= &logger;
-	fileGenerator.logger		= &logger;
 
-	if (fileParserFactory.loadSettings(path / "LibraryGenerationSettings.toml") && fileGenerator.loadSettings(path / "LibraryGenerationSettings.toml"))
-	{
-		kodgen::FileGenerationResult result = fileGenerator.generateFiles(fileParserFactory, fileGenerationUnit, true);
+	rfk::FileParser fileParser;
+	fileParser.logger = &logger;
 
-		for (kodgen::ParsingError const& error : result.parsingErrors)
-		{
-			logger.log(error.toString(), kodgen::ILogger::ELogSeverity::Error);
-		}
+	rfk::CodeGenManager codeGenMgr;
+	codeGenMgr.logger = &logger;
 
-		for (kodgen::FileGenerationError const& error : result.fileGenerationErrors)
-		{
-			logger.log(error.toString(), kodgen::ILogger::ELogSeverity::Error);
-		}
-	}
+	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
+
+	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
+	kodgen::MacroCodeGenUnit codeGenUnit;
+	codeGenUnit.logger = &logger;
+	codeGenUnit.setSettings(codeGenUnitSettings);
+	codeGenUnit.addModule(reflectionCodeGenModule);
+
+	//Load settings
+	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
+
+	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(path / "LibraryGenerationSettings.toml"));
+
+	//Parse
+	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
+
+	//Result
+	printGenerationResult(logger, genResult);
 
 	return EXIT_SUCCESS;
 }

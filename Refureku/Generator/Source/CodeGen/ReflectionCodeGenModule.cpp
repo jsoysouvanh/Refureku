@@ -24,6 +24,25 @@ ReflectionCodeGenModule* ReflectionCodeGenModule::clone() const noexcept
 	return new ReflectionCodeGenModule(*this);
 }
 
+kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	if (entity == nullptr)
+	{
+		//Called once at the very beginning of the generation with nullptr entity
+		//TODO: Replace this by a forward declaration of used types
+		inout_result += "#include <Refureku/Misc/DisableWarningMacros.h>\n"
+						"#include <Refureku/TypeInfo/Namespaces/Namespace.h>\n"
+						"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>\n"
+						"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>\n"
+						"#include <Refureku/TypeInfo/Archetypes/Class.h>\n"
+						"#include <Refureku/TypeInfo/Archetypes/Enum.h>\n"
+						"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>\n"
+						"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>\n";
+	}
+
+	return kodgen::ETraversalBehaviour::Recurse; 
+}
+
 kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	assert(entity != nullptr); //Class footer code should always depend on a non-nullptr entity
@@ -60,7 +79,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 	else
 	{
 		//Called once at the very beginning of the generation with nullptr entity
-		inout_result += std::string("/* This is a test */") + env.getSeparator();
+		//TODO: Include headers
 	}
 
 	return kodgen::ETraversalBehaviour::Recurse;

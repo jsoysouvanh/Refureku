@@ -11,6 +11,7 @@ add_executable(${RefurekuTestsTarget}
 					ExampleClass.cpp
 					ExampleClass2.cpp
 					CustomString.cpp
+					CustomProperties.cpp
 					ThirdPartyEnumReflectionCode.cpp
 					Test.cpp
 					Vector3.cpp

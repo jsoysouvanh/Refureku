@@ -159,6 +159,10 @@ namespace rfk
 		protected:
 			virtual ReflectionCodeGenModule*	clone()																const	noexcept	override;
 
+			virtual kodgen::ETraversalBehaviour	generateHeaderFileHeaderCode(kodgen::EntityInfo const*	entity,
+																			 kodgen::MacroCodeGenEnv&	env,
+																			 std::string&				inout_result)		noexcept	override;
+
 			virtual kodgen::ETraversalBehaviour	generateClassFooterCode(kodgen::EntityInfo const*	entity,
 																		kodgen::MacroCodeGenEnv&	env,
 																		std::string&				inout_result)			noexcept	override;

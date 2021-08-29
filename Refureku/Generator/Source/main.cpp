@@ -1,4 +1,3 @@
-#include <iostream>
 #include <utility>	//std::forward
 
 #include <Kodgen/Misc/Filesystem.h>
@@ -114,7 +113,7 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(settingsFilePath));
 
 	//Parse
-	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true); //TODO: Set this to false
+	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false); //TODO: Set this to false
 
 	//Result
 	printGenerationResult(logger, genResult);

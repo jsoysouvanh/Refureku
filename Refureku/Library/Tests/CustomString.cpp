@@ -1,1 +1,1 @@
-#include "Generated/CustomProperties.rfks.h"
+#include "Generated/CustomString.rfks.h"
