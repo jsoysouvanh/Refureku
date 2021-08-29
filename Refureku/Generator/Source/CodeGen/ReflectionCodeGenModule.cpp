@@ -391,7 +391,12 @@ void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen
 
 void ReflectionCodeGenModule::declareGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "namespace rfk { template <> rfk::Archetype const* getArchetype<" + structClass.getFullName() + ">() noexcept; }" + env.getSeparator();
+	if (structClass.outerEntity == nullptr ||
+		structClass.outerEntity->entityType == kodgen::EEntityType::Namespace ||
+		(structClass.outerEntity->entityType && (kodgen::EEntityType::Struct | kodgen::EEntityType::Class)) && reinterpret_cast<kodgen::NestedStructClassInfo const&>(structClass).accessSpecifier == kodgen::EAccessSpecifier::Public)
+	{
+		inout_result += "namespace rfk { template <> rfk::Archetype const* getArchetype<" + structClass.getFullName() + ">() noexcept; }" + env.getSeparator();
+	}
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
