@@ -101,6 +101,24 @@ namespace rfk
 			static std::string			computeGetVariableFunctionName(kodgen::VariableInfo const& variable)	noexcept;
 
 			/**
+			*	@brief Compute the rfk::EFunctionFlags value for the provided function.
+			*
+			*	@param function Function used to compute the rfk::EFunctionFlags value.
+			* 
+			*	@return The computed rfk::EFunctionFlags value as a uint8.
+			*/
+			static kodgen::uint8		computeRefurekuFunctionFlags(kodgen::FunctionInfo const& function)		noexcept;
+
+			/**
+			*	@brief Compute the name of the getFunction function for the given function.
+			* 
+			*	@param function The target function.
+			* 
+			*	@return The name of the getFunction function for the target function.
+			*/
+			static std::string			computeGetFunctionFunctionName(kodgen::FunctionInfo const& function)	noexcept;
+
+			/**
 			*	TODO
 			*/
 			void	fillEntityProperties(kodgen::EntityInfo const&	entity,
@@ -283,6 +301,9 @@ namespace rfk
 
 
 			//Variables code generation
+			/**
+			*	TODO
+			*/
 			void	declareGetVariableFunction(kodgen::VariableInfo const&	variable,
 											   kodgen::MacroCodeGenEnv&		env,
 											   std::string&					inout_result)				const	noexcept;
@@ -308,6 +329,36 @@ namespace rfk
 													 kodgen::MacroCodeGenEnv&		env,
 													 std::string&					inout_result)		const	noexcept;
 
+
+
+			//Functions code generation
+			/**
+			*	TODO
+			*/
+			void	declareGetFunctionFunction(kodgen::FunctionInfo const&	function,
+											   kodgen::MacroCodeGenEnv&		env,
+											   std::string&					inout_result)				const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineGetFunctionFunction(kodgen::FunctionInfo const&	function,
+											  kodgen::MacroCodeGenEnv&		env,
+											  std::string&					inout_result)						noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
+													  kodgen::MacroCodeGenEnv&		env,
+													  std::string&					inout_result)		const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
+													 kodgen::MacroCodeGenEnv&		env,
+													 std::string&					inout_result)		const	noexcept;
 
 
 

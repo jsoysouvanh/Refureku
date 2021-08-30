@@ -148,6 +148,9 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 				return kodgen::ETraversalBehaviour::Continue; //Go to next variable
 
 			case kodgen::EEntityType::Function:
+				declareGetFunctionFunction(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
+				declareFunctionRegistererVariable(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
+
 				return kodgen::ETraversalBehaviour::Continue; //Go to next function
 
 			case kodgen::EEntityType::Field:
@@ -207,6 +210,9 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				return kodgen::ETraversalBehaviour::Continue; //Go to next variable
 
 			case kodgen::EEntityType::Function:
+				defineGetFunctionFunction(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
+				defineFunctionRegistererVariable(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
+
 				return kodgen::ETraversalBehaviour::Continue; //Go to next function
 
 			case kodgen::EEntityType::Field:
@@ -869,7 +875,75 @@ kodgen::uint8 ReflectionCodeGenModule::computeRefurekuVariableFlags(kodgen::Vari
 
 std::string ReflectionCodeGenModule::computeGetVariableFunctionName(kodgen::VariableInfo const& variable) noexcept
 {
-	return "getVariable" + std::to_string(_stringHasher(variable.id)) + "u";
+	return "getVariable" + getEntityId(variable);;
+}
+
+void ReflectionCodeGenModule::declareGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	inout_result += "namespace rfk::generated { rfk::Function const& " + computeGetFunctionFunctionName(function) + "() noexcept; }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	std::string nonMemberFuncType = "rfk::NonMemberFunction<" + function.getPrototype(true) + ">";
+
+	inout_result += "rfk::Function const& rfk::generated::" + computeGetFunctionFunctionName(function) + "() noexcept {" + env.getSeparator() +
+					"static bool initialized = false;" + env.getSeparator() + 
+					"static rfk::Function function(\"" + function.name + "\", " +
+												   getEntityId(function) + ", "
+												   "rfk::Type::getType<" + function.returnType.getCanonicalName() + ">(), "
+												   "std::unique_ptr<" + nonMemberFuncType + ">(new " + nonMemberFuncType + "(&" + function.getFullName() + ")), "
+													"static_cast<rfk::EFunctionFlags>(" + std::to_string(computeRefurekuFunctionFlags(function)) + ")"
+												   ");" + env.getSeparator();
+
+	//Initialize variable metadata
+	inout_result += "if (!initialized) {" + env.getSeparator() +
+					"initialized = true;" + env.getSeparator();
+
+	fillEntityProperties(function, env, "function.", inout_result);
+
+	//End initialization if
+	inout_result += "}";
+
+	inout_result += "return function; }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::declareFunctionRegistererVariable(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	if (function.outerEntity == nullptr)
+	{
+		inout_result += "namespace rfk::generated { extern rfk::DefaultEntityRegisterer functionRegisterer" + getEntityId(function) + "; }" + env.getSeparator();
+	}
+}
+
+void ReflectionCodeGenModule::defineFunctionRegistererVariable(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	if (function.outerEntity == nullptr)
+	{
+		inout_result += "rfk::DefaultEntityRegisterer rfk::generated::functionRegisterer" + getEntityId(function) + " = &rfk::generated::" + computeGetFunctionFunctionName(function) + "();" + env.getSeparator();
+	}
+}
+
+kodgen::uint8 ReflectionCodeGenModule::computeRefurekuFunctionFlags(kodgen::FunctionInfo const& function) noexcept
+{
+	kodgen::uint8 result = 0u;
+
+	if (function.isStatic)
+	{
+		result |= 1 << 0;
+	}
+
+	if (function.isInline)
+	{
+		result |= 1 << 1;
+	}
+
+	return result;
+}
+
+std::string ReflectionCodeGenModule::computeGetFunctionFunctionName(kodgen::FunctionInfo const& function) noexcept
+{
+	return "getFunction" + getEntityId(function);
 }
 
 //void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
