@@ -284,6 +284,7 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 	fillEntityProperties(structClass, env, "type.", inout_result);
 	fillClassParentsMetadata(structClass, env, "type.", inout_result);
 	fillClassFields(structClass, env, "type", inout_result);
+	fillClassMethods(structClass, env, "type", inout_result);
 
 	//End of the initialization if statement
 	inout_result += "}" + env.getSeparator();
@@ -384,6 +385,72 @@ void ReflectionCodeGenModule::fillClassParentsMetadata(kodgen::StructClassInfo c
 void ReflectionCodeGenModule::fillClassFields(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string generatedClassRefExpression, std::string& inout_result) noexcept
 {
 	inout_result += structClass.name + "::_rfk_registerChildClass<" + structClass.name + ">(" + std::move(generatedClassRefExpression) + ");" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string generatedClassRefExpression, std::string& inout_result) noexcept
+{
+	if (!structClass.methods.empty())
+	{
+		inout_result += "[[maybe_unused]] rfk::Method* method = nullptr; [[maybe_unused]] rfk::StaticMethod* staticMethod = nullptr;";
+	}
+
+	std::string generatedCode;
+	std::string currentMethodVariable;
+	for (kodgen::MethodInfo const& method : structClass.methods)
+	{
+		if (method.isStatic)
+		{
+			inout_result += "staticMethod = type.addStaticMethod(\"" + method.name + "\", " +
+							 std::to_string(_stringHasher(method.id)) + "u, "
+							 "rfk::Type::getType<" + method.returnType.getName() + ">(), "
+							 "std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
+							 "static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
+
+			currentMethodVariable = "staticMethod";
+		}
+		else
+		{
+			inout_result += "method = type.addMethod(\"" + method.name + "\", " +
+									std::to_string(_stringHasher(method.id)) + "u, "
+									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
+									"std::make_unique<rfk::MemberFunction<" + structClass.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
+									"static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
+
+			currentMethodVariable = "method";
+		}
+
+		//Setup parameters
+		if (!method.parameters.empty())
+		{
+			//Add all parameters in a single string
+			generatedCode = currentMethodVariable + "->parameters.reserve(" + std::to_string(method.parameters.size()) + "); " + currentMethodVariable;
+
+			for (kodgen::FunctionParamInfo const& param : method.parameters)
+			{
+				generatedCode += "->addParameter(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">())";
+			}
+
+			//Write generated parameters string to file
+			inout_result += generatedCode + ";" + env.getSeparator();
+		}
+
+		//Add properties after the method has been fully setup
+		//Parameters have been added at this point, so properties generated code can safely add additional checks
+		if (method.isStatic)
+		{
+			fillEntityProperties(method, env, "staticMethod->", inout_result);
+		}
+		else
+		{
+			fillEntityProperties(method, env, "method->", inout_result);
+
+			//Base method properties must be inherited AFTER this method properties have been added
+			if (method.isOverride)
+			{
+				inout_result += "method->inheritBaseMethodProperties();" + env.getSeparator();
+			}
+		}
+	}
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -546,6 +613,70 @@ kodgen::uint16 ReflectionCodeGenModule::computeRefurekuFieldFlags(kodgen::FieldI
 
 	if (field.isMutable)
 		result |= 1 << 4;
+
+	return result;
+}
+
+kodgen::uint16 ReflectionCodeGenModule::computeRefurekuMethodFlags(kodgen::MethodInfo const& method) noexcept
+{
+	kodgen::uint16 result = 0;
+
+	switch (method.accessSpecifier)
+	{
+		case kodgen::EAccessSpecifier::Public:
+			result |= 1 << 0;
+			break;
+
+		case kodgen::EAccessSpecifier::Protected:
+			result |= 1 << 1;
+			break;
+
+		case kodgen::EAccessSpecifier::Private:
+			result |= 1 << 2;
+			break;
+
+		default:
+			break;
+	}
+
+	if (method.isStatic)
+		result |= 1 << 3;
+
+	if (method.isInline)
+		result |= 1 << 4;
+
+	if (method.isVirtual)
+		result |= 1 << 5;
+
+	if (method.isPureVirtual)
+		result |= 1 << 6;
+
+	if (method.isOverride)
+		result |= 1 << 7;
+
+	if (method.isFinal)
+		result |= 1 << 8;
+
+	if (method.isConst)
+		result |= 1 << 9;
+
+	return result;
+}
+
+std::string ReflectionCodeGenModule::computeFullMethodPointerType(kodgen::StructClassInfo const& classInfo, kodgen::MethodInfo const& method) noexcept
+{
+	std::string result = method.getPrototype();
+
+	if (method.isStatic)
+	{
+		//Add the ptr on non-member (*) to the type
+		result.insert(result.find_first_of('('), "(*)");
+	}
+	else
+	{
+		//Add the ptr on member (Class::*) to the type
+		result.insert(result.find_first_of('('), "(" + classInfo.name + "::*)");
+	}
 
 	return result;
 }

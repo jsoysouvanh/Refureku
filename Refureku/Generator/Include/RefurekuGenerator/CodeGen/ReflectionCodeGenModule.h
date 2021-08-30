@@ -41,7 +41,7 @@ namespace rfk
 			* 
 			*	@return The unique ID of an entity as a string.
 			*/
-			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)					noexcept;
+			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)							noexcept;
 
 			/**
 			*	@brief Convert the name of a kodgen::EEntityType to its equivalent rfk::EEntityKind name.
@@ -50,7 +50,7 @@ namespace rfk
 			* 
 			*	@return The name of the equivalent rfk::EEntityKind value.
 			*/
-			static std::string			convertEntityTypeToEntityKind(kodgen::EEntityType entityType)	noexcept;
+			static std::string			convertEntityTypeToEntityKind(kodgen::EEntityType entityType)			noexcept;
 
 			/**
 			*	@brief Compute the rfk::EFieldFlags value for the provided field.
@@ -59,7 +59,28 @@ namespace rfk
 			* 
 			*	@return The computed rfk::FieldFlags value as a uint16.
 			*/
-			static kodgen::uint16		computeRefurekuFieldFlags(kodgen::FieldInfo const& field)		noexcept;
+			static kodgen::uint16		computeRefurekuFieldFlags(kodgen::FieldInfo const& field)				noexcept;
+
+			/**
+			*	@brief Compute the rfk::EMethodFlags value for the provided method.
+			*
+			*	@param method Method used to compute the rfk::EMethodFlags value.
+			* 
+			*	@return The computed rfk::EMethodFlags value as a uint16.
+			*/
+			static kodgen::uint16		computeRefurekuMethodFlags(kodgen::MethodInfo const& method)			noexcept;
+
+			/**
+			*	@brief	Compute the full type of a method pointer.
+			*			Ex: void method(int){} becomes void (*)(int)
+			*			Ex: class A { void method(int){} }; becomes void (A::*)(int)
+			*
+			*	@param method Method used to compute the rfk::EMethodFlags value.
+			* 
+			*	@return The computed rfk::EMethodFlags value as a uint16.
+			*/
+			static std::string			computeFullMethodPointerType(kodgen::StructClassInfo const&	classInfo,
+																	 kodgen::MethodInfo const&		method)		noexcept;
 
 			/**
 			*	TODO
@@ -135,6 +156,14 @@ namespace rfk
 									kodgen::MacroCodeGenEnv&		env,
 									std::string						generatedClassRefExpression,
 									std::string&					inout_result)										noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	fillClassMethods(kodgen::StructClassInfo const&	structClass,
+									 kodgen::MacroCodeGenEnv&		env,
+									 std::string					generatedClassRefExpression,
+									 std::string&					inout_result)										noexcept;
 
 			/**
 			*	@brief Generate the getArchetype method declaration if the provided class inherits from rfk::Object.
