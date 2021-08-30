@@ -162,8 +162,16 @@ namespace rfk
 			*/
 			void	fillClassMethods(kodgen::StructClassInfo const&	structClass,
 									 kodgen::MacroCodeGenEnv&		env,
-									 std::string					generatedClassRefExpression,
+									 std::string const&				generatedEntityVarName,
 									 std::string&					inout_result)										noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	fillClassNestedArchetypes(kodgen::StructClassInfo const&	structClass,
+											  kodgen::MacroCodeGenEnv&			env,
+											  std::string const&				generatedEntityVarName,
+											  std::string&						inout_result)							noexcept;
 
 			/**
 			*	@brief Generate the getArchetype method declaration if the provided class inherits from rfk::Object.
@@ -207,6 +215,20 @@ namespace rfk
 			void	declareAndDefineRegisterChildClassMethod(kodgen::StructClassInfo const&	structClass,
 															 kodgen::MacroCodeGenEnv&		env,
 															 std::string&					inout_result)				noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareClassRegistrationField(kodgen::StructClassInfo const&	structClass,
+												  kodgen::MacroCodeGenEnv&			env,
+												  std::string&						inout_result)						noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineClassRegistrationField(kodgen::StructClassInfo const&	structClass,
+												 kodgen::MacroCodeGenEnv&			env,
+												 std::string&						inout_result)						noexcept;
 
 		protected:
 			virtual ReflectionCodeGenModule*	clone()																const	noexcept	override;

@@ -82,6 +82,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 		case kodgen::EEntityType::Class:
 			declareFriendClasses(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			
+			declareClassRegistrationField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareAndDefineRegisterChildClassMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
@@ -179,6 +180,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			case kodgen::EEntityType::Struct:
 				[[fallthrough]];
 			case kodgen::EEntityType::Class:
+				defineClassRegistrationField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
@@ -222,24 +224,19 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
 					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
-					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator();
+					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() + 
+					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	//TODO: Can improve this by only including used header files depending on the parsing result for this file.
-	//inout_result += "#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator();
+	//inout_result += env.getSeparator();
 
-	inout_result += env.getSeparator();
-
-	//inout_result += "#include <Refureku/Misc/DisableWarningMacros.h>\n"
-	//				"#include <Refureku/TypeInfo/Namespaces/Namespace.h>\n"
-	//				"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>\n"
-	//				"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>\n"
-	//				"#include <Refureku/TypeInfo/Archetypes/Class.h>\n"
-	//				"#include <Refureku/TypeInfo/Archetypes/Enum.h>\n"
-	//				"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>\n"
-	//				"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>\n";
+	//"#include <Refureku/TypeInfo/Namespaces/Namespace.h>\n"
+	//"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>\n"
+	//"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>\n"
+	//"#include <Refureku/TypeInfo/Archetypes/Enum.h>\n"
+	//"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>\n";
 }
 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -284,7 +281,10 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 	fillEntityProperties(structClass, env, "type.", inout_result);
 	fillClassParentsMetadata(structClass, env, "type.", inout_result);
 	fillClassFields(structClass, env, "type", inout_result);
-	fillClassMethods(structClass, env, "type", inout_result);
+	fillClassMethods(structClass, env, "type.", inout_result);
+	fillClassNestedArchetypes(structClass, env, "type.", inout_result);
+
+	inout_result += "type.setDefaultInstantiator(&rfk::defaultInstantiator<" + structClass.name + ">);" + env.getSeparator();
 
 	//End of the initialization if statement
 	inout_result += "}" + env.getSeparator();
@@ -332,39 +332,42 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 
 	std::string generatedPropertyVariableName;
 
-	//Reserve space to avoid reallocation
-	inout_result += generatedEntityVarName + "properties.reserve(" + std::to_string(entity.properties.size()) + ");" + env.getSeparator();
-
-	//Add all properties
-	_propertiesCount.clear();
-	for (int i = 0; i < entity.properties.size(); i++)
+	if (!entity.properties.empty())
 	{
-		generatedPropertyVariableName = getPropertyVariableName(i);
+		//Reserve space to avoid reallocation
+		inout_result += generatedEntityVarName + "properties.reserve(" + std::to_string(entity.properties.size()) + ");" + env.getSeparator();
 
-		//Generate static_asserts bound to this property
-		inout_result += generatePropertyStaticAsserts(entity.properties[i]);
-
-		//Declare property
-		inout_result += "static " + entity.properties[i].name + " " + generatedPropertyVariableName;
-
-		//Construct the property with the provided arguments
-		if (!entity.properties[i].arguments.empty())
+		//Add all properties
+		_propertiesCount.clear();
+		for (int i = 0; i < entity.properties.size(); i++)
 		{
-			inout_result += "{";
+			generatedPropertyVariableName = getPropertyVariableName(i);
 
-			for (std::string const& argument : entity.properties[i].arguments)
+			//Generate static_asserts bound to this property
+			inout_result += generatePropertyStaticAsserts(entity.properties[i]);
+
+			//Declare property
+			inout_result += "static " + entity.properties[i].name + " " + generatedPropertyVariableName;
+
+			//Construct the property with the provided arguments
+			if (!entity.properties[i].arguments.empty())
 			{
-				inout_result += argument + ",";
+				inout_result += "{";
+
+				for (std::string const& argument : entity.properties[i].arguments)
+				{
+					inout_result += argument + ",";
+				}
+
+				inout_result.back() = '}';	//Replace the last , by a }
 			}
 
-			inout_result.back() = '}';	//Replace the last , by a }
+			inout_result.push_back(';');
+
+			//TODO: Insert per property generated code?
+
+			inout_result += generatedEntityVarName + "properties.emplace_back(&" + generatedPropertyVariableName + ");" + env.getSeparator();
 		}
-
-		inout_result.push_back(';');
-
-		//TODO: Insert per property generated code?
-
-		inout_result += generatedEntityVarName + "properties.emplace_back(&" + generatedPropertyVariableName + ");" + env.getSeparator();
 	}
 }
 
@@ -387,11 +390,11 @@ void ReflectionCodeGenModule::fillClassFields(kodgen::StructClassInfo const& str
 	inout_result += structClass.name + "::_rfk_registerChildClass<" + structClass.name + ">(" + std::move(generatedClassRefExpression) + ");" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string generatedClassRefExpression, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
 {
 	if (!structClass.methods.empty())
 	{
-		inout_result += "[[maybe_unused]] rfk::Method* method = nullptr; [[maybe_unused]] rfk::StaticMethod* staticMethod = nullptr;";
+		inout_result += "[[maybe_unused]] rfk::Method* method = nullptr; [[maybe_unused]] rfk::StaticMethod* staticMethod = nullptr;" + env.getSeparator();
 	}
 
 	std::string generatedCode;
@@ -400,7 +403,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 	{
 		if (method.isStatic)
 		{
-			inout_result += "staticMethod = type.addStaticMethod(\"" + method.name + "\", " +
+			inout_result += "staticMethod = " + generatedEntityVarName + "addStaticMethod(\"" + method.name + "\", " +
 							 std::to_string(_stringHasher(method.id)) + "u, "
 							 "rfk::Type::getType<" + method.returnType.getName() + ">(), "
 							 "std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
@@ -410,7 +413,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		}
 		else
 		{
-			inout_result += "method = type.addMethod(\"" + method.name + "\", " +
+			inout_result += "method = " + generatedEntityVarName + "addMethod(\"" + method.name + "\", " +
 									std::to_string(_stringHasher(method.id)) + "u, "
 									"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 									"std::make_unique<rfk::MemberFunction<" + structClass.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
@@ -451,6 +454,43 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 			}
 		}
 	}
+}
+
+void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
+{
+	kodgen::uint64 nestedArchetypesCount = structClass.nestedStructs.size() + structClass.nestedClasses.size() + structClass.nestedEnums.size();
+
+	//No code to generate if there are no nested entities
+	if (nestedArchetypesCount == 0u)
+	{
+		return;
+	}
+
+	//Reserve memory for the correct number of nested entities
+	inout_result += generatedEntityVarName + "nestedArchetypes.reserve(" + std::to_string(nestedArchetypesCount) + ");";
+
+	//Add nested structs
+	inout_result += "rfk::Archetype* archetype = nullptr;" + env.getSeparator();
+	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStruct : structClass.nestedStructs)
+	{
+		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(&" + nestedStruct->name + "::staticGetArchetype(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + "));" + env.getSeparator();
+	}
+
+	//Add nested classes
+	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedClass : structClass.nestedClasses)
+	{
+		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(&" + nestedClass->name + "::staticGetArchetype(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + "));" + env.getSeparator();
+	}
+
+	//Add nested enums
+	//TODO: Uncomment this when enum generated code will be supported
+	/*for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
+	{
+		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">(), "
+								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));" + env.getSeparator();
+	}*/
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -542,6 +582,26 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	}
 
 	inout_result += env.getSeparator() + "}";
+}
+
+void ReflectionCodeGenModule::declareClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	//Define the registrator only when there is no outer entity.
+	//If there is an outer entity, it will register its nested entities to the database itself.
+	if (structClass.outerEntity == nullptr)
+	{
+		inout_result += "private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;" + env.getSeparator();
+	}
+}
+
+void ReflectionCodeGenModule::defineClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	//Define the registrator only when there is no outer entity.
+	//If there is an outer entity, it will register its nested entities to the database itself.
+	if (structClass.outerEntity == nullptr)
+	{
+		inout_result += "rfk::ArchetypeRegisterer " + structClass.getFullName() + "::_rfk_archetypeRegisterer = &staticGetArchetype(); " + env.getSeparator();
+	}
 }
 
 std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEntityType entityType) noexcept
