@@ -44,7 +44,7 @@ namespace rfk
 			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)					noexcept;
 
 			/**
-			*	Convert the name of a kodgen::EEntityType to its equivalent rfk::EEntityKind name.
+			*	@brief Convert the name of a kodgen::EEntityType to its equivalent rfk::EEntityKind name.
 			* 
 			*	@param entityType The kodgen::EEntityType value to convert.
 			* 
@@ -53,11 +53,20 @@ namespace rfk
 			static std::string			convertEntityTypeToEntityKind(kodgen::EEntityType entityType)	noexcept;
 
 			/**
+			*	@brief Compute the rfk::EFieldFlags value for the provided field.
+			*
+			*	@param field Field used to compute the rfk::EFieldFlags value.
+			* 
+			*	@return The computed rfk::FieldFlags value as a uint16.
+			*/
+			static kodgen::uint16		computeRefurekuFieldFlags(kodgen::FieldInfo const& field)		noexcept;
+
+			/**
 			*	TODO
 			*/
 			void	fillEntityProperties(kodgen::EntityInfo const&	entity,
 										 kodgen::MacroCodeGenEnv&	env,
-										 std::string&&				generatedEntityVarName,
+										 std::string const&			generatedEntityVarName,
 										 std::string&				inout_result)										noexcept;
 
 			/**
@@ -116,7 +125,7 @@ namespace rfk
 			*/
 			void	fillClassParentsMetadata(kodgen::StructClassInfo const&	structClass,
 											 kodgen::MacroCodeGenEnv&		env,
-											 std::string&&					generatedEntityVarName,
+											 std::string const&				generatedEntityVarName,
 											 std::string&					inout_result)								noexcept;
 
 			/**
@@ -124,7 +133,7 @@ namespace rfk
 			*/
 			void	fillClassFields(kodgen::StructClassInfo const&	structClass,
 									kodgen::MacroCodeGenEnv&		env,
-									std::string&&					generatedClassRefExpression,
+									std::string						generatedClassRefExpression,
 									std::string&					inout_result)										noexcept;
 
 			/**

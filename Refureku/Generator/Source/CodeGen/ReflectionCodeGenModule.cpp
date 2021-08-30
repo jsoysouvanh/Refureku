@@ -218,9 +218,11 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 
 void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
+	inout_result += "#include <cstddef> /* offsetof macro */" + env.getSeparator() + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
-					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator();
+					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
+					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -243,7 +245,8 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "friend rfk::Struct;" + env.getSeparator();
-	inout_result += "friend rfk::CodeGenerationHelpers;" + env.getSeparator();
+	inout_result += "friend rfk::CodeGenerationHelpers; /* so that it can call the private _registerChildClass method. */" + env.getSeparator();
+	inout_result += "friend implements_template1__registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -289,7 +292,7 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 	inout_result += "return type; }" + env.getSeparator() + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string&& generatedEntityVarName, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
 {
 	auto getPropertyVariableName = [&entity](int propertyIndex) -> std::string
 	{
@@ -364,7 +367,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 	}
 }
 
-void ReflectionCodeGenModule::fillClassParentsMetadata(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string&& generatedEntityVarName, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::fillClassParentsMetadata(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
 {
 	if (!structClass.parents.empty())
 	{
@@ -378,9 +381,9 @@ void ReflectionCodeGenModule::fillClassParentsMetadata(kodgen::StructClassInfo c
 	}
 }
 
-void ReflectionCodeGenModule::fillClassFields(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string&& generatedClassRefExpression, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::fillClassFields(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string generatedClassRefExpression, std::string& inout_result) noexcept
 {
-	inout_result += structClass.name + "::_registerChildClass<" + structClass.name + ">(" + std::forward<std::string>(generatedClassRefExpression) + ");" + env.getSeparator();
+	inout_result += structClass.name + "::_registerChildClass<" + structClass.name + ">(" + std::move(generatedClassRefExpression) + ");" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -422,13 +425,56 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	//Propagate the child class registration to parent classes too
 	for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
 	{
-		inout_result += "rfk::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass); ";
+		inout_result += "rfk::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass);" + env.getSeparator();
 	}
 
+	inout_result += "rfk::Struct const& thisClass = staticGetArchetype();" + env.getSeparator();
+	
 	//Register the child to the children list
+	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::Struct&>(thisClass).children.insert(&childClass);" + env.getSeparator();
 
+	//Make the child class inherit from the parents class fields
+	if (!structClass.fields.empty())
+	{
+		inout_result += "[[maybe_unused]] rfk::Field* field = nullptr; [[maybe_unused]] rfk::StaticField* staticField = nullptr;" + env.getSeparator();
+		inout_result += "__RFK_DISABLE_WARNING_PUSH __RFK_DISABLE_WARNING_OFFSETOF " + env.getSeparator();	//Disable offsetof usage warnings
 
-	inout_result += "}";
+		//Iterate over fields
+		std::string properties;
+		std::string currentFieldVariable;
+		for (kodgen::FieldInfo const& field : structClass.fields)
+		{
+			if (field.isStatic)
+			{
+				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
+								 std::to_string(_stringHasher(field.id)) + "u, "
+								 "rfk::Type::getType<" + field.type.getName() + ">(), "
+								 "static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
+								 "&thisClass, "
+								 "&" + structClass.name + "::" + field.name + ");" + env.getSeparator();
+
+				currentFieldVariable = "staticField->";
+			}
+			else
+			{
+				inout_result += "field = childClass.addField(\"" + field.name + "\", " +
+								 std::to_string(_stringHasher(field.id)) + "u, "
+								 "rfk::Type::getType<" + field.type.getName() + ">(), "
+								 "static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
+								 "&thisClass, "
+								 "offsetof(ChildClass, " + field.name + "));" + env.getSeparator();
+
+				currentFieldVariable = "field->";
+			}
+
+			//Add properties
+			fillEntityProperties(field, env, currentFieldVariable, inout_result);
+		}
+
+		inout_result += "__RFK_DISABLE_WARNING_POP" + env.getSeparator();
+	}
+
+	inout_result += env.getSeparator() + "}";
 }
 
 std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEntityType entityType) noexcept
@@ -471,6 +517,37 @@ std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEnti
 	assert(false);
 
 	return "";
+}
+
+kodgen::uint16 ReflectionCodeGenModule::computeRefurekuFieldFlags(kodgen::FieldInfo const& field) noexcept
+{
+	kodgen::uint16 result = 0;
+
+	switch (field.accessSpecifier)
+	{
+		case kodgen::EAccessSpecifier::Public:
+			result |= 1 << 0;
+			break;
+
+		case kodgen::EAccessSpecifier::Protected:
+			result |= 1 << 1;
+			break;
+
+		case kodgen::EAccessSpecifier::Private:
+			result |= 1 << 2;
+			break;
+
+		default:
+			break;
+	}
+
+	if (field.isStatic)
+		result |= 1 << 3;
+
+	if (field.isMutable)
+		result |= 1 << 4;
+
+	return result;
 }
 
 //void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept

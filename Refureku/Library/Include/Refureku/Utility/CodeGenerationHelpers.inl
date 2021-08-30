@@ -11,7 +11,9 @@ constexpr void CodeGenerationHelpers::registerChildClass(rfk::Struct& childClass
 	static_assert(std::is_class_v<ParentClass>, "registerChildClass first template argument must be a class.");
 	static_assert(std::is_class_v<ChildClass>, "registerChildClass second template argument must be a class.");
 
-	if constexpr (implements_template1__registerChildClass<ParentClass, ChildClass, void(rfk::Struct&)>::value)
+	//The 2nd template type is void because it is friended by all reflected classes
+	//The traits would return false without the friend statement.
+	if constexpr (implements_template1__registerChildClass<ParentClass, void, void(rfk::Struct&)>::value)
 	{
 		ParentClass::template _registerChildClass<ChildClass>(childClass);
 	}

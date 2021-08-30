@@ -382,79 +382,79 @@
 //	TEST(rfk::Database::getFunction("functionInsideGlobalScope") == rfk::Database::getFunction(rfk::Database::getFunction("functionInsideGlobalScope")->id));
 //	TEST(rfk::Database::getFunction("functionInsideGlobalScope", rfk::EFunctionFlags::Inline) == nullptr);
 //}
-//
-//void inheritance()
-//{
-//	//rfk::Class const& pppClass = ParentParentParentClass::staticGetArchetype(); //Not reflected type, so can't call staticGetArchetype();
-//	rfk::Class const& ppc	= namespace2::ParentParentClass::staticGetArchetype();
-//	rfk::Class const& pc	= namespace3::ParentClass::staticGetArchetype();
-//	rfk::Class const& pc2	= namespace3::ParentClass2::staticGetArchetype();
-//	rfk::Class const& ec	= namespace3::ExampleClass::staticGetArchetype();
-//	rfk::Class const& oc	= namespace3::OtherClass::staticGetArchetype();
-//
-//	//IsBaseOf
-//	TEST(ppc.isBaseOf(ppc));
-//	TEST(ppc.isBaseOf(pc));
-//	TEST(!ppc.isBaseOf(pc2));
-//	TEST(ppc.isBaseOf(ec));
-//	TEST(!ppc.isBaseOf(oc));
-//
-//	TEST(!pc.isBaseOf(ppc));
-//	TEST(pc.isBaseOf(pc));
-//	TEST(!pc.isBaseOf(pc2));
-//	TEST(pc.isBaseOf(ec));
-//	TEST(!pc.isBaseOf(oc));
-//
-//	TEST(!ec.isBaseOf(ppc));
-//	TEST(!ec.isBaseOf(pc));
-//	TEST(!ec.isBaseOf(pc2));
-//	TEST(ec.isBaseOf(ec));
-//	TEST(!ec.isBaseOf(oc));
-//
-//	TEST(!oc.isBaseOf(ppc));
-//	TEST(!oc.isBaseOf(pc));
-//	TEST(!oc.isBaseOf(pc2));
-//	TEST(!oc.isBaseOf(ec));
-//	TEST(oc.isBaseOf(oc));
-//
-//	TEST(!pc2.isBaseOf(ppc));
-//	TEST(!pc2.isBaseOf(pc));
-//	TEST(pc2.isBaseOf(pc2));
-//	TEST(pc2.isBaseOf(ec));
-//	TEST(!pc2.isBaseOf(oc));
-//
-//	//isSubclassOf
-//	TEST(!ppc.isSubclassOf(ppc));
-//	TEST(!ppc.isSubclassOf(pc));
-//	TEST(!ppc.isSubclassOf(pc2));
-//	TEST(!ppc.isSubclassOf(ec));
-//	TEST(!ppc.isSubclassOf(oc));
-//
-//	TEST(pc.isSubclassOf(ppc));
-//	TEST(!pc.isSubclassOf(pc));
-//	TEST(!pc.isSubclassOf(pc2));
-//	TEST(!pc.isSubclassOf(ec));
-//	TEST(!pc.isSubclassOf(oc));
-//
-//	TEST(ec.isSubclassOf(ppc));
-//	TEST(ec.isSubclassOf(pc));
-//	TEST(ec.isSubclassOf(pc2));
-//	TEST(!ec.isSubclassOf(ec));
-//	TEST(!ec.isSubclassOf(oc));
-//
-//	TEST(!oc.isSubclassOf(ppc));
-//	TEST(!oc.isSubclassOf(pc));
-//	TEST(!oc.isSubclassOf(pc2));
-//	TEST(!oc.isSubclassOf(ec));
-//	TEST(!oc.isSubclassOf(oc));
-//
-//	TEST(!pc2.isSubclassOf(ppc));
-//	TEST(!pc2.isSubclassOf(pc));
-//	TEST(!pc2.isSubclassOf(pc2));
-//	TEST(!pc2.isSubclassOf(ec));
-//	TEST(!pc2.isSubclassOf(oc));
-//}
-//
+
+void inheritance()
+{
+	//rfk::Class const& pppClass = ParentParentParentClass::staticGetArchetype(); //Not reflected type, so can't call staticGetArchetype();
+	rfk::Class const& ppc	= namespace2::ParentParentClass::staticGetArchetype();
+	rfk::Class const& pc	= namespace3::ParentClass::staticGetArchetype();
+	rfk::Class const& pc2	= namespace3::ParentClass2::staticGetArchetype();
+	rfk::Class const& ec	= namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& oc	= namespace3::OtherClass::staticGetArchetype();
+
+	//IsBaseOf
+	TEST(ppc.isBaseOf(ppc));
+	TEST(ppc.isBaseOf(pc));
+	TEST(!ppc.isBaseOf(pc2));
+	TEST(ppc.isBaseOf(ec));
+	TEST(!ppc.isBaseOf(oc));
+
+	TEST(!pc.isBaseOf(ppc));
+	TEST(pc.isBaseOf(pc));
+	TEST(!pc.isBaseOf(pc2));
+	TEST(pc.isBaseOf(ec));
+	TEST(!pc.isBaseOf(oc));
+
+	TEST(!ec.isBaseOf(ppc));
+	TEST(!ec.isBaseOf(pc));
+	TEST(!ec.isBaseOf(pc2));
+	TEST(ec.isBaseOf(ec));
+	TEST(!ec.isBaseOf(oc));
+
+	TEST(!oc.isBaseOf(ppc));
+	TEST(!oc.isBaseOf(pc));
+	TEST(!oc.isBaseOf(pc2));
+	TEST(!oc.isBaseOf(ec));
+	TEST(oc.isBaseOf(oc));
+
+	TEST(!pc2.isBaseOf(ppc));
+	TEST(!pc2.isBaseOf(pc));
+	TEST(pc2.isBaseOf(pc2));
+	TEST(pc2.isBaseOf(ec));
+	TEST(!pc2.isBaseOf(oc));
+
+	//isSubclassOf
+	TEST(!ppc.isSubclassOf(ppc));
+	TEST(!ppc.isSubclassOf(pc));
+	TEST(!ppc.isSubclassOf(pc2));
+	TEST(!ppc.isSubclassOf(ec));
+	TEST(!ppc.isSubclassOf(oc));
+
+	TEST(pc.isSubclassOf(ppc));
+	TEST(!pc.isSubclassOf(pc));
+	TEST(!pc.isSubclassOf(pc2));
+	TEST(!pc.isSubclassOf(ec));
+	TEST(!pc.isSubclassOf(oc));
+
+	TEST(ec.isSubclassOf(ppc));
+	TEST(ec.isSubclassOf(pc));
+	TEST(ec.isSubclassOf(pc2));
+	TEST(!ec.isSubclassOf(ec));
+	TEST(!ec.isSubclassOf(oc));
+
+	TEST(!oc.isSubclassOf(ppc));
+	TEST(!oc.isSubclassOf(pc));
+	TEST(!oc.isSubclassOf(pc2));
+	TEST(!oc.isSubclassOf(ec));
+	TEST(!oc.isSubclassOf(oc));
+
+	TEST(!pc2.isSubclassOf(ppc));
+	TEST(!pc2.isSubclassOf(pc));
+	TEST(!pc2.isSubclassOf(pc2));
+	TEST(!pc2.isSubclassOf(ec));
+	TEST(!pc2.isSubclassOf(oc));
+}
+
 //void instantiation()
 //{
 //	rfk::Class const& pc	= namespace3::ParentClass::staticGetArchetype();
@@ -747,31 +747,30 @@
 
 int main()
 {
-	/*
-	classes();
-	structs();
-	database();
-	outerEntities();
-	namespaces();
-	templateEnums();
-	getArchetypes();
-	entityCast();
-	enums();
-	methods();
-	staticMethods();
-	fields();
-	staticFields();
-	variables();
-	functions();
 	inheritance();
-	instantiation();
-	properties();
-	dynamicTypes();
-	makeInstance();
-	fundamentalArchetypes();
-	enumManualReflection();
-	classManualReflection();
-	*/
+	
+	//classes();
+	//structs();
+	//database();
+	//outerEntities();
+	//namespaces();
+	//templateEnums();
+	//getArchetypes();
+	//entityCast();
+	//enums();
+	//methods();
+	//staticMethods();
+	//fields();
+	//staticFields();
+	//variables();
+	//functions();
+	//instantiation();
+	//properties();
+	//dynamicTypes();
+	//makeInstance();
+	//fundamentalArchetypes();
+	//enumManualReflection();
+	//classManualReflection();
 
 	return EXIT_SUCCESS;
 }
