@@ -29,7 +29,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCod
 	if (entity == nullptr)
 	{
 		//Called once at the very beginning of the generation with nullptr entity
-		forwardDeclareHeaderTypes(env, inout_result);
+		includeHeaderFileHeaders(env, inout_result);
 	}
 	else
 	{
@@ -82,9 +82,9 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 		case kodgen::EEntityType::Class:
 			declareFriendClasses(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			
-			inout_result += "public:" + env.getSeparator();
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			declareAndDefineRegisterChildClassMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
 			break;
 
@@ -170,7 +170,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 	if (entity == nullptr)
 	{
 		//Called once at the very beginning of the generation with nullptr entity
-		includeRefurekuHeaders(env, inout_result);
+		includeSourceFileHeaders(env, inout_result);
 	}
 	else
 	{
@@ -216,20 +216,17 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 	return kodgen::ETraversalBehaviour::Recurse;
 }
 
-void ReflectionCodeGenModule::forwardDeclareHeaderTypes(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator();
-	inout_result +=	"namespace rfk"
-					" { "
-					"class Struct; "
-					"using Class = Struct; "
-					"}" + env.getSeparator();
+	inout_result += "#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
+					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::includeRefurekuHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//TODO: Can improve this by only including used header files depending on the parsing result for this file.
-	inout_result += "#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator();
+	//inout_result += "#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator();
 
 	inout_result += env.getSeparator();
 
@@ -246,11 +243,12 @@ void ReflectionCodeGenModule::includeRefurekuHeaders(kodgen::MacroCodeGenEnv& en
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "friend rfk::Struct;" + env.getSeparator();
+	inout_result += "friend rfk::CodeGenerationHelpers;" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "static ";
+	inout_result += "public: static ";
 	inout_result += (structClass.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 	inout_result += " const& staticGetArchetype() noexcept;" + env.getSeparator();
 }
@@ -259,7 +257,7 @@ void ReflectionCodeGenModule::declareGetArchetypeMethodIfInheritFromObject(kodge
 {
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
 	{
-		inout_result += "virtual ";
+		inout_result += "public: virtual ";
 		inout_result += (structClass.entityType == kodgen::EEntityType::Struct) ? "rfk::Struct" : "rfk::Class";
 		inout_result += " const& getArchetype() const noexcept override;" + env.getSeparator();
 	}
@@ -282,6 +280,7 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 	//Inside the if statement, initialize the Struct metadata
 	fillEntityProperties(structClass, env, "type.", inout_result);
 	fillClassParentsMetadata(structClass, env, "type.", inout_result);
+	fillClassFields(structClass, env, "type", inout_result);
 
 	//End of the initialization if statement
 	inout_result += "}" + env.getSeparator();
@@ -379,6 +378,11 @@ void ReflectionCodeGenModule::fillClassParentsMetadata(kodgen::StructClassInfo c
 	}
 }
 
+void ReflectionCodeGenModule::fillClassFields(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string&& generatedClassRefExpression, std::string& inout_result) noexcept
+{
+	inout_result += structClass.name + "::_registerChildClass<" + structClass.name + ">(" + std::forward<std::string>(generatedClassRefExpression) + ");" + env.getSeparator();
+}
+
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
@@ -409,6 +413,22 @@ void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::S
 		inout_result += "template <> rfk::Archetype const* rfk::getArchetype<" + structClass.getFullName() + ">() noexcept { " +
 			"return &" + structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator();
 	}
+}
+
+void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	inout_result += "private: template <typename ChildClass> static void _registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
+
+	//Propagate the child class registration to parent classes too
+	for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
+	{
+		inout_result += "rfk::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass); ";
+	}
+
+	//Register the child to the children list
+
+
+	inout_result += "}";
 }
 
 std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEntityType entityType) noexcept

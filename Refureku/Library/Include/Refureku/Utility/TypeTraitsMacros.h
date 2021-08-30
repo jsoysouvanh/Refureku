@@ -40,6 +40,36 @@ struct implements_##MethodName<Class, Ret(Args...)>																						\
 };
 
 /**
+*	This macro generates a traits which allows to know at compile-time if a class owns a template method with a 
+*	given prototype named MethodName.
+*
+*	/!\ It works only for public methods and accept only a single template parameter
+*
+*	For example, if you use GENERATE_IMPLEMENTS_METHOD_TRAITS(MyCustomMethod), you will be able to write:
+*		if constexpr (implements_MyCustomMethod<MyCustomClass, void(int, float)>::value)
+*		{
+*			//Do something
+*		}
+*		
+*		(replacing void(int, float) by the prototype you want)
+*/
+#define GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(MethodName)																									\
+template<typename Class, typename TemplateType1, typename T>	struct implements_template1_##MethodName {};														\
+template <typename Class, typename TemplateType1, typename Ret, typename... Args>																				\
+struct implements_template1_##MethodName<Class, TemplateType1, Ret(Args...)>																					\
+{																																								\
+	private:																																					\
+		template<typename T>																																	\
+		static constexpr auto check(T*) -> typename std::is_same<decltype(std::declval<T>().template MethodName<TemplateType1>(std::declval<Args>()...)), Ret>;	\
+																																								\
+		template<typename>																																		\
+		static constexpr std::false_type check(...);																											\
+																																								\
+	public:																																						\
+		static constexpr bool value = decltype(check<Class>(nullptr))::value;																					\
+};
+
+/**
 *	This macro generates a traits which allows to know at compile-time if a class has a field with a given type named fieldName.
 *
 *	/!\ It works only for public fields

@@ -61,22 +61,22 @@ namespace rfk
 										 std::string&				inout_result)										noexcept;
 
 			/**
-			*	@brief Generate the forward declaration for all refureku types used in the generated header file.
+			*	@brief Generate the headers inclusion code for the generated header file.
 			* 
 			*	@param env			Code generation environment.
 			*	@param inout_result	String to append the generated code.
 			*/
-			void	forwardDeclareHeaderTypes(kodgen::MacroCodeGenEnv&	env,
-											  std::string&				inout_result)							const	noexcept;
+			void	includeHeaderFileHeaders(kodgen::MacroCodeGenEnv&	env,
+											 std::string&				inout_result)							const	noexcept;
 
 			/**
-			*	@brief Generate the header include lines necessary for generated code definitions.
+			*	@brief Generate the headers inclusion code for the generated source file.
 			* 
 			*	@param env			Code generation environment.
 			*	@param inout_result	String to append the generated code.
 			*/
-			void	includeRefurekuHeaders(kodgen::MacroCodeGenEnv&	env,
-										   std::string&				inout_result)								const	noexcept;
+			void	includeSourceFileHeaders(kodgen::MacroCodeGenEnv&	env,
+											 std::string&				inout_result)							const	noexcept;
 
 			/**
 			*	@brief Generate the friend statements for the provided class.
@@ -120,6 +120,14 @@ namespace rfk
 											 std::string&					inout_result)								noexcept;
 
 			/**
+			*	TODO
+			*/
+			void	fillClassFields(kodgen::StructClassInfo const&	structClass,
+									kodgen::MacroCodeGenEnv&		env,
+									std::string&&					generatedClassRefExpression,
+									std::string&					inout_result)										noexcept;
+
+			/**
 			*	@brief Generate the getArchetype method declaration if the provided class inherits from rfk::Object.
 			* 
 			*	@param structClass	Target struct/class.
@@ -152,6 +160,13 @@ namespace rfk
 			*	TODO
 			*/
 			void	defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const&	structClass,
+															 kodgen::MacroCodeGenEnv&		env,
+															 std::string&					inout_result)				noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareAndDefineRegisterChildClassMethod(kodgen::StructClassInfo const&	structClass,
 															 kodgen::MacroCodeGenEnv&		env,
 															 std::string&					inout_result)				noexcept;
 
