@@ -83,6 +83,24 @@ namespace rfk
 																	 kodgen::MethodInfo const&		method)		noexcept;
 
 			/**
+			*	@brief Compute the rfk::EVarFlags value for the provided variable.
+			*
+			*	@param variable Variable used to compute the rfk::EVarFlags value.
+			* 
+			*	@return The computed rfk::EVarFlags value as a uint8.
+			*/
+			static kodgen::uint8		computeRefurekuVariableFlags(kodgen::VariableInfo const& variable)		noexcept;
+
+			/**
+			*	@brief Compute the name of the getVariable function for the given variable.
+			* 
+			*	@param variable The target variable.
+			* 
+			*	@return The name of the getVariable function for the target variable.
+			*/
+			static std::string			computeGetVariableFunctionName(kodgen::VariableInfo const& variable)	noexcept;
+
+			/**
 			*	TODO
 			*/
 			void	fillEntityProperties(kodgen::EntityInfo const&	entity,
@@ -221,16 +239,16 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareClassRegistrationField(kodgen::StructClassInfo const&	structClass,
-												  kodgen::MacroCodeGenEnv&			env,
-												  std::string&						inout_result)				const	noexcept;
+			void	declareClassRegistererField(kodgen::StructClassInfo const&	structClass,
+												kodgen::MacroCodeGenEnv&		env,
+												std::string&					inout_result)					const	noexcept;
 
 			/**
 			*	TODO
 			*/
-			void	defineClassRegistrationField(kodgen::StructClassInfo const&	structClass,
-												 kodgen::MacroCodeGenEnv&			env,
-												 std::string&						inout_result)				const	noexcept;
+			void	defineClassRegistererField(kodgen::StructClassInfo const&	structClass,
+											   kodgen::MacroCodeGenEnv&			env,
+											   std::string&						inout_result)					const	noexcept;
 
 
 
@@ -252,16 +270,46 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareEnumRegistrationVariable(kodgen::EnumInfo const&	enum_,
+			void	declareEnumRegistererVariable(kodgen::EnumInfo const&		enum_,
 													kodgen::MacroCodeGenEnv&	env,
 													std::string&				inout_result)			const	noexcept;
 
 			/**
 			*	TODO
 			*/
-			void	defineEnumRegistrationVariable(kodgen::EnumInfo const&	enum_,
+			void	defineEnumRegistererVariable(kodgen::EnumInfo const&	enum_,
 												   kodgen::MacroCodeGenEnv&	env,
 												   std::string&				inout_result)				const	noexcept;
+
+
+			//Variables code generation
+			void	declareGetVariableFunction(kodgen::VariableInfo const&	variable,
+											   kodgen::MacroCodeGenEnv&		env,
+											   std::string&					inout_result)				const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineGetVariableFunction(kodgen::VariableInfo const&	variable,
+											  kodgen::MacroCodeGenEnv&		env,
+											  std::string&					inout_result)						noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareVariableRegistererVariable(kodgen::VariableInfo const&	variable,
+													  kodgen::MacroCodeGenEnv&		env,
+													  std::string&					inout_result)		const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineVariableRegistererVariable(kodgen::VariableInfo const&	variable,
+													 kodgen::MacroCodeGenEnv&		env,
+													 std::string&					inout_result)		const	noexcept;
+
+
+
 
 		protected:
 			virtual ReflectionCodeGenModule*	clone()																const	noexcept	override;

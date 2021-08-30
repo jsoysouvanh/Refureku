@@ -82,7 +82,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 		case kodgen::EEntityType::Class:
 			declareFriendClasses(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			
-			declareClassRegistrationField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			declareClassRegistererField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareAndDefineRegisterChildClassMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
@@ -137,14 +137,18 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 
 			case kodgen::EEntityType::Enum:
 				declareGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
-				declareEnumRegistrationVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+				declareEnumRegistererVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
 
 				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
 
 			case kodgen::EEntityType::Variable:
-				[[fallthrough]];
+				declareGetVariableFunction(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
+				declareVariableRegistererVariable(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
+
+				return kodgen::ETraversalBehaviour::Continue; //Go to next variable
+
 			case kodgen::EEntityType::Function:
-				break;
+				return kodgen::ETraversalBehaviour::Continue; //Go to next function
 
 			case kodgen::EEntityType::Field:
 				[[fallthrough]];
@@ -183,7 +187,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			case kodgen::EEntityType::Struct:
 				[[fallthrough]];
 			case kodgen::EEntityType::Class:
-				defineClassRegistrationField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+				defineClassRegistererField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
@@ -192,14 +196,18 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 
 			case kodgen::EEntityType::Enum:
 				defineGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
-				defineEnumRegistrationVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+				defineEnumRegistererVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
 
 				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
 
 			case kodgen::EEntityType::Variable:
-				[[fallthrough]];
+				defineGetVariableFunction(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
+				defineVariableRegistererVariable(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
+
+				return kodgen::ETraversalBehaviour::Continue; //Go to next variable
+
 			case kodgen::EEntityType::Function:
-				break;
+				return kodgen::ETraversalBehaviour::Continue; //Go to next function
 
 			case kodgen::EEntityType::Field:
 				[[fallthrough]];
@@ -227,12 +235,11 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "#include <cstddef>" + env.getSeparator() + env.getSeparator() +	//cstddef contains the offsetof macro
+					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() + 
+					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
-					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
-					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() + 
-					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() + 
-					"#include <Refureku/TypeInfo/Archetypes/Enum.h>" + env.getSeparator() + 
+					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator();
 }
 
@@ -587,7 +594,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	inout_result += env.getSeparator() + "}";
 }
 
-void ReflectionCodeGenModule::declareClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//Define the registrator only when there is no outer entity.
 	//If there is an outer entity, it will register its nested entities to the database itself.
@@ -597,7 +604,7 @@ void ReflectionCodeGenModule::declareClassRegistrationField(kodgen::StructClassI
 	}
 }
 
-void ReflectionCodeGenModule::defineClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::defineClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//Define the registrator only when there is no outer entity.
 	//If there is an outer entity, it will register its nested entities to the database itself.
@@ -788,7 +795,7 @@ void ReflectionCodeGenModule::defineGetEnumTemplateSpecialization(kodgen::EnumIn
 	inout_result += "return &type; }" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::declareEnumRegistrationVariable(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareEnumRegistererVariable(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	if (enum_.outerEntity == nullptr)
 	{
@@ -796,12 +803,73 @@ void ReflectionCodeGenModule::declareEnumRegistrationVariable(kodgen::EnumInfo c
 	}
 }
 
-void ReflectionCodeGenModule::defineEnumRegistrationVariable(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::defineEnumRegistererVariable(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	if (enum_.outerEntity == nullptr)
 	{
 		inout_result += "rfk::ArchetypeRegisterer rfk::generated::registerer" + getEntityId(enum_) + " = rfk::getEnum<" + enum_.type.getCanonicalName() + ">();" + env.getSeparator();
 	}
+}
+
+void ReflectionCodeGenModule::declareGetVariableFunction(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	inout_result += "namespace rfk::generated { rfk::Variable const& " + computeGetVariableFunctionName(variable) + "() noexcept; }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	inout_result += "rfk::Variable const& rfk::generated::" + computeGetVariableFunctionName(variable) + "() noexcept {" + env.getSeparator() +
+					"static bool initialized = false;" + env.getSeparator() + 
+					"static rfk::Variable variable(\"" + variable.name + "\", " +
+												   getEntityId(variable) + ", "
+												   "rfk::Type::getType<" + variable.type.getCanonicalName() + ">(), "
+												   "&" + variable.getFullName() + ", "
+												   "static_cast<rfk::EVarFlags>(" + std::to_string(computeRefurekuVariableFlags(variable)) + ")"
+												   ");" + env.getSeparator();
+
+	//Initialize variable metadata
+	inout_result += "if (!initialized) {" + env.getSeparator() +
+					"initialized = true;" + env.getSeparator();
+
+	fillEntityProperties(variable, env, "variable.", inout_result);
+
+	//End initialization if
+	inout_result += "}";
+
+	inout_result += "return variable; }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::declareVariableRegistererVariable(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	if (variable.outerEntity == nullptr)
+	{
+		inout_result += "namespace rfk::generated { extern rfk::DefaultEntityRegisterer variableRegisterer" + getEntityId(variable) + "; }" + env.getSeparator();
+	}
+}
+
+void ReflectionCodeGenModule::defineVariableRegistererVariable(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	if (variable.outerEntity == nullptr)
+	{
+		inout_result += "rfk::DefaultEntityRegisterer rfk::generated::variableRegisterer" + getEntityId(variable) + " = &rfk::generated::" + computeGetVariableFunctionName(variable) + "();" + env.getSeparator();
+	}
+}
+
+kodgen::uint8 ReflectionCodeGenModule::computeRefurekuVariableFlags(kodgen::VariableInfo const& variable) noexcept
+{
+	kodgen::uint8 result = 0u;
+
+	if (variable.isStatic)
+	{
+		result |= 1 << 0;
+	}
+
+	return result;
+}
+
+std::string ReflectionCodeGenModule::computeGetVariableFunctionName(kodgen::VariableInfo const& variable) noexcept
+{
+	return "getVariable" + std::to_string(_stringHasher(variable.id)) + "u";
 }
 
 //void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
