@@ -245,8 +245,8 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "friend rfk::Struct;" + env.getSeparator();
-	inout_result += "friend rfk::CodeGenerationHelpers; /* so that it can call the private _registerChildClass method. */" + env.getSeparator();
-	inout_result += "friend implements_template1__registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator();
+	inout_result += "friend rfk::CodeGenerationHelpers;" + env.getSeparator();
+	inout_result += "friend implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -383,7 +383,7 @@ void ReflectionCodeGenModule::fillClassParentsMetadata(kodgen::StructClassInfo c
 
 void ReflectionCodeGenModule::fillClassFields(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string generatedClassRefExpression, std::string& inout_result) noexcept
 {
-	inout_result += structClass.name + "::_registerChildClass<" + structClass.name + ">(" + std::move(generatedClassRefExpression) + ");" + env.getSeparator();
+	inout_result += structClass.name + "::_rfk_registerChildClass<" + structClass.name + ">(" + std::move(generatedClassRefExpression) + ");" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -420,7 +420,7 @@ void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::S
 
 void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += "private: template <typename ChildClass> static void _registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
+	inout_result += "private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
 
 	//Propagate the child class registration to parent classes too
 	for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)

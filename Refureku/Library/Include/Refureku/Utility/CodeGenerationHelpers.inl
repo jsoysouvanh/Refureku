@@ -13,8 +13,8 @@ constexpr void CodeGenerationHelpers::registerChildClass(rfk::Struct& childClass
 
 	//The 2nd template type is void because it is friended by all reflected classes
 	//The traits would return false without the friend statement.
-	if constexpr (implements_template1__registerChildClass<ParentClass, void, void(rfk::Struct&)>::value)
+	if constexpr (implements_template1__rfk_registerChildClass<ParentClass, void, void(rfk::Struct&)>::value)
 	{
-		ParentClass::template _registerChildClass<ChildClass>(childClass);
+		ParentClass::template _rfk_registerChildClass<ChildClass>(childClass);
 	}
 }
