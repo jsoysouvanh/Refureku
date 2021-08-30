@@ -108,6 +108,8 @@ namespace rfk
 			void	includeSourceFileHeaders(kodgen::MacroCodeGenEnv&	env,
 											 std::string&				inout_result)							const	noexcept;
 
+
+			//Struct / Class code generation
 			/**
 			*	@brief Generate the friend statements for the provided class.
 			* 
@@ -207,7 +209,7 @@ namespace rfk
 			*/
 			void	defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const&	structClass,
 															 kodgen::MacroCodeGenEnv&		env,
-															 std::string&					inout_result)				noexcept;
+															 std::string&					inout_result)		const	noexcept;
 
 			/**
 			*	TODO
@@ -221,14 +223,45 @@ namespace rfk
 			*/
 			void	declareClassRegistrationField(kodgen::StructClassInfo const&	structClass,
 												  kodgen::MacroCodeGenEnv&			env,
-												  std::string&						inout_result)						noexcept;
+												  std::string&						inout_result)				const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineClassRegistrationField(kodgen::StructClassInfo const&	structClass,
 												 kodgen::MacroCodeGenEnv&			env,
-												 std::string&						inout_result)						noexcept;
+												 std::string&						inout_result)				const	noexcept;
+
+
+
+			//Enums code generation
+			/**
+			*	TODO
+			*/
+			void	declareGetEnumTemplateSpecialization(kodgen::EnumInfo const&	enum_,
+														 kodgen::MacroCodeGenEnv&	env,
+														 std::string&				inout_result)		const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineGetEnumTemplateSpecialization(kodgen::EnumInfo const&		enum_,
+														kodgen::MacroCodeGenEnv&	env,
+														std::string&				inout_result)				noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareEnumRegistrationVariable(kodgen::EnumInfo const&	enum_,
+													kodgen::MacroCodeGenEnv&	env,
+													std::string&				inout_result)			const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineEnumRegistrationVariable(kodgen::EnumInfo const&	enum_,
+												   kodgen::MacroCodeGenEnv&	env,
+												   std::string&				inout_result)				const	noexcept;
 
 		protected:
 			virtual ReflectionCodeGenModule*	clone()																const	noexcept	override;

@@ -136,6 +136,9 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 				break;
 
 			case kodgen::EEntityType::Enum:
+				declareGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+				declareEnumRegistrationVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+
 				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
 
 			case kodgen::EEntityType::Variable:
@@ -188,6 +191,9 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				break;
 
 			case kodgen::EEntityType::Enum:
+				defineGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+				defineEnumRegistrationVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+
 				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
 
 			case kodgen::EEntityType::Variable:
@@ -220,23 +226,21 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 
 void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "#include <cstddef> /* offsetof macro */" + env.getSeparator() + env.getSeparator() +
+	inout_result += "#include <cstddef>" + env.getSeparator() + env.getSeparator() +	//cstddef contains the offsetof macro
 					"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
 					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
 					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() + 
-					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator();
+					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() + 
+					"#include <Refureku/TypeInfo/Archetypes/Enum.h>" + env.getSeparator() + 
+					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	//inout_result += env.getSeparator();
-
 	//"#include <Refureku/TypeInfo/Namespaces/Namespace.h>\n"
 	//"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>\n"
 	//"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>\n"
-	//"#include <Refureku/TypeInfo/Archetypes/Enum.h>\n"
-	//"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>\n";
 }
 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -485,12 +489,11 @@ void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo 
 	}
 
 	//Add nested enums
-	//TODO: Uncomment this when enum generated code will be supported
-	/*for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
+	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
 	{
 		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">(), "
 								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));" + env.getSeparator();
-	}*/
+	}
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -513,7 +516,7 @@ void ReflectionCodeGenModule::declareGetArchetypeTemplateSpecialization(kodgen::
 	}
 }
 
-void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//Generate the getArchetype specialization only if the class is non-nested, namespace nested or publicly nested in a struct/class
 	if (structClass.outerEntity == nullptr ||
@@ -584,7 +587,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	inout_result += env.getSeparator() + "}";
 }
 
-void ReflectionCodeGenModule::declareClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::declareClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//Define the registrator only when there is no outer entity.
 	//If there is an outer entity, it will register its nested entities to the database itself.
@@ -594,7 +597,7 @@ void ReflectionCodeGenModule::declareClassRegistrationField(kodgen::StructClassI
 	}
 }
 
-void ReflectionCodeGenModule::defineClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::defineClassRegistrationField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//Define the registrator only when there is no outer entity.
 	//If there is an outer entity, it will register its nested entities to the database itself.
@@ -739,6 +742,66 @@ std::string ReflectionCodeGenModule::computeFullMethodPointerType(kodgen::Struct
 	}
 
 	return result;
+}
+
+
+void ReflectionCodeGenModule::declareGetEnumTemplateSpecialization(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	inout_result += "namespace rfk { template <> rfk::Enum const* getEnum<" + enum_.type.getCanonicalName() + ">() noexcept; }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::defineGetEnumTemplateSpecialization(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	std::string typeName = enum_.type.getCanonicalName();
+
+	inout_result += "template <> rfk::Enum const* rfk::getEnum<" + typeName + ">() noexcept {" + env.getSeparator() +
+					"static bool initialized = false;" + env.getSeparator() +
+					"static rfk::Enum type(\"" + enum_.name + "\", " +
+										   getEntityId(enum_) + ", "
+										   "sizeof(" + typeName + "), "
+										   "rfk::Type::getType<" + enum_.underlyingType.getCanonicalName() + ">());" + env.getSeparator();
+
+	//Initialize the enum metadata
+	inout_result += "if (!initialized) {" + env.getSeparator() +
+					"initialized = true;" + env.getSeparator();
+
+	fillEntityProperties(enum_, env, "type.", inout_result);
+
+	if (!enum_.enumValues.empty())
+	{
+		inout_result += "rfk::EnumValue* enumValue = nullptr;" + env.getSeparator() +
+						"type.values.reserve(" + std::to_string(enum_.enumValues.size()) + ");" + env.getSeparator();
+
+		for (kodgen::EnumValueInfo const& enumValue : enum_.enumValues)
+		{
+			inout_result += "enumValue = type.addEnumValue(\"" + enumValue.name + "\", " + getEntityId(enumValue) + ", " + std::to_string(enumValue.value) + ");" + env.getSeparator();
+
+			//Fill enum value properties
+			fillEntityProperties(enumValue, env, "enumValue->", inout_result);
+		}
+	}
+
+	//End initialization if
+	inout_result += "}" + env.getSeparator();
+	
+	
+	inout_result += "return &type; }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::declareEnumRegistrationVariable(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	if (enum_.outerEntity == nullptr)
+	{
+		inout_result += "namespace rfk::generated { extern rfk::ArchetypeRegisterer registerer" + getEntityId(enum_) + "; }" + env.getSeparator();
+	}
+}
+
+void ReflectionCodeGenModule::defineEnumRegistrationVariable(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	if (enum_.outerEntity == nullptr)
+	{
+		inout_result += "rfk::ArchetypeRegisterer rfk::generated::registerer" + getEntityId(enum_) + " = rfk::getEnum<" + enum_.type.getCanonicalName() + ">();" + env.getSeparator();
+	}
 }
 
 //void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
