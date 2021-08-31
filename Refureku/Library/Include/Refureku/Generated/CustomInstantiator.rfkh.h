@@ -11,7 +11,7 @@
 #include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
 #include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
-namespace rfk {class NamespaceFragment;}
+namespace rfk {class NamespaceFragment;class Function;class Variable;}
 #include <Refureku/TypeInfo/Entity/EEntityKind.h>
 
 #define CustomInstantiator_GENERATED	\
