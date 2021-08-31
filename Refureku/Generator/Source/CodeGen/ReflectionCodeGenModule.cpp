@@ -905,6 +905,20 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 
 	fillEntityProperties(function, env, "function.", inout_result);
 
+	//Setup parameters
+	if (!function.parameters.empty())
+	{
+		inout_result += "function.parameters.reserve(" + std::to_string(function.parameters.size()) + ");" + env.getSeparator() +
+						"rfk::Function* functionPtr = &function; functionPtr" + env.getSeparator();
+
+		for (kodgen::FunctionParamInfo const& param : function.parameters)
+		{
+			inout_result += "->addParameter(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">())" + env.getSeparator();
+		}
+
+		inout_result += ";" + env.getSeparator();
+	}
+
 	//End initialization if
 	inout_result += "}";
 
