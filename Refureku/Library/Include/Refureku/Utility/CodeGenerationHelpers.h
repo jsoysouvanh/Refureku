@@ -13,8 +13,6 @@
 
 GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass);
 
-//TODO: Add Macro to hide generated code
-
 namespace rfk
 {
 	class CodeGenerationHelpers
@@ -33,3 +31,15 @@ namespace rfk
 
 	#include "Refureku/Utility/CodeGenerationHelpers.inl"
 }
+
+#ifndef _RFK_UNPACK_IF_NOT_PARSING
+
+//This macro "KODGEN_PARSING" must match the name defined by the kodgen parser when parsing source files
+//It is used by the generated code to hide some portions of code to the parser
+#ifdef KODGEN_PARSING
+#define _RFK_UNPACK_IF_NOT_PARSING(...)
+#else
+#define _RFK_UNPACK_IF_NOT_PARSING(...) __VA_ARGS__
+#endif
+
+#endif

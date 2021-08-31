@@ -22,17 +22,21 @@ namespace rfk
 	class ReflectionCodeGenModule : public kodgen::MacroCodeGenModule
 	{
 		private:
+			/** Class global string hasher. */
+			static std::hash<std::string>			_stringHasher;
+
+
 			/** Code generator for the CustomInstantiator property. */
 			CustomInstantiatorPropertyCodeGen		_customInstantiatorProperty;
 
 			/** Code generator for the PropertySettings property. */
 			PropertySettingsPropertyCodeGen			_propertySettingsProperty;
 
-			/** Class global string hasher. */
-			static std::hash<std::string>			_stringHasher;
-
 			/** Dictionnary used to generate properties code. */
 			std::unordered_map<std::string, int>	_propertiesCount;
+
+			/** Flag that determines whether the currently generated code is hidden from the parser or not. */
+			bool									_isGeneratingHiddenCode;
 
 			/**
 			*	@brief Compute the unique id of an entity. The returned string contains an unsigned integer.
@@ -150,6 +154,33 @@ namespace rfk
 			*/
 			static std::string			computePropertyVariableName(kodgen::EntityInfo const&	entity,
 																	kodgen::uint8				propertyIndex)				noexcept;
+
+			/**
+			*	@brief	All code generated from this point will be hidden to the parser.
+			*			This means the generated code can't be reflected.
+			* 
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
+			*/
+			void	beginHiddenGeneratedCode(kodgen::MacroCodeGenEnv&	env,
+											 std::string&				inout_result)									noexcept;
+
+			/**
+			*	@brief	End the hidden generated code section. If beginHiddenGeneratedCode hasn't been called before,
+			*			nothing happens.
+			* 
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
+			*/
+			void	endHiddenGeneratedCode(kodgen::MacroCodeGenEnv&	env,
+										   std::string&				inout_result)										noexcept;
+
+			/**
+			*	@brief	Check that the endHiddenGeneratedCode has been called correctly if there was any previous
+			*			call to beginHiddenGeneratedCode.
+			*			If it is not the case, the code will assert.
+			*/
+			void	checkHiddenGeneratedCodeState()																const	noexcept;
 
 			/**
 			*	TODO
@@ -293,7 +324,7 @@ namespace rfk
 			*/
 			void	declareClassRegistererField(kodgen::StructClassInfo const&	structClass,
 												kodgen::MacroCodeGenEnv&		env,
-												std::string&					inout_result)					const	noexcept;
+												std::string&					inout_result)							noexcept;
 
 			/**
 			*	TODO
@@ -340,7 +371,7 @@ namespace rfk
 			*/
 			void	declareGetVariableFunction(kodgen::VariableInfo const&	variable,
 											   kodgen::MacroCodeGenEnv&		env,
-											   std::string&					inout_result)			const	noexcept;
+											   std::string&					inout_result)					noexcept;
 
 			/**
 			*	TODO
@@ -354,7 +385,7 @@ namespace rfk
 			*/
 			void	declareVariableRegistererVariable(kodgen::VariableInfo const&	variable,
 													  kodgen::MacroCodeGenEnv&		env,
-													  std::string&					inout_result)	const	noexcept;
+													  std::string&					inout_result)			noexcept;
 
 			/**
 			*	TODO
@@ -371,7 +402,7 @@ namespace rfk
 			*/
 			void	declareGetFunctionFunction(kodgen::FunctionInfo const&	function,
 											   kodgen::MacroCodeGenEnv&		env,
-											   std::string&					inout_result)			const	noexcept;
+											   std::string&					inout_result)					noexcept;
 
 			/**
 			*	TODO
@@ -385,7 +416,7 @@ namespace rfk
 			*/
 			void	declareFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
 													  kodgen::MacroCodeGenEnv&		env,
-													  std::string&					inout_result)	const	noexcept;
+													  std::string&					inout_result)			noexcept;
 
 			/**
 			*	TODO
@@ -406,7 +437,7 @@ namespace rfk
 			*/
 			void	declareGetNamespaceFragmentFunction(kodgen::NamespaceInfo const&	namespace_,
 														kodgen::MacroCodeGenEnv&		env,
-														std::string&					inout_result)				const	noexcept;
+														std::string&					inout_result)						noexcept;
 
 			/**
 			*	@brief Define the getNamespaceFragment function for the provided namespace.
@@ -428,7 +459,7 @@ namespace rfk
 			*/
 			void	declareNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const&	namespace_,
 															   kodgen::MacroCodeGenEnv&		env,
-															   std::string&					inout_result)			const	noexcept;
+															   std::string&					inout_result)					noexcept;
 
 			/**
 			*	@brief	Recursively define the namespace registerer variable for the provided namespace and all its sub namespaces.

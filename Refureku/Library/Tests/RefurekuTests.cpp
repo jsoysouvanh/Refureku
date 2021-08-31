@@ -749,7 +749,7 @@ int main()
 {
 	inheritance();
 	classes();
-	//structs();
+	structs();
 	database();
 	outerEntities();
 	namespaces();

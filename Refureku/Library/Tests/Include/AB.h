@@ -14,7 +14,7 @@ class RFKClass(CustomProperty2   , CustomProperty(1, 2) ,CustomProperty2) A
 	float sliderFloat = 5.0f; 
 
 	RFKMethod()
-	virtual void testMethod(int i) noexcept {}
+	virtual void testMethod(int i) noexcept { static_cast<void>(i); }
 
 	RFKMethod(Tooltip("This is a test"))
 	virtual void testMethod() noexcept {}
@@ -29,6 +29,11 @@ class RFKClass(CustomProperty(3 , 4)) B : public A
 
 class RFKClass() C : public A 
 {
+	//TODO: Make this work
+	//enum class RFKEnum() CNestedEnum
+	//{
+	//};
+
 	RFKField()
 	int i = 0;
 
@@ -36,6 +41,15 @@ class RFKClass() C : public A
 	virtual void testMethod() noexcept override {}
 
 	C_GENERATED
+};
+
+class RFKClass() D
+{
+	public:
+		RFKField()
+		int const i = 0;
+
+	D_GENERATED
 };
 
 File_AB_GENERATED

@@ -8,7 +8,8 @@ using namespace rfk;
 
 std::hash<std::string> ReflectionCodeGenModule::_stringHasher;
 
-ReflectionCodeGenModule::ReflectionCodeGenModule() noexcept
+ReflectionCodeGenModule::ReflectionCodeGenModule() noexcept:
+	_isGeneratingHiddenCode{false}
 {
 	addPropertyCodeGen(_customInstantiatorProperty);
 	addPropertyCodeGen(_propertySettingsProperty);
@@ -26,6 +27,8 @@ ReflectionCodeGenModule* ReflectionCodeGenModule::clone() const noexcept
 
 kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
+
 	if (entity == nullptr)
 	{
 		//Called once at the very beginning of the generation with nullptr entity
@@ -52,7 +55,8 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCod
 			case kodgen::EEntityType::EnumValue:
 				[[fallthrough]];
 			case kodgen::EEntityType::Namespace:
-				return kodgen::ETraversalBehaviour::Break; 
+				result = kodgen::ETraversalBehaviour::Break; 
+				break;
 
 			case kodgen::EEntityType::Undefined:
 				[[fallthrough]];
@@ -64,12 +68,16 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCod
 		}
 	}
 
-	return kodgen::ETraversalBehaviour::Recurse; 
+	checkHiddenGeneratedCodeState();
+
+	return result; 
 }
 
 kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	assert(entity != nullptr); //Class footer code should always depend on a non-nullptr entity
+
+	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
 
 	switch (entity->entityType)
 	{
@@ -83,16 +91,19 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareAndDefineRegisterChildClassMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
-			return kodgen::ETraversalBehaviour::Recurse;
+			result = kodgen::ETraversalBehaviour::Recurse;
+			break;
 
 		case kodgen::EEntityType::Enum:
-			return kodgen::ETraversalBehaviour::Continue; //Go to next enum
+			result = kodgen::ETraversalBehaviour::Continue; //Go to next enum
+			break;
 
 		case kodgen::EEntityType::Field:
 			[[fallthrough]];
 		case kodgen::EEntityType::Method:
-			return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
-		
+			result = kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+			break;
+
 		//All those cases should not be able to be called in generateClassFooterCode
 		case kodgen::EEntityType::Variable:
 			[[fallthrough]];
@@ -110,10 +121,16 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 
 			return kodgen::ETraversalBehaviour::AbortWithFailure;
 	}
+
+	checkHiddenGeneratedCodeState();
+
+	return result;
 }
 
 kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
+
 	if (entity == nullptr)
 	{
 		//Called once at the very beginning of the generation with nullptr entity
@@ -127,38 +144,44 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 			case kodgen::EEntityType::Class:
 				declareGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				
-				return kodgen::ETraversalBehaviour::Recurse;
+				result = kodgen::ETraversalBehaviour::Recurse;
+				break;
 
 			case kodgen::EEntityType::Enum:
 				declareGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
 				declareEnumRegistererVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
+				result = kodgen::ETraversalBehaviour::Continue; //Go to next enum
+				break;
 
 			case kodgen::EEntityType::Variable:
 				declareGetVariableFunction(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
 				declareVariableRegistererVariable(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Continue; //Go to next variable
+				result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
+				break;
 
 			case kodgen::EEntityType::Function:
 				declareGetFunctionFunction(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
 				declareFunctionRegistererVariable(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Continue; //Go to next function
+				result = kodgen::ETraversalBehaviour::Continue; //Go to next function
+				break;
 
 			case kodgen::EEntityType::Field:
 				[[fallthrough]];
 			case kodgen::EEntityType::Method:
 				[[fallthrough]];
 			case kodgen::EEntityType::EnumValue:
-				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+				result =  kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+				break;
 
 			case kodgen::EEntityType::Namespace:
 				declareGetNamespaceFragmentFunction(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
 				declareNamespaceFragmentRegistererVariable(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Recurse;
+				result = kodgen::ETraversalBehaviour::Recurse;
+				break;
 
 			case kodgen::EEntityType::Undefined:
 				[[fallthrough]];
@@ -170,11 +193,15 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 		}
 	}
 
-	return kodgen::ETraversalBehaviour::Recurse;
+	checkHiddenGeneratedCodeState();
+
+	return result;
 }
 
 kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
+
 	if (entity == nullptr)
 	{
 		//Called once at the very beginning of the generation with nullptr entity
@@ -192,38 +219,44 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Recurse;
+				result = kodgen::ETraversalBehaviour::Recurse;
+				break;
 
 			case kodgen::EEntityType::Enum:
 				defineGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
 				defineEnumRegistererVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
+				result = kodgen::ETraversalBehaviour::Continue; //Go to next enum
+				break;
 
 			case kodgen::EEntityType::Variable:
 				defineGetVariableFunction(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
 				defineVariableRegistererVariable(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Continue; //Go to next variable
+				result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
+				break;
 
 			case kodgen::EEntityType::Function:
 				defineGetFunctionFunction(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
 				defineFunctionRegistererVariable(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Continue; //Go to next function
+				result = kodgen::ETraversalBehaviour::Continue; //Go to next function
+				break;
 
 			case kodgen::EEntityType::Field:
 				[[fallthrough]];
 			case kodgen::EEntityType::Method:
 				[[fallthrough]];
 			case kodgen::EEntityType::EnumValue:
-				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+				result = kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+				break;
 
 			case kodgen::EEntityType::Namespace:
 				defineGetNamespaceFragmentFunction(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
 				defineNamespaceFragmentRegistererVariableRecursive(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
 
-				return kodgen::ETraversalBehaviour::Recurse;
+				result = kodgen::ETraversalBehaviour::Recurse;
+				break;
 
 			case kodgen::EEntityType::Undefined:
 				[[fallthrough]];
@@ -236,7 +269,9 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 		}
 	}
 
-	return kodgen::ETraversalBehaviour::Recurse;
+	checkHiddenGeneratedCodeState();
+
+	return result;
 }
 
 void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -322,6 +357,29 @@ std::string ReflectionCodeGenModule::computePropertyVariableName(kodgen::EntityI
 	return "property_" + entity.name + "_" + entity.properties[propertyIndex].name + "_" + std::to_string(propertyIndex) + "_" + getEntityId(entity);// std::to_string(_stringHasher(entity.id));
 }
 
+void ReflectionCodeGenModule::beginHiddenGeneratedCode(kodgen::MacroCodeGenEnv& /*env*/, std::string& inout_result) noexcept
+{
+	if (!_isGeneratingHiddenCode)
+	{
+		_isGeneratingHiddenCode = true;
+		inout_result += "_RFK_UNPACK_IF_NOT_PARSING(";
+	}
+}
+
+void ReflectionCodeGenModule::endHiddenGeneratedCode(kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	if (_isGeneratingHiddenCode)
+	{
+		_isGeneratingHiddenCode = false;
+		inout_result += ")" + env.getSeparator();
+	}
+}
+
+void ReflectionCodeGenModule::checkHiddenGeneratedCodeState() const noexcept
+{
+	assert(!_isGeneratingHiddenCode);
+}
+
 void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
 {
 	auto generatePropertyStaticAsserts = [this, &entity](kodgen::Property const& property) -> std::string
@@ -363,7 +421,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 
 		//Add all properties
 		_propertiesCount.clear();
-		for (int i = 0; i < entity.properties.size(); i++)
+		for (kodgen::uint8 i = 0; i < entity.properties.size(); i++)
 		{
 			generatedPropertyVariableName = computePropertyVariableName(entity, i);
 
@@ -466,7 +524,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 			fillEntityProperties(method, env, "staticMethod->", inout_result);
 
 			//Generate specific code for the CustomInstantiator property here
-			for (int i = 0; i < method.properties.size(); i++)
+			for (kodgen::uint8 i = 0; i < method.properties.size(); i++)
 			{
 				if (_customInstantiatorProperty.shouldGenerateCode(method, method.properties[i], i))
 				{
@@ -558,6 +616,8 @@ void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::S
 
 void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	beginHiddenGeneratedCode(env, inout_result);
+
 	inout_result += "private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
 
 	//Propagate the child class registration to parent classes too
@@ -613,15 +673,19 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	}
 
 	inout_result += env.getSeparator() + "}";
+
+	endHiddenGeneratedCode(env, inout_result);
 }
 
-void ReflectionCodeGenModule::declareClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	//Define the registrator only when there is no outer entity.
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
+		beginHiddenGeneratedCode(env, inout_result);
 		inout_result += "private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;" + env.getSeparator();
+		endHiddenGeneratedCode(env, inout_result);
 	}
 }
 
@@ -832,9 +896,13 @@ void ReflectionCodeGenModule::defineEnumRegistererVariable(kodgen::EnumInfo cons
 	}
 }
 
-void ReflectionCodeGenModule::declareGetVariableFunction(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareGetVariableFunction(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	beginHiddenGeneratedCode(env, inout_result);
+
 	inout_result += "namespace rfk::generated { rfk::Variable const& " + computeGetVariableFunctionName(variable) + "() noexcept; }" + env.getSeparator();
+
+	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -860,11 +928,15 @@ void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo con
 	inout_result += "return variable; }" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::declareVariableRegistererVariable(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareVariableRegistererVariable(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	if (variable.outerEntity == nullptr)
 	{
+		beginHiddenGeneratedCode(env, inout_result);
+
 		inout_result += "namespace rfk::generated { extern rfk::DefaultEntityRegisterer variableRegisterer" + getEntityId(variable) + "; }" + env.getSeparator();
+
+		endHiddenGeneratedCode(env, inout_result);
 	}
 }
 
@@ -893,9 +965,13 @@ std::string ReflectionCodeGenModule::computeGetVariableFunctionName(kodgen::Vari
 	return "getVariable" + getEntityId(variable);;
 }
 
-void ReflectionCodeGenModule::declareGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	beginHiddenGeneratedCode(env, inout_result);
+
 	inout_result += "namespace rfk::generated { rfk::Function const& " + computeGetFunctionFunctionName(function) + "() noexcept; }" + env.getSeparator();
+
+	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -937,11 +1013,15 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 	inout_result += "return function; }" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::declareFunctionRegistererVariable(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareFunctionRegistererVariable(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	if (function.outerEntity == nullptr)
 	{
+		beginHiddenGeneratedCode(env, inout_result);
+
 		inout_result += "namespace rfk::generated { extern rfk::DefaultEntityRegisterer functionRegisterer" + getEntityId(function) + "; }" + env.getSeparator();
+
+		endHiddenGeneratedCode(env, inout_result);
 	}
 }
 
@@ -977,11 +1057,15 @@ std::string ReflectionCodeGenModule::computeGetFunctionFunctionName(kodgen::Func
 
 
 
-void ReflectionCodeGenModule::declareGetNamespaceFragmentFunction(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareGetNamespaceFragmentFunction(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	beginHiddenGeneratedCode(env, inout_result);
+
 	inout_result += " namespace rfk::generated { "
 					"rfk::NamespaceFragment const& " + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "() noexcept;"
 					" }" + env.getSeparator();
+
+	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::defineGetNamespaceFragmentFunction(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -1053,11 +1137,15 @@ void ReflectionCodeGenModule::defineGetNamespaceFragmentFunction(kodgen::Namespa
 	inout_result += "return fragment; }" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::declareNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::declareNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	beginHiddenGeneratedCode(env, inout_result);
+
 	inout_result += "namespace rfk::generated {"
 					"extern rfk::NamespaceFragmentRegisterer " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + ";"
 					"}" + env.getSeparator();
+
+	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::defineNamespaceFragmentRegistererVariableRecursive(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept

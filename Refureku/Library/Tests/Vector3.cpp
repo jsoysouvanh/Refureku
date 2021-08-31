@@ -31,10 +31,10 @@ rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 		field->addProperty(&fieldProp);
 
 		//Register static fields
-		rfk::StaticField* staticField = type.addStaticField("exampleStaticField", stringHasher("some_namespace::Vector3<float>::exampleStaticField"), rfk::Type::getType<float>(), rfk::EFieldFlags::Public | rfk::EFieldFlags::Static, &type, &some_namespace::Vector3<float>::exampleStaticField);
+		/*rfk::StaticField* staticField = */type.addStaticField("exampleStaticField", stringHasher("some_namespace::Vector3<float>::exampleStaticField"), rfk::Type::getType<float>(), rfk::EFieldFlags::Public | rfk::EFieldFlags::Static, &type, &some_namespace::Vector3<float>::exampleStaticField);
 
 		//Register methods
-		rfk::Method* method = type.addMethod("sqrSize", stringHasher("some_namespace::Vector3<float>::sqrSize()"), rfk::Type::getType<float>(), 
+		/*rfk::Method* method = */type.addMethod("sqrSize", stringHasher("some_namespace::Vector3<float>::sqrSize()"), rfk::Type::getType<float>(), 
 											 std::make_unique<rfk::MemberFunction<Vector3f, float()>>(static_cast<float(Vector3f::*)() const noexcept>(&Vector3f::sqrSize)),
 											 rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline | rfk::EMethodFlags::Const);
 

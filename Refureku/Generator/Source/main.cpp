@@ -113,7 +113,7 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(settingsFilePath));
 
 	//Parse
-	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true); //TODO: Set this to false
+	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
 
 	//Result
 	printGenerationResult(logger, genResult);
@@ -122,7 +122,7 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 /** Can provide the path to the settings file as 1st parameter */
 int main(int argc, char** argv)
 {
-	parseAndGenerate((argc > 1) ? fs::path(argv[1]) : "RefurekuTestsSettings.toml" /*fs::path()*/);
+	parseAndGenerate((argc > 1) ? fs::path(argv[1]) : fs::path());
 
 	return EXIT_SUCCESS;
 }
