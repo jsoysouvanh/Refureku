@@ -35,11 +35,11 @@ namespace namespace2 RFKNamespace()
 	};
 }
 
+//Forward declaration
+class D;
+
 namespace namespace3 RFKNamespace(ParseAllNested)
 {
-	//Forward declaration
-	//class AnotherClassInNamespace3;
-
 	class RFKClass() OtherClass : public rfk::Object
 	{
 		namespace3_OtherClass_GENERATED
@@ -206,8 +206,8 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			RFKMethod()
 			void	methodWithClassParam(ParentClass pc) {}
 
-			//RFKMethod()
-			//void	methodWithForwardDeclaredParam(AnotherClassInNamespace3*) {}
+			RFKMethod()
+			void	methodWithForwardDeclaredParam(D*);
 
 		namespace3_ExampleClass_GENERATED
 	};

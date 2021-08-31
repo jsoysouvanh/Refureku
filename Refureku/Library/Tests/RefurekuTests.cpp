@@ -214,9 +214,9 @@ void methods()
 
 	rfk::Method const* ec_method3float	= ec.getMethod("method3", rfk::EMethodFlags::Private);
 	
-	//TODO: Handle functions / variables reflection when they use an incomplete type (forward declared type)
-	//rfk::Method const* ec_methodWithForwardDeclaredParam = ec.getMethod("methodWithForwardDeclaredParam");
-	//ec_methodWithForwardDeclaredParam->invoke(&e);
+	//Handle functions when they use an incomplete type (forward declared type)
+	rfk::Method const* ec_methodWithForwardDeclaredParam = ec.getMethod<void(D*)>("methodWithForwardDeclaredParam");
+	ec_methodWithForwardDeclaredParam->invoke(&e, nullptr);
 
 	rfk::Method const* ec_methodWithClassParam = ec.getMethod("methodWithClassParam");
 	ec_methodWithClassParam->invoke(&e, nullptr);
