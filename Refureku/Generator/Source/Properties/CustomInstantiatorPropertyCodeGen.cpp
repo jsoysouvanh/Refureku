@@ -2,8 +2,6 @@
 
 #include <Kodgen/InfoStructures/MethodInfo.h>
 
-#include "RefurekuGenerator/Properties/NativeProperties.h"
-
 using namespace rfk;
 
 CustomInstantiatorPropertyCodeGen::CustomInstantiatorPropertyCodeGen() noexcept:

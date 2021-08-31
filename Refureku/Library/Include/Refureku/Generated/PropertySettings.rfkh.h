@@ -22,13 +22,12 @@ _RFK_UNPACK_IF_NOT_PARSING(private: static rfk::ArchetypeRegisterer _rfk_archety
 )\
 public: static rfk::Struct const& staticGetArchetype() noexcept;\
 public: virtual rfk::Struct const& getArchetype() const noexcept override;\
-_RFK_UNPACK_IF_NOT_PARSING(private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
+private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::CodeGenerationHelpers::registerChildClass<rfk::Property, ChildClass>(childClass);\
 rfk::Struct const& thisClass = staticGetArchetype();\
 if constexpr (!std::is_same_v<ChildClass, PropertySettings>) const_cast<rfk::Struct&>(thisClass).children.insert(&childClass);\
 \
-})\
-public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;\
+}public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;\
 virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 
 

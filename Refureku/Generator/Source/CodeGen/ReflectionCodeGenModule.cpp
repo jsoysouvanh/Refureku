@@ -618,8 +618,6 @@ void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::S
 
 void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	beginHiddenGeneratedCode(env, inout_result);
-
 	inout_result += "private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
 
 	//Propagate the child class registration to parent classes too
@@ -637,7 +635,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	if (!structClass.fields.empty())
 	{
 		inout_result += "[[maybe_unused]] rfk::Field* field = nullptr; [[maybe_unused]] rfk::StaticField* staticField = nullptr;" + env.getSeparator();
-		inout_result += "__RFK_DISABLE_WARNING_PUSH __RFK_DISABLE_WARNING_OFFSETOF " + env.getSeparator();	//Disable offsetof usage warnings
+		inout_result += "__RFK_DISABLE_WARNING_PUSH " + env.getSeparator() + "__RFK_DISABLE_WARNING_OFFSETOF " + env.getSeparator();	//Disable offsetof usage warnings
 
 		//Iterate over fields
 		std::string properties;
@@ -675,8 +673,6 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	}
 
 	inout_result += env.getSeparator() + "}";
-
-	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::declareClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept

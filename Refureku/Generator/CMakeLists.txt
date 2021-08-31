@@ -11,7 +11,6 @@ add_library(${RefurekuGeneratorLibTarget}
 				STATIC
 					Source/Properties/CustomInstantiatorPropertyCodeGen.cpp
 					Source/Properties/PropertySettingsPropertyCodeGen.cpp
-#					Source/Properties/TestPropertyRule.cpp
 
 					Source/Parsing/FileParser.cpp
 					
