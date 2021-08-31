@@ -750,7 +750,7 @@ int main()
 	inheritance();
 	classes();
 	//structs();
-	/*database();
+	database();
 	outerEntities();
 	namespaces();
 	templateEnums();
@@ -769,7 +769,7 @@ int main()
 	makeInstance();
 	fundamentalArchetypes();
 	enumManualReflection();
-	classManualReflection();*/
+	classManualReflection();
 
 	return EXIT_SUCCESS;
 }

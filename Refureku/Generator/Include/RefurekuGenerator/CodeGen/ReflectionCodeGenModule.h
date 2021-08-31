@@ -141,6 +141,17 @@ namespace rfk
 																			   fs::path const&				sourceFile)		noexcept;
 
 			/**
+			*	@brief Compute the name of the generated variable for the provided property.
+			* 
+			*	@param entity	Entity the property is attached to.
+			*	@param propertyIndex	Index of the target property in the entity's properties array.
+			* 
+			*	@return The name of the generated variable name for the target property.
+			*/
+			static std::string			computePropertyVariableName(kodgen::EntityInfo const&	entity,
+																	kodgen::uint8				propertyIndex)				noexcept;
+
+			/**
 			*	TODO
 			*/
 			void	fillEntityProperties(kodgen::EntityInfo const&	entity,

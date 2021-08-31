@@ -298,13 +298,14 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 						"initialized = true;" + env.getSeparator();
 
 	//Inside the if statement, initialize the Struct metadata
+	//Set the default instantiator BEFORE filling the class methods since methods can overwrite the custom instantiator
+	inout_result += "type.setDefaultInstantiator(&rfk::defaultInstantiator<" + structClass.name + ">);" + env.getSeparator();
+
 	fillEntityProperties(structClass, env, "type.", inout_result);
 	fillClassParentsMetadata(structClass, env, "type.", inout_result);
 	fillClassFields(structClass, env, "type", inout_result);
 	fillClassMethods(structClass, env, "type.", inout_result);
 	fillClassNestedArchetypes(structClass, env, "type.", inout_result);
-
-	inout_result += "type.setDefaultInstantiator(&rfk::defaultInstantiator<" + structClass.name + ">);" + env.getSeparator();
 
 	//End of the initialization if statement
 	inout_result += "}" + env.getSeparator();
@@ -313,13 +314,13 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 	inout_result += "return type; }" + env.getSeparator() + env.getSeparator();
 }
 
+std::string ReflectionCodeGenModule::computePropertyVariableName(kodgen::EntityInfo const& entity, kodgen::uint8 propertyIndex) noexcept
+{
+	return "property_" + entity.name + "_" + entity.properties[propertyIndex].name + "_" + std::to_string(propertyIndex) + "_" + getEntityId(entity);// std::to_string(_stringHasher(entity.id));
+}
+
 void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
 {
-	auto getPropertyVariableName = [&entity](int propertyIndex) -> std::string
-	{
-		return "property_" + entity.name + "_" + entity.properties[propertyIndex].name + "_" + std::to_string(propertyIndex) + "_" + std::to_string(_stringHasher(entity.id));
-	};
-
 	auto generatePropertyStaticAsserts = [this, &entity](kodgen::Property const& property) -> std::string
 	{
 		std::string result;
@@ -361,7 +362,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 		_propertiesCount.clear();
 		for (int i = 0; i < entity.properties.size(); i++)
 		{
-			generatedPropertyVariableName = getPropertyVariableName(i);
+			generatedPropertyVariableName = computePropertyVariableName(entity, i);
 
 			//Generate static_asserts bound to this property
 			inout_result += generatePropertyStaticAsserts(entity.properties[i]);
@@ -383,8 +384,6 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 			}
 
 			inout_result.push_back(';');
-
-			//TODO: Insert per property generated code?
 
 			inout_result += generatedEntityVarName + "properties.emplace_back(&" + generatedPropertyVariableName + ");" + env.getSeparator();
 		}
@@ -462,6 +461,16 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		if (method.isStatic)
 		{
 			fillEntityProperties(method, env, "staticMethod->", inout_result);
+
+			//Generate specific code for the CustomInstantiator property here
+			for (int i = 0; i < method.properties.size(); i++)
+			{
+				if (_customInstantiatorProperty.shouldGenerateCode(method, method.properties[i], i))
+				{
+					_customInstantiatorProperty.addCustomInstantiatorToClass(method, generatedEntityVarName, "staticMethod", inout_result);
+					break;
+				}
+			}
 		}
 		else
 		{

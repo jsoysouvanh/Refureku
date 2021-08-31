@@ -387,7 +387,7 @@ void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 	//If it is a parameterless custom instantiator, replace the default instantiator
 	if (instantiator->parameters.size() == 0u)
 	{
-		_defaultInstantiator = reinterpret_cast<rfk::NonMemberFunction<void*()> const*>(instantiator->getInternalFunction())->getFunctionHandle();
+		setDefaultInstantiator(reinterpret_cast<rfk::NonMemberFunction<void* ()> const*>(instantiator->getInternalFunction())->getFunctionHandle());
 	}
 	else
 	{
