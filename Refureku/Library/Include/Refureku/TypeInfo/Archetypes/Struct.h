@@ -19,7 +19,6 @@
 #include "Refureku/TypeInfo/Functions/Method.h"
 #include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/TypeInfo/Functions/MethodHelper.h"
-#include "Refureku/Utility/TypeTraits.h"
 
 namespace rfk
 {

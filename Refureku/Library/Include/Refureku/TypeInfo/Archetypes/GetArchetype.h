@@ -10,7 +10,6 @@
 #include <type_traits>
 
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
-#include "Refureku/Utility/TypeTraits.h"
 
 namespace rfk
 {
