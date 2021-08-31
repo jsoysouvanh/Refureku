@@ -48,6 +48,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Functions/FunctionParameter.cpp
 
 					Source/TypeInfo/Properties/Property.cpp
+					Source/TypeInfo/Properties/NativePropertyDefinitions.cpp
 				)
 
 # Setup compilation flags

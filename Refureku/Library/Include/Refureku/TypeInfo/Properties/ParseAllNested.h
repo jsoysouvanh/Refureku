@@ -10,7 +10,7 @@
 #include "Refureku/TypeInfo/Properties/Property.h"
 #include "Refureku/TypeInfo/Properties/PropertySettings.h"
 
-#include "Refureku/Generated/ParseAllNested.rfk.h"
+#include "Refureku/Generated/ParseAllNested.rfkh.h"
 
 /**
 *	@brief	Property used to automatically tag all directly nested entities as reflected.
@@ -21,4 +21,4 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Namespace | rfk::EEntityKind
 	ParseAllNested_GENERATED
 };
 
-File_GENERATED
+File_ParseAllNested_GENERATED

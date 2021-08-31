@@ -289,4 +289,4 @@ class RFKClass(ParseAllNested) ABC
 	ABC_GENERATED
 };
 
-File_ExampleClass_GENERATED 
+File_ExampleClass_GENERATED
