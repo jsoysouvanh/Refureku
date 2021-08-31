@@ -38,32 +38,28 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCod
 			case kodgen::EEntityType::Struct:
 				[[fallthrough]];
 			case kodgen::EEntityType::Class:
-				break;
-
+				[[fallthrough]];
 			case kodgen::EEntityType::Enum:
-				return kodgen::ETraversalBehaviour::Continue; //Go to next enum
-
+				[[fallthrough]];
 			case kodgen::EEntityType::Variable:
 				[[fallthrough]];
 			case kodgen::EEntityType::Function:
-				break;
-
+				[[fallthrough]];
 			case kodgen::EEntityType::Field:
 				[[fallthrough]];
 			case kodgen::EEntityType::Method:
 				[[fallthrough]];
 			case kodgen::EEntityType::EnumValue:
-				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
-
+				[[fallthrough]];
 			case kodgen::EEntityType::Namespace:
-				break;
+				return kodgen::ETraversalBehaviour::Break; 
 
 			case kodgen::EEntityType::Undefined:
 				[[fallthrough]];
-
 			default:
 				assert(false); //This should never happen
 				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+
 				return kodgen::ETraversalBehaviour::AbortWithFailure;
 		}
 	}
@@ -87,36 +83,33 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareAndDefineRegisterChildClassMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
-			break;
+			return kodgen::ETraversalBehaviour::Recurse;
 
 		case kodgen::EEntityType::Enum:
 			return kodgen::ETraversalBehaviour::Continue; //Go to next enum
 
-		case kodgen::EEntityType::Variable:
-			[[fallthrough]];
-		case kodgen::EEntityType::Function:
-			break;
-
 		case kodgen::EEntityType::Field:
 			[[fallthrough]];
 		case kodgen::EEntityType::Method:
+			return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+		
+		//All those cases should not be able to be called in generateClassFooterCode
+		case kodgen::EEntityType::Variable:
+			[[fallthrough]];
+		case kodgen::EEntityType::Function:
+			[[fallthrough]];
+		case kodgen::EEntityType::Namespace:
 			[[fallthrough]];
 		case kodgen::EEntityType::EnumValue:
-			return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
-
-		case kodgen::EEntityType::Namespace:
-			break;
-
+			[[fallthrough]];
 		case kodgen::EEntityType::Undefined:
 			[[fallthrough]];
-
 		default:
 			assert(false); //This should never happen
 			env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+
 			return kodgen::ETraversalBehaviour::AbortWithFailure;
 	}
-
-	return kodgen::ETraversalBehaviour::Recurse;
 }
 
 kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -133,7 +126,8 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 				[[fallthrough]];
 			case kodgen::EEntityType::Class:
 				declareGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-				break;
+				
+				return kodgen::ETraversalBehaviour::Recurse;
 
 			case kodgen::EEntityType::Enum:
 				declareGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
@@ -161,14 +155,17 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
 
 			case kodgen::EEntityType::Namespace:
-				break;
+				declareGetNamespaceFragmentFunction(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
+				declareNamespaceFragmentRegistererVariable(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
+
+				return kodgen::ETraversalBehaviour::Recurse;
 
 			case kodgen::EEntityType::Undefined:
 				[[fallthrough]];
-
 			default:
 				assert(false); //This should never happen
 				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+
 				return kodgen::ETraversalBehaviour::AbortWithFailure;
 		}
 	}
@@ -195,7 +192,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
-				break;
+				return kodgen::ETraversalBehaviour::Recurse;
 
 			case kodgen::EEntityType::Enum:
 				defineGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
@@ -223,7 +220,10 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				return kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
 
 			case kodgen::EEntityType::Namespace:
-				break;
+				defineGetNamespaceFragmentFunction(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
+				defineNamespaceFragmentRegistererVariableRecursive(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
+
+				return kodgen::ETraversalBehaviour::Recurse;
 
 			case kodgen::EEntityType::Undefined:
 				[[fallthrough]];
@@ -231,6 +231,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			default:
 				assert(false); //This should never happen
 				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+
 				return kodgen::ETraversalBehaviour::AbortWithFailure;
 		}
 	}
@@ -246,14 +247,16 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator();
+					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() +
+		//TODO: Might move some of these includes in the cpp file instead
+					"#include <Refureku/TypeInfo/Namespaces/Namespace.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& /*env*/, std::string& /*inout_result*/) const noexcept
 {
-	//"#include <Refureku/TypeInfo/Namespaces/Namespace.h>\n"
-	//"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>\n"
-	//"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>\n"
+	//None for now
 }
 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -944,6 +947,133 @@ kodgen::uint8 ReflectionCodeGenModule::computeRefurekuFunctionFlags(kodgen::Func
 std::string ReflectionCodeGenModule::computeGetFunctionFunctionName(kodgen::FunctionInfo const& function) noexcept
 {
 	return "getFunction" + getEntityId(function);
+}
+
+
+
+void ReflectionCodeGenModule::declareGetNamespaceFragmentFunction(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	inout_result += " namespace rfk::generated { "
+					"rfk::NamespaceFragment const& " + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "() noexcept;"
+					" }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::defineGetNamespaceFragmentFunction(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	inout_result += "rfk::NamespaceFragment const& rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "() noexcept {" + env.getSeparator() +
+					"static rfk::NamespaceFragment fragment(\"" + namespace_.name + "\", " + getEntityId(namespace_) + ");" + env.getSeparator() +
+					"static bool initialized = false;" + env.getSeparator();
+					
+
+	//Initialize namespace metadata
+	inout_result += "if (!initialized) {" + env.getSeparator() +
+					"initialized = true;" + env.getSeparator();
+
+	fillEntityProperties(namespace_, env, "fragment.", inout_result);
+
+	size_t nestedEntityCount =	namespace_.namespaces.size() + namespace_.structs.size() + namespace_.classes.size() +
+								namespace_.enums.size() + namespace_.variables.size() + namespace_.functions.size();
+
+	if (nestedEntityCount > 0u)
+	{
+		//Reserve space first
+		inout_result += "fragment.nestedEntities.reserve(" + std::to_string(nestedEntityCount) + "u);" + env.getSeparator();
+
+		//Chain fill all nested entities at once
+		inout_result += "rfk::NamespaceFragment* fragmentPtr = &fragment;" + env.getSeparator() +
+						"fragmentPtr";
+
+		//Nested...
+		//Namespaces
+		for (kodgen::NamespaceInfo const& nestedNamespace : namespace_.namespaces)
+		{
+			inout_result += "->addNestedEntity(rfk::generated::" + computeNamespaceFragmentRegistererName(nestedNamespace, env.getFileParsingResult()->parsedFile) + ".getNamespaceInstance())" + env.getSeparator();
+		}
+
+		//Structs
+		for (kodgen::StructClassInfo const& nestedStruct : namespace_.structs)
+		{
+			inout_result += "->addNestedEntity(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype())" + env.getSeparator();
+		}
+
+		//Classes
+		for (kodgen::StructClassInfo const& nestedClass : namespace_.classes)
+		{
+			inout_result += "->addNestedEntity(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype())" + env.getSeparator();
+		}
+
+		//Enums
+		for (kodgen::EnumInfo const& nestedEnum : namespace_.enums)
+		{
+			inout_result += "->addNestedEntity(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">())" + env.getSeparator();
+		}
+
+		//Variables
+		for (kodgen::VariableInfo const& variable : namespace_.variables)
+		{
+			inout_result += "->addNestedEntity(&rfk::generated::" + computeGetVariableFunctionName(variable) + "())" + env.getSeparator();
+		}
+
+		//Functions
+		for (kodgen::FunctionInfo const& function : namespace_.functions)
+		{
+			inout_result += "->addNestedEntity(&rfk::generated::" + computeGetFunctionFunctionName(function) + "())" + env.getSeparator();
+		}
+	}
+
+	//End initialization if
+	inout_result += "; }";
+
+	inout_result += "return fragment; }" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::declareNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	inout_result += "namespace rfk::generated {"
+					"extern rfk::NamespaceFragmentRegisterer " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + ";"
+					"}" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::defineNamespaceFragmentRegistererVariableRecursive(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	//Use a lambda since since this portion of code should not be accessible to other methods
+	auto const defineNamespaceFragmentRegistererVariable = [](kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) -> void
+	{
+		//Nested lambda to make a recursive lambda call
+		auto const defineNamespaceFragmentRegistererVariableInternal = [](kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result,
+																		   auto const& declareNamespaceFragmentRegistererVariableInternalRef) -> void
+		{
+			for (kodgen::NamespaceInfo const& nestedNamespace : namespace_.namespaces)
+			{
+				declareNamespaceFragmentRegistererVariableInternalRef(nestedNamespace, env, inout_result, declareNamespaceFragmentRegistererVariableInternalRef);
+			}
+
+			inout_result += " rfk::NamespaceFragmentRegisterer rfk::generated::" + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + " = "
+							"rfk::NamespaceFragmentRegisterer(\"" + namespace_.name + "\", " +
+							getEntityId(namespace_) + ", "
+							"&rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "(), " +
+							((namespace_.outerEntity == nullptr) ? "true" : "false") +
+							");" + env.getSeparator();
+		};
+
+		defineNamespaceFragmentRegistererVariableInternal(namespace_, env, inout_result, defineNamespaceFragmentRegistererVariableInternal);
+	};
+
+	//Generate code only if it is a top-level namespace
+	if (namespace_.outerEntity == nullptr)
+	{
+		defineNamespaceFragmentRegistererVariable(namespace_, env, inout_result);
+	}
+}
+
+std::string ReflectionCodeGenModule::computeGetNamespaceFragmentFunctionName(kodgen::NamespaceInfo const& namespace_, fs::path const& sourceFile) noexcept
+{
+	return "getNamespaceFragment" + getEntityId(namespace_) + "_" + std::to_string(_stringHasher(sourceFile.string()));
+}
+
+std::string ReflectionCodeGenModule::computeNamespaceFragmentRegistererName(kodgen::NamespaceInfo const& namespace_, fs::path const& sourceFile)	noexcept
+{
+	return "namespaceFragmentRegisterer" + getEntityId(namespace_) + "_" + std::to_string(_stringHasher(sourceFile.string()));
 }
 
 //void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept

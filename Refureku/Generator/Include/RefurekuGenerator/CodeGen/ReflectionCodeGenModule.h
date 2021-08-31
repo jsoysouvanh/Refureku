@@ -41,7 +41,7 @@ namespace rfk
 			* 
 			*	@return The unique ID of an entity as a string.
 			*/
-			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)							noexcept;
+			inline static std::string	getEntityId(kodgen::EntityInfo const& entity)										noexcept;
 
 			/**
 			*	@brief Convert the name of a kodgen::EEntityType to its equivalent rfk::EEntityKind name.
@@ -50,7 +50,7 @@ namespace rfk
 			* 
 			*	@return The name of the equivalent rfk::EEntityKind value.
 			*/
-			static std::string			convertEntityTypeToEntityKind(kodgen::EEntityType entityType)			noexcept;
+			static std::string			convertEntityTypeToEntityKind(kodgen::EEntityType entityType)						noexcept;
 
 			/**
 			*	@brief Compute the rfk::EFieldFlags value for the provided field.
@@ -59,7 +59,7 @@ namespace rfk
 			* 
 			*	@return The computed rfk::FieldFlags value as a uint16.
 			*/
-			static kodgen::uint16		computeRefurekuFieldFlags(kodgen::FieldInfo const& field)				noexcept;
+			static kodgen::uint16		computeRefurekuFieldFlags(kodgen::FieldInfo const& field)							noexcept;
 
 			/**
 			*	@brief Compute the rfk::EMethodFlags value for the provided method.
@@ -68,7 +68,7 @@ namespace rfk
 			* 
 			*	@return The computed rfk::EMethodFlags value as a uint16.
 			*/
-			static kodgen::uint16		computeRefurekuMethodFlags(kodgen::MethodInfo const& method)			noexcept;
+			static kodgen::uint16		computeRefurekuMethodFlags(kodgen::MethodInfo const& method)						noexcept;
 
 			/**
 			*	@brief	Compute the full type of a method pointer.
@@ -80,7 +80,7 @@ namespace rfk
 			*	@return The computed rfk::EMethodFlags value as a uint16.
 			*/
 			static std::string			computeFullMethodPointerType(kodgen::StructClassInfo const&	classInfo,
-																	 kodgen::MethodInfo const&		method)		noexcept;
+																	 kodgen::MethodInfo const&		method)					noexcept;
 
 			/**
 			*	@brief Compute the rfk::EVarFlags value for the provided variable.
@@ -89,7 +89,7 @@ namespace rfk
 			* 
 			*	@return The computed rfk::EVarFlags value as a uint8.
 			*/
-			static kodgen::uint8		computeRefurekuVariableFlags(kodgen::VariableInfo const& variable)		noexcept;
+			static kodgen::uint8		computeRefurekuVariableFlags(kodgen::VariableInfo const& variable)					noexcept;
 
 			/**
 			*	@brief Compute the name of the getVariable function for the given variable.
@@ -98,7 +98,7 @@ namespace rfk
 			* 
 			*	@return The name of the getVariable function for the target variable.
 			*/
-			static std::string			computeGetVariableFunctionName(kodgen::VariableInfo const& variable)	noexcept;
+			static std::string			computeGetVariableFunctionName(kodgen::VariableInfo const& variable)				noexcept;
 
 			/**
 			*	@brief Compute the rfk::EFunctionFlags value for the provided function.
@@ -107,7 +107,7 @@ namespace rfk
 			* 
 			*	@return The computed rfk::EFunctionFlags value as a uint8.
 			*/
-			static kodgen::uint8		computeRefurekuFunctionFlags(kodgen::FunctionInfo const& function)		noexcept;
+			static kodgen::uint8		computeRefurekuFunctionFlags(kodgen::FunctionInfo const& function)					noexcept;
 
 			/**
 			*	@brief Compute the name of the getFunction function for the given function.
@@ -116,7 +116,29 @@ namespace rfk
 			* 
 			*	@return The name of the getFunction function for the target function.
 			*/
-			static std::string			computeGetFunctionFunctionName(kodgen::FunctionInfo const& function)	noexcept;
+			static std::string			computeGetFunctionFunctionName(kodgen::FunctionInfo const& function)				noexcept;
+
+			/**
+			*	@brief Compute the name of the getNamespaceFragment function for the given namespace.
+			* 
+			*	@param namespace_	The target namespace.
+			*	@param sourceFile	The path to the file the namespace comes from.
+			* 
+			*	@return The name of the getNamespaceFragment function for the target namespace.
+			*/
+			static std::string			computeGetNamespaceFragmentFunctionName(kodgen::NamespaceInfo const&	namespace_,
+																				fs::path const&					sourceFile)	noexcept;
+
+			/**
+			*	@brief Compute the name of the registerer variable for the given namespace.
+			* 
+			*	@param namespace_	The target namespace.
+			*	@param sourceFile	The path to the file the namespace comes from.
+			* 
+			*	@return The name of the registerer variable for the target namespace.
+			*/
+			static std::string			computeNamespaceFragmentRegistererName(kodgen::NamespaceInfo const&	namespace_,
+																			   fs::path const&				sourceFile)		noexcept;
 
 			/**
 			*	TODO
@@ -143,6 +165,7 @@ namespace rfk
 			*/
 			void	includeSourceFileHeaders(kodgen::MacroCodeGenEnv&	env,
 											 std::string&				inout_result)							const	noexcept;
+
 
 
 			//Struct / Class code generation
@@ -276,28 +299,28 @@ namespace rfk
 			*/
 			void	declareGetEnumTemplateSpecialization(kodgen::EnumInfo const&	enum_,
 														 kodgen::MacroCodeGenEnv&	env,
-														 std::string&				inout_result)		const	noexcept;
+														 std::string&				inout_result)	const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineGetEnumTemplateSpecialization(kodgen::EnumInfo const&		enum_,
 														kodgen::MacroCodeGenEnv&	env,
-														std::string&				inout_result)				noexcept;
+														std::string&				inout_result)			noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	declareEnumRegistererVariable(kodgen::EnumInfo const&		enum_,
 													kodgen::MacroCodeGenEnv&	env,
-													std::string&				inout_result)			const	noexcept;
+													std::string&				inout_result)		const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineEnumRegistererVariable(kodgen::EnumInfo const&	enum_,
 												   kodgen::MacroCodeGenEnv&	env,
-												   std::string&				inout_result)				const	noexcept;
+												   std::string&				inout_result)			const	noexcept;
 
 
 			//Variables code generation
@@ -306,28 +329,28 @@ namespace rfk
 			*/
 			void	declareGetVariableFunction(kodgen::VariableInfo const&	variable,
 											   kodgen::MacroCodeGenEnv&		env,
-											   std::string&					inout_result)				const	noexcept;
+											   std::string&					inout_result)			const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineGetVariableFunction(kodgen::VariableInfo const&	variable,
 											  kodgen::MacroCodeGenEnv&		env,
-											  std::string&					inout_result)						noexcept;
+											  std::string&					inout_result)					noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	declareVariableRegistererVariable(kodgen::VariableInfo const&	variable,
 													  kodgen::MacroCodeGenEnv&		env,
-													  std::string&					inout_result)		const	noexcept;
+													  std::string&					inout_result)	const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineVariableRegistererVariable(kodgen::VariableInfo const&	variable,
 													 kodgen::MacroCodeGenEnv&		env,
-													 std::string&					inout_result)		const	noexcept;
+													 std::string&					inout_result)	const	noexcept;
 
 
 
@@ -337,29 +360,79 @@ namespace rfk
 			*/
 			void	declareGetFunctionFunction(kodgen::FunctionInfo const&	function,
 											   kodgen::MacroCodeGenEnv&		env,
-											   std::string&					inout_result)				const	noexcept;
+											   std::string&					inout_result)			const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineGetFunctionFunction(kodgen::FunctionInfo const&	function,
 											  kodgen::MacroCodeGenEnv&		env,
-											  std::string&					inout_result)						noexcept;
+											  std::string&					inout_result)					noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	declareFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
 													  kodgen::MacroCodeGenEnv&		env,
-													  std::string&					inout_result)		const	noexcept;
+													  std::string&					inout_result)	const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
 													 kodgen::MacroCodeGenEnv&		env,
-													 std::string&					inout_result)		const	noexcept;
+													 std::string&					inout_result)	const	noexcept;
 
+
+
+			//Namespaces code generation
+			/**
+			*	@brief Declare the getNamespaceFragment function for the provided namespace.
+			*
+			*	@param namespace_	Target namespace.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
+			*/
+			void	declareGetNamespaceFragmentFunction(kodgen::NamespaceInfo const&	namespace_,
+														kodgen::MacroCodeGenEnv&		env,
+														std::string&					inout_result)				const	noexcept;
+
+			/**
+			*	@brief Define the getNamespaceFragment function for the provided namespace.
+			*
+			*	@param namespace_	Target namespace.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
+			*/
+			void	defineGetNamespaceFragmentFunction(kodgen::NamespaceInfo const&	namespace_,
+													   kodgen::MacroCodeGenEnv&		env,
+													   std::string&					inout_result)							noexcept;
+
+			/**
+			*	@brief Declare the namespace registerer variable for the provided namespace.
+			*
+			*	@param namespace_	Top level namespace.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
+			*/
+			void	declareNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const&	namespace_,
+															   kodgen::MacroCodeGenEnv&		env,
+															   std::string&					inout_result)			const	noexcept;
+
+			/**
+			*	@brief	Recursively define the namespace registerer variable for the provided namespace and all its sub namespaces.
+			*			Registerers are defined in reversed order, so the most inner namespace registerer will be defined first and the most
+			*			outer ones at the end.
+			*			/!\ This method only generates code when a top-level (without outer entity) namespace is provided.
+			*				In all other cases, the method doesn't generate any code. /!\
+			*
+			*	@param namespace_	Top level namespace.
+			*	@param env			Code generation environment.
+			*	@param inout_result	String to append the generated code.
+			*/
+			void	defineNamespaceFragmentRegistererVariableRecursive(kodgen::NamespaceInfo const&	namespace_,
+																	   kodgen::MacroCodeGenEnv&		env,
+																	   std::string&					inout_result)	const	noexcept;
 
 
 		protected:
