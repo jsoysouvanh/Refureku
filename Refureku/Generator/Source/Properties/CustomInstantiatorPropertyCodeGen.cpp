@@ -11,8 +11,8 @@ CustomInstantiatorPropertyCodeGen::CustomInstantiatorPropertyCodeGen() noexcept:
 {
 }
 
-bool CustomInstantiatorPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::Property const* property,
-																kodgen::uint8 /*propertyIndex*/, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+bool CustomInstantiatorPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::Property const* /*property*/, kodgen::uint8 /*propertyIndex*/,
+																kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	assert(entity != nullptr);
 

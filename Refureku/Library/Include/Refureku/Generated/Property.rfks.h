@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\TypeInfo\Properties\Property.h"
+#include "../TypeInfo/Properties/Property.h"
 
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
