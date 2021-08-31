@@ -247,16 +247,19 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() +
-		//TODO: Might move some of these includes in the cpp file instead
-					"#include <Refureku/TypeInfo/Namespaces/Namespace.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() + 
 					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>" + env.getSeparator();
+
+	//Forward declare some types
+	inout_result += "namespace rfk {"
+					"class NamespaceFragment;"
+					"}" + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& /*env*/, std::string& /*inout_result*/) const noexcept
+void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	//None for now
+	inout_result += "#include <Refureku/TypeInfo/Namespaces/Namespace.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -1098,110 +1101,3 @@ std::string ReflectionCodeGenModule::computeNamespaceFragmentRegistererName(kodg
 {
 	return "namespaceFragmentRegisterer" + getEntityId(namespace_) + "_" + std::to_string(_stringHasher(sourceFile.string()));
 }
-
-//void FileGenerationUnit::writeHeader(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& parsingResult) const noexcept
-//{
-//	//Always call base class
-//	kodgen::FileGenerationUnit::writeHeader(file, parsingResult);
-//
-//	file.writeLines("#include <Refureku/Misc/DisableWarningMacros.h>",
-//					"#include <Refureku/TypeInfo/Namespaces/Namespace.h>",
-//					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>",
-//					"#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>",
-//					"#include <Refureku/TypeInfo/Archetypes/Class.h>",
-//					"#include <Refureku/TypeInfo/Archetypes/Enum.h>",
-//					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>",
-//					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>",
-//					"\n");
-//}
-//
-//void FileGenerationUnit::generateEndFileMacro(kodgen::GeneratedFile& file) const noexcept
-//{
-//	file.writeLine("#define " + getEndFileMacroName() + "\t\\");
-//
-//	//Enum first because structs/classes and namespaces can have nested (and then reference to) enums
-//	for (kodgen::EnumInfo const* enumInfo : _generatedEnums)
-//	{
-//		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(enumInfo->id)) + "u_GENERATED\t\\");
-//	}
-//
-//	//Gen variables
-//	for (kodgen::VariableInfo const* varInfo : _generatedVariables)
-//	{
-//		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(varInfo->id)) + "u_GENERATED\t\\");
-//	}
-//
-//	//Gen functions
-//	for (kodgen::FunctionInfo const* funcInfo : _generatedFunctions)
-//	{
-//		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(funcInfo->id)) + "u_GENERATED\t\\");
-//	}
-//
-//	//Structs/Classes before namespaces because namespaces can have nested (and then reference to) structs/classes
-//	for (kodgen::StructClassInfo const* classInfo : _generatedClasses)
-//	{
-//		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(classInfo->id)) + "u_GetTypeDefinition\t\\");
-//	}
-//
-//	for (kodgen::NamespaceInfo const* namespaceInfo : _generatedNamespaces)
-//	{
-//		file.writeLine("	" + std::string(_internalPrefix) + std::to_string(_stringHasher(namespaceInfo->id)) + "u_GENERATED\t\\");
-//	}
-//
-//	//Native properties footer code
-//	file.writeLine("	" + _nativePropsMacroName + "\t\\");
-//
-//	//New line to avoid "warning: backslash-newline at end of file"
-//	file.writeLine("\n");
-//}
-//
-//void FileGenerationUnit::saveEntitiesUsingNativeProperties(kodgen::EntityInfo const& entityInfo) noexcept
-//{
-//	for (kodgen::SimpleProperty const& prop : entityInfo.properties.simpleProperties)
-//	{
-//		if (prop.boundPropertyRule != nullptr)
-//		{
-//			_entitiesUsingNativeProperties.push_back(&entityInfo);
-//			return;
-//		}
-//	}
-//
-//	for (kodgen::ComplexProperty const& prop : entityInfo.properties.complexProperties)
-//	{
-//		if (prop.boundPropertyRule != nullptr)
-//		{
-//			_entitiesUsingNativeProperties.push_back(&entityInfo);
-//			return;
-//		}
-//	}
-//}
-//
-//void FileGenerationUnit::generateNativePropertiesCode(kodgen::GeneratedFile& file, kodgen::FileParsingResult const& /* parsingResult */) const noexcept
-//{
-//	std::string generatedCode;
-//
-//	//Generate native properties header code
-//	PropertyCodeGenFileHeaderData headerData;
-//	
-//	for (kodgen::EntityInfo const* entityInfo : _entitiesUsingNativeProperties)
-//	{
-//		assert(entityInfo != nullptr);
-//
-//		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &headerData);
-//	}
-//
-//	file.writeLine(generatedCode);
-//
-//	//Generate native properties footer code inside a macro
-//	PropertyCodeGenFileFooterData footerData;
-//
-//	generatedCode.clear();
-//	for (kodgen::EntityInfo const* entityInfo : _entitiesUsingNativeProperties)
-//	{
-//		assert(entityInfo != nullptr);
-//
-//		generatedCode += GeneratedEntityCodeTemplate::generateNativePropertiesCode(*entityInfo, &footerData);
-//	}
-//
-//	file.writeMacro(std::string(_nativePropsMacroName), std::move(generatedCode));
-//}

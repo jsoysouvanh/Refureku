@@ -13,6 +13,8 @@
 
 GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass);
 
+//TODO: Add Macro to hide generated code
+
 namespace rfk
 {
 	class CodeGenerationHelpers
