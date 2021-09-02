@@ -1,4 +1,7 @@
-#include "Generated/ThirdPartyEnumReflectionCode.rfks.h"
+#include "ThirdPartyEnumReflectionCode.h"
+
+#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
+#include <Refureku/TypeInfo/Type.h>
 
 //Register the enum to the database
 rfk::ArchetypeRegisterer NonReflectedEnumRegisterer = rfk::getEnum<ThirdPartyEnum>();

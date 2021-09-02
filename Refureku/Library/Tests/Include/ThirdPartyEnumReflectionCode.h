@@ -2,12 +2,10 @@
 
 #include "ThirdPartyEnum.h"
 
-#include "Generated/ThirdPartyEnumReflectionCode.rfkh.h"
+#include <Refureku/TypeInfo/Archetypes/Enum.h>
 
 namespace rfk
 {
 	template <>
 	rfk::Enum const* getEnum<ThirdPartyEnum>() noexcept;
 }
-
-File_ThirdPartyEnumReflectionCode_GENERATED

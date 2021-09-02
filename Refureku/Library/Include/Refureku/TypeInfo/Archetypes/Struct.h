@@ -520,7 +520,7 @@ namespace rfk
 										   Type const&		type,
 										   EFieldFlags		flags,
 										   Struct const*	outerEntity_,
-										   void*			fieldPtr)					noexcept;
+										   void const*		fieldPtr)					noexcept;
 
 			/**
 			*	@brief Add a method to the struct.

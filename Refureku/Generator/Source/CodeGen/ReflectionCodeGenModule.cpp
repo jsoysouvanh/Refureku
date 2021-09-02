@@ -84,6 +84,12 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 		case kodgen::EEntityType::Struct:
 			[[fallthrough]];
 		case kodgen::EEntityType::Class:
+			//Do not generate code for forward declarations
+			if (reinterpret_cast<kodgen::StructClassInfo const&>(*entity).isForwardDeclaration)
+			{
+				return kodgen::ETraversalBehaviour::Continue;
+			}
+
 			declareFriendClasses(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			
 			declareClassRegistererField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
@@ -142,6 +148,12 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 			case kodgen::EEntityType::Struct:
 				[[fallthrough]];
 			case kodgen::EEntityType::Class:
+				//Do not generate code for forward declarations
+				if (reinterpret_cast<kodgen::StructClassInfo const&>(*entity).isForwardDeclaration)
+				{
+					return kodgen::ETraversalBehaviour::Continue;
+				}
+
 				declareGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				
 				result = kodgen::ETraversalBehaviour::Recurse;
@@ -214,6 +226,12 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			case kodgen::EEntityType::Struct:
 				[[fallthrough]];
 			case kodgen::EEntityType::Class:
+				//Do not generate code for forward declarations
+				if (reinterpret_cast<kodgen::StructClassInfo const&>(*entity).isForwardDeclaration)
+				{
+					return kodgen::ETraversalBehaviour::Continue;
+				}
+
 				defineClassRegistererField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
@@ -910,7 +928,7 @@ void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo con
 					"static rfk::Variable variable(\"" + variable.name + "\", " +
 												   getEntityId(variable) + ", "
 												   "rfk::Type::getType<" + variable.type.getCanonicalName() + ">(), "
-												   "&" + variable.getFullName() + ", "
+												   "const_cast<" + variable.type.getName(true) + "*>(&" + variable.getFullName() + "), "
 												   "static_cast<rfk::EVarFlags>(" + std::to_string(computeRefurekuVariableFlags(variable)) + ")"
 												   ");" + env.getSeparator();
 
