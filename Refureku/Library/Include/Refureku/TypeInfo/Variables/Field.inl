@@ -40,8 +40,13 @@ DataType Field::getData(void const* instance) const noexcept
 }
 
 template <typename DataType>
-void Field::setData(void* instance, DataType&& data) const noexcept
+void Field::setData(void* instance, DataType&& data) const
 {
+	if (type.isConst())
+	{
+		throw ConstViolation("Can't call Field::setData on a const field.");
+	}
+
 	if constexpr (std::is_rvalue_reference_v<DataType&&>)
 	{
 		*reinterpret_cast<DataType*>(getDataAddress(instance)) = std::forward<DataType&&>(data);
@@ -56,19 +61,24 @@ void Field::setData(void* instance, DataType&& data) const noexcept
 	}
 }
 
+inline void Field::setData(void* instance, void const* data, uint64 dataSize) const
+{
+	if (type.isConst())
+	{
+		throw ConstViolation("Can't call Field::setData on a const field.");
+	}
+
+	std::memcpy(getDataAddress(instance), data, dataSize);
+}
+
 inline void* Field::getDataAddress(void* instance) const noexcept
 {
 	assert(instance != nullptr);
 
-	return reinterpret_cast<char*>(instance) + memoryOffset;
+	return reinterpret_cast<uint8_t*>(instance) + memoryOffset;
 }
 
 inline void const* Field::getDataAddress(void const* instance) const noexcept
 {
-	return reinterpret_cast<char const*>(instance) + memoryOffset;
-}
-
-inline void Field::setData(void* instance, void const* data, uint64 dataSize) const noexcept
-{
-	std::memcpy(getDataAddress(instance), data, dataSize);
+	return reinterpret_cast<uint8_t const*>(instance) + memoryOffset;
 }

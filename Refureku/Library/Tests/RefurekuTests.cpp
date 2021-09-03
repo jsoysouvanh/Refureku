@@ -332,37 +332,81 @@ void fields()
 	TEST(pc.getField("pInt64")->getData<unsigned long long>(&p) == 642u);
 
 	//ExampleClass
-	namespace3::ExampleClass	e;
+	namespace3::ExampleClass	instance;
 	rfk::Class const&			ec = namespace3::ExampleClass::staticGetArchetype();
 
 	TEST(ec.getField("ppFloat", rfk::EFieldFlags::Private, false) == nullptr);
-	TEST(static_cast<int>(ec.getField("ppFloat", rfk::EFieldFlags::Private, true)->getData<float>(&e)) == 123456);
+	TEST(static_cast<int>(ec.getField("ppFloat", rfk::EFieldFlags::Private, true)->getData<float>(&instance)) == 123456);
 
-	TEST(ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long>(&e) == 666u);
-	ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long&>(&e) = 642u;
-	TEST(ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long>(&e) == 642u);
+	TEST(ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long>(&instance) == 666u);
+	ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long&>(&instance) = 642u;
+	TEST(ec.getField("pInt64", rfk::EFieldFlags::Default, true)->getData<unsigned long long>(&instance) == 642u);
 
-	TEST(ec.getField("someInt", rfk::EFieldFlags::Public | rfk::EFieldFlags::Mutable)->getData<int>(&e) == 42);
-	TEST(ec.getField("someParentClass")->getData<namespace3::ParentClass&>(&e).pInt64 == 666u);
+	TEST(ec.getField("someInt", rfk::EFieldFlags::Public | rfk::EFieldFlags::Mutable)->getData<int>(&instance) == 42);
+	TEST(ec.getField("someParentClass")->getData<namespace3::ParentClass&>(&instance).pInt64 == 666u);
+
+	//Make sure const fields can't be set
+	rfk::Class const& e = E::staticGetArchetype();
+
+	try
+	{
+		e.getField("constFloat")->setData(nullptr, 0);
+		TEST(false); //Should never pass here
+	}
+	catch (rfk::ConstViolation const&)
+	{
+	}
+
+	try
+	{
+		e.getField("constFloat")->setData(nullptr, 42.0f);
+		TEST(false); //Should never pass here
+	}
+	catch (rfk::ConstViolation const&)
+	{
+	}
+
+	//Make sure that const field can only be get as const
+	//TODO
 }
 
 void staticFields()
 {
 	//ExampleClass
-	namespace3::ExampleClass	e;
-	rfk::Class const&			ec = namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
 	TEST(ec.getField("someStaticInt") == nullptr);
 	TEST(ec.getStaticField("someStaticInt") != nullptr);
 	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public) != nullptr);
 	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public) == rfk::Database::getStaticField(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->id));
-	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->getDataAddress() == &namespace3::ExampleClass::someStaticInt);
 	TEST(ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->getData<int>() == namespace3::ExampleClass::someStaticInt);
-
+	
 	ec.getStaticField("someStaticInt", rfk::EFieldFlags::Public)->setData(2);
-
 	TEST(namespace3::ExampleClass::someStaticInt == 2);
-	TEST(ec.getStaticField("someStaticParentClass", rfk::EFieldFlags::Public)->getDataAddress() == &namespace3::ExampleClass::someStaticParentClass);
+
+	//Make sure const static fields can't be set
+	rfk::Class const& e = E::staticGetArchetype();
+
+	try
+	{
+		e.getStaticField("staticConstFloat")->setData(nullptr, 0);
+		TEST(false); //Should never pass here
+	}
+	catch (rfk::ConstViolation const&)
+	{
+	}
+
+	try
+	{
+		e.getStaticField("staticConstFloat")->setData(42.0f);
+		TEST(false); //Should never pass here
+	}
+	catch (rfk::ConstViolation const&)
+	{
+	}
+
+	//Make sure that const static field can only be get as const
+	//TODO
 }
 
 void variables()
@@ -372,6 +416,25 @@ void variables()
 	TEST(rfk::Database::getVariable("variableInsideGlobalScope") == rfk::Database::getVariable(rfk::Database::getVariable("variableInsideGlobalScope")->id));
 
 	TEST(rfk::Database::getVariable("variableInsideNamespace") == nullptr);
+
+	//Make sure const variables can't be set
+	try
+	{
+		rfk::Database::getVariable("constGlobalInt")->setData(nullptr, 0);
+		TEST(false); //Should never pass here
+	}
+	catch (rfk::ConstViolation const&)
+	{
+	}
+
+	try
+	{
+		rfk::Database::getVariable("constGlobalInt")->setData(32);
+		TEST(false); //Should never pass here
+	}
+	catch (rfk::ConstViolation const&)
+	{
+	}
 }
 
 void functions()

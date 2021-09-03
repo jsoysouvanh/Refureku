@@ -8,16 +8,12 @@
 #pragma once
 
 #include <stdexcept>
-#include <string>
 
 namespace rfk
 {
 	class OutOfRange : public std::out_of_range
 	{
 		public:
-			explicit OutOfRange(std::string const& errorMessage)	noexcept;
-			OutOfRange(OutOfRange const&)							= default;
-			OutOfRange(OutOfRange&&)								= default;
-			~OutOfRange()											= default;
+			using std::out_of_range::out_of_range;
 	};
 }

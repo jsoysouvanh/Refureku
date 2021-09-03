@@ -29,10 +29,11 @@ class RFKClass(CustomProperty(3 , 4)) B : public A
 
 class RFKClass() C : public A 
 {
-	//TODO: Make this work
-	//enum class RFKEnum() CNestedEnum
-	//{
-	//};
+	/*enum class RFKEnum() CNestedEnum
+	{
+		Value1,
+		Value2
+	};*/
 
 	RFKField()
 	int i = 0;
@@ -43,13 +44,19 @@ class RFKClass() C : public A
 	C_GENERATED
 };
 
-class RFKClass() D
+class RFKClass() E
 {
 	public:
 		RFKField()
-		int const i = 0;
+		static inline float const staticConstFloat = 3.14f;
 
-	D_GENERATED
+		RFKField()
+		float const constFloat = 3.14f;
+
+	E_GENERATED
 };
+
+RFKVariable()
+inline int const constGlobalInt = 2;
 
 File_AB_GENERATED

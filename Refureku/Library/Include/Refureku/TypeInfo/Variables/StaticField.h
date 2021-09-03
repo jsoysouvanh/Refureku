@@ -14,6 +14,7 @@
 
 #include "Refureku/TypeInfo/Variables/FieldBase.h"
 #include "Refureku/TypeInfo/Type.h"
+#include "Refureku/Exceptions/ConstViolation.h"
 
 namespace rfk
 {
@@ -21,7 +22,16 @@ namespace rfk
 	{
 		private:
 			/** Address of the field data. */
-			void*	dataAddress	= nullptr;
+			union
+			{
+				void*		_address		= nullptr;
+				void const*	_constAddress;
+			};
+
+			/**
+			*	@return The data address corresponding to this static field.
+			*/
+			inline void*	getAddress()	const noexcept;
 
 		public:
 			StaticField()								= delete;
@@ -30,10 +40,15 @@ namespace rfk
 						Type const&		type,
 						EFieldFlags		flags,
 						Struct const*	ownerStruct,
-						void*			ptrToData)		noexcept;
+						void*			address)		noexcept;
+			StaticField(std::string&&	name,
+						uint64			id,
+						Type const&		type,
+						EFieldFlags		flags,
+						Struct const*	ownerStruct,
+						void const*		address)		noexcept;
 			StaticField(StaticField const&)				= delete;
 			StaticField(StaticField&&)					= delete;
-			~StaticField()								= default;
 
 			/**
 			*	@brief Get the data corresponding to this static field.
@@ -56,9 +71,11 @@ namespace rfk
 			*	@tparam DataType Type to retrieve from the field.
 			*			If DataType is an rvalue reference, the data is forwarded into the static field.
 			*			If DataType is an lvalue reference, the data is copied into the static field.
+			* 
+			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
 			template <typename DataType>
-			void			setData(DataType&& data)					const noexcept;
+			void			setData(DataType&& data)					const;
 
 			/**
 			*	@brief Copy dataSize bytes starting from data into the static field.
@@ -66,13 +83,13 @@ namespace rfk
 			*
 			*	@param data Address of the data to copy.
 			*	@param dataSize Number of bytes to copy into the static field starting from data.
+			* 
+			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
-			inline void		setData(void const* data, uint64 dataSize)	const noexcept;
+			inline void		setData(void const* data, uint64 dataSize)	const;
 
-			/**
-			*	@return The data address corresponding to this static field.
-			*/
-			inline void*	getDataAddress()							const noexcept;
+			StaticField& operator=(StaticField const&)	= delete;
+			StaticField& operator=(StaticField&&)		= delete;
 	};
 
 	#include "Refureku/TypeInfo/Variables/StaticField.inl"

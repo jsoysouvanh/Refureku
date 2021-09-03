@@ -14,9 +14,6 @@ namespace rfk
 	class ReturnTypeMismatch : public TypeMismatch
 	{
 		public:
-			explicit ReturnTypeMismatch(std::string const& errorMessage)	noexcept;
-			ReturnTypeMismatch(ReturnTypeMismatch const&)					= default;
-			ReturnTypeMismatch(ReturnTypeMismatch&&)						= default;
-			~ReturnTypeMismatch()											= default;
+			using TypeMismatch::TypeMismatch;
 	};
 }

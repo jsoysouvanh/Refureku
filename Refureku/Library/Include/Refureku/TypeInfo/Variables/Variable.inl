@@ -10,28 +10,33 @@ DataType Variable::getData() const noexcept
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
-		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(address));
+		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(_address));
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
-		return *reinterpret_cast<std::remove_reference_t<DataType>*>(address);
+		return *reinterpret_cast<std::remove_reference_t<DataType>*>(_address);
 	}
 	else	//By value
 	{
-		return DataType(*reinterpret_cast<DataType*>(address));
+		return DataType(*reinterpret_cast<DataType*>(_address));
 	}
 }
 
 template <typename DataType>
-void Variable::setData(DataType&& data) const noexcept
+void Variable::setData(DataType&& data) const
 {
+	if (type.isConst())
+	{
+		throw ConstViolation("Can't use Variable::setData on a const variable.");
+	}
+
 	if constexpr (std::is_rvalue_reference_v<DataType&&>)
 	{
-		*reinterpret_cast<DataType*>(address) = std::forward<DataType&&>(data);
+		*reinterpret_cast<DataType*>(_address) = std::forward<DataType&&>(data);
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType&&>)
 	{
-		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(address) = data;
+		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(_address) = data;
 	}
 	else
 	{
@@ -39,7 +44,12 @@ void Variable::setData(DataType&& data) const noexcept
 	}
 }
 
-inline void Variable::setData(void const* data, uint64 dataSize) const noexcept
+inline void Variable::setData(void const* data, uint64 dataSize) const
 {
-	std::memcpy(address, data, dataSize);
+	if (type.isConst())
+	{
+		throw ConstViolation("Can't use Variable::setData on a const variable.");
+	}
+
+	std::memcpy(_address, data, dataSize);
 }

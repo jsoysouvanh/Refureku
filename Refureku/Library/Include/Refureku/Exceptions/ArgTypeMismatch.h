@@ -14,9 +14,6 @@ namespace rfk
 	class ArgTypeMismatch : public TypeMismatch
 	{
 		public:
-			explicit ArgTypeMismatch(std::string const& errorMessage)	noexcept;
-			ArgTypeMismatch(ArgTypeMismatch const&)						= default;
-			ArgTypeMismatch(ArgTypeMismatch&&)							= default;
-			~ArgTypeMismatch()											= default;
+			using TypeMismatch::TypeMismatch;
 	};
 }

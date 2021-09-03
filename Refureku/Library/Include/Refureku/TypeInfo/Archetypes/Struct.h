@@ -520,6 +520,27 @@ namespace rfk
 										   Type const&		type,
 										   EFieldFlags		flags,
 										   Struct const*	outerEntity_,
+										   void*			fieldPtr)					noexcept;
+
+			/**
+			*	@brief	Add a static field to the struct..
+			*			Overload with a const field pointer for the addStaticField method.
+			* 
+			*	@param fieldName	Name of the static field.
+			*	@param entityId		Unique entity if of the static field.
+			*	@param type			Type of the static field.
+			*	@param flags		Field flags.
+			*	@param outerEntity_	Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
+			*	@param fieldPtr		Const pointer to the static field memory.
+			*	
+			*	@return A pointer to the added static field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			The name of the static field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
+			*/
+			StaticField*	addStaticField(std::string		fieldName,
+										   uint64			entityId,
+										   Type const&		type,
+										   EFieldFlags		flags,
+										   Struct const*	outerEntity_,
 										   void const*		fieldPtr)					noexcept;
 
 			/**

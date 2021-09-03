@@ -360,15 +360,27 @@ Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type
 	return result;
 }
 
+StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void* fieldPtr) noexcept
+{
+	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
+
+	//Add the static field to the container
+	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
+	StaticField* result = const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr));
+
+	//Set outer entity
+	result->outerEntity = outerEntity_;
+
+	return result;
+}
+
 StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void const* fieldPtr) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	//The second const_cast is not really legal and can cause UB if the initial static field is const.
-	//TODO: Should the reflection disallow a const field to be get as non-const / set?
-	StaticField* result = const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, const_cast<void*>(fieldPtr)));
+	StaticField* result = const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr));
 
 	//Set outer entity
 	result->outerEntity = outerEntity_;

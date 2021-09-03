@@ -10,28 +10,33 @@ DataType StaticField::getData() const noexcept
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
-		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getDataAddress()));
+		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getAddress()));
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
-		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getDataAddress());
+		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getAddress());
 	}
 	else	//By value
 	{
-		return DataType(*reinterpret_cast<DataType*>(getDataAddress()));
+		return DataType(*reinterpret_cast<DataType*>(getAddress()));
 	}
 }
 
 template <typename DataType>
-void StaticField::setData(DataType&& data) const noexcept
+void StaticField::setData(DataType&& data) const
 {
+	if (type.isConst())
+	{
+		throw ConstViolation("Can't call StaticField::setData on a const static field.");
+	}
+
 	if constexpr (std::is_rvalue_reference_v<DataType&&>)
 	{
-		*reinterpret_cast<DataType*>(getDataAddress()) = std::forward<DataType&&>(data);
+		*reinterpret_cast<DataType*>(getAddress()) = std::forward<DataType&&>(data);
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType&&>)
 	{
-		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(getDataAddress()) = data;
+		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(getAddress()) = data;
 	}
 	else
 	{
@@ -39,12 +44,17 @@ void StaticField::setData(DataType&& data) const noexcept
 	}
 }
 
-inline void* StaticField::getDataAddress() const noexcept
+inline void StaticField::setData(void const* data, uint64 dataSize) const
 {
-	return dataAddress;
+	if (type.isConst())
+	{
+		throw ConstViolation("Can't call StaticField::setData on a const static field.");
+	}
+
+	std::memcpy(getAddress(), data, dataSize);
 }
 
-inline void StaticField::setData(void const* data, uint64 dataSize) const noexcept
+inline void* StaticField::getAddress() const noexcept
 {
-	std::memcpy(getDataAddress(), data, dataSize);
+	return _address;
 }

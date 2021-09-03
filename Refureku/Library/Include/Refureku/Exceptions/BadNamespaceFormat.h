@@ -8,16 +8,12 @@
 #pragma once
 
 #include <stdexcept>
-#include <string>
 
 namespace rfk
 {
 	class BadNamespaceFormat : public std::invalid_argument
 	{
 		public:
-			explicit BadNamespaceFormat(std::string const& errorMessage)	noexcept;
-			BadNamespaceFormat(BadNamespaceFormat const&)					= default;
-			BadNamespaceFormat(BadNamespaceFormat&&)						= default;
-			~BadNamespaceFormat()											= default;
+			using std::invalid_argument::invalid_argument;
 	};
 }

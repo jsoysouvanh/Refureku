@@ -8,16 +8,12 @@
 #pragma once
 
 #include <stdexcept>
-#include <string>
 
 namespace rfk
 {
 	class ArgCountMismatch : public std::logic_error
 	{
 		public:
-			explicit ArgCountMismatch(std::string const& errorMessage)	noexcept;
-			ArgCountMismatch(ArgCountMismatch const&)					= default;
-			ArgCountMismatch(ArgCountMismatch&&)						= default;
-			~ArgCountMismatch()											= default;
+			using std::logic_error::logic_error;
 	};
 }

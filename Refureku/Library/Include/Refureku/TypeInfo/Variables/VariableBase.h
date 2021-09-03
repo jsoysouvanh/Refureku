@@ -26,10 +26,12 @@ namespace rfk
 						 Type const&	type)		noexcept;
 			VariableBase(VariableBase const&)		= delete;
 			VariableBase(VariableBase&&)			= delete;
-			~VariableBase()							= default;
 			
 		public:
 			/** Type of this variable. */
 			Type const& type;
+
+			VariableBase& operator=(VariableBase const&)	= delete;
+			VariableBase& operator=(VariableBase&&)			= delete;
 	};
 }
