@@ -25,7 +25,7 @@ public: virtual rfk::Struct const& getArchetype() const noexcept override;\
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::CodeGenerationHelpers::registerChildClass<rfk::Property, ChildClass>(childClass);\
 rfk::Struct const& thisClass = staticGetArchetype();\
-if constexpr (!std::is_same_v<ChildClass, ParseAllNested>) const_cast<rfk::Struct&>(thisClass).children.insert(&childClass);\
+if constexpr (!std::is_same_v<ChildClass, ParseAllNested>) const_cast<rfk::Struct&>(thisClass).subclasses.insert(&childClass);\
 \
 }public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct;\
 virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\

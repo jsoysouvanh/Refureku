@@ -298,13 +298,13 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	return result;
 }
 
-std::vector<Struct const*> Struct::getDirectChildren() const noexcept
+std::vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 {
 	std::vector<Struct const*> result;
 
-	for (Struct const* child : children)
+	for (Struct const* child : subclasses)
 	{
-		//Search this struct in children's parents
+		//Search this struct in subclasses's parents
 		for (Parent const& childParent : child->directParents)
 		{
 			if (childParent.type == this)
@@ -325,7 +325,7 @@ bool Struct::isSubclassOf(Struct const& otherType) const noexcept
 
 bool Struct::isBaseOf(Struct const& otherType) const noexcept
 {
-	return &otherType == this || children.find(&otherType) != children.cend();
+	return &otherType == this || subclasses.find(&otherType) != subclasses.cend();
 }
 
 void Struct::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept

@@ -654,8 +654,8 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 
 	inout_result += "rfk::Struct const& thisClass = staticGetArchetype();" + env.getSeparator();
 	
-	//Register the child to the children list
-	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::Struct&>(thisClass).children.insert(&childClass);" + env.getSeparator();
+	//Register the child to the subclasses list
+	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::Struct&>(thisClass).subclasses.insert(&childClass);" + env.getSeparator();
 
 	//Make the child class inherit from the parents class fields
 	if (!structClass.fields.empty())

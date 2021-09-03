@@ -69,8 +69,8 @@ namespace rfk
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
 			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>							directParents;
 
-			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected children. */
-			std::unordered_set<Struct const*>													children;
+			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected subclasses. */
+			std::unordered_set<Struct const*>													subclasses;
 
 			/** All tagged nested structs/classes/enums contained in this struct. */
 			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedArchetypes;
@@ -433,13 +433,13 @@ namespace rfk
 																 bool				shouldInspectInherited	= false)				const	noexcept;
 
 			/**
-			*	@brief	Compute the list of all direct reflected children of this struct.
-			*			The children are computed by iterating over all children (direct or not), so this method
+			*	@brief	Compute the list of all direct reflected subclasses of this struct.
+			*			Direct subclasses are computed by iterating over all subclasses (direct or not), so this method
 			*			might have a heavy performance cost on big class hierarchies.
 			* 
-			*	@return A list of all direct reflected children of this struct.
+			*	@return A list of all direct reflected subclasses of this struct.
 			*/
-			std::vector<Struct const*>			getDirectChildren()																	const	noexcept;
+			std::vector<Struct const*>			getDirectSubclasses()																const	noexcept;
 
 			/**
 			*	@brief Make an instance of the class represented by this archetype.

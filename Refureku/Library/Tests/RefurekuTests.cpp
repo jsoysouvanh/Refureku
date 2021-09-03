@@ -170,22 +170,21 @@ void enums()
 	TEST(e->getEnumValue([](rfk::EnumValue const* v){ return v->value == 1 << 3 && v->name == "ExampleValue4"; }) != nullptr);
 	TEST(e->getEnumValues([](rfk::EnumValue const* v){ return v->value == 10; }).empty());
 
-	//Nested enum
+	//Nested enums
 	TEST(rfk::Database::getNamespace("namespace3")->getClass("ExampleClass")->getNestedEnum("NestedExampleEnum")->getEnumValue("Value1")->value == 0);
 
-	//Normal enum (no enum class)
-	TEST(rfk::Database::getEnum("EThisIsANormalEnum") != nullptr);
-
-	//Underlying type
-	TEST(rfk::Database::getEnum("EThisIsANormalEnum")->underlyingType.archetype->name == "int");
-
-	//Nested enums
 	TEST(rfk::getEnum<C::PublicNestedEnum>() != nullptr);
 	TEST(C::staticGetArchetype().getNestedEnum("PrivateNestedEnum") != nullptr);
 	TEST(C::staticGetArchetype().getNestedClass("PrivateNestedClass")->getNestedEnum("PrivateNestedEnum") != nullptr);
 
 	rfk::Enum const* nestedEnum = C::staticGetArchetype().getNestedEnum("PrivateNestedEnum");
 	TEST(rfk::Database::getEnum(nestedEnum->id) == nestedEnum);
+
+	//Normal enum (no enum class)
+	TEST(rfk::Database::getEnum("EThisIsANormalEnum") != nullptr);
+
+	//Underlying type
+	TEST(rfk::Database::getEnum("EThisIsANormalEnum")->underlyingType.archetype->name == "int");
 }
 
 void methods()
@@ -941,8 +940,8 @@ void structDirectChildren()
 {
 	rfk::Class const& ppClass = namespace2::ParentParentClass::staticGetArchetype();
 
-	TEST(ppClass.getDirectChildren().size() == 1u);
-	TEST(ppClass.children.size() == 2u);
+	TEST(ppClass.getDirectSubclasses().size() == 1u);
+	TEST(ppClass.subclasses.size() == 2u);
 }
 
 int main()
