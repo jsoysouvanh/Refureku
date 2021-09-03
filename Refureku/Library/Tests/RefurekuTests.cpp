@@ -178,6 +178,14 @@ void enums()
 
 	//Underlying type
 	TEST(rfk::Database::getEnum("EThisIsANormalEnum")->underlyingType.archetype->name == "int");
+
+	//Nested enums
+	TEST(rfk::getEnum<C::PublicNestedEnum>() != nullptr);
+	TEST(C::staticGetArchetype().getNestedEnum("PrivateNestedEnum") != nullptr);
+	TEST(C::staticGetArchetype().getNestedClass("PrivateNestedClass")->getNestedEnum("PrivateNestedEnum") != nullptr);
+
+	rfk::Enum const* nestedEnum = C::staticGetArchetype().getNestedEnum("PrivateNestedEnum");
+	TEST(rfk::Database::getEnum(nestedEnum->id) == nestedEnum);
 }
 
 void methods()

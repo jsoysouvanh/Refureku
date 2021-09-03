@@ -15,6 +15,7 @@ namespace rfk
 {
 	/**
 	*	@brief	Get the archetype of any type if it exists.
+	*			Note that this method will always return nullptr on protected/private nested archetypes.
 	*			If a cv-qualified, pointer/reference, array type is passed, they are all ignored and the raw type archetype is returned.
 	*			Example:	int* -> int,
 	*						int[2] -> int,

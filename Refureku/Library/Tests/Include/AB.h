@@ -29,17 +29,35 @@ class RFKClass(CustomProperty(3 , 4)) B : public A
 
 class RFKClass() C : public A 
 {
-	/*enum class RFKEnum() CNestedEnum
+	enum class RFKEnum() PrivateNestedEnum
 	{
 		Value1,
 		Value2
-	};*/
+	};
+
+	class RFKClass() PrivateNestedClass
+	{
+		enum class RFKEnum() PrivateNestedEnum
+		{
+			Value1,
+			Value2
+		};
+
+		C_PrivateNestedClass_GENERATED
+	};
 
 	RFKField()
 	int i = 0;
 
 	RFKMethod()
 	virtual void testMethod() noexcept override {}
+
+	public:
+		enum class RFKEnum() PublicNestedEnum
+		{
+			Value1,
+			Value2
+		};
 
 	C_GENERATED
 };

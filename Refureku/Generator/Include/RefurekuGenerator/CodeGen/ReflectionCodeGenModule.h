@@ -25,7 +25,6 @@ namespace rfk
 			/** Class global string hasher. */
 			static std::hash<std::string>			_stringHasher;
 
-
 			/** Code generator for the CustomInstantiator property. */
 			CustomInstantiatorPropertyCodeGen		_customInstantiatorProperty;
 
@@ -154,6 +153,15 @@ namespace rfk
 			*/
 			static std::string			computePropertyVariableName(kodgen::EntityInfo const&	entity,
 																	kodgen::uint8				propertyIndex)				noexcept;
+
+			/**
+			*	@brief Compute the name of the generated method to get a non-public nested enum.
+			* 
+			*	@param nestedEnum The target nested enum.
+			* 
+			*	@return The name of the generated method.
+			*/
+			static std::string			computeGetNestedEnumMethodName(kodgen::NestedEnumInfo const& nestedEnum)			noexcept;
 
 			/**
 			*	@brief	All code generated from this point will be hidden to the parser.
@@ -322,6 +330,20 @@ namespace rfk
 			/**
 			*	TODO
 			*/
+			void	declareGetNestedEnumMethods(kodgen::StructClassInfo const&	structClass,
+												kodgen::MacroCodeGenEnv&		env,
+												std::string&					inout_result)							noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineGetNestedEnumMethods(kodgen::StructClassInfo const&	structClass,
+												kodgen::MacroCodeGenEnv&		env,
+												std::string&					inout_result)							noexcept;
+
+			/**
+			*	TODO
+			*/
 			void	declareClassRegistererField(kodgen::StructClassInfo const&	structClass,
 												kodgen::MacroCodeGenEnv&		env,
 												std::string&					inout_result)							noexcept;
@@ -351,18 +373,28 @@ namespace rfk
 														std::string&				inout_result)			noexcept;
 
 			/**
+			*	@brief	Define the content of a get enum method from the { to the }.
+			*			Does not include the method prototype.
+			* 
 			*	TODO
 			*/
-			void	declareEnumRegistererVariable(kodgen::EnumInfo const&		enum_,
-													kodgen::MacroCodeGenEnv&	env,
-													std::string&				inout_result)		const	noexcept;
+			void	defineGetEnumContent(kodgen::EnumInfo const&	enum_,
+										 kodgen::MacroCodeGenEnv&	env,
+										 std::string&				inout_result)							noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareEnumRegistererVariable(kodgen::EnumInfo const&	enum_,
+												  kodgen::MacroCodeGenEnv&	env,
+												  std::string&				inout_result)			const	noexcept;
 
 			/**
 			*	TODO
 			*/
 			void	defineEnumRegistererVariable(kodgen::EnumInfo const&	enum_,
-												   kodgen::MacroCodeGenEnv&	env,
-												   std::string&				inout_result)			const	noexcept;
+												 kodgen::MacroCodeGenEnv&	env,
+												 std::string&				inout_result)			const	noexcept;
 
 
 			//Variables code generation

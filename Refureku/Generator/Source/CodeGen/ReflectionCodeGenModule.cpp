@@ -96,6 +96,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 			declareAndDefineRegisterChildClassMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			declareGetNestedEnumMethods(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
 			result = kodgen::ETraversalBehaviour::Recurse;
 			break;
@@ -236,6 +237,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 				defineGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+				defineGetNestedEnumMethods(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
 
 				result = kodgen::ETraversalBehaviour::Recurse;
 				break;
@@ -374,7 +376,12 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 
 std::string ReflectionCodeGenModule::computePropertyVariableName(kodgen::EntityInfo const& entity, kodgen::uint8 propertyIndex) noexcept
 {
-	return "property_" + entity.name + "_" + entity.properties[propertyIndex].name + "_" + std::to_string(propertyIndex) + "_" + getEntityId(entity);// std::to_string(_stringHasher(entity.id));
+	return "property_" + entity.name + "_" + entity.properties[propertyIndex].name + "_" + std::to_string(propertyIndex) + "_" + getEntityId(entity);
+}
+
+std::string ReflectionCodeGenModule::computeGetNestedEnumMethodName(kodgen::NestedEnumInfo const& nestedEnum) noexcept
+{
+	return "_rfk_getNestedEnum_" + nestedEnum.name;
 }
 
 void ReflectionCodeGenModule::beginHiddenGeneratedCode(kodgen::MacroCodeGenEnv& /*env*/, std::string& inout_result) noexcept
@@ -597,8 +604,9 @@ void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo 
 	//Add nested enums
 	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
 	{
-		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">(), "
-								"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));" + env.getSeparator();
+		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(" + 
+			((nestedEnum.accessSpecifier == kodgen::EAccessSpecifier::Public) ? "rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">" : computeGetNestedEnumMethodName(nestedEnum)) + "(), "
+			"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));" + env.getSeparator();
 	}
 }
 
@@ -691,6 +699,35 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	}
 
 	inout_result += env.getSeparator() + "}";
+}
+
+void ReflectionCodeGenModule::declareGetNestedEnumMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
+	{
+		//Generate a method on non-public nested enums only
+		//Public nested enums generated code is handled like non-nested enums
+		if (nestedEnum.accessSpecifier != kodgen::EAccessSpecifier::Public)
+		{
+			beginHiddenGeneratedCode(env, inout_result);
+
+			inout_result += "private: static rfk::Enum const* " + computeGetNestedEnumMethodName(nestedEnum) + "() noexcept;" + env.getSeparator();
+
+			endHiddenGeneratedCode(env, inout_result);
+		}
+	}
+}
+
+void ReflectionCodeGenModule::defineGetNestedEnumMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
+	{
+		if (nestedEnum.accessSpecifier != kodgen::EAccessSpecifier::Public)
+		{
+			inout_result += "rfk::Enum const* " + structClass.getFullName() + "::" + computeGetNestedEnumMethodName(nestedEnum) + "() noexcept" + env.getSeparator();
+			defineGetEnumContent(nestedEnum, env, inout_result);
+		}
+	}
 }
 
 void ReflectionCodeGenModule::declareClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -855,30 +892,46 @@ std::string ReflectionCodeGenModule::computeFullMethodPointerType(kodgen::Struct
 
 void ReflectionCodeGenModule::declareGetEnumTemplateSpecialization(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "namespace rfk { template <> rfk::Enum const* getEnum<" + enum_.type.getCanonicalName() + ">() noexcept; }" + env.getSeparator();
+	if (enum_.outerEntity == nullptr ||
+		enum_.outerEntity->entityType == kodgen::EEntityType::Namespace ||
+		((enum_.outerEntity->entityType && (kodgen::EEntityType::Struct | kodgen::EEntityType::Class)) && reinterpret_cast<kodgen::NestedEnumInfo const&>(enum_).accessSpecifier == kodgen::EAccessSpecifier::Public))
+	{
+		inout_result += "namespace rfk { template <> rfk::Enum const* getEnum<" + enum_.type.getCanonicalName() + ">() noexcept; }" + env.getSeparator();
+	}
 }
 
 void ReflectionCodeGenModule::defineGetEnumTemplateSpecialization(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	std::string typeName = enum_.type.getCanonicalName();
+	if (enum_.outerEntity == nullptr ||
+		enum_.outerEntity->entityType == kodgen::EEntityType::Namespace ||
+		((enum_.outerEntity->entityType && (kodgen::EEntityType::Struct | kodgen::EEntityType::Class)) && reinterpret_cast<kodgen::NestedEnumInfo const&>(enum_).accessSpecifier == kodgen::EAccessSpecifier::Public))
+	{
+		std::string typeName = enum_.type.getCanonicalName();
 
-	inout_result += "template <> rfk::Enum const* rfk::getEnum<" + typeName + ">() noexcept {" + env.getSeparator() +
+		inout_result += "template <> rfk::Enum const* rfk::getEnum<" + typeName + ">() noexcept" + env.getSeparator();
+		defineGetEnumContent(enum_, env, inout_result);
+	}
+}
+
+void ReflectionCodeGenModule::defineGetEnumContent(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	inout_result += "{" + env.getSeparator() +
 					"static bool initialized = false;" + env.getSeparator() +
 					"static rfk::Enum type(\"" + enum_.name + "\", " +
-										   getEntityId(enum_) + ", "
-										   "sizeof(" + typeName + "), "
-										   "rfk::Type::getType<" + enum_.underlyingType.getCanonicalName() + ">());" + env.getSeparator();
+					getEntityId(enum_) + ", "
+					"sizeof(" + enum_.type.getCanonicalName() + "), "
+					"rfk::Type::getType<" + enum_.underlyingType.getCanonicalName() + ">());" + env.getSeparator();
 
 	//Initialize the enum metadata
 	inout_result += "if (!initialized) {" + env.getSeparator() +
-					"initialized = true;" + env.getSeparator();
+		"initialized = true;" + env.getSeparator();
 
 	fillEntityProperties(enum_, env, "type.", inout_result);
 
 	if (!enum_.enumValues.empty())
 	{
 		inout_result += "rfk::EnumValue* enumValue = nullptr;" + env.getSeparator() +
-						"type.values.reserve(" + std::to_string(enum_.enumValues.size()) + ");" + env.getSeparator();
+			"type.values.reserve(" + std::to_string(enum_.enumValues.size()) + ");" + env.getSeparator();
 
 		for (kodgen::EnumValueInfo const& enumValue : enum_.enumValues)
 		{
@@ -891,8 +944,8 @@ void ReflectionCodeGenModule::defineGetEnumTemplateSpecialization(kodgen::EnumIn
 
 	//End initialization if
 	inout_result += "}" + env.getSeparator();
-	
-	
+
+
 	inout_result += "return &type; }" + env.getSeparator();
 }
 
