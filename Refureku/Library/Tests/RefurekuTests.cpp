@@ -188,8 +188,8 @@ void methods()
 	TEST(ppc.getMethod("SomeMethod") == nullptr);
 
 	//ParentClass
-	namespace3::ParentClass const	p;
-	rfk::Class const&				pc = namespace3::ParentClass::staticGetArchetype();
+	namespace3::ParentClass	p;
+	rfk::Class const&		pc = namespace3::ParentClass::staticGetArchetype();
 
 	pc.getMethod("parentClassMethod1")->invoke(&p);
 
@@ -280,6 +280,18 @@ void methods()
 	TEST(ec.getMethod("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
 	TEST(ec.getMethod<int(int) const>("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
 	TEST(ec.getMethod<int(int)>("method3", rfk::EMethodFlags::Const) == nullptr);	//Method signature is non const and flag is const -> contradiction
+
+	//Check methods non-const method call throw when instance is const
+	namespace3::ParentClass	const constP;
+
+	try
+	{
+		pc.getMethod("parentClassMethod1")->invoke(&constP);
+		TEST(false);
+	}
+	catch (rfk::ConstViolation const&)
+	{
+	}
 }
 
 void staticMethods()

@@ -30,11 +30,16 @@ namespace rfk
 			*
 			*	@param		caller Pointer to the object the internal method should be called on.
 			*	@param...	arguments Arguments to forward to the internal method.
-			*	
+			*
+			*	@exception ConstViolation if a non-const method is called on a const caller.
+			* 
 			*	@return The result of the internal method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(void const* caller, ArgTypes&&... arguments)	const	noexcept;
+			ReturnType	internalInvoke(void* caller, ArgTypes&&... arguments)		const noexcept;
+
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	internalInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 		public:
 			Method()											= delete;
@@ -61,10 +66,15 @@ namespace rfk
 			*	@param caller Pointer to the instance of the class the method will be called.
 			*	@param arguments Arguments provided to the method call. This can in some cases be omitted thanks to template deduction.
 			*
+			*	@exception ConstViolation if a non-const method is called on a const caller.
+			* 
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	rInvoke(void const* caller, ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
+			ReturnType	rInvoke(void* caller, ArgTypes&&... arguments)				const noexcept(REFUREKU_RELEASE);
+
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	rInvoke(void const* caller, ArgTypes&&... arguments)		const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
@@ -81,9 +91,14 @@ namespace rfk
 			*
 			*	@param caller Pointer to the instance of the class the method will be called.
 			*	@param arguments Arguments provided to the method call.
+			* 
+			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*/
 			template <typename... ArgTypes>
-			void		invoke(void const* caller, ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
+			void		invoke(void* caller, ArgTypes&&... arguments)				const noexcept(REFUREKU_RELEASE);
+
+			template <typename... ArgTypes>
+			void		invoke(void const* caller, ArgTypes&&... arguments)			const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any, and return the result.
@@ -98,9 +113,14 @@ namespace rfk
 			*
 			*	@param caller Pointer to the instance of the class the method will be called.
 			*	@param arguments Arguments provided to the method call.
+			* 
+			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*
 			*	@return The result of the method call.
 			*/
+			template <typename ReturnType, typename... ArgTypes>
+			ReturnType	checkedRInvoke(void* caller, ArgTypes&&... arguments)		const;
+
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType	checkedRInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
@@ -119,7 +139,12 @@ namespace rfk
 			*
 			*	@param caller Pointer to the instance of the class the method will be called.
 			*	@param arguments Arguments provided to the method call.
+			* 
+			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*/
+			template <typename... ArgTypes>
+			void		checkedInvoke(void* caller, ArgTypes&&... arguments)		const;
+
 			template <typename... ArgTypes>
 			void		checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
 

@@ -10,12 +10,14 @@
 #include <utility>	//std::forward
 
 #include "Refureku/TypeInfo/Functions/ICallable.h"
+#include "Refureku/Exceptions/ConstViolation.h"
 
 namespace rfk
 {
 	template <typename CallerType, typename FunctionPrototype>
 	class MemberFunction
-	{};
+	{
+	};
 
 	template <typename CallerType, typename ReturnType, typename... ArgTypes>
 	class MemberFunction<CallerType, ReturnType(ArgTypes...)> : public ICallable
@@ -24,28 +26,42 @@ namespace rfk
 			using FunctionPrototype			= ReturnType (CallerType::*)(ArgTypes...);
 			using ConstFunctionPrototype	= ReturnType (CallerType::*)(ArgTypes...) const;
 
+			/** Pointer to the underlying method. */
 			union
 			{
 				FunctionPrototype		_function		= nullptr;
 				ConstFunctionPrototype	_constFunction;
 			};
 
+			/** Is the internal method const-qualified or not. */
+			bool	_isConst;
+
 		public:
-			MemberFunction() = delete;
+			MemberFunction(FunctionPrototype function)		noexcept;
+			MemberFunction(ConstFunctionPrototype function)	noexcept;
 
-			MemberFunction(FunctionPrototype function) noexcept:
-				_function{function}
-			{}
+			/**
+			*	@brief Call the underlying function with on the provided caller forwarding the provided arguments.
+			* 
+			*	@param		caller	Instance the underlying method is called on.
+			*	@param...	args	Arguments forwarded to the method call.
+			* 
+			*	@return The result forwarded from the method call.
+			*/
+			ReturnType operator()(void* caller, ArgTypes&&... args)			const;
 
-			MemberFunction(ConstFunctionPrototype function) noexcept:
-				_constFunction{function}
-			{}
-
-			~MemberFunction() = default;
-
-			inline ReturnType operator()(void const* caller, ArgTypes&&... args) const noexcept
-			{
-				return (static_cast<CallerType const*>(caller)->*_constFunction)(std::forward<ArgTypes>(args)...);
-			}
+			/**
+			*	@brief Call the underlying function with on the provided caller forwarding the provided arguments.
+			* 
+			*	@param		caller	Instance the underlying method is called on.
+			*	@param...	args	Arguments forwarded to the method call.
+			* 
+			*	@exception ConstViolation if the underlying method is not const-qualified.
+			* 
+			*	@return The result forwarded from the method call.
+			*/
+			ReturnType operator()(void const* caller, ArgTypes&&... args)	const;
 	};
+
+	#include "Refureku/TypeInfo/Functions/MemberFunction.inl"
 }

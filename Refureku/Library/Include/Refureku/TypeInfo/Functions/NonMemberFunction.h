@@ -15,7 +15,8 @@ namespace rfk
 {
 	template <typename FunctionPrototype>
 	class NonMemberFunction
-	{};
+	{
+	};
 
 	template <typename ReturnType, typename... ArgTypes>
 	class NonMemberFunction<ReturnType(ArgTypes...)> : public ICallable
@@ -23,30 +24,31 @@ namespace rfk
 		private:
 			using FunctionPrototype = ReturnType (*)(ArgTypes...);
 
-			FunctionPrototype	_function = nullptr;
+			/** Pointer to the underlying function. */
+			FunctionPrototype _function = nullptr;
 
 		public:
-			NonMemberFunction() = delete;
-
-			NonMemberFunction(FunctionPrototype function) noexcept:
-				_function{function}
-			{}
-
 			template <typename Functor>
-			NonMemberFunction(Functor f) noexcept:
-				_function{reinterpret_cast<FunctionPrototype>(f)}
-			{}
+			NonMemberFunction(Functor f)					noexcept;
 
-			~NonMemberFunction() = default;
+			NonMemberFunction(FunctionPrototype function)	noexcept;
 
-			inline FunctionPrototype getFunctionHandle() const noexcept
-			{
-				return _function;
-			}
+			/**
+			*	@brief Get a pointer to the underlying function.
+			* 
+			*	@return The pointer to the underlying function.
+			*/
+			FunctionPrototype getFunctionHandle()		const	noexcept;
 
-			inline ReturnType operator()(ArgTypes&&... args) const noexcept
-			{
-				return _function(std::forward<ArgTypes>(args)...);
-			}
+			/**
+			*	@brief Call the underlying function.
+			* 
+			*	@param args... Arguments to forward to the function call.
+			* 
+			*	@return The result of the underlying call.
+			*/
+			ReturnType operator()(ArgTypes&&... args)	const;
 	};
+
+	#include "Refureku/TypeInfo/Functions/NonMemberFunction.inl"
 }
