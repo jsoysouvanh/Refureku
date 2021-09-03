@@ -6,14 +6,27 @@
 */
 
 template <typename DataType>
-DataType Variable::getData() const noexcept
+DataType Variable::getData() const
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
+		if (type.isConst())
+		{
+			throw ConstViolation("Variable::getData can't be called with an rvalue DataType on const variables.");
+		}
+
 		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(_address));
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
+		if (type.isConst())
+		{
+			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
+			{
+				throw ConstViolation("Variable::getData can't be called with an non-const reference DataType on const variables.");
+			}
+		}
+
 		return *reinterpret_cast<std::remove_reference_t<DataType>*>(_address);
 	}
 	else	//By value

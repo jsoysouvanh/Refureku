@@ -6,14 +6,27 @@
 */
 
 template <typename DataType>
-DataType StaticField::getData() const noexcept
+DataType StaticField::getData() const
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
+		if (type.isConst())
+		{
+			throw ConstViolation("StaticField::getData can't be called with an rvalue DataType on const static fields.");
+		}
+
 		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getAddress()));
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
+		if (type.isConst())
+		{
+			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
+			{
+				throw ConstViolation("StaticField::getData can't be called with an non-const reference DataType on const static fields.");
+			}
+		}
+
 		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getAddress());
 	}
 	else	//By value

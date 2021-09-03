@@ -66,11 +66,15 @@ namespace rfk
 			*		If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
 			*
 			*	@param instance Instance we retrieve the data from.
+			* 
+			*	@exception ConstViolation if:
+			*		- the field is const and DataType is an RValue type (can't move a const field content);
+			*		- the field is const and DataType is a non-const reference;
 			*
 			*	@return The queried data in the instance.
 			*/
 			template <typename DataType>
-			DataType			getData(void* instance)					const noexcept;
+			DataType			getData(void* instance)					const;
 
 			/**
 			*	@brief Get the data corresponding to this field in the provided instance.
@@ -88,7 +92,7 @@ namespace rfk
 			*	@return The queried data in the instance.
 			*/
 			template <typename DataType>
-			DataType			getData(void const* instance)			const noexcept;
+			DataType const		getData(void const* instance)			const noexcept;
 
 			
 			/**

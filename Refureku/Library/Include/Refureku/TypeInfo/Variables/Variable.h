@@ -56,10 +56,14 @@ namespace rfk
 			*			If DataType is an lvalue reference, return a reference to the variable.
 			*			If DataType is a value type, the data is copied. If it is a struct/class, DataType must be copy-constructible.
 			*
+			*	@exception ConstViolation if:
+			*		- the field is const and DataType is an RValue type (can't move a const field content);
+			*		- the field is const and DataType is a non-const reference;
+			* 
 			*	@return The data stored in the variable.
 			*/
 			template <typename DataType>
-			DataType		getData()									const noexcept;
+			DataType		getData()									const;
 
 			/**
 			*	@brief Set some data in this variable.

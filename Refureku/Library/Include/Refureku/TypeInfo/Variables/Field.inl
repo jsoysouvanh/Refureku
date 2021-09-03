@@ -6,14 +6,27 @@
 */
 
 template <typename DataType>
-DataType Field::getData(void* instance) const noexcept
+DataType Field::getData(void* instance) const
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
+		if (type.isConst())
+		{
+			throw ConstViolation("Field::getData can't be called with an rvalue DataType on const fields.");
+		}
+
 		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getDataAddress(instance)));
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
+		if (type.isConst())
+		{
+			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
+			{
+				throw ConstViolation("Field::getData can't be called with an non-const reference DataType on const fields.");
+			}
+		}
+
 		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getDataAddress(instance));
 	}
 	else	//By value
@@ -23,13 +36,11 @@ DataType Field::getData(void* instance) const noexcept
 }
 
 template <typename DataType>
-DataType Field::getData(void const* instance) const noexcept
+DataType const Field::getData(void const* instance) const noexcept
 {
-	if constexpr (std::is_rvalue_reference_v<DataType>)
-	{
-		return std::move(*reinterpret_cast<std::remove_reference_t<DataType> const*>(getDataAddress(instance)));
-	}
-	else if constexpr (std::is_lvalue_reference_v<DataType>)
+	static_assert(!std::is_rvalue_reference_v<DataType>, "Can't call Field::getData with an rvalue reference DataType from a const instance.");
+
+	if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
 		return *reinterpret_cast<std::remove_reference_t<DataType> const*>(getDataAddress(instance));
 	}

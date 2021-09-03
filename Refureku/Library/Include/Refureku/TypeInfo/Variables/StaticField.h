@@ -59,10 +59,14 @@ namespace rfk
 			*			If DataType is an lvalue reference, return a reference to the field.
 			*			If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
 			*
+			*	@exception ConstViolation if:
+			*		- the field is const and DataType is an RValue type (can't move a const field content);
+			*		- the field is const and DataType is a non-const reference;
+			* 
 			*	@return The queried data.
 			*/
 			template <typename DataType>
-			DataType		getData()									const noexcept;
+			DataType		getData()									const;
 
 			/**
 			*	@brief Set the data corresponding to this static field.
