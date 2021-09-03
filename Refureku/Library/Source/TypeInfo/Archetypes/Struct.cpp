@@ -320,15 +320,7 @@ std::vector<Struct const*> Struct::getDirectChildren() const noexcept
 
 bool Struct::isSubclassOf(Struct const& otherType) const noexcept
 {
-	for (Parent const& parent : directParents)
-	{
-		if (parent.type == &otherType || parent.type->isSubclassOf(otherType))
-		{
-			return true;
-		}
-	}
-
-	return false;
+	return &otherType != this && otherType.isBaseOf(*this);
 }
 
 bool Struct::isBaseOf(Struct const& otherType) const noexcept
