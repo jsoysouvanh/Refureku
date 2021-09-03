@@ -929,6 +929,14 @@ void classManualReflection()
 	TEST(exampleClassArchetype.getField("vec3ptr")->type.archetype == vec3archetype);
 }
 
+void structDirectChildren()
+{
+	rfk::Class const& ppClass = namespace2::ParentParentClass::staticGetArchetype();
+
+	TEST(ppClass.getDirectChildren().size() == 1u);
+	TEST(ppClass.children.size() == 2u);
+}
+
 int main()
 {
 	inheritance();
@@ -954,6 +962,7 @@ int main()
 	fundamentalArchetypes();
 	enumManualReflection();
 	classManualReflection();
+	structDirectChildren();
 
 	return EXIT_SUCCESS;
 }

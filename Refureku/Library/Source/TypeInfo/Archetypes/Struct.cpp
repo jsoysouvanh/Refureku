@@ -298,6 +298,26 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	return result;
 }
 
+std::vector<Struct const*> Struct::getDirectChildren() const noexcept
+{
+	std::vector<Struct const*> result;
+
+	for (Struct const* child : children)
+	{
+		//Search this struct in children's parents
+		for (Parent const& childParent : child->directParents)
+		{
+			if (childParent.type == this)
+			{
+				result.emplace_back(child);
+				break;
+			}
+		}
+	}
+
+	return result;
+}
+
 bool Struct::isSubclassOf(Struct const& otherType) const noexcept
 {
 	for (Parent const& parent : directParents)

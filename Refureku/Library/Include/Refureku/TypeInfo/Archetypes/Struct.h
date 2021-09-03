@@ -433,6 +433,15 @@ namespace rfk
 																 bool				shouldInspectInherited	= false)				const	noexcept;
 
 			/**
+			*	@brief	Compute the list of all direct reflected children of this struct.
+			*			The children are computed by iterating over all children (direct or not), so this method
+			*			might have a heavy performance cost on big class hierarchies.
+			* 
+			*	@return A list of all direct reflected children of this struct.
+			*/
+			std::vector<Struct const*>			getDirectChildren()																	const	noexcept;
+
+			/**
 			*	@brief Make an instance of the class represented by this archetype.
 			*
 			*	If no argument is specified, the default constructor will be used.
