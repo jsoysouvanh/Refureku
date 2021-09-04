@@ -37,11 +37,19 @@ class RFKClass() C : public A
 
 	class RFKClass() PrivateNestedClass
 	{
-		enum class RFKEnum() PrivateNestedEnum
-		{
-			Value1,
-			Value2
-		};
+		private:
+			enum class RFKEnum() PrivateNestedEnum
+			{
+				Value1,
+				Value2
+			};
+
+		public:
+			enum class RFKEnum() PublicNestedEnum
+			{
+				Value1,
+				Value2
+			};
 
 		C_PrivateNestedClass_GENERATED
 	};

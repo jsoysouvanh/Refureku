@@ -11,8 +11,10 @@
 #include <vector>
 #include <functional>	//std::hash
 #include <unordered_map>
+#include <unordered_set>
 
 #include <Kodgen/CodeGen/Macro/MacroCodeGenModule.h>
+#include "Kodgen/InfoStructures/EnumInfo.h"
 
 #include "RefurekuGenerator/Properties/CustomInstantiatorPropertyCodeGen.h"
 #include "RefurekuGenerator/Properties/PropertySettingsPropertyCodeGen.h"
@@ -23,19 +25,22 @@ namespace rfk
 	{
 		private:
 			/** Class global string hasher. */
-			static std::hash<std::string>			_stringHasher;
+			static std::hash<std::string>				_stringHasher;
 
 			/** Code generator for the CustomInstantiator property. */
-			CustomInstantiatorPropertyCodeGen		_customInstantiatorProperty;
+			CustomInstantiatorPropertyCodeGen			_customInstantiatorProperty;
 
 			/** Code generator for the PropertySettings property. */
-			PropertySettingsPropertyCodeGen			_propertySettingsProperty;
+			PropertySettingsPropertyCodeGen				_propertySettingsProperty;
 
 			/** Dictionnary used to generate properties code. */
-			std::unordered_map<std::string, int>	_propertiesCount;
+			std::unordered_map<std::string, int>		_propertiesCount;
 
 			/** Flag that determines whether the currently generated code is hidden from the parser or not. */
-			bool									_isGeneratingHiddenCode;
+			bool										_isGeneratingHiddenCode;
+
+			/** List of non-public enums. */
+			std::unordered_set<kodgen::EnumInfo const*>	_nonPublicEnums;
 
 			/**
 			*	@brief Compute the unique id of an entity. The returned string contains an unsigned integer.
@@ -164,6 +169,15 @@ namespace rfk
 			static std::string			computeGetNestedEnumMethodName(kodgen::NestedEnumInfo const& nestedEnum)			noexcept;
 
 			/**
+			*	@brief Check if the provided class is accessible from anywhere in the program.
+			* 
+			*	@param class_ The target class.
+			* 
+			*	@return true if the class is public, else false.
+			*/
+			static bool					isPublicClass(kodgen::StructClassInfo const& class_)								noexcept;
+
+			/**
 			*	@brief	All code generated from this point will be hidden to the parser.
 			*			This means the generated code can't be reflected.
 			* 
@@ -182,6 +196,11 @@ namespace rfk
 			*/
 			void	endHiddenGeneratedCode(kodgen::MacroCodeGenEnv&	env,
 										   std::string&				inout_result)										noexcept;
+
+			/**
+			*	@brief Reset the module to begin a clean generation from scratch.
+			*/
+			void	reset()																								noexcept;
 
 			/**
 			*	@brief	Check that the endHiddenGeneratedCode has been called correctly if there was any previous
@@ -358,6 +377,15 @@ namespace rfk
 
 
 			//Enums code generation
+			/**
+			*	@brief Check whether the target enum has been registered to the _nonPublicEnum set or not.
+			* 
+			*	@param nestedEnum the target enum.
+			* 
+			*	@return true if the nestedEnum is non-public, else false.
+			*/
+			bool	isRegisteredNonPublicEnum(kodgen::EnumInfo const& nestedEnum)					const	noexcept;
+
 			/**
 			*	TODO
 			*/
