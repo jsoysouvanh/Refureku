@@ -510,23 +510,29 @@ namespace rfk
 
 
 		protected:
-			virtual ReflectionCodeGenModule*	clone()																const	noexcept	override;
+			virtual ReflectionCodeGenModule*	clone()																		const	noexcept	override;
 
-			virtual kodgen::ETraversalBehaviour	generateHeaderFileHeaderCode(kodgen::EntityInfo const*	entity,
-																			 kodgen::MacroCodeGenEnv&	env,
-																			 std::string&				inout_result)		noexcept	override;
+			virtual bool						initialGenerateHeaderFileHeaderCode(kodgen::MacroCodeGenEnv&		env,
+																					std::string&					inout_result)	noexcept	override;
 
-			virtual kodgen::ETraversalBehaviour	generateClassFooterCode(kodgen::EntityInfo const*	entity,
-																		kodgen::MacroCodeGenEnv&	env,
-																		std::string&				inout_result)			noexcept	override;
+			virtual kodgen::ETraversalBehaviour	generateHeaderFileHeaderCodeForEntity(kodgen::EntityInfo const&	entity,
+																					  kodgen::MacroCodeGenEnv&	env,
+																					  std::string&				inout_result)		noexcept	override;
 
-			virtual kodgen::ETraversalBehaviour	generateHeaderFileFooterCode(kodgen::EntityInfo const*	entity,
-																			 kodgen::MacroCodeGenEnv&	env,
-																			 std::string&				inout_result)		noexcept	override;
+			virtual kodgen::ETraversalBehaviour	generateClassFooterCodeForEntity(kodgen::EntityInfo const&	entity,
+																				 kodgen::MacroCodeGenEnv&	env,
+																				 std::string&				inout_result)			noexcept	override;
 
-			virtual kodgen::ETraversalBehaviour	generateSourceFileHeaderCode(kodgen::EntityInfo const*	entity,
-																			 kodgen::MacroCodeGenEnv&	env,
-																			 std::string&				inout_result)		noexcept	override;
+			virtual kodgen::ETraversalBehaviour	generateHeaderFileFooterCodeForEntity(kodgen::EntityInfo const&	entity,
+																					  kodgen::MacroCodeGenEnv&	env,
+																					  std::string&				inout_result)		noexcept	override;
+
+			virtual bool						initialGenerateSourceFileHeaderCode(kodgen::MacroCodeGenEnv&		env,
+																					std::string&					inout_result)	noexcept	override;
+
+			virtual kodgen::ETraversalBehaviour	generateSourceFileHeaderCodeForEntity(kodgen::EntityInfo const&	entity,
+																					  kodgen::MacroCodeGenEnv&	env,
+																					  std::string&				inout_result)		noexcept	override;
 
 		public:
 			ReflectionCodeGenModule()								noexcept;

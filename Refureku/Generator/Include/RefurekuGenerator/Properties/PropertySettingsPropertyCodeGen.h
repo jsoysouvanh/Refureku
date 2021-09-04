@@ -14,23 +14,23 @@ namespace rfk
 	class PropertySettingsPropertyCodeGen : public kodgen::MacroPropertyCodeGen
 	{
 		protected:
-			virtual bool	generateHeaderFileHeaderCode(kodgen::EntityInfo const*	entity,
-														 kodgen::Property const*	property,
-														 kodgen::uint8				propertyIndex,
-														 kodgen::MacroCodeGenEnv&	env,
-														 std::string&				inout_result)		noexcept	override;
+			virtual bool	initialGenerateHeaderFileHeaderCode(kodgen::MacroCodeGenEnv&	env,
+																std::string&				inout_result)	noexcept	override;
 
-			virtual bool	generateClassFooterCode(kodgen::EntityInfo const*	entity,
-													kodgen::Property const*		property,
-													kodgen::uint8				propertyIndex,
-													kodgen::MacroCodeGenEnv&	env,
-													std::string&				inout_result)			noexcept	override;
+			virtual bool	generateClassFooterCodeForEntity(kodgen::EntityInfo const&	entity,
+															 kodgen::Property const&	property,
+															 kodgen::uint8				propertyIndex,
+															 kodgen::MacroCodeGenEnv&	env,
+															 std::string&				inout_result)		noexcept	override;
 
-			virtual bool	generateSourceFileHeaderCode(kodgen::EntityInfo const*	entity,
-														 kodgen::Property const*		property,
-														 kodgen::uint8				propertyIndex,
-														 kodgen::MacroCodeGenEnv&	env,
-														 std::string&				inout_result)		noexcept	override;
+			virtual bool	initialGenerateSourceFileHeaderCode(kodgen::MacroCodeGenEnv&	env,
+																std::string&				inout_result)	noexcept	override;
+
+			virtual bool	generateSourceFileHeaderCodeForEntity(kodgen::EntityInfo const&	entity,
+																  kodgen::Property const&	property,
+																  kodgen::uint8				propertyIndex,
+																  kodgen::MacroCodeGenEnv&	env,
+																  std::string&				inout_result)	noexcept	override;
 
 		public:
 			PropertySettingsPropertyCodeGen() noexcept;

@@ -9,15 +9,13 @@ CustomInstantiatorPropertyCodeGen::CustomInstantiatorPropertyCodeGen() noexcept:
 {
 }
 
-bool CustomInstantiatorPropertyCodeGen::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::Property const* /*property*/, kodgen::uint8 /*propertyIndex*/,
+bool CustomInstantiatorPropertyCodeGen::generateClassFooterCodeForEntity(kodgen::EntityInfo const& entity, kodgen::Property const& /*property*/, kodgen::uint8 /*propertyIndex*/,
 																kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	assert(entity != nullptr);
-
-	kodgen::MethodInfo const*	method		= reinterpret_cast<kodgen::MethodInfo const*>(entity);
-	std::string					className	= entity->outerEntity->getFullName();
-	std::string					parameters	= method->getParameterTypes();
-	std::string					methodPtr	= "&" + className + "::" + method->name;
+	kodgen::MethodInfo const&	method		= static_cast<kodgen::MethodInfo const&>(entity);
+	std::string					className	= method.outerEntity->getFullName();
+	std::string					parameters	= method.getParameterTypes();
+	std::string					methodPtr	= "&" + className + "::" + method.name;
 
 	if (parameters.empty())
 	{

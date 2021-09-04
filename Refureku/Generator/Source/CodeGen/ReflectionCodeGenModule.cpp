@@ -25,47 +25,46 @@ ReflectionCodeGenModule* ReflectionCodeGenModule::clone() const noexcept
 	return new ReflectionCodeGenModule(*this);
 }
 
-kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+bool ReflectionCodeGenModule::initialGenerateHeaderFileHeaderCode(kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	includeHeaderFileHeaders(env, inout_result);
+
+	return true;
+}
+
+kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCodeForEntity(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string& /* inout_result */) noexcept
 {
 	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
 
-	if (entity == nullptr)
+	switch (entity.entityType)
 	{
-		//Called once at the very beginning of the generation with nullptr entity
-		includeHeaderFileHeaders(env, inout_result);
-	}
-	else
-	{
-		switch (entity->entityType)
-		{
-			case kodgen::EEntityType::Struct:
-				[[fallthrough]];
-			case kodgen::EEntityType::Class:
-				[[fallthrough]];
-			case kodgen::EEntityType::Enum:
-				[[fallthrough]];
-			case kodgen::EEntityType::Variable:
-				[[fallthrough]];
-			case kodgen::EEntityType::Function:
-				[[fallthrough]];
-			case kodgen::EEntityType::Field:
-				[[fallthrough]];
-			case kodgen::EEntityType::Method:
-				[[fallthrough]];
-			case kodgen::EEntityType::EnumValue:
-				[[fallthrough]];
-			case kodgen::EEntityType::Namespace:
-				result = kodgen::ETraversalBehaviour::Break; 
-				break;
+		case kodgen::EEntityType::Struct:
+			[[fallthrough]];
+		case kodgen::EEntityType::Class:
+			[[fallthrough]];
+		case kodgen::EEntityType::Enum:
+			[[fallthrough]];
+		case kodgen::EEntityType::Variable:
+			[[fallthrough]];
+		case kodgen::EEntityType::Function:
+			[[fallthrough]];
+		case kodgen::EEntityType::Field:
+			[[fallthrough]];
+		case kodgen::EEntityType::Method:
+			[[fallthrough]];
+		case kodgen::EEntityType::EnumValue:
+			[[fallthrough]];
+		case kodgen::EEntityType::Namespace:
+			result = kodgen::ETraversalBehaviour::Break; 
+			break;
 
-			case kodgen::EEntityType::Undefined:
-				[[fallthrough]];
-			default:
-				assert(false); //This should never happen
-				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+		case kodgen::EEntityType::Undefined:
+			[[fallthrough]];
+		default:
+			assert(false); //This should never happen
+			env.getLogger()->log("The entity " + entity.getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
 
-				return kodgen::ETraversalBehaviour::AbortWithFailure;
-		}
+			return kodgen::ETraversalBehaviour::AbortWithFailure;
 	}
 
 	checkHiddenGeneratedCodeState();
@@ -73,30 +72,28 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateHeaderFileHeaderCod
 	return result; 
 }
 
-kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCodeForEntity(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	assert(entity != nullptr); //Class footer code should always depend on a non-nullptr entity
-
 	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
 
-	switch (entity->entityType)
+	switch (entity.entityType)
 	{
 		case kodgen::EEntityType::Struct:
 			[[fallthrough]];
 		case kodgen::EEntityType::Class:
 			//Do not generate code for forward declarations
-			if (reinterpret_cast<kodgen::StructClassInfo const&>(*entity).isForwardDeclaration)
+			if (static_cast<kodgen::StructClassInfo const&>(entity).isForwardDeclaration)
 			{
 				return kodgen::ETraversalBehaviour::Continue;
 			}
 
-			declareFriendClasses(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			declareFriendClasses(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 			
-			declareClassRegistererField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-			declareStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-			declareGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-			declareAndDefineRegisterChildClassMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-			declareGetNestedEnumMethods(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			declareClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			declareStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			declareGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			declareAndDefineRegisterChildClassMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			declareGetNestedEnumMethods(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 
 			result = kodgen::ETraversalBehaviour::Recurse;
 			break;
@@ -124,7 +121,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 			[[fallthrough]];
 		default:
 			assert(false); //This should never happen
-			env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+			env.getLogger()->log("The entity " + entity.getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
 
 			return kodgen::ETraversalBehaviour::AbortWithFailure;
 	}
@@ -134,76 +131,69 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCode(kod
 	return result;
 }
 
-kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCodeForEntity(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
 
-	if (entity == nullptr)
+	switch (entity.entityType)
 	{
-		//Called once at the very beginning of the generation with nullptr entity
-	}
-	else
-	{
-		switch (entity->entityType)
-		{
-			case kodgen::EEntityType::Struct:
-				[[fallthrough]];
-			case kodgen::EEntityType::Class:
-				//Do not generate code for forward declarations
-				if (reinterpret_cast<kodgen::StructClassInfo const&>(*entity).isForwardDeclaration)
-				{
-					return kodgen::ETraversalBehaviour::Continue;
-				}
+		case kodgen::EEntityType::Struct:
+			[[fallthrough]];
+		case kodgen::EEntityType::Class:
+			//Do not generate code for forward declarations
+			if (reinterpret_cast<kodgen::StructClassInfo const&>(entity).isForwardDeclaration)
+			{
+				return kodgen::ETraversalBehaviour::Continue;
+			}
 
-				declareGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			declareGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 				
-				result = kodgen::ETraversalBehaviour::Recurse;
-				break;
+			result = kodgen::ETraversalBehaviour::Recurse;
+			break;
 
-			case kodgen::EEntityType::Enum:
-				declareGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
-				declareEnumRegistererVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Enum:
+			declareGetEnumTemplateSpecialization(static_cast<kodgen::EnumInfo const&>(entity), env, inout_result);
+			declareEnumRegistererVariable(static_cast<kodgen::EnumInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Continue; //Go to next enum
-				break;
+			result = kodgen::ETraversalBehaviour::Continue; //Go to next enum
+			break;
 
-			case kodgen::EEntityType::Variable:
-				declareGetVariableFunction(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
-				declareVariableRegistererVariable(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Variable:
+			declareGetVariableFunction(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
+			declareVariableRegistererVariable(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
-				break;
+			result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
+			break;
 
-			case kodgen::EEntityType::Function:
-				declareGetFunctionFunction(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
-				declareFunctionRegistererVariable(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Function:
+			declareGetFunctionFunction(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
+			declareFunctionRegistererVariable(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Continue; //Go to next function
-				break;
+			result = kodgen::ETraversalBehaviour::Continue; //Go to next function
+			break;
 
-			case kodgen::EEntityType::Field:
-				[[fallthrough]];
-			case kodgen::EEntityType::Method:
-				[[fallthrough]];
-			case kodgen::EEntityType::EnumValue:
-				result =  kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
-				break;
+		case kodgen::EEntityType::Field:
+			[[fallthrough]];
+		case kodgen::EEntityType::Method:
+			[[fallthrough]];
+		case kodgen::EEntityType::EnumValue:
+			result =  kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+			break;
 
-			case kodgen::EEntityType::Namespace:
-				declareGetNamespaceFragmentFunction(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
-				declareNamespaceFragmentRegistererVariable(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Namespace:
+			declareGetNamespaceFragmentFunction(static_cast<kodgen::NamespaceInfo const&>(entity), env, inout_result);
+			declareNamespaceFragmentRegistererVariable(static_cast<kodgen::NamespaceInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Recurse;
-				break;
+			result = kodgen::ETraversalBehaviour::Recurse;
+			break;
 
-			case kodgen::EEntityType::Undefined:
-				[[fallthrough]];
-			default:
-				assert(false); //This should never happen
-				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+		case kodgen::EEntityType::Undefined:
+			[[fallthrough]];
+		default:
+			assert(false); //This should never happen
+			env.getLogger()->log("The entity " + entity.getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
 
-				return kodgen::ETraversalBehaviour::AbortWithFailure;
-		}
+			return kodgen::ETraversalBehaviour::AbortWithFailure;
 	}
 
 	checkHiddenGeneratedCodeState();
@@ -211,82 +201,81 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 	return result;
 }
 
-kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCode(kodgen::EntityInfo const* entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+bool ReflectionCodeGenModule::initialGenerateSourceFileHeaderCode(kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+{
+	includeSourceFileHeaders(env, inout_result);
+
+	return true;
+}
+
+kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCodeForEntity(kodgen::EntityInfo const& entity, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	kodgen::ETraversalBehaviour result = kodgen::ETraversalBehaviour::Recurse;
 
-	if (entity == nullptr)
+	switch (entity.entityType)
 	{
-		//Called once at the very beginning of the generation with nullptr entity
-		includeSourceFileHeaders(env, inout_result);
-	}
-	else
-	{
-		switch (entity->entityType)
-		{
-			case kodgen::EEntityType::Struct:
-				[[fallthrough]];
-			case kodgen::EEntityType::Class:
-				//Do not generate code for forward declarations
-				if (reinterpret_cast<kodgen::StructClassInfo const&>(*entity).isForwardDeclaration)
-				{
-					return kodgen::ETraversalBehaviour::Continue;
-				}
+		case kodgen::EEntityType::Struct:
+			[[fallthrough]];
+		case kodgen::EEntityType::Class:
+			//Do not generate code for forward declarations
+			if (reinterpret_cast<kodgen::StructClassInfo const&>(entity).isForwardDeclaration)
+			{
+				return kodgen::ETraversalBehaviour::Continue;
+			}
 
-				defineClassRegistererField(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-				defineStaticGetArchetypeMethod(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-				defineGetArchetypeMethodIfInheritFromObject(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-				defineGetArchetypeTemplateSpecialization(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
-				defineGetNestedEnumMethods(reinterpret_cast<kodgen::StructClassInfo const&>(*entity), env, inout_result);
+			defineClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			defineStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			defineGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			defineGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			defineGetNestedEnumMethods(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Recurse;
-				break;
+			result = kodgen::ETraversalBehaviour::Recurse;
+			break;
 
-			case kodgen::EEntityType::Enum:
-				defineGetEnumTemplateSpecialization(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
-				defineEnumRegistererVariable(reinterpret_cast<kodgen::EnumInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Enum:
+			defineGetEnumTemplateSpecialization(static_cast<kodgen::EnumInfo const&>(entity), env, inout_result);
+			defineEnumRegistererVariable(static_cast<kodgen::EnumInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Continue; //Go to next enum
-				break;
+			result = kodgen::ETraversalBehaviour::Continue; //Go to next enum
+			break;
 
-			case kodgen::EEntityType::Variable:
-				defineGetVariableFunction(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
-				defineVariableRegistererVariable(reinterpret_cast<kodgen::VariableInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Variable:
+			defineGetVariableFunction(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
+			defineVariableRegistererVariable(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
-				break;
+			result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
+			break;
 
-			case kodgen::EEntityType::Function:
-				defineGetFunctionFunction(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
-				defineFunctionRegistererVariable(reinterpret_cast<kodgen::FunctionInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Function:
+			defineGetFunctionFunction(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
+			defineFunctionRegistererVariable(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Continue; //Go to next function
-				break;
+			result = kodgen::ETraversalBehaviour::Continue; //Go to next function
+			break;
 
-			case kodgen::EEntityType::Field:
-				[[fallthrough]];
-			case kodgen::EEntityType::Method:
-				[[fallthrough]];
-			case kodgen::EEntityType::EnumValue:
-				result = kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
-				break;
+		case kodgen::EEntityType::Field:
+			[[fallthrough]];
+		case kodgen::EEntityType::Method:
+			[[fallthrough]];
+		case kodgen::EEntityType::EnumValue:
+			result = kodgen::ETraversalBehaviour::Break; //Don't need to iterate over those individual entities
+			break;
 
-			case kodgen::EEntityType::Namespace:
-				defineGetNamespaceFragmentFunction(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
-				defineNamespaceFragmentRegistererVariableRecursive(reinterpret_cast<kodgen::NamespaceInfo const&>(*entity), env, inout_result);
+		case kodgen::EEntityType::Namespace:
+			defineGetNamespaceFragmentFunction(static_cast<kodgen::NamespaceInfo const&>(entity), env, inout_result);
+			defineNamespaceFragmentRegistererVariableRecursive(static_cast<kodgen::NamespaceInfo const&>(entity), env, inout_result);
 
-				result = kodgen::ETraversalBehaviour::Recurse;
-				break;
+			result = kodgen::ETraversalBehaviour::Recurse;
+			break;
 
-			case kodgen::EEntityType::Undefined:
-				[[fallthrough]];
+		case kodgen::EEntityType::Undefined:
+			[[fallthrough]];
 
-			default:
-				assert(false); //This should never happen
-				env.getLogger()->log("The entity " + entity->getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
+		default:
+			assert(false); //This should never happen
+			env.getLogger()->log("The entity " + entity.getFullName() + " has an undefined type. Abort.", kodgen::ILogger::ELogSeverity::Error);
 
-				return kodgen::ETraversalBehaviour::AbortWithFailure;
-		}
+			return kodgen::ETraversalBehaviour::AbortWithFailure;
 	}
 
 	checkHiddenGeneratedCodeState();
@@ -553,7 +542,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 			//Generate specific code for the CustomInstantiator property here
 			for (kodgen::uint8 i = 0; i < method.properties.size(); i++)
 			{
-				if (_customInstantiatorProperty.shouldGenerateCode(method, method.properties[i], i))
+				if (_customInstantiatorProperty.shouldGenerateCodeForEntity(method, method.properties[i], i))
 				{
 					_customInstantiatorProperty.addCustomInstantiatorToClass(method, generatedEntityVarName, "staticMethod", inout_result);
 					break;
