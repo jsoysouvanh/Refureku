@@ -2,8 +2,6 @@
 
 #include "Kodgen/InfoStructures/StructClassInfo.h"
 
-//#include "RefurekuGenerator/CodeGen/GeneratedEntityCodeTemplate.h"	//generateNativePropertiesCode
-
 using namespace rfk;
 
 std::hash<std::string> ReflectionCodeGenModule::_stringHasher;
@@ -90,12 +88,13 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCodeForE
 			}
 
 			declareFriendClasses(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			
-			declareClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			declareStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			declareGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+
 			declareAndDefineRegisterChildClassMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 			declareGetNestedEnumMethods(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			
+			declareStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			declareGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			declareClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 
 			result = kodgen::ETraversalBehaviour::Recurse;
 			break;
@@ -148,7 +147,10 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 				return kodgen::ETraversalBehaviour::Continue;
 			}
 
-			declareGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			if (!static_cast<kodgen::StructClassInfo const&>(entity).type.isTemplateType())
+			{
+				declareGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			}
 				
 			result = kodgen::ETraversalBehaviour::Recurse;
 			break;
@@ -225,11 +227,14 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				return kodgen::ETraversalBehaviour::Continue;
 			}
 
-			defineClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			defineStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			defineGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			defineGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			defineGetNestedEnumMethods(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			if (!static_cast<kodgen::StructClassInfo const&>(entity).type.isTemplateType())
+			{
+				defineClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+				defineStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+				defineGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+				defineGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+				defineGetNestedEnumMethods(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			}
 
 			result = kodgen::ETraversalBehaviour::Recurse;
 			break;

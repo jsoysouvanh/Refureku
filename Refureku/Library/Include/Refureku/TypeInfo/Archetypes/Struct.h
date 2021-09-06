@@ -19,11 +19,14 @@
 #include "Refureku/TypeInfo/Functions/Method.h"
 #include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/TypeInfo/Functions/MethodHelper.h"
+#include "Refureku/TypeInfo/Archetypes/EClassKind.h"
 
 namespace rfk
 {
 	//Forward declarations
 	class Enum;
+	class ClassTemplate;
+	class ClassTemplateInstance;
 
 	class Struct : public Archetype
 	{
@@ -40,8 +43,9 @@ namespace rfk
 		protected:
 			Struct(std::string&&	name,
 				   uint64			id,
-				   EEntityKind		kind,
-				   uint64			memorySize)	noexcept;
+				   uint64			memorySize,
+				   bool				isClass,
+				   EClassKind		classKind)		noexcept;
 
 		public:
 			struct Parent
@@ -66,6 +70,9 @@ namespace rfk
 				Struct const*		type;
 			};
 
+			/** Kind of a rfk::Struct or rfk::Class instance. */
+			EClassKind																			classKind;
+
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
 			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>							directParents;
 
@@ -87,9 +94,9 @@ namespace rfk
 			/** All tagged static methods declared in this struct. */
 			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
 
-			Struct(std::string&&	newName,
-				   uint64			newId,
-				   uint64			newMemorySize,
+			Struct(std::string&&	name,
+				   uint64			id,
+				   uint64			memorySize,
 				   bool				isClass)		noexcept;
 			Struct(Struct const&)					= delete;
 			Struct(Struct&&)						= delete;
@@ -599,6 +606,36 @@ namespace rfk
 			*/
 			Archetype*		addNestedArchetype(Archetype const* nestedArchetype,
 											   EAccessSpecifier	accessSpecifier_)		noexcept;
+
+			/**
+			*	@brief	Check if this class is a template or not.
+			*			If the method returns true, the object is safely castable to rfk::ClassTemplate.
+			* 
+			*	@return true if the struct represents a template, else false.
+			*/
+			inline bool							isTemplate()			const	noexcept;
+
+			/**
+			*	@brief	Cast the struct to rfk::ClassTemplate const* if it is a template.
+			* 
+			*	@return A rfk::ClassTemplate const* if the struct is a template, else nullptr.
+			*/
+			inline ClassTemplate const*			asTemplate()			const	noexcept;
+
+			/**
+			*	@brief	Check if this struct is a template instance or not.
+			*			If the method returns true, the object is safely castable to rfk::ClassTemplateInstance.
+			* 
+			*	@return true if the struct represents a template instance, else false.
+			*/
+			inline bool							isTemplateInstance()	const	noexcept;
+
+			/**
+			*	@brief	Cast the struct to rfk::ClassTemplateInstance const* if it is a template instance.
+			* 
+			*	@return A rfk::ClassTemplateInstance const* if the struct is a template instance, else nullptr.
+			*/
+			inline ClassTemplateInstance const*	asTemplateInstance()	const	noexcept;
 	};
 
 	/**

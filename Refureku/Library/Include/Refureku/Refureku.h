@@ -14,6 +14,8 @@
 #include "Refureku/TypeInfo/Entity/EntityCast.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
+#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
+#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Namespaces/Namespace.h"

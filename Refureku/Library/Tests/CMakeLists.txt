@@ -17,6 +17,7 @@ add_executable(${RefurekuTestsTarget}
 					Vector3.cpp
 					AB.cpp
 					GeneratedCodeInCpp.cpp
+					TemplateClass.cpp
 
 					RefurekuTests.cpp
 				)

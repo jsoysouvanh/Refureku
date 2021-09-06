@@ -407,3 +407,23 @@ void* defaultInstantiator()
 		return nullptr;
 	}
 }
+
+inline bool Struct::isTemplate() const noexcept
+{
+	return classKind == EClassKind::Template;
+}
+
+inline ClassTemplate const* Struct::asTemplate() const noexcept
+{
+	return isTemplate() ? reinterpret_cast<ClassTemplate const*>(this) : nullptr;
+}
+
+inline bool	Struct::isTemplateInstance() const noexcept
+{
+	return classKind == EClassKind::TemplateInstance;
+}
+
+inline ClassTemplateInstance const* Struct::asTemplateInstance() const noexcept
+{
+	return isTemplateInstance() ? reinterpret_cast<ClassTemplateInstance const*>(this) : nullptr;
+}

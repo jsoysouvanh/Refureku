@@ -944,9 +944,29 @@ void structDirectChildren()
 	TEST(ppClass.subclasses.size() == 2u);
 }
 
+#include "TemplateClass.h"
+void typeTemplateClass()
+{
+	rfk::Class const* c = rfk::Database::getClass("TestSimpleClassTemplate");
+
+	//Template
+	TEST(c->isTemplate());
+	TEST(c->asTemplate()->getProperty<ParseAllNested>() != nullptr);
+
+	std::cout << c->asTemplate()->getInstance<int>() << std::endl;
+	std::cout << c->asTemplate()->getInstance<TestClassA>() << std::endl;
+	std::cout << c->asTemplate()->getInstance<TestClassB>() << std::endl;
+
+	//Template instance
+
+	//rfk::ClassTemplate const* classTemplate = rfk
+
+	//std::cout << c->getField("vector")->type.archetype << std::endl;
+}
+
 int main()
 {
-	inheritance();
+	/*inheritance();
 	classes();
 	structs();
 	database();
@@ -969,7 +989,9 @@ int main()
 	fundamentalArchetypes();
 	enumManualReflection();
 	classManualReflection();
-	structDirectChildren();
+	structDirectChildren();*/
+
+	typeTemplateClass();
 
 	return EXIT_SUCCESS;
 }

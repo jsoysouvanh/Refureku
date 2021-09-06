@@ -4,13 +4,14 @@
 
 using namespace rfk;
 
-Struct::Struct(std::string&& name, uint64 id, EEntityKind kind, uint64 memorySize) noexcept:
-	Archetype(std::forward<std::string>(name), id, kind, memorySize)
+Struct::Struct(std::string&& name, uint64 id, uint64 memorySize, bool isClass, EClassKind classKind) noexcept:
+	Archetype(std::forward<std::string>(name), id, isClass ? EEntityKind::Class : EEntityKind::Struct, memorySize),
+	classKind{classKind}
 {
 }
 
-Struct::Struct(std::string&& newName, uint64 newId, uint64 newMemorySize, bool isClass) noexcept:
-	Struct(std::forward<std::string>(newName), newId, isClass ? EEntityKind::Class : EEntityKind::Struct, newMemorySize)
+Struct::Struct(std::string&& name, uint64 id, uint64 memorySize, bool isClass) noexcept:
+	Struct(std::forward<std::string>(name), id, memorySize, isClass, rfk::EClassKind::Standard)
 {
 }
 

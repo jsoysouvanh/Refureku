@@ -101,3 +101,11 @@ void Entity::inheritProperties(Entity const& from) noexcept
 		}
 	}
 }
+
+void Entity::inheritAllProperties(Entity const& from) noexcept
+{
+	for (Property const* property : from.properties)
+	{
+		addProperty(property);
+	}
+}
