@@ -18,3 +18,17 @@ ClassTemplateInstance const* ClassTemplate::getInstance() const noexcept
 
 	return nullptr;
 }
+
+template <size_t ArraySize>
+ClassTemplateInstance const* ClassTemplate::getInstance(std::array<Archetype const*, ArraySize> const& archetypes) const noexcept
+{
+	for (ClassTemplateInstance const* instance : instances)
+	{
+		if (instance->hasSameTemplateArguments<ArraySize>(archetypes))
+		{
+			return instance;
+		}
+	}
+
+	return nullptr;
+}

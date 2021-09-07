@@ -954,6 +954,7 @@ void typeTemplateClass()
 	TEST(c->asTemplate()->getProperty<ParseAllNested>() != nullptr);
 
 	TEST(c->asTemplate()->getInstance<TestClassA>() != nullptr);
+	TEST(c->asTemplate()->getInstance<1>({ &TestClassA::staticGetArchetype() }) != nullptr);
 	TEST(c->asTemplate()->getInstance<TestClassB>() == nullptr);
 	TEST(c->asTemplate()->getInstance<int>() == nullptr);
 

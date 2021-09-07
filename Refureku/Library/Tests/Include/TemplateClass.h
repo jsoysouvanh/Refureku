@@ -94,6 +94,8 @@ namespace TEST
 
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
 #include "Refureku/TypeInfo/Properties/ParseAllNested.h"
+#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
+
 template <typename T>
 class RFKClass(ParseAllNested) TestSimpleClassTemplate
 {

@@ -1,7 +1,6 @@
 #include "Include/Generated/TemplateClass.rfks.h"
 
 //GENERATED.rfks.h
-#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
 
 template <>
 rfk::Archetype const* rfk::getArchetype<TestSimpleClassTemplate>() noexcept

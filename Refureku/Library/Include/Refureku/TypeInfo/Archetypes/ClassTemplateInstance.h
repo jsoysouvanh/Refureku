@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/TemplateArgument.h"
@@ -41,7 +42,19 @@ namespace rfk
 			*	@return true if the provided types are the same as this instance's, else false.
 			*/
 			template <typename... Types>
-			bool hasSameTemplateArguments() const noexcept;
+			bool hasSameTemplateArguments()																const	noexcept;
+
+			/**
+			*	@brief Check whether the instance arguments have the same types as the provided ones.
+			* 
+			*	@tparam Size Number of provided archetypes.
+			*	
+			*	@param archetypes Archetypes to check.
+			* 
+			*	@return true if the provided types are the same as this instance's, else false.
+			*/
+			template <size_t ArraySize>
+			bool hasSameTemplateArguments(std::array<Archetype const*, ArraySize> const& archetypes)	const	noexcept;	//TODO: prototype must change to be able to check with non-type parameters
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.inl"

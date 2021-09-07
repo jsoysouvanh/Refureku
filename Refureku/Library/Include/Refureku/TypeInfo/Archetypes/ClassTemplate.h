@@ -13,12 +13,10 @@
 
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
+#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
 
 namespace rfk
 {
-	//Forward declaration
-	class ClassTemplateInstance;
-
 	class ClassTemplate : public Class
 	{
 		public:
@@ -38,7 +36,15 @@ namespace rfk
 			*	@return The instance if any, else nullptr.
 			*/
 			template <typename... Types>
-			ClassTemplateInstance const* getInstance()	const	noexcept;
+			ClassTemplateInstance const* getInstance()															const	noexcept;
+
+			/**
+			*	@brief Get the instance corresponding to the provided template arguments if it exists in the program.
+			* 
+			*	@return The instance if any, else nullptr.
+			*/
+			template <size_t ArraySize>
+			ClassTemplateInstance const* getInstance(std::array<Archetype const*, ArraySize> const& archetypes)	const	noexcept;
 
 			/**
 			*	@brief Add a template parameter.
