@@ -38,17 +38,19 @@ namespace rfk
 								 Archetype const*	archetype)	noexcept;
 	};
 
-	struct TemplateTemplateParameter : public TemplateParameter
+	class TemplateTemplateParameter : public TemplateParameter
 	{
-		std::vector<TemplateParameter> templateParameters;
+		public:
+			/** List of template parameters. */
+			std::vector<TemplateParameter> templateParameters;
 
-		TemplateTemplateParameter(std::string&&	name) noexcept;
+			TemplateTemplateParameter(std::string&&	name) noexcept;
 
-		/**
-		*	@brief Add a template parameter to the list.
-		* 
-		*	@param templateParameter Template parameter to add.
-		*/
-		TemplateTemplateParameter& addTemplateParameter(TemplateParameter&& templateParameter) noexcept;
+			/**
+			*	@brief Add a template parameter to the list.
+			* 
+			*	@param templateParameter Template parameter to add.
+			*/
+			TemplateTemplateParameter& addTemplateParameter(TemplateParameter&& templateParameter) noexcept;
 	};
 }

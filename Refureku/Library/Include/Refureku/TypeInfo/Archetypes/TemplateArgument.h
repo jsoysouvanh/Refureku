@@ -7,10 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
-
 namespace rfk
 {
+	//Forward declaration
+	struct TemplateParameter;
+	class Archetype;
+
 	struct TemplateArgument
 	{
 		/** Template parameter this argument is a value of. */
@@ -19,7 +21,8 @@ namespace rfk
 		/** Archetype used for a template argument. */
 		Archetype const*			archetype = nullptr;
 
-		//TODO: Constructor + add template arguments from TemplateClass::staticGetArchetype
+		TemplateArgument(TemplateParameter const&	parameter,
+						 Archetype const*			archetype)	noexcept;
 	};
 }
 

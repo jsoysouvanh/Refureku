@@ -9,6 +9,7 @@
 #include "TestPropertyUsage.h"
 #include "ThirdPartyEnumReflectionCode.h"
 #include "CustomString.h"
+#include "TemplateClass.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -944,29 +945,30 @@ void structDirectChildren()
 	TEST(ppClass.subclasses.size() == 2u);
 }
 
-#include "TemplateClass.h"
 void typeTemplateClass()
 {
 	rfk::Class const* c = rfk::Database::getClass("TestSimpleClassTemplate");
 
-	//Template
+	//Single Type template class
 	TEST(c->isTemplate());
 	TEST(c->asTemplate()->getProperty<ParseAllNested>() != nullptr);
 
-	std::cout << c->asTemplate()->getInstance<int>() << std::endl;
-	std::cout << c->asTemplate()->getInstance<TestClassA>() << std::endl;
-	std::cout << c->asTemplate()->getInstance<TestClassB>() << std::endl;
+	TEST(c->asTemplate()->getInstance<TestClassA>() != nullptr);
+	TEST(c->asTemplate()->getInstance<TestClassB>() == nullptr);
+	TEST(c->asTemplate()->getInstance<int>() == nullptr);
 
-	//Template instance
+	//TODO: Test with multiple type template class
 
-	//rfk::ClassTemplate const* classTemplate = rfk
-
-	//std::cout << c->getField("vector")->type.archetype << std::endl;
+	//TODO: Test with Single template template class
+	//TODO: Test with Multiple template template class
+	//TODO: Test with single non-type template class
+	//TODO: Test with multiple non-type template class
+	//TODO: Test with a mix of the above 3 (like std::array > Type template + non-type template param)
 }
 
 int main()
 {
-	/*inheritance();
+	inheritance();
 	classes();
 	structs();
 	database();
@@ -989,8 +991,7 @@ int main()
 	fundamentalArchetypes();
 	enumManualReflection();
 	classManualReflection();
-	structDirectChildren();*/
-
+	structDirectChildren();
 	typeTemplateClass();
 
 	return EXIT_SUCCESS;

@@ -22,7 +22,7 @@ namespace rfk
 	{
 		public:
 			/** Class template this instance comes from. */
-			ClassTemplate const*			instantiatedFrom;
+			ClassTemplate const&			instantiatedFrom;
 
 			/** List of all template arguments of this class template instance. */
 			std::vector<TemplateArgument>	templateArguments;
@@ -31,39 +31,18 @@ namespace rfk
 								  uint64			id,
 								  uint64			memorySize,
 								  bool				isClass,
-								  Archetype const*	instantiatedFrom)	noexcept;
+								  Archetype const&	instantiatedFrom)	noexcept;
 
 			/**
-			*	TODO
+			*	@brief Check whether the instance arguments have the same types as the provided ones.
+			* 
+			*	@tparam The types to check.
+			* 
+			*	@return true if the provided types are the same as this instance's, else false.
 			*/
 			template <typename... Types>
-			bool hasSameTemplateArguments() const noexcept
-			{
-				//TODO: Move in .inl file
-				static std::array<Archetype const*, sizeof...(Types)> archetypes = { { rfk::getArchetype<Types>()... } };
-				static bool computed = false;
-				static bool result = false;
-
-				if (!computed)
-				{
-					computed = true;
-
-					if (templateArguments.size() == archetypes.size())
-					{
-						for (int i = 0; i < templateArguments.size(); i++)
-						{
-							if (archetypes[i] != templateArguments[i].archetype)
-							{
-								result = false;
-								break;
-							}
-						}
-
-						result = true;
-					}
-				}
-
-				return result;
-			}
+			bool hasSameTemplateArguments() const noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.inl"
 }

@@ -38,28 +38,7 @@ namespace rfk
 			*	@return The instance if any, else nullptr.
 			*/
 			template <typename... Types>
-			ClassTemplateInstance const* getInstance()	const	noexcept
-			{
-				//TODO: Move this to .inl file
-				static bool computed = false;
-				static ClassTemplateInstance const* result = nullptr;
-
-				if (!computed)
-				{
-					computed = true;
-
-					for (ClassTemplateInstance const* instance : instances)
-					{
-						if (instance->hasSameTemplateArguments<Types...>())
-						{
-							result = instance;
-							break;
-						}
-					}
-				}
-
-				return result;
-			}
+			ClassTemplateInstance const* getInstance()	const	noexcept;
 
 			/**
 			*	@brief Add a template parameter.
@@ -75,4 +54,6 @@ namespace rfk
 			*/
 			void registerClassTemplateInstance(ClassTemplateInstance& instance)	noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Archetypes/ClassTemplate.inl"
 }
