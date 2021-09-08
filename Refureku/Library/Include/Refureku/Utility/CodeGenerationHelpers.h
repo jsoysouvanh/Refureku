@@ -92,7 +92,8 @@ namespace rfk
 		/** Format of the typename for the used compiler. */
 		inline static constexpr RawTypenameFormat typenameFormat = []
 		{
-			static_assert(getCompilerRawTypenameFormat(nullptr), "Unable to figure out how to generate type names on this compiler.");
+			//The below line is not supported in g++8, so drop it
+			//static_assert(getCompilerRawTypenameFormat(nullptr), "Unable to figure out how to generate type names on this compiler.");
 			
 			RawTypenameFormat format;
 			getCompilerRawTypenameFormat(&format);
