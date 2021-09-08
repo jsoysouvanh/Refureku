@@ -14,7 +14,7 @@ rfk::Archetype const* rfk::getArchetype<void>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer voidRegisterer = rfk::getArchetype<void>();
+rfk::ArchetypeRegisterer voidRegisterer = *rfk::getArchetype<void>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<std::nullptr_t>() noexcept
@@ -24,7 +24,7 @@ rfk::Archetype const* rfk::getArchetype<std::nullptr_t>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer nullptrRegisterer	= rfk::getArchetype<std::nullptr_t>();
+rfk::ArchetypeRegisterer nullptrRegisterer	= *rfk::getArchetype<std::nullptr_t>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<bool>() noexcept
@@ -34,7 +34,7 @@ rfk::Archetype const* rfk::getArchetype<bool>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer boolRegisterer = rfk::getArchetype<bool>();
+rfk::ArchetypeRegisterer boolRegisterer = *rfk::getArchetype<bool>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<char>() noexcept
@@ -44,7 +44,7 @@ rfk::Archetype const* rfk::getArchetype<char>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer charRegisterer = rfk::getArchetype<char>();
+rfk::ArchetypeRegisterer charRegisterer = *rfk::getArchetype<char>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<signed char>() noexcept
@@ -54,7 +54,7 @@ rfk::Archetype const* rfk::getArchetype<signed char>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer signedCharRegisterer = rfk::getArchetype<signed char>();
+rfk::ArchetypeRegisterer signedCharRegisterer = *rfk::getArchetype<signed char>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<unsigned char>() noexcept
@@ -64,7 +64,7 @@ rfk::Archetype const* rfk::getArchetype<unsigned char>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer ucharRegisterer = rfk::getArchetype<unsigned char>();
+rfk::ArchetypeRegisterer ucharRegisterer = *rfk::getArchetype<unsigned char>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<wchar_t>() noexcept
@@ -74,7 +74,7 @@ rfk::Archetype const* rfk::getArchetype<wchar_t>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer wcharRegisterer = rfk::getArchetype<wchar_t>();
+rfk::ArchetypeRegisterer wcharRegisterer = *rfk::getArchetype<wchar_t>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<char16_t>() noexcept
@@ -84,7 +84,7 @@ rfk::Archetype const* rfk::getArchetype<char16_t>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer char16Registerer = rfk::getArchetype<char16_t>();
+rfk::ArchetypeRegisterer char16Registerer = *rfk::getArchetype<char16_t>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<char32_t>() noexcept
@@ -94,7 +94,7 @@ rfk::Archetype const* rfk::getArchetype<char32_t>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer char32Registerer = rfk::getArchetype<char32_t>();
+rfk::ArchetypeRegisterer char32Registerer = *rfk::getArchetype<char32_t>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<short>() noexcept
@@ -104,7 +104,7 @@ rfk::Archetype const* rfk::getArchetype<short>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer shortRegisterer = rfk::getArchetype<short>();
+rfk::ArchetypeRegisterer shortRegisterer = *rfk::getArchetype<short>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<unsigned short>() noexcept
@@ -114,7 +114,7 @@ rfk::Archetype const* rfk::getArchetype<unsigned short>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer ushortRegisterer = rfk::getArchetype<unsigned short>();
+rfk::ArchetypeRegisterer ushortRegisterer = *rfk::getArchetype<unsigned short>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<int>() noexcept
@@ -124,7 +124,7 @@ rfk::Archetype const* rfk::getArchetype<int>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer intRegisterer = rfk::getArchetype<int>();
+rfk::ArchetypeRegisterer intRegisterer = *rfk::getArchetype<int>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<unsigned int>() noexcept
@@ -134,7 +134,7 @@ rfk::Archetype const* rfk::getArchetype<unsigned int>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer uintRegisterer = rfk::getArchetype<unsigned int>();
+rfk::ArchetypeRegisterer uintRegisterer = *rfk::getArchetype<unsigned int>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<long>() noexcept
@@ -144,7 +144,7 @@ rfk::Archetype const* rfk::getArchetype<long>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer longRegisterer = rfk::getArchetype<long>();
+rfk::ArchetypeRegisterer longRegisterer = *rfk::getArchetype<long>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<unsigned long>() noexcept
@@ -154,7 +154,7 @@ rfk::Archetype const* rfk::getArchetype<unsigned long>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer ulongRegisterer = rfk::getArchetype<unsigned long>();
+rfk::ArchetypeRegisterer ulongRegisterer = *rfk::getArchetype<unsigned long>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<long long>() noexcept
@@ -164,7 +164,7 @@ rfk::Archetype const* rfk::getArchetype<long long>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer longLongRegisterer = rfk::getArchetype<long long>();
+rfk::ArchetypeRegisterer longLongRegisterer = *rfk::getArchetype<long long>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<unsigned long long>() noexcept
@@ -174,7 +174,7 @@ rfk::Archetype const* rfk::getArchetype<unsigned long long>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer ulongLongRegisterer = rfk::getArchetype<unsigned long long>();
+rfk::ArchetypeRegisterer ulongLongRegisterer = *rfk::getArchetype<unsigned long long>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<float>() noexcept
@@ -184,7 +184,7 @@ rfk::Archetype const* rfk::getArchetype<float>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer floatRegisterer = rfk::getArchetype<float>();
+rfk::ArchetypeRegisterer floatRegisterer = *rfk::getArchetype<float>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<double>() noexcept
@@ -194,7 +194,7 @@ rfk::Archetype const* rfk::getArchetype<double>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer doubleRegisterer = rfk::getArchetype<double>();
+rfk::ArchetypeRegisterer doubleRegisterer = *rfk::getArchetype<double>();
 
 template <>
 rfk::Archetype const* rfk::getArchetype<long double>() noexcept
@@ -204,4 +204,4 @@ rfk::Archetype const* rfk::getArchetype<long double>() noexcept
 	return &archetype;
 }
 
-rfk::ArchetypeRegisterer longDoubleRegisterer = rfk::getArchetype<long double>();
+rfk::ArchetypeRegisterer longDoubleRegisterer = *rfk::getArchetype<long double>();

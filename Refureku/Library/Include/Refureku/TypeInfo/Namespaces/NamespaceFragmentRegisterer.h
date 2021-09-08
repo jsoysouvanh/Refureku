@@ -22,40 +22,37 @@ namespace rfk
 	{
 		private:
 			/** Fragment registered by this registerer. */
-			NamespaceFragment const*	_fragment			= nullptr;
+			NamespaceFragment const&	_fragment;
 
 			/** Namespace this fragment is bound to. */
 			std::shared_ptr<Namespace>	_namespaceInstance	= nullptr;
-
-			/** Registered namespace fragment. */
-			NamespaceFragment const*	_mergedNamespaceFragment;
 
 			/**
 			*	@brief Add namespace fragment entities to the namespace held by this registerer.
 			*	
 			*	@param fragment The namespace fragment to merge.
 			*/
-			void	mergeFragmentToNamespace(NamespaceFragment const* fragment)						noexcept;
+			void	mergeFragmentToNamespace(NamespaceFragment const& fragment)						noexcept;
 
 			/**
 			*	@brief Append fragment properties to the namespace properties.
 			*	
 			*	@param fragment	The namespace fragment to merge.
 			*/
-			void	mergeFragmentPropertiesToNamespaceProperties(NamespaceFragment const* fragment)	noexcept;
+			void	mergeFragmentPropertiesToNamespaceProperties(NamespaceFragment const& fragment)	noexcept;
 
 			/**
 			*	@brief Remove namespace fragment entities from the namespace held by this registerer.
 			*	
 			*	@param fragment The namespace fragment to remove.
 			*/
-			void	removeFragmentFromNamespace(NamespaceFragment const* fragment)					noexcept;
+			void	removeFragmentFromNamespace(NamespaceFragment const& fragment)					noexcept;
 
 		public:
-			NamespaceFragmentRegisterer()													= default;
+			NamespaceFragmentRegisterer()													= delete;
 			NamespaceFragmentRegisterer(char const*					name,
 										uint64						id,
-										NamespaceFragment const*	namespaceFragment,
+										NamespaceFragment const&	namespaceFragment,
 										bool						isFileLevelNamespace)	noexcept;
 			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer const&)					= delete;
 			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer&&)						= delete;

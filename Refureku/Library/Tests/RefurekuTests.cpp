@@ -945,6 +945,8 @@ void structDirectChildren()
 	TEST(ppClass.subclasses.size() == 2u);
 }
 
+
+
 void typeTemplateClass()
 {
 	rfk::Class const* c = rfk::Database::getClass("TestSimpleClassTemplate");
@@ -957,6 +959,8 @@ void typeTemplateClass()
 	TEST(c->asTemplate()->getInstance<1>({ &TestClassA::staticGetArchetype() }) != nullptr);
 	TEST(c->asTemplate()->getInstance<TestClassB>() == nullptr);
 	TEST(c->asTemplate()->getInstance<int>() == nullptr);
+	TEST(rfk::Database::getEntity(c->asTemplate()->getInstance<TestClassA>()->id) != nullptr);
+	TEST(rfk::Database::getEntity(c->asTemplate()->getInstance<TestClassA>()->id) == c->asTemplate()->getInstance<TestClassA>());
 
 	//TODO: Test with multiple type template class
 

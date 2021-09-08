@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include <array>
+#include <cstddef>
+
 #include "Refureku/Utility/TypeTraitsMacros.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
@@ -26,8 +29,113 @@ namespace rfk
 			*			the templated method "_registerChildClass" and the child class is reflected.
 			*/
 			template <typename ParentClass, typename ChildClass>
-			static constexpr void registerChildClass(rfk::Struct& childClass) noexcept;
+			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;
 	};
+
+	namespace generated
+	{
+		struct RawTypenameFormat
+		{
+			/** Number of chars before getting the type part in the __PRETTY_FUNCTION__ / __FUNCSIG__ string. */
+			std::size_t leadingCharsCount   = 0u;
+
+			/** Number of chars after the type part in the __PRETTY_FUNCTION__ / __FUNCSIG__ string. */
+			std::size_t trailingCharsCount  = 0u;
+		};
+
+		/**
+		*   @brief Retrieve a unique ID for the type passed in template parameter.
+		* 
+		*   @tparam T The target type.
+		* 
+		*   @return A unique char array identifying the passed type.
+		*/
+		template <typename T>
+		static constexpr auto const& getRawTypename() noexcept
+		{
+#ifdef _MSC_VER
+			return __FUNCSIG__;
+#else
+			return __PRETTY_FUNCTION__;
+#endif
+		}
+
+		/**
+		*	@brief Fill the format object according to the format of the __PRETTY_FUNCTION__ / __FUNCSIG__.
+		* 
+		*	@param out_format The format object to fill.
+		* 
+		*	@return true if the format was successfully filled, else false.
+		*/
+		static constexpr bool getCompilerRawTypenameFormat(RawTypenameFormat* out_format) noexcept
+		{
+			constexpr auto const& rawTypename = rfk::generated::getRawTypename<int>();
+
+			for (std::size_t i = 0;; i++)
+			{
+				//Detect the "int" chars in the raw type name
+				if (rawTypename[i] == 'i' && rawTypename[i+1] == 'n' && rawTypename[i+2] == 't')
+				{
+					if (out_format != nullptr)
+					{
+						out_format->leadingCharsCount = i;
+						out_format->trailingCharsCount = sizeof(rawTypename) - i - 3 - 1; // 3 to consume the "int" part, 1 for the string null terminator.
+					}
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/** Format of the typename for the used compiler. */
+		inline static constexpr RawTypenameFormat typenameFormat = []
+		{
+			static_assert(getCompilerRawTypenameFormat(nullptr), "Unable to figure out how to generate type names on this compiler.");
+			
+			RawTypenameFormat format;
+			getCompilerRawTypenameFormat(&format);
+
+			return format;
+		}();
+		
+		/**
+		*	@brief Retrieve the typename of the type T.
+		* 
+		*	@tparam T Target type.
+		* 
+		*	@return The typename of T as a null terminated std::array.
+		*/
+		template <typename T>
+		constexpr auto getTypenameAsArray() noexcept
+		{
+			constexpr std::size_t				typenameLength = sizeof(getRawTypename<T>()) - typenameFormat.leadingCharsCount - typenameFormat.trailingCharsCount;
+			std::array<char, typenameLength>	typename_{};
+
+			for (std::size_t i = 0; i < typenameLength - 1; i++)
+			{
+				typename_[i] = getRawTypename<T>()[i + typenameFormat.leadingCharsCount];
+			}
+
+			return typename_;
+		}
+		
+		/**
+		*	@brief Retrieve the typename of the type T.
+		* 
+		*	@tparam T Target type.
+		* 
+		*	@return The typename of T as a char const*.
+		*/
+		template <typename T>
+		char const* getTypename() noexcept
+		{
+			static constexpr auto name = getTypenameAsArray<T>();
+		
+			return name.data();
+		}
+	}
 
 	#include "Refureku/Utility/CodeGenerationHelpers.inl"
 }

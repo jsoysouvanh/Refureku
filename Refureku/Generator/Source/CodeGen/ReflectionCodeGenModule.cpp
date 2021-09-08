@@ -776,7 +776,7 @@ void ReflectionCodeGenModule::defineClassRegistererField(kodgen::StructClassInfo
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "rfk::ArchetypeRegisterer " + structClass.getFullName() + "::_rfk_archetypeRegisterer = &staticGetArchetype(); " + env.getSeparator();
+		inout_result += "rfk::ArchetypeRegisterer " + structClass.getFullName() + "::_rfk_archetypeRegisterer = staticGetArchetype(); " + env.getSeparator();
 	}
 }
 
@@ -993,7 +993,7 @@ void ReflectionCodeGenModule::defineEnumRegistererVariable(kodgen::EnumInfo cons
 {
 	if (enum_.outerEntity == nullptr)
 	{
-		inout_result += "rfk::ArchetypeRegisterer rfk::generated::registerer" + getEntityId(enum_) + " = rfk::getEnum<" + enum_.type.getCanonicalName() + ">();" + env.getSeparator();
+		inout_result += "rfk::ArchetypeRegisterer rfk::generated::registerer" + getEntityId(enum_) + " = *rfk::getEnum<" + enum_.type.getCanonicalName() + ">();" + env.getSeparator();
 	}
 }
 
@@ -1266,7 +1266,7 @@ void ReflectionCodeGenModule::defineNamespaceFragmentRegistererVariableRecursive
 			inout_result += " rfk::NamespaceFragmentRegisterer rfk::generated::" + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + " = "
 							"rfk::NamespaceFragmentRegisterer(\"" + namespace_.name + "\", " +
 							getEntityId(namespace_) + ", "
-							"&rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "(), " +
+							"rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "(), " +
 							((namespace_.outerEntity == nullptr) ? "true" : "false") +
 							");" + env.getSeparator();
 		};

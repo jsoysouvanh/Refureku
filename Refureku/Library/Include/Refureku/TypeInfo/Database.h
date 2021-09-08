@@ -26,6 +26,7 @@ namespace rfk
 		friend class NamespaceFragmentRegisterer;
 		friend class ArchetypeRegisterer;
 		friend class DefaultEntityRegisterer;
+		friend class ClassTemplateInstanceRegisterer;
 
 		private:
 			using EntitiesById					= std::unordered_set<Entity const*, Entity::PtrIdHasher, Entity::PtrEqualId>;

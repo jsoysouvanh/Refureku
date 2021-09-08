@@ -5,7 +5,7 @@
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
 #include <type_traits>
-rfk::ArchetypeRegisterer ParseAllNested::_rfk_archetypeRegisterer = &staticGetArchetype(); 
+rfk::ArchetypeRegisterer ParseAllNested::_rfk_archetypeRegisterer = staticGetArchetype(); 
 rfk::Struct const& ParseAllNested::staticGetArchetype() noexcept {
 static bool initialized = false;
 static rfk::Struct type("ParseAllNested", 17636175816175907530u, sizeof(ParseAllNested), false);

@@ -67,7 +67,7 @@ namespace TEST
 			return type;
 		}
 		
-		_RFK_UNPACK_IF_NOT_PARSING(private: static inline rfk::ArchetypeRegisterer _rfk_archetypeRegisterer = &staticGetArchetype();)
+		_RFK_UNPACK_IF_NOT_PARSING(private: static inline rfk::ArchetypeRegisterer _rfk_archetypeRegisterer = staticGetArchetype();)
 		
 		private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept
 		{
@@ -95,6 +95,7 @@ namespace TEST
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
 #include "Refureku/TypeInfo/Properties/ParseAllNested.h"
 #include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
+#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h"
 
 template <typename T>
 class RFKClass(ParseAllNested) TestSimpleClassTemplate
@@ -110,17 +111,14 @@ class RFKClass(ParseAllNested) TestSimpleClassTemplate
 	friend implements_template1__rfk_registerChildClass<TestSimpleClassTemplate<T>, void, void(rfk::Struct&)>;
 
 	public:
-	static rfk::Class const& /*TestSimpleClassTemplate<T>::*/staticGetArchetype() noexcept
+	static rfk::ClassTemplateInstance const& staticGetArchetype() noexcept
 	{
 		static bool initialized = false;
-		static rfk::ClassTemplateInstance type("TestSimpleClassTemplate", 123456, sizeof(TestSimpleClassTemplate), true, *rfk::getArchetype<::TestSimpleClassTemplate>());
-		//std::string("Path @ To @ TestSimpleClassTemplate @ T").replace()
+		static rfk::ClassTemplateInstance type("TestSimpleClassTemplate", std::hash<std::string>()(std::string("c:@N@TEST@ST>3#T#t>2#T#T#NI@Vector") + rfk::generated::getTypename<TestSimpleClassTemplate>()), sizeof(TestSimpleClassTemplate), true, *rfk::getArchetype<::TestSimpleClassTemplate>());
 
 		if (!initialized)
 		{
 			initialized = true;
-
-			std::cout << "INSTANTIATION TestSimpleClassTemplate: " << rfk::getArchetype<T>()->name << std::endl;
 
 			//Add template arguments for this instance
 			type.templateArguments.emplace_back(type.instantiatedFrom.templateParameters[0], rfk::getArchetype<T>());
@@ -130,6 +128,8 @@ class RFKClass(ParseAllNested) TestSimpleClassTemplate
 			TestSimpleClassTemplate<T>::_rfk_registerChildClass<TestSimpleClassTemplate<T>>(type);
 
 			[[maybe_unused]] rfk::Method* method = nullptr; [[maybe_unused]] rfk::StaticMethod* staticMethod = nullptr;
+
+			//TODO: Replace id by std::hash<std::string>()(std::string("kodgen::id") + rfk::generated::getTypename<TestSimpleClassTemplate>())
 			method = type.addMethod("testMethod", 5430318730629265774u, rfk::Type::getType<T>(), std::make_unique<rfk::MemberFunction<TestSimpleClassTemplate<T>, T (const T &)>>(static_cast<T (TestSimpleClassTemplate<T>::*)(const T &)>(& TestSimpleClassTemplate<T>::testMethod)), static_cast<rfk::EMethodFlags>(17));
 			method->parameters.reserve(1); method->addParameter("param", rfk::Type::getType<const T &>());
 		}
@@ -139,7 +139,7 @@ class RFKClass(ParseAllNested) TestSimpleClassTemplate
 
 	static inline int r = []() -> int { staticGetArchetype(); return 0; }();
 
-	//_RFK_UNPACK_IF_NOT_PARSING(private: static inline rfk::ArchetypeRegisterer _rfk_archetypeRegisterer = &staticGetArchetype();) //TODO: This should register by ID only, since it is already registered to the ClassTemplate
+	_RFK_UNPACK_IF_NOT_PARSING(private: static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();) //TODO: This should register by ID only, since it is already registered to the ClassTemplate
 
 	private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept
 	{
@@ -154,6 +154,7 @@ class RFKClass(ParseAllNested) TestSimpleClassTemplate
 		__RFK_DISABLE_WARNING_PUSH
 		__RFK_DISABLE_WARNING_OFFSETOF
 
+		//TODO: Replace id by std::hash<std::string>()(std::string("kodgen::id") + rfk::generated::getTypename<TestSimpleClassTemplate>())
 		field = childClass.addField("testField", 2732867638607707709u, rfk::Type::getType<T>(), static_cast<rfk::EFieldFlags>(4), &thisClass, offsetof(ChildClass, testField));
 
 		__RFK_DISABLE_WARNING_POP
@@ -177,18 +178,11 @@ class RFKClass() TestTemplateClass
 ///// GENERATE A METHOD TO DEFINE THE CLASS TEMPLATE
 namespace rfk
 {
-	template <>
-	rfk::Archetype const* getArchetype<TestSimpleClassTemplate>() noexcept;
+	template <> rfk::Archetype const* getArchetype<TestSimpleClassTemplate>() noexcept;
 }
 /////////////////////////////////////////////////
 
 File_TemplateClass_GENERATED
-
-namespace rfk
-{
-	//template <> rfk::Archetype const* getArchetype<TEST::Vector<A, std::vector, 2>>() noexcept { return nullptr; }
-	//template <> rfk::Archetype const* getArchetype<Vector<A, std::vector, 2>>() noexcept;
-}
 
 template class RFKClass() TEST::Vector<TestClassA, std::vector, 0>;
 template class RFKClass() TestSimpleClassTemplate<TestClassA>;

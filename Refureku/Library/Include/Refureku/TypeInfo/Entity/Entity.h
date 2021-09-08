@@ -92,7 +92,7 @@ namespace rfk
 			/** Name qualifying this entity. */
 			std::string						name		= "";
 
-			/** Program-unique ID given for this entity. */
+			/** Program-unique ID given for this entity. The ID is persistent even after the program is recompiled / relaunched. */
 			uint64							id			= 0u;
 
 			/** Kind of this entity. */

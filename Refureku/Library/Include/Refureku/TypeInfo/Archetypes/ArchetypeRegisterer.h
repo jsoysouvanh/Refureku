@@ -15,13 +15,16 @@ namespace rfk
 	{
 		private:
 			/** Registered archetype. */
-			Archetype const* _registeredArchetype = nullptr;
+			Archetype const& _registeredArchetype;
 
 		public:
-			ArchetypeRegisterer()							= default;
-			ArchetypeRegisterer(Archetype const* archetype)	noexcept;
+			ArchetypeRegisterer()							= delete;
+			ArchetypeRegisterer(Archetype const& archetype)	noexcept;
 			ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
 			ArchetypeRegisterer(ArchetypeRegisterer&&)		= delete;
 			~ArchetypeRegisterer()							noexcept;
+
+			ArchetypeRegisterer& operator=(ArchetypeRegisterer const&)	= delete;
+			ArchetypeRegisterer& operator=(ArchetypeRegisterer&&)		= delete;
 	};
 }

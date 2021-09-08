@@ -32,5 +32,5 @@ rfk::Archetype const* rfk::getArchetype<TestSimpleClassTemplate>() noexcept
 
 namespace rfk::generated
 {
-	static rfk::ArchetypeRegisterer _register_TestSimpleClassTemplate(rfk::getArchetype<TestSimpleClassTemplate>());
+	static rfk::ArchetypeRegisterer _register_TestSimpleClassTemplate = *rfk::getArchetype<TestSimpleClassTemplate>();
 }

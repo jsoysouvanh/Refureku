@@ -4,7 +4,7 @@
 #include <Refureku/TypeInfo/Type.h>
 
 //Register the enum to the database
-rfk::ArchetypeRegisterer NonReflectedEnumRegisterer = rfk::getEnum<ThirdPartyEnum>();
+rfk::ArchetypeRegisterer NonReflectedEnumRegisterer = *rfk::getEnum<ThirdPartyEnum>();
 
 template <>
 rfk::Enum const* rfk::getEnum<ThirdPartyEnum>() noexcept

@@ -5,7 +5,7 @@
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
 #include <type_traits>
-rfk::ArchetypeRegisterer PropertySettings::_rfk_archetypeRegisterer = &staticGetArchetype(); 
+rfk::ArchetypeRegisterer PropertySettings::_rfk_archetypeRegisterer = staticGetArchetype(); 
 rfk::Struct const& PropertySettings::staticGetArchetype() noexcept {
 static bool initialized = false;
 static rfk::Struct type("PropertySettings", 2708994343965683583u, sizeof(PropertySettings), false);

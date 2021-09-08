@@ -51,4 +51,4 @@ rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 }
 
 //Register the class to the database (note that it is not registered in any namespace, so it's accessible at file level)
-rfk::ArchetypeRegisterer vector3fRegisterer = rfk::getArchetype<Vector3f>();
+rfk::ArchetypeRegisterer vector3fRegisterer = *rfk::getArchetype<Vector3f>();
