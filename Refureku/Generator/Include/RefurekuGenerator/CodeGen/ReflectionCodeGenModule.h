@@ -178,6 +178,18 @@ namespace rfk
 			static bool					isPublicClass(kodgen::StructClassInfo const& class_)								noexcept;
 
 			/**
+			*	@brief Compute the code that will be evaluated to the provided entity id in the generated code.
+			* 
+			*	@param class_ The reference class template.
+			*	@param entity The target entity.
+			* 
+			*	@return The code that will be evaluated the provided entity id in the generated code.
+			*/
+			static std::string			computeClassTemplateEntityId(kodgen::StructClassInfo const& class_,
+																	 kodgen::EntityInfo const&		entity)					noexcept;
+
+
+			/**
 			*	@brief	All code generated from this point will be hidden to the parser.
 			*			This means the generated code can't be reflected.
 			* 
@@ -374,7 +386,34 @@ namespace rfk
 											   kodgen::MacroCodeGenEnv&			env,
 											   std::string&						inout_result)					const	noexcept;
 
+			//Class template code generation
+			/**
+			*	TODO
+			*/
+			void	declareAndDefineClassTemplateStaticGetArchetypeMethod(kodgen::StructClassInfo const&	structClass,
+																		  kodgen::MacroCodeGenEnv&			env,
+																		  std::string&						inout_result)						noexcept;
 
+			/**
+			*	TODO
+			*/
+			void	declareAndDefineClassTemplateGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const&	structClass,
+																					   kodgen::MacroCodeGenEnv&			env,
+																					   std::string&						inout_result)	const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	declareAndDefineClassTemplateRegistererField(kodgen::StructClassInfo const&	structClass,
+																 kodgen::MacroCodeGenEnv&		env,
+																 std::string&					inout_result)							const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	fillClassTemplateArguments(kodgen::StructClassInfo const&	structClass,
+											   kodgen::MacroCodeGenEnv&		env,
+											   std::string&					inout_result)												const	noexcept;
 
 			//Enums code generation
 			/**

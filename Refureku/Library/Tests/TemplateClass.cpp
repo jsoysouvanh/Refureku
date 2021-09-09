@@ -2,6 +2,8 @@
 
 //GENERATED.rfks.h
 
+#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
+
 template <>
 rfk::Archetype const* rfk::getArchetype<TestSimpleClassTemplate>() noexcept
 {
@@ -28,6 +30,12 @@ rfk::Archetype const* rfk::getArchetype<TestSimpleClassTemplate>() noexcept
 	}
 
 	return &type;
+}
+
+template <>
+rfk::Archetype const* rfk::getArchetype<NamespaceForTemplateClass::Vector>() noexcept
+{
+	return nullptr;
 }
 
 namespace rfk::generated

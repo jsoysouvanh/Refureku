@@ -14,17 +14,17 @@ namespace rfk
 	class ClassTemplateInstanceRegisterer
 	{
 		private:
-		/** Registered archetype. */
-		ClassTemplateInstance const& _registeredClassTemplateInstance;
+			/** Registered archetype. */
+			ClassTemplateInstance const& _registeredClassTemplateInstance;
 
 		public:
-		ClassTemplateInstanceRegisterer()													= delete;
-		ClassTemplateInstanceRegisterer(ClassTemplateInstance const& classTemplateInstance)	noexcept;
-		ClassTemplateInstanceRegisterer(ClassTemplateInstanceRegisterer const&)				= delete;
-		ClassTemplateInstanceRegisterer(ClassTemplateInstanceRegisterer&&)					= delete;
-		~ClassTemplateInstanceRegisterer()													noexcept;
+			ClassTemplateInstanceRegisterer()													= delete;
+			ClassTemplateInstanceRegisterer(ClassTemplateInstance const& classTemplateInstance)	noexcept;
+			ClassTemplateInstanceRegisterer(ClassTemplateInstanceRegisterer const&)				= delete;
+			ClassTemplateInstanceRegisterer(ClassTemplateInstanceRegisterer&&)					= delete;
+			~ClassTemplateInstanceRegisterer()													noexcept;
 
-		ClassTemplateInstanceRegisterer& operator=(ClassTemplateInstanceRegisterer const&)	= delete;
-		ClassTemplateInstanceRegisterer& operator=(ClassTemplateInstanceRegisterer&&)		= delete;
+			ClassTemplateInstanceRegisterer& operator=(ClassTemplateInstanceRegisterer const&)	= delete;
+			ClassTemplateInstanceRegisterer& operator=(ClassTemplateInstanceRegisterer&&)		= delete;
 	};
 }
