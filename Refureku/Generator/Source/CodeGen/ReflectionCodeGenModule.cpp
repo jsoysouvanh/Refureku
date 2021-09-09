@@ -91,7 +91,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCodeForE
 			{
 				std::cout << "Name: " << entity.name << std::endl;
 				std::cout << "Full name: " << entity.getFullName() << std::endl;
-				std::cout << "type.getName(): " << static_cast<kodgen::StructClassInfo const&>(entity).type.getName(false, true) << std::endl;
+				std::cout << "type.getName(false, true): " << static_cast<kodgen::StructClassInfo const&>(entity).type.getName(false, true) << std::endl;
 				std::cout << "type.getCanonicalName(): " << static_cast<kodgen::StructClassInfo const&>(entity).type.getCanonicalName() << std::endl;
 				std::cout << "type.id: " << static_cast<kodgen::StructClassInfo const&>(entity).id << std::endl;
 			}
@@ -561,7 +561,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		if (method.isStatic)
 		{
 			inout_result += "staticMethod = " + generatedEntityVarName + "addStaticMethod(\"" + method.name + "\", " +
-							 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id))) + ", "
+							 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
 							 "rfk::Type::getType<" + method.returnType.getName() + ">(), "
 							 "std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
 							 "static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
@@ -571,7 +571,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		else
 		{
 			inout_result += "method = " + generatedEntityVarName + "addMethod(\"" + method.name + "\", " +
-							(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id))) + ", "
+							(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
 							"rfk::Type::getType<" + method.returnType.getName() + ">(), "
 							"std::make_unique<rfk::MemberFunction<" + structClass.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
 							"static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
@@ -721,7 +721,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			if (field.isStatic)
 			{
 				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
-								 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id))) + ", " +
+								 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
 								 "rfk::Type::getType<" + field.type.getName() + ">(), "
 								 "static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 								 "&thisClass, "
@@ -732,7 +732,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			else
 			{
 				inout_result += "field = childClass.addField(\"" + field.name + "\", " +
-								 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id))) + ", " +
+								 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
 								 "rfk::Type::getType<" + field.type.getName() + ">(), "
 								 "static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 								 "&thisClass, "
@@ -809,7 +809,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateStaticGetArchetypeMet
 {
 	inout_result += "public: static rfk::ClassTemplateInstance const& staticGetArchetype() noexcept {" + env.getSeparator();
 	inout_result += "static bool initialized = false;" + env.getSeparator();
-	inout_result += "static rfk::ClassTemplateInstance type(\"" + structClass.type.getName() + "\"," +
+	inout_result += "static rfk::ClassTemplateInstance type(\"" + structClass.type.getName(false, true) + "\"," +
 															computeClassTemplateEntityId(structClass, structClass) + ", " +
 															"sizeof(" + structClass.type.getName() + "), " + 
 															((structClass.entityType == kodgen::EEntityType::Struct) ? "false" : "true") + ", "

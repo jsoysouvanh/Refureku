@@ -945,8 +945,6 @@ void structDirectChildren()
 	TEST(ppClass.subclasses.size() == 2u);
 }
 
-
-
 void typeTemplateClass()
 {
 	rfk::Class const* c = rfk::Database::getClass("TestSimpleClassTemplate");

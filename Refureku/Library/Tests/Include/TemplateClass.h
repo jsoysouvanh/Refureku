@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 
+#include "Refureku/TypeInfo/Properties/ParseAllNested.h"
+
 #include "Generated/TemplateClass.rfkh.h"
 
 class RFKClass() TestClassA
@@ -102,12 +104,12 @@ namespace NamespaceForTemplateClass
 	};
 }
 
+#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
-#include "Refureku/TypeInfo/Properties/ParseAllNested.h"
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h"
 
 template <typename T>
-class RFKClass() TestSimpleClassTemplate : public rfk::Object
+class RFKClass(ParseAllNested) TestSimpleClassTemplate : public rfk::Object
 {
 	RFKField()
 	T testField;
