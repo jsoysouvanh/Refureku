@@ -286,10 +286,10 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	fillClassParentsMetadata(kodgen::StructClassInfo const&	structClass,
-											 kodgen::MacroCodeGenEnv&		env,
-											 std::string const&				generatedEntityVarName,
-											 std::string&					inout_result)								noexcept;
+			void	fillClassParents(kodgen::StructClassInfo const&	structClass,
+									 kodgen::MacroCodeGenEnv&		env,
+									 std::string const&				generatedEntityVarName,
+									 std::string&					inout_result)										noexcept;
 
 			/**
 			*	TODO
@@ -412,8 +412,29 @@ namespace rfk
 			*	TODO
 			*/
 			void	fillClassTemplateArguments(kodgen::StructClassInfo const&	structClass,
-											   kodgen::MacroCodeGenEnv&		env,
-											   std::string&					inout_result)												const	noexcept;
+											   kodgen::MacroCodeGenEnv&			env,
+											   std::string&						inout_result)											const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	defineClassTemplateGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const&	structClass,
+																		  kodgen::MacroCodeGenEnv&			env,
+																		  std::string&						inout_result)						noexcept;
+
+			/**
+			*	TODO
+			*/
+			void	fillClassTemplateParameters(kodgen::StructClassInfo const&	structClass,
+												kodgen::MacroCodeGenEnv&		env,
+												std::string&					inout_result)											const	noexcept;
+
+			/**
+			*	TODO
+			*/
+			/*void	fillClassTemplateParents(kodgen::StructClassInfo const&	structClass,
+											 kodgen::MacroCodeGenEnv&		env,
+											 std::string&					inout_result)												const	noexcept;*/
 
 			//Enums code generation
 			/**

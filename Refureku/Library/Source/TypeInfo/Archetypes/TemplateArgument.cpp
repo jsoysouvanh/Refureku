@@ -1,7 +1,6 @@
 #include "Refureku/TypeInfo/Archetypes/TemplateArgument.h"
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
 
 using namespace rfk;
 

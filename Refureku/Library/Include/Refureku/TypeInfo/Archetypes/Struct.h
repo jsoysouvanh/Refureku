@@ -477,9 +477,20 @@ namespace rfk
 
 			/**
 			*	@brief Add the type T to this type's parents if T is a reflected class.
+			* 
+			*	@param inheritanceAccess The inheritance access for the provided parent.
 			*/
 			template <typename T>
 			void		addToParents(EAccessSpecifier inheritanceAccess)				noexcept;
+
+			/**
+			*	@brief Add the parent to this type's parent if it is not nullptr.
+			* 
+			*	@param parent				The struct to add as parent.
+			*	@param inheritanceAccess	The inheritance access for the provided parent.
+			*/
+			void		addToParents(Struct const*		parent,
+									 EAccessSpecifier	inheritanceAccess)				noexcept;
 
 			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.

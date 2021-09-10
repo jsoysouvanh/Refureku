@@ -3,6 +3,7 @@
 #include <utility>	//std::forward
 
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
+#include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
 
 using namespace rfk;
 
@@ -11,9 +12,9 @@ ClassTemplate::ClassTemplate(std::string&& name, uint64 id, bool isClass) noexce
 {
 }
 
-void ClassTemplate::addTemplateParameter(TemplateParameter&& templateParameter)	noexcept
+void ClassTemplate::addTemplateParameter(TemplateParameter const& templateParameter) noexcept
 {
-	templateParameters.emplace_back(std::forward<TemplateParameter>(templateParameter));
+	templateParameters.emplace_back(&templateParameter);
 }
 
 void ClassTemplate::registerClassTemplateInstance(ClassTemplateInstance& instance) noexcept

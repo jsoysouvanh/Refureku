@@ -7,10 +7,11 @@
 
 #pragma once
 
+#include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
+
 namespace rfk
 {
 	//Forward declaration
-	struct TemplateParameter;
 	class Archetype;
 
 	struct TemplateArgument

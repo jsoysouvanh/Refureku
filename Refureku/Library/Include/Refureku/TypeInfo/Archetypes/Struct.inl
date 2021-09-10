@@ -6,7 +6,7 @@
 */
 
 template <typename T>
-void Struct::addToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) noexcept
+void Struct::addToParents(EAccessSpecifier inheritanceAccess) noexcept
 {
 	Archetype const* parentArchetype = getArchetype<T>();
 
@@ -14,10 +14,7 @@ void Struct::addToParents([[maybe_unused]] EAccessSpecifier inheritanceAccess) n
 	{
 		assert(parentArchetype->kind == EEntityKind::Struct || parentArchetype->kind == EEntityKind::Class);
 
-		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, reinterpret_cast<Struct const*>(parentArchetype) });
-
-		//Inherit parent properties
-		inheritProperties(*parentArchetype);
+		addToParents(reinterpret_cast<Struct const*>(parentArchetype), inheritanceAccess);
 	}
 }
 

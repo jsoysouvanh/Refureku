@@ -12,16 +12,18 @@
 #include <array>
 
 #include "Refureku/TypeInfo/Archetypes/Class.h"
-#include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
 
 namespace rfk
 {
+	//Forward declaration
+	struct TemplateParameter;
+
 	class ClassTemplate : public Class
 	{
 		public:
 			/** List of all template parameters of this class template. */
-			std::vector<TemplateParameter>						templateParameters;
+			std::vector<TemplateParameter const*>				templateParameters;
 
 			/** All instances of this class template in the program. */
 			std::unordered_set<ClassTemplateInstance const*>	instances;
@@ -51,14 +53,14 @@ namespace rfk
 			* 
 			*	@param templateParameter The template parameter to add.
 			*/
-			void addTemplateParameter(TemplateParameter&& templateParameter)	noexcept;
+			void addTemplateParameter(TemplateParameter const& templateParameter)	noexcept;
 
 			/**
 			*	@brief Register an instance generated from this class template.
 			* 
 			*	@param instance The instance to register.
 			*/
-			void registerClassTemplateInstance(ClassTemplateInstance& instance)	noexcept;
+			void registerClassTemplateInstance(ClassTemplateInstance& instance)		noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/ClassTemplate.inl"

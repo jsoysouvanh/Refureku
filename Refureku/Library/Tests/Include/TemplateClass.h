@@ -38,12 +38,13 @@ namespace NamespaceForTemplateClass
 	template <typename T, template <typename A, typename B> typename U, int V>
 	class RFKClass() Vector : public std::vector<T>
 	{
-		RFKField()
+		private:
+			RFKField()
 			int i;
 
 		public:
 			RFKField()
-				typename T::Type t;
+			typename T::Type t;
 
 			RFKMethod()
 			static void testStaticMethod(T const& t) {}
@@ -104,10 +105,6 @@ namespace NamespaceForTemplateClass
 	};
 }
 
-#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
-#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
-#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h"
-
 template <typename T>
 class RFKClass(ParseAllNested) TestSimpleClassTemplate : public rfk::Object
 {
@@ -120,24 +117,17 @@ class RFKClass(ParseAllNested) TestSimpleClassTemplate : public rfk::Object
 	TestSimpleClassTemplate_T_GENERATED
 };
 
-class RFKClass() TestTemplateClass
-{
-	public:
-		RFKField()
-		NamespaceForTemplateClass::Vector<TestClassA, std::vector, 0>	vectorF;
-
-		RFKField()
-		NamespaceForTemplateClass::Vector<TestClassB, std::vector, 3>	vectorI;
-
-	TestTemplateClass_GENERATED
-};
-
-///// GENERATE A METHOD TO DEFINE THE CLASS TEMPLATE
-namespace rfk
-{
-	template <> rfk::Archetype const* getArchetype<TestSimpleClassTemplate>() noexcept;
-}
-/////////////////////////////////////////////////
+//class RFKClass() TestTemplateClass
+//{
+//	public:
+//		RFKField()
+//		NamespaceForTemplateClass::Vector<TestClassA, std::vector, 0>	vectorF;
+//
+//		RFKField()
+//		NamespaceForTemplateClass::Vector<TestClassB, std::vector, 3>	vectorI;
+//
+//	TestTemplateClass_GENERATED
+//};
 
 File_TemplateClass_GENERATED
 

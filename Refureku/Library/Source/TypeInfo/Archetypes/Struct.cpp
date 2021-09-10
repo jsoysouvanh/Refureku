@@ -334,6 +334,17 @@ void Struct::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
 	_defaultInstantiator = defaultInstantiator;
 }
 
+void Struct::addToParents(Struct const* parent, EAccessSpecifier inheritanceAccess) noexcept
+{
+	if (parent != nullptr)
+	{
+		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, parent });
+
+		//Inherit parent properties
+		inheritProperties(*parent);
+	}
+}
+
 Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
 {
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
