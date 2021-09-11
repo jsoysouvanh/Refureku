@@ -12,19 +12,13 @@
 
 #define RFK_ATTRIBUTE(attr) __attribute__((attr))
 
-#define RFK_USED RFK_ATTRIBUTE(used)
-
 #elif defined(__clang__)
 
 #define RFK_ATTRIBUTE(attr) __attribute__((attr))
 
-#define RFK_USED RFK_ATTRIBUTE(used)
-
 #elif defined(_MSC_VER)
 
 #define RFK_ATTRIBUTE(attr) __declspec((attr))
-
-#define RFK_USED
 
 #else
 

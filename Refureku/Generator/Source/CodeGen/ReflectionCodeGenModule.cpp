@@ -861,7 +861,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: RFK_USED static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();" + env.getSeparator() + env.getSeparator();
+		inout_result += "private: static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype(); rfk::ForceGenerateSymbol<&_rfk_registerer> _rfk_forceRegister() = delete;" + env.getSeparator() + env.getSeparator();
 	}
 }
 

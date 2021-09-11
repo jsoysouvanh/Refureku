@@ -28,7 +28,7 @@ namespace NamespaceForTemplateClass
 			typename T::Type t;
 
 			RFKMethod()
-			static void testStaticMethod(T const& t) {}
+			static void testStaticMethod([[maybe_unused]] T const& t) {}
 
 		//GENERATED CODE
 		friend rfk::Struct;

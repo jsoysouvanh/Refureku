@@ -32,6 +32,11 @@ namespace rfk
 			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;
 	};
 
+	template <auto>
+	struct ForceGenerateSymbol
+	{
+	};
+
 	namespace generated
 	{
 		struct RawTypenameFormat
