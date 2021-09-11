@@ -961,6 +961,7 @@ void testSingleTypeTemplateClassTemplate()
 	TEST(c->asTemplate()->getInstance<int>() == nullptr);
 	TEST(rfk::Database::getEntity(c->asTemplate()->getInstance<TestClassA>()->id) != nullptr);
 	TEST(rfk::Database::getEntity(c->asTemplate()->getInstance<TestClassA>()->id) == c->asTemplate()->getInstance<TestClassA>());
+	TEST(rfk::getArchetype<SingleTypeTemplateClassTemplate<TestClassA>>() == &SingleTypeTemplateClassTemplate<TestClassA>::staticGetArchetype());
 }
 
 void testMultipleTypeTemplateClassTemplate()
@@ -971,15 +972,16 @@ void testMultipleTypeTemplateClassTemplate()
 	rfk::ClassTemplate const* c = rfk::Database::getClass("MultipleTypeTemplateClassTemplate")->asTemplate();
 
 	TEST(c->templateParameters.size() == 3u);
-	
-	MultipleTypeTemplateClassTemplate<int, float, double> implicitInstantiation;
 
 	TEST(c->instances.size() == 2u);
 	TEST(c->getInstance<int, int, int>() != nullptr);
 	TEST(c->getInstance<3>({ rfk::getArchetype<int>(), rfk::getArchetype<int>(), rfk::getArchetype<int>() }) != nullptr);
 	TEST(c->getInstance<int, float, double>() != nullptr);
 	TEST(c->getInstance<3>({ rfk::getArchetype<int>(), rfk::getArchetype<float>(), rfk::getArchetype<double>() }) != nullptr);
+
+	std::cout << "MultipleTypeTemplateClassTemplate<int, float, double>::id = " << MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype().id << std::endl;
 	TEST(rfk::Database::getEntity(MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype().id) != nullptr);
+	TEST(rfk::getArchetype<MultipleTypeTemplateClassTemplate<int, float, double>>() == &MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype());
 
 	rfk::ClassTemplateInstance const* iiiInstance = c->getInstance<int, int, int>();
 
@@ -988,13 +990,17 @@ void testMultipleTypeTemplateClassTemplate()
 	TEST(iiiInstance->getMethod("returnT")->returnType == rfk::Type::getType<int>());
 
 	rfk::ClassTemplateInstance const* ifdInstance = c->getInstance<int, float, double>();
+	MultipleTypeTemplateClassTemplate<int, float, double> o;
 
 	TEST(ifdInstance->getMethod("returnT") != nullptr);
 	TEST(ifdInstance->getMethod("returnT")->returnType == rfk::Type::getType<int>());
+	TEST(ifdInstance->getMethod<int(int const&, int const&)>("returnT")->rInvoke<int, int const&, int const&>(&o, 3, 5) == 8);
 	TEST(ifdInstance->getMethod("returnU") != nullptr);
 	TEST(ifdInstance->getMethod("returnU")->returnType == rfk::Type::getType<float>());
 	TEST(ifdInstance->getMethod("returnV") != nullptr);
 	TEST(ifdInstance->getMethod("returnV")->returnType == rfk::Type::getType<double>());
+	TEST(rfk::Database::getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation") != nullptr);
+	TEST(rfk::Database::getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation")->type.archetype == &o.getArchetype());
 }
 
 void templateClasses()

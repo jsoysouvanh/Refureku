@@ -40,6 +40,36 @@ struct implements_##MethodName<Class, Ret(Args...)>																						\
 };
 
 /**
+*	This macro generates a traits which allows to know at compile-time if a method named MethodName
+*	with the given prototype is callable on a class.
+*
+*	/!\ It works only for public methods
+*
+*	For example, if you use GENERATE_IMPLEMENTS_METHOD_TRAITS(MyCustomMethod), you will be able to write:
+*		if constexpr (isCallable_MyCustomMethod<MyCustomClass, void(int, float)>::value)
+*		{
+*			//Do something
+*		}
+*		
+*		(replacing void(int, float) by the prototype you want)
+*/
+#define GENERATE_IS_CALLABLE_METHOD_TRAITS(MethodName)																							\
+template<typename Class, typename T>	struct isCallable_##MethodName {};																		\
+template <typename Class, typename Ret, typename... Args>																						\
+struct isCallable_##MethodName<Class, Ret(Args...)>																								\
+{																																				\
+	private:																																	\
+		template<typename T>																													\
+		static constexpr auto check(T*) -> typename std::is_convertible<decltype(std::declval<T>().MethodName(std::declval<Args>()...)), Ret>;	\
+																																				\
+		template<typename>																														\
+		static constexpr std::false_type check(...);																							\
+																																				\
+	public:																																		\
+		static constexpr bool value = decltype(check<Class>(nullptr))::value;																	\
+};
+
+/**
 *	This macro generates a traits which allows to know at compile-time if a class owns a template method with a 
 *	given prototype named MethodName.
 *

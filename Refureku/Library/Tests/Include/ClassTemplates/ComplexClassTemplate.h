@@ -47,8 +47,6 @@ namespace NamespaceForTemplateClass
 			{
 				initialized = true;
 
-				std::cout << "INITIALIZE Vector: " << rfk::getArchetype<T>()->name << std::endl;
-
 				type.setDefaultInstantiator(&rfk::defaultInstantiator<Vector<T, U, V>>);
 				type.directParents.reserve(1);
 				type.addToParents<std::vector<T>>(static_cast<rfk::EAccessSpecifier>(1));

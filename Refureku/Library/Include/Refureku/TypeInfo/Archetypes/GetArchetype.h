@@ -10,9 +10,12 @@
 #include <type_traits>
 
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/Utility/TypeTraitsMacros.h"
 
 namespace rfk
 {
+	GENERATE_IS_CALLABLE_METHOD_TRAITS(staticGetArchetype)
+
 	/**
 	*	@brief	Get the archetype of any type if it exists.
 	*			Note that this method will always return nullptr on protected/private nested archetypes.

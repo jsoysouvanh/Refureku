@@ -20,7 +20,7 @@ namespace rfk
 	{
 		private:
 			template <typename T>
-			static void				fillType(Type& out_type)	noexcept;
+			static void	fillType(Type& out_type) noexcept;
 
 		public:
 			/** Archetype of this type. */

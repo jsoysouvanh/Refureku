@@ -33,4 +33,7 @@ class RFKClass() MultipleTypeTemplateClassTemplate : public rfk::Object
 
 File_MultipleTypeTemplateClassTemplate_GENERATED
 
+RFKVariable()
+extern MultipleTypeTemplateClassTemplate<int, float, double> multipleTypeTemplateClassTemplateImplicitInstantiation;
+
 template class RFKClass() MultipleTypeTemplateClassTemplate<int, int, int>;

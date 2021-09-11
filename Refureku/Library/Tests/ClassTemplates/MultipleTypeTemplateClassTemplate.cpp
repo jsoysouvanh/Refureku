@@ -1,1 +1,3 @@
 #include "Generated/MultipleTypeTemplateClassTemplate.rfks.h"
+
+MultipleTypeTemplateClassTemplate<int, float, double> multipleTypeTemplateClassTemplateImplicitInstantiation;
