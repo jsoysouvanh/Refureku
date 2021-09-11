@@ -87,15 +87,6 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCodeForE
 				return kodgen::ETraversalBehaviour::Continue;
 			}
 
-			if (static_cast<kodgen::StructClassInfo const&>(entity).type.isTemplateType())
-			{
-				std::cout << "Name: " << entity.name << std::endl;
-				std::cout << "Full name: " << entity.getFullName() << std::endl;
-				std::cout << "type.getName(false, true): " << static_cast<kodgen::StructClassInfo const&>(entity).type.getName(false, true) << std::endl;
-				std::cout << "type.getCanonicalName(): " << static_cast<kodgen::StructClassInfo const&>(entity).type.getCanonicalName() << std::endl;
-				std::cout << "type.id: " << static_cast<kodgen::StructClassInfo const&>(entity).id << std::endl;
-			}
-
 			beginHiddenGeneratedCode(env, inout_result);
 
 			declareFriendClasses(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);

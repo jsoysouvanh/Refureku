@@ -37,3 +37,10 @@ RFKVariable()
 extern MultipleTypeTemplateClassTemplate<int, float, double> multipleTypeTemplateClassTemplateImplicitInstantiation;
 
 template class RFKClass() MultipleTypeTemplateClassTemplate<int, int, int>;
+
+//Clang compiler has a bug with the "used" attribute so all reflected instantiations must be instantiated explicitely
+#if defined(__clang__)
+
+template class MultipleTypeTemplateClassTemplate<int, float, double>;
+
+#endif
