@@ -319,6 +319,7 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 {
 	//TODO: Move includes in the GenerateHeaderFileHeaderCode and check for each entity what includes it needs
 	inout_result += "#include <cstddef>" + env.getSeparator() + env.getSeparator() +	//cstddef contains the offsetof macro
+					"#include <Refureku/Utility/Macros.h>" + env.getSeparator() +
 					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() + 
 					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
@@ -869,7 +870,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();" + env.getSeparator() + env.getSeparator();
+		inout_result += "private: _RFK_USED static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();" + env.getSeparator() + env.getSeparator();
 	}
 }
 

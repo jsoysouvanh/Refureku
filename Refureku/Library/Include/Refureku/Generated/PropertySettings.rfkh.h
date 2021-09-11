@@ -4,6 +4,7 @@
 
 #include <cstddef>
 
+#include <Refureku/Utility/Macros.h>
 #include <Refureku/Misc/DisableWarningMacros.h>
 #include <Refureku/Utility/CodeGenerationHelpers.h>
 #include <Refureku/TypeInfo/Archetypes/GetArchetype.h>
@@ -11,21 +12,30 @@
 #include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
 #include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
+#include <Refureku/TypeInfo/Archetypes/ClassTemplate.h>
+#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h>
+#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h>
 namespace rfk {class NamespaceFragment;class Function;class Variable;}
 #include <Refureku/TypeInfo/Entity/EEntityKind.h>
 
 #define PropertySettings_GENERATED	\
-friend rfk::Struct;\
+_RFK_UNPACK_IF_NOT_PARSING(friend rfk::Struct;\
 friend rfk::CodeGenerationHelpers;\
 friend implements_template1__rfk_registerChildClass<PropertySettings, void, void(rfk::Struct&)>; \
+\
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::CodeGenerationHelpers::registerChildClass<rfk::Property, ChildClass>(childClass);\
 rfk::Struct const& thisClass = staticGetArchetype();\
 if constexpr (!std::is_same_v<ChildClass, PropertySettings>) const_cast<rfk::Struct&>(thisClass).subclasses.insert(&childClass);\
+}\
 \
-}public: static rfk::Struct const& staticGetArchetype() noexcept;\
+\
+public: static rfk::Struct const& staticGetArchetype() noexcept;\
+\
 public: virtual rfk::Struct const& getArchetype() const noexcept override;\
-_RFK_UNPACK_IF_NOT_PARSING(private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;\
+\
+private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;\
+\
 )\
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;\
 virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\

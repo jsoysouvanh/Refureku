@@ -978,8 +978,6 @@ void testMultipleTypeTemplateClassTemplate()
 	TEST(c->getInstance<3>({ rfk::getArchetype<int>(), rfk::getArchetype<int>(), rfk::getArchetype<int>() }) != nullptr);
 	TEST(c->getInstance<int, float, double>() != nullptr);
 	TEST(c->getInstance<3>({ rfk::getArchetype<int>(), rfk::getArchetype<float>(), rfk::getArchetype<double>() }) != nullptr);
-
-	std::cout << "MultipleTypeTemplateClassTemplate<int, float, double>::id = " << MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype().id << std::endl;
 	TEST(rfk::Database::getEntity(MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype().id) != nullptr);
 	TEST(rfk::getArchetype<MultipleTypeTemplateClassTemplate<int, float, double>>() == &MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype());
 
