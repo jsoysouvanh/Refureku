@@ -57,5 +57,5 @@ namespace rfk
 		EnumValue				= 1 << 9
 	};
 
-	GENERATE_ENUM_OPERATORS(EEntityKind)
+	RFK_GENERATE_ENUM_OPERATORS(EEntityKind)
 }

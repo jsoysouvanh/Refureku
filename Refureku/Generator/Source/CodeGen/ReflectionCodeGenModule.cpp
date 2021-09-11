@@ -443,7 +443,7 @@ void ReflectionCodeGenModule::beginHiddenGeneratedCode(kodgen::MacroCodeGenEnv& 
 	if (!_isGeneratingHiddenCode)
 	{
 		_isGeneratingHiddenCode = true;
-		inout_result += "_RFK_UNPACK_IF_NOT_PARSING(";
+		inout_result += "RFK_UNPACK_IF_NOT_PARSING(";
 	}
 }
 
@@ -870,7 +870,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: _RFK_USED static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();" + env.getSeparator() + env.getSeparator();
+		inout_result += "private: RFK_USED static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();" + env.getSeparator() + env.getSeparator();
 	}
 }
 

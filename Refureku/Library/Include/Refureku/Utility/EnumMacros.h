@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#define GENERATE_ENUM_OPERATORS(EnumName)																		\
+#define RFK_GENERATE_ENUM_OPERATORS(EnumName)																	\
 constexpr EnumName operator|(EnumName flags1, EnumName flags2) noexcept											\
 {																												\
 	using UnderlyingType = std::underlying_type_t<EnumName>;													\

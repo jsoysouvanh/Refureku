@@ -23,7 +23,7 @@
 *		
 *		(replacing void(int, float) by the prototype you want)
 */
-#define GENERATE_IMPLEMENTS_METHOD_TRAITS(MethodName)																					\
+#define RFK_GENERATE_IMPLEMENTS_METHOD_TRAITS(MethodName)																				\
 template<typename Class, typename T>	struct implements_##MethodName {};																\
 template <typename Class, typename Ret, typename... Args>																				\
 struct implements_##MethodName<Class, Ret(Args...)>																						\
@@ -53,7 +53,7 @@ struct implements_##MethodName<Class, Ret(Args...)>																						\
 *		
 *		(replacing void(int, float) by the prototype you want)
 */
-#define GENERATE_IS_CALLABLE_METHOD_TRAITS(MethodName)																							\
+#define RFK_GENERATE_IS_CALLABLE_METHOD_TRAITS(MethodName)																						\
 template<typename Class, typename T>	struct isCallable_##MethodName {};																		\
 template <typename Class, typename Ret, typename... Args>																						\
 struct isCallable_##MethodName<Class, Ret(Args...)>																								\
@@ -83,8 +83,8 @@ struct isCallable_##MethodName<Class, Ret(Args...)>																								\
 *		
 *		(replacing void(int, float) by the prototype you want)
 */
-#define GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(MethodName)																									\
-template<typename Class, typename TemplateType1, typename T>	struct implements_template1_##MethodName {};														\
+#define RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(MethodName)																								\
+template<typename Class, typename TemplateType1, typename T>	struct implements_template1_##MethodName {};													\
 template <typename Class, typename TemplateType1, typename Ret, typename... Args>																				\
 struct implements_template1_##MethodName<Class, TemplateType1, Ret(Args...)>																					\
 {																																								\
@@ -112,18 +112,18 @@ struct implements_template1_##MethodName<Class, TemplateType1, Ret(Args...)>				
 *		
 *		(replacing int by the type you want)
 */
-#define GENERATE_HAS_FIELD_TRAITS(fieldName)																		\
-template <typename Class, typename FieldType>																		\
-struct hasField_##fieldName																							\
-{																													\
-	private:																										\
-		template <typename T>																						\
+#define RFK_GENERATE_HAS_FIELD_TRAITS(fieldName)																								\
+template <typename Class, typename FieldType>																									\
+struct hasField_##fieldName																														\
+{																																				\
+	private:																																	\
+		template <typename T>																													\
 		static constexpr auto check(T*) -> typename std::is_same<std::remove_reference_t<decltype(std::declval<T>().fieldName)>, FieldType>;	\
-																													\
-		template <typename>																							\
-		static constexpr std::false_type check(...);																\
-																													\
-	public:																											\
-		static constexpr bool value = decltype(check<Class>(nullptr))::value;										\
+																																				\
+		template <typename>																														\
+		static constexpr std::false_type check(...);																							\
+																																				\
+	public:																																		\
+		static constexpr bool value = decltype(check<Class>(nullptr))::value;																	\
 };
 

@@ -25,5 +25,5 @@ namespace rfk
 		Inline			= 1 << 1
 	};
 
-	GENERATE_ENUM_OPERATORS(EFunctionFlags)
+	RFK_GENERATE_ENUM_OPERATORS(EFunctionFlags)
 }

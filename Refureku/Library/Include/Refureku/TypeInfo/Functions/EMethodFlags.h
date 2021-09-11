@@ -45,5 +45,5 @@ namespace rfk
 		Const			= 1 << 9
 	};
 
-	GENERATE_ENUM_OPERATORS(EMethodFlags)
+	RFK_GENERATE_ENUM_OPERATORS(EMethodFlags)
 }

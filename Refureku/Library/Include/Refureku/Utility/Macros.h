@@ -10,21 +10,21 @@
 //Compiler dependant macros
 #if defined(__GNUC__)
 
-#define _RFK_ATTRIBUTE(attr) __attribute((attr))
+#define RFK_ATTRIBUTE(attr) __attribute__((attr))
 
-#define _RFK_USED _RFK_ATTRIBUTE(used)
+#define RFK_USED RFK_ATTRIBUTE(used)
 
 #elif defined(__clang__)
 
-#define _RFK_ATTRIBUTE(attr) __attribute((attr))
+#define RFK_ATTRIBUTE(attr) __attribute__((attr))
 
-#define _RFK_USED _RFK_ATTRIBUTE(used)
+#define RFK_USED RFK_ATTRIBUTE(used)
 
 #elif defined(_MSC_VER)
 
-#define _RFK_ATTRIBUTE(attr) __declspec((attr))
+#define RFK_ATTRIBUTE(attr) __declspec((attr))
 
-#define _RFK_USED
+#define RFK_USED
 
 #else
 
@@ -36,9 +36,9 @@
 //This macro "KODGEN_PARSING" must match the name defined by the kodgen parser when parsing source files
 //It is used by the generated code to hide some portions of code to the parser
 #ifdef KODGEN_PARSING
-#define _RFK_UNPACK_IF_NOT_PARSING(...)
+#define RFK_UNPACK_IF_NOT_PARSING(...)
 #else
-#define _RFK_UNPACK_IF_NOT_PARSING(...) __VA_ARGS__
+#define RFK_UNPACK_IF_NOT_PARSING(...) __VA_ARGS__
 #endif
 
 #endif

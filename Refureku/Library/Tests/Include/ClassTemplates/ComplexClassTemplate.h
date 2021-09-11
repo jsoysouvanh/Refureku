@@ -20,14 +20,14 @@ namespace NamespaceForTemplateClass
 	class RFKClass() Vector : public std::vector<T>
 	{
 		private:
-		RFKField()
+			RFKField()
 			int i;
 
 		public:
-		RFKField()
+			RFKField()
 			typename T::Type t;
 
-		RFKMethod()
+			RFKMethod()
 			static void testStaticMethod(T const& t) {}
 
 		//GENERATED CODE
@@ -59,7 +59,7 @@ namespace NamespaceForTemplateClass
 			return type;
 		}
 
-		_RFK_UNPACK_IF_NOT_PARSING(private: static inline rfk::ArchetypeRegisterer _rfk_archetypeRegisterer = staticGetArchetype();)
+		RFK_UNPACK_IF_NOT_PARSING(private: static inline rfk::ArchetypeRegisterer _rfk_archetypeRegisterer = staticGetArchetype();)
 
 		private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept
 		{

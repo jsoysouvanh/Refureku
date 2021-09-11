@@ -19,7 +19,7 @@ namespace rfk {class NamespaceFragment;class Function;class Variable;}
 #include <Refureku/TypeInfo/Entity/EEntityKind.h>
 
 #define CustomInstantiator_GENERATED	\
-_RFK_UNPACK_IF_NOT_PARSING(friend rfk::Struct;\
+RFK_UNPACK_IF_NOT_PARSING(friend rfk::Struct;\
 friend rfk::CodeGenerationHelpers;\
 friend implements_template1__rfk_registerChildClass<CustomInstantiator, void, void(rfk::Struct&)>; \
 \

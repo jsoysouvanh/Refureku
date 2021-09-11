@@ -21,5 +21,5 @@ namespace rfk
 		Static			= 1 << 0
 	};
 
-	GENERATE_ENUM_OPERATORS(EVarFlags)
+	RFK_GENERATE_ENUM_OPERATORS(EVarFlags)
 }
