@@ -34,20 +34,14 @@ namespace rfk
 	* 
 	*	@return The archetype of the provided type if it exists, else nullptr.
 	*/
-	template <template <typename> typename T>
-	Archetype const* getArchetype()	noexcept;
+	template <template <typename...> typename T>
+	Archetype const* getArchetype()	noexcept;								//Variadic type template parameters
 
-	template <template <typename, typename> typename T>
-	Archetype const* getArchetype()	noexcept;
+	template <template <auto...> typename T>
+	Archetype const* getArchetype()	noexcept;								//Variadic non-type template parameters
 
-	template <template <typename, typename, typename> typename T>
-	Archetype const* getArchetype()	noexcept;
-
-	template <template <typename, typename, typename, typename> typename T>
-	Archetype const* getArchetype()	noexcept;
-
-	template <template <auto> typename T>
-	Archetype const* getArchetype()	noexcept;
+	template <template <template <typename...> typename...> typename T>
+	Archetype const* getArchetype()	noexcept;								//Variadic template template type parameters
 
 	template <template <typename, auto> typename T>
 	Archetype const* getArchetype()	noexcept;

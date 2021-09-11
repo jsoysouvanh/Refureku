@@ -1,27 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <iostream>
+#include "ClassTemplates/TestClassAB.h"
 
-#include "Refureku/TypeInfo/Properties/ParseAllNested.h"
-
-#include "Generated/TemplateClass.rfkh.h"
-
-class RFKClass() TestClassA
-{
-	public:
-		using Type = float;
-
-	TestClassA_GENERATED
-};
-
-class RFKClass() TestClassB
-{
-	public:
-		using Type = int;
-
-	TestClassB_GENERATED
-};
+#include "Generated/ComplexClassTemplate.rfkh.h"
 
 namespace rfk
 {
@@ -39,21 +20,21 @@ namespace NamespaceForTemplateClass
 	class RFKClass() Vector : public std::vector<T>
 	{
 		private:
-			RFKField()
+		RFKField()
 			int i;
 
 		public:
-			RFKField()
+		RFKField()
 			typename T::Type t;
 
-			RFKMethod()
+		RFKMethod()
 			static void testStaticMethod(T const& t) {}
 
 		//GENERATED CODE
 		friend rfk::Struct;
 		friend rfk::CodeGenerationHelpers;
 		friend implements_template1__rfk_registerChildClass<Vector<T, U, V>, void, void(rfk::Struct&)>; 
-		
+
 		public: static rfk::Class const& staticGetArchetype() noexcept
 		{
 			static bool initialized = false;
@@ -79,9 +60,9 @@ namespace NamespaceForTemplateClass
 
 			return type;
 		}
-		
+
 		_RFK_UNPACK_IF_NOT_PARSING(private: static inline rfk::ArchetypeRegisterer _rfk_archetypeRegisterer = staticGetArchetype();)
-		
+
 		private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept
 		{
 			rfk::CodeGenerationHelpers::registerChildClass<std::vector<T>, ChildClass>(childClass);
@@ -93,29 +74,17 @@ namespace NamespaceForTemplateClass
 			[[maybe_unused]] rfk::StaticField* staticField = nullptr;
 
 			__RFK_DISABLE_WARNING_PUSH
-			__RFK_DISABLE_WARNING_OFFSETOF
+				__RFK_DISABLE_WARNING_OFFSETOF
 
-			field = childClass.addField("i", 2732867638607707709u, rfk::Type::getType<int>(), static_cast<rfk::EFieldFlags>(4), &thisClass, offsetof(ChildClass, i));
+				field = childClass.addField("i", 2732867638607707709u, rfk::Type::getType<int>(), static_cast<rfk::EFieldFlags>(4), &thisClass, offsetof(ChildClass, i));
 			field = childClass.addField("t", 2732870937142592342u, rfk::Type::getType<typename T::Type>(), static_cast<rfk::EFieldFlags>(1), &thisClass, offsetof(ChildClass, t));
 
 			__RFK_DISABLE_WARNING_POP
 		}
-			
-		//Vector_T_U_V_GENERATED
+
+										  //Vector_T_U_V_GENERATED
 	};
 }
-
-template <typename T>
-class RFKClass(ParseAllNested) TestSimpleClassTemplate : public rfk::Object
-{
-	RFKField()
-	T testField;
-
-	RFKMethod()
-	T testMethod(T const& param) { return param; }
-
-	TestSimpleClassTemplate_T_GENERATED
-};
 
 //class RFKClass() TestTemplateClass
 //{
@@ -129,7 +98,6 @@ class RFKClass(ParseAllNested) TestSimpleClassTemplate : public rfk::Object
 //	TestTemplateClass_GENERATED
 //};
 
-File_TemplateClass_GENERATED
+File_ComplexClassTemplate_GENERATED
 
 template class RFKClass() NamespaceForTemplateClass::Vector<TestClassA, std::vector, 0>;
-template class RFKClass() TestSimpleClassTemplate<TestClassA>;

@@ -33,6 +33,7 @@ shouldParseAllEntities = false
 
 # Include directories of the project
 projectIncludeDirectories = [
+	'''./Include''',
 	'''../Include'''
 ]
 

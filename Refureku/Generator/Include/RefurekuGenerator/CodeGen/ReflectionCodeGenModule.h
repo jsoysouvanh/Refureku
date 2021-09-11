@@ -432,9 +432,9 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			/*void	fillClassTemplateParents(kodgen::StructClassInfo const&	structClass,
-											 kodgen::MacroCodeGenEnv&		env,
-											 std::string&					inout_result)												const	noexcept;*/
+			void	declareAndDefineClassTemplateRegistererVariable(kodgen::StructClassInfo const&	structClass,
+																	kodgen::MacroCodeGenEnv&		env,
+																	std::string&					inout_result)						const	noexcept;
 
 			//Enums code generation
 			/**

@@ -46,7 +46,7 @@ namespace rfk
 			*	@return The instance if any, else nullptr.
 			*/
 			template <size_t ArraySize>
-			ClassTemplateInstance const* getInstance(std::array<Archetype const*, ArraySize> const& archetypes)	const	noexcept;
+			ClassTemplateInstance const* getInstance(std::array<Archetype const*, ArraySize> const& archetypes)	const	noexcept;	//TODO: Should be an array of TemplateArgument instead
 
 			/**
 			*	@brief Add a template parameter.

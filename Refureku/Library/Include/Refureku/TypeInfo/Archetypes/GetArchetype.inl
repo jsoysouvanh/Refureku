@@ -44,31 +44,19 @@ Archetype const* getArchetype() noexcept
 	}
 }
 
-template <template <typename> typename T>
+template <template <typename...> typename T>
 Archetype const* getArchetype()	noexcept
 {
 	return nullptr;
 }
 
-template <template <typename, typename> typename T>
+template <template <auto...> typename T>
 Archetype const* getArchetype()	noexcept
 {
 	return nullptr;
 }
 
-template <template <typename, typename, typename> typename T>
-Archetype const* getArchetype()	noexcept
-{
-	return nullptr;
-}
-
-template <template <typename, typename, typename, typename> typename T>
-Archetype const* getArchetype()	noexcept
-{
-	return nullptr;
-}
-
-template <template <auto> typename T>
+template <template <template <typename...> typename...> typename T>
 Archetype const* getArchetype()	noexcept
 {
 	return nullptr;

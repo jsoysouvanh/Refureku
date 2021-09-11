@@ -250,6 +250,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			if (static_cast<kodgen::StructClassInfo const&>(entity).type.isTemplateType())
 			{
 				defineClassTemplateGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+				declareAndDefineClassTemplateRegistererVariable(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 			}
 			else
 			{
@@ -348,14 +349,14 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 {
 	inout_result += "friend rfk::Struct;" + env.getSeparator();
 	inout_result += "friend rfk::CodeGenerationHelpers;" + env.getSeparator();
-	inout_result += "friend implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator();
+	inout_result += "friend implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "public: static ";
 	inout_result += (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
-	inout_result += " const& staticGetArchetype() noexcept;" + env.getSeparator();
+	inout_result += " const& staticGetArchetype() noexcept;" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -364,7 +365,7 @@ void ReflectionCodeGenModule::declareGetArchetypeMethodIfInheritFromObject(kodge
 	{
 		inout_result += "public: virtual ";
 		inout_result += (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
-		inout_result += " const& getArchetype() const noexcept override;" + env.getSeparator();
+		inout_result += " const& getArchetype() const noexcept override;" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -546,9 +547,8 @@ void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& st
 		{
 			if (parent.type.isTemplateType())
 			{
-				//TODO: FIX THIS
-				//inout_result += generatedEntityVarName + "addToParents(reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<" + parent.type.getName(true, false, true) + ">()), "
-				//										"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
+				inout_result += generatedEntityVarName + "addToParents(reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<" + parent.type.getName(true, false, true) + ">()), "
+														"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
 			}
 			else
 			{
@@ -705,7 +705,7 @@ void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::S
 		((structClass.outerEntity->entityType && (kodgen::EEntityType::Struct | kodgen::EEntityType::Class)) && reinterpret_cast<kodgen::NestedStructClassInfo const&>(structClass).accessSpecifier == kodgen::EAccessSpecifier::Public))
 	{
 		inout_result += "template <> rfk::Archetype const* rfk::getArchetype<" + structClass.getFullName() + ">() noexcept { " +
-			"return &" + structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator();
+			"return &" + structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -765,7 +765,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 		inout_result += "__RFK_DISABLE_WARNING_POP" + env.getSeparator();
 	}
 
-	inout_result += env.getSeparator() + "}";
+	inout_result += "}" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareGetNestedEnumMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -787,6 +787,8 @@ void ReflectionCodeGenModule::declareGetNestedEnumMethods(kodgen::StructClassInf
 			endHiddenGeneratedCode(env, inout_result);
 		}
 	}
+
+	inout_result += env.getSeparator();
 }
 
 void ReflectionCodeGenModule::defineGetNestedEnumMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -807,7 +809,7 @@ void ReflectionCodeGenModule::declareClassRegistererField(kodgen::StructClassInf
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;" + env.getSeparator();
+		inout_result += "private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -817,7 +819,7 @@ void ReflectionCodeGenModule::defineClassRegistererField(kodgen::StructClassInfo
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "rfk::ArchetypeRegisterer " + structClass.getFullName() + "::_rfk_archetypeRegisterer = staticGetArchetype(); " + env.getSeparator();
+		inout_result += "rfk::ArchetypeRegisterer " + structClass.getFullName() + "::_rfk_archetypeRegisterer = staticGetArchetype(); " + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -850,14 +852,14 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateStaticGetArchetypeMet
 	//End init
 	inout_result += "}" + env.getSeparator();
 
-	inout_result += "return type; }";
+	inout_result += "return type; }" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareAndDefineClassTemplateGetArchetypeMethodIfInheritFromObject(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
 	{
-		inout_result += "virtual rfk::ClassTemplateInstance const& getArchetype() const noexcept override { return staticGetArchetype(); }" + env.getSeparator();
+		inout_result += "virtual rfk::ClassTemplateInstance const& getArchetype() const noexcept override { return staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -867,7 +869,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();" + env.getSeparator();
+		inout_result += "private: static inline rfk::ClassTemplateInstanceRegisterer _rfk_registerer = staticGetArchetype();" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -905,7 +907,7 @@ void ReflectionCodeGenModule::defineClassTemplateGetArchetypeTemplateSpecializat
 	//End init if
 	inout_result += "}";
 
-	inout_result += "return &type; }" + env.getSeparator();
+	inout_result += "return &type; }" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::fillClassTemplateParameters(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -930,6 +932,14 @@ void ReflectionCodeGenModule::fillClassTemplateParameters(kodgen::StructClassInf
 			//TODO
 		}
 	}
+}
+
+void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererVariable(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	assert(structClass.type.isTemplateType());
+
+	inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer _register_" + getEntityId(structClass) +
+					" = *rfk::getArchetype<" + structClass.type.getName(false, false, true) + ">(); }" + env.getSeparator() + env.getSeparator();
 }
 
 std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEntityType entityType) noexcept

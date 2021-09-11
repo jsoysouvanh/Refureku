@@ -9,7 +9,7 @@
 #include "TestPropertyUsage.h"
 #include "ThirdPartyEnumReflectionCode.h"
 #include "CustomString.h"
-#include "TemplateClass.h"
+#include "ClassTemplates/SingleTypeTemplateClassTemplate.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -945,9 +945,9 @@ void structDirectChildren()
 	TEST(ppClass.subclasses.size() == 2u);
 }
 
-void typeTemplateClass()
+void testSingleTypeTemplateClassTemplate()
 {
-	rfk::Class const* c = rfk::Database::getClass("TestSimpleClassTemplate");
+	rfk::Class const* c = rfk::Database::getClass("SingleTypeTemplateClassTemplate");
 
 	//Single Type template class
 	TEST(c->isTemplate());
@@ -959,6 +959,12 @@ void typeTemplateClass()
 	TEST(c->asTemplate()->getInstance<int>() == nullptr);
 	TEST(rfk::Database::getEntity(c->asTemplate()->getInstance<TestClassA>()->id) != nullptr);
 	TEST(rfk::Database::getEntity(c->asTemplate()->getInstance<TestClassA>()->id) == c->asTemplate()->getInstance<TestClassA>());
+}
+
+void templateClasses()
+{
+	testSingleTypeTemplateClassTemplate();
+
 
 	//TODO: Test with multiple type template class
 
@@ -995,7 +1001,7 @@ int main()
 	enumManualReflection();
 	classManualReflection();
 	structDirectChildren();
-	typeTemplateClass();
+	templateClasses();
 
 	return EXIT_SUCCESS;
 }
