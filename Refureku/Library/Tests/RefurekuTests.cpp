@@ -9,7 +9,10 @@
 #include "TestPropertyUsage.h"
 #include "ThirdPartyEnumReflectionCode.h"
 #include "CustomString.h"
+
+//Template
 #include "ClassTemplates/SingleTypeTemplateClassTemplate.h"
+#include "ClassTemplates/MultipleTypeTemplateClassTemplate.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -949,7 +952,6 @@ void testSingleTypeTemplateClassTemplate()
 {
 	rfk::Class const* c = rfk::Database::getClass("SingleTypeTemplateClassTemplate");
 
-	//Single Type template class
 	TEST(c->isTemplate());
 	TEST(c->asTemplate()->getProperty<ParseAllNested>() != nullptr);
 
@@ -961,12 +963,44 @@ void testSingleTypeTemplateClassTemplate()
 	TEST(rfk::Database::getEntity(c->asTemplate()->getInstance<TestClassA>()->id) == c->asTemplate()->getInstance<TestClassA>());
 }
 
+void testMultipleTypeTemplateClassTemplate()
+{
+	TEST(rfk::Database::getClass("MultipleTypeTemplateClassTemplate") != nullptr);
+	TEST(rfk::Database::getClass("MultipleTypeTemplateClassTemplate")->isTemplate());
+
+	rfk::ClassTemplate const* c = rfk::Database::getClass("MultipleTypeTemplateClassTemplate")->asTemplate();
+
+	TEST(c->templateParameters.size() == 3u);
+	
+	MultipleTypeTemplateClassTemplate<int, float, double> implicitInstantiation;
+
+	TEST(c->instances.size() == 2u);
+	TEST(c->getInstance<int, int, int>() != nullptr);
+	TEST(c->getInstance<3>({ rfk::getArchetype<int>(), rfk::getArchetype<int>(), rfk::getArchetype<int>() }) != nullptr);
+	TEST(c->getInstance<int, float, double>() != nullptr);
+	TEST(c->getInstance<3>({ rfk::getArchetype<int>(), rfk::getArchetype<float>(), rfk::getArchetype<double>() }) != nullptr);
+	TEST(rfk::Database::getEntity(MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype().id) != nullptr);
+
+	rfk::ClassTemplateInstance const* iiiInstance = c->getInstance<int, int, int>();
+
+	TEST(iiiInstance->getMethod<int(int const&)>("returnT") != nullptr);
+	TEST(iiiInstance->getMethod<int(int const&, int const&)>("returnT") != nullptr);
+	TEST(iiiInstance->getMethod("returnT")->returnType == rfk::Type::getType<int>());
+
+	rfk::ClassTemplateInstance const* ifdInstance = c->getInstance<int, float, double>();
+
+	TEST(ifdInstance->getMethod("returnT") != nullptr);
+	TEST(ifdInstance->getMethod("returnT")->returnType == rfk::Type::getType<int>());
+	TEST(ifdInstance->getMethod("returnU") != nullptr);
+	TEST(ifdInstance->getMethod("returnU")->returnType == rfk::Type::getType<float>());
+	TEST(ifdInstance->getMethod("returnV") != nullptr);
+	TEST(ifdInstance->getMethod("returnV")->returnType == rfk::Type::getType<double>());
+}
+
 void templateClasses()
 {
 	testSingleTypeTemplateClassTemplate();
-
-
-	//TODO: Test with multiple type template class
+	testMultipleTypeTemplateClassTemplate();
 
 	//TODO: Test with Single template template class
 	//TODO: Test with Multiple template template class

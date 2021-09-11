@@ -1,0 +1,1 @@
+#include "Generated/MultipleTypeTemplateClassTemplate.rfks.h"

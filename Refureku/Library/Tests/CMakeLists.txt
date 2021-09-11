@@ -20,6 +20,7 @@ add_executable(${RefurekuTestsTarget}
 
 					ClassTemplates/TestClassAB.cpp
 					ClassTemplates/SingleTypeTemplateClassTemplate.cpp
+					ClassTemplates/MultipleTypeTemplateClassTemplate.cpp
 					ClassTemplates/ComplexClassTemplate.cpp
 
 					RefurekuTests.cpp
