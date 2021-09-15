@@ -14,6 +14,6 @@ namespace rfk
 	class CodeGenManager : public kodgen::CodeGenManager
 	{
 		public:
-			CodeGenManager() noexcept;
+			CodeGenManager(kodgen::uint32 threadCount = 0u) noexcept;
 	};
 }

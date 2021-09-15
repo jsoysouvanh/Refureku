@@ -110,10 +110,11 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 	
-	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, "RefurekuTestsSettings.toml"/*std::forward<fs::path>(settingsFilePath)*/);
+	//loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, "RefurekuTestsSettings.toml"); //For tests
+	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(settingsFilePath));
 
 	//Parse
-	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true, 2u);	//TODO: set to false + 2u
+	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false, 2u);	//TODO: set to false + 2u
 
 	//Result
 	printGenerationResult(logger, genResult);
