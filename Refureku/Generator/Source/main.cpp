@@ -60,13 +60,35 @@ bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeG
 	}
 
 #if RFK_DEV
+
 	//Specify used compiler
 #if defined(__GNUC__)
-	parsingSettings.setCompilerExeName("g++");
+	if (parsingSettings.setCompilerExeName("g++"))
+	{
+		logger.log("Set compiler: g++");
+	}
+	else
+	{
+		logger.log("Failed to set compiler: g++");
+	}
 #elif defined(__clang__)
-	parsingSettings.setCompilerExeName("clang++");
+	if (parsingSettings.setCompilerExeName("clang++"))
+	{
+		logger.log("Set compiler: clang++");
+	}
+	else
+	{
+		logger.log("Failed to set compiler: clang++");
+	}
 #elif defined(_MSC_VER)
-	parsingSettings.setCompilerExeName("msvc");
+	if (parsingSettings.setCompilerExeName("msvc"))
+	{
+		logger.log("Set compiler: msvc");
+	}
+	else
+	{
+		logger.log("Failed to set compiler: msvc");
+	}
 #endif
 
 #endif
