@@ -11,11 +11,11 @@ DefaultEntityRegisterer::DefaultEntityRegisterer(Entity const* entity) noexcept:
 	assert(_registeredEntity->outerEntity == nullptr);
 
 	//Register to database
-	Database::registerFileLevelEntity(*entity, false);
+	Database::getInternal().registerFileLevelEntity(*entity, false);
 }
 
 DefaultEntityRegisterer::~DefaultEntityRegisterer()noexcept
 {
 	//Unregister from database
-	Database::unregisterEntity(*_registeredEntity, false);
+	Database::getInternal().unregisterEntity(*_registeredEntity, false);
 }

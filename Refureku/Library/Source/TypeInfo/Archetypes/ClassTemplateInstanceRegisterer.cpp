@@ -9,10 +9,10 @@ ClassTemplateInstanceRegisterer::ClassTemplateInstanceRegisterer(ClassTemplateIn
 	_registeredClassTemplateInstance{classTemplateInstance}
 {
 	//Class template instances only register their ID to the database since they are already registered to their original class template.
-	Database::registerEntity(classTemplateInstance, false);
+	Database::getInternal().registerEntity(classTemplateInstance, false);
 }
 
 ClassTemplateInstanceRegisterer::~ClassTemplateInstanceRegisterer() noexcept
 {
-	Database::unregisterEntity(_registeredClassTemplateInstance, false);
+	Database::getInternal().unregisterEntity(_registeredClassTemplateInstance, false);
 }

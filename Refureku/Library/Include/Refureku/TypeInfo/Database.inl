@@ -5,8 +5,19 @@
 *	See the README.md file for full license details.
 */
 
+inline Database const& getDatabase() noexcept
+{
+	return Database::getInternal();
+}
+
+inline Database& Database::getInternal() noexcept
+{
+	static Database database;
+	return database;
+}
+
 template <typename Predicate, typename>
-Entity const* Database::getEntity(Predicate predicate)
+Entity const* Database::getEntity(Predicate predicate) const
 {
 	for (Entity const* entity : _entitiesById)
 	{
@@ -20,7 +31,7 @@ Entity const* Database::getEntity(Predicate predicate)
 }
 
 template <typename Predicate, typename>
-Namespace const* Database::getNamespace(Predicate predicate)
+Namespace const* Database::getNamespace(Predicate predicate) const
 {
 	for (Namespace const* n : _fileLevelNamespacesByName)
 	{
@@ -34,7 +45,7 @@ Namespace const* Database::getNamespace(Predicate predicate)
 }
 
 template <typename Predicate, typename>
-Archetype const* Database::getArchetype(Predicate predicate)
+Archetype const* Database::getArchetype(Predicate predicate) const
 {
 	Archetype const* result = nullptr;
 
@@ -53,7 +64,7 @@ Archetype const* Database::getArchetype(Predicate predicate)
 }
 
 template <typename Predicate, typename>
-Struct const* Database::getStruct(Predicate predicate)
+Struct const* Database::getStruct(Predicate predicate) const
 {
 	for (Struct const* s : _fileLevelStructsByName)
 	{
@@ -67,7 +78,7 @@ Struct const* Database::getStruct(Predicate predicate)
 }
 
 template <typename Predicate, typename>
-Class const* Database::getClass(Predicate predicate)
+Class const* Database::getClass(Predicate predicate) const
 {
 	for (Class const* c : _fileLevelClassesByName)
 	{
@@ -81,7 +92,7 @@ Class const* Database::getClass(Predicate predicate)
 }
 
 template <typename Predicate, typename>
-Enum const* Database::getEnum(Predicate predicate)
+Enum const* Database::getEnum(Predicate predicate) const
 {
 	for (Enum const* e : _fileLevelEnumsByName)
 	{
@@ -95,7 +106,7 @@ Enum const* Database::getEnum(Predicate predicate)
 }
 
 template <typename Predicate, typename>
-FundamentalArchetype const* Database::getFundamentalArchetype(Predicate predicate)
+FundamentalArchetype const* Database::getFundamentalArchetype(Predicate predicate) const
 {
 	for (FundamentalArchetype const* fundamentalArchetype : _fundamentalArchetypes)
 	{
@@ -109,7 +120,7 @@ FundamentalArchetype const* Database::getFundamentalArchetype(Predicate predicat
 }
 
 template <typename Predicate, typename>
-Variable const* Database::getVariable(Predicate predicate)
+Variable const* Database::getVariable(Predicate predicate) const
 {
 	for (Variable const* variable : _fileLevelVariablesByName)
 	{
@@ -123,7 +134,7 @@ Variable const* Database::getVariable(Predicate predicate)
 }
 
 template <typename Predicate, typename>
-Function const* Database::getFunction(Predicate predicate)
+Function const* Database::getFunction(Predicate predicate) const
 {
 	for (Function const* function : _fileLevelFunctionsByName)
 	{
@@ -137,7 +148,7 @@ Function const* Database::getFunction(Predicate predicate)
 }
 
 template <typename FunctionSignature>
-Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) noexcept
+Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) const noexcept
 {
 	static_assert(std::is_function_v<FunctionSignature>, "Database::getFunction<> must be called with a function signature as template argument.");
 

@@ -8,52 +8,6 @@
 
 using namespace rfk;
 
-//Init database containers BEFORE any other code so that reflected classes can register at startup
-#if defined(__GNUC__) || defined(__clang__)
-
-Database::EntitiesById					Database::_entitiesById					__attribute__((init_priority(101)));
-Database::NamespacesByName				Database::_fileLevelNamespacesByName	__attribute__((init_priority(101)));
-Database::FundamentalArchetypesByName	Database::_fundamentalArchetypes		__attribute__((init_priority(101)));
-Database::StructsByName					Database::_fileLevelStructsByName		__attribute__((init_priority(101)));
-Database::ClassesByName					Database::_fileLevelClassesByName		__attribute__((init_priority(101)));
-Database::EnumsByName					Database::_fileLevelEnumsByName			__attribute__((init_priority(101)));
-Database::VariablesByName				Database::_fileLevelVariablesByName		__attribute__((init_priority(101)));
-Database::FunctionsByName				Database::_fileLevelFunctionsByName		__attribute__((init_priority(101)));
-Database::GenNamespaces					Database::_generatedNamespaces			__attribute__((init_priority(101)));
-
-#elif defined(_MSC_VER)
-
-__RFK_DISABLE_WARNING_PUSH
-__RFK_DISABLE_WARNING_INIT_SEG
-
-#pragma init_seg(lib)
-
-__RFK_DISABLE_WARNING_POP
-
-Database::EntitiesById					Database::_entitiesById;
-Database::NamespacesByName				Database::_fileLevelNamespacesByName;
-Database::FundamentalArchetypesByName	Database::_fundamentalArchetypes;
-Database::StructsByName					Database::_fileLevelStructsByName;
-Database::ClassesByName					Database::_fileLevelClassesByName;
-Database::EnumsByName					Database::_fileLevelEnumsByName;
-Database::VariablesByName				Database::_fileLevelVariablesByName;
-Database::FunctionsByName				Database::_fileLevelFunctionsByName;
-Database::GenNamespaces					Database::_generatedNamespaces;
-
-#else
-
-Database::EntitiesById					Database::_entitiesById;
-Database::NamespacesByName				Database::_fileLevelNamespacesByName;
-Database::FundamentalArchetypesByName	Database::_fundamentalArchetypes;
-Database::StructsByName					Database::_fileLevelStructsByName;
-Database::ClassesByName					Database::_fileLevelClassesByName;
-Database::EnumsByName					Database::_fileLevelEnumsByName;
-Database::VariablesByName				Database::_fileLevelVariablesByName;
-Database::FunctionsByName				Database::_fileLevelFunctionsByName;
-Database::GenNamespaces					Database::_generatedNamespaces;
-
-#endif
-
 void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	//Register by id
@@ -359,7 +313,7 @@ std::shared_ptr<Namespace> Database::generateNamespace(char const* name, uint64 
 	return _generatedNamespaces.emplace_back(std::make_shared<Namespace>(name, id));
 }
 
-Entity const* Database::getEntity(uint64 id) noexcept
+Entity const* Database::getEntity(uint64 id) const noexcept
 {
 	Entity searching("", id);
 
@@ -368,12 +322,12 @@ Entity const* Database::getEntity(uint64 id) noexcept
 	return (it != _entitiesById.cend()) ? *it : nullptr;
 }
 
-Namespace const* Database::getNamespace(uint64 id) noexcept
+Namespace const* Database::getNamespace(uint64 id) const noexcept
 {
 	return entityCast<Namespace>(getEntity(id));
 }
 
-Namespace const* Database::getNamespace(std::string namespaceName)
+Namespace const* Database::getNamespace(std::string namespaceName) const
 {
 	size_t index = namespaceName.find_first_of(':');
 
@@ -413,12 +367,12 @@ Namespace const* Database::getNamespace(std::string namespaceName)
 	return result;
 }
 
-Archetype const* Database::getArchetype(uint64 id) noexcept
+Archetype const* Database::getArchetype(uint64 id) const noexcept
 {
 	return entityCast<Archetype>(getEntity(id));
 }
 
-Archetype const* Database::getArchetype(std::string archetypeName) noexcept
+Archetype const* Database::getArchetype(std::string archetypeName) const noexcept
 {
 	Archetype const* result = getClass(archetypeName);
 	
@@ -440,12 +394,12 @@ Archetype const* Database::getArchetype(std::string archetypeName) noexcept
 	return result;
 }
 
-Struct const* Database::getStruct(uint64 id) noexcept
+Struct const* Database::getStruct(uint64 id) const noexcept
 {
 	return entityCast<Struct>(getEntity(id));
 }
 
-Struct const* Database::getStruct(std::string structName) noexcept
+Struct const* Database::getStruct(std::string structName) const noexcept
 {
 	Entity searchedStruct(std::move(structName), 0u);
 
@@ -454,12 +408,12 @@ Struct const* Database::getStruct(std::string structName) noexcept
 	return (it != _fileLevelStructsByName.cend()) ? *it : nullptr;
 }
 
-Class const* Database::getClass(uint64 id) noexcept
+Class const* Database::getClass(uint64 id) const noexcept
 {
 	return entityCast<Class>(getEntity(id));
 }
 
-Class const* Database::getClass(std::string className) noexcept
+Class const* Database::getClass(std::string className) const noexcept
 {
 	Entity searchedClass(std::move(className), 0u);
 
@@ -468,12 +422,12 @@ Class const* Database::getClass(std::string className) noexcept
 	return (it != _fileLevelClassesByName.cend()) ? *it : nullptr;
 }
 
-Enum const* Database::getEnum(uint64 id) noexcept
+Enum const* Database::getEnum(uint64 id) const noexcept
 {
 	return entityCast<Enum>(getEntity(id));
 }
 
-Enum const* Database::getEnum(std::string enumName) noexcept
+Enum const* Database::getEnum(std::string enumName) const noexcept
 {
 	Entity searchedEnum(std::move(enumName), 0u);
 
@@ -482,12 +436,12 @@ Enum const* Database::getEnum(std::string enumName) noexcept
 	return (it != _fileLevelEnumsByName.cend()) ? *it : nullptr;
 }
 
-FundamentalArchetype const* Database::getFundamentalArchetype(uint64 id) noexcept
+FundamentalArchetype const* Database::getFundamentalArchetype(uint64 id) const noexcept
 {
 	return entityCast<FundamentalArchetype>(getEntity(id));
 }
 
-FundamentalArchetype const* Database::getFundamentalArchetype(std::string archetypeName) noexcept
+FundamentalArchetype const* Database::getFundamentalArchetype(std::string archetypeName) const noexcept
 {
 	Entity searchedFundamentalArchetype(std::move(archetypeName), 0u);
 
@@ -496,12 +450,12 @@ FundamentalArchetype const* Database::getFundamentalArchetype(std::string archet
 	return (it != _fundamentalArchetypes.cend()) ? *it : nullptr;
 }
 
-Variable const* Database::getVariable(uint64 id) noexcept
+Variable const* Database::getVariable(uint64 id) const noexcept
 {
 	return entityCast<Variable>(getEntity(id));
 }
 
-Variable const* Database::getVariable(std::string variableName, EVarFlags flags) noexcept
+Variable const* Database::getVariable(std::string variableName, EVarFlags flags) const noexcept
 {
 	Entity searchedVariable(std::move(variableName), 0u);
 
@@ -510,12 +464,12 @@ Variable const* Database::getVariable(std::string variableName, EVarFlags flags)
 	return (it != _fileLevelVariablesByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }
 
-Function const* Database::getFunction(uint64 id) noexcept
+Function const* Database::getFunction(uint64 id) const noexcept
 {
 	return entityCast<Function>(getEntity(id));
 }
 
-Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) noexcept
+Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) const noexcept
 {
 	Entity searchedFunction(std::move(functionName), 0u);
 
@@ -524,80 +478,67 @@ Function const* Database::getFunction(std::string functionName, EFunctionFlags f
 	return (it != _fileLevelFunctionsByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }
 
-Method const* Database::getMethod(uint64 id) noexcept
+Method const* Database::getMethod(uint64 id) const noexcept
 {
 	return entityCast<Method>(getEntity(id));
 }
 
-StaticMethod const* Database::getStaticMethod(uint64 id) noexcept
+StaticMethod const* Database::getStaticMethod(uint64 id) const noexcept
 {
 	return entityCast<StaticMethod>(getEntity(id));
 }
 
-Field const* Database::getField(uint64 id) noexcept
+Field const* Database::getField(uint64 id) const noexcept
 {
 	return entityCast<Field>(getEntity(id));
 }
 
-StaticField const* Database::getStaticField(uint64 id) noexcept
+StaticField const* Database::getStaticField(uint64 id) const noexcept
 {
 	return entityCast<StaticField>(getEntity(id));
 }
 
-EnumValue const* Database::getEnumValue(uint64 id) noexcept
+EnumValue const* Database::getEnumValue(uint64 id) const noexcept
 {
 	return entityCast<EnumValue>(getEntity(id));
 }
 
-void Database::clear() noexcept
-{
-	_entitiesById.clear();
-	_fileLevelNamespacesByName.clear();
-	_fileLevelStructsByName.clear();
-	_fileLevelClassesByName.clear();
-	_fileLevelEnumsByName.clear();
-	_fileLevelVariablesByName.clear();
-	_fileLevelFunctionsByName.clear();
-
-	//Don't clear _fundamentalArchetypes because it will never re-register
-}
-
-Database::EntitiesById const& Database::getEntitiesById() noexcept
+Database::EntitiesById const& Database::getEntitiesById() const noexcept
 {
 	return _entitiesById;
 }
 
-Database::NamespacesByName const& Database::getFileLevelNamespaces() noexcept
+Database::NamespacesByName const& Database::getFileLevelNamespaces() const noexcept
 {
 	return _fileLevelNamespacesByName;
 }
 
-Database::FundamentalArchetypesByName const& Database::getFundamentalArchetypes() noexcept
+Database::FundamentalArchetypesByName const& Database::getFundamentalArchetypes() const noexcept
 {
 	return _fundamentalArchetypes;
 }
 
-Database::StructsByName const& Database::getFileLevelStructs() noexcept
+Database::StructsByName const& Database::getFileLevelStructs() const noexcept
 {
 	return _fileLevelStructsByName;
 }
 
-Database::ClassesByName const& Database::getFileLevelClasses() noexcept
+Database::ClassesByName const& Database::getFileLevelClasses() const noexcept
 {
 	return _fileLevelClassesByName;
 }
 
-Database::EnumsByName const& Database::getFileLevelEnums() noexcept
+Database::EnumsByName const& Database::getFileLevelEnums() const noexcept
 {
 	return _fileLevelEnumsByName;
 }
 
-Database::VariablesByName const& Database::getFileLevelVariables() noexcept
+Database::VariablesByName const& Database::getFileLevelVariables() const noexcept
 {
 	return _fileLevelVariablesByName;
 }
 
-Database::FunctionsByName const& Database::getFileLevelFunctions() noexcept
+Database::FunctionsByName const& Database::getFileLevelFunctions() const noexcept
 {
 	return _fileLevelFunctionsByName;
 }
