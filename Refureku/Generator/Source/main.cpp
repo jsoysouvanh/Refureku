@@ -136,7 +136,7 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(settingsFilePath));
 
 	//Parse
-	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false, 2u);
+	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
 
 	//Result
 	printGenerationResult(logger, genResult);
