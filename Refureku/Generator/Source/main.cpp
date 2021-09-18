@@ -121,12 +121,12 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	rfk::CodeGenManager codeGenMgr;
 	codeGenMgr.logger = &logger;
 
-	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
-
 	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
 	kodgen::MacroCodeGenUnit codeGenUnit;
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
+	
+	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
 	codeGenUnit.addModule(reflectionCodeGenModule);
 
 	//Load settings

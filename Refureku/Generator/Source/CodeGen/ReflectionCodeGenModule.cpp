@@ -419,7 +419,7 @@ bool ReflectionCodeGenModule::isPublicClass(kodgen::StructClassInfo const& class
 		else
 		{
 			return	static_cast<kodgen::NestedStructClassInfo const&>(class_).accessSpecifier == kodgen::EAccessSpecifier::Public &&
-					isPublicClass(static_cast<kodgen::StructClassInfo const&>(class_));
+					isPublicClass(static_cast<kodgen::StructClassInfo const&>(*class_.outerEntity));
 		}
 	}
 }
