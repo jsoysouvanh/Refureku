@@ -10,12 +10,6 @@ inline Database const& getDatabase() noexcept
 	return Database::getInternal();
 }
 
-inline Database& Database::getInternal() noexcept
-{
-	static Database database;
-	return database;
-}
-
 template <typename Predicate, typename>
 Entity const* Database::getEntity(Predicate predicate) const
 {

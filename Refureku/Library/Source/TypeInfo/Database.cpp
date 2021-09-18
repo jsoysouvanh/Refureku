@@ -8,6 +8,12 @@
 
 using namespace rfk;
 
+Database& Database::getInternal() noexcept
+{
+	static Database database;
+	return database;
+}
+
 void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	//Register by id

@@ -72,7 +72,7 @@ namespace rfk
 			* 
 			*	@return An instance of the database.
 			*/
-			inline static Database&		getInternal()														noexcept;
+			static Database&			getInternal()														noexcept;
 
 			/**
 			*	@brief Register a file level entity to the database (add it to both _entitiesById & _fileLevelEntitiesByName).
