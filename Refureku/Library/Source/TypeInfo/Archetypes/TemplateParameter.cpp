@@ -4,6 +4,22 @@
 
 using namespace rfk;
 
+TemplateParameter::TemplateParameter(std::string&& name, ETemplateParameterKind kind) noexcept:
+	_name{std::forward<std::string>(name)},
+	_kind{kind}
+{
+}
+
+std::string const& TemplateParameter::getName() const noexcept
+{
+	return _name;
+}
+
+ETemplateParameterKind TemplateParameter::getKind() const noexcept
+{
+	return _kind;
+}
+
 TypeTemplateParameter::TypeTemplateParameter(std::string&& name) noexcept:
 	TemplateParameter{std::forward<std::string>(name), ETemplateParameterKind::TypeTemplateParameter}
 {

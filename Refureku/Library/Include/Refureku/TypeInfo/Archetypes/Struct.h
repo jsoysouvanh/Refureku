@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <type_traits>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Variables/Field.h"
 #include "Refureku/TypeInfo/Variables/StaticField.h"
@@ -94,12 +95,12 @@ namespace rfk
 			/** All tagged static methods declared in this struct. */
 			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
 
-			Struct(std::string&&	name,
-				   uint64			id,
-				   uint64			memorySize,
-				   bool				isClass)		noexcept;
-			Struct(Struct const&)					= delete;
-			Struct(Struct&&)						= delete;
+			REFUREKU_API Struct(std::string&&	name,
+								uint64			id,
+								uint64			memorySize,
+								bool			isClass)		noexcept;
+			Struct(Struct const&)								= delete;
+			Struct(Struct&&)									= delete;
 
 			/**
 			*	@brief Retrieve from this struct a nested archetype matching with a given predicate.
@@ -127,7 +128,7 @@ namespace rfk
 			*
 			*	@return The found nested struct if any, else nullptr.
 			*/
-			Struct const*						getNestedStruct(std::string			structName,
+			REFUREKU_API Struct const*			getNestedStruct(std::string			structName,
 																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
 
 			/**
@@ -146,8 +147,8 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			Struct const*						getNestedClass(std::string			className,
-																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
+			REFUREKU_API Struct const*			getNestedClass(std::string		className,
+															   EAccessSpecifier	access = EAccessSpecifier::Undefined)				const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a nested enum matching with a given predicate.
@@ -165,7 +166,7 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			Enum const*							getNestedEnum(std::string		enumName,
+			REFUREKU_API Enum const*			getNestedEnum(std::string		enumName,
 															  EAccessSpecifier	access = EAccessSpecifier::Undefined)				const	noexcept;
 
 			/**
@@ -193,7 +194,7 @@ namespace rfk
 			*	@return The first field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			Field const*						getField(std::string	fieldName,
+			REFUREKU_API Field const*			getField(std::string	fieldName,
 														 EFieldFlags	minFlags				= EFieldFlags::Default,
 														 bool			shouldInspectInherited	= false)							const	noexcept;
 
@@ -221,9 +222,9 @@ namespace rfk
 			*
 			*	@return A vector of all fields named fieldName fulfilling all requirements.
 			*/
-			std::vector<Field const*>			getFields(std::string	fieldName,
-														 EFieldFlags	minFlags				= EFieldFlags::Default,
-														 bool			shouldInspectInherited	= false)							const	noexcept;
+			REFUREKU_API std::vector<Field const*>	getFields(std::string	fieldName,
+															  EFieldFlags	minFlags				= EFieldFlags::Default,
+															  bool			shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a static field matching with a given predicate.
@@ -251,9 +252,9 @@ namespace rfk
 			*	@return The first static field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			StaticField const*					getStaticField(std::string	fieldName,
-															   EFieldFlags	minFlags				= EFieldFlags::Default,
-															   bool			shouldInspectInherited	= false)						const	noexcept;
+			REFUREKU_API StaticField const*					getStaticField(std::string	fieldName,
+																		   EFieldFlags	minFlags				= EFieldFlags::Default,
+																		   bool			shouldInspectInherited	= false)				const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct all static fields matching with a given predicate.
@@ -280,9 +281,9 @@ namespace rfk
 			*
 			*	@return A vector of all static fields named fieldName fulfilling all requirements.
 			*/
-			std::vector<StaticField const*>		getStaticFields(std::string	fieldName,
-															   EFieldFlags	minFlags				= EFieldFlags::Default,
-															   bool			shouldInspectInherited	= false)						const	noexcept;
+			REFUREKU_API std::vector<StaticField const*>	getStaticFields(std::string	fieldName,
+																			EFieldFlags	minFlags				= EFieldFlags::Default,
+																			bool		shouldInspectInherited	= false)				const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a method matching with a given predicate.
@@ -328,7 +329,7 @@ namespace rfk
 			*
 			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			Method const*						getMethod(std::string const&	methodName,
+			REFUREKU_API Method const*			getMethod(std::string const&	methodName,
 														  EMethodFlags			minFlags				= EMethodFlags::Default,
 														  bool					shouldInspectInherited	= false)					const	noexcept;
 
@@ -356,9 +357,9 @@ namespace rfk
 			*
 			*	@return A vector of all methods named methodName fulfilling all requirements. 
 			*/
-			std::vector<Method const*>			getMethods(std::string const&	methodName,
-														   EMethodFlags			minFlags				= EMethodFlags::Default,
-														   bool					shouldInspectInherited	= false)					const	noexcept;
+			REFUREKU_API std::vector<Method const*>	getMethods(std::string const&	methodName,
+															   EMethodFlags			minFlags				= EMethodFlags::Default,
+															   bool					shouldInspectInherited	= false)					const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a static method matching with a given predicate.
@@ -406,7 +407,7 @@ namespace rfk
 			*
 			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			StaticMethod const*					getStaticMethod(std::string const&	methodName,
+			REFUREKU_API StaticMethod const*	getStaticMethod(std::string const&	methodName,
 																EMethodFlags		minFlags				= EMethodFlags::Default,
 																bool				shouldInspectInherited	= false)				const	noexcept;
 
@@ -435,9 +436,9 @@ namespace rfk
 			*
 			*	@return All static methods named methodName fulfilling all requirements. 
 			*/
-			std::vector<StaticMethod const*>	getStaticMethods(std::string const&	methodName,
-																 EMethodFlags		minFlags				= EMethodFlags::Default,
-																 bool				shouldInspectInherited	= false)				const	noexcept;
+			REFUREKU_API std::vector<StaticMethod const*>	getStaticMethods(std::string const&	methodName,
+																			 EMethodFlags		minFlags				= EMethodFlags::Default,
+																			 bool				shouldInspectInherited	= false)				const	noexcept;
 
 			/**
 			*	@brief	Compute the list of all direct reflected subclasses of this struct.
@@ -446,7 +447,7 @@ namespace rfk
 			* 
 			*	@return A list of all direct reflected subclasses of this struct.
 			*/
-			std::vector<Struct const*>			getDirectSubclasses()																const	noexcept;
+			REFUREKU_API std::vector<Struct const*>	getDirectSubclasses()															const	noexcept;
 
 			/**
 			*	@brief Make an instance of the class represented by this archetype.
@@ -468,12 +469,12 @@ namespace rfk
 			/**
 			*	@return true if this type is a subclass from the provided type, else false.
 			*/
-			bool		isSubclassOf(Struct const& otherType)					const	noexcept;
+			REFUREKU_API bool		isSubclassOf(Struct const& otherType)					const	noexcept;
 			
 			/**
 			*	@return true if this type is a parent (direct or not) of the provided type, else false.
 			*/
-			bool		isBaseOf(Struct const& otherType)						const	noexcept;
+			REFUREKU_API bool		isBaseOf(Struct const& otherType)						const	noexcept;
 
 			/**
 			*	@brief Add the type T to this type's parents if T is a reflected class.
@@ -481,7 +482,7 @@ namespace rfk
 			*	@param inheritanceAccess The inheritance access for the provided parent.
 			*/
 			template <typename T>
-			void		addToParents(EAccessSpecifier inheritanceAccess)				noexcept;
+			void		addToParents(EAccessSpecifier inheritanceAccess)							noexcept;
 
 			/**
 			*	@brief Add the parent to this type's parent if it is not nullptr.
@@ -489,8 +490,8 @@ namespace rfk
 			*	@param parent				The struct to add as parent.
 			*	@param inheritanceAccess	The inheritance access for the provided parent.
 			*/
-			void		addToParents(Struct const*		parent,
-									 EAccessSpecifier	inheritanceAccess)				noexcept;
+			REFUREKU_API void		addToParents(Struct const*		parent,
+												 EAccessSpecifier	inheritanceAccess)				noexcept;
 
 			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
@@ -499,7 +500,7 @@ namespace rfk
 			*	@param instantiator Pointer to the static method.
 			*/
 			template <typename ReturnType>
-			void		addCustomInstantiator(StaticMethod const* instantiator)			noexcept;
+			void		addCustomInstantiator(StaticMethod const* instantiator)						noexcept;
 			
 			/**
 			*	@brief	Setup the default instantiator to use when a Struct::makeInstance is called without parameters.
@@ -507,7 +508,7 @@ namespace rfk
 			*
 			*	@param defaultInstantiator Pointer to the instantiator method.
 			*/
-			void		setDefaultInstantiator(void*(*defaultInstantiator)())			noexcept;
+			REFUREKU_API void		setDefaultInstantiator(void*(*defaultInstantiator)())			noexcept;
 
 			/**
 			*	@brief Add a field to the struct.
@@ -522,12 +523,12 @@ namespace rfk
 			*	@return A pointer to the added field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			Field*			addField(std::string	fieldName,
-									 uint64			entityId,
-									 Type const&	type,
-									 EFieldFlags	flags,
-									 Struct const*	outerEntity_,
-									 uint64			memoryOffset)						noexcept;
+			REFUREKU_API Field*			addField(std::string	fieldName,
+												 uint64			entityId,
+												 Type const&	type,
+												 EFieldFlags	flags,
+												 Struct const*	outerEntity_,
+												 uint64			memoryOffset)						noexcept;
 
 			/**
 			*	@brief Add a static field to the struct.
@@ -542,12 +543,12 @@ namespace rfk
 			*	@return A pointer to the added static field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the static field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			StaticField*	addStaticField(std::string		fieldName,
-										   uint64			entityId,
-										   Type const&		type,
-										   EFieldFlags		flags,
-										   Struct const*	outerEntity_,
-										   void*			fieldPtr)					noexcept;
+			REFUREKU_API StaticField*	addStaticField(std::string		fieldName,
+													   uint64			entityId,
+													   Type const&		type,
+													   EFieldFlags		flags,
+													   Struct const*	outerEntity_,
+													   void*			fieldPtr)					noexcept;
 
 			/**
 			*	@brief	Add a static field to the struct..
@@ -563,12 +564,12 @@ namespace rfk
 			*	@return A pointer to the added static field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the static field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			StaticField*	addStaticField(std::string		fieldName,
-										   uint64			entityId,
-										   Type const&		type,
-										   EFieldFlags		flags,
-										   Struct const*	outerEntity_,
-										   void const*		fieldPtr)					noexcept;
+			REFUREKU_API StaticField*	addStaticField(std::string		fieldName,
+													   uint64			entityId,
+													   Type const&		type,
+													   EFieldFlags		flags,
+													   Struct const*	outerEntity_,
+													   void const*		fieldPtr)					noexcept;
 
 			/**
 			*	@brief Add a method to the struct.
@@ -582,11 +583,11 @@ namespace rfk
 			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			Method*			addMethod(std::string					methodName,
-									  uint64						entityId,
-									  Type const&					returnType,
-									  std::unique_ptr<ICallable>	internalMethod,
-									  EMethodFlags					flags)				noexcept;
+			REFUREKU_API Method*		addMethod(std::string					methodName,
+												  uint64						entityId,
+												  Type const&					returnType,
+												  std::unique_ptr<ICallable>	internalMethod,
+												  EMethodFlags					flags)				noexcept;
 
 			/**
 			*	@brief Add a static method to the struct.
@@ -600,23 +601,23 @@ namespace rfk
 			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the static method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			StaticMethod*	addStaticMethod(std::string					methodName,
-											uint64						entityId,
-											Type const&					returnType,
-											std::unique_ptr<ICallable>	internalMethod,
-											EMethodFlags				flags)			noexcept;
+			REFUREKU_API StaticMethod*	addStaticMethod(std::string					methodName,
+														uint64						entityId,
+														Type const&					returnType,
+														std::unique_ptr<ICallable>	internalMethod,
+														EMethodFlags				flags)			noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.
 			*	
 			*	@param nestedArchetype	Nested archetype.
-			*	@param accessSpeficier_	Access of the nested archetype in the struct.
+			*	@param accessSpeficier	Access of the nested archetype in the struct.
 			*	
 			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the archetype **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			Archetype*		addNestedArchetype(Archetype const* nestedArchetype,
-											   EAccessSpecifier	accessSpecifier_)		noexcept;
+			REFUREKU_API Archetype*		addNestedArchetype(Archetype const* nestedArchetype,
+														   EAccessSpecifier	accessSpecifier)		noexcept;
 
 			/**
 			*	@brief	Check if this class is a template or not.

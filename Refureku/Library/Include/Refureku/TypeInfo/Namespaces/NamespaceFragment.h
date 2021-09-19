@@ -9,6 +9,7 @@
 
 #include <vector>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
 
 namespace rfk
@@ -19,8 +20,8 @@ namespace rfk
 			/** Collection of all entities contained in this namespace fragment. */
 			std::vector<Entity const*>	nestedEntities;
 
-			NamespaceFragment(std::string&& newName,
-							  uint64		newId	= 0u)	noexcept;
+			REFUREKU_API NamespaceFragment(std::string&& newName,
+										   uint64		 newId	= 0u)	noexcept;
 			NamespaceFragment(NamespaceFragment const&)		= delete;
 			NamespaceFragment(NamespaceFragment&&)			= default;
 			~NamespaceFragment()							= default;
@@ -32,6 +33,6 @@ namespace rfk
 			*	
 			*	@param this.
 			*/
-			NamespaceFragment* addNestedEntity(Entity const* nestedEntity) noexcept;
+			REFUREKU_API NamespaceFragment* addNestedEntity(Entity const* nestedEntity) noexcept;
 	};
 }

@@ -54,9 +54,9 @@ void FunctionBase::checkReturnType() const
 {
 	Type providedType = Type::getType<ReturnType>();
 
-	if (!returnType.match(providedType))
+	if (!getReturnType().match(providedType))
 	{
-		throw ReturnTypeMismatch("The specified return type is incorrect.\nProvided: \n" + providedType.toString() + "\nExpected: \n" + returnType.toString());
+		throw ReturnTypeMismatch("The specified return type is incorrect.\nProvided: \n" + providedType.toString() + "\nExpected: \n" + getReturnType().toString());
 	}
 }
 
@@ -69,7 +69,7 @@ bool FunctionBase::hasSameArgumentsCount() const noexcept
 template <typename ReturnType>
 bool FunctionBase::hasSameReturnType() const noexcept
 {
-	return Type::getType<ReturnType>() == returnType;
+	return Type::getType<ReturnType>() == getReturnType();
 }
 
 template <typename... ArgTypes>

@@ -10,6 +10,7 @@
 #include <memory>	//unique_ptr
 #include <vector>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Functions/FunctionParameter.h"
 #include "Refureku/TypeInfo/Functions/ICallable.h"
@@ -22,6 +23,9 @@ namespace rfk
 	class FunctionBase : public Entity
 	{
 		private:
+			/** Type returned by this function. */
+			Type const&	_returnType;
+
 			template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
 			void	checkArguments()		const;
 
@@ -84,8 +88,6 @@ namespace rfk
 			void checkReturnType()		const;
 			
 		public:
-			/** Type returned by this function. */
-			Type const&						returnType;
 
 			/** Parameters of this function. */
 			std::vector<FunctionParameter>	parameters;
@@ -113,7 +115,7 @@ namespace rfk
 			*	
 			*	@param other Function to compare the prototype with.
 			*/
-			bool				hasSamePrototype(FunctionBase const* other)	const	noexcept;
+			REFUREKU_API bool				hasSamePrototype(FunctionBase const* other)	const	noexcept;
 
 			/**
 			*	@brief Add a parameter to the function.
@@ -123,15 +125,22 @@ namespace rfk
 			*	
 			*	@return this.
 			*/
-			FunctionBase*		addParameter(std::string parameterName,
-											 Type const& parameterType)				noexcept;
+			REFUREKU_API FunctionBase*		addParameter(std::string parameterName,
+														 Type const& parameterType)				noexcept;
 
 			/**
 			*	@brief Get the internal function handle held by this object.
 			*	
 			*	@return The function handle.
 			*/
-			ICallable const*	getInternalFunction()						const	noexcept;
+			REFUREKU_API ICallable const*	getInternalFunction()						const	noexcept;
+
+			/**
+			*	@brief Getter for the field _returnType.
+			* 
+			*	@return _returnType.
+			*/
+			REFUREKU_API Type const&		getReturnType()								const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBase.inl"

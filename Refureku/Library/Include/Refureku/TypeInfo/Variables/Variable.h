@@ -33,17 +33,17 @@ namespace rfk
 			/** Flags describing this variable. */
 			EVarFlags	flags	= EVarFlags::Default;
 
-			Variable()							= delete;
-			Variable(std::string&&	name,
-					 uint64			id,
-					 Type const&	type,
-					 void*			address,
-					 EVarFlags		flags)		noexcept;
-			Variable(std::string&&	name,
-					 uint64			id,
-					 Type const&	type,
-					 void const*	address,
-					 EVarFlags		flags)		noexcept;
+			REFUREKU_API Variable(std::string&&	name,
+								  std::size_t	id,
+								  Type const&	type,
+								  void*			address,
+								  EVarFlags		flags)		noexcept;
+			REFUREKU_API Variable(std::string&&	name,
+								  std::size_t	id,
+								  Type const&	type,
+								  void const*	address,
+								  EVarFlags		flags)		noexcept;
+
 			Variable(Variable const&)			= delete;
 			Variable(Variable&&)				= delete;
 

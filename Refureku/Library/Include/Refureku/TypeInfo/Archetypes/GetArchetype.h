@@ -9,6 +9,7 @@
 
 #include <type_traits>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/Utility/TypeTraitsMacros.h"
 
@@ -53,64 +54,64 @@ namespace rfk
 	*	rfk::getArchetype specialization for all fundamental types.
 	*/
 	template <>
-	Archetype const* getArchetype<void>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<void>()					noexcept;
 
 	template <>
-	Archetype const* getArchetype<std::nullptr_t>()		noexcept;
+	REFUREKU_API Archetype const* getArchetype<std::nullptr_t>()		noexcept;
 
 	template <>
-	Archetype const* getArchetype<bool>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<bool>()					noexcept;
 
 	template <>
-	Archetype const* getArchetype<char>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<char>()					noexcept;
 
 	template <>
-	Archetype const* getArchetype<signed char>()		noexcept;
+	REFUREKU_API Archetype const* getArchetype<signed char>()			noexcept;
 
 	template <>
-	Archetype const* getArchetype<unsigned char>()		noexcept;
+	REFUREKU_API Archetype const* getArchetype<unsigned char>()			noexcept;
 
 	template <>
-	Archetype const* getArchetype<wchar_t>()			noexcept;
+	REFUREKU_API Archetype const* getArchetype<wchar_t>()				noexcept;
 
 	template <>
-	Archetype const* getArchetype<char16_t>()			noexcept;
+	REFUREKU_API Archetype const* getArchetype<char16_t>()				noexcept;
 
 	template <>
-	Archetype const* getArchetype<char32_t>()			noexcept;
+	REFUREKU_API Archetype const* getArchetype<char32_t>()				noexcept;
 
 	template <>
-	Archetype const* getArchetype<short>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<short>()					noexcept;
 
 	template <>
-	Archetype const* getArchetype<unsigned short>()		noexcept;
+	REFUREKU_API Archetype const* getArchetype<unsigned short>()		noexcept;
 
 	template <>
-	Archetype const* getArchetype<int>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<int>()					noexcept;
 
 	template <>
-	Archetype const* getArchetype<unsigned int>()		noexcept;
+	REFUREKU_API Archetype const* getArchetype<unsigned int>()			noexcept;
 
 	template <>
-	Archetype const* getArchetype<long>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<long>()					noexcept;
 
 	template <>
-	Archetype const* getArchetype<unsigned long>()		noexcept;
+	REFUREKU_API Archetype const* getArchetype<unsigned long>()			noexcept;
 
 	template <>
-	Archetype const* getArchetype<long long>()			noexcept;
+	REFUREKU_API Archetype const* getArchetype<long long>()				noexcept;
 
 	template <>
-	Archetype const* getArchetype<unsigned long long>()	noexcept;
+	REFUREKU_API Archetype const* getArchetype<unsigned long long>()	noexcept;
 
 	template <>
-	Archetype const* getArchetype<float>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<float>()					noexcept;
 
 	template <>
-	Archetype const* getArchetype<double>()				noexcept;
+	REFUREKU_API Archetype const* getArchetype<double>()				noexcept;
 
 	template <>
-	Archetype const* getArchetype<long double>()		noexcept;
+	REFUREKU_API Archetype const* getArchetype<long double>()			noexcept;
 
 	#include "Refureku/TypeInfo/Archetypes/GetArchetype.inl"
 }

@@ -5,14 +5,14 @@ using namespace rfk;
 FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod, Entity const* outerEntity) noexcept:
 	Entity(std::forward<std::string>(name), id, kind, outerEntity),
 	internalMethod{std::forward<std::unique_ptr<ICallable>>(internalMethod)},
-	returnType{returnType}
+	_returnType{returnType}
 {
 }
 
 bool FunctionBase::hasSamePrototype(FunctionBase const* other) const noexcept
 {
 	//Compare return type
-	if (returnType != other->returnType)
+	if (_returnType != other->_returnType)
 	{
 		return false;
 	}
@@ -44,4 +44,9 @@ FunctionBase* FunctionBase::addParameter(std::string parameterName, Type const& 
 ICallable const* FunctionBase::getInternalFunction() const noexcept
 {
 	return internalMethod.get();
+}
+
+Type const& FunctionBase::getReturnType() const noexcept
+{
+	return _returnType;
 }

@@ -379,7 +379,7 @@ void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 {
 	//Make sure the instantiator is valid
 	assert(instantiator != nullptr);
-	assert(instantiator->returnType.isPointer());
+	assert(instantiator->getReturnType().isPointer());
 
 	//If it is a parameterless custom instantiator, replace the default instantiator
 	if (instantiator->parameters.size() == 0u)

@@ -10,32 +10,54 @@
 #include <string>
 #include <vector>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/ETemplateParameterKind.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
 namespace rfk
 {
-	struct TemplateParameter
+	class TemplateParameter
 	{
-		/** Name of the template parameter. */
-		std::string				name;
+		private:
+			/** Name of the template parameter. */
+			std::string				_name;
 
-		/** Kind of template parameter. */
-		ETemplateParameterKind	kind;
+			/** Kind of template parameter. */
+			ETemplateParameterKind	_kind;
+
+		public:
+			REFUREKU_API TemplateParameter(std::string&&			name,
+										   ETemplateParameterKind	kind)	noexcept;
+
+			/**
+			*	@brief Getter for the field _name.
+			* 
+			*	@return _name.
+			*/
+			REFUREKU_API std::string const&		getName()			const	noexcept;
+
+			/**
+			*	@brief Getter for the field _kind.
+			* 
+			*	@return _kind.
+			*/
+			REFUREKU_API ETemplateParameterKind	getKind()			const	noexcept;
 	};
 
-	struct TypeTemplateParameter : public TemplateParameter
+	class TypeTemplateParameter : public TemplateParameter
 	{
-		TypeTemplateParameter(std::string&& name) noexcept;
+		public:
+			REFUREKU_API TypeTemplateParameter(std::string&& name) noexcept;
 	};
 
-	struct NonTypeTemplateParameter : public TemplateParameter
+	class NonTypeTemplateParameter : public TemplateParameter
 	{
-		/** Archetype of the non-type template parameter. */
-		Archetype const* archetype = nullptr;
+		public:
+			/** Archetype of the non-type template parameter. */
+			Archetype const* archetype = nullptr;
 
-		NonTypeTemplateParameter(std::string&&		name,
-								 Archetype const*	archetype)	noexcept;
+			REFUREKU_API NonTypeTemplateParameter(std::string&&		name,
+												  Archetype const*	archetype)	noexcept;
 	};
 
 	class TemplateTemplateParameter : public TemplateParameter
@@ -44,13 +66,13 @@ namespace rfk
 			/** List of template parameters. */
 			std::vector<TemplateParameter> templateParameters;
 
-			TemplateTemplateParameter(std::string&&	name) noexcept;
+			REFUREKU_API TemplateTemplateParameter(std::string&& name) noexcept;
 
 			/**
 			*	@brief Add a template parameter to the list.
 			* 
 			*	@param templateParameter Template parameter to add.
 			*/
-			TemplateTemplateParameter& addTemplateParameter(TemplateParameter&& templateParameter) noexcept;
+			REFUREKU_API TemplateTemplateParameter& addTemplateParameter(TemplateParameter&& templateParameter) noexcept;
 	};
 }

@@ -9,6 +9,7 @@
 
 #include <type_traits>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Variables/Variable.h"
 #include "Refureku/TypeInfo/Variables/Field.h"
@@ -50,56 +51,56 @@ namespace rfk
 	*	@return The casted entity if the provided type matched the concrete entity type, else nullptr.
 	*/
 	template <typename T, typename = internal::isValidEntityType<T>>
-	T const*					entityCast(Entity const* entity)								noexcept;
+	T const*	entityCast(Entity const* entity)	noexcept;
 
 	/**
 	*	rfk::entityCast<> specialization for all Entity types.
 	*/
 	template <>
-	Archetype const*			entityCast<Archetype, void>(Entity const* entity)				noexcept;
+	REFUREKU_API Archetype const*				entityCast<Archetype, void>(Entity const* entity)				noexcept;
 
 	template <>
-	FundamentalArchetype const* entityCast<FundamentalArchetype, void>(Entity const* entity)	noexcept;
+	REFUREKU_API FundamentalArchetype const*	entityCast<FundamentalArchetype, void>(Entity const* entity)	noexcept;
 
 	/**
 	*	This entity cast specialization doesn't work to check if an entity is a class (it will return a non-nullptr pointer when it is a struct as well).
 	*	Make sure to check if the result's kind is EEntityKind::Class.
 	*/
 	template <>
-	Struct const*				entityCast<Struct, void>(Entity const* entity)					noexcept;
+	REFUREKU_API Struct const*					entityCast<Struct, void>(Entity const* entity)					noexcept;
 
 	template <>
-	FieldBase const*			entityCast<FieldBase, void>(Entity const* entity)				noexcept;
+	REFUREKU_API FieldBase const*				entityCast<FieldBase, void>(Entity const* entity)				noexcept;
 
 	template <>
-	Field const*				entityCast<Field, void>(Entity const* entity)					noexcept;
+	REFUREKU_API Field const*					entityCast<Field, void>(Entity const* entity)					noexcept;
 
 	template <>
-	StaticField const*			entityCast<StaticField, void>(Entity const* entity)				noexcept;
+	REFUREKU_API StaticField const*				entityCast<StaticField, void>(Entity const* entity)				noexcept;
 
 	template <>
-	MethodBase const*			entityCast<MethodBase, void>(Entity const* entity)				noexcept;
+	REFUREKU_API MethodBase const*				entityCast<MethodBase, void>(Entity const* entity)				noexcept;
 
 	template <>
-	Method const*				entityCast<Method, void>(Entity const* entity)					noexcept;
+	REFUREKU_API Method const*					entityCast<Method, void>(Entity const* entity)					noexcept;
 
 	template <>
-	StaticMethod const*			entityCast<StaticMethod, void>(Entity const* entity)			noexcept;
+	REFUREKU_API StaticMethod const*			entityCast<StaticMethod, void>(Entity const* entity)			noexcept;
 
 	template <>
-	Enum const*					entityCast<Enum, void>(Entity const* entity)					noexcept;
+	REFUREKU_API Enum const*					entityCast<Enum, void>(Entity const* entity)					noexcept;
 
 	template <>
-	EnumValue const*			entityCast<EnumValue, void>(Entity const* entity)				noexcept;
+	REFUREKU_API EnumValue const*				entityCast<EnumValue, void>(Entity const* entity)				noexcept;
 
 	template <>
-	Namespace const*			entityCast<Namespace, void>(Entity const* entity)				noexcept;
+	REFUREKU_API Namespace const*				entityCast<Namespace, void>(Entity const* entity)				noexcept;
 
 	template <>
-	Variable const*				entityCast<Variable, void>(Entity const* entity)				noexcept;
+	REFUREKU_API Variable const*				entityCast<Variable, void>(Entity const* entity)				noexcept;
 
 	template <>
-	Function const*				entityCast<Function, void>(Entity const* entity)				noexcept;
+	REFUREKU_API Function const*				entityCast<Function, void>(Entity const* entity)				noexcept;
 
 	#include "Refureku/TypeInfo/Entity/EntityCast.inl"
 }

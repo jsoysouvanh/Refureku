@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
 
 namespace rfk
@@ -22,8 +23,8 @@ namespace rfk
 		/** Archetype used for a template argument. */
 		Archetype const*			archetype = nullptr;
 
-		TemplateArgument(TemplateParameter const&	parameter,
-						 Archetype const*			archetype)	noexcept;
+		REFUREKU_API TemplateArgument(TemplateParameter const&	parameter,
+									  Archetype const*			archetype)	noexcept;
 	};
 }
 

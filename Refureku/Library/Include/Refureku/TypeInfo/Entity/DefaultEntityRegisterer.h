@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
+
 namespace rfk
 {
 	//Forward declaration
@@ -19,10 +21,10 @@ namespace rfk
 			Entity const* _registeredEntity = nullptr;
 
 		public:
-			DefaultEntityRegisterer()								= delete;
-			DefaultEntityRegisterer(Entity const* entity)			noexcept;
+			REFUREKU_API DefaultEntityRegisterer(Entity const* entity)			noexcept;
+			REFUREKU_API ~DefaultEntityRegisterer()								noexcept;
+			
 			DefaultEntityRegisterer(DefaultEntityRegisterer const&)	= delete;
 			DefaultEntityRegisterer(DefaultEntityRegisterer&&)		= delete;
-			~DefaultEntityRegisterer()								noexcept;
 	};
 }

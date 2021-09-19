@@ -11,13 +11,14 @@
 #include <unordered_set>
 #include <array>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
 
 namespace rfk
 {
 	//Forward declaration
-	struct TemplateParameter;
+	class TemplateParameter;
 
 	class ClassTemplate : public Class
 	{
@@ -28,9 +29,9 @@ namespace rfk
 			/** All instances of this class template in the program. */
 			std::unordered_set<ClassTemplateInstance const*>	instances;
 
-			ClassTemplate(std::string&&	name,
-						  uint64		id,
-						  bool			isClass)	noexcept;
+			REFUREKU_API ClassTemplate(std::string&&	name,
+									   uint64			id,
+									   bool				isClass)	noexcept;
 
 			/**
 			*	@brief Get the instance corresponding to the provided template arguments if it exists in the program.
@@ -53,14 +54,14 @@ namespace rfk
 			* 
 			*	@param templateParameter The template parameter to add.
 			*/
-			void addTemplateParameter(TemplateParameter const& templateParameter)	noexcept;
+			REFUREKU_API void addTemplateParameter(TemplateParameter const& templateParameter)	noexcept;
 
 			/**
 			*	@brief Register an instance generated from this class template.
 			* 
 			*	@param instance The instance to register.
 			*/
-			void registerClassTemplateInstance(ClassTemplateInstance& instance)		noexcept;
+			REFUREKU_API void registerClassTemplateInstance(ClassTemplateInstance& instance)	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/ClassTemplate.inl"

@@ -6,8 +6,8 @@
 
 using namespace rfk;
 
-Namespace::Namespace(std::string&& newName, uint64 newId) noexcept:
-	Entity(std::forward<std::string>(newName), newId, EEntityKind::Namespace)
+Namespace::Namespace(std::string&& name, std::size_t id) noexcept:
+	Entity(std::forward<std::string>(name), id, EEntityKind::Namespace)
 {
 }
 

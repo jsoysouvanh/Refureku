@@ -12,6 +12,7 @@
 #include <unordered_set>
 #include <algorithm>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 
@@ -22,22 +23,23 @@ namespace rfk
 
 	class Enum final : public Archetype
 	{
-		public:
+		private:
 			/** Values contained in this enum. */
-			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>	values;
+			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>	_values;
 
 			/** Underlying type of this enum. */
-			Type const&																underlyingType;
+			Archetype const&														_underlyingType;
 
-			Enum()										= delete;
-			Enum(std::string&&	name,
-				 std::size_t	id,
-				 uint64			memorySize,
-				 Type const&	underlyingType,
-				 Entity const*	outerEntity = nullptr)	noexcept;
-			Enum(Enum const&)							= delete;
-			Enum(Enum&&)								= delete;
-			~Enum()										= default;
+		public:
+			REFUREKU_API Enum()											= delete;
+			REFUREKU_API Enum(std::string&&		name,
+							  std::size_t		id,
+							  uint64			memorySize,
+							  Archetype const*	underlyingType,
+							  Entity const*		outerEntity = nullptr)	noexcept;
+			REFUREKU_API Enum(Enum const&)								= delete;
+			REFUREKU_API Enum(Enum&&)									= delete;
+			REFUREKU_API ~Enum()										= default;
 
 			/**
 			*	@brief Retrieve from this enum an enum value matching with a given predicate.
@@ -47,7 +49,7 @@ namespace rfk
 			*	@return The first matching enum value if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
-			EnumValue const*				getEnumValue(Predicate predicate)		const	noexcept;
+			EnumValue const*							getEnumValue(Predicate predicate)		const	noexcept;
 
 			/**
 			*	@brief Retrieve from this enum all enum values matching with a given predicate.
@@ -57,7 +59,7 @@ namespace rfk
 			*	@return All the enum values matching with the given predicate.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
-			std::vector<EnumValue const*>	getEnumValues(Predicate predicate)		const	noexcept;
+			std::vector<EnumValue const*>				getEnumValues(Predicate predicate)		const	noexcept;
 
 			/**
 			*	@brief Search an enum value in this enum.
@@ -66,7 +68,7 @@ namespace rfk
 			*	
 			*	@return The EnumValue corresponding to the provided name if any, else nullptr.
 			*/
-			EnumValue const*				getEnumValue(std::string enumValueName)	const	noexcept;
+			REFUREKU_API EnumValue const*				getEnumValue(std::string enumValueName)	const	noexcept;
 			
 			/**
 			*	@brief Search an enum value in this enum.
@@ -75,7 +77,7 @@ namespace rfk
 			*
 			*	@return The first found EnumValue equals to the provided value if any, else nullptr.
 			*/
-			EnumValue const*				getEnumValue(int64 value)				const	noexcept;
+			REFUREKU_API EnumValue const*				getEnumValue(int64 value)				const	noexcept;
 
 			/**
 			*	@brief Search all enum values in this enum holding the provided value.
@@ -84,7 +86,7 @@ namespace rfk
 			*
 			*	@return All the EnumValues equal to the provided value.
 			*/
-			std::vector<EnumValue const*>	getEnumValues(int64 value)				const	noexcept;
+			REFUREKU_API std::vector<EnumValue const*>	getEnumValues(int64 value)				const	noexcept;
 
 			/**
 			*	@brief Add an enum value to this enum.
@@ -96,9 +98,30 @@ namespace rfk
 			*	@return A pointer to the added enum value. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the enum value **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			EnumValue*						addEnumValue(std::string	enumValueName,
-														 uint64			entityId,
-														 int64			value)				noexcept;
+			REFUREKU_API EnumValue*						addEnumValue(std::string	enumValueName,
+																	 uint64			entityId,
+																	 int64			value)				noexcept;
+
+			/**
+			*	@brief Getter for the field _values.
+			* 
+			*	@return _values.
+			*/
+			REFUREKU_API std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName> const&	getEnumValues()		const	noexcept;
+
+			/**
+			*	@brief Non-const getter for the field _values.
+			* 
+			*	@return _values.
+			*/
+			REFUREKU_API std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>&			getEnumValues()				noexcept;
+
+			/**
+			*	@brief Getter for the field _underlyingType.
+			* 
+			*	@return _underlyingType.
+			*/
+			REFUREKU_API Archetype const&																getUnderlyingType()	const	noexcept;
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */

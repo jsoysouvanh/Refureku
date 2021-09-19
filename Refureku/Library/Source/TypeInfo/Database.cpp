@@ -283,7 +283,7 @@ void Database::unregisterSubEntities(Struct const& s) noexcept
 void Database::registerSubEntities(Enum const& e) noexcept
 {
 	//Enum values
-	for (Entity const& enumValue : e.values)
+	for (Entity const& enumValue : e.getEnumValues())
 	{
 		registerEntity(enumValue, false);
 	}
@@ -292,7 +292,7 @@ void Database::registerSubEntities(Enum const& e) noexcept
 void Database::unregisterSubEntities(Enum const& e) noexcept
 {
 	//Enum values
-	for (Entity const& enumValue : e.values)
+	for (Entity const& enumValue : e.getEnumValues())
 	{
 		unregisterEntity(enumValue, false);
 	}
@@ -547,4 +547,9 @@ Database::VariablesByName const& Database::getFileLevelVariables() const noexcep
 Database::FunctionsByName const& Database::getFileLevelFunctions() const noexcept
 {
 	return _fileLevelFunctionsByName;
+}
+
+Database const& rfk::getDatabase() noexcept
+{
+	return Database::getInternal();
 }

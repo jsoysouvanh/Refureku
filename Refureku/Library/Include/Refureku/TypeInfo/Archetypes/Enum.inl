@@ -8,7 +8,7 @@
 template <typename Predicate, typename>
 EnumValue const* Enum::getEnumValue(Predicate predicate) const noexcept
 {
-	for (EnumValue const& enumValue : values)
+	for (EnumValue const& enumValue : getEnumValues())
 	{
 		if (predicate(&enumValue))
 		{
@@ -24,7 +24,7 @@ std::vector<EnumValue const*> Enum::getEnumValues(Predicate predicate) const noe
 {
 	std::vector<EnumValue const*> result;
 
-	for (EnumValue const& enumValue : values)
+	for (EnumValue const& enumValue : getEnumValues())
 	{
 		if (predicate(&enumValue))
 		{

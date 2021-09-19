@@ -10,6 +10,7 @@
 #include <string>
 #include <memory>
 
+#include "Refureku/Config.h"
 #include "Refureku/Misc/FundamentalTypes.h"
 
 namespace rfk
@@ -49,21 +50,21 @@ namespace rfk
 			void	removeFragmentFromNamespace(NamespaceFragment const& fragment)					noexcept;
 
 		public:
-			NamespaceFragmentRegisterer()													= delete;
-			NamespaceFragmentRegisterer(char const*					name,
+			REFUREKU_API NamespaceFragmentRegisterer(char const*	name,
 										std::size_t					id,
 										NamespaceFragment const&	namespaceFragment,
 										bool						isFileLevelNamespace)	noexcept;
+			REFUREKU_API ~NamespaceFragmentRegisterer()										noexcept;
+
 			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer const&)					= delete;
 			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer&&)						= delete;
-			~NamespaceFragmentRegisterer()													noexcept;
 
 			/**
 			*	@brief Getter for _namespaceInstance.
 			*	
 			*	@return _namespaceInstance
 			*/
-			Namespace const* getNamespaceInstance()	const	noexcept;
+			REFUREKU_API Namespace const* getNamespaceInstance()	const	noexcept;
 
 			NamespaceFragmentRegisterer& operator=(NamespaceFragmentRegisterer const&)	= delete;
 			NamespaceFragmentRegisterer& operator=(NamespaceFragmentRegisterer&&)		= delete;

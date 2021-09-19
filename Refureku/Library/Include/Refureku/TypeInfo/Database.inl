@@ -5,11 +5,6 @@
 *	See the README.md file for full license details.
 */
 
-inline Database const& getDatabase() noexcept
-{
-	return Database::getInternal();
-}
-
 template <typename Predicate, typename>
 Entity const* Database::getEntity(Predicate predicate) const
 {

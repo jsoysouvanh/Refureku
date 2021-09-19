@@ -51,7 +51,7 @@ namespace rfk
 			*	@return A reference to the modified Type (this).
 			*/
 			template <typename... ArgTypes>
-			inline Type&		addPart(ArgTypes&&... args)			noexcept;
+			inline Type&				addPart(ArgTypes&&... args)			noexcept;
 
 			/**
 			*	Add a TypePart to this type instance.
@@ -60,54 +60,54 @@ namespace rfk
 			*
 			*	@return A reference to the modified Type (this).
 			*/
-			inline Type&		addPart(TypePart const&	newPart)	noexcept;
+			inline Type&				addPart(TypePart const&	newPart)	noexcept;
 
 			/**
 			*	Remove the last TypePart from this type instance.
 			*
 			*	@return A reference to the modified Type (this).
 			*/
-			inline Type&		removePart()						noexcept;
+			inline Type&				removePart()						noexcept;
 
 			/** 
 			*	@return true if this type is a pointer type (*), else false.
 			*/
-			inline bool			isPointer()					const	noexcept;
+			inline bool					isPointer()					const	noexcept;
 
 			/**
 			*	@return true if this type is a left value reference type (&), else false.
 			*/
-			inline bool			isLValueReference()			const	noexcept;
+			inline bool					isLValueReference()			const	noexcept;
 
 			/**
 			*	@return true if this type is a right value reference type (&&), else false.
 			*/
-			inline bool			isRValueReference()			const	noexcept;
+			inline bool					isRValueReference()			const	noexcept;
 
 			/**
 			*	@return true if this type is a c-style array ([]), else false.
 			*/
-			inline bool			isCArray()					const	noexcept;
+			inline bool					isCArray()					const	noexcept;
 
 			/**
 			*	@return true if this type is a value type (not a pointer, lvalue ref, rvalue ref, c-style array), else false.
 			*/
-			inline bool			isValue()					const	noexcept;
+			inline bool					isValue()					const	noexcept;
 
 			/**
 			*	@return true if this type is const qualified, else false.
 			*/
-			inline bool			isConst()					const	noexcept;
+			inline bool					isConst()					const	noexcept;
 
 			/**
 			*	@return true if this type is volatile qualified, else false.
 			*/
-			inline bool			isVolatile()				const	noexcept;
+			inline bool					isVolatile()				const	noexcept;
 
 			/**
 			*	@return The size of the array if isCArray() returns true, else 0.
 			*/
-			inline uint32		getArraySize()				const	noexcept;
+			inline uint32				getArraySize()				const	noexcept;
 
 			/**
 			*	@param other The other type to compare with.
@@ -115,18 +115,18 @@ namespace rfk
 			*	@return true if two types match together if they represent the same type.
 			*			Pointers and nullptr_t types also match together.
 			*/
-			bool				match(Type const& other)		const	noexcept;
+			REFUREKU_API bool			match(Type const& other)	const	noexcept;
 
 			/**
 			*	@return a string representation of the content of this type.
 			*/
-			std::string			toString()					const	noexcept;
+			REFUREKU_API std::string	toString()					const	noexcept;
 
 			Type& operator=(Type const&)	= default;
 			Type& operator=(Type&&)			= default;
 
-			bool operator==(Type const& type)	const noexcept;
-			bool operator!=(Type const& type)	const noexcept;
+			REFUREKU_API bool operator==(Type const& type)	const noexcept;
+			REFUREKU_API bool operator!=(Type const& type)	const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Type.inl"

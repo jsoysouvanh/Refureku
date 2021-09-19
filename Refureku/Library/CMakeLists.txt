@@ -5,7 +5,7 @@ project(RefurekuLibrary)
 # Add Refureku library
 set(RefurekuLibraryTarget Refureku)
 add_library(${RefurekuLibraryTarget}
-				STATIC																#TODO: Change to SHARED
+				SHARED
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/EnumValue.cpp

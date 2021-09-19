@@ -6,7 +6,7 @@
 
 using namespace rfk;
 
-ClassTemplateInstance::ClassTemplateInstance(std::string&& name, uint64 id, uint64 memorySize, bool isClass, Archetype const& instantiatedFrom) noexcept:
+ClassTemplateInstance::ClassTemplateInstance(std::string&& name, std::size_t id, std::size_t memorySize, bool isClass, Archetype const& instantiatedFrom) noexcept:
 	Class(std::forward<std::string>(name), id, memorySize, isClass, EClassKind::TemplateInstance),
 	instantiatedFrom{static_cast<ClassTemplate const&>(instantiatedFrom)}
 {

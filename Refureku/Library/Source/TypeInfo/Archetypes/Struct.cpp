@@ -25,7 +25,7 @@ Struct const* Struct::getNestedStruct(std::string structName, EAccessSpecifier a
 
 	return (it != nestedArchetypes.cend() &&
 			(*it)->getKind() == EEntityKind::Struct &&
-			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
+			(access == EAccessSpecifier::Undefined || access == (*it)->getAccessSpecifier())) ?
 				reinterpret_cast<Struct const*>(*it) : nullptr;
 }
 
@@ -39,7 +39,7 @@ Class const* Struct::getNestedClass(std::string className, EAccessSpecifier acce
 
 	return (it != nestedArchetypes.cend() &&
 			(*it)->getKind() == EEntityKind::Class &&
-			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
+			(access == EAccessSpecifier::Undefined || access == (*it)->getAccessSpecifier())) ?
 				reinterpret_cast<Class const*>(*it) : nullptr;
 }
 
@@ -53,7 +53,7 @@ Enum const* Struct::getNestedEnum(std::string enumName, EAccessSpecifier access)
 
 	return (it != nestedArchetypes.cend() &&
 			(*it)->getKind() == EEntityKind::Enum &&
-			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
+			(access == EAccessSpecifier::Undefined || access == (*it)->getAccessSpecifier())) ?
 				reinterpret_cast<Enum const*>(*it) : nullptr;
 }
 
@@ -387,13 +387,13 @@ StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type
 	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity_));
 }
 
-Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier_) noexcept
+Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
 {
 	//Add the archetype to the container
 	Archetype* result = const_cast<Archetype*>(*nestedArchetypes.emplace(nestedArchetype).first);
 
 	//Set the access specifier
-	result->accessSpecifier = accessSpecifier_;
+	result->setAccessSpecifier(accessSpecifier);
 
 	//Set outer entity
 	result->setOuterEntity(this);

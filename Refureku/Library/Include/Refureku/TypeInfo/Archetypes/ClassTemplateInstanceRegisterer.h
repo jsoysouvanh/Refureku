@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
+
 namespace rfk
 {
 	class ClassTemplateInstance;	//Forward declaration
@@ -18,11 +20,11 @@ namespace rfk
 			ClassTemplateInstance const& _registeredClassTemplateInstance;
 
 		public:
-			ClassTemplateInstanceRegisterer()													= delete;
-			ClassTemplateInstanceRegisterer(ClassTemplateInstance const& classTemplateInstance)	noexcept;
+			REFUREKU_API ClassTemplateInstanceRegisterer(ClassTemplateInstance const& classTemplateInstance)	noexcept;
+			REFUREKU_API ~ClassTemplateInstanceRegisterer()														noexcept;
+
 			ClassTemplateInstanceRegisterer(ClassTemplateInstanceRegisterer const&)				= delete;
 			ClassTemplateInstanceRegisterer(ClassTemplateInstanceRegisterer&&)					= delete;
-			~ClassTemplateInstanceRegisterer()													noexcept;
 
 			ClassTemplateInstanceRegisterer& operator=(ClassTemplateInstanceRegisterer const&)	= delete;
 			ClassTemplateInstanceRegisterer& operator=(ClassTemplateInstanceRegisterer&&)		= delete;

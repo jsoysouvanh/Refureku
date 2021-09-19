@@ -11,6 +11,7 @@
 #include <vector>
 #include <array>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/TemplateArgument.h"
 
@@ -28,11 +29,11 @@ namespace rfk
 			/** List of all template arguments of this class template instance. */
 			std::vector<TemplateArgument>	templateArguments;
 
-			ClassTemplateInstance(std::string&&		name,
-								  uint64			id,
-								  uint64			memorySize,
-								  bool				isClass,
-								  Archetype const&	instantiatedFrom)	noexcept;
+			REFUREKU_API ClassTemplateInstance(std::string&&	name,
+											   std::size_t		id,
+											   std::size_t		memorySize,
+											   bool				isClass,
+											   Archetype const&	instantiatedFrom)	noexcept;
 
 			/**
 			*	@brief Check whether the instance arguments have the same types as the provided ones.

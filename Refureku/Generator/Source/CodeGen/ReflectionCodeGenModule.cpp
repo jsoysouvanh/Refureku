@@ -1112,7 +1112,7 @@ void ReflectionCodeGenModule::defineGetEnumContent(kodgen::EnumInfo const& enum_
 					"static rfk::Enum type(\"" + enum_.name + "\", " +
 					getEntityId(enum_) + ", "
 					"sizeof(" + enum_.type.getCanonicalName() + "), "
-					"rfk::Type::getType<" + enum_.underlyingType.getCanonicalName() + ">());" + env.getSeparator();
+					"rfk::getArchetype<" + enum_.underlyingType.getCanonicalName() + ">());" + env.getSeparator();
 
 	//Initialize the enum metadata
 	inout_result += "if (!initialized) {" + env.getSeparator() +
@@ -1123,7 +1123,7 @@ void ReflectionCodeGenModule::defineGetEnumContent(kodgen::EnumInfo const& enum_
 	if (!enum_.enumValues.empty())
 	{
 		inout_result += "rfk::EnumValue* enumValue = nullptr;" + env.getSeparator() +
-			"type.values.reserve(" + std::to_string(enum_.enumValues.size()) + ");" + env.getSeparator();
+			"type.getEnumValues().reserve(" + std::to_string(enum_.enumValues.size()) + ");" + env.getSeparator();
 
 		for (kodgen::EnumValueInfo const& enumValue : enum_.enumValues)
 		{

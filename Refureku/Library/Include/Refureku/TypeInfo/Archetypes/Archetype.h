@@ -9,6 +9,7 @@
 
 #include <type_traits>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
 
@@ -16,22 +17,44 @@ namespace rfk
 {
 	class Archetype : public Entity
 	{
+		private:
+			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */
+			EAccessSpecifier	_accessSpecifier	= EAccessSpecifier::Undefined;
+
+			/** Size in bytes an instance of this archetype takes in memory, basically what sizeof(Type) returns */
+			std::size_t			_memorySize			= 0;
+
 		protected:
 			Archetype(std::string&& newName,
-					  uint64		newId,
+					  std::size_t	id,
 					  EEntityKind	kind,
-					  uint64		newMemorySize,
+					  std::size_t	memorySize,
 					  Entity const*	outerEntity = nullptr)	noexcept;
 			Archetype(Archetype const&)						= delete;
 			Archetype(Archetype&&)							= delete;
 			~Archetype()									= default;
 
 		public:
-			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */
-			EAccessSpecifier	accessSpecifier	= EAccessSpecifier::Undefined;
+			/**
+			*	@brief Getter for the field _accessSpecifier.
+			* 
+			*	@return _accessSpecifier.
+			*/
+			REFUREKU_API EAccessSpecifier	getAccessSpecifier()			const	noexcept;
 
-			/** Size in bytes an instance of this archetype takes in memory, basically what sizeof(Type) returns */
-			uint64				memorySize		= 0;
+			/**
+			*	@brief Setter for the field _accessSpecifier.
+			* 
+			*	@param The access specifier to set.
+			*/
+			REFUREKU_API void				setAccessSpecifier(EAccessSpecifier)	noexcept;
+
+			/**
+			*	@brief Getter for the field _memorySize.
+			* 
+			*	@return _memorySize.
+			*/
+			REFUREKU_API std::size_t		getMemorySize()					const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Archetype.inl"

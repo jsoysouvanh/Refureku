@@ -27,7 +27,7 @@ namespace rfk
 		friend class ArchetypeRegisterer;
 		friend class DefaultEntityRegisterer;
 		friend class ClassTemplateInstanceRegisterer;
-		friend Database const& getDatabase() noexcept;
+		friend REFUREKU_API Database const& getDatabase() noexcept;
 
 		private:
 			using EntitiesById					= std::unordered_set<Entity const*, Entity::PtrIdHasher, Entity::PtrEqualId>;
@@ -156,17 +156,10 @@ namespace rfk
 														  uint64		id)									noexcept;
 
 		public:
-			Database()					= default;
-			Database(Database const&)	= delete;
-			Database(Database&&)		= delete;
-			~Database()					= default;
-
-			/**
-			*	@brief Get a reference to the database.
-			* 
-			*	@return A reference to the database.
-			*/
-			inline static Database const&		get()																		noexcept;
+			REFUREKU_INTERNAL Database()	= default;
+			REFUREKU_INTERNAL ~Database()	= default;
+			Database(Database const&)		= delete;
+			Database(Database&&)			= delete;
 
 			/**
 			*	@brief Retrieve any entity of the program matching with a given predicate.
@@ -185,7 +178,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			Entity const*						getEntity(uint64 id)												const	noexcept;
+			REFUREKU_API Entity const*						getEntity(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level namespace matching with a given predicate.
@@ -204,7 +197,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
 			*/
-			Namespace const*					getNamespace(uint64 id)												const	noexcept;
+			REFUREKU_API Namespace const*					getNamespace(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief	Retrieve a namespace by name.
@@ -217,7 +210,7 @@ namespace rfk
 			*
 			*	@exception BadNamespaceFormat if the provided namespace name has : instead of :: as a separator, or ends with :.
 			*/
-			Namespace const*					getNamespace(std::string namespaceName)								const;
+			REFUREKU_API Namespace const*					getNamespace(std::string namespaceName)								const;
 
 			/**
 			*	@brief Retrieve a file level archetype matching with a given predicate.
@@ -236,7 +229,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
 			*/
-			Archetype const*					getArchetype(uint64 id)												const	noexcept;
+			REFUREKU_API Archetype const*					getArchetype(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief	Retrieve a file level archetype by name.
@@ -247,7 +240,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
 			*/
-			Archetype const*					getArchetype(std::string archetypeName)								const	noexcept;
+			REFUREKU_API Archetype const*					getArchetype(std::string archetypeName)								const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level struct matching with a given predicate.
@@ -266,7 +259,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			Struct const*						getStruct(uint64 id)												const	noexcept;
+			REFUREKU_API Struct const*						getStruct(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level struct by name.
@@ -275,7 +268,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			Struct const*						getStruct(std::string structName)									const	noexcept;
+			REFUREKU_API Struct const*						getStruct(std::string structName)									const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level class matching with a given predicate.
@@ -294,7 +287,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried class if it exists, else nullptr.
 			*/
-			Class const*						getClass(uint64 id)													const	noexcept;
+			REFUREKU_API Class const*						getClass(uint64 id)													const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level class by name.
@@ -303,7 +296,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried class if it exists, else nullptr.
 			*/
-			Class const*						getClass(std::string className)										const	noexcept;
+			REFUREKU_API Class const*						getClass(std::string className)										const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level enum matching with a given predicate.
@@ -322,7 +315,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
-			Enum const*							getEnum(uint64 id)													const	noexcept;
+			REFUREKU_API Enum const*							getEnum(uint64 id)													const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level enum by name.
@@ -331,7 +324,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
-			Enum const*							getEnum(std::string enumName)										const	noexcept;
+			REFUREKU_API Enum const*							getEnum(std::string enumName)										const	noexcept;
 
 			/**
 			*	@brief Retrieve a fundamental archetype matching with a given predicate.
@@ -350,7 +343,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
 			*/
-			FundamentalArchetype const*			getFundamentalArchetype(uint64 id)									const	noexcept;
+			REFUREKU_API FundamentalArchetype const*	getFundamentalArchetype(uint64 id)									const	noexcept;
 
 			/**
 			*	@brief Retrieve a fundamental archetype by name.
@@ -359,7 +352,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
 			*/
-			FundamentalArchetype const*			getFundamentalArchetype(std::string archetypeName)					const	noexcept;
+			REFUREKU_API FundamentalArchetype const*	getFundamentalArchetype(std::string archetypeName)					const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level variable matching with a given predicate.
@@ -378,7 +371,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried variable if it exists, else nullptr.
 			*/
-			Variable const*						getVariable(uint64 id)												const	noexcept;
+			REFUREKU_API Variable const*		getVariable(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) variable by name.
@@ -389,7 +382,7 @@ namespace rfk
 			*	
 			*	@return A constant pointer to the queried variable if it exists, else nullptr.
 			*/
-			Variable const*						getVariable(std::string variableName,
+			REFUREKU_API Variable const*		getVariable(std::string variableName,
 															EVarFlags	flags = EVarFlags::Default)					const	noexcept;
 
 			/**
@@ -424,7 +417,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried function if it exists, else nullptr.
 			*/
-			Function const*						getFunction(uint64 id)												const	noexcept;
+			REFUREKU_API Function const*					getFunction(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) function by name.
@@ -435,8 +428,8 @@ namespace rfk
 			*	
 			*	@return A constant pointer to the first function matching the name and flags if it exists, else nullptr.
 			*/
-			Function const*						getFunction(std::string		functionName,
-															EFunctionFlags	flags = EFunctionFlags::Default)		const	noexcept;
+			REFUREKU_API Function const*					getFunction(std::string		functionName,
+																		EFunctionFlags	flags = EFunctionFlags::Default)		const	noexcept;
 
 			/**
 			*	@brief Retrieve a method by id.
@@ -445,7 +438,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried method if it exists, else nullptr.
 			*/
-			Method const*						getMethod(uint64 id)												const	noexcept;
+			REFUREKU_API Method const*						getMethod(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief Retrieve a static method by id.
@@ -454,7 +447,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried static method if it exists, else nullptr.
 			*/
-			StaticMethod const*					getStaticMethod(uint64 id)											const	noexcept;
+			REFUREKU_API StaticMethod const*				getStaticMethod(uint64 id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a field by id.
@@ -463,7 +456,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried field if it exists, else nullptr.
 			*/
-			Field const*						getField(uint64 id)													const	noexcept;
+			REFUREKU_API Field const*						getField(uint64 id)													const	noexcept;
 
 			/**
 			*	@brief Retrieve a static field by id.
@@ -472,7 +465,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried static field if it exists, else nullptr.
 			*/
-			StaticField const*					getStaticField(uint64 id)											const	noexcept;
+			REFUREKU_API StaticField const*					getStaticField(uint64 id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve an enum value by id.
@@ -481,63 +474,63 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum value if it exists, else nullptr.
 			*/
-			EnumValue const*					getEnumValue(uint64 id)												const	noexcept;
+			REFUREKU_API EnumValue const*					getEnumValue(uint64 id)												const	noexcept;
 
 			/**
 			*	@brief Getter for _entitiesById.
 			*
 			*	@return _entitiesById.
 			*/
-			EntitiesById const&					getEntitiesById()													const	noexcept;
+			REFUREKU_API EntitiesById const&				getEntitiesById()													const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelNamespacesByName.
 			*
 			*	@return _fileLevelNamespacesByName.
 			*/
-			NamespacesByName const&				getFileLevelNamespaces()											const	noexcept;
+			REFUREKU_API NamespacesByName const&			getFileLevelNamespaces()											const	noexcept;
 
 			/**
 			*	@brief Getter for _fundamentalArchetypes.
 			*
 			*	@return _fundamentalArchetypes.
 			*/
-			FundamentalArchetypesByName const&	getFundamentalArchetypes()											const	noexcept;
+			REFUREKU_API FundamentalArchetypesByName const&	getFundamentalArchetypes()											const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelStructsByName.
 			*
 			*	@return _fileLevelStructsByName.
 			*/
-			StructsByName const&				getFileLevelStructs()												const	noexcept;
+			REFUREKU_API StructsByName const&				getFileLevelStructs()												const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelClassesByName.
 			*
 			*	@return _fileLevelClassesByName.
 			*/
-			ClassesByName const&				getFileLevelClasses()												const	noexcept;
+			REFUREKU_API ClassesByName const&				getFileLevelClasses()												const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelEnumsByName.
 			*
 			*	@return _fileLevelEnumsByName.
 			*/
-			EnumsByName const&					getFileLevelEnums()													const	noexcept;
+			REFUREKU_API EnumsByName const&					getFileLevelEnums()													const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelVariablesByName.
 			*
 			*	@return _fileLevelVariablesByName.
 			*/
-			VariablesByName const&				getFileLevelVariables()												const	noexcept;
+			REFUREKU_API VariablesByName const&				getFileLevelVariables()												const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelFunctionsByName.
 			*
 			*	@return _fileLevelFunctionsByName.
 			*/
-			FunctionsByName const&				getFileLevelFunctions()												const	noexcept;
+			REFUREKU_API FunctionsByName const&				getFileLevelFunctions()												const	noexcept;
 	};
 
 	/**
@@ -545,7 +538,7 @@ namespace rfk
 	* 
 	*	@return A reference to the database of this program.
 	*/
-	inline Database const&	getDatabase()	noexcept;
+	REFUREKU_API Database const& getDatabase() noexcept;
 
 	#include "Refureku/TypeInfo/Database.inl"
 }

@@ -6,8 +6,23 @@
 
 using namespace rfk;
 
-Archetype::Archetype(std::string&& newName, uint64 newId, EEntityKind kind, uint64 newMemorySize, Entity const*	outerEntity) noexcept:
-	Entity(std::forward<std::string>(newName), newId, kind, outerEntity),
-	memorySize{newMemorySize}
+Archetype::Archetype(std::string&& newName, std::size_t id, EEntityKind kind, std::size_t memorySize, Entity const*	outerEntity) noexcept:
+	Entity(std::forward<std::string>(newName), id, kind, outerEntity),
+	_memorySize{memorySize}
 {
+}
+
+EAccessSpecifier Archetype::getAccessSpecifier() const noexcept
+{
+	return _accessSpecifier;
+}
+
+void Archetype::setAccessSpecifier(EAccessSpecifier accessSpecifier) noexcept
+{
+	_accessSpecifier = accessSpecifier;
+}
+
+std::size_t Archetype::getMemorySize() const noexcept
+{
+	return _memorySize;
 }

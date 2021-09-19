@@ -9,6 +9,7 @@
 
 #include <string>
 
+#include "Refureku/Config.h"
 #include "Refureku/Misc/FundamentalTypes.h"
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
@@ -152,7 +153,7 @@ namespace rfk
 			/**
 			*	@brief Inherit from the properties this method overrides (if it has the override method flag).
 			*/
-			void		inheritBaseMethodProperties()	noexcept;
+			REFUREKU_API	void		inheritBaseMethodProperties()	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/Method.inl"

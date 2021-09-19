@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
 #include "Refureku/Misc/FundamentalTypes.h"
 #include "Refureku/Utility/EnumMacros.h"
 

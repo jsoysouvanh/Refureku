@@ -33,12 +33,12 @@ namespace rfk
 			/** Flags describing this function. */
 			EFunctionFlags	flags = EFunctionFlags::Default;
 
-			Function()												= delete;
-			Function(std::string&&					name, 
-					 uint64							id,
-					 Type const&					returnType,
-					 std::unique_ptr<ICallable>&&	internalMethod,
-					 EFunctionFlags					flags)			noexcept;
+			REFUREKU_API Function(std::string&&					name, 
+								  uint64						id,
+								  Type const&					returnType,
+								  std::unique_ptr<ICallable>&&	internalMethod,
+								  EFunctionFlags				flags)			noexcept;
+			
 			Function(Function const&)								= delete;
 			Function(Function&&)									= delete;
 			~Function()												= default;
