@@ -50,6 +50,16 @@ namespace rfk
 			EnumValue const*				getEnumValue(Predicate predicate)		const	noexcept;
 
 			/**
+			*	@brief Retrieve from this enum all enum values matching with a given predicate.
+			*
+			*	@param predicate Predicate returning true for any matching enum value.
+			*	
+			*	@return All the enum values matching with the given predicate.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
+			std::vector<EnumValue const*>	getEnumValues(Predicate predicate)		const	noexcept;
+
+			/**
 			*	@brief Search an enum value in this enum.
 			*
 			*	@param enumValueName Name of the enum value to search for.
@@ -66,16 +76,6 @@ namespace rfk
 			*	@return The first found EnumValue equals to the provided value if any, else nullptr.
 			*/
 			EnumValue const*				getEnumValue(int64 value)				const	noexcept;
-
-			/**
-			*	@brief Retrieve from this enum all enum values matching with a given predicate.
-			*
-			*	@param predicate Predicate returning true for any matching enum value.
-			*	
-			*	@return All the enum values matching with the given predicate.
-			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
-			std::vector<EnumValue const*>	getEnumValues(Predicate predicate)		const	noexcept;
 
 			/**
 			*	@brief Search all enum values in this enum holding the provided value.
@@ -103,7 +103,7 @@ namespace rfk
 
 	/** Base implementation of getEnum, specialized for each reflected enum */
 	template <typename T, typename = std::enable_if_t<std::is_enum_v<T>>>
-	inline rfk::Enum const* getEnum() noexcept;
+	rfk::Enum const* getEnum() noexcept;
 
 	#include "Refureku/TypeInfo/Archetypes/Enum.inl"
 }

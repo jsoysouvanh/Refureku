@@ -36,7 +36,7 @@ std::vector<EnumValue const*> Enum::getEnumValues(Predicate predicate) const noe
 }
 
 template <typename T, typename>
-inline rfk::Enum const* getEnum() noexcept
+rfk::Enum const* getEnum() noexcept
 {
 	return nullptr;
 }
