@@ -5,7 +5,7 @@ project(RefurekuLibrary)
 # Add Refureku library
 set(RefurekuLibraryTarget Refureku)
 add_library(${RefurekuLibraryTarget}
-				STATIC
+				STATIC																#TODO: Change to SHARED
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/EnumValue.cpp
@@ -48,6 +48,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Properties/Property.cpp
 					Source/TypeInfo/Properties/NativePropertyDefinitions.cpp
 				)
+
+target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)
 
 # Setup compilation flags
 if (MSVC)
