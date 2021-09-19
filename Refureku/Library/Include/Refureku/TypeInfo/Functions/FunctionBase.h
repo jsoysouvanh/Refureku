@@ -47,15 +47,16 @@ namespace rfk
 			/** Handle pointing to the actual function in memory. */
 			std::unique_ptr<ICallable>	internalMethod;
 
-			FunctionBase()												= delete;
+			FunctionBase()														= delete;
 			FunctionBase(std::string&&					name, 
 						 uint64							id,
 						 EEntityKind					kind,
 						 Type const&					returnType,
-						 std::unique_ptr<ICallable>&&	internalMethod)	noexcept;
-			FunctionBase(FunctionBase const&)							= delete;
-			FunctionBase(FunctionBase&&)								= delete;
-			~FunctionBase()												= default;
+						 std::unique_ptr<ICallable>&&	internalMethod,
+						 Entity const*					outerEntity	= nullptr)	noexcept;
+			FunctionBase(FunctionBase const&)									= delete;
+			FunctionBase(FunctionBase&&)										= delete;
+			~FunctionBase()														= default;
 
 			/**
 			*	@brief Check that the provided argument count is the same as this function's.

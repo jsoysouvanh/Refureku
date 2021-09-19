@@ -9,7 +9,7 @@
 
 using namespace rfk;
 
-NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, uint64 id, NamespaceFragment const& namespaceFragment, bool isFileLevelNamespace) noexcept:
+NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, std::size_t id, NamespaceFragment const& namespaceFragment, bool isFileLevelNamespace) noexcept:
 	_fragment{namespaceFragment}
 {
 	Database& database = Database::getInternal();
@@ -53,7 +53,7 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 	Database& database = Database::getInternal();
 
 	//Make sure we can actually merge this fragment to the namespace
-	assert(_namespaceInstance->id == fragment.id);
+	assert(_namespaceInstance->getId() == fragment.getId());
 
 	//Merge properties
 	mergeFragmentPropertiesToNamespaceProperties(fragment);
@@ -61,9 +61,9 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 	for (Entity const* entity : fragment.nestedEntities)
 	{
 		//Setup outer entity
-		const_cast<Entity*>(entity)->outerEntity = _namespaceInstance.get();	//Don't tell anyone I actually wrote const_cast...
+		const_cast<Entity*>(entity)->setOuterEntity(_namespaceInstance.get());	//Don't tell anyone I actually wrote const_cast...
 
-		switch (entity->kind)
+		switch (entity->getKind())
 		{
 			case EEntityKind::Namespace:
 				_namespaceInstance->namespaces.emplace(reinterpret_cast<Namespace const*>(entity));
@@ -115,7 +115,7 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(NamespaceFragment const& fragment) noexcept
 {
 	//Append properties
-	for (Property const* fragmentProperty : fragment.properties)
+	for (Property const* fragmentProperty : fragment.getProperties())
 	{
 		//Don't add the prop if the same prop is already added
 		if (!_namespaceInstance->getProperty([fragmentProperty](Property const* namespaceProperty)
@@ -123,7 +123,7 @@ void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(N
 				return &namespaceProperty->getArchetype() == &fragmentProperty->getArchetype();
 			}))
 		{
-			_namespaceInstance->properties.emplace_back(fragmentProperty);
+			_namespaceInstance->getProperties().emplace_back(fragmentProperty);
 		}
 	}
 }
@@ -136,7 +136,7 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 	//nested non-namespace entities
 	for (Entity const* entity : _fragment.nestedEntities)
 	{
-		switch (entity->kind)
+		switch (entity->getKind())
 		{
 			case EEntityKind::Namespace:
 				_namespaceInstance->namespaces.erase(reinterpret_cast<Namespace const*>(entity));

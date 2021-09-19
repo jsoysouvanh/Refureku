@@ -2,8 +2,8 @@
 
 using namespace rfk;
 
-EnumValue::EnumValue(std::string&& name, uint64 id, int64 value) noexcept:
-	Entity(std::forward<std::string>(name), id, EEntityKind::EnumValue),
+EnumValue::EnumValue(std::string&& name, std::size_t id, int64 value, Entity const* outerEntity) noexcept:
+	Entity(std::forward<std::string>(name), id, EEntityKind::EnumValue, outerEntity),
 	value{value}
 {
 }

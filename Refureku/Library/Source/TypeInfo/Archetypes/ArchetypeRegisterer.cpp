@@ -9,7 +9,7 @@ ArchetypeRegisterer::ArchetypeRegisterer(Archetype const& archetype) noexcept:
 	_registeredArchetype{archetype}
 {
 	//Archetypes which are not at file level should not be registered
-	assert(_registeredArchetype.outerEntity == nullptr);
+	assert(_registeredArchetype.getOuterEntity() == nullptr);
 
 	Database::getInternal().registerFileLevelEntity(_registeredArchetype, true);
 }

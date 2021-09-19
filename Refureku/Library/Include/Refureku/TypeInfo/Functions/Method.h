@@ -42,15 +42,16 @@ namespace rfk
 			ReturnType	internalInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 		public:
-			Method()											= delete;
+			Method()													= delete;
 			Method(std::string&&				methodName,
 				   uint64						methodId,
 				   Type const&					returnType,
 				   std::unique_ptr<ICallable>&&	internalMethod,
-				   EMethodFlags					flags)			noexcept;
-			Method(Method const&)								= delete;
-			Method(Method&&)									= delete;
-			~Method()											= default;
+				   EMethodFlags					flags,
+				   Entity const*				outerEntity = nullptr)	noexcept;
+			Method(Method const&)										= delete;
+			Method(Method&&)											= delete;
+			~Method()													= default;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any, and return the result.

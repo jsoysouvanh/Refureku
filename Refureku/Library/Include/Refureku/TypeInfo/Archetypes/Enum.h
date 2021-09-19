@@ -29,14 +29,15 @@ namespace rfk
 			/** Underlying type of this enum. */
 			Type const&																underlyingType;
 
-			Enum()								= delete;
+			Enum()										= delete;
 			Enum(std::string&&	name,
-				 uint64			id,
+				 std::size_t	id,
 				 uint64			memorySize,
-				 Type const&	underlyingType)	noexcept;
-			Enum(Enum const&)					= delete;
-			Enum(Enum&&)						= delete;
-			~Enum()								= default;
+				 Type const&	underlyingType,
+				 Entity const*	outerEntity = nullptr)	noexcept;
+			Enum(Enum const&)							= delete;
+			Enum(Enum&&)								= delete;
+			~Enum()										= default;
 
 			/**
 			*	@brief Retrieve from this enum an enum value matching with a given predicate.

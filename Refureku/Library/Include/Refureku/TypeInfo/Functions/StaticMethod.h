@@ -29,15 +29,16 @@ namespace rfk
 			ReturnType	internalInvoke(ArgTypes&&... arguments) const noexcept;
 
 		public:
-			StaticMethod()												= delete;
+			StaticMethod()														= delete;
 			StaticMethod(std::string&&					name,
 						 uint64							id,
 						 Type const&					returnType,
 						 std::unique_ptr<ICallable>&&	internalMethod,
-						 EMethodFlags					flags)			noexcept;
-			StaticMethod(StaticMethod const&)							= delete;
-			StaticMethod(StaticMethod&&)								= delete;
-			~StaticMethod()												= default;
+						 EMethodFlags					flags,
+						 Entity const*					outerEntity = nullptr)	noexcept;
+			StaticMethod(StaticMethod const&)									= delete;
+			StaticMethod(StaticMethod&&)										= delete;
+			~StaticMethod()														= default;
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any, and return the result.

@@ -16,15 +16,16 @@ namespace rfk
 	class MethodBase : public FunctionBase
 	{
 		protected:
-			MethodBase()											= delete;
+			MethodBase()													= delete;
 			MethodBase(std::string&&				name, 
 					   uint64						id,
 					   Type const&					returnType,
 					   std::unique_ptr<ICallable>&&	internalMethod,
-					   EMethodFlags					flags)			noexcept;
-			MethodBase(MethodBase const&)							= delete;
-			MethodBase(MethodBase&&)								= delete;
-			~MethodBase()											= default;
+					   EMethodFlags					flags,
+					   Entity const*				outerEntity	= nullptr)	noexcept;
+			MethodBase(MethodBase const&)									= delete;
+			MethodBase(MethodBase&&)										= delete;
+			~MethodBase()													= default;
 
 		public:
 			/** Flags describing this method. */

@@ -19,13 +19,14 @@ namespace rfk
 	class VariableBase : public Entity
 	{
 		protected:
-			VariableBase()							= delete;
+			VariableBase()										= delete;
 			VariableBase(std::string&&	name,
 						 uint64			id,
 						 EEntityKind	newKind,
-						 Type const&	type)		noexcept;
-			VariableBase(VariableBase const&)		= delete;
-			VariableBase(VariableBase&&)			= delete;
+						 Type const&	type,
+						 Entity const*	outerEntity = nullptr)	noexcept;
+			VariableBase(VariableBase const&)					= delete;
+			VariableBase(VariableBase&&)						= delete;
 			
 		public:
 			/** Type of this variable. */

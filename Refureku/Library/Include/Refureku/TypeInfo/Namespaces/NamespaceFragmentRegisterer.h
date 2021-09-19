@@ -51,7 +51,7 @@ namespace rfk
 		public:
 			NamespaceFragmentRegisterer()													= delete;
 			NamespaceFragmentRegisterer(char const*					name,
-										uint64						id,
+										std::size_t					id,
 										NamespaceFragment const&	namespaceFragment,
 										bool						isFileLevelNamespace)	noexcept;
 			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer const&)					= delete;

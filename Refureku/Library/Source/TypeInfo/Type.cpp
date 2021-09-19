@@ -18,7 +18,7 @@ std::string Type::toString() const noexcept
 
 	if (archetype != nullptr)
 	{
-		result += "Archetype: " + archetype->name + "\n";
+		result += "Archetype: " + archetype->getName() + "\n";
 	}
 	else
 	{

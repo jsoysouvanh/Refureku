@@ -38,7 +38,7 @@ Struct const* Namespace::getStruct(Predicate predicate) const
 {
 	for (Archetype const* archetype : archetypes)
 	{
-		if (archetype->kind == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
+		if (archetype->getKind() == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
 		{
 			return reinterpret_cast<Struct const*>(archetype);
 		}
@@ -52,7 +52,7 @@ Class const* Namespace::getClass(Predicate predicate) const
 {
 	for (Archetype const* archetype : archetypes)
 	{
-		if (archetype->kind == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
+		if (archetype->getKind() == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
 		{
 			return reinterpret_cast<Class const*>(archetype);
 		}
@@ -66,7 +66,7 @@ Enum const* Namespace::getEnum(Predicate predicate) const
 {
 	for (Archetype const* archetype : archetypes)
 	{
-		if (archetype->kind == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
+		if (archetype->getKind() == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
 		{
 			return reinterpret_cast<Enum const*>(archetype);
 		}

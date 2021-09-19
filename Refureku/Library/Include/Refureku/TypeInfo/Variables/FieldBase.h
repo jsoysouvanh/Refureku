@@ -18,15 +18,16 @@ namespace rfk
 	class FieldBase : public VariableBase
 	{
 		protected:
-			FieldBase()									= delete;
-			FieldBase(std::string&&		name,
-					  uint64			id,
-					  Type const&		type,
-					  EFieldFlags		flags,
-					  Struct const*		ownerStruct)	noexcept;
-			FieldBase(FieldBase const&)					= delete;
-			FieldBase(FieldBase&&)						= delete;
-			~FieldBase()								= default;
+			FieldBase()										= delete;
+			FieldBase(std::string&&	name,
+					  uint64		id,
+					  Type const&	type,
+					  EFieldFlags	flags,
+					  Struct const*	ownerStruct,
+					  Entity const*	outerEntity = nullptr)	noexcept;
+			FieldBase(FieldBase const&)						= delete;
+			FieldBase(FieldBase&&)							= delete;
+			~FieldBase()									= default;
 
 		public:
 			/** Flags describing this field. */

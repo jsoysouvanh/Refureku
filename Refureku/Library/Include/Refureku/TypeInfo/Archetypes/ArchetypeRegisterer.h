@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
+
 namespace rfk
 {
 	class Archetype;	//Forward declaration
@@ -18,13 +20,13 @@ namespace rfk
 			Archetype const& _registeredArchetype;
 
 		public:
-			ArchetypeRegisterer()							= delete;
-			ArchetypeRegisterer(Archetype const& archetype)	noexcept;
-			ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
-			ArchetypeRegisterer(ArchetypeRegisterer&&)		= delete;
-			~ArchetypeRegisterer()							noexcept;
+			REFUREKU_API ArchetypeRegisterer()								= delete;
+			REFUREKU_API ArchetypeRegisterer(Archetype const& archetype)	noexcept;
+			REFUREKU_API ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
+			REFUREKU_API ArchetypeRegisterer(ArchetypeRegisterer&&)			= delete;
+			REFUREKU_API ~ArchetypeRegisterer()								noexcept;
 
-			ArchetypeRegisterer& operator=(ArchetypeRegisterer const&)	= delete;
-			ArchetypeRegisterer& operator=(ArchetypeRegisterer&&)		= delete;
+			REFUREKU_API ArchetypeRegisterer& operator=(ArchetypeRegisterer const&)	= delete;
+			REFUREKU_API ArchetypeRegisterer& operator=(ArchetypeRegisterer&&)		= delete;
 	};
 }

@@ -2,8 +2,8 @@
 
 using namespace rfk;
 
-FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod) noexcept:
-	Entity(std::forward<std::string>(name), id, kind),
+FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod, Entity const* outerEntity) noexcept:
+	Entity(std::forward<std::string>(name), id, kind, outerEntity),
 	internalMethod{std::forward<std::unique_ptr<ICallable>>(internalMethod)},
 	returnType{returnType}
 {

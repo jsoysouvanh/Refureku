@@ -4,8 +4,8 @@
 
 using namespace rfk;
 
-Enum::Enum(std::string&& name, uint64 id, uint64 memorySize, Type const& underlyingType) noexcept:
-	Archetype(std::forward<std::string>(name), id, EEntityKind::Enum, memorySize),
+Enum::Enum(std::string&& name, std::size_t id, uint64 memorySize, Type const& underlyingType, Entity const* outerEntity) noexcept:
+	Archetype(std::forward<std::string>(name), id, EEntityKind::Enum, memorySize, outerEntity),
 	underlyingType{underlyingType}
 {
 }
@@ -43,10 +43,5 @@ std::vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 EnumValue* Enum::addEnumValue(std::string enumValueName, uint64 entityId, int64 value) noexcept
 {
 	//Add the enum value to the container
-	EnumValue* result = const_cast<EnumValue*>(&*values.emplace(std::move(enumValueName), entityId, value).first);
-
-	//Set outer entity
-	result->outerEntity = this;
-
-	return result;
+	return const_cast<EnumValue*>(&*values.emplace(std::move(enumValueName), entityId, value, this).first);
 }

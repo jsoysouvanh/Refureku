@@ -20,7 +20,7 @@ void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegister
 	registerEntity(entity, shouldRegisterSubEntities);
 
 	//Register by name
-	switch (entity.kind)
+	switch (entity.getKind())
 	{
 		case EEntityKind::Namespace:
 			_fileLevelNamespacesByName.emplace(reinterpret_cast<Namespace const*>(&entity));
@@ -71,7 +71,7 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 
 	if (shouldRegisterSubEntities)
 	{
-		switch (entity.kind)
+		switch (entity.getKind())
 		{
 			case EEntityKind::Namespace:
 				registerSubEntities(static_cast<Namespace const&>(entity));
@@ -114,7 +114,7 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 {
 	if (shouldUnregisterSubEntities)
 	{
-		switch (entity.kind)
+		switch (entity.getKind())
 		{
 			case EEntityKind::Namespace:
 				assert(false); //This situation should never happen
@@ -155,9 +155,9 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 	//Remove this entity from the list of registered entity ids
 	_entitiesById.erase(&entity);
 
-	if (entity.outerEntity == nullptr)
+	if (entity.getOuterEntity() == nullptr)
 	{
-		switch (entity.kind)
+		switch (entity.getKind())
 		{
 			case EEntityKind::Namespace:
 				_fileLevelNamespacesByName.erase(reinterpret_cast<Namespace const*>(&entity));

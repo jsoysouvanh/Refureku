@@ -5,8 +5,10 @@ using namespace rfk;
 template <>
 Archetype const* rfk::entityCast<Archetype, void>(Entity const* entity) noexcept
 {
+	EEntityKind kind = entity->getKind();
+
 	return (entity != nullptr &&
-			(entity->kind == EEntityKind::FundamentalArchetype || entity->kind == EEntityKind::Struct || entity->kind == EEntityKind::Class || entity->kind == EEntityKind::Enum)) ?
+			(kind == EEntityKind::FundamentalArchetype || kind == EEntityKind::Struct || kind == EEntityKind::Class || kind == EEntityKind::Enum)) ?
 			reinterpret_cast<Archetype const*>(entity) : nullptr;
 }
 
@@ -19,7 +21,9 @@ FundamentalArchetype const* rfk::entityCast<FundamentalArchetype, void>(Entity c
 template <>
 Struct const* rfk::entityCast<Struct, void>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && (entity->kind == EEntityKind::Struct || entity->kind == EEntityKind::Class)) ? reinterpret_cast<Struct const*>(entity) : nullptr;
+	EEntityKind kind = entity->getKind();
+
+	return (entity != nullptr && (kind == EEntityKind::Struct || kind == EEntityKind::Class)) ? reinterpret_cast<Struct const*>(entity) : nullptr;
 }
 
 template <>
@@ -31,13 +35,13 @@ FieldBase const* rfk::entityCast<FieldBase, void>(Entity const* entity) noexcept
 template <>
 Field const* rfk::entityCast<Field, void>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->kind == EEntityKind::Field && !reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<Field const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Field && !reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<Field const*>(entity) : nullptr;
 }
 
 template <>
 StaticField const* rfk::entityCast<StaticField, void>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->kind == EEntityKind::Field && reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticField const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Field && reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticField const*>(entity) : nullptr;
 }
 
 template <>
@@ -49,13 +53,13 @@ MethodBase const* rfk::entityCast<MethodBase, void>(Entity const* entity) noexce
 template <>
 Method const* rfk::entityCast<Method, void>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->kind == EEntityKind::Method && !reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<Method const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Method && !reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<Method const*>(entity) : nullptr;
 }
 
 template <>
 StaticMethod const* rfk::entityCast<StaticMethod, void>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->kind == EEntityKind::Method && reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticMethod const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Method && reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticMethod const*>(entity) : nullptr;
 }
 
 template <>

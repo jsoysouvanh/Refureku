@@ -14,7 +14,7 @@ PropertyType const* Entity::getProperty(bool isChildClassValid) const noexcept
 template <typename Predicate, typename>
 Property const* Entity::getProperty(Predicate predicate) const
 {
-	for (Property const* property : properties)
+	for (Property const* property : _properties)
 	{
 		if (predicate(property))
 		{
@@ -38,7 +38,7 @@ std::vector<Property const*> Entity::getProperties(Predicate predicate) const
 {
 	std::vector<Property const*> result;
 
-	for (Property const* property : properties)
+	for (Property const* property : _properties)
 	{
 		if (predicate(property))
 		{

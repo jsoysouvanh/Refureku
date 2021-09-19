@@ -20,10 +20,11 @@ namespace rfk
 			Archetype(std::string&& newName,
 					  uint64		newId,
 					  EEntityKind	kind,
-					  uint64		newMemorySize)	noexcept;
-			Archetype(Archetype const&)				= delete;
-			Archetype(Archetype&&)					= delete;
-			~Archetype()							= default;
+					  uint64		newMemorySize,
+					  Entity const*	outerEntity = nullptr)	noexcept;
+			Archetype(Archetype const&)						= delete;
+			Archetype(Archetype&&)							= delete;
+			~Archetype()									= default;
 
 		public:
 			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */

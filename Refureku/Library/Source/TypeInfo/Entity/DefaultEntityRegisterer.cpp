@@ -8,7 +8,7 @@ DefaultEntityRegisterer::DefaultEntityRegisterer(Entity const* entity) noexcept:
 	_registeredEntity{entity}
 {
 	//Entities which are not at file level should not be registered
-	assert(_registeredEntity->outerEntity == nullptr);
+	assert(_registeredEntity->getOuterEntity() == nullptr);
 
 	//Register to database
 	Database::getInternal().registerFileLevelEntity(*entity, false);

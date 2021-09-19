@@ -12,7 +12,7 @@ void Struct::addToParents(EAccessSpecifier inheritanceAccess) noexcept
 
 	if (parentArchetype != nullptr)
 	{
-		assert(parentArchetype->kind == EEntityKind::Struct || parentArchetype->kind == EEntityKind::Class);
+		assert(parentArchetype->getKind() == EEntityKind::Struct || parentArchetype->getKind() == EEntityKind::Class);
 
 		addToParents(reinterpret_cast<Struct const*>(parentArchetype), inheritanceAccess);
 	}
@@ -37,7 +37,7 @@ Struct const* Struct::getNestedStruct(Predicate predicate) const
 {
 	for (Archetype const* archetype : nestedArchetypes)
 	{
-		if (archetype->kind == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
+		if (archetype->getKind() == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
 		{
 			return reinterpret_cast<Struct const*>(archetype);
 		}
@@ -51,7 +51,7 @@ Class const* Struct::getNestedClass(Predicate predicate) const
 {
 	for (Archetype const* archetype : nestedArchetypes)
 	{
-		if (archetype->kind == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
+		if (archetype->getKind() == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
 		{
 			return reinterpret_cast<Class const*>(archetype);
 		}
@@ -65,7 +65,7 @@ Enum const* Struct::getNestedEnum(Predicate predicate) const
 {
 	for (Archetype const* archetype : nestedArchetypes)
 	{
-		if (archetype->kind == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
+		if (archetype->getKind() == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
 		{
 			return reinterpret_cast<Enum const*>(archetype);
 		}
@@ -83,7 +83,7 @@ Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) 
 		*	fields collection contains both this struct fields and inherited fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if ((shouldInspectInherited || field.outerEntity == this) && predicate(&field))
+		if ((shouldInspectInherited || field.getOuterEntity() == this) && predicate(&field))
 		{
 			return &field;
 		}
@@ -103,7 +103,7 @@ std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInsp
 		*	fields collection contains both this struct fields and inherited fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if ((shouldInspectInherited || field.outerEntity == this) && predicate(&field))
+		if ((shouldInspectInherited || field.getOuterEntity() == this) && predicate(&field))
 		{
 			result.emplace_back(&field);
 		}
@@ -121,7 +121,7 @@ StaticField const* Struct::getStaticField(Predicate predicate, bool shouldInspec
 		*	staticFields collection contains both this struct static fields and inherited static fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if ((shouldInspectInherited || staticField.outerEntity == this) && predicate(&staticField))
+		if ((shouldInspectInherited || staticField.getOuterEntity() == this) && predicate(&staticField))
 		{
 			return &staticField;
 		}
@@ -141,7 +141,7 @@ std::vector<StaticField const*> Struct::getStaticFields(Predicate predicate, boo
 		*	staticFields collection contains both this struct static fields and inherited static fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if ((shouldInspectInherited || staticField.outerEntity == this) && predicate(&staticField))
+		if ((shouldInspectInherited || staticField.getOuterEntity() == this) && predicate(&staticField))
 		{
 			result.emplace_back(&staticField);
 		}

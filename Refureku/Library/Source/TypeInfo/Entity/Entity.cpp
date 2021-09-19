@@ -7,10 +7,11 @@
 
 using namespace rfk;
 
-Entity::Entity(std::string&& name, uint64 id, EEntityKind kind)	noexcept:
-	name{std::forward<std::string>(name)},
-	id{id},
-	kind{kind}
+Entity::Entity(std::string&& name, std::size_t id, EEntityKind kind, Entity const* outerEntity) noexcept:
+	_name{std::forward<std::string>(name)},
+	_id{id},
+	_kind{kind},
+	_outerEntity{outerEntity}
 {
 }
 
@@ -19,7 +20,7 @@ Property const* Entity::getProperty(Struct const& archetype, bool isChildClassVa
 	//Iterate over all props to find a matching property
 	if (isChildClassValid)
 	{
-		for (Property const* p : properties)
+		for (Property const* p : _properties)
 		{
 			//Consider child classes as valid
 			if (archetype.isBaseOf(p->getArchetype()))
@@ -30,7 +31,7 @@ Property const* Entity::getProperty(Struct const& archetype, bool isChildClassVa
 	}
 	else
 	{
-		for (Property const* p : properties)
+		for (Property const* p : _properties)
 		{
 			//Child classes are not considered
 			if (archetype == p->getArchetype())
@@ -50,7 +51,7 @@ std::vector<Property const*> Entity::getProperties(Struct const& archetype, bool
 	//Iterate over all props to find a matching property
 	if (isChildClassValid)
 	{
-		for (Property const* p : properties)
+		for (Property const* p : _properties)
 		{
 			//Consider child classes as valid
 			if (archetype.isBaseOf(p->getArchetype()))
@@ -61,7 +62,7 @@ std::vector<Property const*> Entity::getProperties(Struct const& archetype, bool
 	}
 	else
 	{
-		for (Property const* p : properties)
+		for (Property const* p : _properties)
 		{
 			//Child classes are not considered
 			if (archetype == p->getArchetype())
@@ -80,20 +81,20 @@ bool Entity::addProperty(Property const* toAddProperty) noexcept
 	{
 		//Check if a property of the same type is already in this entity,
 		//in which case we abort the add
-		if (std::find_if(properties.cbegin(), properties.cend(), [toAddProperty](Property const* ownedProperty) { return &toAddProperty->getArchetype() == &ownedProperty->getArchetype(); }) != properties.cend())
+		if (std::find_if(_properties.cbegin(), _properties.cend(), [toAddProperty](Property const* ownedProperty) { return &toAddProperty->getArchetype() == &ownedProperty->getArchetype(); }) != _properties.cend())
 		{
 			return false;
 		}
 	}
 
-	properties.emplace_back(toAddProperty);
+	_properties.emplace_back(toAddProperty);
 
 	return true;
 }
 
 void Entity::inheritProperties(Entity const& from) noexcept
 {
-	for (Property const* property : from.properties)
+	for (Property const* property : from._properties)
 	{
 		if (property->getShouldInherit())
 		{
@@ -104,8 +105,43 @@ void Entity::inheritProperties(Entity const& from) noexcept
 
 void Entity::inheritAllProperties(Entity const& from) noexcept
 {
-	for (Property const* property : from.properties)
+	for (Property const* property : from._properties)
 	{
 		addProperty(property);
 	}
+}
+
+std::string const& Entity::getName() const noexcept
+{
+	return _name;
+}
+
+std::size_t Entity::getId() const noexcept
+{
+	return _id;
+}
+
+EEntityKind Entity::getKind() const noexcept
+{
+	return _kind;
+}
+
+Entity const* Entity::getOuterEntity() const noexcept
+{
+	return _outerEntity;
+}
+
+void Entity::setOuterEntity(Entity const* outerEntity) noexcept
+{
+	_outerEntity = outerEntity;
+}
+
+std::vector<Property const*> const& Entity::getProperties() const noexcept
+{
+	return _properties;
+}
+
+std::vector<Property const*>& Entity::getProperties() noexcept
+{
+	return _properties;
 }

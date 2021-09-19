@@ -24,7 +24,7 @@ Struct const* Struct::getNestedStruct(std::string structName, EAccessSpecifier a
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingStruct));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->kind == EEntityKind::Struct &&
+			(*it)->getKind() == EEntityKind::Struct &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Struct const*>(*it) : nullptr;
 }
@@ -38,7 +38,7 @@ Class const* Struct::getNestedClass(std::string className, EAccessSpecifier acce
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingClass));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->kind == EEntityKind::Class &&
+			(*it)->getKind() == EEntityKind::Class &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Class const*>(*it) : nullptr;
 }
@@ -52,7 +52,7 @@ Enum const* Struct::getNestedEnum(std::string enumName, EAccessSpecifier access)
 	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingEnum));
 
 	return (it != nestedArchetypes.cend() &&
-			(*it)->kind == EEntityKind::Enum &&
+			(*it)->getKind() == EEntityKind::Enum &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->accessSpecifier)) ?
 				reinterpret_cast<Enum const*>(*it) : nullptr;
 }
@@ -68,7 +68,7 @@ Field const* Struct::getField(std::string fieldName, EFieldFlags minFlags, bool 
 		*	fields variable contains both this struct fields and inherited fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->outerEntity == this)
+		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)
@@ -97,7 +97,7 @@ std::vector<Field const*> Struct::getFields(std::string fieldName, EFieldFlags m
 		*	fields variable contains both this struct fields and inherited fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->outerEntity == this)
+		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)
@@ -121,7 +121,7 @@ StaticField const* Struct::getStaticField(std::string fieldName, EFieldFlags min
 		*	staticFields variable contains both this struct static fields and inherited static fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->outerEntity == this)
+		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)
@@ -150,7 +150,7 @@ std::vector<StaticField const*> Struct::getStaticFields(std::string fieldName, E
 		*	staticFields variable contains both this struct static fields and inherited static fields,
 		*	make sure we check inherited fields only if requested
 		*/
-		if (shouldInspectInherited || it->outerEntity == this)
+		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
 			if ((it->flags & minFlags) == minFlags)
@@ -350,12 +350,7 @@ Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& r
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
 
 	//Add the method to the container
-	Method* result = const_cast<Method*>(&*methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags));
-
-	//Set outer entity
-	result->outerEntity = this;
-
-	return result;
+	return const_cast<Method*>(&*methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
 }
 
 StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
@@ -363,12 +358,7 @@ StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, T
 	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
 
 	//Add the static method to the container
-	StaticMethod* result = const_cast<StaticMethod*>(&*staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags));
-
-	//Set outer entity
-	result->outerEntity = this;
-
-	return result;
+	return const_cast<StaticMethod*>(&*staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
 }
 
 Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, uint64 memoryOffset) noexcept
@@ -376,12 +366,7 @@ Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
 
 	//Add the field to the container
-	Field* result = const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset));
-
-	//Set outer entity
-	result->outerEntity = outerEntity_;
-
-	return result;
+	return const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset, outerEntity_));
 }
 
 StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void* fieldPtr) noexcept
@@ -390,12 +375,7 @@ StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	StaticField* result = const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr));
-
-	//Set outer entity
-	result->outerEntity = outerEntity_;
-
-	return result;
+	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity_));
 }
 
 StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void const* fieldPtr) noexcept
@@ -404,12 +384,7 @@ StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	StaticField* result = const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr));
-
-	//Set outer entity
-	result->outerEntity = outerEntity_;
-
-	return result;
+	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity_));
 }
 
 Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier_) noexcept
@@ -421,7 +396,7 @@ Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessS
 	result->accessSpecifier = accessSpecifier_;
 
 	//Set outer entity
-	result->outerEntity = this;
+	result->setOuterEntity(this);
 
 	return result;
 }

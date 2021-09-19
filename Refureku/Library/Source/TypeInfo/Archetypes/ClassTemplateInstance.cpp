@@ -11,7 +11,7 @@ ClassTemplateInstance::ClassTemplateInstance(std::string&& name, uint64 id, uint
 	instantiatedFrom{static_cast<ClassTemplate const&>(instantiatedFrom)}
 {
 	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
-	assert(instantiatedFrom.kind == rfk::EEntityKind::Class || instantiatedFrom.kind == rfk::EEntityKind::Struct);
+	assert(instantiatedFrom.getKind() == rfk::EEntityKind::Class || instantiatedFrom.getKind() == rfk::EEntityKind::Struct);
 	assert(static_cast<Class const&>(instantiatedFrom).classKind == EClassKind::Template);
 
 	const_cast<ClassTemplate&>(static_cast<ClassTemplate const&>(instantiatedFrom)).registerClassTemplateInstance(*this);

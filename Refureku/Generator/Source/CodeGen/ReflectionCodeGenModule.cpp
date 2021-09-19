@@ -500,7 +500,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 	if (!entity.properties.empty())
 	{
 		//Reserve space to avoid reallocation
-		inout_result += generatedEntityVarName + "properties.reserve(" + std::to_string(entity.properties.size()) + ");" + env.getSeparator();
+		inout_result += generatedEntityVarName + "getProperties().reserve(" + std::to_string(entity.properties.size()) + ");" + env.getSeparator();
 
 		//Add all properties
 		_propertiesCount.clear();
@@ -529,7 +529,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 
 			inout_result.push_back(';');
 
-			inout_result += generatedEntityVarName + "properties.emplace_back(&" + generatedPropertyVariableName + ");" + env.getSeparator();
+			inout_result += generatedEntityVarName + "addProperty(&" + generatedPropertyVariableName + ");" + env.getSeparator();
 		}
 	}
 }

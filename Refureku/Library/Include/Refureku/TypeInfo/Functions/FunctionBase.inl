@@ -13,7 +13,7 @@ void FunctionBase::checkArgumentsCount() const
 	//Check the number of provided params is correct
 	if (sizeof...(ArgTypes) != correctParamCount)
 	{
-		throw ArgCountMismatch("Tried to call method " + name + " with " + std::to_string(sizeof...(ArgTypes)) + " arguments but " + std::to_string(correctParamCount) + " were expected.");
+		throw ArgCountMismatch("Tried to call method " + getName() + " with " + std::to_string(sizeof...(ArgTypes)) + " arguments but " + std::to_string(correctParamCount) + " were expected.");
 	}
 }
 
@@ -44,7 +44,7 @@ void FunctionBase::checkArguments() const
 
 	if (!parameters[Rank].type.match(providedType))
 	{
-		throw ArgTypeMismatch("Tried to call method " + name + " but argument " + std::to_string(Rank) + " (" + parameters[Rank].name + ") type doesn't match.\n" +
+		throw ArgTypeMismatch("Tried to call method " + getName() + " but argument " + std::to_string(Rank) + " (" + parameters[Rank].name + ") type doesn't match.\n" +
 							  "Provided: \n" + providedType.toString() + "\nExpected: \n" + parameters[Rank].type.toString());
 	}
 }

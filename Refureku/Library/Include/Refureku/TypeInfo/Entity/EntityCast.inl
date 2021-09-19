@@ -8,5 +8,5 @@
 template <typename T, EEntityKind CheckKind, typename>
 T const* rfk::internal::entityCast(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->kind == CheckKind) ? reinterpret_cast<T const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == CheckKind) ? reinterpret_cast<T const*>(entity) : nullptr;
 }

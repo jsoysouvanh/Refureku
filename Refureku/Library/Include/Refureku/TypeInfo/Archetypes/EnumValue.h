@@ -19,11 +19,14 @@ namespace rfk
 			/** Value of this enum value. */
 			int64	value = 0;
 
-			EnumValue()												= delete;
-			EnumValue(std::string&& name, uint64 id, int64 value)	noexcept;
-			EnumValue(EnumValue const&)								= delete;
-			EnumValue(EnumValue&&)									= delete;
-			~EnumValue()											= default;
+			EnumValue()										= delete;
+			EnumValue(std::string&&	name,
+					  std::size_t	id,
+					  int64			value,
+					  Entity const*	outerEntity = nullptr)	noexcept;
+			EnumValue(EnumValue const&)						= delete;
+			EnumValue(EnumValue&&)							= delete;
+			~EnumValue()									= default;
 
 			/**
 			*	@brief Cast the enum value as the provided template type.

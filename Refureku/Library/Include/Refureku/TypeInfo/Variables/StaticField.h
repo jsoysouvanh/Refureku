@@ -34,21 +34,23 @@ namespace rfk
 			inline void*	getAddress()	const noexcept;
 
 		public:
-			StaticField()								= delete;
+			StaticField()										= delete;
 			StaticField(std::string&&	name,
 						uint64			id,
 						Type const&		type,
 						EFieldFlags		flags,
 						Struct const*	ownerStruct,
-						void*			address)		noexcept;
+						void*			address,
+						Entity const*	outerEntity = nullptr)	noexcept;
 			StaticField(std::string&&	name,
 						uint64			id,
 						Type const&		type,
 						EFieldFlags		flags,
 						Struct const*	ownerStruct,
-						void const*		address)		noexcept;
-			StaticField(StaticField const&)				= delete;
-			StaticField(StaticField&&)					= delete;
+						void const*		address,
+						Entity const*	outerEntity = nullptr)	noexcept;
+			StaticField(StaticField const&)						= delete;
+			StaticField(StaticField&&)							= delete;
 
 			/**
 			*	@brief Get the data corresponding to this static field.

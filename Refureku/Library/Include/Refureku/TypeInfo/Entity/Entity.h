@@ -23,13 +23,32 @@ namespace rfk
 
 	class Entity
 	{
+		private:
+			/** Name qualifying this entity. */
+			std::string						_name			= "";
+
+			/** Program-unique ID given for this entity. The ID is persistent even after the program is recompiled / relaunched. */
+			std::size_t						_id				= 0u;
+
+			/** Kind of this entity. */
+			EEntityKind						_kind			= EEntityKind::Undefined;
+
+			/**
+			*	The outer entity is the entity in which this entity has been declared.
+			*	If this entity is declared at file level, outerEntity will be nullptr.
+			*/
+			Entity const*					_outerEntity	= nullptr;
+
+			/** Properties attached to this entity. */
+			std::vector<Property const*>	_properties;
+
 		public:
 			/** Helper structs for hashing / equal */
 			struct NameHasher
 			{
 				size_t operator()(rfk::Entity const& entity) const
 				{
-					return std::hash<std::string>()(entity.name);
+					return std::hash<std::string>()(entity.getName());
 				}
 			};
 
@@ -37,7 +56,7 @@ namespace rfk
 			{
 				size_t operator()(rfk::Entity const& entity) const
 				{
-					return entity.id;
+					return entity.getId();
 				}
 			};
 
@@ -45,7 +64,7 @@ namespace rfk
 			{
 				bool operator()(rfk::Entity const& e1, rfk::Entity const& e2) const
 				{
-					return e1.name == e2.name;
+					return e1.getName() == e2.getName();
 				}
 			};
 
@@ -53,7 +72,7 @@ namespace rfk
 			{
 				bool operator()(rfk::Entity const& e1, rfk::Entity const& e2) const
 				{
-					return e1.id == e2.id;
+					return e1.getId() == e2.getId();
 				}
 			};
 
@@ -61,7 +80,7 @@ namespace rfk
 			{
 				size_t operator()(rfk::Entity const* entity) const
 				{
-					return std::hash<std::string>()(entity->name);
+					return std::hash<std::string>()(entity->getName());
 				}
 			};
 
@@ -69,7 +88,7 @@ namespace rfk
 			{
 				size_t operator()(rfk::Entity const* entity) const
 				{
-					return entity->id;
+					return entity->getId();
 				}
 			};
 
@@ -77,7 +96,7 @@ namespace rfk
 			{
 				bool operator()(rfk::Entity const* e1, rfk::Entity const* e2) const
 				{
-					return e1->name == e2->name;
+					return e1->getName() == e2->getName();
 				}
 			};
 
@@ -85,46 +104,31 @@ namespace rfk
 			{
 				bool operator()(rfk::Entity const* e1, rfk::Entity const* e2) const
 				{
-					return e1->id == e2->id;
+					return e1->getId() == e2->getId();
 				}
 			};
 
-			/** Name qualifying this entity. */
-			std::string						name		= "";
-
-			/** Program-unique ID given for this entity. The ID is persistent even after the program is recompiled / relaunched. */
-			uint64							id			= 0u;
-
-			/** Kind of this entity. */
-			EEntityKind						kind		= EEntityKind::Undefined;
-
-			/**
-			*	The outer entity is the entity in which this entity has been declared.
-			*	If this entity is declared at file level, outerEntity will be nullptr.
-			*/
-			Entity const*					outerEntity	= nullptr;
-
-			/** Properties contained by this entity. */
-			std::vector<Property const*>	properties;
-
-			Entity()												= delete;
-			Entity(std::string&&	name,
-				   uint64			id,
-				   EEntityKind		kind = EEntityKind::Undefined)	noexcept;
-			Entity(Entity const&)									= default;
-			Entity(Entity&&)										= default;
-			~Entity()												= default;
+			REFUREKU_API Entity()												= delete;
+			REFUREKU_API Entity(std::string&&	name,
+								std::size_t		id,
+								EEntityKind		kind = EEntityKind::Undefined,
+								Entity const*	outerEntity = nullptr)			noexcept;
+			REFUREKU_API Entity(Entity const&)									= default;
+			REFUREKU_API Entity(Entity&&)										= default;
+			REFUREKU_API ~Entity()												= default;
 
 			/**
 			*	@brief	Retrieve a property of a given type from this entity.
 			*			The provided property type must be non-abstract.
 			*	
 			*	@tparam PropertyType Type of the property to retrieve. It must be a child class of rfk::Property.
+			* 
+			*	@param isChildClassValid Whether types inheriting from the provided PropertyType are considered valid or not.
 			*	
 			*	@return The first found property of type PropertyType if any, else nullptr.
 			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
-			PropertyType const*					getProperty(bool isChildClassValid = true)				const	noexcept;
+			PropertyType const*					getProperty(bool isChildClassValid = true)		const	noexcept;
 
 			/**
 			*	@brief Retrieve a property matching with a predicate.
@@ -134,18 +138,7 @@ namespace rfk
 			*	@return The first found property fulfilling the provided predicate if any, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
-			Property const*						getProperty(Predicate predicate)						const;
-
-			/**
-			*	@brief Retrieve the first property matching with the provided archetype.
-			*	
-			*	@param archetype			Archetype of the property to look for.
-			*	@param isChildClassValid	If true, all properties inheriting from the provided archetype are considered valid.
-			*	
-			*	@return The first property matching the provided archetype in this entity, nullptr if none is found.
-			*/
-			Property const*						getProperty(Struct const&	archetype,
-															bool			isChildClassValid = true)	const	noexcept;
+			Property const*						getProperty(Predicate predicate)				const;
 
 			/**
 			*	@brief	Retrieve properties of a given type from this entity.
@@ -156,7 +149,7 @@ namespace rfk
 			*	@return A collection of all properties of type PropertyType contained in this entity.
 			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType>>>
-			std::vector<PropertyType const*>	getProperties(bool isChildClassValid = true)			const	noexcept;
+			std::vector<PropertyType const*>	getProperties(bool isChildClassValid = true)	const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with a predicate in this entity.
@@ -166,7 +159,18 @@ namespace rfk
 			*	@return A collection of all properties fulfilling the provided predicate contained in this entity.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
-			std::vector<Property const*>		getProperties(Predicate predicate)						const;
+			std::vector<Property const*>		getProperties(Predicate predicate)				const;
+
+			/**
+			*	@brief Retrieve the first property matching with the provided archetype.
+			*	
+			*	@param archetype			Archetype of the property to look for.
+			*	@param isChildClassValid	If true, all properties inheriting from the provided archetype are considered valid.
+			*	
+			*	@return The first property matching the provided archetype in this entity, nullptr if none is found.
+			*/
+			REFUREKU_API Property const*						getProperty(Struct const&	archetype,
+																			bool			isChildClassValid = true)	const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with the provided archetype.
@@ -176,8 +180,8 @@ namespace rfk
 			*	
 			*	@return A collection of all properties matching the provided archetype in this entity.
 			*/
-			std::vector<Property const*>		getProperties(Struct const&	archetype,
-															  bool			isChildClassValid = true)	const	noexcept;
+			REFUREKU_API std::vector<Property const*>			getProperties(Struct const&	archetype,
+																			  bool			isChildClassValid = true)	const	noexcept;
 
 			/**
 			*	@brief Add a property to this entity.
@@ -187,24 +191,74 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
 			*/
-			bool								addProperty(Property const* property)							noexcept;
+			REFUREKU_API bool									addProperty(Property const* property)							noexcept;
 
 			/**
 			*	@brief Inherit from another entity inheritable properties.
 			*	
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			void								inheritProperties(Entity const& from)							noexcept;
+			REFUREKU_API void									inheritProperties(Entity const& from)							noexcept;
 
 			/**
 			*	@brief Inherit all properties from another entity.
 			* 
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			void								inheritAllProperties(Entity const& from)						noexcept;
+			REFUREKU_API void									inheritAllProperties(Entity const& from)						noexcept;
 
-			inline bool operator==(Entity const& other) const noexcept;
-			inline bool operator!=(Entity const& other) const noexcept;
+			/**
+			*	@brief Getter for the field _name.
+			* 
+			*	@return _name.
+			*/
+			REFUREKU_API std::string const&						getName()												const	noexcept;
+
+			/**
+			*	@brief Getter for the field _id.
+			* 
+			*	@return _id.
+			*/
+			REFUREKU_API std::size_t							getId()													const	noexcept;
+
+			/**
+			*	@brief Getter for the field _kind.
+			* 
+			*	@return _kind.
+			*/
+			REFUREKU_API EEntityKind							getKind()												const	noexcept;
+
+			/**
+			*	@brief Getter for the field _outerEntity.
+			* 
+			*	@return _outerEntity.
+			*/
+			REFUREKU_API Entity const*							getOuterEntity()										const	noexcept;
+
+			/**
+			*	@brief Setter for the field _outerEntity.
+			* 
+			*	@param The outer entity to set.
+			*/
+			REFUREKU_API void									setOuterEntity(Entity const*)									noexcept;
+
+			/**
+			*	@brief Getter for the field _properties.
+			* 
+			*	@return _properties.
+			*/
+			REFUREKU_API std::vector<Property const*> const&	getProperties()											const	noexcept;
+
+			/**
+			*	@brief Non-const getter for the field _properties.
+			* 
+			*	@return _properties.
+			*/
+			REFUREKU_API std::vector<Property const*>&			getProperties()													noexcept;
+
+
+			REFUREKU_API inline bool operator==(Entity const& other) const noexcept;
+			REFUREKU_API inline bool operator!=(Entity const& other) const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Entity/Entity.inl"
