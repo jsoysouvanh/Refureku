@@ -24,11 +24,16 @@
 #define REFUREKU_VERSION_PATCH 0
 
 //Dynamic library import/export macros
-#if defined _WIN32 || defined __CYGWIN__
+#if defined(KODGEN_PARSING)
 
-	#ifdef REFUREKU_EXPORT
+	#define REFUREKU_API
+	#define REFUREKU_INTERNAL
 
-		#ifdef __GNUC__
+#elif defined(_WIN32) || defined(__CYGWIN__)
+
+	#if defined(REFUREKU_EXPORT)
+
+		#if defined(__GNUC__)
 			#define REFUREKU_API __attribute__((dllexport))
 		#else
 			#define REFUREKU_API __declspec(dllexport)
@@ -36,7 +41,7 @@
 
 	#else
 
-		#ifdef __GNUC__
+		#if defined(__GNUC__)
 			#define REFUREKU_API	__attribute__((dllimport))
 		#else
 			#define REFUREKU_API	__declspec(dllimport)

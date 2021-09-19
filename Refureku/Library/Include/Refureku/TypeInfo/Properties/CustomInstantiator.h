@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Properties/Property.h"
 #include "Refureku/TypeInfo/Properties/PropertySettings.h"
 
@@ -16,7 +17,7 @@
 *	@brief	Property used to add a new way to instantiate a struct or class through the rfk::Struct::makeInstance method.
 *			This property can only be attached to static methods returning a pointer to the class.
 */
-struct RFKStruct(PropertySettings(rfk::EEntityKind::Method)) CustomInstantiator : public rfk::Property
+struct REFUREKU_API RFKStruct(PropertySettings(rfk::EEntityKind::Method)) CustomInstantiator : public rfk::Property
 {
 	CustomInstantiator_GENERATED
 };

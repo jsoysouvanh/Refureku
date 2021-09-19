@@ -375,16 +375,16 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareClassRegistererField(kodgen::StructClassInfo const&	structClass,
-												kodgen::MacroCodeGenEnv&		env,
-												std::string&					inout_result)							noexcept;
+			void	declareClassRegistererVariable(kodgen::StructClassInfo const&	structClass,
+												   kodgen::MacroCodeGenEnv&		env,
+												   std::string&					inout_result)							noexcept;
 
 			/**
 			*	TODO
 			*/
-			void	defineClassRegistererField(kodgen::StructClassInfo const&	structClass,
-											   kodgen::MacroCodeGenEnv&			env,
-											   std::string&						inout_result)					const	noexcept;
+			void	defineClassRegistererVariable(kodgen::StructClassInfo const&	structClass,
+												  kodgen::MacroCodeGenEnv&			env,
+												  std::string&						inout_result)				const	noexcept;
 
 			//Class template code generation
 			/**

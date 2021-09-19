@@ -2,11 +2,13 @@
 
 #include "../TypeInfo/Properties/PropertySettings.h"
 
+#include <type_traits>
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
 #include <Refureku/TypeInfo/Archetypes/TemplateParameter.h>
-#include <type_traits>
-rfk::ArchetypeRegisterer PropertySettings::_rfk_archetypeRegisterer = staticGetArchetype(); 
+rfk::EEntityKind PropertySettings::getTargetEntityKind() const noexcept { return targetEntityKind; }
+static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");
+rfk::ArchetypeRegisterer rfk::generated::_rfk_archetypeRegisterer_2708994343965683583u = PropertySettings::staticGetArchetype(); 
 
 rfk::Struct const& PropertySettings::staticGetArchetype() noexcept {
 static bool initialized = false;
@@ -26,5 +28,4 @@ rfk::Struct const& PropertySettings::getArchetype() const noexcept { return Prop
 
 template <> rfk::Archetype const* rfk::getArchetype<PropertySettings>() noexcept { return &PropertySettings::staticGetArchetype(); }
 
-rfk::EEntityKind PropertySettings::getTargetEntityKind() const noexcept { return targetEntityKind; }
-static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");
+

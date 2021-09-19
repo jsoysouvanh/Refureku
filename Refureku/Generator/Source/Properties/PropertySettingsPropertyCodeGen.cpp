@@ -75,7 +75,7 @@ bool PropertySettingsPropertyCodeGen::generateSourceFileHeaderCodeForEntity(kodg
 	}
 		
 	//Static assert to make sure the property is attached to a class inheriting from rfk::Property.
-	inout_result += "static_assert(std::is_base_of_v<rfk::Property, " + entity.getFullName() + ">, \"[Refureku] Can't attach " + property.name + " property to " + entity.getFullName() + " as it doesn't inherit from rfk::Property.\");";
+	inout_result += "static_assert(std::is_base_of_v<rfk::Property, " + entity.getFullName() + ">, \"[Refureku] Can't attach " + property.name + " property to " + entity.getFullName() + " as it doesn't inherit from rfk::Property.\");" + env.getSeparator();
 
 	return true;
 }

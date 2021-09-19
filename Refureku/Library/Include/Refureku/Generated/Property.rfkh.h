@@ -2,6 +2,7 @@
 
 #include "EntityMacros.h"
 
+#include <Refureku/TypeInfo/Entity/EEntityKind.h>
 #include <cstddef>
 
 #include <Refureku/Utility/Macros.h>
@@ -16,7 +17,6 @@
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h>
 namespace rfk {class NamespaceFragment;class Function;class Variable;}
-#include <Refureku/TypeInfo/Entity/EEntityKind.h>
 
 #define File_Property_GENERATED	\
 

@@ -2,11 +2,13 @@
 
 #include "../TypeInfo/Properties/ParseAllNested.h"
 
+#include <type_traits>
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
 #include <Refureku/TypeInfo/Archetypes/TemplateParameter.h>
-#include <type_traits>
-rfk::ArchetypeRegisterer ParseAllNested::_rfk_archetypeRegisterer = staticGetArchetype(); 
+rfk::EEntityKind ParseAllNested::getTargetEntityKind() const noexcept { return targetEntityKind; }
+static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");
+rfk::ArchetypeRegisterer rfk::generated::_rfk_archetypeRegisterer_17636175816175907530u = ParseAllNested::staticGetArchetype(); 
 
 rfk::Struct const& ParseAllNested::staticGetArchetype() noexcept {
 static bool initialized = false;
@@ -26,5 +28,4 @@ rfk::Struct const& ParseAllNested::getArchetype() const noexcept { return ParseA
 
 template <> rfk::Archetype const* rfk::getArchetype<ParseAllNested>() noexcept { return &ParseAllNested::staticGetArchetype(); }
 
-rfk::EEntityKind ParseAllNested::getTargetEntityKind() const noexcept { return targetEntityKind; }
-static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");
+

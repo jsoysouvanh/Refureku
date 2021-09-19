@@ -2,6 +2,7 @@
 
 #include "EntityMacros.h"
 
+#include <Refureku/TypeInfo/Entity/EEntityKind.h>
 #include <cstddef>
 
 #include <Refureku/Utility/Macros.h>
@@ -16,9 +17,10 @@
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h>
 namespace rfk {class NamespaceFragment;class Function;class Variable;}
-#include <Refureku/TypeInfo/Entity/EEntityKind.h>
 
 #define PropertySettings_GENERATED	\
+public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;\
+virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 RFK_UNPACK_IF_NOT_PARSING(friend rfk::Struct;\
 friend rfk::CodeGenerationHelpers;\
 friend implements_template1__rfk_registerChildClass<PropertySettings, void, void(rfk::Struct&)>; \
@@ -34,14 +36,12 @@ public: static rfk::Struct const& staticGetArchetype() noexcept;\
 \
 public: virtual rfk::Struct const& getArchetype() const noexcept override;\
 \
-private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;\
-\
 )\
-public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;\
-virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 
 
 #define File_PropertySettings_GENERATED	\
 namespace rfk { template <> rfk::Archetype const* getArchetype<PropertySettings>() noexcept; }\
+namespace rfk::generated { extern rfk::ArchetypeRegisterer _rfk_archetypeRegisterer_2708994343965683583u; }\
+\
 
 

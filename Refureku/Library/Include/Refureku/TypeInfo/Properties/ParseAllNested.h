@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Properties/Property.h"
 #include "Refureku/TypeInfo/Properties/PropertySettings.h"
 
@@ -16,7 +17,7 @@
 *	@brief	Property used to automatically tag all directly nested entities as reflected.
 *			This property can only be attached to namespaces, structs and classes.
 */
-struct RFKStruct(PropertySettings(rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct)) ParseAllNested : public rfk::Property
+struct REFUREKU_API RFKStruct(PropertySettings(rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct)) ParseAllNested : public rfk::Property
 {
 	ParseAllNested_GENERATED
 };

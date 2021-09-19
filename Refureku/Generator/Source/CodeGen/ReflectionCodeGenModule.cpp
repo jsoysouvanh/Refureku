@@ -105,7 +105,7 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCodeForE
 			{
 				declareStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 				declareGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-				declareClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+				//declareClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 			}
 
 			endHiddenGeneratedCode(env, inout_result);
@@ -162,6 +162,11 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 			}
 
 			declareGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+
+			if (!static_cast<kodgen::StructClassInfo const&>(entity).type.isTemplateType())
+			{
+				declareClassRegistererVariable(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+			}
 				
 			result = kodgen::ETraversalBehaviour::Recurse;
 			break;
@@ -245,7 +250,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			}
 			else
 			{
-				defineClassRegistererField(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
+				defineClassRegistererVariable(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 				defineStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 				defineGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
@@ -795,23 +800,24 @@ void ReflectionCodeGenModule::defineGetNestedEnumMethods(kodgen::StructClassInfo
 	}
 }
 
-void ReflectionCodeGenModule::declareClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
+void ReflectionCodeGenModule::declareClassRegistererVariable(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
 	//Define the registrator only when there is no outer entity.
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: static rfk::ArchetypeRegisterer _rfk_archetypeRegisterer;" + env.getSeparator() + env.getSeparator();
+		inout_result += "namespace rfk::generated { extern rfk::ArchetypeRegisterer _rfk_archetypeRegisterer_" + getEntityId(structClass) + "; }" + env.getSeparator() + env.getSeparator();
 	}
 }
 
-void ReflectionCodeGenModule::defineClassRegistererField(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::defineClassRegistererVariable(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//Define the registrator only when there is no outer entity.
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "rfk::ArchetypeRegisterer " + structClass.getFullName() + "::_rfk_archetypeRegisterer = staticGetArchetype(); " + env.getSeparator() + env.getSeparator();
+		inout_result += "rfk::ArchetypeRegisterer rfk::generated::_rfk_archetypeRegisterer_" + getEntityId(structClass) + " = " +
+			structClass.getFullName() + "::staticGetArchetype(); " + env.getSeparator() + env.getSeparator();
 	}
 }
 

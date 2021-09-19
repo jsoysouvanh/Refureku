@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
 #include "Refureku/Object.h"
 #include "Refureku/TypeInfo/Entity/EEntityKind.h"
 
@@ -15,10 +16,10 @@ namespace rfk
 	/**
 	*	@brief Base struct to inherit from to define new properties.
 	*/
-	struct Property : public Object
+	struct REFUREKU_API Property : public Object
 	{
 		protected:
-			Property()	= default;
+			Property() = default;
 
 		public:
 			/** Kind of entity this property can be attached to. By default, a property can be attached to any kind of entity. */

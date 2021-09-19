@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
+
 namespace rfk
 {
 	//Forward declaration
@@ -15,7 +17,7 @@ namespace rfk
 	/**
 	*	Base class which implements the virtual getArchetype method.
 	*/
-	class Object
+	class REFUREKU_API Object
 	{
 		public:
 			Object()				= default;
