@@ -22,6 +22,9 @@ namespace rfk
 	class Field final : public FieldBase
 	{
 		private:
+			/** Memory offset in bytes of this field in its owner class */
+			std::size_t	_memoryOffset	= 0u;
+
 			/**
 			*	@brief Get the data address corresponding to this field in the provided instance.
 			*
@@ -42,17 +45,14 @@ namespace rfk
 			*/
 			inline void const*	getDataAddress(void const* instance)	const noexcept;
 
-		public:
-			/** Memory offset in bytes of this field in its owner class */
-			uint64	memoryOffset	= 0u;
 
-			Field()										= delete;
+		public:
 			Field(std::string&&	name,
-				  uint64		id,
+				  std::size_t	id,
 				  Type const&	type,
 				  EFieldFlags	flags,
-				  Struct const*	ownerStruct,
-				  uint64		memoryOffset,
+				  Struct const*	containedIn,
+				  std::size_t	memoryOffset,
 				  Entity const*	outerEntity = nullptr)	noexcept;
 			Field(Field const&)							= delete;
 			Field(Field&&)								= delete;
@@ -125,6 +125,13 @@ namespace rfk
 			inline void			setData(void*		instance,
 										void const* data,
 										uint64		dataSize)			const;
+
+			/**
+			*	@brief Getter for the field _memoryOffset.
+			* 
+			*	@return _memoryOffset.
+			*/
+			inline std::size_t	getMemoryOffset()						const	noexcept;
 
 			Field& operator=(Field const&)	= delete;
 			Field& operator=(Field&&)		= delete;

@@ -10,7 +10,7 @@ DataType StaticField::getData() const
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
-		if (type.isConst())
+		if (getType().isConst())
 		{
 			throw ConstViolation("StaticField::getData can't be called with an rvalue DataType on const static fields.");
 		}
@@ -19,7 +19,7 @@ DataType StaticField::getData() const
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
-		if (type.isConst())
+		if (getType().isConst())
 		{
 			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
 			{
@@ -38,7 +38,7 @@ DataType StaticField::getData() const
 template <typename DataType>
 void StaticField::setData(DataType&& data) const
 {
-	if (type.isConst())
+	if (getType().isConst())
 	{
 		throw ConstViolation("Can't call StaticField::setData on a const static field.");
 	}
@@ -59,7 +59,7 @@ void StaticField::setData(DataType&& data) const
 
 inline void StaticField::setData(void const* data, uint64 dataSize) const
 {
-	if (type.isConst())
+	if (getType().isConst())
 	{
 		throw ConstViolation("Can't call StaticField::setData on a const static field.");
 	}

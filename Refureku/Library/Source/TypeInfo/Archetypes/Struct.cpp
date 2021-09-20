@@ -71,7 +71,7 @@ Field const* Struct::getField(std::string fieldName, EFieldFlags minFlags, bool 
 		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
-			if ((it->flags & minFlags) == minFlags)
+			if ((it->getFlags() & minFlags) == minFlags)
 			{
 				return &*it;
 			}
@@ -100,7 +100,7 @@ std::vector<Field const*> Struct::getFields(std::string fieldName, EFieldFlags m
 		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
-			if ((it->flags & minFlags) == minFlags)
+			if ((it->getFlags() & minFlags) == minFlags)
 			{
 				result.emplace_back(&*it);
 			}
@@ -124,7 +124,7 @@ StaticField const* Struct::getStaticField(std::string fieldName, EFieldFlags min
 		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
-			if ((it->flags & minFlags) == minFlags)
+			if ((it->getFlags() & minFlags) == minFlags)
 			{
 				return &*it;
 			}
@@ -153,7 +153,7 @@ std::vector<StaticField const*> Struct::getStaticFields(std::string fieldName, E
 		if (shouldInspectInherited || it->getOuterEntity() == this)
 		{
 			//We found a field which has minFlags
-			if ((it->flags & minFlags) == minFlags)
+			if ((it->getFlags() & minFlags) == minFlags)
 			{
 				result.emplace_back(&*it);
 			}
@@ -361,30 +361,30 @@ StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, T
 	return const_cast<StaticMethod*>(&*staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
 }
 
-Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, uint64 memoryOffset) noexcept
+Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, uint64 memoryOffset) noexcept
 {
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
 
 	//Add the field to the container
-	return const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset, outerEntity_));
+	return const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset, outerEntity));
 }
 
-StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void* fieldPtr) noexcept
+StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void* fieldPtr) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity_));
+	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
 }
 
-StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity_, void const* fieldPtr) noexcept
+StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void const* fieldPtr) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity_));
+	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
 }
 
 Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept

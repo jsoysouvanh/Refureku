@@ -63,7 +63,7 @@ Variable const* Namespace::getVariable(std::string variableName, EVarFlags flags
 	//We know the hash method only uses the name inherited from Entity so cast is fine
 	decltype(variables)::const_iterator it = variables.find(reinterpret_cast<Variable const*>(&searchingVariable));
 	
-	return (it != variables.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
+	return (it != variables.cend() && ((*it)->getFlags() & flags) == flags) ? *it : nullptr;
 }
 
 Function const* Namespace::getFunction(std::string functionName, EFunctionFlags flags) const noexcept

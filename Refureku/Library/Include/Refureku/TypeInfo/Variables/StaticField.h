@@ -8,7 +8,7 @@
 #pragma once
 
 #include <cassert>
-#include <type_traits>
+#include <type_traits>	//std::is_rvalue_reference_v, std::is_lvalue_reference_v, std::remove_reference_t
 #include <cstring>		//std::memcpy
 #include <utility>		//std::forward
 
@@ -29,24 +29,25 @@ namespace rfk
 			};
 
 			/**
-			*	@return The data address corresponding to this static field.
+			*	@brief Getter for the field _address.
+			* 
+			*	@return _address.
 			*/
 			inline void*	getAddress()	const noexcept;
 
 		public:
-			StaticField()										= delete;
 			StaticField(std::string&&	name,
-						uint64			id,
+						std::size_t		id,
 						Type const&		type,
 						EFieldFlags		flags,
-						Struct const*	ownerStruct,
+						Struct const*	declaredIn,
 						void*			address,
 						Entity const*	outerEntity = nullptr)	noexcept;
 			StaticField(std::string&&	name,
-						uint64			id,
+						std::size_t		id,
 						Type const&		type,
 						EFieldFlags		flags,
-						Struct const*	ownerStruct,
+						Struct const*	declaredIn,
 						void const*		address,
 						Entity const*	outerEntity = nullptr)	noexcept;
 			StaticField(StaticField const&)						= delete;

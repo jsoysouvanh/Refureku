@@ -10,7 +10,7 @@ DataType Field::getData(void* instance) const
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
-		if (type.isConst())
+		if (getType().isConst())
 		{
 			throw ConstViolation("Field::getData can't be called with an rvalue DataType on const fields.");
 		}
@@ -19,7 +19,7 @@ DataType Field::getData(void* instance) const
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
-		if (type.isConst())
+		if (getType().isConst())
 		{
 			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
 			{
@@ -53,7 +53,7 @@ DataType const Field::getData(void const* instance) const noexcept
 template <typename DataType>
 void Field::setData(void* instance, DataType&& data) const
 {
-	if (type.isConst())
+	if (getType().isConst())
 	{
 		throw ConstViolation("Can't call Field::setData on a const field.");
 	}
@@ -74,7 +74,7 @@ void Field::setData(void* instance, DataType&& data) const
 
 inline void Field::setData(void* instance, void const* data, uint64 dataSize) const
 {
-	if (type.isConst())
+	if (getType().isConst())
 	{
 		throw ConstViolation("Can't call Field::setData on a const field.");
 	}
@@ -86,10 +86,15 @@ inline void* Field::getDataAddress(void* instance) const noexcept
 {
 	assert(instance != nullptr);
 
-	return reinterpret_cast<uint8_t*>(instance) + memoryOffset;
+	return reinterpret_cast<uint8_t*>(instance) + getMemoryOffset();
 }
 
 inline void const* Field::getDataAddress(void const* instance) const noexcept
 {
-	return reinterpret_cast<uint8_t const*>(instance) + memoryOffset;
+	return reinterpret_cast<uint8_t const*>(instance) + getMemoryOffset();
+}
+
+inline std::size_t Field::getMemoryOffset() const noexcept
+{
+	return _memoryOffset;
 }

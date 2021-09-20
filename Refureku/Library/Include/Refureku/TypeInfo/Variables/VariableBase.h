@@ -18,8 +18,11 @@ namespace rfk
 	/** Base class for all variables related entities (member, non-member). */
 	class VariableBase : public Entity
 	{
+		private:
+			/** Type of this variable. */
+			Type const&	_type;
+
 		protected:
-			VariableBase()										= delete;
 			VariableBase(std::string&&	name,
 						 uint64			id,
 						 EEntityKind	newKind,
@@ -29,10 +32,17 @@ namespace rfk
 			VariableBase(VariableBase&&)						= delete;
 			
 		public:
-			/** Type of this variable. */
-			Type const& type;
+			/**
+			*	@brief Getter for the field _type.
+			* 
+			*	@return _type.
+			*/
+			inline Type const& getType() const noexcept;
+
 
 			VariableBase& operator=(VariableBase const&)	= delete;
 			VariableBase& operator=(VariableBase&&)			= delete;
 	};
+
+	#include "Refureku/TypeInfo/Variables/VariableBase.inl"
 }

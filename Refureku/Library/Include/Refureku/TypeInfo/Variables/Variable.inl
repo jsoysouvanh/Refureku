@@ -10,7 +10,7 @@ DataType Variable::getData() const
 {
 	if constexpr (std::is_rvalue_reference_v<DataType>)
 	{
-		if (type.isConst())
+		if (getType().isConst())
 		{
 			throw ConstViolation("Variable::getData can't be called with an rvalue DataType on const variables.");
 		}
@@ -19,7 +19,7 @@ DataType Variable::getData() const
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
-		if (type.isConst())
+		if (getType().isConst())
 		{
 			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
 			{
@@ -38,7 +38,7 @@ DataType Variable::getData() const
 template <typename DataType>
 void Variable::setData(DataType&& data) const
 {
-	if (type.isConst())
+	if (getType().isConst())
 	{
 		throw ConstViolation("Can't use Variable::setData on a const variable.");
 	}
@@ -59,10 +59,20 @@ void Variable::setData(DataType&& data) const
 
 inline void Variable::setData(void const* data, uint64 dataSize) const
 {
-	if (type.isConst())
+	if (getType().isConst())
 	{
 		throw ConstViolation("Can't use Variable::setData on a const variable.");
 	}
 
 	std::memcpy(_address, data, dataSize);
+}
+
+inline bool Variable::isStatic() const noexcept
+{
+	return (getFlags() & EVarFlags::Static) != EVarFlags::Default;
+}
+
+inline EVarFlags Variable::getFlags() const noexcept
+{
+	return _flags;
 }

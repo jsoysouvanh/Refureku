@@ -17,39 +17,56 @@ namespace rfk
 
 	class FieldBase : public VariableBase
 	{
+		private:
+			/** Flags describing this field. */
+			EFieldFlags		_flags			= EFieldFlags::Default;
+
+			/** Struct containing this field. */
+			Struct const*	_containedIn	= nullptr;
+
 		protected:
-			FieldBase()										= delete;
 			FieldBase(std::string&&	name,
 					  uint64		id,
 					  Type const&	type,
 					  EFieldFlags	flags,
-					  Struct const*	ownerStruct,
+					  Struct const*	containedIn,
 					  Entity const*	outerEntity = nullptr)	noexcept;
 			FieldBase(FieldBase const&)						= delete;
 			FieldBase(FieldBase&&)							= delete;
-			~FieldBase()									= default;
 
 		public:
-			/** Flags describing this field. */
-			EFieldFlags			flags	= EFieldFlags::Default;
-
-			/** Struct this field belongs to. */
-			Struct const*		ownerStruct;
-
 			/**
 			*	@return The access specifier of this field in its owner struct/class.
 			*/
-			EAccessSpecifier	getAccess()		const	noexcept;
+			REFUREKU_API EAccessSpecifier	getAccess()			const	noexcept;
 
 			/**
 			*	@return true if this field is static, else false.
 			*/
-			inline bool			isStatic()		const	noexcept;
+			inline bool						isStatic()			const	noexcept;
 
 			/**
 			*	@return true if this field is mutable, else false
 			*/
-			inline bool			isMutable()		const	noexcept;
+			inline bool						isMutable()			const	noexcept;
+
+			/**
+			*	@brief Getter for the field _flags.
+			* 
+			*	@return _flags.
+			*/
+			inline EFieldFlags				getFlags()			const	noexcept;
+
+			/**
+			*	@brief Getter for the field _containedIn.
+			* 
+			*	@return _containedIn.
+			*/
+			inline Struct const*			getContainedIn()	const	noexcept;
+
+
+			FieldBase& operator=(FieldBase const&)	= delete;
+			FieldBase& operator=(FieldBase&&)		= delete;
 	};
 
 	#include "Refureku/TypeInfo/Variables/FieldBase.inl"

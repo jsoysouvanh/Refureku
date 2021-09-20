@@ -467,7 +467,7 @@ Variable const* Database::getVariable(std::string variableName, EVarFlags flags)
 
 	Database::VariablesByName::const_iterator it = _fileLevelVariablesByName.find(reinterpret_cast<Variable const*>(&searchedVariable));
 
-	return (it != _fileLevelVariablesByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
+	return (it != _fileLevelVariablesByName.cend() && ((*it)->getFlags() & flags) == flags) ? *it : nullptr;
 }
 
 Function const* Database::getFunction(std::size_t id) const noexcept

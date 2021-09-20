@@ -22,6 +22,9 @@ namespace rfk
 	class Variable final : public VariableBase
 	{
 		private:
+			/** Flags describing this variable. */
+			EVarFlags		_flags			= EVarFlags::Default;
+
 			/** Address of this variable in memory. */
 			union
 			{
@@ -30,9 +33,6 @@ namespace rfk
 			};
 
 		public:
-			/** Flags describing this variable. */
-			EVarFlags	flags	= EVarFlags::Default;
-
 			REFUREKU_API Variable(std::string&&	name,
 								  std::size_t	id,
 								  Type const&	type,
@@ -43,9 +43,8 @@ namespace rfk
 								  Type const&	type,
 								  void const*	address,
 								  EVarFlags		flags)		noexcept;
-
-			Variable(Variable const&)			= delete;
-			Variable(Variable&&)				= delete;
+			Variable(Variable const&)						= delete;
+			Variable(Variable&&)							= delete;
 
 			/**
 			*	@brief Get the data stored in this variable.
@@ -63,7 +62,7 @@ namespace rfk
 			*	@return The data stored in the variable.
 			*/
 			template <typename DataType>
-			DataType		getData()									const;
+			DataType			getData()									const;
 
 			/**
 			*	@brief Set some data in this variable.
@@ -76,7 +75,7 @@ namespace rfk
 			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
 			template <typename DataType>
-			void			setData(DataType&& data)					const;
+			void				setData(DataType&& data)					const;
 
 			/**
 			*	@brief Copy dataSize bytes starting from data into the variable.
@@ -86,14 +85,21 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
-			inline void		setData(void const* data, uint64 dataSize)	const;
+			inline void			setData(void const* data, uint64 dataSize)	const;
 
 			/**
 			*	@brief Check if this variable is static.
 			*
 			*	@return true if the variable is static, else false.
 			*/
-			bool			isStatic()									const noexcept;
+			inline bool			isStatic()									const	noexcept;
+
+			/**
+			*	@brief Getter for the field _flags.
+			* 
+			*	@return _flags.
+			*/
+			inline EVarFlags	getFlags()									const	noexcept;
 
 			Variable& operator=(Variable const&)	= delete;
 			Variable& operator=(Variable&&)			= delete;

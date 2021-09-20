@@ -7,10 +7,20 @@
 
 inline bool FieldBase::isStatic() const noexcept
 {
-	return static_cast<std::underlying_type_t<EFieldFlags>>(flags & EFieldFlags::Static);
+	return static_cast<std::underlying_type_t<EFieldFlags>>(getFlags() & EFieldFlags::Static);
 }
 
 inline bool FieldBase::isMutable() const noexcept
 {
-	return static_cast<std::underlying_type_t<EFieldFlags>>(flags & EFieldFlags::Mutable);
+	return static_cast<std::underlying_type_t<EFieldFlags>>(getFlags() & EFieldFlags::Mutable);
+}
+
+inline EFieldFlags FieldBase::getFlags() const noexcept
+{
+	return _flags;
+}
+
+inline Struct const* FieldBase::getContainedIn() const noexcept
+{
+	return _containedIn;
 }

@@ -135,9 +135,9 @@ void structs()
 	TEST(ExampleStruct::staticGetArchetype().getNestedStruct([](rfk::Struct const*) { return true; }) == nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getNestedClass([](rfk::Class const*) { return true; }) == nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getNestedEnum([](rfk::Enum const*) { return true; }) == nullptr);
-	TEST(ExampleStruct::staticGetArchetype().getField([](rfk::Field const* f) { return f->type == rfk::Type::getType<int>(); }) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getField([](rfk::Field const* f) { return f->getType() == rfk::Type::getType<int>(); }) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getFields([](rfk::Field const*) { return true; }, true).size() == 1u);
-	TEST(ExampleStruct::staticGetArchetype().getStaticField([](rfk::StaticField const* sf) { return sf->type == rfk::Type::getType<int>(); }) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getStaticField([](rfk::StaticField const* sf) { return sf->getType() == rfk::Type::getType<int>(); }) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getStaticFields([](rfk::StaticField const*) { return true; }, true).size() == 1u);
 	TEST(ExampleStruct::staticGetArchetype().getMethod([](rfk::Method const* m) { return m->parameters.size() == 2u; }, true) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getMethods([](rfk::Method const*) { return true; }).size() == 1u);
@@ -808,7 +808,7 @@ void database()
 	TEST(rfk::getDatabase().getClass([](rfk::Class const* c){ CustomProperty const* prop = c->getProperty<CustomProperty>(); return prop != nullptr && prop->i == 3 && prop->j == 4; })->getName() == "B");
 	TEST(rfk::getDatabase().getEnum([](rfk::Enum const* e) { rfk::EnumValue const* ev = e->getEnumValue("Value2"); return ev != nullptr && ev->value == 1; })->getName() == "EThisIsANormalEnum");
 	TEST(rfk::getDatabase().getFundamentalArchetype([](rfk::FundamentalArchetype const* ft) { return ft->getMemorySize() == 4; }) != nullptr);
-	TEST(rfk::getDatabase().getVariable([](rfk::Variable const* v) { return v->type == rfk::Type::getType<float>() && v->getData<float>() == 10.0f; })->getName() == "variableInsideGlobalScope");
+	TEST(rfk::getDatabase().getVariable([](rfk::Variable const* v) { return v->getType() == rfk::Type::getType<float>() && v->getData<float>() == 10.0f; })->getName() == "variableInsideGlobalScope");
 	TEST(rfk::getDatabase().getFunction([](rfk::Function const* f) { return f->getReturnType() == rfk::Type::getType<void>() && f->parameters.size() == 1 && f->parameters[0].type == rfk::Type::getType<namespace3::ExampleClass>(); })->getName() == "function1");
 }
 
@@ -936,8 +936,8 @@ void classManualReflection()
 	TEST(approximatelyEqual(vec3archetype->getField("z")->getData<float>(&vec), 0.0f));
 
 	rfk::Class const& exampleClassArchetype = namespace3::ExampleClass::staticGetArchetype();
-	TEST(exampleClassArchetype.getField("vec3")->type.getArchetype() == vec3archetype);
-	TEST(exampleClassArchetype.getField("vec3ptr")->type.getArchetype() == vec3archetype);
+	TEST(exampleClassArchetype.getField("vec3")->getType().getArchetype() == vec3archetype);
+	TEST(exampleClassArchetype.getField("vec3ptr")->getType().getArchetype() == vec3archetype);
 }
 
 void structDirectChildren()
@@ -999,7 +999,7 @@ void testMultipleTypeTemplateClassTemplate()
 	TEST(ifdInstance->getMethod("returnV") != nullptr);
 	TEST(ifdInstance->getMethod("returnV")->getReturnType() == rfk::Type::getType<double>());
 	TEST(rfk::getDatabase().getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation") != nullptr);
-	TEST(rfk::getDatabase().getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation")->type.getArchetype() == &o.getArchetype());
+	TEST(rfk::getDatabase().getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation")->getType().getArchetype() == &o.getArchetype());
 
 	//Must stay at the end of this function to test if the implicit instantiation works
 	MultipleTypeTemplateClassTemplate<double, double, double> implicitelyInstantiated;
