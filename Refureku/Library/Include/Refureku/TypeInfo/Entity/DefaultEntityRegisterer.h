@@ -21,10 +21,10 @@ namespace rfk
 			Entity const* _registeredEntity = nullptr;
 
 		public:
-			REFUREKU_API DefaultEntityRegisterer(Entity const* entity)			noexcept;
-			REFUREKU_API ~DefaultEntityRegisterer()								noexcept;
+			REFUREKU_API DefaultEntityRegisterer(Entity const* entity)	noexcept;
+			DefaultEntityRegisterer(DefaultEntityRegisterer const&)		= delete;
+			DefaultEntityRegisterer(DefaultEntityRegisterer&&)			= delete;
+			REFUREKU_API ~DefaultEntityRegisterer()						noexcept;
 			
-			DefaultEntityRegisterer(DefaultEntityRegisterer const&)	= delete;
-			DefaultEntityRegisterer(DefaultEntityRegisterer&&)		= delete;
 	};
 }

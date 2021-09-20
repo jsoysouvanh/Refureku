@@ -138,7 +138,7 @@ inline Archetype const* Type::getArchetype() const noexcept
 }
 
 template <typename T>
-static Type const& rfk::getType() noexcept
+Type const& rfk::getType() noexcept
 {
 	return Type::getType<T>();
 }

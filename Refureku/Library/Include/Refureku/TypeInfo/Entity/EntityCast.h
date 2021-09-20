@@ -51,7 +51,7 @@ namespace rfk
 	*	@return The casted entity if the provided type matched the concrete entity type, else nullptr.
 	*/
 	template <typename T, typename = internal::isValidEntityType<T>>
-	T const*	entityCast(Entity const* entity)	noexcept;
+	T const*									entityCast(Entity const* entity)								noexcept;
 
 	/**
 	*	rfk::entityCast<> specialization for all Entity types.

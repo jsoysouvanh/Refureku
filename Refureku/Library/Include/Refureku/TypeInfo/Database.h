@@ -153,7 +153,7 @@ namespace rfk
 			*	@return The newly generated namespace.
 			*/
 			std::shared_ptr<Namespace>	generateNamespace(char const*	name,
-														  uint64		id)									noexcept;
+														  std::size_t	id)									noexcept;
 
 		public:
 			Database()					= default;

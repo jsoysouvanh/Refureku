@@ -256,9 +256,8 @@ namespace rfk
 			*/
 			REFUREKU_API std::vector<Property const*>&			getProperties()													noexcept;
 
-
-			REFUREKU_API inline bool operator==(Entity const& other) const noexcept;
-			REFUREKU_API inline bool operator!=(Entity const& other) const noexcept;
+			inline bool operator==(Entity const& other) const noexcept;
+			inline bool operator!=(Entity const& other) const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Entity/Entity.inl"
