@@ -8,7 +8,7 @@
 template <typename... ArgTypes>
 void FunctionBase::checkArgumentsCount() const
 {
-	size_t correctParamCount = parameters.size();
+	std::size_t correctParamCount = getParameterCount();
 
 	//Check the number of provided params is correct
 	if (sizeof...(ArgTypes) != correctParamCount)
@@ -42,10 +42,10 @@ void FunctionBase::checkArguments() const
 {
 	Type providedType = Type::getType<LastArgType>();
 
-	if (!parameters[Rank].type.match(providedType))
+	if (!getParameter(Rank).getType().match(providedType))
 	{
-		throw ArgTypeMismatch("Tried to call method " + getName() + " but argument " + std::to_string(Rank) + " (" + parameters[Rank].name + ") type doesn't match.\n" +
-							  "Provided: \n" + providedType.toString() + "\nExpected: \n" + parameters[Rank].type.toString());
+		throw ArgTypeMismatch("Tried to call method " + getName() + " but argument " + std::to_string(Rank) + " (" + getParameter(Rank).getName() + ") type doesn't match.\n" +
+							  "Provided: \n" + providedType.toString() + "\nExpected: \n" + getParameter(Rank).getType().toString());
 	}
 }
 
@@ -63,7 +63,7 @@ void FunctionBase::checkReturnType() const
 template <typename... ArgTypes>
 bool FunctionBase::hasSameArgumentsCount() const noexcept
 {
-	return sizeof...(ArgTypes) == parameters.size();
+	return sizeof...(ArgTypes) == getParameterCount();
 }
 
 template <typename ReturnType>
@@ -87,7 +87,7 @@ bool FunctionBase::hasSameArgumentTypes() const noexcept
 template <size_t Rank, typename LastArgType>
 bool FunctionBase::hasSameArgumentTypes() const noexcept
 {
-	return parameters[Rank].type == Type::getType<LastArgType>();
+	return getParameter(Rank).getType() == Type::getType<LastArgType>();
 }
 
 template <typename ReturnType, typename... ArgTypes>
@@ -96,7 +96,7 @@ bool FunctionBase::hasSamePrototype() const noexcept
 	if constexpr (sizeof...(ArgTypes) == 0u)
 	{
 		//Check only return type if there are no arguments
-		return parameters.size() == 0u && hasSameReturnType<ReturnType>();
+		return getParameterCount() == 0u && hasSameReturnType<ReturnType>();
 	}
 	else
 	{
@@ -109,10 +109,15 @@ bool FunctionBase::hasSameArguments() const noexcept
 {
 	if constexpr (sizeof...(ArgTypes) == 0u)
 	{
-		return parameters.size() == 0u;
+		return getParameterCount() == 0u;
 	}
 	else
 	{
 		return hasSameArgumentsCount<ArgTypes...>() && hasSameArgumentTypes<ArgTypes...>();
 	}
+}
+
+inline Type const& FunctionBase::getReturnType() const noexcept
+{
+	return _returnType;
 }

@@ -114,7 +114,7 @@ Function const* Namespace::getFunction(std::string functionName, EFunctionFlags 
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if (((*it)->flags & flags) == flags && internal::FunctionHelper<FunctionSignature>::hasSamePrototype(**it))
+		if (((*it)->getFlags() & flags) == flags && internal::FunctionHelper<FunctionSignature>::hasSamePrototype(**it))
 		{
 			return *it;
 		}

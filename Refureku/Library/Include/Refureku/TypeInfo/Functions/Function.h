@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Functions/FunctionBase.h"
 #include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
 #include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
@@ -16,6 +17,9 @@ namespace rfk
 	class Function final : public FunctionBase
 	{
 		private:
+			/** Flags describing this function. */
+			EFunctionFlags	_flags	= EFunctionFlags::Default;
+
 			/**
 			*	@brief Invoke the internal function using passed arguments.
 			*	
@@ -27,21 +31,16 @@ namespace rfk
 			*	@return The result of the internal function call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(ArgTypes&&... arguments) const noexcept;
+			ReturnType	internalInvoke(ArgTypes&&... arguments)	const noexcept;
 
 		public:
-			/** Flags describing this function. */
-			EFunctionFlags	flags = EFunctionFlags::Default;
-
 			REFUREKU_API Function(std::string&&					name, 
-								  uint64						id,
+								  std::size_t					id,
 								  Type const&					returnType,
 								  std::unique_ptr<ICallable>&&	internalMethod,
 								  EFunctionFlags				flags)			noexcept;
-			
-			Function(Function const&)								= delete;
-			Function(Function&&)									= delete;
-			~Function()												= default;
+			Function(Function const&)											= delete;
+			Function(Function&&)												= delete;
 
 			/**
 			*	@brief Call the function with the provided argument(s) if any, and return the result.
@@ -59,7 +58,7 @@ namespace rfk
 			*	@return The result of the function call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	rInvoke(ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
+			ReturnType				rInvoke(ArgTypes&&... arguments)		const	noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the function with the provided argument(s) if any.
@@ -74,7 +73,7 @@ namespace rfk
 			*	@param arguments... Arguments provided to the function call.
 			*/
 			template <typename... ArgTypes>
-			void		invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
+			void					invoke(ArgTypes&&... arguments)			const	noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the function with the provided argument(s) if any, and return the result.
@@ -92,7 +91,7 @@ namespace rfk
 			*	@return The result of the function call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	checkedRInvoke(ArgTypes&&... arguments)	const;
+			ReturnType				checkedRInvoke(ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Call the function with the provided argument(s) if any.
@@ -107,21 +106,32 @@ namespace rfk
 			*	@param arguments... Arguments provided to the function call.
 			*/
 			template <typename... ArgTypes>
-			void		checkedInvoke(ArgTypes&&... arguments)	const;
+			void					checkedInvoke(ArgTypes&&... arguments)	const;
+
+			/**
+			*	@brief Getter for the field _flags.
+			* 
+			*	@return _flags.
+			*/
+			inline EFunctionFlags	getFlags()								const	noexcept;
 
 			/**
 			*	@brief Check if this function is inline.
 			*
 			*	@return true if the function is inline, else false.
 			*/
-			bool	isInline()									const noexcept;
+			inline	bool			isInline()								const	noexcept;
 
 			/**
 			*	@brief Check if this function is static.
 			*
 			*	@return true if the function is static, else false.
 			*/
-			bool	isStatic()									const noexcept;
+			inline	bool			isStatic()								const	noexcept;
+
+
+			Function& operator=(Function const&)	= delete;
+			Function& operator=(Function&&)			= delete;
 	};
 
 	#include "Refureku/TypeInfo/Functions/Function.inl"

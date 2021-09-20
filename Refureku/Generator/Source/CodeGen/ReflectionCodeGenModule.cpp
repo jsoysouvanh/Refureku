@@ -583,7 +583,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		if (!method.parameters.empty())
 		{
 			//Add all parameters in a single string
-			generatedCode = currentMethodVariable + "->parameters.reserve(" + std::to_string(method.parameters.size()) + "); " + currentMethodVariable;
+			generatedCode = currentMethodVariable + "->setParameterCount(" + std::to_string(method.parameters.size()) + "); " + currentMethodVariable;
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
@@ -1213,7 +1213,7 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 	//Setup parameters
 	if (!function.parameters.empty())
 	{
-		inout_result += "function.parameters.reserve(" + std::to_string(function.parameters.size()) + ");" + env.getSeparator() +
+		inout_result += "function.setParameterCount(" + std::to_string(function.parameters.size()) + ");" + env.getSeparator() +
 						"rfk::Function* functionPtr = &function; functionPtr" + env.getSeparator();
 
 		for (kodgen::FunctionParamInfo const& param : function.parameters)

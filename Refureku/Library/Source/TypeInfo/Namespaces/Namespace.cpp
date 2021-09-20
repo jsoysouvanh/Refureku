@@ -74,5 +74,5 @@ Function const* Namespace::getFunction(std::string functionName, EFunctionFlags 
 	//We know the hash method only uses the name inherited from Entity so cast is fine
 	decltype(functions)::const_iterator it = functions.find(reinterpret_cast<Function const*>(&searchingMethod));
 
-	return (it != functions.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
+	return (it != functions.cend() && ((*it)->getFlags() & flags) == flags) ? *it : nullptr;
 }

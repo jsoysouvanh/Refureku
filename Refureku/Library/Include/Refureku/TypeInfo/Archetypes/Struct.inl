@@ -161,7 +161,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && internal::MethodHelper<MethodSignature>::hasSamePrototype(*it))
+		if ((it->getFlags() & minFlags) == minFlags && internal::MethodHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}
@@ -258,7 +258,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags && internal::MethodHelper<MethodSignature>::hasSamePrototype(*it))
+		if ((it->getFlags() & minFlags) == minFlags && internal::MethodHelper<MethodSignature>::hasSamePrototype(*it))
 		{
 			return &*it;
 		}
@@ -382,7 +382,7 @@ void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 	assert(instantiator->getReturnType().isPointer());
 
 	//If it is a parameterless custom instantiator, replace the default instantiator
-	if (instantiator->parameters.size() == 0u)
+	if (instantiator->getParameterCount() == 0u)
 	{
 		setDefaultInstantiator(reinterpret_cast<rfk::NonMemberFunction<void* ()> const*>(instantiator->getInternalFunction())->getFunctionHandle());
 	}

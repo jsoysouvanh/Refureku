@@ -7,35 +7,40 @@
 
 inline bool MethodBase::isStatic() const noexcept
 {
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Static);
+	return static_cast<std::underlying_type_t<EMethodFlags>>(getFlags() & EMethodFlags::Static);
 }
 
 inline bool MethodBase::isInline() const noexcept
 {
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Inline);
+	return static_cast<std::underlying_type_t<EMethodFlags>>(getFlags() & EMethodFlags::Inline);
 }
 
 inline bool MethodBase::isVirtual() const noexcept
 {
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Virtual);
+	return static_cast<std::underlying_type_t<EMethodFlags>>(getFlags() & EMethodFlags::Virtual);
 }
 
 inline bool MethodBase::isPureVirtual() const noexcept
 {
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::PureVirtual);
+	return static_cast<std::underlying_type_t<EMethodFlags>>(getFlags() & EMethodFlags::PureVirtual);
 }
 
 inline bool MethodBase::isOverride() const noexcept
 {
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Override);
+	return static_cast<std::underlying_type_t<EMethodFlags>>(getFlags() & EMethodFlags::Override);
 }
 
 inline bool MethodBase::isFinal() const noexcept
 {
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Final);
+	return static_cast<std::underlying_type_t<EMethodFlags>>(getFlags() & EMethodFlags::Final);
 }
 
 inline bool MethodBase::isConst() const noexcept
 {
-	return static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Const);
+	return static_cast<std::underlying_type_t<EMethodFlags>>(getFlags() & EMethodFlags::Const);
+}
+
+inline EMethodFlags MethodBase::getFlags() const noexcept
+{
+	return _flags;
 }

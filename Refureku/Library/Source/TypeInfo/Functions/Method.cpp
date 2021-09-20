@@ -6,8 +6,8 @@
 
 using namespace rfk;
 
-Method::Method(std::string&& methodName, uint64 methodId, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
-	MethodBase(std::forward<std::string>(methodName), methodId, returnType, std::forward<std::unique_ptr<ICallable>>(internalMethod), flags, outerEntity)
+Method::Method(std::string&& methodName, std::size_t id, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
+	MethodBase(std::forward<std::string>(methodName), id, returnType, std::forward<std::unique_ptr<ICallable>>(internalMethod), flags, outerEntity)
 {
 	assert(!static_cast<std::underlying_type_t<EMethodFlags>>(flags & EMethodFlags::Static));
 }
@@ -20,7 +20,7 @@ void Method::inheritBaseMethodProperties() noexcept
 	Struct const* ownerStruct = reinterpret_cast<Struct const*>(getOuterEntity());
 
 	//Check inherited properties if this method is an override
-	if ((flags & EMethodFlags::Override) == EMethodFlags::Override && !ownerStruct->directParents.empty())
+	if ((getFlags() & EMethodFlags::Override) == EMethodFlags::Override && !ownerStruct->directParents.empty())
 	{
 		Method const* parentMethod = nullptr;
 

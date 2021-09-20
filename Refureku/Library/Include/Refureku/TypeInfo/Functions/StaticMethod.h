@@ -29,16 +29,14 @@ namespace rfk
 			ReturnType	internalInvoke(ArgTypes&&... arguments) const noexcept;
 
 		public:
-			StaticMethod()														= delete;
 			StaticMethod(std::string&&					name,
-						 uint64							id,
+						 std::size_t					id,
 						 Type const&					returnType,
 						 std::unique_ptr<ICallable>&&	internalMethod,
 						 EMethodFlags					flags,
 						 Entity const*					outerEntity = nullptr)	noexcept;
 			StaticMethod(StaticMethod const&)									= delete;
 			StaticMethod(StaticMethod&&)										= delete;
-			~StaticMethod()														= default;
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any, and return the result.
@@ -56,7 +54,7 @@ namespace rfk
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	rInvoke(ArgTypes&&... arguments)		const noexcept(REFUREKU_RELEASE);
+			ReturnType	rInvoke(ArgTypes&&... arguments)		const	noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any.
@@ -74,7 +72,7 @@ namespace rfk
 			*	@param arguments... Arguments provided to the method call.
 			*/
 			template <typename... ArgTypes>
-			void		invoke(ArgTypes&&... arguments)			const noexcept(REFUREKU_RELEASE);
+			void		invoke(ArgTypes&&... arguments)			const	noexcept(REFUREKU_RELEASE);
 
 			/**
 			*	@brief Call the static method with the provided argument(s) if any, and return the result.
@@ -111,6 +109,10 @@ namespace rfk
 			*/
 			template <typename... ArgTypes>
 			void		checkedInvoke(ArgTypes&&... arguments)	const;
+
+
+			StaticMethod& operator=(StaticMethod const&)	= delete;
+			StaticMethod& operator=(StaticMethod&&)			= delete;
 	};
 
 	#include "Refureku/TypeInfo/Functions/StaticMethod.inl"

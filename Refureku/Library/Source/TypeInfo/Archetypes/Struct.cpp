@@ -171,7 +171,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags)
+		if ((it->getFlags() & minFlags) == minFlags)
 		{
 			return &*it;
 		}
@@ -206,7 +206,7 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMe
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags)
+		if ((it->getFlags() & minFlags) == minFlags)
 		{
 			result.emplace_back(&*it);
 		}
@@ -239,7 +239,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags)
+		if ((it->getFlags() & minFlags) == minFlags)
 		{
 			return &*it;
 		}
@@ -274,7 +274,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	for (auto it = range.first; it != range.second; it++)
 	{
 		//We found a method which has minFlags
-		if ((it->flags & minFlags) == minFlags)
+		if ((it->getFlags() & minFlags) == minFlags)
 		{
 			result.emplace_back(&*it);
 		}

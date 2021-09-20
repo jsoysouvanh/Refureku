@@ -148,7 +148,7 @@ Function const* Database::getFunction(std::string functionName, EFunctionFlags f
 
 	for (auto it = range.first; it != range.second; it++)
 	{
-		if (((*it)->flags & flags) == flags && internal::FunctionHelper<FunctionSignature>::hasSamePrototype(**it))
+		if (((*it)->getFlags() & flags) == flags && internal::FunctionHelper<FunctionSignature>::hasSamePrototype(**it))
 		{
 			//We found a method which has minFlags and matches the signature
 			return *it;

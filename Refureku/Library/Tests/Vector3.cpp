@@ -43,7 +43,7 @@ rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 															   std::make_unique<rfk::NonMemberFunction<float(Vector3f const&, Vector3f const&)>>(static_cast<float(*)(Vector3f const&, Vector3f const&)>(&Vector3f::dot)), 
 															   rfk::EMethodFlags::Public | rfk::EMethodFlags::Static | rfk::EMethodFlags::Inline);
 
-		staticMethod->parameters.reserve(2);
+		staticMethod->setParameterCount(2u);
 		staticMethod->addParameter("lhs", rfk::Type::getType<Vector3f const&>())->addParameter("rhs", rfk::Type::getType<Vector3f const&>());
 	}
 

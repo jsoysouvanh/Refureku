@@ -8,7 +8,7 @@
 template <typename ReturnType, typename... ArgTypes>
 ReturnType Function::internalInvoke(ArgTypes&&... arguments) const noexcept
 {
-	return reinterpret_cast<NonMemberFunction<ReturnType(ArgTypes...)>*>(internalMethod.get())->operator()(std::forward<ArgTypes>(arguments)...);
+	return reinterpret_cast<NonMemberFunction<ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(std::forward<ArgTypes>(arguments)...);
 }
 
 template <typename... ArgTypes>
@@ -54,4 +54,19 @@ ReturnType Function::checkedRInvoke(ArgTypes&&... arguments) const
 	checkArguments<ArgTypes...>();
 
 	return internalInvoke<ReturnType, ArgTypes...>(std::forward<ArgTypes>(arguments)...);
+}
+
+inline EFunctionFlags Function::getFlags() const noexcept
+{
+	return _flags;
+}
+
+inline bool Function::isInline() const noexcept
+{
+	return (getFlags() & EFunctionFlags::Inline) != EFunctionFlags::Default;
+}
+
+inline bool Function::isStatic() const noexcept
+{
+	return (getFlags() & EFunctionFlags::Static) != EFunctionFlags::Default;
 }

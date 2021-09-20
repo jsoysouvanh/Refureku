@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Functions/FunctionBase.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
@@ -15,8 +16,11 @@ namespace rfk
 {
 	class MethodBase : public FunctionBase
 	{
+		private:
+			/** Flags describing this method. */
+			EMethodFlags	_flags	= EMethodFlags::Default;
+
 		protected:
-			MethodBase()													= delete;
 			MethodBase(std::string&&				name, 
 					   uint64						id,
 					   Type const&					returnType,
@@ -25,51 +29,58 @@ namespace rfk
 					   Entity const*				outerEntity	= nullptr)	noexcept;
 			MethodBase(MethodBase const&)									= delete;
 			MethodBase(MethodBase&&)										= delete;
-			~MethodBase()													= default;
 
 		public:
-			/** Flags describing this method. */
-			EMethodFlags	flags = EMethodFlags::Default;
-
 			/**
 			*	@return Access specifier of this method in its owner struct/class.
 			*/
-			EAccessSpecifier	getAccess()			const	noexcept;
+			REFUREKU_API EAccessSpecifier	getAccess()			const	noexcept;
 
 			/**
 			*	@return true if this method is static, else false.
 			*/
-			inline bool			isStatic()			const	noexcept;
+			inline bool						isStatic()			const	noexcept;
 
 			/**
 			*	@return true if this method is declared as inline, else false.
 			*/
-			inline bool			isInline()			const	noexcept;
+			inline bool						isInline()			const	noexcept;
 
 			/**
 			*	@return true if this method is virtual, else false.
 			*/
-			inline bool			isVirtual()			const	noexcept;
+			inline bool						isVirtual()			const	noexcept;
 
 			/**
 			*	@return true if this method is virtual pure, else false.
 			*/
-			inline bool			isPureVirtual()		const	noexcept;
+			inline bool						isPureVirtual()		const	noexcept;
 
 			/**
 			*	@return true if this method overrides a previous definition, else false.
 			*/
-			inline bool			isOverride()		const	noexcept;
+			inline bool						isOverride()		const	noexcept;
 
 			/**
 			*	@return true if this method is marked as final, else false.
 			*/
-			inline bool			isFinal()			const	noexcept;
+			inline bool						isFinal()			const	noexcept;
 
 			/**
 			*	@return true if this method is marked as const, else false.
 			*/
-			inline bool			isConst()			const	noexcept;
+			inline bool						isConst()			const	noexcept;
+
+			/**
+			*	@brief Getter for the field _flags.
+			* 
+			*	@return _flags.
+			*/
+			inline EMethodFlags				getFlags()			const	noexcept;
+
+
+			MethodBase& operator=(MethodBase const&)	= delete;
+			MethodBase& operator=(MethodBase&&)			= delete;
 	};
 
 	#include "Refureku/TypeInfo/Functions/MethodBase.inl"

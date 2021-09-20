@@ -8,13 +8,13 @@
 template <typename ReturnType, typename... ArgTypes>
 ReturnType Method::internalInvoke(void* caller, ArgTypes&&... arguments) const noexcept
 {
-	return reinterpret_cast<MemberFunction<DummyClass, ReturnType(ArgTypes...)>*>(internalMethod.get())->operator()(caller, std::forward<ArgTypes>(arguments)...);
+	return reinterpret_cast<MemberFunction<DummyClass, ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(caller, std::forward<ArgTypes>(arguments)...);
 }
 
 template <typename ReturnType, typename... ArgTypes>
 ReturnType Method::internalInvoke(void const* caller, ArgTypes&&... arguments) const
 {
-	return reinterpret_cast<MemberFunction<DummyClass, ReturnType(ArgTypes...)>*>(internalMethod.get())->operator()(caller, std::forward<ArgTypes>(arguments)...);
+	return reinterpret_cast<MemberFunction<DummyClass, ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(caller, std::forward<ArgTypes>(arguments)...);
 }
 
 template <typename... ArgTypes>

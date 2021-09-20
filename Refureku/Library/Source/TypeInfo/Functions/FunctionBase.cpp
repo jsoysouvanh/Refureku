@@ -2,10 +2,10 @@
 
 using namespace rfk;
 
-FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalMethod, Entity const* outerEntity) noexcept:
+FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalFunction, Entity const* outerEntity) noexcept:
 	Entity(std::forward<std::string>(name), id, kind, outerEntity),
 	_returnType{returnType},
-	internalMethod{std::forward<std::unique_ptr<ICallable>>(internalMethod)}
+	_internalFunction{std::forward<std::unique_ptr<ICallable>>(internalFunction)}
 {
 }
 
@@ -18,14 +18,14 @@ bool FunctionBase::hasSamePrototype(FunctionBase const* other) const noexcept
 	}
 
 	//Compare parameters
-	if (parameters.size() != other->parameters.size())
+	if (_parameters.size() != other->_parameters.size())
 	{
 		return false;
 	}
 
-	for (size_t i = 0u; i < parameters.size(); i++)
+	for (size_t i = 0u; i < _parameters.size(); i++)
 	{
-		if (parameters[i].type != other->parameters[i].type)
+		if (_parameters[i].getType() != other->_parameters[i].getType())
 		{
 			return false;
 		}
@@ -36,17 +36,27 @@ bool FunctionBase::hasSamePrototype(FunctionBase const* other) const noexcept
 
 FunctionBase* FunctionBase::addParameter(std::string parameterName, Type const& parameterType) noexcept
 {
-	parameters.emplace_back(std::move(parameterName), parameterType);
+	_parameters.emplace_back(std::move(parameterName), parameterType);
 
 	return this;
 }
 
-ICallable const* FunctionBase::getInternalFunction() const noexcept
+std::size_t FunctionBase::getParameterCount() const noexcept
 {
-	return internalMethod.get();
+	return _parameters.size();
 }
 
-Type const& FunctionBase::getReturnType() const noexcept
+FunctionParameter const& FunctionBase::getParameter(std::size_t paramIndex) const
 {
-	return _returnType;
+	return _parameters.at(paramIndex);
+}
+
+ICallable* FunctionBase::getInternalFunction() const noexcept
+{
+	return _internalFunction.get();
+}
+
+void FunctionBase::setParameterCount(std::size_t paramCount) noexcept
+{
+	_parameters.reserve(paramCount);
 }

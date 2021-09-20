@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include <memory>	//unique_ptr
+#include <stdexcept>	//std::out_of_range
+#include <memory>		//unique_ptr
 #include <vector>
 
 #include "Refureku/Config.h"
@@ -24,7 +25,13 @@ namespace rfk
 	{
 		private:
 			/** Type returned by this function. */
-			Type const&	_returnType;
+			Type const&						_returnType;
+
+			/** Handle pointing to the actual function in memory. */
+			std::unique_ptr<ICallable>		_internalFunction;
+
+			/** Parameters of this function. */
+			std::vector<FunctionParameter>	_parameters;
 
 			template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
 			void	checkArguments()		const;
@@ -48,15 +55,12 @@ namespace rfk
 			bool	hasSameArgumentTypes()	const	noexcept;
 
 		protected:
-			/** Handle pointing to the actual function in memory. */
-			std::unique_ptr<ICallable>	internalMethod;
-
 			FunctionBase()														= delete;
 			FunctionBase(std::string&&					name, 
 						 uint64							id,
 						 EEntityKind					kind,
 						 Type const&					returnType,
-						 std::unique_ptr<ICallable>&&	internalMethod,
+						 std::unique_ptr<ICallable>&&	internalFunction,
 						 Entity const*					outerEntity	= nullptr)	noexcept;
 			FunctionBase(FunctionBase const&)									= delete;
 			FunctionBase(FunctionBase&&)										= delete;
@@ -88,10 +92,6 @@ namespace rfk
 			void checkReturnType()		const;
 			
 		public:
-
-			/** Parameters of this function. */
-			std::vector<FunctionParameter>	parameters;
-
 			/**
 			*	@tparam		ReturnType	Return type to compare with.
 			*	@tparam...	ArgTypes	Argument types to compare with.
@@ -100,7 +100,7 @@ namespace rfk
 			*			parameter types as ArgTypes, else false.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			bool				hasSamePrototype()							const	noexcept;
+			bool	hasSamePrototype()	const	noexcept;
 
 			/**
 			*	@tparam... ArgTypes Argument types to compare with.
@@ -108,14 +108,14 @@ namespace rfk
 			*	@return true if this function has the same parameter types as ArgTypes, else false.
 			*/
 			template <typename... ArgTypes>
-			bool				hasSameArguments()							const	noexcept;
+			bool	hasSameArguments()	const	noexcept;
 
 			/**
 			*	@brief Check that another function has the same prototype as this function.
 			*	
 			*	@param other Function to compare the prototype with.
 			*/
-			REFUREKU_API bool				hasSamePrototype(FunctionBase const* other)	const	noexcept;
+			REFUREKU_API bool									hasSamePrototype(FunctionBase const* other)	const	noexcept;
 
 			/**
 			*	@brief Add a parameter to the function.
@@ -125,22 +125,49 @@ namespace rfk
 			*	
 			*	@return this.
 			*/
-			REFUREKU_API FunctionBase*		addParameter(std::string parameterName,
-														 Type const& parameterType)				noexcept;
+			REFUREKU_API FunctionBase*							addParameter(std::string parameterName,
+																			 Type const& parameterType)				noexcept;
 
 			/**
 			*	@brief Get the internal function handle held by this object.
 			*	
 			*	@return The function handle.
 			*/
-			REFUREKU_API ICallable const*	getInternalFunction()						const	noexcept;
+			REFUREKU_API ICallable*								getInternalFunction()						const	noexcept;
+
+			/**
+			*	@brief Get the number of parameters of this function.
+			* 
+			*	@return The number of parameters of this function.
+			*/
+			REFUREKU_API std::size_t							getParameterCount()							const	noexcept;
+
+			/**
+			*	@brief Get the parameter at the given index.
+			* 
+			*	@param paramIndex Index of the parameter.
+			* 
+			*	@return The parameter at the given index.
+			* 
+			*	@exception std::out_of_range if the provided return type is different from this function's return type.
+			*/
+			REFUREKU_API FunctionParameter const&				getParameter(std::size_t paramIndex)		const;
 
 			/**
 			*	@brief Getter for the field _returnType.
 			* 
 			*	@return _returnType.
 			*/
-			REFUREKU_API Type const&		getReturnType()								const	noexcept;
+			inline Type const&									getReturnType()								const	noexcept;
+
+			/**
+			*	@brief	Set the number of parameters for this function.
+			*			Useful to avoid reallocations when adding a lot of parameters.
+			*			If the number of parameters if already >= the provided param, this method has no effect.
+			* 
+			*	@return The number of parameters of this function.
+			*/
+			REFUREKU_API void									setParameterCount(std::size_t paramCount)			noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBase.inl"

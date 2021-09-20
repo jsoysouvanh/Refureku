@@ -481,7 +481,7 @@ Function const* Database::getFunction(std::string functionName, EFunctionFlags f
 
 	Database::FunctionsByName::const_iterator it = _fileLevelFunctionsByName.find(reinterpret_cast<Function const*>(&searchedFunction));
 
-	return (it != _fileLevelFunctionsByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
+	return (it != _fileLevelFunctionsByName.cend() && ((*it)->getFlags() & flags) == flags) ? *it : nullptr;
 }
 
 Method const* Database::getMethod(std::size_t id) const noexcept

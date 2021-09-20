@@ -9,23 +9,40 @@
 
 #include <string>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Type.h"
 
 namespace rfk
 {
 	class FunctionParameter
 	{
-		public:
+		private:
 			/** Name of this parameter. Can be unspecified (empty). */
-			std::string	name;
+			std::string		_name;
 
 			/** Type of this parameter */
-			Type const&	type;
+			Type const&		_type;
 
-			FunctionParameter()										= delete;
-			FunctionParameter(std::string&& name, Type const& type)	noexcept;
-			FunctionParameter(FunctionParameter const&)				= default;
-			FunctionParameter(FunctionParameter&&)					= default;
-			~FunctionParameter()									= default;
+		public:
+			FunctionParameter(std::string&&	name,
+							  Type const&	type)		noexcept;
+			FunctionParameter(FunctionParameter const&)	= default;
+			FunctionParameter(FunctionParameter&&)		= default;
+
+			/**
+			*	@brief Getter for the field _name.
+			* 
+			*	@return _name;
+			*/
+			REFUREKU_API std::string const&	getName()	const	noexcept;
+
+			/**
+			*	@brief Getter for the field _type.
+			* 
+			*	@return _type;
+			*/
+			inline Type const&				getType()	const	noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Functions/FunctionParameter.inl"
 }

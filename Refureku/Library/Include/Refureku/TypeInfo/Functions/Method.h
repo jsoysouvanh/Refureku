@@ -16,8 +16,6 @@
 
 namespace rfk
 {
-	class Struct;	//Forward declaration
-
 	class Method final : public MethodBase
 	{
 		private:
@@ -43,16 +41,14 @@ namespace rfk
 			ReturnType	internalInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 		public:
-			Method()													= delete;
 			Method(std::string&&				methodName,
-				   uint64						methodId,
+				   std::size_t					id,
 				   Type const&					returnType,
 				   std::unique_ptr<ICallable>&&	internalMethod,
 				   EMethodFlags					flags,
 				   Entity const*				outerEntity = nullptr)	noexcept;
 			Method(Method const&)										= delete;
 			Method(Method&&)											= delete;
-			~Method()													= default;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any, and return the result.
@@ -73,10 +69,10 @@ namespace rfk
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	rInvoke(void* caller, ArgTypes&&... arguments)				const noexcept(REFUREKU_RELEASE);
+			ReturnType			rInvoke(void* caller, ArgTypes&&... arguments)				const	noexcept(REFUREKU_RELEASE);
 
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	rInvoke(void const* caller, ArgTypes&&... arguments)		const;
+			ReturnType			rInvoke(void const* caller, ArgTypes&&... arguments)		const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
@@ -97,10 +93,10 @@ namespace rfk
 			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*/
 			template <typename... ArgTypes>
-			void		invoke(void* caller, ArgTypes&&... arguments)				const noexcept(REFUREKU_RELEASE);
+			void				invoke(void* caller, ArgTypes&&... arguments)				const	noexcept(REFUREKU_RELEASE);
 
 			template <typename... ArgTypes>
-			void		invoke(void const* caller, ArgTypes&&... arguments)			const;
+			void				invoke(void const* caller, ArgTypes&&... arguments)			const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any, and return the result.
@@ -121,10 +117,10 @@ namespace rfk
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	checkedRInvoke(void* caller, ArgTypes&&... arguments)		const;
+			ReturnType			checkedRInvoke(void* caller, ArgTypes&&... arguments)		const;
 
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	checkedRInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			ReturnType			checkedRInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
@@ -145,15 +141,19 @@ namespace rfk
 			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*/
 			template <typename... ArgTypes>
-			void		checkedInvoke(void* caller, ArgTypes&&... arguments)		const;
+			void				checkedInvoke(void* caller, ArgTypes&&... arguments)		const;
 
 			template <typename... ArgTypes>
-			void		checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			void				checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Inherit from the properties this method overrides (if it has the override method flag).
 			*/
-			REFUREKU_API	void		inheritBaseMethodProperties()	noexcept;
+			REFUREKU_API void	inheritBaseMethodProperties()										noexcept;
+
+
+			Method& operator=(Method const&)	= delete;
+			Method& operator=(Method&&)			= delete;
 	};
 
 	#include "Refureku/TypeInfo/Functions/Method.inl"
