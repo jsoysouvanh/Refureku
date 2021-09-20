@@ -6,26 +6,26 @@ using namespace rfk;
 
 bool Type::match(Type const& other) const noexcept
 {
-	return	(this == &other) ||														//Types have the same address, don't need any further check
-			(*this == other) ||														//Strictly the same type
-			((isPointer() && other.archetype == getArchetype<std::nullptr_t>()) ||	//Pointer - nullptr_t correspondance
-			(archetype == getArchetype<std::nullptr_t>() && other.isPointer()));
+	return	(this == &other) ||																	//Types have the same address, don't need any further check
+			(*this == other) ||																	//Strictly the same type
+			((isPointer() && other.getArchetype() == rfk::getArchetype<std::nullptr_t>()) ||	//Pointer - nullptr_t correspondance
+			(getArchetype() == rfk::getArchetype<std::nullptr_t>() && other.isPointer()));
 }
 
 std::string Type::toString() const noexcept
 {
 	std::string result;
 
-	if (archetype != nullptr)
+	if (getArchetype() != nullptr)
 	{
-		result += "Archetype: " + archetype->getName() + "\n";
+		result += "Archetype: " + getArchetype()->getName() + "\n";
 	}
 	else
 	{
 		result += "Archetype: Unknown\n";
 	}
 
-	for (rfk::TypePart part : parts)
+	for (rfk::TypePart part : _parts)
 	{
 		result += "  - ";
 
@@ -65,21 +65,24 @@ std::string Type::toString() const noexcept
 	return result;
 }
 
+std::vector<TypePart>& Type::getParts() noexcept
+{
+	return _parts;
+}
+
+std::vector<TypePart> const& Type::getParts() const noexcept
+{
+	return _parts;
+}
+
 bool Type::operator==(Type const& type) const noexcept
 {
-	return	archetype == type.archetype &&
-			parts.size() == type.parts.size() &&
-			std::memcmp(parts.data(), type.parts.data(), parts.size() * sizeof(TypePart)) == 0;
+	return	getArchetype() == type.getArchetype() &&
+			_parts.size() == type._parts.size() &&
+			std::memcmp(_parts.data(), type._parts.data(), _parts.size() * sizeof(TypePart)) == 0;
 }
 
 bool Type::operator!=(Type const& type) const noexcept
 {
 	return !(*this == type);
-}
-
-std::ostream& rfk::operator<<(std::ostream& stream, Type const& type) noexcept
-{
-	stream << type.toString();
-
-	return stream;
 }

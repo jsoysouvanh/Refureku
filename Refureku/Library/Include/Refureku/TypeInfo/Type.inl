@@ -8,7 +8,7 @@
 template <typename T>
 void Type::fillType(Type& out_type) noexcept
 {
-	TypePart& currPart = out_type.parts.emplace_back(TypePart{ 0u, ETypePartDescriptor::Undefined, 0u });
+	TypePart& currPart = out_type.getParts().emplace_back(TypePart{ 0u, ETypePartDescriptor::Undefined, 0u });
 
 	//Const
 	if constexpr (std::is_const_v<T>)
@@ -48,7 +48,7 @@ void Type::fillType(Type& out_type) noexcept
 	{
 		currPart.descriptor = currPart.descriptor | ETypePartDescriptor::Value;
 
-		out_type.archetype = rfk::getArchetype<std::decay_t<T>>();
+		out_type._archetype = rfk::getArchetype<std::decay_t<T>>();
 	}
 }
 
@@ -70,23 +70,23 @@ Type const& Type::getType() noexcept
 template <typename... ArgTypes>
 inline Type& Type::addPart(ArgTypes&&... args) noexcept
 {
-	parts.emplace_back(std::forward<ArgTypes>(args)...);
+	getParts().emplace_back(std::forward<ArgTypes>(args)...);
 
 	return *this;
 }
 
 inline Type& Type::addPart(TypePart const& newPart) noexcept
 {
-	parts.push_back(newPart);
+	getParts().push_back(newPart);
 
 	return *this;
 }
 
 inline Type& Type::removePart() noexcept
 {
-	if (!parts.empty())
+	if (!getParts().empty())
 	{
-		parts.erase(parts.cbegin());
+		getParts().erase(getParts().cbegin());
 	}
 
 	return *this;
@@ -94,40 +94,51 @@ inline Type& Type::removePart() noexcept
 
 inline bool Type::isPointer() const noexcept
 {
-	return !parts.empty() && parts.front().isPointer();
+	return !getParts().empty() && getParts().front().isPointer();
 }
 
 inline bool Type::isLValueReference() const	noexcept
 {
-	return !parts.empty() && parts.front().isLValueReference();
+	return !getParts().empty() && getParts().front().isLValueReference();
 }
 
 inline bool Type::isRValueReference() const	noexcept
 {
-	return !parts.empty() && parts.front().isRValueReference();
+	return !getParts().empty() && getParts().front().isRValueReference();
 }
 
 inline bool Type::isCArray() const noexcept
 {
-	return !parts.empty() && parts.front().isCArray();
+	return !getParts().empty() && getParts().front().isCArray();
 }
 
 inline bool Type::isValue() const noexcept
 {
-	return !parts.empty() && parts.front().isValue();
+	return !getParts().empty() && getParts().front().isValue();
 }
 
 inline bool Type::isConst() const noexcept
 {
-	return !parts.empty() && parts.front().isConst();
+	return !getParts().empty() && getParts().front().isConst();
 }
 
 inline bool Type::isVolatile() const noexcept
 {
-	return !parts.empty() && parts.front().isVolatile();
+	return !getParts().empty() && getParts().front().isVolatile();
 }
 
 inline uint32 Type::getArraySize() const noexcept
 {
-	return (!parts.empty()) ? parts.front().getArraySize() : 0u;
+	return (!getParts().empty()) ? getParts().front().getArraySize() : 0u;
+}
+
+inline Archetype const* Type::getArchetype() const noexcept
+{
+	return _archetype;
+}
+
+template <typename T>
+static Type const& rfk::getType() noexcept
+{
+	return Type::getType<T>();
 }

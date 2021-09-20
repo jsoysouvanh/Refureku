@@ -936,8 +936,8 @@ void classManualReflection()
 	TEST(approximatelyEqual(vec3archetype->getField("z")->getData<float>(&vec), 0.0f));
 
 	rfk::Class const& exampleClassArchetype = namespace3::ExampleClass::staticGetArchetype();
-	TEST(exampleClassArchetype.getField("vec3")->type.archetype == vec3archetype);
-	TEST(exampleClassArchetype.getField("vec3ptr")->type.archetype == vec3archetype);
+	TEST(exampleClassArchetype.getField("vec3")->type.getArchetype() == vec3archetype);
+	TEST(exampleClassArchetype.getField("vec3ptr")->type.getArchetype() == vec3archetype);
 }
 
 void structDirectChildren()
@@ -999,7 +999,7 @@ void testMultipleTypeTemplateClassTemplate()
 	TEST(ifdInstance->getMethod("returnV") != nullptr);
 	TEST(ifdInstance->getMethod("returnV")->getReturnType() == rfk::Type::getType<double>());
 	TEST(rfk::getDatabase().getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation") != nullptr);
-	TEST(rfk::getDatabase().getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation")->type.archetype == &o.getArchetype());
+	TEST(rfk::getDatabase().getVariable("multipleTypeTemplateClassTemplateImplicitInstantiation")->type.getArchetype() == &o.getArchetype());
 
 	//Must stay at the end of this function to test if the implicit instantiation works
 	MultipleTypeTemplateClassTemplate<double, double, double> implicitelyInstantiated;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include <Refureku/NativeProperties.h>
 #include <Refureku/Object.h>
 
