@@ -39,6 +39,12 @@ namespace rfk
 			/** Flag that determines whether the currently generated code is hidden from the parser or not. */
 			bool										_isGeneratingHiddenCode;
 
+			/** Macro used to mark symbols to export. Can stay empty if the generated code is NOT exported into a dynamic library. */
+			std::string									_exportSymbolMacroName;
+
+			/** Macro used to mark internal symbols (that should not be exported). Can stay empty if the generated code is NOT exported into a dynamic library. */
+			std::string									_internalSymbolMacroName;
+
 			/** List of non-public enums. */
 			std::unordered_set<kodgen::EnumInfo const*>	_nonPublicEnums;
 
@@ -124,7 +130,7 @@ namespace rfk
 			* 
 			*	@return The name of the getFunction function for the target function.
 			*/
-			static std::string			computeGetFunctionFunctionName(kodgen::FunctionInfo const& function)				noexcept;
+			static std::string			computeGetFunctionFunctionName(kodgen::FunctionInfo const& function)		noexcept;
 
 			/**
 			*	@brief Compute the name of the getNamespaceFragment function for the given namespace.
@@ -375,16 +381,9 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareClassRegistererVariable(kodgen::StructClassInfo const&	structClass,
-												   kodgen::MacroCodeGenEnv&		env,
-												   std::string&					inout_result)							noexcept;
-
-			/**
-			*	TODO
-			*/
-			void	defineClassRegistererVariable(kodgen::StructClassInfo const&	structClass,
-												  kodgen::MacroCodeGenEnv&			env,
-												  std::string&						inout_result)				const	noexcept;
+			void	declareAndDefineClassRegistererVariable(kodgen::StructClassInfo const&	structClass,
+															kodgen::MacroCodeGenEnv&		env,
+															std::string&					inout_result)		const	noexcept;
 
 			//Class template code generation
 			/**
@@ -473,16 +472,9 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareEnumRegistererVariable(kodgen::EnumInfo const&	enum_,
-												  kodgen::MacroCodeGenEnv&	env,
-												  std::string&				inout_result)			const	noexcept;
-
-			/**
-			*	TODO
-			*/
-			void	defineEnumRegistererVariable(kodgen::EnumInfo const&	enum_,
-												 kodgen::MacroCodeGenEnv&	env,
-												 std::string&				inout_result)			const	noexcept;
+			void	declareAndDefineEnumRegistererVariable(kodgen::EnumInfo const&	enum_,
+														   kodgen::MacroCodeGenEnv&	env,
+														   std::string&				inout_result)	const	noexcept;
 
 
 			//Variables code generation
@@ -503,16 +495,9 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareVariableRegistererVariable(kodgen::VariableInfo const&	variable,
-													  kodgen::MacroCodeGenEnv&		env,
-													  std::string&					inout_result)			noexcept;
-
-			/**
-			*	TODO
-			*/
-			void	defineVariableRegistererVariable(kodgen::VariableInfo const&	variable,
-													 kodgen::MacroCodeGenEnv&		env,
-													 std::string&					inout_result)	const	noexcept;
+			void	declareAndDefineVariableRegistererVariable(kodgen::VariableInfo const&	variable,
+															   kodgen::MacroCodeGenEnv&		env,
+															   std::string&					inout_result)	noexcept;
 
 
 
@@ -534,56 +519,39 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
-													  kodgen::MacroCodeGenEnv&		env,
-													  std::string&					inout_result)			noexcept;
-
-			/**
-			*	TODO
-			*/
-			void	defineFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
-													 kodgen::MacroCodeGenEnv&		env,
-													 std::string&					inout_result)	const	noexcept;
+			void	declareAndDefineFunctionRegistererVariable(kodgen::FunctionInfo const&	function,
+															   kodgen::MacroCodeGenEnv&		env,
+															   std::string&					inout_result)	noexcept;
 
 
 
 			//Namespaces code generation
 			/**
-			*	@brief Declare the getNamespaceFragment function for the provided namespace.
+			*	@brief Declare and define the getNamespaceFragment function for the provided namespace.
 			*
 			*	@param namespace_	Target namespace.
 			*	@param env			Code generation environment.
 			*	@param inout_result	String to append the generated code.
 			*/
-			void	declareGetNamespaceFragmentFunction(kodgen::NamespaceInfo const&	namespace_,
-														kodgen::MacroCodeGenEnv&		env,
-														std::string&					inout_result)						noexcept;
+			void	declareAndDefineGetNamespaceFragmentFunction(kodgen::NamespaceInfo const&	namespace_,
+																 kodgen::MacroCodeGenEnv&		env,
+																 std::string&					inout_result)				noexcept;
 
 			/**
-			*	@brief Define the getNamespaceFragment function for the provided namespace.
-			*
+			*	@brief Define the namespace fragment registerer variable for the provided namespace.
+			* 
 			*	@param namespace_	Target namespace.
 			*	@param env			Code generation environment.
 			*	@param inout_result	String to append the generated code.
 			*/
-			void	defineGetNamespaceFragmentFunction(kodgen::NamespaceInfo const&	namespace_,
-													   kodgen::MacroCodeGenEnv&		env,
-													   std::string&					inout_result)							noexcept;
+			void	declareAndDefineNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const&	namespace_,
+																		kodgen::MacroCodeGenEnv&		env,
+																		std::string&					inout_result)		noexcept;
 
 			/**
-			*	@brief Declare the namespace registerer variable for the provided namespace.
-			*
-			*	@param namespace_	Top level namespace.
-			*	@param env			Code generation environment.
-			*	@param inout_result	String to append the generated code.
-			*/
-			void	declareNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const&	namespace_,
-															   kodgen::MacroCodeGenEnv&		env,
-															   std::string&					inout_result)					noexcept;
-
-			/**
-			*	@brief	Recursively define the namespace registerer variable for the provided namespace and all its sub namespaces.
-			*			Registerers are defined in reversed order, so the most inner namespace registerer will be defined first and the most
+			*	@brief	Recursively declare and define the get namespace fragment function and the namespace registerer variable
+			*			for the provided namespace and all its sub namespaces.
+			*			Function and registerers are defined in reversed order, so the most inner namespace metadata will be defined first and the most
 			*			outer ones at the end.
 			*			/!\ This method only generates code when a top-level (without outer entity) namespace is provided.
 			*				In all other cases, the method doesn't generate any code. /!\
@@ -592,9 +560,9 @@ namespace rfk
 			*	@param env			Code generation environment.
 			*	@param inout_result	String to append the generated code.
 			*/
-			void	defineNamespaceFragmentRegistererVariableRecursive(kodgen::NamespaceInfo const&	namespace_,
-																	   kodgen::MacroCodeGenEnv&		env,
-																	   std::string&					inout_result)	const	noexcept;
+			void	declareAndDefineGetNamespaceFragmentAndRegistererRecursive(kodgen::NamespaceInfo const&	namespace_,
+																			   kodgen::MacroCodeGenEnv&		env,
+																			   std::string&					inout_result)	noexcept;
 
 
 		protected:
@@ -623,8 +591,17 @@ namespace rfk
 																					  std::string&				inout_result)		noexcept	override;
 
 		public:
-			ReflectionCodeGenModule()								noexcept;
-			ReflectionCodeGenModule(ReflectionCodeGenModule const&)	noexcept;
+			/**
+			*	@param importExportMacroName	If the generated code is compiled into a dynamic library, a macro is necessary to explicitely
+			*									define whether a symbol is exported or not.
+			*									Typically, exportSymbolMacroName should expand to __declspec(dllexport) on Windows.
+			*	@param internalSymbolMacroName	If the generated code is compiled into a dynamic library, a macro can be specified to hide some symbols.
+			*									On Unix systems, all symbols are exported by default so it can be useful to hide some symbols and reduce the final
+			*									library size. It should typically expand to __attribute__((visibility("hidden"))) on Unix systems.
+			*/
+			ReflectionCodeGenModule(std::string const& exportSymbolMacroName = "",
+									std::string const& internalSymbolMacroName = "")	noexcept;
+			ReflectionCodeGenModule(ReflectionCodeGenModule const&)						noexcept;
 	};
 
 	#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.inl"

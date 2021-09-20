@@ -6,9 +6,12 @@
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
 #include <Refureku/TypeInfo/Archetypes/TemplateParameter.h>
+#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
+#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
+#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
 rfk::EEntityKind PropertySettings::getTargetEntityKind() const noexcept { return targetEntityKind; }
 static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");
-rfk::ArchetypeRegisterer rfk::generated::_rfk_archetypeRegisterer_2708994343965683583u = PropertySettings::staticGetArchetype(); 
+namespace rfk::generated { REFUREKU_INTERNAL static rfk::ArchetypeRegisterer registerer_2708994343965683583u = PropertySettings::staticGetArchetype(); }
 
 rfk::Struct const& PropertySettings::staticGetArchetype() noexcept {
 static bool initialized = false;

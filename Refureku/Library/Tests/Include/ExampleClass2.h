@@ -12,7 +12,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 	};
 
 	RFKFunction()
-	inline void functionInsideNamespace(int i) { i; } 
+	inline void functionInsideNamespace(int i [[maybe_unused]]) {}
 
 	RFKFunction()
 	int function1(int i) { return i; }
@@ -25,7 +25,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 }
 
 RFKFunction() 
-static void functionInsideGlobalScope(float j) { j; } 
+static void functionInsideGlobalScope(float j [[maybe_unused]]) {}
 
 RFKFunction()
 int function1(int i) { return i; }

@@ -6,9 +6,12 @@
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragment.h>
 #include <Refureku/TypeInfo/Archetypes/TemplateParameter.h>
+#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
+#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
+#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
 rfk::EEntityKind ParseAllNested::getTargetEntityKind() const noexcept { return targetEntityKind; }
 static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");
-rfk::ArchetypeRegisterer rfk::generated::_rfk_archetypeRegisterer_17636175816175907530u = ParseAllNested::staticGetArchetype(); 
+namespace rfk::generated { REFUREKU_INTERNAL static rfk::ArchetypeRegisterer registerer_17636175816175907530u = ParseAllNested::staticGetArchetype(); }
 
 rfk::Struct const& ParseAllNested::staticGetArchetype() noexcept {
 static bool initialized = false;

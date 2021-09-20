@@ -10,13 +10,10 @@
 #include <Refureku/Utility/CodeGenerationHelpers.h>
 #include <Refureku/TypeInfo/Archetypes/GetArchetype.h>
 #include <Refureku/TypeInfo/Archetypes/Class.h>
-#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
-#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
-#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplate.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h>
-namespace rfk {class NamespaceFragment;class Function;class Variable;}
+namespace rfk {class Function;class Variable;}
 
 #define ParseAllNested_GENERATED	\
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct;\
@@ -40,8 +37,6 @@ public: virtual rfk::Struct const& getArchetype() const noexcept override;\
 
 
 #define File_ParseAllNested_GENERATED	\
-namespace rfk { template <> rfk::Archetype const* getArchetype<ParseAllNested>() noexcept; }\
-namespace rfk::generated { extern rfk::ArchetypeRegisterer _rfk_archetypeRegisterer_17636175816175907530u; }\
-\
+namespace rfk { template <> REFUREKU_API rfk::Archetype const* getArchetype<ParseAllNested>() noexcept; }\
 
 

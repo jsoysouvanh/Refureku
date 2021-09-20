@@ -80,12 +80,12 @@ int main()
 	rfk::CodeGenManager codeGenMgr;
 	codeGenMgr.logger = &logger;
 
-	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
-
-	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
 	kodgen::MacroCodeGenUnit codeGenUnit;
+	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
+	
+	rfk::ReflectionCodeGenModule reflectionCodeGenModule("REFUREKU_API", "REFUREKU_INTERNAL");
 	codeGenUnit.addModule(reflectionCodeGenModule);
 
 	//Load settings

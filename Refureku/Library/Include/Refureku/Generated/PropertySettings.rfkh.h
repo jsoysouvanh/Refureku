@@ -10,13 +10,10 @@
 #include <Refureku/Utility/CodeGenerationHelpers.h>
 #include <Refureku/TypeInfo/Archetypes/GetArchetype.h>
 #include <Refureku/TypeInfo/Archetypes/Class.h>
-#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
-#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
-#include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplate.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h>
-namespace rfk {class NamespaceFragment;class Function;class Variable;}
+namespace rfk {class Function;class Variable;}
 
 #define PropertySettings_GENERATED	\
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;\
@@ -40,8 +37,6 @@ public: virtual rfk::Struct const& getArchetype() const noexcept override;\
 
 
 #define File_PropertySettings_GENERATED	\
-namespace rfk { template <> rfk::Archetype const* getArchetype<PropertySettings>() noexcept; }\
-namespace rfk::generated { extern rfk::ArchetypeRegisterer _rfk_archetypeRegisterer_2708994343965683583u; }\
-\
+namespace rfk { template <> REFUREKU_API rfk::Archetype const* getArchetype<PropertySettings>() noexcept; }\
 
 
