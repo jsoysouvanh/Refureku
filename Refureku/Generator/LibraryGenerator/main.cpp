@@ -85,7 +85,7 @@ int main()
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
 	
-	rfk::ReflectionCodeGenModule reflectionCodeGenModule("REFUREKU_API", "REFUREKU_INTERNAL");
+	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
 	codeGenUnit.addModule(reflectionCodeGenModule);
 
 	//Load settings

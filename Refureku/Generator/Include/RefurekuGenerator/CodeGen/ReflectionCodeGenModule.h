@@ -39,12 +39,6 @@ namespace rfk
 			/** Flag that determines whether the currently generated code is hidden from the parser or not. */
 			bool										_isGeneratingHiddenCode;
 
-			/** Macro used to mark symbols to export. Can stay empty if the generated code is NOT exported into a dynamic library. */
-			std::string									_exportSymbolMacroName;
-
-			/** Macro used to mark internal symbols (that should not be exported). Can stay empty if the generated code is NOT exported into a dynamic library. */
-			std::string									_internalSymbolMacroName;
-
 			/** List of non-public enums. */
 			std::unordered_set<kodgen::EnumInfo const*>	_nonPublicEnums;
 
@@ -591,17 +585,8 @@ namespace rfk
 																					  std::string&				inout_result)		noexcept	override;
 
 		public:
-			/**
-			*	@param importExportMacroName	If the generated code is compiled into a dynamic library, a macro is necessary to explicitely
-			*									define whether a symbol is exported or not.
-			*									Typically, exportSymbolMacroName should expand to __declspec(dllexport) on Windows.
-			*	@param internalSymbolMacroName	If the generated code is compiled into a dynamic library, a macro can be specified to hide some symbols.
-			*									On Unix systems, all symbols are exported by default so it can be useful to hide some symbols and reduce the final
-			*									library size. It should typically expand to __attribute__((visibility("hidden"))) on Unix systems.
-			*/
-			ReflectionCodeGenModule(std::string const& exportSymbolMacroName = "",
-									std::string const& internalSymbolMacroName = "")	noexcept;
-			ReflectionCodeGenModule(ReflectionCodeGenModule const&)						noexcept;
+			ReflectionCodeGenModule()								noexcept;
+			ReflectionCodeGenModule(ReflectionCodeGenModule const&)	noexcept;
 	};
 
 	#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.inl"

@@ -32,19 +32,19 @@ bool PropertySettingsPropertyCodeGen::generateClassFooterCodeForEntity(kodgen::E
 	//Generate constexpr fields + get overrides
 	//generate targetEntityKind
 	inout_result += "public: static constexpr rfk::EEntityKind targetEntityKind = " + property.arguments[0] + ";" + env.getSeparator();
-	inout_result += "virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;" + env.getSeparator();
+	inout_result += env.getExportSymbolMacro() + " virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;" + env.getSeparator();
 	
 	if (property.arguments.size() >= 2)
 	{
 		//generate allowMultiple
 		inout_result += "static constexpr bool allowMultiple = " + property.arguments[1] + ";" + env.getSeparator();
-		inout_result += "virtual bool getAllowMultiple() const noexcept override;" + env.getSeparator();
+		inout_result += env.getExportSymbolMacro() + " virtual bool getAllowMultiple() const noexcept override;" + env.getSeparator();
 	
 		if (property.arguments.size() >= 3)
 		{
 			//generate shouldInherit
 			inout_result += "static constexpr bool shouldInherit = " + property.arguments[2] + ";" + env.getSeparator();
-			inout_result += "virtual bool getShouldInherit() const noexcept override;" + env.getSeparator();
+			inout_result += env.getExportSymbolMacro() + " virtual bool getShouldInherit() const noexcept override;" + env.getSeparator();
 		}
 	}
 

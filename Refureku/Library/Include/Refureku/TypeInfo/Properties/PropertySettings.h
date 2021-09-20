@@ -15,7 +15,7 @@
 /**
 *	@brief Property used to define basic settings of a property. Can't be used on structs or classes not inheriting from rfk::Property.
 */
-struct REFUREKU_API RFKStruct(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : public rfk::Property
+struct RFKStruct(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : public rfk::Property
 {
 	public:
 		/**
