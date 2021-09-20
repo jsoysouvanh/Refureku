@@ -156,10 +156,10 @@ namespace rfk
 														  uint64		id)									noexcept;
 
 		public:
-			REFUREKU_INTERNAL Database()	= default;
-			REFUREKU_INTERNAL ~Database()	= default;
-			Database(Database const&)		= delete;
-			Database(Database&&)			= delete;
+			Database()					= default;
+			Database(Database const&)	= delete;
+			Database(Database&&)		= delete;
+			~Database()					= default;
 
 			/**
 			*	@brief Retrieve any entity of the program matching with a given predicate.
@@ -169,16 +169,7 @@ namespace rfk
 			*	@return The first matching entity if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Entity const*>>>
-			Entity const*						getEntity(Predicate predicate)										const;
-
-			/**
-			*	@brief Retrieve an entity by id.
-			*
-			*	@param id The id of the entity.
-			*
-			*	@return A constant pointer to the queried entity if it exists, else nullptr.
-			*/
-			REFUREKU_API Entity const*						getEntity(uint64 id)												const	noexcept;
+			Entity const*				getEntity(Predicate predicate)									const;
 
 			/**
 			*	@brief Retrieve a file level namespace matching with a given predicate.
@@ -188,29 +179,7 @@ namespace rfk
 			*	@return The first matching namespace if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Namespace const*>>>
-			Namespace const*					getNamespace(Predicate predicate)									const;
-
-			/**
-			*	@brief Retrieve a namespace by id.
-			*
-			*	@param id The id of the namespace.
-			*
-			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
-			*/
-			REFUREKU_API Namespace const*					getNamespace(uint64 id)												const	noexcept;
-
-			/**
-			*	@brief	Retrieve a namespace by name.
-			*			Can search nested namespaces directly using :: separator.
-			*			Example: getNamespace("namespace1::namespace2") will get the namespace2 nested inside namespace1 if it exists.
-			*
-			*	@param namespaceName The name of the namespace.
-			*
-			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
-			*
-			*	@exception BadNamespaceFormat if the provided namespace name has : instead of :: as a separator, or ends with :.
-			*/
-			REFUREKU_API Namespace const*					getNamespace(std::string namespaceName)								const;
+			Namespace const*			getNamespace(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a file level archetype matching with a given predicate.
@@ -220,27 +189,7 @@ namespace rfk
 			*	@return The first matching archetype if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Archetype const*>>>
-			Archetype const*					getArchetype(Predicate predicate)									const;
-
-			/**
-			*	@brief Retrieve an archetype by id.
-			*
-			*	@param id The id of the archetype.
-			*
-			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
-			*/
-			REFUREKU_API Archetype const*					getArchetype(uint64 id)												const	noexcept;
-
-			/**
-			*	@brief	Retrieve a file level archetype by name.
-			*			This method costs heavier performance as it will basically call getClass, getStruct, getEnum and then getFundamentalArchetype to find
-			*			the queried archetype.
-			*	
-			*	@param archetypeName Name of the archetype.
-			*
-			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
-			*/
-			REFUREKU_API Archetype const*					getArchetype(std::string archetypeName)								const	noexcept;
+			Archetype const*			getArchetype(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a file level struct matching with a given predicate.
@@ -250,25 +199,7 @@ namespace rfk
 			*	@return The first matching struct if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
-			Struct const*						getStruct(Predicate predicate)										const;
-
-			/**
-			*	@brief Retrieve a struct by id.
-			*
-			*	@param id The id of the struct.
-			*
-			*	@return A constant pointer to the queried struct if it exists, else nullptr.
-			*/
-			REFUREKU_API Struct const*						getStruct(uint64 id)												const	noexcept;
-
-			/**
-			*	@brief Retrieve a file level struct by name.
-			*
-			*	@param structName The name of the struct.
-			*
-			*	@return A constant pointer to the queried struct if it exists, else nullptr.
-			*/
-			REFUREKU_API Struct const*						getStruct(std::string structName)									const	noexcept;
+			Struct const*				getStruct(Predicate predicate)									const;
 
 			/**
 			*	@brief Retrieve a file level class matching with a given predicate.
@@ -278,25 +209,7 @@ namespace rfk
 			*	@return The first matching class if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Class const*>>>
-			Class const*						getClass(Predicate predicate)										const;
-
-			/**
-			*	@brief Retrieve a class by id.
-			*
-			*	@param id The id of the class.
-			*
-			*	@return A constant pointer to the queried class if it exists, else nullptr.
-			*/
-			REFUREKU_API Class const*						getClass(uint64 id)													const	noexcept;
-
-			/**
-			*	@brief Retrieve a file level class by name.
-			*
-			*	@param className The name of the class.
-			*
-			*	@return A constant pointer to the queried class if it exists, else nullptr.
-			*/
-			REFUREKU_API Class const*						getClass(std::string className)										const	noexcept;
+			Class const*				getClass(Predicate predicate)									const;
 
 			/**
 			*	@brief Retrieve a file level enum matching with a given predicate.
@@ -306,25 +219,7 @@ namespace rfk
 			*	@return The first matching enum if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const*>>>
-			Enum const*							getEnum(Predicate predicate)										const;
-
-			/**
-			*	@brief Retrieve an enum by id.
-			*
-			*	@param id The id of the enum.
-			*
-			*	@return A constant pointer to the queried enum if it exists, else nullptr.
-			*/
-			REFUREKU_API Enum const*							getEnum(uint64 id)													const	noexcept;
-
-			/**
-			*	@brief Retrieve a file level enum by name.
-			*
-			*	@param enumName The name of the enum.
-			*
-			*	@return A constant pointer to the queried enum if it exists, else nullptr.
-			*/
-			REFUREKU_API Enum const*							getEnum(std::string enumName)										const	noexcept;
+			Enum const*					getEnum(Predicate predicate)									const;
 
 			/**
 			*	@brief Retrieve a fundamental archetype matching with a given predicate.
@@ -334,25 +229,7 @@ namespace rfk
 			*	@return The first matching fundamental archetype if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, FundamentalArchetype const*>>>
-			FundamentalArchetype const*			getFundamentalArchetype(Predicate predicate)						const;
-
-			/**
-			*	@brief Retrieve a fundamental archetype by id.
-			*
-			*	@param id The id of the fundamental archetype.
-			*
-			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
-			*/
-			REFUREKU_API FundamentalArchetype const*	getFundamentalArchetype(uint64 id)									const	noexcept;
-
-			/**
-			*	@brief Retrieve a fundamental archetype by name.
-			*
-			*	@param archetypeName The name of the fundamental archetype.
-			*
-			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
-			*/
-			REFUREKU_API FundamentalArchetype const*	getFundamentalArchetype(std::string archetypeName)					const	noexcept;
+			FundamentalArchetype const*	getFundamentalArchetype(Predicate predicate)					const;
 
 			/**
 			*	@brief Retrieve a file level variable matching with a given predicate.
@@ -362,28 +239,7 @@ namespace rfk
 			*	@return The first matching variable if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Variable const*>>>
-			Variable const*						getVariable(Predicate predicate)									const;
-
-			/**
-			*	@brief Retrieve a variable by id.
-			*
-			*	@param id The id of the variable.
-			*
-			*	@return A constant pointer to the queried variable if it exists, else nullptr.
-			*/
-			REFUREKU_API Variable const*		getVariable(uint64 id)												const	noexcept;
-
-			/**
-			*	@brief Retrieve a file level (non-member) variable by name.
-			*	
-			*	@param variableName The name of the variable.
-			*	@param flags		Flags describing the queried variable.
-			*						The result variable will have at least the provided flags.
-			*	
-			*	@return A constant pointer to the queried variable if it exists, else nullptr.
-			*/
-			REFUREKU_API Variable const*		getVariable(std::string variableName,
-															EVarFlags	flags = EVarFlags::Default)					const	noexcept;
+			Variable const*				getVariable(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a file level function matching with a given predicate.
@@ -393,7 +249,7 @@ namespace rfk
 			*	@return The first matching function if any is found, else nullptr.
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Function const*>>>
-			Function const*						getFunction(Predicate predicate)									const;
+			Function const*				getFunction(Predicate predicate)								const;
 
 			/**
 			*	@brief Retrieve a file level (non-member) function by name and signature.
@@ -407,8 +263,158 @@ namespace rfk
 			*	@return A constant pointer to the function matching the signature, name and flags if it exists, else nullptr.
 			*/
 			template <typename FunctionSignature>
-			Function const*						getFunction(std::string		functionName,
-															EFunctionFlags	flags = EFunctionFlags::Default)		const noexcept;
+			Function const*				getFunction(std::string		functionName,
+													EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
+
+			/**
+			*	@brief Retrieve an entity by id.
+			*
+			*	@param id The id of the entity.
+			*
+			*	@return A constant pointer to the queried entity if it exists, else nullptr.
+			*/
+			REFUREKU_API Entity const*					getEntity(std::size_t id)											const	noexcept;
+
+			/**
+			*	@brief Retrieve a namespace by id.
+			*
+			*	@param id The id of the namespace.
+			*
+			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
+			*/
+			REFUREKU_API Namespace const*				getNamespace(std::size_t id)										const	noexcept;
+
+			/**
+			*	@brief	Retrieve a namespace by name.
+			*			Can search nested namespaces directly using :: separator.
+			*			Example: getNamespace("namespace1::namespace2") will get the namespace2 nested inside namespace1 if it exists.
+			*
+			*	@param namespaceName The name of the namespace.
+			*
+			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
+			*
+			*	@exception BadNamespaceFormat if the provided namespace name has : instead of :: as a separator, or ends with :.
+			*/
+			REFUREKU_API Namespace const*				getNamespace(std::string namespaceName)								const;
+
+			/**
+			*	@brief Retrieve an archetype by id.
+			*
+			*	@param id The id of the archetype.
+			*
+			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
+			*/
+			REFUREKU_API Archetype const*				getArchetype(std::size_t id)										const	noexcept;
+
+			/**
+			*	@brief	Retrieve a file level archetype by name.
+			*			This method costs heavier performance as it will basically call getClass, getStruct, getEnum and then getFundamentalArchetype to find
+			*			the queried archetype.
+			*	
+			*	@param archetypeName Name of the archetype.
+			*
+			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
+			*/
+			REFUREKU_API Archetype const*				getArchetype(std::string archetypeName)								const	noexcept;
+
+			
+
+			/**
+			*	@brief Retrieve a struct by id.
+			*
+			*	@param id The id of the struct.
+			*
+			*	@return A constant pointer to the queried struct if it exists, else nullptr.
+			*/
+			REFUREKU_API Struct const*					getStruct(std::size_t id)											const	noexcept;
+
+			/**
+			*	@brief Retrieve a file level struct by name.
+			*
+			*	@param structName The name of the struct.
+			*
+			*	@return A constant pointer to the queried struct if it exists, else nullptr.
+			*/
+			REFUREKU_API Struct const*					getStruct(std::string structName)									const	noexcept;
+
+			/**
+			*	@brief Retrieve a class by id.
+			*
+			*	@param id The id of the class.
+			*
+			*	@return A constant pointer to the queried class if it exists, else nullptr.
+			*/
+			REFUREKU_API Class const*					getClass(std::size_t id)											const	noexcept;
+
+			/**
+			*	@brief Retrieve a file level class by name.
+			*
+			*	@param className The name of the class.
+			*
+			*	@return A constant pointer to the queried class if it exists, else nullptr.
+			*/
+			REFUREKU_API Class const*					getClass(std::string className)										const	noexcept;
+
+			/**
+			*	@brief Retrieve an enum by id.
+			*
+			*	@param id The id of the enum.
+			*
+			*	@return A constant pointer to the queried enum if it exists, else nullptr.
+			*/
+			REFUREKU_API Enum const*					getEnum(std::size_t id)												const	noexcept;
+
+			/**
+			*	@brief Retrieve a file level enum by name.
+			*
+			*	@param enumName The name of the enum.
+			*
+			*	@return A constant pointer to the queried enum if it exists, else nullptr.
+			*/
+			REFUREKU_API Enum const*					getEnum(std::string enumName)										const	noexcept;
+
+			/**
+			*	@brief Retrieve a fundamental archetype by id.
+			*
+			*	@param id The id of the fundamental archetype.
+			*
+			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
+			*/
+			REFUREKU_API FundamentalArchetype const*	getFundamentalArchetype(std::size_t id)								const	noexcept;
+
+			/**
+			*	@brief Retrieve a fundamental archetype by name.
+			*
+			*	@param archetypeName The name of the fundamental archetype.
+			*
+			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
+			*/
+			REFUREKU_API FundamentalArchetype const*	getFundamentalArchetype(std::string archetypeName)					const	noexcept;
+
+			
+
+			/**
+			*	@brief Retrieve a variable by id.
+			*
+			*	@param id The id of the variable.
+			*
+			*	@return A constant pointer to the queried variable if it exists, else nullptr.
+			*/
+			REFUREKU_API Variable const*				getVariable(std::size_t id)											const	noexcept;
+
+			/**
+			*	@brief Retrieve a file level (non-member) variable by name.
+			*	
+			*	@param variableName The name of the variable.
+			*	@param flags		Flags describing the queried variable.
+			*						The result variable will have at least the provided flags.
+			*	
+			*	@return A constant pointer to the queried variable if it exists, else nullptr.
+			*/
+			REFUREKU_API Variable const*				getVariable(std::string variableName,
+																	EVarFlags	flags = EVarFlags::Default)					const	noexcept;
+
+			
 
 			/**
 			*	@brief Retrieve a function by id.
@@ -417,7 +423,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried function if it exists, else nullptr.
 			*/
-			REFUREKU_API Function const*					getFunction(uint64 id)												const	noexcept;
+			REFUREKU_API Function const*				getFunction(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) function by name.
@@ -428,8 +434,8 @@ namespace rfk
 			*	
 			*	@return A constant pointer to the first function matching the name and flags if it exists, else nullptr.
 			*/
-			REFUREKU_API Function const*					getFunction(std::string		functionName,
-																		EFunctionFlags	flags = EFunctionFlags::Default)		const	noexcept;
+			REFUREKU_API Function const*				getFunction(std::string		functionName,
+																	EFunctionFlags	flags = EFunctionFlags::Default)		const	noexcept;
 
 			/**
 			*	@brief Retrieve a method by id.
@@ -438,7 +444,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried method if it exists, else nullptr.
 			*/
-			REFUREKU_API Method const*						getMethod(uint64 id)												const	noexcept;
+			REFUREKU_API Method const*					getMethod(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a static method by id.
@@ -447,7 +453,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried static method if it exists, else nullptr.
 			*/
-			REFUREKU_API StaticMethod const*				getStaticMethod(uint64 id)											const	noexcept;
+			REFUREKU_API StaticMethod const*			getStaticMethod(std::size_t id)										const	noexcept;
 
 			/**
 			*	@brief Retrieve a field by id.
@@ -456,7 +462,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried field if it exists, else nullptr.
 			*/
-			REFUREKU_API Field const*						getField(uint64 id)													const	noexcept;
+			REFUREKU_API Field const*					getField(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a static field by id.
@@ -465,7 +471,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried static field if it exists, else nullptr.
 			*/
-			REFUREKU_API StaticField const*					getStaticField(uint64 id)											const	noexcept;
+			REFUREKU_API StaticField const*				getStaticField(std::size_t id)										const	noexcept;
 
 			/**
 			*	@brief Retrieve an enum value by id.
@@ -474,63 +480,63 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum value if it exists, else nullptr.
 			*/
-			REFUREKU_API EnumValue const*					getEnumValue(uint64 id)												const	noexcept;
+			REFUREKU_API EnumValue const*				getEnumValue(std::size_t id)										const	noexcept;
 
 			/**
 			*	@brief Getter for _entitiesById.
 			*
 			*	@return _entitiesById.
 			*/
-			REFUREKU_API EntitiesById const&				getEntitiesById()													const	noexcept;
+			REFUREKU_API EntitiesById const&				getEntitiesById()			const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelNamespacesByName.
 			*
 			*	@return _fileLevelNamespacesByName.
 			*/
-			REFUREKU_API NamespacesByName const&			getFileLevelNamespaces()											const	noexcept;
+			REFUREKU_API NamespacesByName const&			getFileLevelNamespaces()	const	noexcept;
 
 			/**
 			*	@brief Getter for _fundamentalArchetypes.
 			*
 			*	@return _fundamentalArchetypes.
 			*/
-			REFUREKU_API FundamentalArchetypesByName const&	getFundamentalArchetypes()											const	noexcept;
+			REFUREKU_API FundamentalArchetypesByName const&	getFundamentalArchetypes()	const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelStructsByName.
 			*
 			*	@return _fileLevelStructsByName.
 			*/
-			REFUREKU_API StructsByName const&				getFileLevelStructs()												const	noexcept;
+			REFUREKU_API StructsByName const&				getFileLevelStructs()		const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelClassesByName.
 			*
 			*	@return _fileLevelClassesByName.
 			*/
-			REFUREKU_API ClassesByName const&				getFileLevelClasses()												const	noexcept;
+			REFUREKU_API ClassesByName const&				getFileLevelClasses()		const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelEnumsByName.
 			*
 			*	@return _fileLevelEnumsByName.
 			*/
-			REFUREKU_API EnumsByName const&					getFileLevelEnums()													const	noexcept;
+			REFUREKU_API EnumsByName const&					getFileLevelEnums()			const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelVariablesByName.
 			*
 			*	@return _fileLevelVariablesByName.
 			*/
-			REFUREKU_API VariablesByName const&				getFileLevelVariables()												const	noexcept;
+			REFUREKU_API VariablesByName const&				getFileLevelVariables()		const	noexcept;
 
 			/**
 			*	@brief Getter for _fileLevelFunctionsByName.
 			*
 			*	@return _fileLevelFunctionsByName.
 			*/
-			REFUREKU_API FunctionsByName const&				getFileLevelFunctions()												const	noexcept;
+			REFUREKU_API FunctionsByName const&				getFileLevelFunctions()		const	noexcept;
 	};
 
 	/**

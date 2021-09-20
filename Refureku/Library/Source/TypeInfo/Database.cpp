@@ -314,12 +314,12 @@ void Database::checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr) n
 	}
 }
 
-std::shared_ptr<Namespace> Database::generateNamespace(char const* name, uint64 id) noexcept
+std::shared_ptr<Namespace> Database::generateNamespace(char const* name, std::size_t id) noexcept
 {
 	return _generatedNamespaces.emplace_back(std::make_shared<Namespace>(name, id));
 }
 
-Entity const* Database::getEntity(uint64 id) const noexcept
+Entity const* Database::getEntity(std::size_t id) const noexcept
 {
 	Entity searching("", id);
 
@@ -328,7 +328,7 @@ Entity const* Database::getEntity(uint64 id) const noexcept
 	return (it != _entitiesById.cend()) ? *it : nullptr;
 }
 
-Namespace const* Database::getNamespace(uint64 id) const noexcept
+Namespace const* Database::getNamespace(std::size_t id) const noexcept
 {
 	return entityCast<Namespace>(getEntity(id));
 }
@@ -373,7 +373,7 @@ Namespace const* Database::getNamespace(std::string namespaceName) const
 	return result;
 }
 
-Archetype const* Database::getArchetype(uint64 id) const noexcept
+Archetype const* Database::getArchetype(std::size_t id) const noexcept
 {
 	return entityCast<Archetype>(getEntity(id));
 }
@@ -400,7 +400,7 @@ Archetype const* Database::getArchetype(std::string archetypeName) const noexcep
 	return result;
 }
 
-Struct const* Database::getStruct(uint64 id) const noexcept
+Struct const* Database::getStruct(std::size_t id) const noexcept
 {
 	return entityCast<Struct>(getEntity(id));
 }
@@ -414,7 +414,7 @@ Struct const* Database::getStruct(std::string structName) const noexcept
 	return (it != _fileLevelStructsByName.cend()) ? *it : nullptr;
 }
 
-Class const* Database::getClass(uint64 id) const noexcept
+Class const* Database::getClass(std::size_t id) const noexcept
 {
 	return entityCast<Class>(getEntity(id));
 }
@@ -428,7 +428,7 @@ Class const* Database::getClass(std::string className) const noexcept
 	return (it != _fileLevelClassesByName.cend()) ? *it : nullptr;
 }
 
-Enum const* Database::getEnum(uint64 id) const noexcept
+Enum const* Database::getEnum(std::size_t id) const noexcept
 {
 	return entityCast<Enum>(getEntity(id));
 }
@@ -442,7 +442,7 @@ Enum const* Database::getEnum(std::string enumName) const noexcept
 	return (it != _fileLevelEnumsByName.cend()) ? *it : nullptr;
 }
 
-FundamentalArchetype const* Database::getFundamentalArchetype(uint64 id) const noexcept
+FundamentalArchetype const* Database::getFundamentalArchetype(std::size_t id) const noexcept
 {
 	return entityCast<FundamentalArchetype>(getEntity(id));
 }
@@ -456,7 +456,7 @@ FundamentalArchetype const* Database::getFundamentalArchetype(std::string archet
 	return (it != _fundamentalArchetypes.cend()) ? *it : nullptr;
 }
 
-Variable const* Database::getVariable(uint64 id) const noexcept
+Variable const* Database::getVariable(std::size_t id) const noexcept
 {
 	return entityCast<Variable>(getEntity(id));
 }
@@ -470,7 +470,7 @@ Variable const* Database::getVariable(std::string variableName, EVarFlags flags)
 	return (it != _fileLevelVariablesByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }
 
-Function const* Database::getFunction(uint64 id) const noexcept
+Function const* Database::getFunction(std::size_t id) const noexcept
 {
 	return entityCast<Function>(getEntity(id));
 }
@@ -484,27 +484,27 @@ Function const* Database::getFunction(std::string functionName, EFunctionFlags f
 	return (it != _fileLevelFunctionsByName.cend() && ((*it)->flags & flags) == flags) ? *it : nullptr;
 }
 
-Method const* Database::getMethod(uint64 id) const noexcept
+Method const* Database::getMethod(std::size_t id) const noexcept
 {
 	return entityCast<Method>(getEntity(id));
 }
 
-StaticMethod const* Database::getStaticMethod(uint64 id) const noexcept
+StaticMethod const* Database::getStaticMethod(std::size_t id) const noexcept
 {
 	return entityCast<StaticMethod>(getEntity(id));
 }
 
-Field const* Database::getField(uint64 id) const noexcept
+Field const* Database::getField(std::size_t id) const noexcept
 {
 	return entityCast<Field>(getEntity(id));
 }
 
-StaticField const* Database::getStaticField(uint64 id) const noexcept
+StaticField const* Database::getStaticField(std::size_t id) const noexcept
 {
 	return entityCast<StaticField>(getEntity(id));
 }
 
-EnumValue const* Database::getEnumValue(uint64 id) const noexcept
+EnumValue const* Database::getEnumValue(std::size_t id) const noexcept
 {
 	return entityCast<EnumValue>(getEntity(id));
 }
