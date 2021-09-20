@@ -13,7 +13,7 @@ ReflectionCodeGenModule::ReflectionCodeGenModule() noexcept:
 	addPropertyCodeGen(_propertySettingsProperty);
 }
 
-ReflectionCodeGenModule::ReflectionCodeGenModule(ReflectionCodeGenModule const& other) noexcept:
+ReflectionCodeGenModule::ReflectionCodeGenModule(ReflectionCodeGenModule const&) noexcept:
 	ReflectionCodeGenModule()
 {
 }
@@ -486,7 +486,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 	if (!entity.properties.empty())
 	{
 		//Reserve space to avoid reallocation
-		inout_result += generatedEntityVarName + "getProperties().reserve(" + std::to_string(entity.properties.size()) + ");" + env.getSeparator();
+		inout_result += generatedEntityVarName + "setPropertiesCapacity(" + std::to_string(entity.properties.size()) + ");" + env.getSeparator();
 
 		//Add all properties
 		_propertiesCount.clear();
@@ -583,7 +583,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		if (!method.parameters.empty())
 		{
 			//Add all parameters in a single string
-			generatedCode = currentMethodVariable + "->setParameterCount(" + std::to_string(method.parameters.size()) + "); " + currentMethodVariable;
+			generatedCode = currentMethodVariable + "->setParametersCapacity(" + std::to_string(method.parameters.size()) + "); " + currentMethodVariable;
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
@@ -792,7 +792,7 @@ void ReflectionCodeGenModule::declareAndDefineClassRegistererVariable(kodgen::St
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { " + env.getInternalSymbolMacro() + " static rfk::ArchetypeRegisterer registerer_" + getEntityId(structClass) + " = " +
+		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_" + getEntityId(structClass) + " = " +
 			structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
 }
@@ -911,7 +911,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererVariable(ko
 {
 	assert(structClass.type.isTemplateType());
 
-	inout_result += "namespace rfk::generated { " + env.getInternalSymbolMacro() + " static rfk::ArchetypeRegisterer register_" + getEntityId(structClass) +
+	inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer register_" + getEntityId(structClass) +
 					" = *rfk::getArchetype<" + structClass.type.getName(false, false, true) + ">(); }" + env.getSeparator() + env.getSeparator();
 }
 
@@ -1120,7 +1120,7 @@ void ReflectionCodeGenModule::declareAndDefineEnumRegistererVariable(kodgen::Enu
 {
 	if (enum_.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { " + env.getInternalSymbolMacro() + " static rfk::ArchetypeRegisterer registerer_" + getEntityId(enum_) + " = *rfk::getEnum<" + enum_.type.getCanonicalName() + ">(); }" + env.getSeparator();
+		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_" + getEntityId(enum_) + " = *rfk::getEnum<" + enum_.type.getCanonicalName() + ">(); }" + env.getSeparator();
 	}
 }
 
@@ -1160,7 +1160,7 @@ void ReflectionCodeGenModule::declareAndDefineVariableRegistererVariable(kodgen:
 {
 	if (variable.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { " + env.getInternalSymbolMacro() + " static rfk::DefaultEntityRegisterer registerer_" + getEntityId(variable) +
+		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer_" + getEntityId(variable) +
 			" = &rfk::generated::" + computeGetVariableFunctionName(variable) + "(); }" + env.getSeparator();
 	}
 }
@@ -1213,7 +1213,7 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 	//Setup parameters
 	if (!function.parameters.empty())
 	{
-		inout_result += "function.setParameterCount(" + std::to_string(function.parameters.size()) + ");" + env.getSeparator() +
+		inout_result += "function.setParametersCapacity(" + std::to_string(function.parameters.size()) + ");" + env.getSeparator() +
 						"rfk::Function* functionPtr = &function; functionPtr" + env.getSeparator();
 
 		for (kodgen::FunctionParamInfo const& param : function.parameters)
@@ -1234,7 +1234,7 @@ void ReflectionCodeGenModule::declareAndDefineFunctionRegistererVariable(kodgen:
 {
 	if (function.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { " + env.getInternalSymbolMacro() + " static rfk::DefaultEntityRegisterer registerer" + getEntityId(function) +
+		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer" + getEntityId(function) +
 			" = &rfk::generated::" + computeGetFunctionFunctionName(function) + "(); }" + env.getSeparator();
 	}
 }
@@ -1332,7 +1332,7 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 
 void ReflectionCodeGenModule::declareAndDefineNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += env.getInternalSymbolMacro() + " static rfk::NamespaceFragmentRegisterer " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + " = "
+	inout_result += "static rfk::NamespaceFragmentRegisterer " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + " = "
 											   "rfk::NamespaceFragmentRegisterer(\"" + namespace_.name + "\", " +
 											   getEntityId(namespace_) + ", "
 											   "rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "(), " +

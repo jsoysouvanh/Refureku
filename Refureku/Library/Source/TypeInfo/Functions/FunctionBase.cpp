@@ -56,7 +56,7 @@ ICallable* FunctionBase::getInternalFunction() const noexcept
 	return _internalFunction.get();
 }
 
-void FunctionBase::setParameterCount(std::size_t paramCount) noexcept
+void FunctionBase::setParametersCapacity(std::size_t paramCapacity) noexcept
 {
-	_parameters.reserve(paramCount);
+	_parameters.reserve(paramCapacity);
 }

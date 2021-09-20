@@ -11,7 +11,7 @@
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
 rfk::EEntityKind PropertySettings::getTargetEntityKind() const noexcept { return targetEntityKind; }
 static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");
-namespace rfk::generated { REFUREKU_INTERNAL static rfk::ArchetypeRegisterer registerer_2708994343965683583u = PropertySettings::staticGetArchetype(); }
+namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_2708994343965683583u = PropertySettings::staticGetArchetype(); }
 
 rfk::Struct const& PropertySettings::staticGetArchetype() noexcept {
 static bool initialized = false;
@@ -19,7 +19,7 @@ static rfk::Struct type("PropertySettings", 2708994343965683583u, sizeof(Propert
 if (!initialized) {
 initialized = true;
 type.setDefaultInstantiator(&rfk::defaultInstantiator<PropertySettings>);
-type.getProperties().reserve(1);
+type.setPropertiesCapacity(1);
 static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Struct");static PropertySettings property_2708994343965683583u_PropertySettings_0{rfk::EEntityKind::Struct | rfk::EEntityKind::Class};type.addProperty(&property_2708994343965683583u_PropertySettings_0);
 type.directParents.reserve(1);
 type.addToParents<rfk::Property>(static_cast<rfk::EAccessSpecifier>(1));

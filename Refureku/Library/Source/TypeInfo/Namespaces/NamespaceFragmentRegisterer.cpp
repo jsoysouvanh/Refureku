@@ -114,16 +114,20 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 
 void NamespaceFragmentRegisterer::mergeFragmentPropertiesToNamespaceProperties(NamespaceFragment const& fragment) noexcept
 {
+	Property const* fragmentProperty = nullptr;
+
 	//Append properties
-	for (Property const* fragmentProperty : fragment.getProperties())
+	for (std::size_t i = 0; i < fragment.getPropertyCount(); i++)
 	{
+		fragmentProperty = fragment.getProperty(i);
+
 		//Don't add the prop if the same prop is already added
 		if (!_namespaceInstance->getProperty([fragmentProperty](Property const* namespaceProperty)
 			{
 				return &namespaceProperty->getArchetype() == &fragmentProperty->getArchetype();
 			}))
 		{
-			_namespaceInstance->getProperties().emplace_back(fragmentProperty);
+			_namespaceInstance->addProperty(fragmentProperty);
 		}
 	}
 }

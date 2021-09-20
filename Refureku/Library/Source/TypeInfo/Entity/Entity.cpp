@@ -15,6 +15,11 @@ Entity::Entity(std::string&& name, std::size_t id, EEntityKind kind, Entity cons
 {
 }
 
+Property const* Entity::getProperty(std::size_t propertyIndex) const
+{
+	return _properties.at(propertyIndex);
+}
+
 Property const* Entity::getProperty(Struct const& archetype, bool isChildClassValid) const noexcept
 {
 	//Iterate over all props to find a matching property
@@ -73,6 +78,11 @@ std::vector<Property const*> Entity::getProperties(Struct const& archetype, bool
 	}
 
 	return result;
+}
+
+std::size_t Entity::getPropertyCount() const noexcept
+{
+	return _properties.size();
 }
 
 bool Entity::addProperty(Property const* toAddProperty) noexcept
@@ -136,12 +146,7 @@ void Entity::setOuterEntity(Entity const* outerEntity) noexcept
 	_outerEntity = outerEntity;
 }
 
-std::vector<Property const*> const& Entity::getProperties() const noexcept
+void Entity::setPropertiesCapacity(std::size_t propertiesCapacity) noexcept
 {
-	return _properties;
-}
-
-std::vector<Property const*>& Entity::getProperties() noexcept
-{
-	return _properties;
+	_properties.reserve(propertiesCapacity);
 }

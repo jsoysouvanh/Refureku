@@ -108,14 +108,12 @@ namespace rfk
 				}
 			};
 
-			REFUREKU_API Entity()												= delete;
 			REFUREKU_API Entity(std::string&&	name,
 								std::size_t		id,
 								EEntityKind		kind = EEntityKind::Undefined,
 								Entity const*	outerEntity = nullptr)			noexcept;
-			REFUREKU_API Entity(Entity const&)									= default;
-			REFUREKU_API Entity(Entity&&)										= default;
-			REFUREKU_API ~Entity()												= default;
+			Entity(Entity const&)												= default;
+			Entity(Entity&&)													= default;
 
 			/**
 			*	@brief	Retrieve a property of a given type from this entity.
@@ -162,6 +160,17 @@ namespace rfk
 			std::vector<Property const*>		getProperties(Predicate predicate)				const;
 
 			/**
+			*	@brief Retrieve the property at the given index.
+			* 
+			*	@param propertyIndex Index of the property to retrieve in this entity.
+			* 
+			*	@return The property at the given index.
+			* 
+			*	@exception std::out_of_range if the provided index is greater than the number of properties in this entity.
+			*/
+			REFUREKU_API Property const*						getProperty(std::size_t propertyIndex)					const;
+
+			/**
 			*	@brief Retrieve the first property matching with the provided archetype.
 			*	
 			*	@param archetype			Archetype of the property to look for.
@@ -182,6 +191,13 @@ namespace rfk
 			*/
 			REFUREKU_API std::vector<Property const*>			getProperties(Struct const&	archetype,
 																			  bool			isChildClassValid = true)	const	noexcept;
+
+			/**
+			*	@brief Get the number of properties attached to this entity.
+			* 
+			*	@return The number of properties attached to this entity.
+			*/
+			REFUREKU_API std::size_t							getPropertyCount()										const	noexcept;
 
 			/**
 			*	@brief Add a property to this entity.
@@ -243,18 +259,14 @@ namespace rfk
 			REFUREKU_API void									setOuterEntity(Entity const*)									noexcept;
 
 			/**
-			*	@brief Getter for the field _properties.
+			*	@brief	Set the number of properties for this entity.
+			*			Useful to avoid reallocations when adding a lot of properties.
+			*			If the number of properties is already >= to the provided count, this method has no effect.
 			* 
-			*	@return _properties.
+			*	@param propertiesCapacity The number of properties of this entity.
 			*/
-			REFUREKU_API std::vector<Property const*> const&	getProperties()											const	noexcept;
+			REFUREKU_API void									setPropertiesCapacity(std::size_t propertiesCapacity)			noexcept;
 
-			/**
-			*	@brief Non-const getter for the field _properties.
-			* 
-			*	@return _properties.
-			*/
-			REFUREKU_API std::vector<Property const*>&			getProperties()													noexcept;
 
 			inline bool operator==(Entity const& other) const noexcept;
 			inline bool operator!=(Entity const& other) const noexcept;

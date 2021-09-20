@@ -11,7 +11,7 @@
 #include <Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h>
 rfk::EEntityKind ParseAllNested::getTargetEntityKind() const noexcept { return targetEntityKind; }
 static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");
-namespace rfk::generated { REFUREKU_INTERNAL static rfk::ArchetypeRegisterer registerer_17636175816175907530u = ParseAllNested::staticGetArchetype(); }
+namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_17636175816175907530u = ParseAllNested::staticGetArchetype(); }
 
 rfk::Struct const& ParseAllNested::staticGetArchetype() noexcept {
 static bool initialized = false;
@@ -19,7 +19,7 @@ static rfk::Struct type("ParseAllNested", 17636175816175907530u, sizeof(ParseAll
 if (!initialized) {
 initialized = true;
 type.setDefaultInstantiator(&rfk::defaultInstantiator<ParseAllNested>);
-type.getProperties().reserve(1);
+type.setPropertiesCapacity(1);
 static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Struct");static PropertySettings property_17636175816175907530u_PropertySettings_0{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.addProperty(&property_17636175816175907530u_PropertySettings_0);
 type.directParents.reserve(1);
 type.addToParents<rfk::Property>(static_cast<rfk::EAccessSpecifier>(1));

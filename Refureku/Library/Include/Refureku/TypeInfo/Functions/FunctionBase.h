@@ -149,7 +149,7 @@ namespace rfk
 			* 
 			*	@return The parameter at the given index.
 			* 
-			*	@exception std::out_of_range if the provided return type is different from this function's return type.
+			*	@exception std::out_of_range if the provided paramIndex is greater or equal to the number of parameters.
 			*/
 			REFUREKU_API FunctionParameter const&				getParameter(std::size_t paramIndex)		const;
 
@@ -163,11 +163,11 @@ namespace rfk
 			/**
 			*	@brief	Set the number of parameters for this function.
 			*			Useful to avoid reallocations when adding a lot of parameters.
-			*			If the number of parameters if already >= the provided param, this method has no effect.
+			*			If the number of parameters is already >= to the provided count, this method has no effect.
 			* 
-			*	@return The number of parameters of this function.
+			*	@param paramCapacity The number of parameters of this function.
 			*/
-			REFUREKU_API void									setParameterCount(std::size_t paramCount)			noexcept;
+			REFUREKU_API void									setParametersCapacity(std::size_t paramCapacity)	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBase.inl"
