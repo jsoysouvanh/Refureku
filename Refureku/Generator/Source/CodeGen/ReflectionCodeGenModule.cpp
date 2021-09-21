@@ -694,6 +694,8 @@ void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::S
 
 void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	bool isGeneratingHiddenCode = _isGeneratingHiddenCode;
+
 	inout_result += "private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
 
 	//Propagate the child class registration to parent classes too
@@ -711,7 +713,19 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	if (!structClass.fields.empty())
 	{
 		inout_result += "[[maybe_unused]] rfk::Field* field = nullptr; [[maybe_unused]] rfk::StaticField* staticField = nullptr;" + env.getSeparator();
-		inout_result += "__RFK_DISABLE_WARNING_PUSH " + env.getSeparator() + "__RFK_DISABLE_WARNING_OFFSETOF " + env.getSeparator();	//Disable offsetof usage warnings
+
+		//Trick to have the pragma statement outside of the UNPACK_IF_NOT_PARSING macro
+		//If not doing that, the pragma is ignored and offsetof warnings are issued on gcc & clang.
+		if (isGeneratingHiddenCode)
+		{
+			endHiddenGeneratedCode(env, inout_result);
+			inout_result += "__RFK_DISABLE_WARNING_PUSH " + env.getSeparator() + "__RFK_DISABLE_WARNING_OFFSETOF " + env.getSeparator();	//Disable offsetof usage warnings
+			beginHiddenGeneratedCode(env, inout_result);
+		}
+		else
+		{
+			inout_result += "__RFK_DISABLE_WARNING_PUSH " + env.getSeparator() + "__RFK_DISABLE_WARNING_OFFSETOF " + env.getSeparator();	//Disable offsetof usage warnings
+		}
 
 		//Iterate over fields
 		std::string properties;
@@ -745,7 +759,18 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			fillEntityProperties(field, env, currentFieldVariable, inout_result);
 		}
 
-		inout_result += "__RFK_DISABLE_WARNING_POP" + env.getSeparator();
+		//Trick to have the pragma statement outside of the UNPACK_IF_NOT_PARSING macro
+		//If not doing that, the pragma is ignored and offsetof warnings are issued on gcc & clang.
+		if (isGeneratingHiddenCode)
+		{
+			endHiddenGeneratedCode(env, inout_result);
+			inout_result += "__RFK_DISABLE_WARNING_POP " + env.getSeparator();
+			beginHiddenGeneratedCode(env, inout_result);
+		}
+		else
+		{
+			inout_result += "__RFK_DISABLE_WARNING_POP " + env.getSeparator();
+		}
 	}
 
 	inout_result += "}" + env.getSeparator() + env.getSeparator();
