@@ -2,6 +2,11 @@
 
 using namespace rfk;
 
+Property::~Property() noexcept
+{
+	//Must define default destructor for correct vtable export on GCC/Clang
+}
+
 rfk::EEntityKind Property::getTargetEntityKind() const noexcept
 {
 	return Property::targetEntityKind;

@@ -33,6 +33,8 @@ namespace rfk
 			/** Is this property allowed to be attached multiple times to the same entity? */
 			static constexpr bool				allowMultiple		= false;
 
+			virtual ~Property()	noexcept;
+
 			/**
 			*	@brief Getter for targetEntityKind of the concrete Property type.
 			*	

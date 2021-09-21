@@ -6,6 +6,8 @@ project(RefurekuLibrary)
 set(RefurekuLibraryTarget Refureku)
 add_library(${RefurekuLibraryTarget}
 				SHARED
+					Source/Object.cpp
+
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/EnumValue.cpp
@@ -46,7 +48,9 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Functions/FunctionParameter.cpp
 
 					Source/TypeInfo/Properties/Property.cpp
-					Source/TypeInfo/Properties/NativePropertyDefinitions.cpp
+					Source/TypeInfo/Properties/CustomInstantiator.cpp
+					Source/TypeInfo/Properties/ParseAllNested.cpp
+					Source/TypeInfo/Properties/PropertySettings.cpp
 				)
 
 target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)

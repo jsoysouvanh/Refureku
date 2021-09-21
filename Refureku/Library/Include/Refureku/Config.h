@@ -53,7 +53,7 @@
 
 #else
 
-	#if __GNUC__ >= 4
+	#if __GNUC__ >= 4 && defined(REFUREKU_EXPORT)
 
 		#define REFUREKU_API		__attribute__((visibility("default")))
 		#define REFUREKU_INTERNAL	__attribute__((visibility("hidden")))

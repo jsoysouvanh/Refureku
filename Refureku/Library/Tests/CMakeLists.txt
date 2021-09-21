@@ -29,6 +29,11 @@ add_executable(${RefurekuTestsTarget}
 # Link to RefurekuLibrary
 target_link_libraries(${RefurekuTestsTarget} PRIVATE ${RefurekuLibraryTarget})
 
+if (MSVC)
+else()
+	target_compile_options(${RefurekuTestsTarget} PRIVATE -fno-rtti)
+endif()
+
 # Create the command to run RefurekuGenerator
 set(RefurekuGeneratorExeName RefurekuGenerator)
 set(RunTestGeneratorTarget RunRefurekuTestGenerator)
