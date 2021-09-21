@@ -62,7 +62,7 @@ if (MSVC)
 	endif()
 
 else()	# Clang or GCC
-	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fno-rtti)
+	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fno-rtti -fvisibility=hidden)
 
 	# Use rtti on Property file if specified
 	if (GEN_PROPERTY_RTTI)

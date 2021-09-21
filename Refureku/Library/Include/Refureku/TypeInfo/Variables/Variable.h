@@ -62,7 +62,7 @@ namespace rfk
 			*	@return The data stored in the variable.
 			*/
 			template <typename DataType>
-			DataType			getData()									const;
+			DataType			getData()						const;
 
 			/**
 			*	@brief Set some data in this variable.
@@ -75,31 +75,32 @@ namespace rfk
 			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
 			template <typename DataType>
-			void				setData(DataType&& data)					const;
+			void				setData(DataType&& data)		const;
 
 			/**
 			*	@brief Copy dataSize bytes starting from data into the variable.
 			*
-			*	@param data Address of the data to copy.
+			*	@param data		Address of the data to copy.
 			*	@param dataSize Number of bytes to copy into the variable starting from data.
 			* 
 			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
-			inline void			setData(void const* data, uint64 dataSize)	const;
+			inline void			setData(void const* data,
+										std::size_t dataSize)	const;
 
 			/**
 			*	@brief Check if this variable is static.
 			*
 			*	@return true if the variable is static, else false.
 			*/
-			inline bool			isStatic()									const	noexcept;
+			inline bool			isStatic()						const	noexcept;
 
 			/**
 			*	@brief Getter for the field _flags.
 			* 
 			*	@return _flags.
 			*/
-			inline EVarFlags	getFlags()									const	noexcept;
+			inline EVarFlags	getFlags()						const	noexcept;
 
 			Variable& operator=(Variable const&)	= delete;
 			Variable& operator=(Variable&&)			= delete;

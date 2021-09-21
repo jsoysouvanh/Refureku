@@ -57,7 +57,7 @@ void Variable::setData(DataType&& data) const
 	}
 }
 
-inline void Variable::setData(void const* data, uint64 dataSize) const
+inline void Variable::setData(void const* data, std::size_t dataSize) const
 {
 	if (getType().isConst())
 	{
