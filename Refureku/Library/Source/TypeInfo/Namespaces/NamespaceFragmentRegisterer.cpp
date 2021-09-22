@@ -58,7 +58,7 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 	//Merge properties
 	mergeFragmentPropertiesToNamespaceProperties(fragment);
 
-	for (Entity const* entity : fragment.nestedEntities)
+	for (Entity const* entity : fragment.getNestedEntities())
 	{
 		//Setup outer entity
 		const_cast<Entity*>(entity)->setOuterEntity(_namespaceInstance.get());	//Don't tell anyone I actually wrote const_cast...
@@ -138,7 +138,7 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 
 	//Each namespace self unregister, so we only need to unregister
 	//nested non-namespace entities
-	for (Entity const* entity : _fragment.nestedEntities)
+	for (Entity const* entity : _fragment.getNestedEntities())
 	{
 		switch (entity->getKind())
 		{

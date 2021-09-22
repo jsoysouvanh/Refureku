@@ -9,7 +9,17 @@ NamespaceFragment::NamespaceFragment(std::string&& newName, uint64 newId) noexce
 
 NamespaceFragment* NamespaceFragment::addNestedEntity(Entity const* nestedEntity) noexcept
 {
-	nestedEntities.emplace_back(nestedEntity);
+	_nestedEntities.emplace_back(nestedEntity);
 
 	return this;
+}
+
+void NamespaceFragment::setNestedEntitiesCapacity(std::size_t capacity) noexcept
+{
+	_nestedEntities.reserve(capacity);
+}
+
+std::vector<Entity const*> const& NamespaceFragment::getNestedEntities() const noexcept
+{
+	return _nestedEntities;
 }

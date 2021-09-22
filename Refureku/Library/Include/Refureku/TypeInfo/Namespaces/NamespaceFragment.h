@@ -16,15 +16,15 @@ namespace rfk
 {
 	class NamespaceFragment final : public Entity
 	{
-		public:
+		private:
 			/** Collection of all entities contained in this namespace fragment. */
-			std::vector<Entity const*>	nestedEntities;
+			std::vector<Entity const*>	_nestedEntities;
 
+		public:
 			REFUREKU_API NamespaceFragment(std::string&& newName,
 										   uint64		 newId	= 0u)	noexcept;
 			NamespaceFragment(NamespaceFragment const&)		= delete;
-			NamespaceFragment(NamespaceFragment&&)			= default;
-			~NamespaceFragment()							= default;
+			NamespaceFragment(NamespaceFragment&&)			= delete;
 
 			/**
 			*	@brief Add a nested entity to the namespace.
@@ -33,6 +33,25 @@ namespace rfk
 			*	
 			*	@param this.
 			*/
-			REFUREKU_API NamespaceFragment* addNestedEntity(Entity const* nestedEntity) noexcept;
+			REFUREKU_API NamespaceFragment*					addNestedEntity(Entity const* nestedEntity)			noexcept;
+
+			/**
+			*	@brief	Set the number of nested entities for this entity.
+			*			Useful to avoid reallocations when adding a lot of entities.
+			*			If the number of entities is already >= to the provided count, this method has no effect.
+			* 
+			*	@param capacity The number of entities of this namespace fragment.
+			*/
+			REFUREKU_API void								setNestedEntitiesCapacity(std::size_t capacity)		noexcept;
+
+			/**
+			*	@brief Getter for the field _nestedEntities.
+			* 
+			*	@return _nestedEntities.
+			*/
+			REFUREKU_API std::vector<Entity const*> const&	getNestedEntities()							const	noexcept;
+
+			NamespaceFragment& operator=(NamespaceFragment const&)	= delete;
+			NamespaceFragment& operator=(NamespaceFragment&&)		= delete;
 	};
 }

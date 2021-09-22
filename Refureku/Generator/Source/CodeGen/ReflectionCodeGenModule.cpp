@@ -1303,7 +1303,7 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 	if (nestedEntityCount > 0u)
 	{
 		//Reserve space first
-		inout_result += "fragment.nestedEntities.reserve(" + std::to_string(nestedEntityCount) + "u);" + env.getSeparator();
+		inout_result += "fragment.setNestedEntitiesCapacity(" + std::to_string(nestedEntityCount) + "u);" + env.getSeparator();
 
 		//Chain fill all nested entities at once
 		inout_result += "rfk::NamespaceFragment* fragmentPtr = &fragment;" + env.getSeparator() +
