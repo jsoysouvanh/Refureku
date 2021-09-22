@@ -562,7 +562,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		{
 			inout_result += "staticMethod = " + generatedEntityVarName + "addStaticMethod(\"" + method.name + "\", " +
 							 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
-							 "rfk::Type::getType<" + method.returnType.getName() + ">(), "
+							 "rfk::getType<" + method.returnType.getName() + ">(), "
 							 "std::make_unique<rfk::NonMemberFunction<" + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
 							 "static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
 
@@ -572,7 +572,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		{
 			inout_result += "method = " + generatedEntityVarName + "addMethod(\"" + method.name + "\", " +
 							(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
-							"rfk::Type::getType<" + method.returnType.getName() + ">(), "
+							"rfk::getType<" + method.returnType.getName() + ">(), "
 							"std::make_unique<rfk::MemberFunction<" + structClass.name + ", " + method.getPrototype(true) + ">" + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
 							"static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
 
@@ -587,7 +587,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
-				generatedCode += "->addParameter(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">())";
+				generatedCode += "->addParameter(\"" + param.name + "\", rfk::getType<" + param.type.getName() + ">())";
 			}
 
 			//Write generated parameters string to file
@@ -736,7 +736,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			{
 				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
 								 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
-								 "rfk::Type::getType<" + field.type.getName() + ">(), "
+								 "rfk::getType<" + field.type.getName() + ">(), "
 								 "static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 								 "&thisClass, "
 								 "&" + structClass.name + "::" + field.name + ");" + env.getSeparator();
@@ -747,7 +747,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			{
 				inout_result += "field = childClass.addField(\"" + field.name + "\", " +
 								 (structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
-								 "rfk::Type::getType<" + field.type.getName() + ">(), "
+								 "rfk::getType<" + field.type.getName() + ">(), "
 								 "static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 								 "&thisClass, "
 								 "offsetof(ChildClass, " + field.name + "));" + env.getSeparator();
@@ -1164,7 +1164,7 @@ void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo con
 					"static bool initialized = false;" + env.getSeparator() + 
 					"static rfk::Variable variable(\"" + variable.name + "\", " +
 												   getEntityId(variable) + ", "
-												   "rfk::Type::getType<" + variable.type.getCanonicalName() + ">(), "
+												   "rfk::getType<" + variable.type.getCanonicalName() + ">(), "
 												   "const_cast<" + variable.type.getName(true) + "*>(&" + variable.getFullName() + "), "
 												   "static_cast<rfk::EVarFlags>(" + std::to_string(computeRefurekuVariableFlags(variable)) + ")"
 												   ");" + env.getSeparator();
@@ -1224,7 +1224,7 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 					"static bool initialized = false;" + env.getSeparator() + 
 					"static rfk::Function function(\"" + function.name + "\", " +
 												   getEntityId(function) + ", "
-												   "rfk::Type::getType<" + function.returnType.getCanonicalName() + ">(), "
+												   "rfk::getType<" + function.returnType.getCanonicalName() + ">(), "
 												   "std::unique_ptr<" + nonMemberFuncType + ">(new " + nonMemberFuncType + "(&" + function.getFullName() + ")), "
 													"static_cast<rfk::EFunctionFlags>(" + std::to_string(computeRefurekuFunctionFlags(function)) + ")"
 												   ");" + env.getSeparator();
@@ -1243,7 +1243,7 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 
 		for (kodgen::FunctionParamInfo const& param : function.parameters)
 		{
-			inout_result += "->addParameter(\"" + param.name + "\", rfk::Type::getType<" + param.type.getName() + ">())" + env.getSeparator();
+			inout_result += "->addParameter(\"" + param.name + "\", rfk::getType<" + param.type.getName() + ">())" + env.getSeparator();
 		}
 
 		inout_result += ";" + env.getSeparator();

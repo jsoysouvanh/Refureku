@@ -52,21 +52,6 @@ void Type::fillType(Type& out_type) noexcept
 	}
 }
 
-template <typename T>
-Type const& Type::getType() noexcept
-{
-	static Type	result;
-	static bool	initialized = false;
-	
-	if (!initialized)
-	{
-		initialized = true;
-		fillType<T>(result);
-	}
-
-	return result;
-}
-
 template <typename... ArgTypes>
 inline Type& Type::addPart(ArgTypes&&... args) noexcept
 {
@@ -132,13 +117,17 @@ inline uint32 Type::getArraySize() const noexcept
 	return (!getParts().empty()) ? getParts().front().getArraySize() : 0u;
 }
 
-inline Archetype const* Type::getArchetype() const noexcept
-{
-	return _archetype;
-}
-
 template <typename T>
 Type const& getType() noexcept
 {
-	return Type::getType<T>();
+	static Type	result;
+	static bool	initialized = false;
+
+	if (!initialized)
+	{
+		initialized = true;
+		Type::fillType<T>(result);
+	}
+
+	return result;
 }

@@ -65,6 +65,11 @@ std::string Type::toString() const noexcept
 	return result;
 }
 
+Archetype const* Type::getArchetype() const noexcept
+{
+	return _archetype;
+}
+
 std::vector<TypePart>& Type::getParts() noexcept
 {
 	return _parts;

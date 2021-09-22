@@ -40,7 +40,7 @@ void FunctionBase::checkArguments() const
 template <size_t Rank, typename LastArgType>
 void FunctionBase::checkArguments() const
 {
-	Type providedType = Type::getType<LastArgType>();
+	Type providedType = rfk::getType<LastArgType>();
 
 	if (!getParameter(Rank).getType().match(providedType))
 	{
@@ -52,7 +52,7 @@ void FunctionBase::checkArguments() const
 template <typename ReturnType>
 void FunctionBase::checkReturnType() const
 {
-	Type providedType = Type::getType<ReturnType>();
+	Type providedType = rfk::getType<ReturnType>();
 
 	if (!getReturnType().match(providedType))
 	{
@@ -69,7 +69,7 @@ bool FunctionBase::hasSameArgumentsCount() const noexcept
 template <typename ReturnType>
 bool FunctionBase::hasSameReturnType() const noexcept
 {
-	return Type::getType<ReturnType>() == getReturnType();
+	return rfk::getType<ReturnType>() == getReturnType();
 }
 
 template <typename... ArgTypes>
@@ -87,7 +87,7 @@ bool FunctionBase::hasSameArgumentTypes() const noexcept
 template <size_t Rank, typename LastArgType>
 bool FunctionBase::hasSameArgumentTypes() const noexcept
 {
-	return getParameter(Rank).getType() == Type::getType<LastArgType>();
+	return getParameter(Rank).getType() == rfk::getType<LastArgType>();
 }
 
 template <typename ReturnType, typename... ArgTypes>

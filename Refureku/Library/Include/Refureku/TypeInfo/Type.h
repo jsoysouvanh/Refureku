@@ -17,6 +17,10 @@ namespace rfk
 {
 	class Type
 	{
+		//The rfk::getType<T> method can access Type internal methods to fill the type
+		template <typename T>
+		friend Type const& getType() noexcept;
+
 		private:
 			/** Archetype of this type. */
 			Archetype const*		_archetype = nullptr;
@@ -35,15 +39,6 @@ namespace rfk
 			REFUREKU_API std::vector<TypePart>&	getParts()					noexcept;
 
 		public:
-			/**
-			*	@brief	Retrieve the Type object from a given type.
-			*			Identical types will return the same Type object (the returned object will have the same address in memory).
-			* 
-			*	@return The computed type.
-			*/
-			template <typename T>
-			static Type const&							getType()							noexcept;
-
 			/**
 			*	@brief Add multiple type parts to this type object at once.
 			*
@@ -130,7 +125,7 @@ namespace rfk
 			* 
 			*	@return _archetype.
 			*/
-			inline Archetype const*						getArchetype()				const	noexcept;
+			REFUREKU_API Archetype const*				getArchetype()				const	noexcept;
 
 			/**
 			*	@brief Getter for the field _parts.
@@ -147,12 +142,35 @@ namespace rfk
 	/**
 	*	@brief	Retrieve the Type object from a given type.
 	*			Identical types will return the same Type object (the returned object will have the same address in memory).
-	*			Effectively calling rfk::Type::getType<T>();
 	* 
 	*	@return The computed type.
 	*/
 	template <typename T>
-	static Type const& getType() noexcept;
+	Type const& getType() noexcept;
 
 	#include "Refureku/TypeInfo/Type.inl"
+
+	/*
+	*	Export getType<T> instantiations for all fundamental types so that their address is shared among all consumers
+	*/
+	template REFUREKU_API Type const& getType<void>();
+	template REFUREKU_API Type const& getType<std::nullptr_t>();
+	template REFUREKU_API Type const& getType<bool>();
+	template REFUREKU_API Type const& getType<char>();
+	template REFUREKU_API Type const& getType<signed char>();
+	template REFUREKU_API Type const& getType<unsigned char>();
+	template REFUREKU_API Type const& getType<wchar_t>();
+	template REFUREKU_API Type const& getType<char16_t>();
+	template REFUREKU_API Type const& getType<char32_t>();
+	template REFUREKU_API Type const& getType<short>();
+	template REFUREKU_API Type const& getType<unsigned short>();
+	template REFUREKU_API Type const& getType<int>();
+	template REFUREKU_API Type const& getType<unsigned int>();
+	template REFUREKU_API Type const& getType<long>();
+	template REFUREKU_API Type const& getType<unsigned long>();
+	template REFUREKU_API Type const& getType<long long>();
+	template REFUREKU_API Type const& getType<unsigned long long>();
+	template REFUREKU_API Type const& getType<float>();
+	template REFUREKU_API Type const& getType<double>();
+	template REFUREKU_API Type const& getType<long double>();
 }
