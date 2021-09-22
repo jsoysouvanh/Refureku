@@ -166,7 +166,7 @@ namespace rfk
 			* 
 			*	@return The property at the given index.
 			* 
-			*	@exception std::out_of_range if the provided index is greater than the number of properties in this entity.
+			*	@exception std::out_of_range if the provided index is greater or equal to the number of properties in this entity.
 			*/
 			REFUREKU_API Property const*						getProperty(std::size_t propertyIndex)					const;
 

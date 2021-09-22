@@ -111,7 +111,7 @@ namespace rfk
 			* 
 			*	@return The enum values at the provided index.
 			* 
-			*	@exception std::out_of_range if the provided index is greater than the number of properties in this entity.
+			*	@exception std::out_of_range if the provided index is greater or equal to the number of properties in this entity.
 			*/
 			REFUREKU_API EnumValue const&				getEnumValueAt(std::size_t valueIndex)	const;
 

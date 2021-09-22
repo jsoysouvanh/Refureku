@@ -527,7 +527,7 @@ void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& st
 {
 	if (!structClass.parents.empty())
 	{
-		inout_result += generatedEntityVarName + "directParents.reserve(" + std::to_string(structClass.parents.size()) + ");" + env.getSeparator();
+		inout_result += generatedEntityVarName + "setDirectParentsCapacity(" + std::to_string(structClass.parents.size()) + ");" + env.getSeparator();
 
 		for (kodgen::StructClassInfo::ParentInfo parent : structClass.parents)
 		{

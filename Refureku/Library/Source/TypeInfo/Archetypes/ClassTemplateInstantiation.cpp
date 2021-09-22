@@ -12,7 +12,7 @@ ClassTemplateInstantiation::ClassTemplateInstantiation(std::string&& name, std::
 {
 	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
 	assert(instantiatedFrom.getKind() == rfk::EEntityKind::Class || instantiatedFrom.getKind() == rfk::EEntityKind::Struct);
-	assert(static_cast<Class const&>(instantiatedFrom).classKind == EClassKind::Template);
+	assert(static_cast<Class const&>(instantiatedFrom).getClassKind() == EClassKind::Template);
 
 	const_cast<ClassTemplate&>(static_cast<ClassTemplate const&>(instantiatedFrom)).registerClassTemplateInstantiation(*this);
 }

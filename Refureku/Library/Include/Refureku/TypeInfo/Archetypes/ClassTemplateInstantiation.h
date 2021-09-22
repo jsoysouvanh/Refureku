@@ -80,7 +80,7 @@ namespace rfk
 			* 
 			*	@return The template argument at the provided index.
 			*
-			*	@exception std::out_of_range if the provided index is greater than the number of template arguments.
+			*	@exception std::out_of_range if the provided index is greater or equal to the number of template arguments.
 			*/
 			REFUREKU_API TemplateArgument const&	getTemplateArgument(std::size_t argIndex)			const;
 

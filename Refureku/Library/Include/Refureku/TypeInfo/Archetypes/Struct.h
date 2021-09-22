@@ -31,52 +31,45 @@ namespace rfk
 
 	class Struct : public Archetype
 	{
+		public:
+			class Parent
+			{
+				private:
+
+				public:
+					//TODO: Swap this to private
+					EAccessSpecifier	access;
+					Struct const*		type;	//TODO: Rename this to archetype
+
+					Parent(EAccessSpecifier	access,
+						   Struct const*	archetype)	noexcept;
+			};
+
 		private:
 			/** Pointer to the default method used to make an instance of this archetype. */
 			void*								(*_defaultInstantiator)() = nullptr;
 
 			/** List of all custom instantiators for this archetype. */
-			std::vector<StaticMethod const*>	customInstantiators;
+			std::vector<StaticMethod const*>	_customInstantiators;
+
+			/** Kind of a rfk::Struct or rfk::Class instance. */
+			EClassKind							_classKind;
+
+			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
+			std::vector<Parent>					_directParents;
+
 
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const;
 
 		protected:
 			Struct(std::string&&	name,
-				   uint64			id,
-				   uint64			memorySize,
+				   std::size_t		id,
+				   std::size_t		memorySize,
 				   bool				isClass,
 				   EClassKind		classKind)		noexcept;
 
 		public:
-			struct Parent
-			{
-				struct Hasher
-				{
-					size_t operator()(rfk::Struct::Parent const& parent) const
-					{
-						return std::hash<rfk::Struct const*>()(parent.type);
-					}
-				};
-
-				struct Equal
-				{
-					bool operator()(rfk::Struct::Parent const& p1, rfk::Struct::Parent const& p2) const
-					{
-						return p1.type == p2.type;
-					}
-				};
-
-				EAccessSpecifier	access;
-				Struct const*		type;
-			};
-
-			/** Kind of a rfk::Struct or rfk::Class instance. */
-			EClassKind																			classKind;
-
-			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
-			std::unordered_set<Parent, Parent::Hasher, Parent::Equal>							directParents;
-
 			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected subclasses. */
 			std::unordered_set<Struct const*>													subclasses;
 
@@ -96,8 +89,8 @@ namespace rfk
 			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
 
 			REFUREKU_API Struct(std::string&&	name,
-								uint64			id,
-								uint64			memorySize,
+								std::size_t		id,
+								std::size_t		memorySize,
 								bool			isClass)		noexcept;
 			Struct(Struct const&)								= delete;
 			Struct(Struct&&)									= delete;
@@ -123,15 +116,6 @@ namespace rfk
 			Struct const*						getNestedStruct(Predicate predicate)												const;
 
 			/**
-			*	@param structName	Name of the nested struct to look for.
-			*	@param access		Access specifier of the nested struct in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
-			*
-			*	@return The found nested struct if any, else nullptr.
-			*/
-			REFUREKU_API Struct const*			getNestedStruct(std::string			structName,
-																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
-
-			/**
 			*	@brief Retrieve from this struct a nested class matching with a given predicate.
 			*	
 			*	@param predicate Predicate returning true for any matching class.
@@ -142,15 +126,6 @@ namespace rfk
 			Struct const*						getNestedClass(Predicate predicate)													const;
 
 			/**
-			*	@param className	Name of the nested class to look for.
-			*	@param access		Access specifier of the nested class in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
-			*
-			*	@return The found nested class if any, else nullptr.
-			*/
-			REFUREKU_API Struct const*			getNestedClass(std::string		className,
-															   EAccessSpecifier	access = EAccessSpecifier::Undefined)				const	noexcept;
-
-			/**
 			*	@brief Retrieve from this struct a nested enum matching with a given predicate.
 			*	
 			*	@param predicate Predicate returning true for any matching enum.
@@ -159,15 +134,6 @@ namespace rfk
 			*/
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const*>>>
 			Enum const*							getNestedEnum(Predicate predicate)													const;
-
-			/**
-			*	@param enumName	Name of the nested enum to look for.
-			*	@param access	Access specifier of the nested enum in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
-			*
-			*	@return The found nested class if any, else nullptr.
-			*/
-			REFUREKU_API Enum const*			getNestedEnum(std::string		enumName,
-															  EAccessSpecifier	access = EAccessSpecifier::Undefined)				const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a field matching with a given predicate.
@@ -183,22 +149,6 @@ namespace rfk
 														 bool		shouldInspectInherited	= false)								const;
 
 			/**
-			*	@param fieldName Name of the field to retrieve.
-			*	@param minFlags Requirements the queried field should fulfill.
-			*					Keep in mind that the returned field should contain all of the specified flags,
-			*					so setting for example Public and Protected will always return nullptr.
-			*					EFieldFlags::Default means no requirement, so the first field named fieldName will be returned.
-			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
-			*								  If false, only fields introduced by this struct will be considered.
-			*
-			*	@return The first field named fieldName fulfilling all requirements.
-			*			The method returns nullptr if none was found. 
-			*/
-			REFUREKU_API Field const*			getField(std::string	fieldName,
-														 EFieldFlags	minFlags				= EFieldFlags::Default,
-														 bool			shouldInspectInherited	= false)							const	noexcept;
-
-			/**
 			*	@brief Retrieve from this struct all the fields matching with a given predicate.
 			*	
 			*	@param predicate Predicate returning true for any matching field.
@@ -210,21 +160,6 @@ namespace rfk
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Field const*>>>
 			std::vector<Field const*>			getFields(Predicate	predicate,
 														  bool		shouldInspectInherited	= false)								const;
-
-			/**
-			*	@param fieldName Name of the fields to retrieve.
-			*	@param minFlags Requirements the queried fields should fulfill.
-			*					Keep in mind that the returned fields should contain all of the specified flags,
-			*					so setting for example Public and Protected will always return an empty vector.
-			*					EFieldFlags::Default means no requirement, so all fields named fieldName will be returned.
-			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
-			*								  If false, only fields introduced by this struct will be considered.
-			*
-			*	@return A vector of all fields named fieldName fulfilling all requirements.
-			*/
-			REFUREKU_API std::vector<Field const*>	getFields(std::string	fieldName,
-															  EFieldFlags	minFlags				= EFieldFlags::Default,
-															  bool			shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a static field matching with a given predicate.
@@ -240,23 +175,6 @@ namespace rfk
 															   bool			shouldInspectInherited	= false)						const;
 
 			/**
-			*	@param fieldName Name of the static field to retrieve.
-			*	@param minFlags Requirements the queried static field should fulfill.
-			*					Keep in mind that the returned static field should contain all of the specified flags,
-			*					so setting for example Public and Protected will always return nullptr.
-			*					EFieldFlags::Default means no requirement, so the first static field named fieldName will be returned.
-			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
-			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
-			*								  If false, only static fields introduced by this struct will be considered.
-			*
-			*	@return The first static field named fieldName fulfilling all requirements.
-			*			The method returns nullptr if none was found. 
-			*/
-			REFUREKU_API StaticField const*					getStaticField(std::string	fieldName,
-																		   EFieldFlags	minFlags				= EFieldFlags::Default,
-																		   bool			shouldInspectInherited	= false)				const	noexcept;
-
-			/**
 			*	@brief Retrieve from this struct all static fields matching with a given predicate.
 			*	
 			*	@param predicate Predicate returning true for any matching static field.
@@ -268,22 +186,6 @@ namespace rfk
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticField const*>>>
 			std::vector<StaticField const*>		getStaticFields(Predicate	predicate,
 																bool		shouldInspectInherited	= false)						const;
-
-			/**
-			*	@param fieldName Name of the static fields to retrieve.
-			*	@param minFlags Requirements the queried static fields should fulfill.
-			*					Keep in mind that the returned static fields should contain all of the specified flags,
-			*					so setting for example Public and Protected will always return an empty vector.
-			*					EFieldFlags::Default means no requirement, so all static fields named fieldName will be returned.
-			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
-			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
-			*								  If false, only static fields introduced by this struct will be considered.
-			*
-			*	@return A vector of all static fields named fieldName fulfilling all requirements.
-			*/
-			REFUREKU_API std::vector<StaticField const*>	getStaticFields(std::string	fieldName,
-																			EFieldFlags	minFlags				= EFieldFlags::Default,
-																			bool		shouldInspectInherited	= false)				const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a method matching with a given predicate.
@@ -319,21 +221,6 @@ namespace rfk
 														  bool					shouldInspectParents	= false)					const	noexcept;
 
 			/**
-			*	@param methodName Name of the method to retrieve.
-			*	@param minFlags Requirements the queried method should fulfill.
-			*					Keep in mind that the returned method should contain all of the specified flags,
-			*					so setting for example Public and Protected will always return nullptr.
-			*					EMethodFlags::Default means no requirement, so the first method named methodName will be returned.
-			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
-			*								  If false, only methods introduced by this struct will be considered.
-			*
-			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
-			*/
-			REFUREKU_API Method const*			getMethod(std::string const&	methodName,
-														  EMethodFlags			minFlags				= EMethodFlags::Default,
-														  bool					shouldInspectInherited	= false)					const	noexcept;
-
-			/**
 			*	@brief Retrieve from a struct all methods matching with a given predicate.
 			*	
 			*	@param predicate				Predicate defining the matching method.
@@ -345,21 +232,6 @@ namespace rfk
 			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const*>>>
 			std::vector<Method const*>			getMethods(Predicate	predicate,
 														   bool			shouldInspectInherited = false)								const;
-
-			/**
-			*	@param methodName Name of the methods to retrieve.
-			*	@param minFlags Requirements the queried methods should fulfill.
-			*					Keep in mind that the returned methods should contain all of the specified flags,
-			*					so setting for example Public and Protected will always return an empty vector.
-			*					EMethodFlags::Default means no requirement, so all methods named methodName will be returned.
-			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
-			*								  If false, only methods introduced by this struct will be considered.
-			*
-			*	@return A vector of all methods named methodName fulfilling all requirements. 
-			*/
-			REFUREKU_API std::vector<Method const*>	getMethods(std::string const&	methodName,
-															   EMethodFlags			minFlags				= EMethodFlags::Default,
-															   bool					shouldInspectInherited	= false)					const	noexcept;
 
 			/**
 			*	@brief Retrieve from this struct a static method matching with a given predicate.
@@ -396,6 +268,182 @@ namespace rfk
 																bool				shouldInspectInherited	= false)				const	noexcept;
 
 			/**
+			*	@brief Retrieve from this struct all static methods matching with a given predicate.
+			*	
+			*	@param predicate				Predicate returning true for any matching static method.
+			*	@param shouldInspectInherited	Should inherited static methods be considered as well in the search process?
+			*									If false, only static methods introduced by this struct will be considered.
+			*	
+			*	@return All static methods matching with the given predicate.
+			*/
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const*>>>
+			std::vector<StaticMethod const*>	getStaticMethods(Predicate	predicate,
+																 bool		shouldInspectInherited = false)							const;
+
+			/**
+			*	@brief Make an instance of the class represented by this archetype.
+			*
+			*	If no argument is specified, the default constructor will be used.
+			*	In case the class isn't default constructible, the matching user-specified custom instantiator will be used.
+			*	If one or more arguments are provided, the matching user-specified custom instantiator will be used.
+			*	
+			*	For more information about custom instantiators, see https://github.com/jsoysouvanh/Refureku/wiki/Properties#custominstantiator-method.
+			*
+			*	@note Memory is not auto-managed and must be freed manually by the user.
+			*
+			*	@return an instance of this struct if a suitable constructor (no params only) / custom instantator was found,
+			*			else nullptr.
+			*/
+			template <typename ReturnType = void, typename... ArgTypes>
+			ReturnType*							makeInstance(ArgTypes&&... args)													const;
+
+			/**
+			*	@brief Add the type T to this type's parents if T is a reflected class.
+			* 
+			*	@param inheritanceAccess The inheritance access for the provided parent.
+			*/
+			template <typename T>
+			void								addToParents(EAccessSpecifier inheritanceAccess)											noexcept;
+
+			/**
+			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
+			*			If the provided static method takes no parameter, it will override the default instantiator.
+			*	
+			*	@param instantiator Pointer to the static method.
+			*/
+			template <typename ReturnType>
+			void								addCustomInstantiator(StaticMethod const* instantiator)										noexcept;
+
+			/**
+			*	@param structName	Name of the nested struct to look for.
+			*	@param access		Access specifier of the nested struct in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested struct if any, else nullptr.
+			*/
+			REFUREKU_API Struct const*			getNestedStruct(std::string			structName,
+																EAccessSpecifier	access = EAccessSpecifier::Undefined)			const	noexcept;
+
+			/**
+			*	@param className	Name of the nested class to look for.
+			*	@param access		Access specifier of the nested class in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if any, else nullptr.
+			*/
+			REFUREKU_API Struct const*			getNestedClass(std::string		className,
+															   EAccessSpecifier	access = EAccessSpecifier::Undefined)				const	noexcept;
+
+			
+
+			/**
+			*	@param enumName	Name of the nested enum to look for.
+			*	@param access	Access specifier of the nested enum in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if any, else nullptr.
+			*/
+			REFUREKU_API Enum const*			getNestedEnum(std::string		enumName,
+															  EAccessSpecifier	access = EAccessSpecifier::Undefined)				const	noexcept;
+
+			/**
+			*	@param fieldName Name of the field to retrieve.
+			*	@param minFlags Requirements the queried field should fulfill.
+			*					Keep in mind that the returned field should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return nullptr.
+			*					EFieldFlags::Default means no requirement, so the first field named fieldName will be returned.
+			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
+			*								  If false, only fields introduced by this struct will be considered.
+			*
+			*	@return The first field named fieldName fulfilling all requirements.
+			*			The method returns nullptr if none was found. 
+			*/
+			REFUREKU_API Field const*			getField(std::string	fieldName,
+														 EFieldFlags	minFlags				= EFieldFlags::Default,
+														 bool			shouldInspectInherited	= false)							const	noexcept;
+
+			
+
+			/**
+			*	@param fieldName Name of the fields to retrieve.
+			*	@param minFlags Requirements the queried fields should fulfill.
+			*					Keep in mind that the returned fields should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return an empty vector.
+			*					EFieldFlags::Default means no requirement, so all fields named fieldName will be returned.
+			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
+			*								  If false, only fields introduced by this struct will be considered.
+			*
+			*	@return A vector of all fields named fieldName fulfilling all requirements.
+			*/
+			REFUREKU_API std::vector<Field const*>	getFields(std::string	fieldName,
+															  EFieldFlags	minFlags				= EFieldFlags::Default,
+															  bool			shouldInspectInherited	= false)						const	noexcept;
+
+			
+
+			/**
+			*	@param fieldName Name of the static field to retrieve.
+			*	@param minFlags Requirements the queried static field should fulfill.
+			*					Keep in mind that the returned static field should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return nullptr.
+			*					EFieldFlags::Default means no requirement, so the first static field named fieldName will be returned.
+			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
+			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
+			*								  If false, only static fields introduced by this struct will be considered.
+			*
+			*	@return The first static field named fieldName fulfilling all requirements.
+			*			The method returns nullptr if none was found. 
+			*/
+			REFUREKU_API StaticField const*					getStaticField(std::string	fieldName,
+																		   EFieldFlags	minFlags				= EFieldFlags::Default,
+																		   bool			shouldInspectInherited	= false)				const	noexcept;
+
+			
+
+			/**
+			*	@param fieldName Name of the static fields to retrieve.
+			*	@param minFlags Requirements the queried static fields should fulfill.
+			*					Keep in mind that the returned static fields should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return an empty vector.
+			*					EFieldFlags::Default means no requirement, so all static fields named fieldName will be returned.
+			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
+			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
+			*								  If false, only static fields introduced by this struct will be considered.
+			*
+			*	@return A vector of all static fields named fieldName fulfilling all requirements.
+			*/
+			REFUREKU_API std::vector<StaticField const*>	getStaticFields(std::string	fieldName,
+																			EFieldFlags	minFlags				= EFieldFlags::Default,
+																			bool		shouldInspectInherited	= false)				const	noexcept;
+
+			/**
+			*	@param methodName Name of the method to retrieve.
+			*	@param minFlags Requirements the queried method should fulfill.
+			*					Keep in mind that the returned method should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return nullptr.
+			*					EMethodFlags::Default means no requirement, so the first method named methodName will be returned.
+			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
+			*								  If false, only methods introduced by this struct will be considered.
+			*
+			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
+			*/
+			REFUREKU_API Method const*			getMethod(std::string const&	methodName,
+														  EMethodFlags			minFlags				= EMethodFlags::Default,
+														  bool					shouldInspectInherited	= false)					const	noexcept;
+
+			/**
+			*	@param methodName Name of the methods to retrieve.
+			*	@param minFlags Requirements the queried methods should fulfill.
+			*					Keep in mind that the returned methods should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return an empty vector.
+			*					EMethodFlags::Default means no requirement, so all methods named methodName will be returned.
+			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
+			*								  If false, only methods introduced by this struct will be considered.
+			*
+			*	@return A vector of all methods named methodName fulfilling all requirements. 
+			*/
+			REFUREKU_API std::vector<Method const*>	getMethods(std::string const&	methodName,
+															   EMethodFlags			minFlags				= EMethodFlags::Default,
+															   bool					shouldInspectInherited	= false)					const	noexcept;
+
+			/**
 			*	@param methodName Name of the static method to retrieve.
 			*	@param minFlags Requirements the queried static method should fulfill.
 			*					Keep in mind that the returned static method should contain all of the specified flags,
@@ -410,19 +458,6 @@ namespace rfk
 			REFUREKU_API StaticMethod const*	getStaticMethod(std::string const&	methodName,
 																EMethodFlags		minFlags				= EMethodFlags::Default,
 																bool				shouldInspectInherited	= false)				const	noexcept;
-
-			/**
-			*	@brief Retrieve from this struct all static methods matching with a given predicate.
-			*	
-			*	@param predicate				Predicate returning true for any matching static method.
-			*	@param shouldInspectInherited	Should inherited static methods be considered as well in the search process?
-			*									If false, only static methods introduced by this struct will be considered.
-			*	
-			*	@return All static methods matching with the given predicate.
-			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const*>>>
-			std::vector<StaticMethod const*>	getStaticMethods(Predicate	predicate,
-																 bool		shouldInspectInherited = false)							const;
 
 			/**
 			*	@param methodName Name of the static methods to retrieve.
@@ -450,23 +485,6 @@ namespace rfk
 			REFUREKU_API std::vector<Struct const*>	getDirectSubclasses()															const	noexcept;
 
 			/**
-			*	@brief Make an instance of the class represented by this archetype.
-			*
-			*	If no argument is specified, the default constructor will be used.
-			*	In case the class isn't default constructible, the matching user-specified custom instantiator will be used.
-			*	If one or more arguments are provided, the matching user-specified custom instantiator will be used.
-			*	
-			*	For more information about custom instantiators, see https://github.com/jsoysouvanh/Refureku/wiki/Properties#custominstantiator-method.
-			*
-			*	@note Memory is not auto-managed and must be freed manually by the user.
-			*
-			*	@return an instance of this struct if a suitable constructor (no params only) / custom instantator was found,
-			*			else nullptr.
-			*/
-			template <typename ReturnType = void, typename... ArgTypes>
-			ReturnType*	makeInstance(ArgTypes&&... args)						const;
-
-			/**
 			*	@return true if this type is a subclass from the provided type, else false.
 			*/
 			REFUREKU_API bool		isSubclassOf(Struct const& otherType)					const	noexcept;
@@ -476,13 +494,7 @@ namespace rfk
 			*/
 			REFUREKU_API bool		isBaseOf(Struct const& otherType)						const	noexcept;
 
-			/**
-			*	@brief Add the type T to this type's parents if T is a reflected class.
-			* 
-			*	@param inheritanceAccess The inheritance access for the provided parent.
-			*/
-			template <typename T>
-			void		addToParents(EAccessSpecifier inheritanceAccess)							noexcept;
+			
 
 			/**
 			*	@brief Add the parent to this type's parent if it is not nullptr.
@@ -492,15 +504,6 @@ namespace rfk
 			*/
 			REFUREKU_API void		addToParents(Struct const*		parent,
 												 EAccessSpecifier	inheritanceAccess)				noexcept;
-
-			/**
-			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
-			*			If the provided static method takes no parameter, it will override the default instantiator.
-			*	
-			*	@param instantiator Pointer to the static method.
-			*/
-			template <typename ReturnType>
-			void		addCustomInstantiator(StaticMethod const* instantiator)						noexcept;
 			
 			/**
 			*	@brief	Setup the default instantiator to use when a Struct::makeInstance is called without parameters.
@@ -524,11 +527,11 @@ namespace rfk
 			*			The name of the field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
 			REFUREKU_API Field*			addField(std::string	fieldName,
-												 uint64			entityId,
+												 std::size_t	entityId,
 												 Type const&	type,
 												 EFieldFlags	flags,
 												 Struct const*	outerEntity_,
-												 uint64			memoryOffset)						noexcept;
+												 std::size_t	memoryOffset)						noexcept;
 
 			/**
 			*	@brief Add a static field to the struct.
@@ -544,7 +547,7 @@ namespace rfk
 			*			The name of the static field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
 			REFUREKU_API StaticField*	addStaticField(std::string		fieldName,
-													   uint64			entityId,
+													   std::size_t		entityId,
 													   Type const&		type,
 													   EFieldFlags		flags,
 													   Struct const*	outerEntity_,
@@ -565,7 +568,7 @@ namespace rfk
 			*			The name of the static field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
 			REFUREKU_API StaticField*	addStaticField(std::string		fieldName,
-													   uint64			entityId,
+													   std::size_t		entityId,
 													   Type const&		type,
 													   EFieldFlags		flags,
 													   Struct const*	outerEntity_,
@@ -584,7 +587,7 @@ namespace rfk
 			*			The name of the method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
 			REFUREKU_API Method*		addMethod(std::string					methodName,
-												  uint64						entityId,
+												  std::size_t					entityId,
 												  Type const&					returnType,
 												  std::unique_ptr<ICallable>	internalMethod,
 												  EMethodFlags					flags)				noexcept;
@@ -602,7 +605,7 @@ namespace rfk
 			*			The name of the static method **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
 			REFUREKU_API StaticMethod*	addStaticMethod(std::string					methodName,
-														uint64						entityId,
+														std::size_t					entityId,
 														Type const&					returnType,
 														std::unique_ptr<ICallable>	internalMethod,
 														EMethodFlags				flags)			noexcept;
@@ -648,6 +651,38 @@ namespace rfk
 			*	@return A rfk::ClassTemplateInstantiation const* if the struct is a template instantiation, else nullptr.
 			*/
 			inline ClassTemplateInstantiation const*	asTemplateInstantiation()	const	noexcept;
+
+			/*
+			*	@brief Getter for the field _classKind.
+			*
+			*	@return _classKind.
+			*/
+			REFUREKU_API EClassKind						getClassKind()				const	noexcept;
+
+			/**
+			*	@brief Get the index'th direct parent of this struct.
+			* 
+			*	@return The index'th direct parent of this struct.
+			* 
+			*	@exception std::out_of_range if the provided index is greater or equal to the number of direct parents of this struct.
+			*/
+			REFUREKU_API Parent const&					getDirectParentAt(std::size_t index)	const;
+
+			/**
+			*	@brief Get the number of direct parents this struct is inheriting from.
+			* 
+			*	@return The number of direct parents this struct is inheriting from.
+			*/
+			REFUREKU_API std::size_t					getDirectParentsCount()					const	noexcept;
+
+			/**
+			*	@brief	Set the number of direct parents for this struct.
+			*			Useful to avoid reallocations and avoid having unused memory.
+			*			If the number of direct parents is already >= to the provided count, this method has no effect.
+			* 
+			*	@param capacity The number of direct parents of this struct.
+			*/
+			REFUREKU_API void							setDirectParentsCapacity(std::size_t capacity)	noexcept;
 	};
 
 	/**

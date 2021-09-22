@@ -21,7 +21,7 @@ initialized = true;
 type.setDefaultInstantiator(&rfk::defaultInstantiator<CustomInstantiator>);
 type.setPropertiesCapacity(1);
 static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Struct");static PropertySettings property_291713889535622996u_PropertySettings_0{rfk::EEntityKind::Method};type.addProperty(&property_291713889535622996u_PropertySettings_0);
-type.directParents.reserve(1);
+type.setDirectParentsCapacity(1);
 type.addToParents<rfk::Property>(static_cast<rfk::EAccessSpecifier>(1));
 CustomInstantiator::_rfk_registerChildClass<CustomInstantiator>(type);
 }

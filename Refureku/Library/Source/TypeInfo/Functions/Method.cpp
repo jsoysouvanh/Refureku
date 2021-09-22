@@ -20,13 +20,14 @@ void Method::inheritBaseMethodProperties() noexcept
 	Struct const* ownerStruct = reinterpret_cast<Struct const*>(getOuterEntity());
 
 	//Check inherited properties if this method is an override
-	if ((getFlags() & EMethodFlags::Override) == EMethodFlags::Override && !ownerStruct->directParents.empty())
+	std::size_t directParentsCount = ownerStruct->getDirectParentsCount();
+	if ((getFlags() & EMethodFlags::Override) == EMethodFlags::Override && directParentsCount != 0u)
 	{
 		Method const* parentMethod = nullptr;
 
-		for (Struct::Parent const& parent : ownerStruct->directParents)
+		for (std::size_t i = 0; i < directParentsCount; i++)
 		{
-			parentMethod = parent.type->getMethod([this](Method const* other){ return getName() == other->getName() && hasSamePrototype(other) && isConst() == other->isConst(); }, true);
+			parentMethod = ownerStruct->getDirectParentAt(i).type->getMethod([this](Method const* other){ return getName() == other->getName() && hasSamePrototype(other) && isConst() == other->isConst(); }, true);
 
 			if (parentMethod != nullptr)
 			{

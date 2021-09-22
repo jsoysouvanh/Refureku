@@ -69,7 +69,7 @@ namespace rfk
 			*
 			*	@return The template parameter at the specified index.
 			* 
-			*	@exception std::out_of_range if the provided index is greater than the number of template parameters.
+			*	@exception std::out_of_range if the provided index is greater or equal to the number of template parameters.
 			*/
 			REFUREKU_API TemplateParameter const&			getTemplateParameter(std::size_t parameterIndex)				const;
 
@@ -85,7 +85,7 @@ namespace rfk
 			*
 			*	@return The instance at the specified index.
 			* 
-			*	@exception std::out_of_range if the provided index is greater than the number of registered instances.
+			*	@exception std::out_of_range if the provided index is greater or equal to the number of registered instances.
 			*/
 			REFUREKU_API ClassTemplateInstantiation const&	getInstantiation(std::size_t instanceIndex)						const;
 

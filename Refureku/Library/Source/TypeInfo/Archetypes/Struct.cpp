@@ -4,13 +4,19 @@
 
 using namespace rfk;
 
-Struct::Struct(std::string&& name, uint64 id, uint64 memorySize, bool isClass, EClassKind classKind) noexcept:
-	Archetype(std::forward<std::string>(name), id, isClass ? EEntityKind::Class : EEntityKind::Struct, memorySize),
-	classKind{classKind}
+Struct::Parent::Parent(EAccessSpecifier	access, Struct const* archetype) noexcept:
+	access{access},
+	type{archetype}
 {
 }
 
-Struct::Struct(std::string&& name, uint64 id, uint64 memorySize, bool isClass) noexcept:
+Struct::Struct(std::string&& name, std::size_t id, std::size_t memorySize, bool isClass, EClassKind classKind) noexcept:
+	Archetype(std::forward<std::string>(name), id, isClass ? EEntityKind::Class : EEntityKind::Struct, memorySize),
+	_classKind{classKind}
+{
+}
+
+Struct::Struct(std::string&& name, std::size_t id, std::size_t memorySize, bool isClass) noexcept:
 	Struct(std::forward<std::string>(name), id, memorySize, isClass, rfk::EClassKind::Standard)
 {
 }
@@ -182,7 +188,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	{
 		Method const* result = nullptr;
 
-		for (Struct::Parent const& parent : directParents)
+		for (Struct::Parent const& parent : _directParents)
 		{
 			result = parent.type->getMethod(methodName, minFlags, true);
 
@@ -217,7 +223,7 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMe
 	{
 		std::vector<Method const*> parentResult;
 		
-		for (Struct::Parent const& parent : directParents)
+		for (Struct::Parent const& parent : _directParents)
 		{
 			parentResult = parent.type->getMethods(methodName, minFlags, true);
 
@@ -250,7 +256,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	{
 		StaticMethod const* result = nullptr;
 
-		for (Struct::Parent const& parent : directParents)
+		for (Struct::Parent const& parent : _directParents)
 		{
 			result = parent.type->getStaticMethod(methodName, minFlags, true);
 
@@ -285,7 +291,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	{
 		std::vector<StaticMethod const*> parentResult;
 
-		for (Struct::Parent const& parent : directParents)
+		for (Struct::Parent const& parent : _directParents)
 		{
 			parentResult = parent.type->getStaticMethods(methodName, minFlags, true);
 
@@ -306,7 +312,7 @@ std::vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 	for (Struct const* child : subclasses)
 	{
 		//Search this struct in subclasses's parents
-		for (Parent const& childParent : child->directParents)
+		for (Parent const& childParent : child->_directParents)
 		{
 			if (childParent.type == this)
 			{
@@ -338,14 +344,14 @@ void Struct::addToParents(Struct const* parent, EAccessSpecifier inheritanceAcce
 {
 	if (parent != nullptr)
 	{
-		directParents.emplace(rfk::Struct::Parent{ inheritanceAccess, parent });
+		_directParents.emplace_back(inheritanceAccess, parent);
 
 		//Inherit parent properties
 		inheritProperties(*parent);
 	}
 }
 
-Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+Method* Struct::addMethod(std::string methodName, std::size_t entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
 {
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
 
@@ -353,7 +359,7 @@ Method* Struct::addMethod(std::string methodName, uint64 entityId, Type const& r
 	return const_cast<Method*>(&*methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
 }
 
-StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+StaticMethod* Struct::addStaticMethod(std::string methodName, std::size_t entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
 {
 	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
 
@@ -361,7 +367,7 @@ StaticMethod* Struct::addStaticMethod(std::string methodName, uint64 entityId, T
 	return const_cast<StaticMethod*>(&*staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
 }
 
-Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, uint64 memoryOffset) noexcept
+Field* Struct::addField(std::string	fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, std::size_t memoryOffset) noexcept
 {
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
 
@@ -369,7 +375,7 @@ Field* Struct::addField(std::string	fieldName, uint64 entityId, Type const& type
 	return const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset, outerEntity));
 }
 
-StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void* fieldPtr) noexcept
+StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void* fieldPtr) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
@@ -378,7 +384,7 @@ StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type
 	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
 }
 
-StaticField* Struct::addStaticField(std::string fieldName, uint64 entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void const* fieldPtr) noexcept
+StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void const* fieldPtr) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
@@ -399,4 +405,24 @@ Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessS
 	result->setOuterEntity(this);
 
 	return result;
+}
+
+EClassKind Struct::getClassKind() const noexcept
+{
+	return _classKind;
+}
+
+Struct::Parent const& Struct::getDirectParentAt(std::size_t index) const
+{
+	return _directParents.at(index);
+}
+
+std::size_t Struct::getDirectParentsCount() const noexcept
+{
+	return _directParents.size();
+}
+
+void Struct::setDirectParentsCapacity(std::size_t capacity) noexcept
+{
+	_directParents.reserve(capacity);
 }

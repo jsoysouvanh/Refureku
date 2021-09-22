@@ -172,9 +172,9 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	{
 		Method const* result = nullptr;
 
-		for (Struct::Parent const& parent : directParents)
+		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = parent.type->getMethod(methodName, minFlags, true);
+			result = getDirectParentAt(i).type->getMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -203,9 +203,9 @@ Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited
 	{
 		Method const* result = nullptr;
 
-		for (Struct::Parent const& parent : directParents)
+		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = parent.type->getMethod<Predicate>(predicate, true);
+			result = getDirectParentAt(i).type->getMethod<Predicate>(predicate, true);
 
 			if (result != nullptr)
 			{
@@ -236,9 +236,9 @@ std::vector<Method const*> Struct::getMethods(Predicate	predicate, bool shouldIn
 	{
 		std::vector<Method const*> parentResult;
 
-		for (Struct::Parent const& parent : directParents)
+		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			parentResult = parent.type->getMethods(predicate, true);
+			parentResult = getDirectParentAt(i).type->getMethods(predicate, true);
 
 			result.insert(result.end(), parentResult.begin(), parentResult.end());
 		}
@@ -269,9 +269,9 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	{
 		StaticMethod const* result = nullptr;
 
-		for (Struct::Parent const& parent : directParents)
+		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = parent.type->getStaticMethod(methodName, minFlags, true);
+			result = getDirectParentAt(i).type->getStaticMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -300,9 +300,9 @@ StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInsp
 	{
 		StaticMethod const* result = nullptr;
 
-		for (Struct::Parent const& parent : directParents)
+		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = parent.type->getStaticMethod(predicate, true);
+			result = getDirectParentAt(i).type->getStaticMethod(predicate, true);
 
 			if (result != nullptr)
 			{
@@ -333,9 +333,9 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, b
 	{
 		std::vector<StaticMethod const*> parentResult;
 
-		for (Struct::Parent const& parent : directParents)
+		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			parentResult = parent.type->getStaticMethods(predicate, true);
+			parentResult = getDirectParentAt(0).type->getStaticMethods(predicate, true);
 
 			result.insert(result.end(), parentResult.begin(), parentResult.end());
 		}
@@ -347,7 +347,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, b
 template <typename ReturnType, typename... ArgTypes>
 ReturnType* Struct::makeInstanceFromCustomInstantiator(ArgTypes&&... args) const
 {
-	for (StaticMethod const* instantiator : customInstantiators)
+	for (StaticMethod const* instantiator : _customInstantiators)
 	{
 		if (instantiator->hasSameArguments<ArgTypes...>())
 		{
@@ -388,7 +388,7 @@ void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 	}
 	else
 	{
-		customInstantiators.emplace_back(instantiator);
+		_customInstantiators.push_back(instantiator);
 	}
 }
 
@@ -407,7 +407,7 @@ void* defaultInstantiator()
 
 inline bool Struct::isTemplate() const noexcept
 {
-	return classKind == EClassKind::Template;
+	return _classKind == EClassKind::Template;
 }
 
 inline ClassTemplate const* Struct::asTemplate() const noexcept
@@ -417,7 +417,7 @@ inline ClassTemplate const* Struct::asTemplate() const noexcept
 
 inline bool	Struct::isTemplateInstantiation() const noexcept
 {
-	return classKind == EClassKind::TemplateInstantiation;
+	return _classKind == EClassKind::TemplateInstantiation;
 }
 
 inline ClassTemplateInstantiation const* Struct::asTemplateInstantiation() const noexcept
