@@ -27,7 +27,7 @@ namespace rfk
 	//Forward declarations
 	class Enum;
 	class ClassTemplate;
-	class ClassTemplateInstance;
+	class ClassTemplateInstantiation;
 
 	class Struct : public Archetype
 	{
@@ -625,29 +625,29 @@ namespace rfk
 			* 
 			*	@return true if the struct represents a template, else false.
 			*/
-			inline bool							isTemplate()			const	noexcept;
+			inline bool									isTemplate()			const	noexcept;
 
 			/**
 			*	@brief	Cast the struct to rfk::ClassTemplate const* if it is a template.
 			* 
 			*	@return A rfk::ClassTemplate const* if the struct is a template, else nullptr.
 			*/
-			inline ClassTemplate const*			asTemplate()			const	noexcept;
+			inline ClassTemplate const*					asTemplate()			const	noexcept;
 
 			/**
-			*	@brief	Check if this struct is a template instance or not.
-			*			If the method returns true, the object is safely castable to rfk::ClassTemplateInstance.
+			*	@brief	Check if this struct is a template instantiation or not.
+			*			If the method returns true, the object is safely castable to rfk::ClassTemplateInstantiation.
 			* 
-			*	@return true if the struct represents a template instance, else false.
+			*	@return true if the struct represents a template instantiation, else false.
 			*/
-			inline bool							isTemplateInstance()	const	noexcept;
+			inline bool									isTemplateInstantiation()	const	noexcept;
 
 			/**
-			*	@brief	Cast the struct to rfk::ClassTemplateInstance const* if it is a template instance.
+			*	@brief	Cast the struct to rfk::ClassTemplateInstantiation const* if it is a template instantiation.
 			* 
-			*	@return A rfk::ClassTemplateInstance const* if the struct is a template instance, else nullptr.
+			*	@return A rfk::ClassTemplateInstantiation const* if the struct is a template instantiation, else nullptr.
 			*/
-			inline ClassTemplateInstance const*	asTemplateInstance()	const	noexcept;
+			inline ClassTemplateInstantiation const*	asTemplateInstantiation()	const	noexcept;
 	};
 
 	/**

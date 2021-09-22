@@ -26,7 +26,7 @@ namespace rfk
 		friend class NamespaceFragmentRegisterer;
 		friend class ArchetypeRegisterer;
 		friend class DefaultEntityRegisterer;
-		friend class ClassTemplateInstanceRegisterer;
+		friend class ClassTemplateInstantiationRegisterer;
 		friend REFUREKU_API Database const& getDatabase() noexcept;
 
 		private:

@@ -11,8 +11,8 @@
 #include <Refureku/TypeInfo/Archetypes/GetArchetype.h>
 #include <Refureku/TypeInfo/Archetypes/Class.h>
 #include <Refureku/TypeInfo/Archetypes/ClassTemplate.h>
-#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h>
-#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.h>
+#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstantiation.h>
+#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstantiationRegisterer.h>
 namespace rfk {class Function;class Variable;}
 
 #define ParseAllNested_GENERATED	\

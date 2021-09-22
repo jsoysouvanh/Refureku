@@ -6,25 +6,29 @@
 */
 
 template <typename... Types>
-bool ClassTemplateInstance::hasSameTemplateArguments() const noexcept
+bool ClassTemplateInstantiation::hasSameTemplateArguments() const noexcept
 {
+	//TODO: Remove the std::array dependency
 	static std::array<Archetype const*, sizeof...(Types)> archetypes = { { rfk::getArchetype<Types>()... } };
 
 	return hasSameTemplateArguments<sizeof...(Types)>(archetypes);
 }
 
 template <size_t ArraySize>
-bool ClassTemplateInstance::hasSameTemplateArguments(std::array<Archetype const*, ArraySize> const& archetypes) const noexcept
+bool ClassTemplateInstantiation::hasSameTemplateArguments(std::array<Archetype const*, ArraySize> const& archetypes) const noexcept
 {
-	if (templateArguments.size() != archetypes.size())
+	std::size_t templateArgumentsCount = getTemplateArgumentsCount();
+
+	//TODO: Remove the std::array dependency
+	if (templateArgumentsCount != ArraySize)
 	{
 		return false;
 	}
 
-	for (size_t i = 0; i < templateArguments.size(); i++)
+	for (std::size_t i = 0; i < templateArgumentsCount; i++)
 	{
 		//Can't assert equality when archetype is nullptr since it represents all non-reflected types
-		if (archetypes[i] == nullptr || archetypes[i] != templateArguments[i].archetype)
+		if (archetypes[i] == nullptr || archetypes[i] != getTemplateArgument(i).archetype)
 		{
 			return false;
 		}

@@ -30,9 +30,9 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/GetArchetype.cpp
 					Source/TypeInfo/Archetypes/ClassTemplate.cpp
 					Source/TypeInfo/Archetypes/TemplateParameter.cpp
-					Source/TypeInfo/Archetypes/ClassTemplateInstance.cpp
 					Source/TypeInfo/Archetypes/TemplateArgument.cpp
-					Source/TypeInfo/Archetypes/ClassTemplateInstanceRegisterer.cpp
+					Source/TypeInfo/Archetypes/ClassTemplateInstantiation.cpp
+					Source/TypeInfo/Archetypes/ClassTemplateInstantiationRegisterer.cpp
 
 					Source/TypeInfo/Variables/VariableBase.cpp
 					Source/TypeInfo/Variables/Variable.cpp

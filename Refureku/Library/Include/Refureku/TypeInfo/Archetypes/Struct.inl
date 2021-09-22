@@ -415,12 +415,12 @@ inline ClassTemplate const* Struct::asTemplate() const noexcept
 	return isTemplate() ? reinterpret_cast<ClassTemplate const*>(this) : nullptr;
 }
 
-inline bool	Struct::isTemplateInstance() const noexcept
+inline bool	Struct::isTemplateInstantiation() const noexcept
 {
-	return classKind == EClassKind::TemplateInstance;
+	return classKind == EClassKind::TemplateInstantiation;
 }
 
-inline ClassTemplateInstance const* Struct::asTemplateInstance() const noexcept
+inline ClassTemplateInstantiation const* Struct::asTemplateInstantiation() const noexcept
 {
-	return isTemplateInstance() ? reinterpret_cast<ClassTemplateInstance const*>(this) : nullptr;
+	return isTemplateInstantiation() ? reinterpret_cast<ClassTemplateInstantiation const*>(this) : nullptr;
 }

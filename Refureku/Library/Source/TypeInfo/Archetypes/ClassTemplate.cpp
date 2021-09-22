@@ -2,7 +2,7 @@
 
 #include <utility>	//std::forward
 
-#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstance.h"
+#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstantiation.h"
 #include "Refureku/TypeInfo/Archetypes/TemplateParameter.h"
 
 using namespace rfk;
@@ -17,11 +17,11 @@ void ClassTemplate::addTemplateParameter(TemplateParameter const& templateParame
 	_templateParameters.push_back(&templateParameter);
 }
 
-void ClassTemplate::registerClassTemplateInstance(ClassTemplateInstance& instance) noexcept
+void ClassTemplate::registerClassTemplateInstantiation(ClassTemplateInstantiation& inst) noexcept
 {
-	instance.inheritAllProperties(*this);
+	inst.inheritAllProperties(*this);
 
-	_instantiations.push_back(&instance);
+	_instantiations.push_back(&inst);
 }
 
 TemplateParameter const& ClassTemplate::getTemplateParameter(std::size_t parameterIndex) const
@@ -34,7 +34,7 @@ std::size_t ClassTemplate::getTemplateParametersCount() const noexcept
 	return _templateParameters.size();
 }
 
-ClassTemplateInstance const& ClassTemplate::getInstantiation(std::size_t instanceIndex) const
+ClassTemplateInstantiation const& ClassTemplate::getInstantiation(std::size_t instanceIndex) const
 {
 	return *_instantiations.at(instanceIndex);
 }
