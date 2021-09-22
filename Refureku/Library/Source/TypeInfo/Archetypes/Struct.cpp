@@ -44,9 +44,9 @@ Struct const* Struct::getNestedStruct(std::string structName, EAccessSpecifier a
 	Entity searchingStruct(std::move(structName), 0u);
 
 	//We know the hash method only uses the name inherited from Entity so cast is fine
-	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingStruct));
+	NestedArchetypes::const_iterator it = _nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingStruct));
 
-	return (it != nestedArchetypes.cend() &&
+	return (it != _nestedArchetypes.cend() &&
 			(*it)->getKind() == EEntityKind::Struct &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->getAccessSpecifier())) ?
 				reinterpret_cast<Struct const*>(*it) : nullptr;
@@ -58,9 +58,9 @@ Class const* Struct::getNestedClass(std::string className, EAccessSpecifier acce
 	Entity searchingClass(std::move(className), 0u);
 
 	//We know the hash method only uses the name inherited from Entity so cast is fine
-	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingClass));
+	NestedArchetypes::const_iterator it = _nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingClass));
 
-	return (it != nestedArchetypes.cend() &&
+	return (it != _nestedArchetypes.cend() &&
 			(*it)->getKind() == EEntityKind::Class &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->getAccessSpecifier())) ?
 				reinterpret_cast<Class const*>(*it) : nullptr;
@@ -72,9 +72,9 @@ Enum const* Struct::getNestedEnum(std::string enumName, EAccessSpecifier access)
 	Entity searchingEnum(std::move(enumName), 0u);
 
 	//We know the hash method only uses the name inherited from Entity so cast is fine
-	decltype(nestedArchetypes)::const_iterator it = nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingEnum));
+	NestedArchetypes::const_iterator it = _nestedArchetypes.find(reinterpret_cast<Archetype const*>(&searchingEnum));
 
-	return (it != nestedArchetypes.cend() &&
+	return (it != _nestedArchetypes.cend() &&
 			(*it)->getKind() == EEntityKind::Enum &&
 			(access == EAccessSpecifier::Undefined || access == (*it)->getAccessSpecifier())) ?
 				reinterpret_cast<Enum const*>(*it) : nullptr;
@@ -326,7 +326,7 @@ std::vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 {
 	std::vector<Struct const*> result;
 
-	for (Struct const* child : subclasses)
+	for (Struct const* child : _subclasses)
 	{
 		//Search this struct in subclasses's parents
 		for (Parent const& childParent : child->_directParents)
@@ -349,7 +349,7 @@ bool Struct::isSubclassOf(Struct const& otherType) const noexcept
 
 bool Struct::isBaseOf(Struct const& otherType) const noexcept
 {
-	return &otherType == this || subclasses.find(&otherType) != subclasses.cend();
+	return &otherType == this || _subclasses.find(&otherType) != _subclasses.cend();
 }
 
 void Struct::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
@@ -413,12 +413,9 @@ StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId,
 Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
 {
 	//Add the archetype to the container
-	Archetype* result = const_cast<Archetype*>(*nestedArchetypes.emplace(nestedArchetype).first);
+	Archetype* result = const_cast<Archetype*>(*_nestedArchetypes.emplace(nestedArchetype).first);
 
-	//Set the access specifier
 	result->setAccessSpecifier(accessSpecifier);
-
-	//Set outer entity
 	result->setOuterEntity(this);
 
 	return result;
@@ -443,3 +440,64 @@ void Struct::setDirectParentsCapacity(std::size_t capacity) noexcept
 {
 	_directParents.reserve(capacity);
 }
+
+void Struct::addSubclass(Struct const& subclass) noexcept
+{
+	_subclasses.insert(&subclass);
+}
+
+void Struct::foreachNestedArchetype(bool (*visitor)(Archetype const&, void*), void* userData) const noexcept
+{
+	if (visitor != nullptr)
+	{
+		for (Archetype const* nestedArchetype : _nestedArchetypes)
+		{
+			if (!visitor(*nestedArchetype, userData))
+			{
+				return;
+			}
+		}
+	}
+}
+
+void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
+{
+	_nestedArchetypes.reserve(capacity);
+}
+
+//TODO: TEST
+//template <typename Predicate, typename>
+//Archetype const* Struct::getNestedArchetype(Predicate predicate) const
+//{
+//	struct Data
+//	{
+//		Predicate			predicate;
+//		Archetype const*	result = nullptr;
+//	} data;
+//
+//	foreachNestedArchetype([](Archetype const& archetype, void* userData)
+//						   {
+//							   Data* data = reinterpret_cast<Data*>(userData);
+//
+//							   if (data.predicate(archetype))
+//							   {
+//								   data->result = &archetype;
+//								   return false;
+//							   }
+//
+//							   return true;
+//						   }, &data);
+//
+//	return data.result;
+//
+//	/*for (Archetype const* archetype : nestedArchetypes)
+//	{
+//		if (predicate(archetype))
+//		{
+//			return archetype;
+//		}
+//	}
+//
+//	return nullptr;*/
+//}
+//END TODO: TEST

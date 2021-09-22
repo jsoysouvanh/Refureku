@@ -9,11 +9,6 @@ namespace testPropertyUsageNamespace RFKNamespace(TestProperty())
 
 }
 
-//struct RFKStruct(TestProperty()) TestPropertyUsageStruct
-//{
-//	TestPropertyUsageStruct_GENERATED
-//};
-
 class RFKClass(TestProperty()) TestPropertyUsageClass
 {
 	RFKField(TestProperty())

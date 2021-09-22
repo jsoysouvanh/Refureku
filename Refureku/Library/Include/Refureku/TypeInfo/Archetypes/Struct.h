@@ -9,9 +9,9 @@
 
 #include <cassert>
 #include <vector>
-#include <unordered_set>
+#include <unordered_set>	//std::unordered_set, std::unordered_multiset
 #include <algorithm>
-#include <type_traits>
+#include <type_traits>	//std::enable_if_t, std::is_invocable_r_v
 
 #include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
@@ -32,6 +32,8 @@ namespace rfk
 	class Struct : public Archetype
 	{
 		public:
+			using NestedArchetypes = std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
+
 			class Parent
 			{
 				private:
@@ -73,6 +75,11 @@ namespace rfk
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
 			std::vector<Parent>					_directParents;
 
+			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected subclasses. */
+			std::unordered_set<Struct const*>	_subclasses;
+
+			/** All tagged nested structs/classes/enums contained in this struct. */
+			NestedArchetypes					_nestedArchetypes;
 
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const;
@@ -85,12 +92,6 @@ namespace rfk
 				   EClassKind		classKind)		noexcept;
 
 		public:
-			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected subclasses. */
-			std::unordered_set<Struct const*>													subclasses;
-
-			/** All tagged nested structs/classes/enums contained in this struct. */
-			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>	nestedArchetypes;
-
 			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
 			std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>				fields;
 
@@ -117,7 +118,7 @@ namespace rfk
 			*	
 			*	@return The first matching archetype if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Archetype const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Archetype const&>>>
 			Archetype const*					getNestedArchetype(Predicate predicate)												const;
 
 			/**
@@ -127,7 +128,7 @@ namespace rfk
 			*	
 			*	@return The first matching struct if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const&>>>
 			Struct const*						getNestedStruct(Predicate predicate)												const;
 
 			/**
@@ -137,7 +138,7 @@ namespace rfk
 			*	
 			*	@return The first matching class if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Struct const&>>>
 			Struct const*						getNestedClass(Predicate predicate)													const;
 
 			/**
@@ -147,7 +148,7 @@ namespace rfk
 			*	
 			*	@return The first matching enum if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Enum const&>>>
 			Enum const*							getNestedEnum(Predicate predicate)													const;
 
 			/**
@@ -698,6 +699,31 @@ namespace rfk
 			*	@param capacity The number of direct parents of this struct.
 			*/
 			REFUREKU_API void							setDirectParentsCapacity(std::size_t capacity)	noexcept;
+
+			/**
+			*	@brief Add a subclass to this struct.
+			* 
+			*	@param subclass The subclass to add.
+			*/
+			REFUREKU_API void							addSubclass(Struct const& subclass)							noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all archetypes nested in this struct.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			*/
+			REFUREKU_API void							foreachNestedArchetype(bool (*visitor)(Archetype const&,
+																							   void*),
+																			   void* userData)					const	noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of nested archetypes.
+			*			If the number of nested archetypes is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of nested archetypes to pre-allocate.
+			*/
+			REFUREKU_API void							setNestedArchetypesCapacity(std::size_t capacity)				noexcept;
 	};
 
 	/**

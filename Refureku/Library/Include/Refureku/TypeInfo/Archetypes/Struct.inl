@@ -21,57 +21,101 @@ void Struct::addParent(EAccessSpecifier inheritanceAccess) noexcept
 template <typename Predicate, typename>
 Archetype const* Struct::getNestedArchetype(Predicate predicate) const
 {
-	for (Archetype const* archetype : nestedArchetypes)
+	struct Data
 	{
-		if (predicate(archetype))
-		{
-			return archetype;
-		}
-	}
+		Predicate			predicate;
+		Archetype const*	result = nullptr;
+	} data{predicate, nullptr};
 
-	return nullptr;
+	foreachNestedArchetype([](Archetype const& archetype, void* userData)
+						   {
+							   Data* data = reinterpret_cast<Data*>(userData);
+
+							   if (data->predicate(archetype))
+							   {
+								   data->result = &archetype;
+								   return false;
+							   }
+
+							   return true;
+						   }, &data);
+
+	return data.result;
 }
 
 template <typename Predicate, typename>
 Struct const* Struct::getNestedStruct(Predicate predicate) const
 {
-	for (Archetype const* archetype : nestedArchetypes)
+	struct Data
 	{
-		if (archetype->getKind() == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
-		{
-			return reinterpret_cast<Struct const*>(archetype);
-		}
-	}
+		Predicate		predicate;
+		Struct const*	result = nullptr;
+	} data{predicate, nullptr};
 
-	return nullptr;
+	foreachNestedArchetype([](Archetype const& archetype, void* userData)
+						   {
+							   Data* data = reinterpret_cast<Data*>(userData);
+
+							   if (archetype.getKind() == EEntityKind::Struct && data->predicate(static_cast<Struct const&>(archetype)))
+							   {
+								   data->result = &static_cast<Struct const&>(archetype);
+								   return false;
+							   }
+
+							   return true;
+						   }, &data);
+
+	return data.result;
 }
 
 template <typename Predicate, typename>
 Class const* Struct::getNestedClass(Predicate predicate) const
 {
-	for (Archetype const* archetype : nestedArchetypes)
+	struct Data
 	{
-		if (archetype->getKind() == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
-		{
-			return reinterpret_cast<Class const*>(archetype);
-		}
-	}
+		Predicate		predicate;
+		Class const*	result = nullptr;
+	} data{predicate, nullptr};
 
-	return nullptr;
+	foreachNestedArchetype([](Archetype const& archetype, void* userData)
+						   {
+							   Data* data = reinterpret_cast<Data*>(userData);
+
+							   if (archetype.getKind() == EEntityKind::Class && data->predicate(static_cast<Class const&>(archetype)))
+							   {
+								   data->result = &static_cast<Class const&>(archetype);
+								   return false;
+							   }
+
+							   return true;
+						   }, &data);
+
+	return data.result;
 }
 
 template <typename Predicate, typename>
 Enum const* Struct::getNestedEnum(Predicate predicate) const
 {
-	for (Archetype const* archetype : nestedArchetypes)
+	struct Data
 	{
-		if (archetype->getKind() == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
-		{
-			return reinterpret_cast<Enum const*>(archetype);
-		}
-	}
+		Predicate	predicate;
+		Enum const*	result = nullptr;
+	} data{predicate, nullptr};
 
-	return nullptr;
+	foreachNestedArchetype([](Archetype const& archetype, void* userData)
+						   {
+							   Data* data = reinterpret_cast<Data*>(userData);
+
+							   if (archetype.getKind() == EEntityKind::Enum && data->predicate(static_cast<Enum const&>(archetype)))
+							   {
+								   data->result = &static_cast<Enum const&>(archetype);
+								   return false;
+							   }
+
+							   return true;
+						   }, &data);
+
+	return data.result;
 }
 
 template <typename Predicate, typename>

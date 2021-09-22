@@ -221,10 +221,12 @@ void Database::registerSubEntities(Namespace const& n) noexcept
 void Database::registerSubEntities(Struct const& s) noexcept
 {
 	//Add nested archetypes
-	for (Archetype const* nestedArchetype : s.nestedArchetypes)
-	{
-		registerEntity(*nestedArchetype, true);
-	}
+	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
+							 {
+								 reinterpret_cast<Database*>(userData)->registerEntity(archetype, true);
+
+								 return true;
+							 }, this);
 
 	//Add fields
 	for (Entity const& field : s.fields)
@@ -252,10 +254,12 @@ void Database::registerSubEntities(Struct const& s) noexcept
 void Database::unregisterSubEntities(Struct const& s) noexcept
 {
 	//Remove nested archetypes
-	for (Archetype const* nestedArchetype : s.nestedArchetypes)
-	{
-		unregisterEntity(*nestedArchetype, true);
-	}
+	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
+							 {
+								 reinterpret_cast<Database*>(userData)->unregisterEntity(archetype, true);
+
+								 return true;
+							 }, this);
 
 	//Add fields
 	for (Entity const& field : s.fields)

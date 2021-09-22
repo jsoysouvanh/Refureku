@@ -261,7 +261,7 @@ namespace rfk
 			/**
 			*	@brief	Set the number of properties for this entity.
 			*			Useful to avoid reallocations when adding a lot of properties.
-			*			If the number of properties is already >= to the provided count, this method has no effect.
+			*			If the number of properties is already >= to the provided capacity, this method has no effect.
 			* 
 			*	@param propertiesCapacity The number of properties of this entity.
 			*/

@@ -637,7 +637,7 @@ void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo 
 	}
 
 	//Reserve memory for the correct number of nested entities
-	inout_result += generatedEntityVarName + "nestedArchetypes.reserve(" + std::to_string(nestedArchetypesCount) + ");";
+	inout_result += generatedEntityVarName + "setNestedArchetypesCapacity(" + std::to_string(nestedArchetypesCount) + ");";
 
 	//Add nested structs
 	inout_result += "rfk::Archetype* archetype = nullptr;" + env.getSeparator();
@@ -706,7 +706,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	inout_result += "rfk::Struct const& thisClass = staticGetArchetype();" + env.getSeparator();
 	
 	//Register the child to the subclasses list
-	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::Struct&>(thisClass).subclasses.insert(&childClass);" + env.getSeparator();
+	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::Struct&>(thisClass).addSubclass(childClass);" + env.getSeparator();
 
 	//Make the child class inherit from the parents class fields
 	if (!structClass.fields.empty())

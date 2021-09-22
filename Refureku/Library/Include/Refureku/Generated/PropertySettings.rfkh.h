@@ -25,7 +25,7 @@ friend implements_template1__rfk_registerChildClass<PropertySettings, void, void
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::CodeGenerationHelpers::registerChildClass<rfk::Property, ChildClass>(childClass);\
 rfk::Struct const& thisClass = staticGetArchetype();\
-if constexpr (!std::is_same_v<ChildClass, PropertySettings>) const_cast<rfk::Struct&>(thisClass).subclasses.insert(&childClass);\
+if constexpr (!std::is_same_v<ChildClass, PropertySettings>) const_cast<rfk::Struct&>(thisClass).addSubclass(childClass);\
 }\
 \
 \
