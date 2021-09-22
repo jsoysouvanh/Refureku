@@ -37,6 +37,6 @@ public: REFUREKU_API virtual rfk::Struct const& getArchetype() const noexcept ov
 
 
 #define File_PropertySettings_GENERATED	\
-namespace rfk { template <> REFUREKU_API rfk::Archetype const* getArchetype<PropertySettings>() noexcept; }\
+template <> REFUREKU_API rfk::Archetype const* rfk::getArchetype<PropertySettings>() noexcept;\
 
 

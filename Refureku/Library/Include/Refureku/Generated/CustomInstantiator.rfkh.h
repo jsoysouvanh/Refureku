@@ -37,6 +37,6 @@ public: REFUREKU_API virtual rfk::Struct const& getArchetype() const noexcept ov
 
 
 #define File_CustomInstantiator_GENERATED	\
-namespace rfk { template <> REFUREKU_API rfk::Archetype const* getArchetype<CustomInstantiator>() noexcept; }\
+template <> REFUREKU_API rfk::Archetype const* rfk::getArchetype<CustomInstantiator>() noexcept;\
 
 

@@ -409,6 +409,9 @@ bool ReflectionCodeGenModule::isPublicClass(kodgen::StructClassInfo const& class
 		}
 		else
 		{
+			//A class outer entity must be another struct or class
+			assert(class_.outerEntity->entityType && (kodgen::EEntityType::Class | kodgen::EEntityType::Struct));
+
 			return	static_cast<kodgen::NestedStructClassInfo const&>(class_).accessSpecifier == kodgen::EAccessSpecifier::Public &&
 					isPublicClass(static_cast<kodgen::StructClassInfo const&>(*class_.outerEntity));
 		}
@@ -672,20 +675,16 @@ void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen
 
 void ReflectionCodeGenModule::declareGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	if (structClass.outerEntity == nullptr ||
-		structClass.outerEntity->entityType == kodgen::EEntityType::Namespace ||
-		((structClass.outerEntity->entityType && (kodgen::EEntityType::Struct | kodgen::EEntityType::Class)) && reinterpret_cast<kodgen::NestedStructClassInfo const&>(structClass).accessSpecifier == kodgen::EAccessSpecifier::Public))
+	if (isPublicClass(structClass))
 	{
-		inout_result += "namespace rfk { template <> " + env.getExportSymbolMacro() + " rfk::Archetype const* getArchetype<" + structClass.type.getName() + ">() noexcept; }" + env.getSeparator();
+		inout_result += "template <> " + env.getExportSymbolMacro() + " rfk::Archetype const* rfk::getArchetype<" + structClass.type.getName() + ">() noexcept;" + env.getSeparator();
 	}
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	//Generate the getArchetype specialization only if the class is non-nested, namespace nested or publicly nested in a struct/class
-	if (structClass.outerEntity == nullptr ||
-		structClass.outerEntity->entityType == kodgen::EEntityType::Namespace ||
-		((structClass.outerEntity->entityType && (kodgen::EEntityType::Struct | kodgen::EEntityType::Class)) && reinterpret_cast<kodgen::NestedStructClassInfo const&>(structClass).accessSpecifier == kodgen::EAccessSpecifier::Public))
+	if (isPublicClass(structClass))
 	{
 		inout_result += "template <> rfk::Archetype const* rfk::getArchetype<" + structClass.getFullName() + ">() noexcept { " +
 			"return &" + structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
@@ -821,7 +820,6 @@ void ReflectionCodeGenModule::declareAndDefineClassRegistererVariable(kodgen::St
 			structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
 }
-
 
 void ReflectionCodeGenModule::declareAndDefineClassTemplateStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
