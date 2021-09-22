@@ -9,24 +9,22 @@
 
 #include <type_traits>
 
+#include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
 
 namespace rfk
 {
 	class EnumValue final : public Entity
 	{
-		public:
+		private:
 			/** Value of this enum value. */
-			int64	value = 0;
+			int64	_value = 0;
 
-			EnumValue()										= delete;
+		public:
 			EnumValue(std::string&&	name,
 					  std::size_t	id,
 					  int64			value,
 					  Entity const*	outerEntity = nullptr)	noexcept;
-			EnumValue(EnumValue const&)						= delete;
-			EnumValue(EnumValue&&)							= delete;
-			~EnumValue()									= default;
 
 			/**
 			*	@brief Cast the enum value as the provided template type.
@@ -35,8 +33,8 @@ namespace rfk
 			*
 			*	@return The value contained in this enum value cast to T.
 			*/
-			template <typename T, typename = std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
-			T as() const noexcept;
+			template <typename T = int64, typename = std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
+			T value() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/EnumValue.inl"

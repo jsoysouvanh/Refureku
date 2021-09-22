@@ -6,7 +6,7 @@
 
 using namespace rfk;
 
-Enum::Enum(std::string&& name, std::size_t id, uint64 memorySize, Archetype const* underlyingType, Entity const* outerEntity) noexcept:
+Enum::Enum(std::string&& name, std::size_t id, std::size_t memorySize, Archetype const* underlyingType, Entity const* outerEntity) noexcept:
 	Archetype(std::forward<std::string>(name), id, EEntityKind::Enum, memorySize, outerEntity),
 	_underlyingType{*underlyingType}
 {
@@ -15,26 +15,37 @@ Enum::Enum(std::string&& name, std::size_t id, uint64 memorySize, Archetype cons
 
 EnumValue const* Enum::getEnumValue(std::string enumValueName)  const noexcept
 {
-	decltype(_values)::const_iterator it = _values.find(static_cast<EnumValue&&>(Entity(std::move(enumValueName), 0u)));
-
-	return (it != _values.cend()) ? &*it : nullptr;
+	for (EnumValue const& enumValue : _enumValues)
+	{
+		if (enumValue.getName() == enumValueName)
+		{
+			return &enumValue;
+		}
+	}
+	
+	return nullptr;
 }
 
 EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 {
-	decltype(_values)::const_iterator it = std::find_if(_values.cbegin(), _values.cend(), [value](EnumValue const& v)
-													   { return v.value == value; });
+	for (EnumValue const& enumValue : _enumValues)
+	{
+		if (enumValue.value() == value)
+		{
+			return &enumValue;
+		}
+	}
 
-	return (it != _values.cend()) ? &*it : nullptr;
+	return nullptr;
 }
 
 std::vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 {
 	std::vector<EnumValue const*> result;
 
-	for (EnumValue const& ev : _values)
+	for (EnumValue const& ev : _enumValues)
 	{
-		if (ev.value == value)
+		if (ev.value() == value)
 		{
 			result.push_back(&ev);
 		}
@@ -43,20 +54,24 @@ std::vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 	return result;
 }
 
-EnumValue* Enum::addEnumValue(std::string enumValueName, uint64 entityId, int64 value) noexcept
+EnumValue* Enum::addEnumValue(std::string enumValueName, std::size_t entityId, int64 value) noexcept
 {
-	//Add the enum value to the container
-	return const_cast<EnumValue*>(&*_values.emplace(std::move(enumValueName), entityId, value, this).first);
+	return &_enumValues.emplace_back(std::move(enumValueName), entityId, value, this);
 }
 
-std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName> const& Enum::getEnumValues() const noexcept
+void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
 {
-	return _values;
+	_enumValues.reserve(capacity);
 }
 
-std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>& Enum::getEnumValues() noexcept
+EnumValue const& Enum::getEnumValueAt(std::size_t valueIndex) const
 {
-	return _values;
+	return _enumValues.at(valueIndex);
+}
+
+std::size_t Enum::getEnumValuesCount() const noexcept
+{
+	return _enumValues.size();
 }
 
 Archetype const& Enum::getUnderlyingType() const noexcept

@@ -8,9 +8,11 @@
 template <typename Predicate, typename>
 EnumValue const* Enum::getEnumValue(Predicate predicate) const noexcept
 {
-	for (EnumValue const& enumValue : getEnumValues())
+	for (std::size_t i = 0; i < getEnumValuesCount(); i++)
 	{
-		if (predicate(&enumValue))
+		EnumValue const& enumValue = getEnumValueAt(i);
+
+		if (predicate(enumValue))
 		{
 			return &enumValue;
 		}
@@ -24,11 +26,13 @@ std::vector<EnumValue const*> Enum::getEnumValues(Predicate predicate) const noe
 {
 	std::vector<EnumValue const*> result;
 
-	for (EnumValue const& enumValue : getEnumValues())
+	for (std::size_t i = 0; i < getEnumValuesCount(); i++)
 	{
-		if (predicate(&enumValue))
+		EnumValue const& enumValue = getEnumValueAt(i);
+
+		if (predicate(enumValue))
 		{
-			result.emplace_back(&enumValue);
+			result.push_back(&enumValue);
 		}
 	}
 

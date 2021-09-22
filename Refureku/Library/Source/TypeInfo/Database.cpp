@@ -283,18 +283,18 @@ void Database::unregisterSubEntities(Struct const& s) noexcept
 void Database::registerSubEntities(Enum const& e) noexcept
 {
 	//Enum values
-	for (Entity const& enumValue : e.getEnumValues())
+	for (std::size_t i = 0; i < e.getEnumValuesCount(); i++)
 	{
-		registerEntity(enumValue, false);
+		registerEntity(e.getEnumValueAt(i), false);
 	}
 }
 
 void Database::unregisterSubEntities(Enum const& e) noexcept
 {
 	//Enum values
-	for (Entity const& enumValue : e.getEnumValues())
+	for (std::size_t i = 0; i < e.getEnumValuesCount(); i++)
 	{
-		unregisterEntity(enumValue, false);
+		unregisterEntity(e.getEnumValueAt(i), false);
 	}
 }
 

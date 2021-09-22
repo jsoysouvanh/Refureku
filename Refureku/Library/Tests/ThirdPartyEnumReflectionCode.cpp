@@ -16,7 +16,7 @@ rfk::Enum const* rfk::getEnum<ThirdPartyEnum>() noexcept
 	{
 		initialized = true;
 
-		type.getEnumValues().reserve(2);
+		type.setEnumValuesCapacity(2);
 		type.addEnumValue("Value1", std::hash<std::string>()("ThirdPartyEnum@Value1"), 0u);
 		type.addEnumValue("Value2", std::hash<std::string>()("ThirdPartyEnum@Value2"), 2u);
 	}

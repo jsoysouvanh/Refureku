@@ -9,8 +9,6 @@
 
 #include <string>
 #include <vector>
-#include <unordered_set>
-#include <algorithm>
 
 #include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
@@ -25,21 +23,17 @@ namespace rfk
 	{
 		private:
 			/** Values contained in this enum. */
-			std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>	_values;
+			std::vector<EnumValue>	_enumValues;
 
 			/** Underlying type of this enum. */
-			Archetype const&														_underlyingType;
+			Archetype const&		_underlyingType;
 
 		public:
-			REFUREKU_API Enum()											= delete;
 			REFUREKU_API Enum(std::string&&		name,
 							  std::size_t		id,
-							  uint64			memorySize,
+							  std::size_t		memorySize,
 							  Archetype const*	underlyingType,
 							  Entity const*		outerEntity = nullptr)	noexcept;
-			REFUREKU_API Enum(Enum const&)								= delete;
-			REFUREKU_API Enum(Enum&&)									= delete;
-			REFUREKU_API ~Enum()										= default;
 
 			/**
 			*	@brief Retrieve from this enum an enum value matching with a given predicate.
@@ -48,7 +42,7 @@ namespace rfk
 			*	
 			*	@return The first matching enum value if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const&>>>
 			EnumValue const*							getEnumValue(Predicate predicate)		const	noexcept;
 
 			/**
@@ -58,7 +52,8 @@ namespace rfk
 			*	
 			*	@return All the enum values matching with the given predicate.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const*>>>
+			//TODO: Change std::vector dependency
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, EnumValue const&>>>
 			std::vector<EnumValue const*>				getEnumValues(Predicate predicate)		const	noexcept;
 
 			/**
@@ -99,29 +94,44 @@ namespace rfk
 			*			The name of the enum value **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
 			REFUREKU_API EnumValue*						addEnumValue(std::string	enumValueName,
-																	 uint64			entityId,
+																	 std::size_t	entityId,
 																	 int64			value)				noexcept;
 
 			/**
-			*	@brief Getter for the field _values.
+			*	@brief	Set the number of enum values for this entity.
+			*			Useful to avoid reallocations when adding a lot of enum values.
+			*			If the number of enum values is already >= to the provided capacity, this method has no effect.
 			* 
-			*	@return _values.
+			*	@param propertiesCapacity The number of enum values in this enum.
 			*/
-			REFUREKU_API std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName> const&	getEnumValues()		const	noexcept;
+			REFUREKU_API void							setEnumValuesCapacity(std::size_t capacity)		noexcept;
 
 			/**
-			*	@brief Non-const getter for the field _values.
+			*	@brief Get the enum value located at the provided index in the enum.
 			* 
-			*	@return _values.
+			*	@return The enum values at the provided index.
+			* 
+			*	@exception std::out_of_range if the provided index is greater than the number of properties in this entity.
 			*/
-			REFUREKU_API std::unordered_set<EnumValue, Entity::NameHasher, Entity::EqualName>&			getEnumValues()				noexcept;
+			REFUREKU_API EnumValue const&				getEnumValueAt(std::size_t valueIndex)	const;
+
+			/**
+			*	@brief Get the number of enum values contained in this enum.
+			* 
+			*	@return The number of enum values contained in this enum.
+			*/
+			REFUREKU_API std::size_t					getEnumValuesCount()					const	noexcept;
 
 			/**
 			*	@brief Getter for the field _underlyingType.
 			* 
 			*	@return _underlyingType.
 			*/
-			REFUREKU_API Archetype const&																getUnderlyingType()	const	noexcept;
+			REFUREKU_API Archetype const&				getUnderlyingType()						const	noexcept;
+
+
+			Enum& operator=(Enum const&)	= delete;
+			Enum& operator=(Enum&&)			= delete;
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */

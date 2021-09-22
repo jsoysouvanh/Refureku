@@ -1121,7 +1121,7 @@ void ReflectionCodeGenModule::defineGetEnumContent(kodgen::EnumInfo const& enum_
 	if (!enum_.enumValues.empty())
 	{
 		inout_result += "rfk::EnumValue* enumValue = nullptr;" + env.getSeparator() +
-			"type.getEnumValues().reserve(" + std::to_string(enum_.enumValues.size()) + ");" + env.getSeparator();
+			"type.setEnumValuesCapacity(" + std::to_string(enum_.enumValues.size()) + ");" + env.getSeparator();
 
 		for (kodgen::EnumValueInfo const& enumValue : enum_.enumValues)
 		{

@@ -6,7 +6,7 @@
 */
 
 template <typename T, typename>
-T EnumValue::as() const noexcept
+T EnumValue::value() const noexcept
 {
-	return static_cast<T>(value);
+	return static_cast<T>(_value);
 }
