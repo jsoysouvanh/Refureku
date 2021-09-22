@@ -21,9 +21,16 @@ FundamentalArchetype const* rfk::entityCast<FundamentalArchetype, void>(Entity c
 template <>
 Struct const* rfk::entityCast<Struct, void>(Entity const* entity) noexcept
 {
-	EEntityKind kind = entity->getKind();
+	if (entity != nullptr)
+	{
+		EEntityKind kind = entity->getKind();
 
-	return (entity != nullptr && (kind == EEntityKind::Struct || kind == EEntityKind::Class)) ? reinterpret_cast<Struct const*>(entity) : nullptr;
+		return (kind == EEntityKind::Struct || kind == EEntityKind::Class) ? reinterpret_cast<Struct const*>(entity) : nullptr;
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 template <>

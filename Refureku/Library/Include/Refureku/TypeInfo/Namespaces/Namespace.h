@@ -26,23 +26,29 @@ namespace rfk
 	class Namespace final : public Entity
 	{
 		public:
+			using NamespaceHashSet	= std::unordered_set<Namespace const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
+			using ArchetypeHashSet	= std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
+			using VariableHashSet	= std::unordered_set<Variable const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
+			using FunctionHashSet	= std::unordered_multiset<Function const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
+
+		private:
 			/** Collection of all namespaces contained in this namespace. */
-			std::unordered_set<Namespace const*, Entity::PtrNameHasher, Entity::PtrEqualName>		namespaces;
+			NamespaceHashSet	_namespaces;
 
 			/** Collection of all archetypes contained in this namespace. */
-			std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>		archetypes;
+			ArchetypeHashSet	_archetypes;
 
 			/** Collection of all (non-member) variables contained in this namespace. */
-			std::unordered_set<Variable const*, Entity::PtrNameHasher, Entity::PtrEqualName>		variables;
+			VariableHashSet		_variables;
 
 			/** Collection of all (non-member) functions contained in this namespace. */
-			std::unordered_multiset<Function const*, Entity::PtrNameHasher, Entity::PtrEqualName>	functions;
+			FunctionHashSet		_functions;
 
+		public:
 			REFUREKU_API Namespace(std::string&&	name,
 								   std::size_t		id)		noexcept;
-			Namespace(Namespace const&)			= delete;
-			Namespace(Namespace&&)				= delete;
-			~Namespace()						= default;
+			Namespace(Namespace const&)						= delete;
+			Namespace(Namespace&&)							= delete;
 
 			/**
 			*	@brief Retrieve from this namespace an archetype matching with a given predicate.
@@ -137,7 +143,7 @@ namespace rfk
 			*
 			*	@return The found nested namespace if it exists, else nullptr.
 			*/
-			REFUREKU_API Namespace const*	getNamespace(std::string namespaceName)							const	noexcept;
+			REFUREKU_API Namespace const*			getNamespace(std::string namespaceName)							const	noexcept;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.
@@ -146,7 +152,7 @@ namespace rfk
 			*
 			*	@return The found struct if it exists, else nullptr.
 			*/
-			REFUREKU_API Struct const*		getStruct(std::string structName)								const	noexcept;
+			REFUREKU_API Struct const*				getStruct(std::string structName)								const	noexcept;
 
 			/**
 			*	@brief Retrieve a class from this namespace.
@@ -155,7 +161,7 @@ namespace rfk
 			*
 			*	@return The found class if it exists, else nullptr.
 			*/
-			REFUREKU_API Class const*		getClass(std::string className)									const	noexcept;
+			REFUREKU_API Class const*				getClass(std::string className)									const	noexcept;
 
 			/**
 			*	@brief Retrieve an enum from this namespace.
@@ -164,9 +170,7 @@ namespace rfk
 			*
 			*	@return The found enum if it exists, else nullptr.
 			*/
-			REFUREKU_API Enum const*		getEnum(std::string enumName)									const	noexcept;
-
-			
+			REFUREKU_API Enum const*				getEnum(std::string enumName)									const	noexcept;
 
 			/**
 			*	@brief Retrieve a variable from this namespace.
@@ -177,8 +181,8 @@ namespace rfk
 			*	
 			*	@return The found variable if it exists, else nullptr.
 			*/
-			REFUREKU_API Variable const*	getVariable(std::string variableName,
-														EVarFlags	flags = EVarFlags::Default)				const	noexcept;
+			REFUREKU_API Variable const*			getVariable(std::string variableName,
+																EVarFlags	flags = EVarFlags::Default)				const	noexcept;
 
 			/**
 			*	@brief Retrieve a function from this namespace.
@@ -189,8 +193,92 @@ namespace rfk
 			*	
 			*	@return The first function matching the provided name and flags if it exists, else nullptr.
 			*/
-			REFUREKU_API Function const*	getFunction(std::string		functionName,
-														EFunctionFlags	flags = EFunctionFlags::Default)	const noexcept;
+			REFUREKU_API Function const*			getFunction(std::string		functionName,
+																EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
+
+			/**
+			*	@brief Getter for the field _namespaces.
+			* 
+			*	@return _namespaces.
+			*/
+			REFUREKU_API NamespaceHashSet const&	getNamespaces()													const	noexcept;
+
+			/**
+			*	@brief Getter for the field _archetypes.
+			* 
+			*	@return _archetypes.
+			*/
+			REFUREKU_API ArchetypeHashSet const&	getArchetypes()													const	noexcept;
+
+			/**
+			*	@brief Getter for the field _variables.
+			* 
+			*	@return _variables.
+			*/
+			REFUREKU_API VariableHashSet const&		getVariables()													const	noexcept;
+
+			/**
+			*	@brief Getter for the field _functions.
+			* 
+			*	@return _functions.
+			*/
+			REFUREKU_API FunctionHashSet const&		getFunctions()													const	noexcept;
+
+			/**
+			*	@brief Add a nested namespace to this namespace.
+			* 
+			*	@param nestedNamespace The namespace to add.
+			*/
+			REFUREKU_INTERNAL void	addNamespace(Namespace const* nestedNamespace)		noexcept;
+
+			/**
+			*	@brief Add a nested archetype to this namespace.
+			* 
+			*	@param archetype The archetype to add.
+			*/
+			REFUREKU_INTERNAL void	addArchetype(Archetype const* archetype)			noexcept;
+
+			/**
+			*	@brief Add a nested variable to this namespace.
+			* 
+			*	@param variable The variable to add.
+			*/
+			REFUREKU_INTERNAL void	addVariable(Variable const* variable)				noexcept;
+
+			/**
+			*	@brief Add a nested function to this namespace.
+			* 
+			*	@param function The function to add.
+			*/
+			REFUREKU_INTERNAL void	addFunction(Function const* function)				noexcept;
+
+			/**
+			*	@brief Remove a nested namespace from this namespace.
+			* 
+			*	@param nestedNamespace The namespace to add.
+			*/
+			REFUREKU_INTERNAL void	removeNamespace(Namespace const* nestedNamespace)	noexcept;
+
+			/**
+			*	@brief Remove a nested archetype from this namespace.
+			* 
+			*	@param archetype The archetype to remove.
+			*/
+			REFUREKU_INTERNAL void	removeArchetype(Archetype const* archetype)			noexcept;
+
+			/**
+			*	@brief Remove a nested variable from this namespace.
+			* 
+			*	@param variable The variable to remove.
+			*/
+			REFUREKU_INTERNAL void	removeVariable(Variable const* variable)			noexcept;
+
+			/**
+			*	@brief Remove a nested function from this namespace.
+			* 
+			*	@param function The function to remove.
+			*/
+			REFUREKU_INTERNAL void	removeFunction(Function const* function)			noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Namespaces/Namespace.inl"

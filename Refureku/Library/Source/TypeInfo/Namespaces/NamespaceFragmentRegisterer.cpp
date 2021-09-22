@@ -66,7 +66,7 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 		switch (entity->getKind())
 		{
 			case EEntityKind::Namespace:
-				_namespaceInstance->namespaces.emplace(reinterpret_cast<Namespace const*>(entity));
+				_namespaceInstance->addNamespace(reinterpret_cast<Namespace const*>(entity));
 
 				//Register the nested namespace but don't register sub entities
 				database.registerEntity(*entity, false);
@@ -77,21 +77,21 @@ void NamespaceFragmentRegisterer::mergeFragmentToNamespace(NamespaceFragment con
 			case EEntityKind::Class:
 				[[fallthrough]];
 			case EEntityKind::Enum:
-				_namespaceInstance->archetypes.emplace(reinterpret_cast<Archetype const*>(entity));
+				_namespaceInstance->addArchetype(reinterpret_cast<Archetype const*>(entity));
 				
 				//Register the archetype and its sub entities to the database.
 				database.registerEntity(*entity, true);
 				break;
 
 			case EEntityKind::Variable:
-				_namespaceInstance->variables.emplace(reinterpret_cast<Variable const*>(entity));
+				_namespaceInstance->addVariable(reinterpret_cast<Variable const*>(entity));
 
 				//Register the variable to the database, a variable doesn't have sub entities so can write false right away
 				database.registerEntity(*entity, false);
 				break;
 
 			case EEntityKind::Function:
-				_namespaceInstance->functions.emplace(reinterpret_cast<Function const*>(entity));
+				_namespaceInstance->addFunction(reinterpret_cast<Function const*>(entity));
 
 				//Register the function to the database, a function doesn't have sub entities so can write false right away
 				database.registerEntity(*entity, false);
@@ -143,7 +143,7 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 		switch (entity->getKind())
 		{
 			case EEntityKind::Namespace:
-				_namespaceInstance->namespaces.erase(reinterpret_cast<Namespace const*>(entity));
+				_namespaceInstance->removeNamespace(reinterpret_cast<Namespace const*>(entity));
 
 				//Namespaces unregister automatically from the database, don't need to do it here
 				break;
@@ -153,21 +153,21 @@ void NamespaceFragmentRegisterer::removeFragmentFromNamespace(NamespaceFragment 
 			case EEntityKind::Class:
 				[[fallthrough]];
 			case EEntityKind::Enum:
-				_namespaceInstance->archetypes.erase(reinterpret_cast<Archetype const*>(entity));
+				_namespaceInstance->removeArchetype(reinterpret_cast<Archetype const*>(entity));
 
 				//Unregister archetypes and their sub entities from the database
 				database.unregisterEntity(*entity, true);
 				break;
 
 			case EEntityKind::Variable:
-				_namespaceInstance->variables.erase(reinterpret_cast<Variable const*>(entity));
+				_namespaceInstance->removeVariable(reinterpret_cast<Variable const*>(entity));
 
 				//Unregister the variable from the database, a variable doesn't have sub entities so can write false right away
 				database.unregisterEntity(*entity, false);
 				break;
 
 			case EEntityKind::Function:
-				_namespaceInstance->functions.erase(reinterpret_cast<Function const*>(entity));
+				_namespaceInstance->removeFunction(reinterpret_cast<Function const*>(entity));
 
 				//Unregister the function from the database, a function doesn't have sub entities so can write false right away
 				database.unregisterEntity(*entity, false);

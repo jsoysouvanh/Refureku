@@ -8,7 +8,7 @@
 template <typename Predicate, typename>
 Namespace const* Namespace::getNamespace(Predicate predicate) const
 {
-	for (Namespace const* n : namespaces)
+	for (Namespace const* n : getNamespaces())
 	{
 		if (predicate(n))
 		{
@@ -22,7 +22,7 @@ Namespace const* Namespace::getNamespace(Predicate predicate) const
 template <typename Predicate, typename>
 Archetype const* Namespace::getArchetype(Predicate predicate) const
 {
-	for (Archetype const* archetype : archetypes)
+	for (Archetype const* archetype : getArchetypes())
 	{
 		if (predicate(archetype))
 		{
@@ -36,7 +36,7 @@ Archetype const* Namespace::getArchetype(Predicate predicate) const
 template <typename Predicate, typename>
 Struct const* Namespace::getStruct(Predicate predicate) const
 {
-	for (Archetype const* archetype : archetypes)
+	for (Archetype const* archetype : getArchetypes())
 	{
 		if (archetype->getKind() == EEntityKind::Struct && predicate(reinterpret_cast<Struct const*>(archetype)))
 		{
@@ -50,7 +50,7 @@ Struct const* Namespace::getStruct(Predicate predicate) const
 template <typename Predicate, typename>
 Class const* Namespace::getClass(Predicate predicate) const
 {
-	for (Archetype const* archetype : archetypes)
+	for (Archetype const* archetype : getArchetypes())
 	{
 		if (archetype->getKind() == EEntityKind::Class && predicate(reinterpret_cast<Class const*>(archetype)))
 		{
@@ -64,7 +64,7 @@ Class const* Namespace::getClass(Predicate predicate) const
 template <typename Predicate, typename>
 Enum const* Namespace::getEnum(Predicate predicate) const
 {
-	for (Archetype const* archetype : archetypes)
+	for (Archetype const* archetype : getArchetypes())
 	{
 		if (archetype->getKind() == EEntityKind::Enum && predicate(reinterpret_cast<Enum const*>(archetype)))
 		{
@@ -78,7 +78,7 @@ Enum const* Namespace::getEnum(Predicate predicate) const
 template <typename Predicate, typename>
 Variable const* Namespace::getVariable(Predicate predicate) const
 {
-	for (Variable const* v : variables)
+	for (Variable const* v : getVariables())
 	{
 		if (predicate(v))
 		{
@@ -92,7 +92,7 @@ Variable const* Namespace::getVariable(Predicate predicate) const
 template <typename Predicate, typename>
 Function const* Namespace::getFunction(Predicate predicate) const
 {
-	for (Function const* function : functions)
+	for (Function const* function : getFunctions())
 	{
 		if (predicate(function))
 		{
@@ -109,7 +109,7 @@ Function const* Namespace::getFunction(std::string functionName, EFunctionFlags 
 	Entity searchedFunction(std::move(functionName), 0u);
 
 	//Use an Entity instead of a Function to avoid memory / allocation overhead
-	auto range = functions.equal_range(static_cast<Function const*>(&searchedFunction));
+	auto range = getFunctions().equal_range(static_cast<Function const*>(&searchedFunction));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
