@@ -971,9 +971,9 @@ void testMultipleTypeTemplateClassTemplate()
 
 	rfk::ClassTemplate const* c = rfk::getDatabase().getClass("MultipleTypeTemplateClassTemplate")->asTemplate();
 
-	TEST(c->templateParameters.size() == 3u);
+	TEST(c->getTemplateParametersCount() == 3u);
 
-	TEST(c->instances.size() == 3u); //The last implicit instance is at the end of this test function.
+	TEST(c->getInstantiationsCount() == 3u); //The last implicit instance is at the end of this test function.
 
 	TEST(c->getInstance<int, int, int>() != nullptr);
 	TEST(c->getInstance<3>({ rfk::getArchetype<int>(), rfk::getArchetype<int>(), rfk::getArchetype<int>() }) != nullptr);

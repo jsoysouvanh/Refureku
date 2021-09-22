@@ -20,13 +20,12 @@ namespace rfk
 			Archetype const& _registeredArchetype;
 
 		public:
-			REFUREKU_API ArchetypeRegisterer()								= delete;
 			REFUREKU_API ArchetypeRegisterer(Archetype const& archetype)	noexcept;
-			REFUREKU_API ArchetypeRegisterer(ArchetypeRegisterer const&)	= delete;
-			REFUREKU_API ArchetypeRegisterer(ArchetypeRegisterer&&)			= delete;
+			ArchetypeRegisterer(ArchetypeRegisterer const&)					= delete;
+			ArchetypeRegisterer(ArchetypeRegisterer&&)						= delete;
 			REFUREKU_API ~ArchetypeRegisterer()								noexcept;
 
-			REFUREKU_API ArchetypeRegisterer& operator=(ArchetypeRegisterer const&)	= delete;
-			REFUREKU_API ArchetypeRegisterer& operator=(ArchetypeRegisterer&&)		= delete;
+			ArchetypeRegisterer& operator=(ArchetypeRegisterer const&)	= delete;
+			ArchetypeRegisterer& operator=(ArchetypeRegisterer&&)		= delete;
 	};
 }

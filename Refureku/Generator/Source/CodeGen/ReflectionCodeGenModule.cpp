@@ -874,7 +874,7 @@ void ReflectionCodeGenModule::fillClassTemplateArguments(kodgen::StructClassInfo
 {
 	for (std::size_t i = 0; i < structClass.type.getTemplateTypenames().size(); i++)
 	{
-		inout_result += "type.templateArguments.emplace_back(*type.instantiatedFrom.templateParameters[" + std::to_string(i) + "],"
+		inout_result += "type.templateArguments.emplace_back(type.instantiatedFrom.getTemplateParameter(" + std::to_string(i) + "),"
 						 "rfk::getArchetype<" + structClass.type.getTemplateTypenames()[i].getName() + ">());" + env.getSeparator();
 	}
 }

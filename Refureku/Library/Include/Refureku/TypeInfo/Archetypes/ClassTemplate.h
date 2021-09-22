@@ -22,15 +22,16 @@ namespace rfk
 
 	class ClassTemplate : public Class
 	{
-		public:
+		private:
 			/** List of all template parameters of this class template. */
-			std::vector<TemplateParameter const*>				templateParameters;
+			std::vector<TemplateParameter const*>		_templateParameters;
 
-			/** All instances of this class template in the program. */
-			std::unordered_set<ClassTemplateInstance const*>	instances;
+			/** All different instantiations of this class template in the program (with different template parameters). */
+			std::vector<ClassTemplateInstance const*>	_instantiations;
 
+		public:
 			REFUREKU_API ClassTemplate(std::string&&	name,
-									   uint64			id,
+									   std::size_t		id,
 									   bool				isClass)	noexcept;
 
 			/**
@@ -46,7 +47,7 @@ namespace rfk
 			* 
 			*	@return The instance if any, else nullptr.
 			*/
-			template <size_t ArraySize>
+			template <std::size_t ArraySize>
 			ClassTemplateInstance const* getInstance(std::array<Archetype const*, ArraySize> const& archetypes)	const	noexcept;	//TODO: Should be an array of TemplateArgument instead
 
 			/**
@@ -54,14 +55,46 @@ namespace rfk
 			* 
 			*	@param templateParameter The template parameter to add.
 			*/
-			REFUREKU_API void addTemplateParameter(TemplateParameter const& templateParameter)	noexcept;
+			REFUREKU_API void							addTemplateParameter(TemplateParameter const& templateParameter)		noexcept;
 
 			/**
 			*	@brief Register an instance generated from this class template.
 			* 
 			*	@param instance The instance to register.
 			*/
-			REFUREKU_API void registerClassTemplateInstance(ClassTemplateInstance& instance)	noexcept;
+			REFUREKU_API void							registerClassTemplateInstance(ClassTemplateInstance& instance)			noexcept;
+
+			/**
+			*	@brief Get the template parameter at the specified index.
+			*
+			*	@return The template parameter at the specified index.
+			* 
+			*	@exception std::out_of_range if the provided index is greater than the number of template parameters.
+			*/
+			REFUREKU_API TemplateParameter const&		getTemplateParameter(std::size_t parameterIndex)				const;
+
+			/**
+			*	@brief Get the number of template parameters for this class template.
+			*
+			*	@return The number of template parameters for this class template.
+			*/
+			REFUREKU_API std::size_t					getTemplateParametersCount()									const	noexcept;
+
+			/**
+			*	@brief Get the instantiation stored at index.
+			*
+			*	@return The instance at the specified index.
+			* 
+			*	@exception std::out_of_range if the provided index is greater than the number of registered instances.
+			*/
+			REFUREKU_API ClassTemplateInstance const&	getInstantiation(std::size_t instanceIndex)						const;
+
+			/**
+			*	@brief Get the number of instantiations (with different template parameters) of this class template within the program.
+			* 
+			*	@return The number of instantiations of this class template within the program.
+			*/
+			REFUREKU_API std::size_t					getInstantiationsCount()										const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/ClassTemplate.inl"

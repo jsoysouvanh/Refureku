@@ -8,11 +8,13 @@
 template <typename... Types>
 ClassTemplateInstance const* ClassTemplate::getInstance() const noexcept
 {
-	for (ClassTemplateInstance const* instance : instances)
+	for (std::size_t i = 0; i < getInstantiationsCount(); i++)
 	{
-		if (instance->hasSameTemplateArguments<Types...>())
+		ClassTemplateInstance const& instantiation = getInstantiation(i);
+
+		if (instantiation.hasSameTemplateArguments<Types...>())
 		{
-			return instance;
+			return &instantiation;
 		}
 	}
 
@@ -22,11 +24,13 @@ ClassTemplateInstance const* ClassTemplate::getInstance() const noexcept
 template <size_t ArraySize>
 ClassTemplateInstance const* ClassTemplate::getInstance(std::array<Archetype const*, ArraySize> const& archetypes) const noexcept
 {
-	for (ClassTemplateInstance const* instance : instances)
+	for (std::size_t i = 0; i < getInstantiationsCount(); i++)
 	{
-		if (instance->hasSameTemplateArguments<ArraySize>(archetypes))
+		ClassTemplateInstance const& instantiation = getInstantiation(i);
+
+		if (instantiation.hasSameTemplateArguments<ArraySize>(archetypes))
 		{
-			return instance;
+			return &instantiation;
 		}
 	}
 
