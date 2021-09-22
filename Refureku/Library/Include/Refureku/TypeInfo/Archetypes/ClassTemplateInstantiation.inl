@@ -28,7 +28,7 @@ bool ClassTemplateInstantiation::hasSameTemplateArguments(std::array<Archetype c
 	for (std::size_t i = 0; i < templateArgumentsCount; i++)
 	{
 		//Can't assert equality when archetype is nullptr since it represents all non-reflected types
-		if (archetypes[i] == nullptr || archetypes[i] != getTemplateArgument(i).archetype)
+		if (archetypes[i] == nullptr || archetypes[i] != getTemplateArgument(i).getArchetype())
 		{
 			return false;
 		}

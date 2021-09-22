@@ -16,12 +16,10 @@ namespace rfk
 	class FundamentalArchetype final : public Archetype
 	{
 		public:
-			FundamentalArchetype()								= delete;
 			FundamentalArchetype(std::string&&	name,
 								 uint64			id,
 								 uint64			memorySize)		noexcept;
 			FundamentalArchetype(FundamentalArchetype const&)	= delete;
 			FundamentalArchetype(FundamentalArchetype&&)		= delete;
-			~FundamentalArchetype()								= default;
 	};
 }

@@ -15,16 +15,33 @@ namespace rfk
 	//Forward declaration
 	class Archetype;
 
-	struct TemplateArgument
+	class TemplateArgument
 	{
-		/** Template parameter this argument is a value of. */
-		TemplateParameter const&	parameter;
+		private:
+			/** Template parameter this argument is a value of. */
+			TemplateParameter const&	_boundParameter;
 
-		/** Archetype used for a template argument. */
-		Archetype const*			archetype = nullptr;
+			/** Archetype used for a template argument. */
+			Archetype const*			_archetype = nullptr;
+			
+		public:
+			REFUREKU_API TemplateArgument(TemplateParameter const&	boundParameter,
+										  Archetype const*			archetype)		noexcept;
 
-		REFUREKU_API TemplateArgument(TemplateParameter const&	parameter,
-									  Archetype const*			archetype)	noexcept;
+			/**
+			*	@brief Getter for the field _boundParameter.
+			* 
+			*	@return _boundParameter.
+			*/
+			REFUREKU_API TemplateParameter const&	getBoundParameter()	const	noexcept;
+
+			/**
+			*	@brief Getter for the field _archetype.
+			* 
+			*	@return _archetype.
+			*/
+			//TODO: This will change to a different return type to support non-type template and template template type arguments
+			REFUREKU_API Archetype const*			getArchetype()		const	noexcept;
 	};
 }
 
