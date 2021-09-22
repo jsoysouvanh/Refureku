@@ -22,7 +22,7 @@ type.setDefaultInstantiator(&rfk::defaultInstantiator<ParseAllNested>);
 type.setPropertiesCapacity(1);
 static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Struct) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Struct");static PropertySettings property_17636175816175907530u_PropertySettings_0{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.addProperty(&property_17636175816175907530u_PropertySettings_0);
 type.setDirectParentsCapacity(1);
-type.addToParents<rfk::Property>(static_cast<rfk::EAccessSpecifier>(1));
+type.addParent<rfk::Property>(static_cast<rfk::EAccessSpecifier>(1));
 ParseAllNested::_rfk_registerChildClass<ParseAllNested>(type);
 }
 return type; }

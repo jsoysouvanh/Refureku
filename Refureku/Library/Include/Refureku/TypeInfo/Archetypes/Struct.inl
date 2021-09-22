@@ -6,7 +6,7 @@
 */
 
 template <typename T>
-void Struct::addToParents(EAccessSpecifier inheritanceAccess) noexcept
+void Struct::addParent(EAccessSpecifier inheritanceAccess) noexcept
 {
 	Archetype const* parentArchetype = getArchetype<T>();
 
@@ -14,7 +14,7 @@ void Struct::addToParents(EAccessSpecifier inheritanceAccess) noexcept
 	{
 		assert(parentArchetype->getKind() == EEntityKind::Struct || parentArchetype->getKind() == EEntityKind::Class);
 
-		addToParents(reinterpret_cast<Struct const*>(parentArchetype), inheritanceAccess);
+		addParent(reinterpret_cast<Struct const*>(parentArchetype), inheritanceAccess);
 	}
 }
 
@@ -174,7 +174,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 
 		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = getDirectParentAt(i).type->getMethod(methodName, minFlags, true);
+			result = getDirectParentAt(i).getArchetype().getMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -205,7 +205,7 @@ Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited
 
 		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = getDirectParentAt(i).type->getMethod<Predicate>(predicate, true);
+			result = getDirectParentAt(i).getArchetype().getMethod<Predicate>(predicate, true);
 
 			if (result != nullptr)
 			{
@@ -238,7 +238,7 @@ std::vector<Method const*> Struct::getMethods(Predicate	predicate, bool shouldIn
 
 		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			parentResult = getDirectParentAt(i).type->getMethods(predicate, true);
+			parentResult = getDirectParentAt(i).getArchetype().getMethods(predicate, true);
 
 			result.insert(result.end(), parentResult.begin(), parentResult.end());
 		}
@@ -271,7 +271,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 
 		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = getDirectParentAt(i).type->getStaticMethod(methodName, minFlags, true);
+			result = getDirectParentAt(i).getArchetype().getStaticMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -302,7 +302,7 @@ StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInsp
 
 		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			result = getDirectParentAt(i).type->getStaticMethod(predicate, true);
+			result = getDirectParentAt(i).getArchetype().getStaticMethod(predicate, true);
 
 			if (result != nullptr)
 			{
@@ -335,7 +335,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, b
 
 		for (std::size_t i = 0u; i < getDirectParentsCount(); i++)
 		{
-			parentResult = getDirectParentAt(0).type->getStaticMethods(predicate, true);
+			parentResult = getDirectParentAt(0).getArchetype().getStaticMethods(predicate, true);
 
 			result.insert(result.end(), parentResult.begin(), parentResult.end());
 		}

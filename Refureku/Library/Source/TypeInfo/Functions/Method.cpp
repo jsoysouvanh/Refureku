@@ -27,7 +27,7 @@ void Method::inheritBaseMethodProperties() noexcept
 
 		for (std::size_t i = 0; i < directParentsCount; i++)
 		{
-			parentMethod = ownerStruct->getDirectParentAt(i).type->getMethod([this](Method const* other){ return getName() == other->getName() && hasSamePrototype(other) && isConst() == other->isConst(); }, true);
+			parentMethod = ownerStruct->getDirectParentAt(i).getArchetype().getMethod([this](Method const* other){ return getName() == other->getName() && hasSamePrototype(other) && isConst() == other->isConst(); }, true);
 
 			if (parentMethod != nullptr)
 			{

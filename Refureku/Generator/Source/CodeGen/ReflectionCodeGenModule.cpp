@@ -533,12 +533,12 @@ void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& st
 		{
 			if (parent.type.isTemplateType())
 			{
-				inout_result += generatedEntityVarName + "addToParents(reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<" + parent.type.getName(true, false, true) + ">()), "
+				inout_result += generatedEntityVarName + "addParent(reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<" + parent.type.getName(true, false, true) + ">()), "
 														"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
 			}
 			else
 			{
-				inout_result += generatedEntityVarName + "addToParents<" + parent.type.getName(true) + 
+				inout_result += generatedEntityVarName + "addParent<" + parent.type.getName(true) + 
 					">(static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
 			}
 		}

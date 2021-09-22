@@ -4,12 +4,29 @@
 
 using namespace rfk;
 
-Struct::Parent::Parent(EAccessSpecifier	access, Struct const* archetype) noexcept:
-	access{access},
-	type{archetype}
+//////////////////////
+//	Struct::Parent
+//////////////////////
+Struct::Parent::Parent(EAccessSpecifier	_inheritanceAccessSpecifier, Struct const& archetype) noexcept:
+	_archetype{archetype},
+	_inheritanceAccessSpecifier{_inheritanceAccessSpecifier}
 {
 }
 
+Struct const& Struct::Parent::getArchetype() const noexcept
+{
+	return _archetype;
+}
+
+EAccessSpecifier Struct::Parent::getInheritanceAccessSpecifier() const noexcept
+{
+	return _inheritanceAccessSpecifier;
+}
+
+
+//////////////////////
+//	Struct
+//////////////////////
 Struct::Struct(std::string&& name, std::size_t id, std::size_t memorySize, bool isClass, EClassKind classKind) noexcept:
 	Archetype(std::forward<std::string>(name), id, isClass ? EEntityKind::Class : EEntityKind::Struct, memorySize),
 	_classKind{classKind}
@@ -190,7 +207,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 
 		for (Struct::Parent const& parent : _directParents)
 		{
-			result = parent.type->getMethod(methodName, minFlags, true);
+			result = parent.getArchetype().getMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -225,7 +242,7 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMe
 		
 		for (Struct::Parent const& parent : _directParents)
 		{
-			parentResult = parent.type->getMethods(methodName, minFlags, true);
+			parentResult = parent.getArchetype().getMethods(methodName, minFlags, true);
 
 			if (!parentResult.empty())
 			{
@@ -258,7 +275,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 
 		for (Struct::Parent const& parent : _directParents)
 		{
-			result = parent.type->getStaticMethod(methodName, minFlags, true);
+			result = parent.getArchetype().getStaticMethod(methodName, minFlags, true);
 
 			if (result != nullptr)
 			{
@@ -293,7 +310,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 
 		for (Struct::Parent const& parent : _directParents)
 		{
-			parentResult = parent.type->getStaticMethods(methodName, minFlags, true);
+			parentResult = parent.getArchetype().getStaticMethods(methodName, minFlags, true);
 
 			if (!parentResult.empty())
 			{
@@ -314,7 +331,7 @@ std::vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 		//Search this struct in subclasses's parents
 		for (Parent const& childParent : child->_directParents)
 		{
-			if (childParent.type == this)
+			if (&childParent.getArchetype() == this)
 			{
 				result.emplace_back(child);
 				break;
@@ -340,11 +357,11 @@ void Struct::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
 	_defaultInstantiator = defaultInstantiator;
 }
 
-void Struct::addToParents(Struct const* parent, EAccessSpecifier inheritanceAccess) noexcept
+void Struct::addParent(Struct const* parent, EAccessSpecifier inheritanceAccess) noexcept
 {
 	if (parent != nullptr)
 	{
-		_directParents.emplace_back(inheritanceAccess, parent);
+		_directParents.emplace_back(inheritanceAccess, *parent);
 
 		//Inherit parent properties
 		inheritProperties(*parent);

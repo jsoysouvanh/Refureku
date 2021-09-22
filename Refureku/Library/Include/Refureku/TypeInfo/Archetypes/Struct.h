@@ -35,14 +35,29 @@ namespace rfk
 			class Parent
 			{
 				private:
+					/** Parent struct archetype. */
+					Struct const&		_archetype;
+
+					/** Inheritance access specifier. */
+					EAccessSpecifier	_inheritanceAccessSpecifier;
 
 				public:
-					//TODO: Swap this to private
-					EAccessSpecifier	access;
-					Struct const*		type;	//TODO: Rename this to archetype
+					Parent(EAccessSpecifier	inheritanceAccessSpecifier,
+						   Struct const&	archetype)					noexcept;
 
-					Parent(EAccessSpecifier	access,
-						   Struct const*	archetype)	noexcept;
+					/**
+					*	@brief Getter for the field _archetype.
+					* 
+					*	@return _archetype.
+					*/
+					REFUREKU_API Struct const&		getArchetype()						const	noexcept;
+
+					/**
+					*	@brief Getter for the field _access.
+					* 
+					*	@return _access.
+					*/
+					REFUREKU_API EAccessSpecifier	getInheritanceAccessSpecifier()		const	noexcept;
 			};
 
 		private:
@@ -303,7 +318,7 @@ namespace rfk
 			*	@param inheritanceAccess The inheritance access for the provided parent.
 			*/
 			template <typename T>
-			void								addToParents(EAccessSpecifier inheritanceAccess)											noexcept;
+			void								addParent(EAccessSpecifier inheritanceAccess)												noexcept;
 
 			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
@@ -502,8 +517,8 @@ namespace rfk
 			*	@param parent				The struct to add as parent.
 			*	@param inheritanceAccess	The inheritance access for the provided parent.
 			*/
-			REFUREKU_API void		addToParents(Struct const*		parent,
-												 EAccessSpecifier	inheritanceAccess)				noexcept;
+			REFUREKU_API void		addParent(Struct const*		parent,
+											  EAccessSpecifier	inheritanceAccess)					noexcept;
 			
 			/**
 			*	@brief	Setup the default instantiator to use when a Struct::makeInstance is called without parameters.
