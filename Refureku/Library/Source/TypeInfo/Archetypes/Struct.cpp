@@ -189,7 +189,7 @@ std::vector<StaticField const*> Struct::getStaticFields(std::string fieldName, E
 Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	//Use an Entity instead of a Method to avoid memory / allocation overhead
-	auto range = methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
+	auto range = _methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -224,7 +224,7 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMe
 	std::vector<Method const*> result;
 
 	//Use an Entity instead of a Method to avoid memory / allocation overhead
-	auto range = methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
+	auto range = _methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -373,7 +373,7 @@ Method* Struct::addMethod(std::string methodName, std::size_t entityId, Type con
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
 
 	//Add the method to the container
-	return const_cast<Method*>(&*methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
+	return const_cast<Method*>(&*_methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
 }
 
 StaticMethod* Struct::addStaticMethod(std::string methodName, std::size_t entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
@@ -446,7 +446,7 @@ void Struct::addSubclass(Struct const& subclass) noexcept
 	_subclasses.insert(&subclass);
 }
 
-void Struct::foreachNestedArchetype(bool (*visitor)(Archetype const&, void*), void* userData) const noexcept
+bool Struct::foreachNestedArchetype(bool (*visitor)(Archetype const&, void*), void* userData) const noexcept
 {
 	if (visitor != nullptr)
 	{
@@ -454,10 +454,14 @@ void Struct::foreachNestedArchetype(bool (*visitor)(Archetype const&, void*), vo
 		{
 			if (!visitor(*nestedArchetype, userData))
 			{
-				return;
+				return false;
 			}
 		}
+
+		return true;
 	}
+
+	return false;
 }
 
 void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
@@ -465,7 +469,7 @@ void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 	_nestedArchetypes.reserve(capacity);
 }
 
-void Struct::foreachField(bool (*visitor)(Field const&, void*), void* userData) const noexcept
+bool Struct::foreachField(bool (*visitor)(Field const&, void*), void* userData) const noexcept
 {
 	if (visitor != nullptr)
 	{
@@ -473,10 +477,14 @@ void Struct::foreachField(bool (*visitor)(Field const&, void*), void* userData) 
 		{
 			if (!visitor(field, userData))
 			{
-				return;
+				return false;
 			}
 		}
+
+		return true;
 	}
+
+	return false;
 }
 
 void Struct::setFieldsCapacity(std::size_t capacity) noexcept
@@ -484,7 +492,7 @@ void Struct::setFieldsCapacity(std::size_t capacity) noexcept
 	_fields.reserve(capacity);
 }
 
-void Struct::foreachStaticField(bool (*visitor)(StaticField const&, void*), void* userData) const noexcept
+bool Struct::foreachStaticField(bool (*visitor)(StaticField const&, void*), void* userData) const noexcept
 {
 	if (visitor != nullptr)
 	{
@@ -492,13 +500,40 @@ void Struct::foreachStaticField(bool (*visitor)(StaticField const&, void*), void
 		{
 			if (!visitor(staticField, userData))
 			{
-				return;
+				return false;
 			}
 		}
+
+		return true;
 	}
+
+	return false;
 }
 
 void Struct::setStaticFieldsCapacity(std::size_t capacity) noexcept
 {
 	_staticFields.reserve(capacity);
+}
+
+bool Struct::foreachMethod(bool (*visitor)(Method const&, void*), void* userData) const noexcept
+{
+	if (visitor != nullptr)
+	{
+		for (Method const& method : _methods)
+		{
+			if (!visitor(method, userData))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	return false;
+}
+
+void Struct::setMethodsCapacity(std::size_t capacity) noexcept
+{
+	_methods.reserve(capacity);
 }

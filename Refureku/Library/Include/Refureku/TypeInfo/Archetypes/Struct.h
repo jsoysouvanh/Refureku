@@ -35,6 +35,7 @@ namespace rfk
 			using NestedArchetypes	= std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
 			using Fields			= std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>;
 			using StaticFields		= std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>;
+			using Methods			= std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>;
 
 			class Parent
 			{
@@ -80,14 +81,17 @@ namespace rfk
 			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected subclasses. */
 			std::unordered_set<Struct const*>	_subclasses;
 
-			/** All tagged nested structs/classes/enums contained in this struct. */
+			/** All reflected nested structs/classes/enums contained in this struct. */
 			NestedArchetypes					_nestedArchetypes;
 
-			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
+			/** All reflected fields contained in this struct, may they be declared in this struct or one of its parents. */
 			Fields								_fields;
 
-			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents. */
+			/** All reflected static fields contained in this struct, may they be declared in this struct or one of its parents. */
 			StaticFields						_staticFields;
+
+			/** All reflected methods declared in this struct. */
+			Methods								_methods;
 
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const;
@@ -100,9 +104,6 @@ namespace rfk
 				   EClassKind		classKind)		noexcept;
 
 		public:
-			/** All tagged methods declared in this struct. */
-			std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>				methods;
-
 			/** All tagged static methods declared in this struct. */
 			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
 
@@ -214,7 +215,7 @@ namespace rfk
 			*	
 			*	@return The first matching method if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const&>>>
 			Method const*						getMethod(Predicate predicate,
 														  bool		shouldInspectInherited = false)									const;
 
@@ -247,7 +248,7 @@ namespace rfk
 			*	
 			*	@return The first method matching with the predicate, nullptr if none was found. 
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Method const&>>>
 			std::vector<Method const*>			getMethods(Predicate	predicate,
 														   bool			shouldInspectInherited = false)								const;
 
@@ -714,8 +715,11 @@ namespace rfk
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
 			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
 			*/
-			REFUREKU_API void							foreachNestedArchetype(bool (*visitor)(Archetype const&,
+			REFUREKU_API bool							foreachNestedArchetype(bool (*visitor)(Archetype const&,
 																							   void*),
 																			   void* userData)					const	noexcept;
 
@@ -732,8 +736,11 @@ namespace rfk
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
 			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
 			*/
-			REFUREKU_API void							foreachField(bool (*visitor)(Field const&,
+			REFUREKU_API bool							foreachField(bool (*visitor)(Field const&,
 																					 void*),
 																	 void* userData)							const	noexcept;
 
@@ -750,8 +757,11 @@ namespace rfk
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
 			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
 			*/
-			REFUREKU_API void							foreachStaticField(bool (*visitor)(StaticField const&,
+			REFUREKU_API bool							foreachStaticField(bool (*visitor)(StaticField const&,
 																						   void*),
 																		   void* userData)						const	noexcept;
 
@@ -762,6 +772,27 @@ namespace rfk
 			*	@param capacity The number of static fields to pre-allocate.
 			*/
 			REFUREKU_API void							setStaticFieldsCapacity(std::size_t capacity)					noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all methods in this struct.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool							foreachMethod(bool (*visitor)(Method const&,
+																					  void*),
+																	  void* userData)							const	noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of methods.
+			*			If the number of methods is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of methods to pre-allocate.
+			*/
+			REFUREKU_API void							setMethodsCapacity(std::size_t capacity)						noexcept;
 	};
 
 	/**

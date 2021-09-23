@@ -28,17 +28,17 @@ Archetype const* Struct::getNestedArchetype(Predicate predicate) const
 	} data{predicate, nullptr};
 
 	foreachNestedArchetype([](Archetype const& archetype, void* userData)
-						   {
-							   Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 
-							   if (data->predicate(archetype))
-							   {
-								   data->result = &archetype;
-								   return false;
-							   }
+		if (data->predicate(archetype))
+		{
+			data->result = &archetype;
+			return false;
+		}
 
-							   return true;
-						   }, &data);
+		return true;
+	}, &data);
 
 	return data.result;
 }
@@ -53,17 +53,17 @@ Struct const* Struct::getNestedStruct(Predicate predicate) const
 	} data{predicate, nullptr};
 
 	foreachNestedArchetype([](Archetype const& archetype, void* userData)
-						   {
-							   Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 
-							   if (archetype.getKind() == EEntityKind::Struct && data->predicate(static_cast<Struct const&>(archetype)))
-							   {
-								   data->result = &static_cast<Struct const&>(archetype);
-								   return false;
-							   }
+		if (archetype.getKind() == EEntityKind::Struct && data->predicate(static_cast<Struct const&>(archetype)))
+		{
+			data->result = &static_cast<Struct const&>(archetype);
+			return false;
+		}
 
-							   return true;
-						   }, &data);
+		return true;
+	}, &data);
 
 	return data.result;
 }
@@ -78,17 +78,17 @@ Class const* Struct::getNestedClass(Predicate predicate) const
 	} data{predicate, nullptr};
 
 	foreachNestedArchetype([](Archetype const& archetype, void* userData)
-						   {
-							   Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 
-							   if (archetype.getKind() == EEntityKind::Class && data->predicate(static_cast<Class const&>(archetype)))
-							   {
-								   data->result = &static_cast<Class const&>(archetype);
-								   return false;
-							   }
+		if (archetype.getKind() == EEntityKind::Class && data->predicate(static_cast<Class const&>(archetype)))
+		{
+			data->result = &static_cast<Class const&>(archetype);
+			return false;
+		}
 
-							   return true;
-						   }, &data);
+		return true;
+	}, &data);
 
 	return data.result;
 }
@@ -103,17 +103,17 @@ Enum const* Struct::getNestedEnum(Predicate predicate) const
 	} data{predicate, nullptr};
 
 	foreachNestedArchetype([](Archetype const& archetype, void* userData)
-						   {
-							   Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 
-							   if (archetype.getKind() == EEntityKind::Enum && data->predicate(static_cast<Enum const&>(archetype)))
-							   {
-								   data->result = &static_cast<Enum const&>(archetype);
-								   return false;
-							   }
+		if (archetype.getKind() == EEntityKind::Enum && data->predicate(static_cast<Enum const&>(archetype)))
+		{
+			data->result = &static_cast<Enum const&>(archetype);
+			return false;
+		}
 
-							   return true;
-						   }, &data);
+		return true;
+	}, &data);
 
 	return data.result;
 }
@@ -130,17 +130,17 @@ Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) 
 	} data{predicate, shouldInspectInherited, this, nullptr};
 
 	foreachField([](Field const& field, void* userData)
-				 {
-				 	Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 				 
-				 	if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
-				 	{
-				 		data->result = &field;
-				 		return false;
-				 	}
+		if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
+		{
+			data->result = &field;
+			return false;
+		}
 				 
-				 	return true;
-				 }, &data);
+		return true;
+	}, &data);
 
 	return data.result;
 }
@@ -157,16 +157,16 @@ std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInsp
 	} data{predicate, shouldInspectInherited, this};
 
 	foreachField([](Field const& field, void* userData)
-				 {
-					 Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 
-					 if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
-					 {
-						 data->result.push_back(&field);
-					 }
+		if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
+		{
+			data->result.push_back(&field);
+		}
 
-					 return true;
-				 }, &data);
+		return true;
+	}, &data);
 
 	return data.result; //Should we std::move?
 }
@@ -183,21 +183,21 @@ StaticField const* Struct::getStaticField(Predicate predicate, bool shouldInspec
 	} data{predicate, shouldInspectInherited, this, nullptr};
 
 	foreachStaticField([](StaticField const& staticField, void* userData)
-					   {
-						   Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 					   
-						   /**
-						   *	_staticFields collection contains both this struct static fields and inherited static fields,
-						   *	make sure we check inherited fields only if requested
-						   */
-						   if ((data->shouldInspectInherited || staticField.getOuterEntity() == data->thisStruct) && data->predicate(staticField))
-						   {
-							   data->result = &staticField;
-							   return false;
-						   }
+		/**
+		*	_staticFields collection contains both this struct static fields and inherited static fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if ((data->shouldInspectInherited || staticField.getOuterEntity() == data->thisStruct) && data->predicate(staticField))
+		{
+			data->result = &staticField;
+			return false;
+		}
 					   
-						   return true;
-					   }, &data);
+		return true;
+	}, &data);
 
 	return data.result;
 }
@@ -214,20 +214,20 @@ std::vector<StaticField const*> Struct::getStaticFields(Predicate predicate, boo
 	} data{predicate, shouldInspectInherited, this};
 
 	foreachStaticField([](StaticField const& staticField, void* userData)
-					   {
-						   Data* data = reinterpret_cast<Data*>(userData);
+	{
+		Data* data = reinterpret_cast<Data*>(userData);
 
-						   /**
-						   *	_staticFields collection contains both this struct static fields and inherited static fields,
-						   *	make sure we check inherited fields only if requested
-						   */
-						   if ((data->shouldInspectInherited || staticField.getOuterEntity() == data->thisStruct) && data->predicate(staticField))
-						   {
-							   data->result.push_back(&staticField);
-						   }
+		/**
+		*	_staticFields collection contains both this struct static fields and inherited static fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if ((data->shouldInspectInherited || staticField.getOuterEntity() == data->thisStruct) && data->predicate(staticField))
+		{
+			data->result.push_back(&staticField);
+		}
 
-						   return true;
-					   }, &data);
+		return true;
+	}, &data);
 
 	return data.result; //Should we std::move?
 }
@@ -238,7 +238,7 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 	static_assert(std::is_function_v<MethodSignature>, "Struct::getMethod<> must be called with a function signature as template argument.");
 
 	//Use an Entity instead of a Method to avoid memory / allocation overhead
-	auto range = methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
+	auto range = _methods.equal_range(static_cast<Method&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -271,13 +271,26 @@ Method const* Struct::getMethod(std::string const& methodName, EMethodFlags minF
 template <typename Predicate, typename>
 Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited) const
 {
-	//Iterate over this struct's methods
-	for (Method const& method : methods)
+	struct Data
 	{
-		if (predicate(&method))
+		Predicate		predicate;
+		Method const*	result;
+	} data{predicate, nullptr};
+
+	if (!foreachMethod([](Method const& method, void* userData)
 		{
-			return &method;
-		}
+			Data* data = reinterpret_cast<Data*>(userData);
+
+			if (data->predicate(method))
+			{
+				data->result = &method;
+				return false;
+			}
+
+			return true;
+		}, &data))
+	{
+		return data.result;
 	}
 
 	//Check in parent's methods
@@ -302,16 +315,24 @@ Method const* Struct::getMethod(Predicate predicate, bool shouldInspectInherited
 template <typename Predicate, typename>
 std::vector<Method const*> Struct::getMethods(Predicate	predicate, bool shouldInspectInherited) const
 {
-	std::vector<Method const*> result;
+	struct Data
+	{
+		Predicate					predicate;
+		std::vector<Method const*>	result;
+	} data{predicate};
 
 	//Retrieve methods declared in this struct first
-	for (Method const& method : methods)
+	foreachMethod([](Method const& method, void* userData)
 	{
-		if (predicate(&method))
+		Data* data = reinterpret_cast<Data*>(userData);
+
+		if (data->predicate(method))
 		{
-			result.emplace_back(&method);
+			data->result.push_back(&method);
 		}
-	}
+
+		return true;
+	}, &data);
 
 	//Add parent's method matching the predicate if queried
 	if (shouldInspectInherited)
@@ -322,11 +343,11 @@ std::vector<Method const*> Struct::getMethods(Predicate	predicate, bool shouldIn
 		{
 			parentResult = getDirectParentAt(i).getArchetype().getMethods(predicate, true);
 
-			result.insert(result.end(), parentResult.begin(), parentResult.end());
+			data.result.insert(data.result.end(), parentResult.begin(), parentResult.end());
 		}
 	}
 
-	return result;
+	return data.result;	//Should we std::move?
 }
 
 template <typename MethodSignature>

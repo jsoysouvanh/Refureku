@@ -114,8 +114,10 @@ namespace rfk
 			*	@brief Check that another function has the same prototype as this function.
 			*	
 			*	@param other Function to compare the prototype with.
+			* 
+			*	@return true if the provided function has the same prototype as this function, else false.
 			*/
-			REFUREKU_API bool									hasSamePrototype(FunctionBase const* other)	const	noexcept;
+			REFUREKU_API bool									hasSamePrototype(FunctionBase const& other)	const	noexcept;
 
 			/**
 			*	@brief Add a parameter to the function.

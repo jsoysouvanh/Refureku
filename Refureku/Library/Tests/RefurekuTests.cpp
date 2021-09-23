@@ -139,8 +139,8 @@ void structs()
 	TEST(ExampleStruct::staticGetArchetype().getFields([](rfk::Field const&) { return true; }, true).size() == 1u);
 	TEST(ExampleStruct::staticGetArchetype().getStaticField([](rfk::StaticField const& sf) { return sf.getType() == rfk::getType<int>(); }) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getStaticFields([](rfk::StaticField const&) { return true; }, true).size() == 1u);
-	TEST(ExampleStruct::staticGetArchetype().getMethod([](rfk::Method const* m) { return m->getParameterCount() == 2u; }, true) != nullptr);
-	TEST(ExampleStruct::staticGetArchetype().getMethods([](rfk::Method const*) { return true; }).size() == 1u);
+	TEST(ExampleStruct::staticGetArchetype().getMethod([](rfk::Method const& m) { return m.getParameterCount() == 2u; }, true) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getMethods([](rfk::Method const&) { return true; }).size() == 1u);
 	TEST(ExampleStruct::staticGetArchetype().getStaticMethod([](rfk::StaticMethod const* sm) { return sm->getParameterCount() == 0u; }) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getStaticMethods([](rfk::StaticMethod const* sm) { return sm->getReturnType() == rfk::getType<void>(); }).size() == 1u);
 }
@@ -708,7 +708,7 @@ void properties()
 																reinterpret_cast<CustomProperty const*>(prop)->j == 456; }) != nullptr);
 	TEST(f->getProperties<CustomProperty2>().empty());
 
-	TEST(a.getMethod([](rfk::Method const* method) { return method->getName() == "testMethod" && method->getParameterCount() == 0u; })->getProperty<Tooltip>()->message == "This is a test");
+	TEST(a.getMethod([](rfk::Method const& method) { return method.getName() == "testMethod" && method.getParameterCount() == 0u; })->getProperty<Tooltip>()->message == "This is a test");
 
 	//Properties inheritance
 	rfk::Class const& b = B::staticGetArchetype();

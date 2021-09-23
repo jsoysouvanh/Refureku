@@ -9,23 +9,23 @@ FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type
 {
 }
 
-bool FunctionBase::hasSamePrototype(FunctionBase const* other) const noexcept
+bool FunctionBase::hasSamePrototype(FunctionBase const& other) const noexcept
 {
 	//Compare return type
-	if (_returnType != other->_returnType)
+	if (_returnType != other._returnType)
 	{
 		return false;
 	}
 
 	//Compare parameters
-	if (_parameters.size() != other->_parameters.size())
+	if (_parameters.size() != other._parameters.size())
 	{
 		return false;
 	}
 
 	for (size_t i = 0u; i < _parameters.size(); i++)
 	{
-		if (_parameters[i].getType() != other->_parameters[i].getType())
+		if (_parameters[i].getType() != other._parameters[i].getType())
 		{
 			return false;
 		}

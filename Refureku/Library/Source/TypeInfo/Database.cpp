@@ -244,10 +244,12 @@ void Database::registerSubEntities(Struct const& s) noexcept
 				   }, this);
 
 	//Add methods
-	for (Entity const& method : s.methods)
-	{
-		registerEntity(method, false);
-	}
+	s.foreachMethod([](Method const& method, void* userData)
+				   {
+					   reinterpret_cast<Database*>(userData)->registerEntity(method, false);
+
+					   return true;
+				   }, this);
 
 	for (Entity const& staticMethod : s.staticMethods)
 	{
@@ -281,10 +283,12 @@ void Database::unregisterSubEntities(Struct const& s) noexcept
 				   }, this);
 
 	//Remove methods
-	for (Entity const& method : s.methods)
-	{
-		unregisterEntity(method, false);
-	}
+	s.foreachMethod([](Method const& method, void* userData)
+					{
+						reinterpret_cast<Database*>(userData)->unregisterEntity(method, false);
+
+						return true;
+					}, this);
 
 	for (Entity const& staticMethod : s.staticMethods)
 	{
