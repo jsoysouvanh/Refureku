@@ -10,40 +10,53 @@
 #include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
 #include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
 
-bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::ParsingSettings& parsingSettings,
-				  kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings, fs::path&& settingsFilePath)
+fs::path getLibraryDirectoryPath()
 {
-	if (!settingsFilePath.empty())
+	fs::path path = fs::current_path();
+
+	//Rewind until /Refureku directory
+	while (path.has_stem() && path.stem() != "Refureku")
 	{
-		//Load settings from settings file
-		//All settings are localized in a single file for ease of use
-		if (!parsingSettings.loadFromFile(settingsFilePath, &logger))
-		{
-			return false;
-		}
-		else if (!codeGenMgrSettings.loadFromFile(settingsFilePath, &logger))
-		{
-			return false;
-		}
-		else if (!codeGenUnitSettings.loadFromFile(settingsFilePath, &logger))
-		{
-			return false;
-		}
+		path = path.parent_path();
 	}
 
-#if RFK_DEV
-	//Specify used compiler
-#if defined(__GNUC__)
-	parsingSettings.setCompilerExeName("g++");
-#elif defined(__clang__)
-	parsingSettings.setCompilerExeName("clang++");
-#elif defined(_MSC_VER)
-	parsingSettings.setCompilerExeName("msvc");
-#endif
+	return path / "Refureku" / "Library";
+}
 
-#endif
+bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::ParsingSettings& parsingSettings,
+				  kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings)
+{
+	bool result = true;
 
-	return true;
+	fs::path libraryDirectoryPath = getLibraryDirectoryPath();
+	fs::path outputDirectory = libraryDirectoryPath / "Include" / "Private" / "Refureku" / "Generated";
+
+	result &= codeGenMgrSettings.addSupportedFileExtension(".h");
+	result &= codeGenMgrSettings.addSupportedFileExtension(".hpp");
+	result &= codeGenMgrSettings.addToProcessDirectory(libraryDirectoryPath / "Include" / "Private" / "Refureku" / "TypeInfo" / "Properties");
+	result &= codeGenMgrSettings.addIgnoredDirectory(outputDirectory);
+
+	result &= codeGenUnitSettings.setOutputDirectory(outputDirectory);
+	codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
+	codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
+
+	parsingSettings.shouldAbortParsingOnFirstError = true;
+	parsingSettings.shouldParseAllEntities = false;
+	result &= parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Public");
+	result &= parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Private"); //TODO: Delete this once public API is fully implemented
+	result &= parsingSettings.setCompilerExeName("msvc");
+
+	parsingSettings.propertyParsingSettings.namespaceMacroName	= "RFKNamespace";
+	parsingSettings.propertyParsingSettings.classMacroName		= "RFKClass";
+	parsingSettings.propertyParsingSettings.structMacroName		= "RFKStruct";
+	parsingSettings.propertyParsingSettings.variableMacroName	= "RFKVariable";
+	parsingSettings.propertyParsingSettings.fieldMacroName		= "RFKField";
+	parsingSettings.propertyParsingSettings.functionMacroName	= "RFKFunction";
+	parsingSettings.propertyParsingSettings.methodMacroName		= "RFKMethod";
+	parsingSettings.propertyParsingSettings.enumMacroName		= "RFKEnum";
+	parsingSettings.propertyParsingSettings.enumValueMacroName	= "RFKEnumVal";
+
+	return result;
 }
 
 void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const& genResult)
@@ -61,17 +74,6 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const&
 
 int main()
 {
-	fs::path path = fs::current_path();
-
-	//Rewind until /Refureku directory
-	while (path.has_stem() && path.stem() != "Refureku")
-	{
-		path = path.parent_path();
-	}
-
-	path = path / "Refureku" / "Generator" / "LibraryGenerator";
-
-	//----------------------------------------
 	kodgen::DefaultLogger logger;
 
 	rfk::FileParser fileParser;
@@ -91,13 +93,18 @@ int main()
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 
-	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(path / "LibraryGenerationSettings.toml"));
+	if (loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings))
+	{
+		//Parse
+		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
 
-	//Parse
-	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
-
-	//Result
-	printGenerationResult(logger, genResult);
+		//Result
+		printGenerationResult(logger, genResult);
+	}
+	else
+	{
+		logger.log("Settings loading failed.", kodgen::ILogger::ELogSeverity::Error);
+	}
 
 	return EXIT_SUCCESS;
 }

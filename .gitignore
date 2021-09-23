@@ -8,8 +8,9 @@ Generated/
 enc_temp_folder/
 out/
 
-#Internal files
-LibraryGenerationSettings.toml
+#Exception for the library generated folder
+!Refureku/Library/Include/Private/Refureku/Generated
+!Refureku/Library/Include/Public/Refureku/Generated
 
 #Settings
 *.json
