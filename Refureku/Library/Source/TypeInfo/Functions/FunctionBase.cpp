@@ -2,7 +2,7 @@
 
 using namespace rfk;
 
-FunctionBase::FunctionBase(std::string&& name, uint64 id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalFunction, Entity const* outerEntity) noexcept:
+FunctionBase::FunctionBase(std::string&& name, std::size_t id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalFunction, Entity const* outerEntity) noexcept:
 	Entity(std::forward<std::string>(name), id, kind, outerEntity),
 	_returnType{returnType},
 	_internalFunction{std::forward<std::unique_ptr<ICallable>>(internalFunction)}
@@ -23,7 +23,7 @@ bool FunctionBase::hasSamePrototype(FunctionBase const& other) const noexcept
 		return false;
 	}
 
-	for (size_t i = 0u; i < _parameters.size(); i++)
+	for (std::size_t i = 0u; i < _parameters.size(); i++)
 	{
 		if (_parameters[i].getType() != other._parameters[i].getType())
 		{

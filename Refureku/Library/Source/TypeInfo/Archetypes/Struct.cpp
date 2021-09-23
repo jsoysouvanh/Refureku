@@ -368,46 +368,46 @@ void Struct::addParent(Struct const* parent, EAccessSpecifier inheritanceAccess)
 	}
 }
 
-Method* Struct::addMethod(std::string methodName, std::size_t entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+Method* Struct::addMethod(std::string methodName, std::size_t id, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
 {
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
 
 	//Add the method to the container
-	return const_cast<Method*>(&*_methods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
+	return const_cast<Method*>(&*_methods.emplace(std::move(methodName), id, returnType, std::move(internalMethod), flags, this));
 }
 
-StaticMethod* Struct::addStaticMethod(std::string methodName, std::size_t entityId, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
+StaticMethod* Struct::addStaticMethod(std::string methodName, std::size_t id, Type const& returnType, std::unique_ptr<ICallable> internalMethod, EMethodFlags flags) noexcept
 {
 	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
 
 	//Add the static method to the container
-	return const_cast<StaticMethod*>(&*_staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
+	return const_cast<StaticMethod*>(&*_staticMethods.emplace(std::move(methodName), id, returnType, std::move(internalMethod), flags, this));
 }
 
-Field* Struct::addField(std::string	fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, std::size_t memoryOffset) noexcept
+Field* Struct::addField(std::string	fieldName, std::size_t id, Type const& type, EFieldFlags flags, Struct const* outerEntity, std::size_t memoryOffset) noexcept
 {
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
 
 	//Add the field to the container
-	return const_cast<Field*>(&*_fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset, outerEntity));
+	return const_cast<Field*>(&*_fields.emplace(std::move(fieldName), id, type, flags, this, memoryOffset, outerEntity));
 }
 
-StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void* fieldPtr) noexcept
+StaticField* Struct::addStaticField(std::string fieldName, std::size_t id, Type const& type, EFieldFlags flags, Struct const* outerEntity, void* fieldPtr) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	return const_cast<StaticField*>(&*_staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
+	return const_cast<StaticField*>(&*_staticFields.emplace(std::move(fieldName), id, type, flags, this, fieldPtr, outerEntity));
 }
 
-StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void const* fieldPtr) noexcept
+StaticField* Struct::addStaticField(std::string fieldName, std::size_t id, Type const& type, EFieldFlags flags, Struct const* outerEntity, void const* fieldPtr) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	return const_cast<StaticField*>(&*_staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
+	return const_cast<StaticField*>(&*_staticFields.emplace(std::move(fieldName), id, type, flags, this, fieldPtr, outerEntity));
 }
 
 Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept

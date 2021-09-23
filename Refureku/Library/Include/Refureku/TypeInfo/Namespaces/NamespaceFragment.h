@@ -22,9 +22,7 @@ namespace rfk
 
 		public:
 			REFUREKU_API NamespaceFragment(std::string&& newName,
-										   uint64		 newId	= 0u)	noexcept;
-			NamespaceFragment(NamespaceFragment const&)		= delete;
-			NamespaceFragment(NamespaceFragment&&)			= delete;
+										   std::size_t	 id	= 0u)	noexcept;
 
 			/**
 			*	@brief Add a nested entity to the namespace.
@@ -50,8 +48,5 @@ namespace rfk
 			*	@return _nestedEntities.
 			*/
 			REFUREKU_API std::vector<Entity const*> const&	getNestedEntities()							const	noexcept;
-
-			NamespaceFragment& operator=(NamespaceFragment const&)	= delete;
-			NamespaceFragment& operator=(NamespaceFragment&&)		= delete;
 	};
 }

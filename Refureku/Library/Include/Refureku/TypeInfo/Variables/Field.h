@@ -124,7 +124,7 @@ namespace rfk
 			*/
 			inline void			setData(void*		instance,
 										void const* data,
-										uint64		dataSize)			const;
+										std::size_t	dataSize)			const;
 
 			/**
 			*	@brief Getter for the field _memoryOffset.

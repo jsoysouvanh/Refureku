@@ -2,8 +2,8 @@
 
 using namespace rfk;
 
-NamespaceFragment::NamespaceFragment(std::string&& newName, uint64 newId) noexcept:
-	Entity(std::forward<std::string>(newName), newId, EEntityKind::Undefined)	//Fragments are used internally only, so it's fine to let it as undefined
+NamespaceFragment::NamespaceFragment(std::string&& newName, std::size_t id) noexcept:
+	Entity(std::forward<std::string>(newName), id, EEntityKind::Undefined)	//Fragments are used internally only, so it's fine to let it as undefined
 {
 }
 

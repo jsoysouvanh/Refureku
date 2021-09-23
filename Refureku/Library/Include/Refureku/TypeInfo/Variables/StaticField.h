@@ -93,7 +93,7 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
-			inline void		setData(void const* data, uint64 dataSize)	const;
+			inline void		setData(void const* data, std::size_t dataSize)	const;
 
 			StaticField& operator=(StaticField const&)	= delete;
 			StaticField& operator=(StaticField&&)		= delete;

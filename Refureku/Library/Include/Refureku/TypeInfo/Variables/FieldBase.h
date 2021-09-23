@@ -26,7 +26,7 @@ namespace rfk
 
 		protected:
 			FieldBase(std::string&&	name,
-					  uint64		id,
+					  std::size_t	id,
 					  Type const&	type,
 					  EFieldFlags	flags,
 					  Struct const*	containedIn,

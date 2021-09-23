@@ -17,8 +17,8 @@ namespace rfk
 	{
 		public:
 			FundamentalArchetype(std::string&&	name,
-								 uint64			id,
-								 uint64			memorySize)		noexcept;
+								 std::size_t	id,
+								 std::size_t	memorySize)		noexcept;
 			FundamentalArchetype(FundamentalArchetype const&)	= delete;
 			FundamentalArchetype(FundamentalArchetype&&)		= delete;
 	};

@@ -57,7 +57,7 @@ namespace rfk
 		protected:
 			FunctionBase()														= delete;
 			FunctionBase(std::string&&					name, 
-						 uint64							id,
+						 std::size_t					id,
 						 EEntityKind					kind,
 						 Type const&					returnType,
 						 std::unique_ptr<ICallable>&&	internalFunction,

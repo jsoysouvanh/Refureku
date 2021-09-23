@@ -4,7 +4,7 @@
 
 using namespace rfk;
 
-FieldBase::FieldBase(std::string&& name, uint64 id, Type const& type, EFieldFlags flags, Struct const* containedIn, Entity const* outerEntity) noexcept:
+FieldBase::FieldBase(std::string&& name, std::size_t id, Type const& type, EFieldFlags flags, Struct const* containedIn, Entity const* outerEntity) noexcept:
 	VariableBase(std::forward<std::string>(name), id, EEntityKind::Field, type, outerEntity),
 	_flags{flags},
 	_containedIn{containedIn}

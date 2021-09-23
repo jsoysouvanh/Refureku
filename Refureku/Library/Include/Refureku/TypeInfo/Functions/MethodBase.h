@@ -22,7 +22,7 @@ namespace rfk
 
 		protected:
 			MethodBase(std::string&&				name, 
-					   uint64						id,
+					   std::size_t					id,
 					   Type const&					returnType,
 					   std::unique_ptr<ICallable>&&	internalMethod,
 					   EMethodFlags					flags,

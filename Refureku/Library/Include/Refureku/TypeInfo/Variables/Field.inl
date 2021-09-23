@@ -72,7 +72,7 @@ void Field::setData(void* instance, DataType&& data) const
 	}
 }
 
-inline void Field::setData(void* instance, void const* data, uint64 dataSize) const
+inline void Field::setData(void* instance, void const* data, std::size_t dataSize) const
 {
 	if (getType().isConst())
 	{

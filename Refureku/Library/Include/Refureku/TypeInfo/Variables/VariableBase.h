@@ -24,7 +24,7 @@ namespace rfk
 
 		protected:
 			VariableBase(std::string&&	name,
-						 uint64			id,
+						 std::size_t	id,
 						 EEntityKind	newKind,
 						 Type const&	type,
 						 Entity const*	outerEntity = nullptr)	noexcept;
