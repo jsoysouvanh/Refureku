@@ -34,7 +34,8 @@ shouldParseAllEntities = false
 # Include directories of the project
 projectIncludeDirectories = [
 	'''./Include''',
-	'''../Include'''
+	'''../Include/Public''',
+	'''../Include/Private'''	#TODO: Remove this once the public API is ready
 ]
 
 # Must be one of "msvc", "clang++", "g++"

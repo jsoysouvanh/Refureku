@@ -78,6 +78,8 @@ endif()
 # Setup language requirements
 target_compile_features(${RefurekuLibraryTarget} PUBLIC cxx_std_17)
 
-target_include_directories(${RefurekuLibraryTarget} PUBLIC Include)
+target_include_directories(${RefurekuLibraryTarget}
+							PUBLIC Include/Public
+							PUBLIC Include/Private)	#TODO: Switch to PRIVATE once the public API is ready
 
 add_subdirectory(Tests)

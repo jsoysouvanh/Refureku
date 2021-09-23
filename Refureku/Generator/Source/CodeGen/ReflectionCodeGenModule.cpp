@@ -628,7 +628,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 
 void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
 {
-	kodgen::uint64 nestedArchetypesCount = structClass.nestedStructs.size() + structClass.nestedClasses.size() + structClass.nestedEnums.size();
+	std::size_t nestedArchetypesCount = structClass.nestedStructs.size() + structClass.nestedClasses.size() + structClass.nestedEnums.size();
 
 	//No code to generate if there are no nested entities
 	if (nestedArchetypesCount == 0u)
