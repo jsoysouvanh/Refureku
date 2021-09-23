@@ -257,7 +257,7 @@ std::vector<Method const*> Struct::getMethods(std::string const& methodName, EMe
 StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMethodFlags minFlags, bool shouldInspectParents) const noexcept
 {
 	//Use an Entity instead of a StaticMethod to avoid memory / allocation overhead
-	auto range = staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
+	auto range = _staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -292,7 +292,7 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(std::string const& met
 	std::vector<StaticMethod const*> result;
 
 	//Use an Entity instead of a StaticMethod to avoid memory / allocation overhead
-	auto range = staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
+	auto range = _staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -381,7 +381,7 @@ StaticMethod* Struct::addStaticMethod(std::string methodName, std::size_t entity
 	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
 
 	//Add the static method to the container
-	return const_cast<StaticMethod*>(&*staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
+	return const_cast<StaticMethod*>(&*_staticMethods.emplace(std::move(methodName), entityId, returnType, std::move(internalMethod), flags, this));
 }
 
 Field* Struct::addField(std::string	fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, std::size_t memoryOffset) noexcept
@@ -536,4 +536,27 @@ bool Struct::foreachMethod(bool (*visitor)(Method const&, void*), void* userData
 void Struct::setMethodsCapacity(std::size_t capacity) noexcept
 {
 	_methods.reserve(capacity);
+}
+
+bool Struct::foreachStaticMethod(bool (*visitor)(StaticMethod const&, void*), void* userData) const noexcept
+{
+	if (visitor != nullptr)
+	{
+		for (StaticMethod const& staticMethod : _staticMethods)
+		{
+			if (!visitor(staticMethod, userData))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+void Struct::setStaticMethodsCapacity(std::size_t capacity) noexcept
+{
+	_staticMethods.reserve(capacity);
 }

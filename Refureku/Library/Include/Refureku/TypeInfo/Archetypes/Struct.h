@@ -36,6 +36,7 @@ namespace rfk
 			using Fields			= std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>;
 			using StaticFields		= std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>;
 			using Methods			= std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>;
+			using StaticMethods		= std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>;
 
 			class Parent
 			{
@@ -93,6 +94,9 @@ namespace rfk
 			/** All reflected methods declared in this struct. */
 			Methods								_methods;
 
+			/** All tagged static methods declared in this struct. */
+			StaticMethods						_staticMethods;
+
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const;
 
@@ -104,9 +108,6 @@ namespace rfk
 				   EClassKind		classKind)		noexcept;
 
 		public:
-			/** All tagged static methods declared in this struct. */
-			std::unordered_multiset<StaticMethod, Entity::NameHasher, Entity::EqualName>		staticMethods;
-
 			REFUREKU_API Struct(std::string&&	name,
 								std::size_t		id,
 								std::size_t		memorySize,
@@ -261,7 +262,7 @@ namespace rfk
 			*	
 			*	@return The first matching static method if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const&>>>
 			StaticMethod const*					getStaticMethod(Predicate	predicate,
 																bool		shouldInspectInherited = false)							const;
 
@@ -295,7 +296,7 @@ namespace rfk
 			*	
 			*	@return All static methods matching with the given predicate.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticMethod const&>>>
 			std::vector<StaticMethod const*>	getStaticMethods(Predicate	predicate,
 																 bool		shouldInspectInherited = false)							const;
 
@@ -793,6 +794,27 @@ namespace rfk
 			*	@param capacity The number of methods to pre-allocate.
 			*/
 			REFUREKU_API void							setMethodsCapacity(std::size_t capacity)						noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all static methods in this struct.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool							foreachStaticMethod(bool (*visitor)(StaticMethod const&,
+																							void*),
+																			void* userData)						const	noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of static methods.
+			*			If the number of static methods is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of static methods to pre-allocate.
+			*/
+			REFUREKU_API void							setStaticMethodsCapacity(std::size_t capacity)					noexcept;
 	};
 
 	/**

@@ -141,8 +141,8 @@ void structs()
 	TEST(ExampleStruct::staticGetArchetype().getStaticFields([](rfk::StaticField const&) { return true; }, true).size() == 1u);
 	TEST(ExampleStruct::staticGetArchetype().getMethod([](rfk::Method const& m) { return m.getParameterCount() == 2u; }, true) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getMethods([](rfk::Method const&) { return true; }).size() == 1u);
-	TEST(ExampleStruct::staticGetArchetype().getStaticMethod([](rfk::StaticMethod const* sm) { return sm->getParameterCount() == 0u; }) != nullptr);
-	TEST(ExampleStruct::staticGetArchetype().getStaticMethods([](rfk::StaticMethod const* sm) { return sm->getReturnType() == rfk::getType<void>(); }).size() == 1u);
+	TEST(ExampleStruct::staticGetArchetype().getStaticMethod([](rfk::StaticMethod const& sm) { return sm.getParameterCount() == 0u; }) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getStaticMethods([](rfk::StaticMethod const& sm) { return sm.getReturnType() == rfk::getType<void>(); }).size() == 1u);
 }
 
 void enums()

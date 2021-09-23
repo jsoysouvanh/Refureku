@@ -356,7 +356,7 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 	static_assert(std::is_function_v<MethodSignature>, "Struct::getStaticMethod<> must be called with a function signature as template argument.");
 
 	//Use an Entity instead of a StaticMethod to avoid memory / allocation overhead
-	auto range = staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
+	auto range = _staticMethods.equal_range(static_cast<StaticMethod&&>(Entity(std::string(methodName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -389,13 +389,27 @@ StaticMethod const* Struct::getStaticMethod(std::string const& methodName, EMeth
 template <typename Predicate, typename>
 StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInspectInherited) const
 {
-	//Iterate over this struct's static methods
-	for (StaticMethod const& staticMethod : staticMethods)
+	struct Data
 	{
-		if (predicate(&staticMethod))
+		Predicate			predicate;
+		StaticMethod const*	result;
+	} data{predicate, nullptr};
+
+	//Iterate over this struct's static methods
+	if (!foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
 		{
-			return &staticMethod;
-		}
+			Data* data = reinterpret_cast<Data*>(userData);
+
+			if (data->predicate(staticMethod))
+			{
+				data->result = &staticMethod;
+				return false;
+			}
+
+			return true;
+		}, &data))
+	{
+		return data.result;
 	}
 
 	//Check in parent's static methods
@@ -420,16 +434,24 @@ StaticMethod const* Struct::getStaticMethod(Predicate predicate, bool shouldInsp
 template <typename Predicate, typename>
 std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, bool shouldInspectInherited) const
 {
-	std::vector<StaticMethod const*> result;
+	struct Data
+	{
+		Predicate							predicate;
+		std::vector<StaticMethod const*>	result;
+	} data{predicate};
 
 	//Iterate over this struct's static methods
-	for (StaticMethod const& staticMethod : staticMethods)
+	foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
 	{
-		if (predicate(&staticMethod))
+		Data* data = reinterpret_cast<Data*>(userData);
+
+		if (data->predicate(staticMethod))
 		{
-			result.emplace_back(&staticMethod);
+			data->result.push_back(&staticMethod);
 		}
-	}
+
+		return true;
+	}, &data);
 
 	//Check in parent's static methods
 	if (shouldInspectInherited)
@@ -440,11 +462,11 @@ std::vector<StaticMethod const*> Struct::getStaticMethods(Predicate predicate, b
 		{
 			parentResult = getDirectParentAt(0).getArchetype().getStaticMethods(predicate, true);
 
-			result.insert(result.end(), parentResult.begin(), parentResult.end());
+			data.result.insert(data.result.end(), parentResult.begin(), parentResult.end());
 		}
 	}
 
-	return result;
+	return data.result;	//Should we std::move?
 }
 
 template <typename ReturnType, typename... ArgTypes>

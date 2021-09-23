@@ -222,39 +222,41 @@ void Database::registerSubEntities(Struct const& s) noexcept
 {
 	//Add nested archetypes
 	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
-							 {
-								 reinterpret_cast<Database*>(userData)->registerEntity(archetype, true);
+	{
+		reinterpret_cast<Database*>(userData)->registerEntity(archetype, true);
 
-								 return true;
-							 }, this);
+		return true;
+	}, this);
 
 	//Add fields
 	s.foreachField([](Field const& field, void* userData)
-				   {
-					   reinterpret_cast<Database*>(userData)->registerEntity(field, false);
+	{
+		reinterpret_cast<Database*>(userData)->registerEntity(field, false);
 				   
-					   return true;
-				   }, this);
+		return true;
+	}, this);
 
 	s.foreachStaticField([](StaticField const& staticField, void* userData)
-				   {
-					   reinterpret_cast<Database*>(userData)->registerEntity(staticField, false);
+	{
+		reinterpret_cast<Database*>(userData)->registerEntity(staticField, false);
 
-					   return true;
-				   }, this);
+		return true;
+	}, this);
 
 	//Add methods
 	s.foreachMethod([](Method const& method, void* userData)
-				   {
-					   reinterpret_cast<Database*>(userData)->registerEntity(method, false);
-
-					   return true;
-				   }, this);
-
-	for (Entity const& staticMethod : s.staticMethods)
 	{
-		registerEntity(staticMethod, false);
-	}
+		reinterpret_cast<Database*>(userData)->registerEntity(method, false);
+
+		return true;
+	}, this);
+
+	s.foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
+	{
+		reinterpret_cast<Database*>(userData)->registerEntity(staticMethod, false);
+
+		return true;
+	}, this);
 }
 
 void Database::unregisterSubEntities(Struct const& s) noexcept
@@ -290,10 +292,12 @@ void Database::unregisterSubEntities(Struct const& s) noexcept
 						return true;
 					}, this);
 
-	for (Entity const& staticMethod : s.staticMethods)
+	s.foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
 	{
-		unregisterEntity(staticMethod, false);
-	}
+		reinterpret_cast<Database*>(userData)->unregisterEntity(staticMethod, false);
+
+		return true;
+	}, this);
 }
 
 void Database::registerSubEntities(Enum const& e) noexcept
