@@ -33,6 +33,7 @@ namespace rfk
 	{
 		public:
 			using NestedArchetypes = std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
+			using Fields = std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>;
 
 			class Parent
 			{
@@ -81,6 +82,9 @@ namespace rfk
 			/** All tagged nested structs/classes/enums contained in this struct. */
 			NestedArchetypes					_nestedArchetypes;
 
+			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
+			Fields								_fields;
+
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const;
 
@@ -92,9 +96,6 @@ namespace rfk
 				   EClassKind		classKind)		noexcept;
 
 		public:
-			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
-			std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>				fields;
-
 			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents. */
 			std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>			staticFields;
 
@@ -160,7 +161,7 @@ namespace rfk
 			*	
 			*	@return The first matching field if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Field const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Field const&>>>
 			Field const*						getField(Predicate	predicate,
 														 bool		shouldInspectInherited	= false)								const;
 
@@ -173,7 +174,7 @@ namespace rfk
 			*	
 			*	@return A vector of all fields matching with the provided predicate.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Field const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Field const&>>>
 			std::vector<Field const*>			getFields(Predicate	predicate,
 														  bool		shouldInspectInherited	= false)								const;
 
@@ -724,6 +725,24 @@ namespace rfk
 			*	@param capacity The number of nested archetypes to pre-allocate.
 			*/
 			REFUREKU_API void							setNestedArchetypesCapacity(std::size_t capacity)				noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all fields in this struct.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			*/
+			REFUREKU_API void							foreachField(bool (*visitor)(Field const&,
+																					 void*),
+																	 void* userData)							const	noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of nested archetypes.
+			*			If the number of nested archetypes is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of nested archetypes to pre-allocate.
+			*/
+			REFUREKU_API void							setFieldsCapacity(std::size_t capacity)							noexcept;
 	};
 
 	/**

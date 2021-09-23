@@ -121,39 +121,54 @@ Enum const* Struct::getNestedEnum(Predicate predicate) const
 template <typename Predicate, typename>
 Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) const
 {
-	for (Field const& field : fields)
+	struct Data
 	{
-		/**
-		*	fields collection contains both this struct fields and inherited fields,
-		*	make sure we check inherited fields only if requested
-		*/
-		if ((shouldInspectInherited || field.getOuterEntity() == this) && predicate(&field))
-		{
-			return &field;
-		}
-	}
+		Predicate		predicate;
+		bool			shouldInspectInherited;
+		Struct const*	thisStruct;
+		Field const*	result = nullptr;
+	} data{predicate, shouldInspectInherited, this, nullptr};
 
-	return nullptr;
+	foreachField([](Field const& field, void* userData)
+				 {
+				 	Data* data = reinterpret_cast<Data*>(userData);
+				 
+				 	if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
+				 	{
+				 		data->result = &static_cast<Field const&>(field);
+				 		return false;
+				 	}
+				 
+				 	return true;
+				 }, &data);
+
+	return data.result;
 }
 
 template <typename Predicate, typename>
 std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInspectInherited) const
 {
-	std::vector<Field const*> result;
-
-	for (Field const& field : fields)
+	struct Data
 	{
-		/**
-		*	fields collection contains both this struct fields and inherited fields,
-		*	make sure we check inherited fields only if requested
-		*/
-		if ((shouldInspectInherited || field.getOuterEntity() == this) && predicate(&field))
-		{
-			result.emplace_back(&field);
-		}
-	}
+		Predicate					predicate;
+		bool						shouldInspectInherited;
+		Struct const*				thisStruct;
+		std::vector<Field const*>	result;
+	} data{predicate, shouldInspectInherited, this};
 
-	return result;
+	foreachField([](Field const& field, void* userData)
+				 {
+					 Data* data = reinterpret_cast<Data*>(userData);
+
+					 if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
+					 {
+						 data->result.push_back(&static_cast<Field const&>(field));
+					 }
+
+					 return true;
+				 }, &data);
+
+	return data.result;
 }
 
 template <typename Predicate, typename>

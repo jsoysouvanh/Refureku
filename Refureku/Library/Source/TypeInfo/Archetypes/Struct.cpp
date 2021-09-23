@@ -83,7 +83,7 @@ Enum const* Struct::getNestedEnum(std::string enumName, EAccessSpecifier access)
 Field const* Struct::getField(std::string fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	//Use an Entity instead of a Field to avoid memory / allocation overhead
-	auto range = fields.equal_range(static_cast<Field&&>(Entity(std::move(fieldName), 0u)));
+	auto range = _fields.equal_range(static_cast<Field&&>(Entity(std::move(fieldName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -109,7 +109,7 @@ std::vector<Field const*> Struct::getFields(std::string fieldName, EFieldFlags m
 	std::vector<Field const*> result;
 
 	//Use an Entity instead of a Field to avoid memory / allocation overhead
-	auto range = fields.equal_range(static_cast<Field&&>(Entity(std::move(fieldName), 0u)));
+	auto range = _fields.equal_range(static_cast<Field&&>(Entity(std::move(fieldName), 0u)));
 
 	//In case of full match, avoid reallocation
 	result.reserve(std::distance(range.first, range.second));
@@ -389,7 +389,7 @@ Field* Struct::addField(std::string	fieldName, std::size_t entityId, Type const&
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
 
 	//Add the field to the container
-	return const_cast<Field*>(&*fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset, outerEntity));
+	return const_cast<Field*>(&*_fields.emplace(std::move(fieldName), entityId, type, flags, this, memoryOffset, outerEntity));
 }
 
 StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void* fieldPtr) noexcept
@@ -463,6 +463,25 @@ void Struct::foreachNestedArchetype(bool (*visitor)(Archetype const&, void*), vo
 void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 {
 	_nestedArchetypes.reserve(capacity);
+}
+
+void Struct::foreachField(bool (*visitor)(Field const&, void*), void* userData) const noexcept
+{
+	if (visitor != nullptr)
+	{
+		for (Field const& field : _fields)
+		{
+			if (!visitor(field, userData))
+			{
+				return;
+			}
+		}
+	}
+}
+
+void Struct::setFieldsCapacity(std::size_t capacity) noexcept
+{
+	_fields.reserve(capacity);
 }
 
 //TODO: TEST
