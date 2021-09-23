@@ -236,10 +236,12 @@ void Database::registerSubEntities(Struct const& s) noexcept
 					   return true;
 				   }, this);
 
-	for (Entity const& staticField : s.staticFields)
-	{
-		registerEntity(staticField, false);
-	}
+	s.foreachStaticField([](StaticField const& staticField, void* userData)
+				   {
+					   reinterpret_cast<Database*>(userData)->registerEntity(staticField, false);
+
+					   return true;
+				   }, this);
 
 	//Add methods
 	for (Entity const& method : s.methods)
@@ -271,10 +273,12 @@ void Database::unregisterSubEntities(Struct const& s) noexcept
 					   return true;
 				   }, this);
 
-	for (Entity const& staticField : s.staticFields)
-	{
-		unregisterEntity(staticField, false);
-	}
+	s.foreachStaticField([](StaticField const& staticField, void* userData)
+				   {
+					   reinterpret_cast<Database*>(userData)->unregisterEntity(staticField, false);
+
+					   return true;
+				   }, this);
 
 	//Remove methods
 	for (Entity const& method : s.methods)

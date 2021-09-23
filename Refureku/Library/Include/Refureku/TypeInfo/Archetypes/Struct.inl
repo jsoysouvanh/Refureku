@@ -135,7 +135,7 @@ Field const* Struct::getField(Predicate predicate, bool shouldInspectInherited) 
 				 
 				 	if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
 				 	{
-				 		data->result = &static_cast<Field const&>(field);
+				 		data->result = &field;
 				 		return false;
 				 	}
 				 
@@ -162,51 +162,74 @@ std::vector<Field const*> Struct::getFields(Predicate predicate, bool shouldInsp
 
 					 if ((data->shouldInspectInherited || field.getOuterEntity() == data->thisStruct) && data->predicate(field))
 					 {
-						 data->result.push_back(&static_cast<Field const&>(field));
+						 data->result.push_back(&field);
 					 }
 
 					 return true;
 				 }, &data);
 
-	return data.result;
+	return data.result; //Should we std::move?
 }
 
 template <typename Predicate, typename>
 StaticField const* Struct::getStaticField(Predicate predicate, bool shouldInspectInherited) const
 {
-	for (StaticField const& staticField : staticFields)
+	struct Data
 	{
-		/**
-		*	staticFields collection contains both this struct static fields and inherited static fields,
-		*	make sure we check inherited fields only if requested
-		*/
-		if ((shouldInspectInherited || staticField.getOuterEntity() == this) && predicate(&staticField))
-		{
-			return &staticField;
-		}
-	}
+		Predicate			predicate;
+		bool				shouldInspectInherited;
+		Struct const*		thisStruct;
+		StaticField const*	result;
+	} data{predicate, shouldInspectInherited, this, nullptr};
 
-	return nullptr;
+	foreachStaticField([](StaticField const& staticField, void* userData)
+					   {
+						   Data* data = reinterpret_cast<Data*>(userData);
+					   
+						   /**
+						   *	_staticFields collection contains both this struct static fields and inherited static fields,
+						   *	make sure we check inherited fields only if requested
+						   */
+						   if ((data->shouldInspectInherited || staticField.getOuterEntity() == data->thisStruct) && data->predicate(staticField))
+						   {
+							   data->result = &staticField;
+							   return false;
+						   }
+					   
+						   return true;
+					   }, &data);
+
+	return data.result;
 }
 
 template <typename Predicate, typename>
 std::vector<StaticField const*> Struct::getStaticFields(Predicate predicate, bool shouldInspectInherited) const
 {
-	std::vector<StaticField const*> result;
-
-	for (StaticField const& staticField : staticFields)
+	struct Data
 	{
-		/**
-		*	staticFields collection contains both this struct static fields and inherited static fields,
-		*	make sure we check inherited fields only if requested
-		*/
-		if ((shouldInspectInherited || staticField.getOuterEntity() == this) && predicate(&staticField))
-		{
-			result.emplace_back(&staticField);
-		}
-	}
+		Predicate						predicate;
+		bool							shouldInspectInherited;
+		Struct const*					thisStruct;
+		std::vector<StaticField const*>	result;
+	} data{predicate, shouldInspectInherited, this};
 
-	return result;
+	foreachStaticField([](StaticField const& staticField, void* userData)
+					   {
+						   Data* data = reinterpret_cast<Data*>(userData);
+
+						   /**
+						   *	_staticFields collection contains both this struct static fields and inherited static fields,
+						   *	make sure we check inherited fields only if requested
+						   */
+						   if ((data->shouldInspectInherited || staticField.getOuterEntity() == data->thisStruct) && data->predicate(staticField))
+						   {
+							   data->result.push_back(&staticField);
+						   }
+
+						   return true;
+					   }, &data);
+
+	return data.result; //Should we std::move?
 }
 
 template <typename MethodSignature>

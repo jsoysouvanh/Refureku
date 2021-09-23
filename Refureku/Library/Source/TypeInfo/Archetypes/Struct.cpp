@@ -136,7 +136,7 @@ std::vector<Field const*> Struct::getFields(std::string fieldName, EFieldFlags m
 StaticField const* Struct::getStaticField(std::string fieldName, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	//Use an Entity instead of a StaticField to avoid memory / allocation overhead
-	auto range = staticFields.equal_range(static_cast<StaticField&&>(Entity(std::move(fieldName), 0u)));
+	auto range = _staticFields.equal_range(static_cast<StaticField&&>(Entity(std::move(fieldName), 0u)));
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -162,7 +162,7 @@ std::vector<StaticField const*> Struct::getStaticFields(std::string fieldName, E
 	std::vector<StaticField const*> result;
 
 	//Use an Entity instead of a StaticField to avoid memory / allocation overhead
-	auto range = staticFields.equal_range(static_cast<StaticField&&>(Entity(std::move(fieldName), 0u)));
+	auto range = _staticFields.equal_range(static_cast<StaticField&&>(Entity(std::move(fieldName), 0u)));
 
 	//In case of full match, avoid reallocation
 	result.reserve(std::distance(range.first, range.second));
@@ -398,7 +398,7 @@ StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId,
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
+	return const_cast<StaticField*>(&*_staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
 }
 
 StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId, Type const& type, EFieldFlags flags, Struct const* outerEntity, void const* fieldPtr) noexcept
@@ -407,7 +407,7 @@ StaticField* Struct::addStaticField(std::string fieldName, std::size_t entityId,
 
 	//Add the static field to the container
 	//The first const_cast is here so that we can set the outerEntity field. It doesn't change the hash value so it won't break the unordered_multiset.
-	return const_cast<StaticField*>(&*staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
+	return const_cast<StaticField*>(&*_staticFields.emplace(std::move(fieldName), entityId, type, flags, this, fieldPtr, outerEntity));
 }
 
 Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
@@ -484,39 +484,21 @@ void Struct::setFieldsCapacity(std::size_t capacity) noexcept
 	_fields.reserve(capacity);
 }
 
-//TODO: TEST
-//template <typename Predicate, typename>
-//Archetype const* Struct::getNestedArchetype(Predicate predicate) const
-//{
-//	struct Data
-//	{
-//		Predicate			predicate;
-//		Archetype const*	result = nullptr;
-//	} data;
-//
-//	foreachNestedArchetype([](Archetype const& archetype, void* userData)
-//						   {
-//							   Data* data = reinterpret_cast<Data*>(userData);
-//
-//							   if (data.predicate(archetype))
-//							   {
-//								   data->result = &archetype;
-//								   return false;
-//							   }
-//
-//							   return true;
-//						   }, &data);
-//
-//	return data.result;
-//
-//	/*for (Archetype const* archetype : nestedArchetypes)
-//	{
-//		if (predicate(archetype))
-//		{
-//			return archetype;
-//		}
-//	}
-//
-//	return nullptr;*/
-//}
-//END TODO: TEST
+void Struct::foreachStaticField(bool (*visitor)(StaticField const&, void*), void* userData) const noexcept
+{
+	if (visitor != nullptr)
+	{
+		for (StaticField const& staticField : _staticFields)
+		{
+			if (!visitor(staticField, userData))
+			{
+				return;
+			}
+		}
+	}
+}
+
+void Struct::setStaticFieldsCapacity(std::size_t capacity) noexcept
+{
+	_staticFields.reserve(capacity);
+}

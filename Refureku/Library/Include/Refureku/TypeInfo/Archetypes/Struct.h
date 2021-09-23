@@ -32,8 +32,9 @@ namespace rfk
 	class Struct : public Archetype
 	{
 		public:
-			using NestedArchetypes = std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
-			using Fields = std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>;
+			using NestedArchetypes	= std::unordered_set<Archetype const*, Entity::PtrNameHasher, Entity::PtrEqualName>;
+			using Fields			= std::unordered_multiset<Field, Entity::NameHasher, Entity::EqualName>;
+			using StaticFields		= std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>;
 
 			class Parent
 			{
@@ -85,6 +86,9 @@ namespace rfk
 			/** All tagged fields contained in this struct, may they be declared in this struct or one of its parents. */
 			Fields								_fields;
 
+			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents. */
+			StaticFields						_staticFields;
+
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType* makeInstanceFromCustomInstantiator(ArgTypes&&... args)	const;
 
@@ -96,9 +100,6 @@ namespace rfk
 				   EClassKind		classKind)		noexcept;
 
 		public:
-			/** All tagged static fields contained in this struct, may they be declared in this struct or one of its parents. */
-			std::unordered_multiset<StaticField, Entity::NameHasher, Entity::EqualName>			staticFields;
-
 			/** All tagged methods declared in this struct. */
 			std::unordered_multiset<Method, Entity::NameHasher, Entity::EqualName>				methods;
 
@@ -187,7 +188,7 @@ namespace rfk
 			*	
 			*	@return The first matching static field if any is found, else nullptr.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticField const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticField const&>>>
 			StaticField const*					getStaticField(Predicate	predicate,
 															   bool			shouldInspectInherited	= false)						const;
 
@@ -200,7 +201,7 @@ namespace rfk
 			*	
 			*	@return A vector of all static fields matching with the provided predicate.
 			*/
-			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticField const*>>>
+			template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, StaticField const&>>>
 			std::vector<StaticField const*>		getStaticFields(Predicate	predicate,
 																bool		shouldInspectInherited	= false)						const;
 
@@ -737,12 +738,30 @@ namespace rfk
 																	 void* userData)							const	noexcept;
 
 			/**
-			*	@brief	Internally pre-allocate enough memory for the provided number of nested archetypes.
-			*			If the number of nested archetypes is already >= to the provided capacity, this method has no effect.
+			*	@brief	Internally pre-allocate enough memory for the provided number of fields.
+			*			If the number of fields is already >= to the provided capacity, this method has no effect.
 			* 
-			*	@param capacity The number of nested archetypes to pre-allocate.
+			*	@param capacity The number of fields to pre-allocate.
 			*/
 			REFUREKU_API void							setFieldsCapacity(std::size_t capacity)							noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all static fields in this struct.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			*/
+			REFUREKU_API void							foreachStaticField(bool (*visitor)(StaticField const&,
+																						   void*),
+																		   void* userData)						const	noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of static fields.
+			*			If the number of fields is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of static fields to pre-allocate.
+			*/
+			REFUREKU_API void							setStaticFieldsCapacity(std::size_t capacity)					noexcept;
 	};
 
 	/**

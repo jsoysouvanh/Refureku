@@ -137,8 +137,8 @@ void structs()
 	TEST(ExampleStruct::staticGetArchetype().getNestedEnum([](rfk::Enum const&) { return true; }) == nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getField([](rfk::Field const& f) { return f.getType() == rfk::getType<int>(); }) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getFields([](rfk::Field const&) { return true; }, true).size() == 1u);
-	TEST(ExampleStruct::staticGetArchetype().getStaticField([](rfk::StaticField const* sf) { return sf->getType() == rfk::getType<int>(); }) != nullptr);
-	TEST(ExampleStruct::staticGetArchetype().getStaticFields([](rfk::StaticField const*) { return true; }, true).size() == 1u);
+	TEST(ExampleStruct::staticGetArchetype().getStaticField([](rfk::StaticField const& sf) { return sf.getType() == rfk::getType<int>(); }) != nullptr);
+	TEST(ExampleStruct::staticGetArchetype().getStaticFields([](rfk::StaticField const&) { return true; }, true).size() == 1u);
 	TEST(ExampleStruct::staticGetArchetype().getMethod([](rfk::Method const* m) { return m->getParameterCount() == 2u; }, true) != nullptr);
 	TEST(ExampleStruct::staticGetArchetype().getMethods([](rfk::Method const*) { return true; }).size() == 1u);
 	TEST(ExampleStruct::staticGetArchetype().getStaticMethod([](rfk::StaticMethod const* sm) { return sm->getParameterCount() == 0u; }) != nullptr);
