@@ -8,30 +8,91 @@
 template <typename T>
 template <typename... Args>
 Pimpl<T>::Pimpl(Args&&... arguments):
-	_implReference(std::forward<Args>(arguments)...)
+	_implementation{ new T(std::forward<Args>(arguments)...) }
 {
 }
 
 template <typename T>
-T& Pimpl<T>::get() noexcept
+Pimpl<T>::Pimpl(Pimpl const& other):
+	_implementation{(other._implementation != nullptr) ? new T(*other._implementation) : nullptr}
 {
-	return _implReference;
 }
 
 template <typename T>
-T const& Pimpl<T>::get() const noexcept
+Pimpl<T>::Pimpl(Pimpl&& other) noexcept:
+	_implementation{other._implementation}
 {
-	return _implReference;
+	other._implementation = nullptr;
 }
 
 template <typename T>
-T& Pimpl<T>::operator->() noexcept
+Pimpl<T>::~Pimpl()
 {
-	return _implReference;
+	checkedDelete();
 }
 
 template <typename T>
-T const& Pimpl<T>::operator->() const noexcept
+void Pimpl<T>::checkedDelete()
 {
-	return _implReference;
+	if (_implementation != nullptr)
+	{
+		delete _implementation;
+	}
+}
+
+template <typename T>
+T* Pimpl<T>::get() noexcept
+{
+	return _implementation;
+}
+
+template <typename T>
+T const* Pimpl<T>::get() const noexcept
+{
+	return _implementation;
+}
+
+template <typename T>
+Pimpl<T>& Pimpl<T>::operator=(Pimpl const& other)
+{
+	checkedDelete();
+
+	_implementation = (other._implementation != nullptr) ? new T(*other._implementation) : nullptr;
+
+	return *this;
+}
+
+template <typename T>
+Pimpl<T>& Pimpl<T>::operator=(Pimpl&& other) noexcept
+{
+	checkedDelete();
+
+	_implementation = other._implementation;
+	other._implementation = nullptr;
+
+	return *this;
+}
+
+template <typename T>
+T* Pimpl<T>::operator->() noexcept
+{
+	return _implementation;
+}
+
+template <typename T>
+T const* Pimpl<T>::operator->() const noexcept
+{
+	return _implementation;
+}
+
+template <typename T>
+T& Pimpl<T>::operator*() noexcept
+{
+	return *_implementation;
+}
+
+template <typename T>
+T const& Pimpl<T>::operator*() const noexcept
+{
+	return *_implementation;
 }

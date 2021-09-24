@@ -13,52 +13,72 @@ namespace rfk
 {
 	/**
 	*	Utility class used for the pimpl (pointer to implementation) idiom.
-	*	It propagates constness.
+	*	It holds (and owns) a pointer to the underlying class and propagates constness.
 	*/
 	template <typename T>
 	class Pimpl
 	{
 		private:
 			/** Underlying class instance. */
-			T _implReference;
+			T* _implementation;
+
+			/**
+			*	@brief Destroy the underlying object if it is valid.
+			*/
+			void	checkedDelete();
 
 		public:
 			template <typename... Args>
 			explicit Pimpl(Args&&... arguments);
 
-			Pimpl(Pimpl const&)	= default;
-			Pimpl(Pimpl&&)		= default;
+			Pimpl(Pimpl const& other);
+			Pimpl(Pimpl&& other)		noexcept;
+			~Pimpl();
 
 			/**
-			*	@brief Retrieve the underlying object.
+			*	@brief Retrieve a pointer to the underlying object.
 			* 
 			*	@return The underlying object.
 			*/
-			T& get()				noexcept;
+			T*			get()			noexcept;
 
 			/**
-			*	@brief Retrieve the const underlying object.
+			*	@brief Retrieve a const pointer to the underlying object.
 			* 
 			*	@return The const underlying object.
 			*/
-			T const& get()	const	noexcept;
+			T const*	get()	const	noexcept;
 
-			Pimpl&		operator=(Pimpl const&)	= default;
-			Pimpl&		operator=(Pimpl&&)		= default;
+			Pimpl&		operator=(Pimpl const& other);
+			Pimpl&		operator=(Pimpl&& other)		noexcept;
 
 			/**
-			*	@brief Retrieve the underlying object.
+			*	@brief Retrieve a pointer to the underlying object.
 			* 
 			*	@return The underlying object.
 			*/
-			T&			operator->()			noexcept;
+			T*			operator->()					noexcept;
 
 			/**
-			*	@brief Retrieve the const underlying object.
+			*	@brief Retrieve a const pointer to the underlying object.
 			* 
 			*	@return The const underlying object.
 			*/
-			T const&	operator->()	const	noexcept;
+			T const*	operator->()			const	noexcept;
+
+			/**
+			*	@brief Retrieve a reference to the underlying object.
+			* 
+			*	@return The underlying object.
+			*/
+			T&			operator*()						noexcept;
+
+			/**
+			*	@brief Retrieve a const reference to the underlying object.
+			* 
+			*	@return The const underlying object.
+			*/
+			T const&	operator*()				const	noexcept;
 	};
 
 	#include "Refureku/Utility/Pimpl.inl"

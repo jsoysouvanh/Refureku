@@ -7,6 +7,7 @@
 
 #pragma once
 
+//TODO: This should only include public headers
 #include "Refureku/Config.h"
 
 #include "Refureku/TypeInfo/Database.h"
