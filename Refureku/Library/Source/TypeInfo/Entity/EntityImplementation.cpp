@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Entity/EntityImplementation.h"
 
 #include <utility>		//std::forward
 #include <algorithm>	//std::find

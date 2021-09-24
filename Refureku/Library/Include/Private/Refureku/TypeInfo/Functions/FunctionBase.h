@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "Refureku/Config.h"
-#include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Entity/EntityImplementation.h"
 #include "Refureku/TypeInfo/Functions/FunctionParameter.h"
 #include "Refureku/TypeInfo/Functions/ICallable.h"
 #include "Refureku/Exceptions/ArgCountMismatch.h"

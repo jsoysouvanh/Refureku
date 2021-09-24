@@ -21,3 +21,8 @@
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Namespaces/Namespace.h"
 #include "Refureku/TypeInfo/Properties/Property.h"
+
+
+//WIP: Public headers
+#include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Properties/Property.h"

@@ -10,7 +10,7 @@
 #include <type_traits>
 
 #include "Refureku/Config.h"
-#include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Entity/EntityImplementation.h"
 
 namespace rfk
 {

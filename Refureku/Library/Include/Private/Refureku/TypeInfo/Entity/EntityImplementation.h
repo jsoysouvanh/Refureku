@@ -272,5 +272,5 @@ namespace rfk
 			inline bool operator!=(Entity const& other) const noexcept;
 	};
 
-	#include "Refureku/TypeInfo/Entity/Entity.inl"
+	#include "Refureku/TypeInfo/Entity/EntityImplementation.inl"
 }

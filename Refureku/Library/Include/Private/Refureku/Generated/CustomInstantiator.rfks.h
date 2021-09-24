@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../TypeInfo/Properties/CustomInstantiator.h"
+#include "../../../Public/Refureku/TypeInfo/Properties/CustomInstantiator.h"
 
 #include <type_traits>
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>

@@ -1,4 +1,5 @@
 #include <utility>	//std::forward
+#include <vector>
 
 #include <Kodgen/Misc/Filesystem.h>
 #include <Kodgen/Misc/DefaultLogger.h>
@@ -24,17 +25,16 @@ fs::path getLibraryDirectoryPath()
 }
 
 bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::ParsingSettings& parsingSettings,
-				  kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings)
+				  kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings, fs::path outputDirectory)
 {
 	bool result = true;
 
 	fs::path libraryDirectoryPath = getLibraryDirectoryPath();
-	fs::path outputDirectory = libraryDirectoryPath / "Include" / "Private" / "Refureku" / "Generated";
 
 	result &= codeGenMgrSettings.addSupportedFileExtension(".h");
 	result &= codeGenMgrSettings.addSupportedFileExtension(".hpp");
-	result &= codeGenMgrSettings.addToProcessDirectory(libraryDirectoryPath / "Include" / "Private" / "Refureku" / "TypeInfo" / "Properties");
-	result &= codeGenMgrSettings.addIgnoredDirectory(outputDirectory);
+	codeGenMgrSettings.addToProcessDirectory(libraryDirectoryPath / "Include" / "Public" / "Refureku" / "TypeInfo" / "Properties");
+	codeGenMgrSettings.addIgnoredDirectory(outputDirectory);
 
 	result &= codeGenUnitSettings.setOutputDirectory(outputDirectory);
 	codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
@@ -42,8 +42,8 @@ bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeG
 
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 	parsingSettings.shouldParseAllEntities = false;
-	result &= parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Public");
-	result &= parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Private"); //TODO: Delete this once public API is fully implemented
+	parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Public");
+	parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Private"); //TODO: Delete this once public API is fully implemented
 	result &= parsingSettings.setCompilerExeName("msvc");
 
 	parsingSettings.propertyParsingSettings.namespaceMacroName	= "RFKNamespace";
@@ -72,6 +72,63 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const&
 	}
 }
 
+void runForPrivateDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
+							kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
+{
+	logger.log("Run for private directory.");
+	if (loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, getLibraryDirectoryPath() / "Include" / "Private" / "Refureku" / "Generated"))
+	{
+		//Parse
+		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
+
+		//Result
+		printGenerationResult(logger, genResult);
+	}
+	else
+	{
+		logger.log("Settings loading failed.", kodgen::ILogger::ELogSeverity::Error);
+	}
+}
+
+void runForPublicDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
+						   kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
+{
+	logger.log("Run for public directory.");
+	
+	fs::path outputDirectory = getLibraryDirectoryPath() / "Include" / "Public" / "Refureku" / "Generated";
+	if (loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, outputDirectory))
+	{
+		//Parse
+		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
+
+		//Result
+		printGenerationResult(logger, genResult);
+	}
+	else
+	{
+		logger.log("Settings loading failed.", kodgen::ILogger::ELogSeverity::Error);
+	}
+
+	//Delete all generated source files from the output directory since they are only needed in the private one
+	std::vector<fs::path> toDelete;
+	for (fs::recursive_directory_iterator directoryIt = fs::recursive_directory_iterator(outputDirectory, fs::directory_options::follow_directory_symlink); directoryIt != fs::recursive_directory_iterator(); directoryIt++)
+	{
+		fs::directory_entry entry = *directoryIt;
+
+		if (entry.is_regular_file())
+		{
+			fs::path filePath = entry.path();
+			fs::path stem = filePath.stem();
+
+			if (stem.has_extension() && stem.extension() == ".rfks")
+			{
+				fs::remove(filePath);
+				logger.log("Remove file: " + filePath.string());
+			}
+		}
+	}
+}
+
 int main()
 {
 	kodgen::DefaultLogger logger;
@@ -93,18 +150,8 @@ int main()
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 
-	if (loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings))
-	{
-		//Parse
-		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
-
-		//Result
-		printGenerationResult(logger, genResult);
-	}
-	else
-	{
-		logger.log("Settings loading failed.", kodgen::ILogger::ELogSeverity::Error);
-	}
+	runForPrivateDirectory(logger, codeGenMgr, fileParser, codeGenUnit, codeGenUnitSettings);
+	runForPublicDirectory(logger, codeGenMgr, fileParser, codeGenUnit, codeGenUnitSettings);
 
 	return EXIT_SUCCESS;
 }

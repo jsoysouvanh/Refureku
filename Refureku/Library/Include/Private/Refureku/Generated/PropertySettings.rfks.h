@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../TypeInfo/Properties/PropertySettings.h"
+#include "../../../Public/Refureku/TypeInfo/Properties/PropertySettings.h"
 
 #include <type_traits>
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../TypeInfo/Properties/ParseAllNested.h"
+#include "../../../Public/Refureku/TypeInfo/Properties/ParseAllNested.h"
 
 #include <type_traits>
 #include <Refureku/TypeInfo/Namespaces/Namespace.h>

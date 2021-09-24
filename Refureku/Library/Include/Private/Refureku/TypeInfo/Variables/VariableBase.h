@@ -9,7 +9,7 @@
 
 #include <string>
 
-#include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Entity/EntityImplementation.h"
 #include "Refureku/TypeInfo/Type.h"
 #include "Refureku/Misc/FundamentalTypes.h"
 
