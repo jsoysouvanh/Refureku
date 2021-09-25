@@ -8,11 +8,27 @@
 template <typename T>
 [[nodiscard]] constexpr T* Allocator<T>::allocate(std::size_t count)
 {
-	return reinterpret_cast<T*>(::operator new(count * sizeof(T), std::align_val_t{alignof(T)}));
+	if constexpr (alignof(T) > __STDCPP_DEFAULT_NEW_ALIGNMENT__)
+	{
+		return static_cast<T*>(::operator new(count * sizeof(T), std::align_val_t{alignof(T)}));
+	}
+	else
+	{
+		return static_cast<T*>(::operator new(count * sizeof(T)));
+	}
 }
 
 template <typename T>
-constexpr void Allocator<T>::deallocate(T* allocatedMemory, std::size_t count)
+constexpr void Allocator<T>::deallocate(T* allocatedMemory, [[maybe_unused]] std::size_t count)
 {
-	::operator delete(allocatedMemory, count * sizeof(T), std::align_val_t{alignof(T)});
+	//For some reasons clang can't find the delete overload with count * sizeof(T) as second parameter
+
+	if constexpr (alignof(T) > __STDCPP_DEFAULT_NEW_ALIGNMENT__)
+	{
+		::operator delete(allocatedMemory, std::align_val_t{alignof(T)});
+	}
+	else
+	{
+		::operator delete(allocatedMemory);
+	}
 }

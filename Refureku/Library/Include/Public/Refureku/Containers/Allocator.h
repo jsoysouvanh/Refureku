@@ -29,7 +29,7 @@ namespace rfk
 			* 
 			*	@return A pointer to the allocated memory.
 			*/
-			[[nodiscard]] constexpr T* allocate(std::size_t count);
+			[[nodiscard]] constexpr T*	allocate(std::size_t count);
 
 			/**
 			*	@brief Deallocate count * sizeof(T) bytes at the specified memory.

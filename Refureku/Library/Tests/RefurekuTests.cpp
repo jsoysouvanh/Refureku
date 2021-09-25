@@ -23,13 +23,15 @@ bool approximatelyEqual(float value1, float value2, float epsilon = FLT_EPSILON)
 	return std::fabs(value1 - value2) <= epsilon;
 }
 
-#include <vector>
+struct HugeClass
+{
+	std::size_t array[20];
+};
 
 void containers()
 {
-	std::vector<int> v;
-
 	rfk::Vector<int> intVec;
+	rfk::Vector<HugeClass> hugeClassVec;
 }
 
 void outerEntities()
