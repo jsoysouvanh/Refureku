@@ -4,6 +4,8 @@
 
 #include <Refureku/Refureku.h>
 
+#include "Refureku/Containers/Vector.h"
+
 #include "AB.h"
 #include "ExampleClass.h"
 #include "TestPropertyUsage.h"
@@ -19,6 +21,15 @@
 bool approximatelyEqual(float value1, float value2, float epsilon = FLT_EPSILON)
 {
 	return std::fabs(value1 - value2) <= epsilon;
+}
+
+#include <vector>
+
+void containers()
+{
+	std::vector<int> v;
+
+	rfk::Vector<int> intVec;
 }
 
 void outerEntities()
@@ -1018,6 +1029,7 @@ void templateClasses()
 
 int main()
 {
+	containers();
 	inheritance();
 	classes();
 	structs();

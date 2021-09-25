@@ -20,7 +20,8 @@ namespace rfk
 	{
 		private:
 			class Implementation;
-
+			
+			/** Concrete implementation of the entity class. */
 			Pimpl<EntityAPI::Implementation> _pimpl;
 
 		public:

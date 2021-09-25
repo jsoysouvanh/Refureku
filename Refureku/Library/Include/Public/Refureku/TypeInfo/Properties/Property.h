@@ -9,6 +9,7 @@
 
 #include "Refureku/Config.h"
 #include "Refureku/Object.h"
+#include "Refureku/Containers/Vector.h"
 #include "Refureku/TypeInfo/Entity/EEntityKind.h"
 
 namespace rfk
@@ -54,4 +55,12 @@ namespace rfk
 			*/
 			virtual bool				getAllowMultiple()		const noexcept;
 	};
+
+#ifdef REFUREKU_EXPORT
+	extern template class rfk::Allocator<Property const*>;
+	extern template class Vector<Property const*, rfk::Allocator<Property const*>>;
+#else
+	template class REFUREKU_API rfk::Allocator<Property const*>;
+	template class REFUREKU_API Vector<Property const*, rfk::Allocator<Property const*>>;
+#endif
 }

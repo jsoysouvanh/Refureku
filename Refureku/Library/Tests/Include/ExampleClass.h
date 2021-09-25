@@ -15,7 +15,7 @@ namespace namespace1
 	class ParentParentParentClass 
 	{
 		private:
-			double pppDouble = 0.21;
+			[[maybe_unused]] double pppDouble = 0.21;
 
 		public:
 			ParentParentParentClass() noexcept {} 

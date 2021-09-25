@@ -2,6 +2,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_API rfk::Allocator<Property const*>;
+template class REFUREKU_API Vector<Property const*, rfk::Allocator<Property const*>>;
+
 rfk::EEntityKind Property::getTargetEntityKind() const noexcept
 {
 	return Property::targetEntityKind;
