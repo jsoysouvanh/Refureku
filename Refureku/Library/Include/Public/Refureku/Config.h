@@ -28,24 +28,30 @@
 
 	#define REFUREKU_API
 	#define REFUREKU_INTERNAL
+	#define REFUREKU_TEMPLATE_API(...)
 
 #elif defined(_WIN32) || defined(__CYGWIN__)
 
 	#if defined(REFUREKU_EXPORT)
 
 		#if defined(__GNUC__)
-			#define REFUREKU_API __attribute__((dllexport))
+			#define REFUREKU_API						__attribute__((dllexport))
 		#else
-			#define REFUREKU_API __declspec(dllexport)
+			#define REFUREKU_API						__declspec(dllexport)
 		#endif
+
+		#define REFUREKU_TEMPLATE_API_DEF 	REFUREKU_API
+		#define REFUREKU_TEMPLATE_API(...)	extern template class __VA_ARGS__
 
 	#else
 
 		#if defined(__GNUC__)
-			#define REFUREKU_API	__attribute__((dllimport))
+			#define REFUREKU_API __attribute__((dllimport))
 		#else
-			#define REFUREKU_API	__declspec(dllimport)
+			#define REFUREKU_API __declspec(dllimport)
 		#endif
+
+		#define REFUREKU_TEMPLATE_API(...)	template class REFUREKU_API __VA_ARGS__
 
   #endif
 
@@ -53,15 +59,28 @@
 
 #else
 
-	#if __GNUC__ >= 4 && defined(REFUREKU_EXPORT)
+	#if __GNUC__ >= 4
 
-		#define REFUREKU_API		__attribute__((visibility("default")))
-		#define REFUREKU_INTERNAL	__attribute__((visibility("hidden")))
+		#if defined(REFUREKU_EXPORT)
+
+			#define REFUREKU_API				__attribute__((visibility("default")))
+			#define REFUREKU_INTERNAL			__attribute__((visibility("hidden")))
+			#define REFUREKU_TEMPLATE_API_DEF
+			#define REFUREKU_TEMPLATE_API(...)	extern template class REFUREKU_API __VA_ARGS__
+
+		#else
+
+			#define REFUREKU_API
+			#define REFUREKU_INTERNAL
+			#define REFUREKU_TEMPLATE_API(...)
+
+		#endif
 
 	#else
 
 		#define REFUREKU_API
 		#define REFUREKU_INTERNAL
+		#define REFUREKU_TEMPLATE_API(...)
 
 	#endif
 

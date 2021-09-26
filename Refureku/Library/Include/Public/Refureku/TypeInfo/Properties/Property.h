@@ -56,11 +56,6 @@ namespace rfk
 			virtual bool				getAllowMultiple()		const noexcept;
 	};
 
-#ifdef REFUREKU_EXPORT
-	extern template class rfk::Allocator<Property const*>;
-	extern template class Vector<Property const*, rfk::Allocator<Property const*>>;
-#else
-	template class REFUREKU_API rfk::Allocator<Property const*>;
-	template class REFUREKU_API Vector<Property const*, rfk::Allocator<Property const*>>;
-#endif
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Property const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Property const*, rfk::Allocator<Property const*>>);
 }

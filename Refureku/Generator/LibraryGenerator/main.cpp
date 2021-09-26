@@ -24,7 +24,7 @@ fs::path getLibraryDirectoryPath()
 	return path / "Refureku" / "Library";
 }
 
-bool loadSettings(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::ParsingSettings& parsingSettings,
+bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::ParsingSettings& parsingSettings,
 				  kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings, fs::path outputDirectory)
 {
 	bool result = true;
@@ -76,7 +76,7 @@ void runForPrivateDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGe
 							kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
 {
 	logger.log("Run for private directory.");
-	if (loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, getLibraryDirectoryPath() / "Include" / "Private" / "Refureku" / "Generated"))
+	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, getLibraryDirectoryPath() / "Include" / "Private" / "Refureku" / "Generated"))
 	{
 		//Parse
 		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
@@ -96,7 +96,7 @@ void runForPublicDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGen
 	logger.log("Run for public directory.");
 	
 	fs::path outputDirectory = getLibraryDirectoryPath() / "Include" / "Public" / "Refureku" / "Generated";
-	if (loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, outputDirectory))
+	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, outputDirectory))
 	{
 		//Parse
 		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
