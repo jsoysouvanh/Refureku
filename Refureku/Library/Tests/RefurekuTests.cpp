@@ -968,7 +968,9 @@ void testSingleTypeTemplateClassTemplate()
 	TEST(c->asTemplate()->getProperty<ParseAllNested>() != nullptr);
 
 	TEST(c->asTemplate()->getInstantiation<TestClassA>() != nullptr);
-	TEST(c->asTemplate()->getInstantiation<1>({ &TestClassA::staticGetArchetype() }) != nullptr);
+
+	rfk::Archetype const* testClassA[] = { &TestClassA::staticGetArchetype() };
+	TEST(c->asTemplate()->getInstantiation(testClassA) != nullptr);
 	TEST(c->asTemplate()->getInstantiation<TestClassB>() == nullptr);
 	TEST(c->asTemplate()->getInstantiation<int>() == nullptr);
 	TEST(rfk::getDatabase().getEntity(c->asTemplate()->getInstantiation<TestClassA>()->getId()) != nullptr);
@@ -988,9 +990,11 @@ void testMultipleTypeTemplateClassTemplate()
 	TEST(c->getInstantiationsCount() == 3u); //The last implicit instance is at the end of this test function.
 
 	TEST(c->getInstantiation<int, int, int>() != nullptr);
-	TEST(c->getInstantiation<3>({ rfk::getArchetype<int>(), rfk::getArchetype<int>(), rfk::getArchetype<int>() }) != nullptr);
+	rfk::Archetype const* intintint[] = { rfk::getArchetype<int>(), rfk::getArchetype<int>(), rfk::getArchetype<int>() };
+	TEST(c->getInstantiation(intintint) != nullptr);
 	TEST(c->getInstantiation<int, float, double>() != nullptr);
-	TEST(c->getInstantiation<3>({ rfk::getArchetype<int>(), rfk::getArchetype<float>(), rfk::getArchetype<double>() }) != nullptr);
+	rfk::Archetype const* intfloatdouble[] = { rfk::getArchetype<int>(), rfk::getArchetype<float>(), rfk::getArchetype<double>() };
+	TEST(c->getInstantiation(intfloatdouble) != nullptr);
 	TEST(rfk::getDatabase().getEntity(MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype().getId()) != nullptr);
 	TEST(rfk::getArchetype<MultipleTypeTemplateClassTemplate<int, float, double>>() == &MultipleTypeTemplateClassTemplate<int, float, double>::staticGetArchetype());
 

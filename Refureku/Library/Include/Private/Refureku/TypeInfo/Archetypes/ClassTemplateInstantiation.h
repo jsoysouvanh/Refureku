@@ -9,7 +9,6 @@
 
 #include <string>
 #include <vector>
-#include <array>
 
 #include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
@@ -55,9 +54,8 @@ namespace rfk
 			* 
 			*	@return true if the provided types are the same as this instance's, else false.
 			*/
-			//TODO: Remove the std::array dependency
-			template <size_t ArraySize>
-			bool hasSameTemplateArguments(std::array<Archetype const*, ArraySize> const& archetypes)	const	noexcept;	//TODO: prototype must change to be able to check with non-type parameters
+			template <std::size_t ArraySize>
+			bool hasSameTemplateArguments(Archetype const* (&archetypes)[ArraySize])	const	noexcept;	//TODO: prototype must change to be able to check with non-type parameters
 
 			/**
 			*	@brief Add a template argument to this instantiation

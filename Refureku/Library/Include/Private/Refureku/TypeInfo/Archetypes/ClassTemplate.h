@@ -9,7 +9,6 @@
 
 #include <vector>
 #include <unordered_set>
-#include <array>
 
 #include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
@@ -48,7 +47,7 @@ namespace rfk
 			*	@return The instance if any, else nullptr.
 			*/
 			template <std::size_t ArraySize>
-			ClassTemplateInstantiation const*	getInstantiation(std::array<Archetype const*, ArraySize> const& archetypes)	const	noexcept;	//TODO: Should be an array of TemplateArgument instead
+			ClassTemplateInstantiation const*	getInstantiation(Archetype const* (&archetypes)[ArraySize])	const	noexcept;	//TODO: Should be an array of TemplateArgument instead
 
 			/**
 			*	@brief Add a template parameter.

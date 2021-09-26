@@ -22,7 +22,7 @@ ClassTemplateInstantiation const* ClassTemplate::getInstantiation() const noexce
 }
 
 template <size_t ArraySize>
-ClassTemplateInstantiation const* ClassTemplate::getInstantiation(std::array<Archetype const*, ArraySize> const& archetypes) const noexcept
+ClassTemplateInstantiation const* ClassTemplate::getInstantiation(Archetype const* (&archetypes)[ArraySize]) const noexcept
 {
 	for (std::size_t i = 0; i < getInstantiationsCount(); i++)
 	{
