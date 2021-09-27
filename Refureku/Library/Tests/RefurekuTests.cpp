@@ -11,6 +11,7 @@
 #include "TestPropertyUsage.h"
 #include "ThirdPartyEnumReflectionCode.h"
 #include "CustomString.h"
+#include "ContainerTestClasses.h"
 
 //Template
 #include "ClassTemplates/SingleTypeTemplateClassTemplate.h"
@@ -23,15 +24,71 @@ bool approximatelyEqual(float value1, float value2, float epsilon = FLT_EPSILON)
 	return std::fabs(value1 - value2) <= epsilon;
 }
 
-struct HugeClass
-{
-	std::size_t array[20];
-};
-
 void containers()
 {
 	rfk::Vector<int> intVec;
-	rfk::Vector<HugeClass> hugeClassVec;
+
+	TEST(intVec.empty());
+	TEST(intVec.capacity() == 2u);
+
+	intVec.push_back(1);
+	TEST(!intVec.empty());
+
+	intVec.push_back(2);
+	TEST(intVec.capacity() == 2u);
+	TEST(intVec.size() == 2u);
+
+	intVec.push_back(3);
+	TEST(intVec.capacity() == 4u);
+	TEST(intVec.size() == 3u);
+	TEST(intVec.front() == 1);
+	TEST(intVec.back() == 3);
+	TEST(intVec[0] == 1);
+	TEST(intVec[1] == 2);
+	TEST(intVec[2] == 3);
+
+	intVec.clear();
+	TEST(intVec.empty());
+
+	TEST(HugeClass::getInstanceCount() == 0u);
+	{
+		rfk::Vector<HugeClass> hugeClassVec;
+
+		hugeClassVec.emplace_back();
+		hugeClassVec.emplace_back(1);
+
+		//Trigger realloc here
+		hugeClassVec.push_back(hugeClassVec.back());
+		TEST(HugeClass::getInstanceCount() == 3u);
+
+		hugeClassVec.resize(10);
+		TEST(HugeClass::getInstanceCount() == 10u);
+
+		hugeClassVec.resize(2);
+		TEST(HugeClass::getInstanceCount() == 2u);
+	}
+	TEST(HugeClass::getInstanceCount() == 0u);
+
+	{
+		rfk::Vector<CopyOnly> copyOnlyVec;
+
+		copyOnlyVec.emplace_back();
+		copyOnlyVec.emplace_back();
+		copyOnlyVec.emplace_back();
+	}
+
+	{
+		rfk::Vector<MoveOnly> moveOnlyVec;
+
+		moveOnlyVec.emplace_back();
+		moveOnlyVec.emplace_back();
+		moveOnlyVec.emplace_back();
+	}
+
+	{
+		//Doesn't compile
+		//rfk::Vector<NotCopyNorMove> notCpyNorMoveVec;
+	}
 }
 
 void outerEntities()

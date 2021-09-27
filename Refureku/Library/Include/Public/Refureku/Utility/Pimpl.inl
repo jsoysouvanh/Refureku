@@ -37,6 +37,8 @@ void Pimpl<T>::checkedDelete()
 	if (_implementation != nullptr)
 	{
 		delete _implementation;
+
+		_implementation = nullptr;
 	}
 }
 

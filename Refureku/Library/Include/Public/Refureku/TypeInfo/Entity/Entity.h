@@ -16,7 +16,7 @@ namespace rfk
 {
 	class StructAPI;
 
-	class EntityAPI //TODO: Rename in EntityAPI
+	class EntityAPI //TODO: Rename in Entity
 	{
 		private:
 			class Implementation;
@@ -26,9 +26,9 @@ namespace rfk
 
 		public:
 			REFUREKU_API EntityAPI(char const*		name,
-								std::size_t			id,
-								EEntityKind			kind = EEntityKind::Undefined,
-								EntityAPI const*	outerEntity = nullptr)			noexcept;
+								   std::size_t		id,
+								   EEntityKind		kind = EEntityKind::Undefined,
+								   EntityAPI const*	outerEntity = nullptr)			noexcept;
 			EntityAPI(EntityAPI const&)												= default;
 			EntityAPI(EntityAPI&&)													= default;
 

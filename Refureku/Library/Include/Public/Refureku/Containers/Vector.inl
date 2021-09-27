@@ -11,6 +11,7 @@ Vector<T, Allocator>::Vector() noexcept:
 	_size{0u},
 	_capacity{0u}
 {
+	reserve(2u);
 }
 
 template <typename T, typename Allocator>
@@ -62,7 +63,7 @@ void Vector<T, Allocator>::copyElements(T const* from, T* to, std::size_t count)
 }
 
 template <typename T, typename Allocator>
-void Vector<T, Allocator>::moveElements(T const* from, T* to, std::size_t count) noexcept(std::is_nothrow_move_constructible_v<T>)
+void Vector<T, Allocator>::moveElements(T* from, T* to, std::size_t count) noexcept(std::is_nothrow_move_constructible_v<T>)
 {
 	static_assert(std::is_move_constructible_v<T>, "Can't call moveElements on a non-moveable type T.");
 
@@ -93,6 +94,15 @@ void Vector<T, Allocator>::checkedDelete() noexcept(std::is_nothrow_destructible
 }
 
 template <typename T, typename Allocator>
+void Vector<T, Allocator>::reallocateIfFull()
+{
+	if (_size == _capacity)
+	{
+		reserve(_capacity * 2);
+	}
+}
+
+template <typename T, typename Allocator>
 T& Vector<T, Allocator>::front() noexcept
 {
 	assert(!empty());
@@ -113,7 +123,7 @@ T& Vector<T, Allocator>::back() noexcept
 {
 	assert(!empty());
 
-	return *(data() + _size);
+	return *(data() + _size - 1);
 }
 
 template <typename T, typename Allocator>
@@ -121,7 +131,7 @@ T const& Vector<T, Allocator>::back() const noexcept
 {
 	assert(!empty());
 
-	return *(data() + _size);
+	return *(data() + _size - 1);
 }
 
 template <typename T, typename Allocator>
@@ -150,12 +160,12 @@ void Vector<T, Allocator>::reserve(std::size_t capacity)
 			//Move elements if possible
 			if constexpr (std::is_move_constructible_v<T>)
 			{
-				moveElements(data(), reinterpret_cast<T*>(newData), _size);
+				moveElements(data(), newData, _size);
 			}
 			else //Copy elements otherwise
 			{
-				copyElements(data(), reinterpret_cast<T*>(newData), _size);
-				deleteElements(data(), _size);
+				copyElements(data(), newData, _size);
+				destroyElements(data(), _size);
 			}
 
 			//Release previously allocated memory
@@ -202,6 +212,80 @@ template <typename T, typename Allocator>
 bool Vector<T, Allocator>::empty() const noexcept
 {
 	return _size == 0u;
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::clear() noexcept(std::is_nothrow_destructible_v<T>)
+{
+	destroyElements(data(), _size);
+
+	_size = 0u;
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::push_back(T const& value)
+{
+	reallocateIfFull();
+
+	AllocTraits::construct(_allocator, end(), value);
+	_size++;
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::push_back(T&& value)
+{
+	reallocateIfFull();
+
+	AllocTraits::construct(_allocator, end(), std::forward<T>(value));
+	_size++;
+}
+
+template <typename T, typename Allocator>
+template <typename... Args>
+T& Vector<T, Allocator>::emplace_back(Args&&... args)
+{
+	reallocateIfFull();
+
+	AllocTraits::construct(_allocator, end(), std::forward<Args>(args)...);
+	_size++;
+
+	return back();
+}
+
+template <typename T, typename Allocator>
+T* Vector<T, Allocator>::begin() noexcept
+{
+	return data();
+}
+
+template <typename T, typename Allocator>
+T const* Vector<T, Allocator>::begin() const noexcept
+{
+	return cbegin();
+}
+
+template <typename T, typename Allocator>
+T const* Vector<T, Allocator>::cbegin() const noexcept
+{
+	return data();
+}
+
+template <typename T, typename Allocator>
+T* Vector<T, Allocator>::end() noexcept
+{
+	return (data() + _size);
+}
+
+template <typename T, typename Allocator>
+T const* Vector<T, Allocator>::end() const noexcept
+{
+	return cend();
+}
+
+template <typename T, typename Allocator>
+T const* Vector<T, Allocator>::cend() const noexcept
+{
+	return (data() + _size);
 }
 
 template <typename T, typename Allocator>
