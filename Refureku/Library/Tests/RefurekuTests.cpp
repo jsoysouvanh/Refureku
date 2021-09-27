@@ -101,10 +101,70 @@ void entities()
 	TEST(entity.getKind() == rfk::EEntityKind::Undefined);
 	TEST(entity.getOuterEntity() == nullptr);
 
+	TestProperty testProperty;
+	TestProperty2 testProperty2;
+
+	entity.addProperty(&testProperty);
+	entity.addProperty(&testProperty2);
+
+	TEST(entity.getPropertyCount() == 2u);
+	TEST(entity.getPropertyAt(0) == &testProperty);
+	TEST(entity.getPropertyAt(1) == &testProperty2);
+
+	TEST(entity.getProperty([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().getName() == "TestProperty";
+		 }) == &testProperty);
+	TEST(entity.getProperty([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().getName() == "TestProperty2";
+		 }) == &testProperty2);
+
+	TEST(entity.getProperties([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
+		 }).size() == 0u);
+
 	rfk::EntityAPI entity2("TestEntity2", 6789u, rfk::EEntityKind::Class, nullptr);
 
 	entity.setOuterEntity(&entity2);
 	TEST(entity.getOuterEntity() == &entity2);
+
+	entity2.inheritProperties(entity); //Inherit only inheritable properties
+
+	TEST(entity2.getPropertyCount() == 1u);
+	TEST(entity2.getProperty([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().getName() == "TestProperty";
+		 }) == &testProperty);
+	TEST(entity2.getProperty([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().getName() == "TestProperty2";
+		 }) == nullptr);
+
+	rfk::EntityAPI entity3("TestEntity3", 101112u, rfk::EEntityKind::Enum, nullptr);
+
+	entity3.inheritAllProperties(entity);
+
+	TEST(entity3.getPropertyCount() == 2u);
+	TEST(entity3.getProperty([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().getName() == "TestProperty";
+		 }) == &testProperty);
+	TEST(entity3.getProperty([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().getName() == "TestProperty2";
+		 }) == &testProperty2);
+
+	TEST(entity3.getProperties([](rfk::Property const& prop, void* data)
+		 {
+			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
+		 }).size() == 0u);
+
+	//TODO: Add test getProperty(Struct const& archetype, false)
+	//TODO: Add test getProperty(Struct const& archetype, true)
+	//TODO: Add test getProperties(Struct const& archetype, false)
+	//TODO: Add test getProperties(Struct const& archetype, true)
 }
 
 void outerEntities()

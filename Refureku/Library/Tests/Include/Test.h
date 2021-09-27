@@ -12,7 +12,7 @@ struct RFKStruct(PropertySettings(all))
 	TestProperty_GENERATED
 };
 
-struct RFKStruct(PropertySettings(all))
+struct RFKStruct(PropertySettings(all, false, false))
     TestProperty2 : public rfk::Property
 {
     TestProperty2_GENERATED 

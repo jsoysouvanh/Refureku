@@ -19,6 +19,14 @@ namespace rfk
 	class StructAPI;
 	struct Property;	//TODO: Replace struct by class
 
+	/**
+	*	@brief Predicate defining if a property is valid or not.
+	* 
+	*	@param prop		The tested property.
+	*	@param userData	Data received from the user.
+	*/
+	using PropertyPredicate = bool (*)(Property const& prop, void* userData);
+
 	class EntityAPI //TODO: Rename in Entity
 	{
 		public:
@@ -54,12 +62,13 @@ namespace rfk
 			/**
 			*	@brief Retrieve a property matching with a predicate.
 			*	
-			*	@param predicate Predicate returning true for any matching property.
+			*	@param predicate	Predicate returning true for any matching property.
+			*	@param userData		Optional data forwarded to the predicate.
 			*	
 			*	@return The first found property fulfilling the provided predicate if any, else nullptr.
 			*/
-			//template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
-			//Property const*						getProperty(Predicate predicate)				const;
+			REFUREKU_API Property const*						getProperty(PropertyPredicate	predicate,
+																			void*				userData = nullptr)			const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with the provided archetype.
@@ -75,13 +84,13 @@ namespace rfk
 			/**
 			*	@brief Retrieve all properties matching with a predicate in this entity.
 			*	
-			*	@param predicate Predicate returning true for any matching property.
+			*	@param predicate	Predicate returning true for any matching property.
+			*	@param userData		Optional data forwarded to the predicate.
 			*	
 			*	@return A collection of all properties fulfilling the provided predicate contained in this entity.
 			*/
-			//TODO: Wrap std::vector to remove it from the API
-			//template <typename Predicate, typename = std::enable_if_t<std::is_invocable_r_v<bool, Predicate, Property const*>>>
-			//std::vector<Property const*>		getProperties(Predicate predicate)				const;
+			REFUREKU_API Vector<Property const*>				getProperties(PropertyPredicate	predicate,
+																			  void*				userData = nullptr)			const	noexcept;
 
 			/**
 			*	@brief Get the number of properties attached to this entity.

@@ -49,6 +49,19 @@ Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildC
 	return nullptr;
 }
 
+Property const* EntityAPI::getProperty(PropertyPredicate predicate, void* userData) const noexcept
+{
+	for (Property const* prop : _pimpl->getProperties())
+	{
+		if (predicate(*prop, userData))
+		{
+			return prop;
+		}
+	}
+	
+	return nullptr;
+}
+
 Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, bool isChildClassValid) const noexcept
 {
 	Vector<Property const*> result;
@@ -78,6 +91,21 @@ Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, boo
 	//		}
 	//	}
 	//}
+
+	return result;
+}
+
+Vector<Property const*> EntityAPI::getProperties(PropertyPredicate	predicate, void* userData) const noexcept
+{
+	Vector<Property const*> result;
+
+	for (Property const* prop : _pimpl->getProperties())
+	{
+		if (predicate(*prop, userData))
+		{
+			result.push_back(prop);
+		}
+	}
 
 	return result;
 }
