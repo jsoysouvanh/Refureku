@@ -11,13 +11,16 @@ class HugeClass
 		int _i = -1;
 
 	public:
-		HugeClass() noexcept
+		HugeClass() noexcept:
+			_array{},
+			_i{0}
 		{
 			_instanceCount++;
 			//std::cout << "HugeClass()" << std::endl;
 		}
 
 		HugeClass(int i) noexcept:
+			_array{},
 			_i{i}
 		{
 			_instanceCount++;

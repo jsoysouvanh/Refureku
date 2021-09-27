@@ -1,0 +1,122 @@
+/**
+*	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Refureku library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
+#pragma once
+
+#include <cstddef>	//std::size_t
+#include <string>
+#include <vector>
+
+#include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Entity/EEntityKind.h"
+#include "Refureku/TypeInfo/Properties/Property.h"
+
+namespace rfk
+{
+	class EntityAPI::EntityImpl
+	{
+		private:
+			/** Name qualifying this entity. */
+			std::string						_name;
+
+			/** Properties attached to this entity. */
+			std::vector<Property const*>	_properties;
+
+			/** Program-unique ID given for this entity. The ID is persistent even after the program is recompiled / relaunched. */
+			std::size_t						_id;
+
+			/**
+			*	The outer entity is the entity in which this entity has been declared.
+			*	If this entity is declared at file level, outerEntity will be nullptr.
+			*/
+			EntityAPI const*				_outerEntity;
+
+			/** Kind of this entity. */
+			EEntityKind						_kind;
+
+		public:
+			EntityImpl(char const*		name,
+					   std::size_t		id,
+					   EEntityKind		kind = EEntityKind::Undefined,
+					   EntityAPI const*	outerEntity = nullptr)			noexcept;
+
+			/**
+			*	@brief Add a property to this entity.
+			*	
+			*	@param property The property to add.
+			*	
+			*	@return	true if the property was added,
+			*			false if it failed to be added (for example, AllowMultiple is false and a property of the same kind is already in the entity).
+			*/
+			bool								addProperty(Property const* property)					noexcept;
+
+			/**
+			*	@brief Inherit from another entity inheritable properties.
+			*	
+			*	@param from The entity this entity should inherit the properties from.
+			*/
+			void								inheritProperties(EntityImpl const& from)				noexcept;
+
+			/**
+			*	@brief Inherit all properties from another entity.
+			* 
+			*	@param from The entity this entity should inherit the properties from.
+			*/
+			void								inheritAllProperties(EntityImpl const& from)			noexcept;
+
+			/**
+			*	@brief Getter for the field _name.
+			* 
+			*	@return _name.
+			*/
+			std::string const&					getName()										const	noexcept;
+
+			/**
+			*	@brief Getter for the field _id.
+			* 
+			*	@return _id.
+			*/
+			std::size_t							getId()											const	noexcept;
+
+			/**
+			*	@brief Getter for the field _kind.
+			* 
+			*	@return _kind.
+			*/
+			EEntityKind							getKind()										const	noexcept;
+
+			/**
+			*	@brief Getter for the field _outerEntity.
+			* 
+			*	@return _outerEntity.
+			*/
+			EntityAPI const*					getOuterEntity()								const	noexcept;
+
+			/**
+			*	@brief Getter for the field _properties.
+			* 
+			*	@return _properties.
+			*/
+			std::vector<Property const*> const&	getProperties()									const	noexcept;
+
+			/**
+			*	@brief Setter for the field _outerEntity.
+			* 
+			*	@param outerEntity The outer entity to set.
+			*/
+			void								setOuterEntity(EntityAPI const* outerEntity)			noexcept;
+
+			/**
+			*	@brief	Set the number of properties for this entity.
+			*			Useful to avoid reallocations when adding a lot of properties.
+			*			If the number of properties is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of properties of this entity.
+			*/
+			void								setPropertiesCapacity(std::size_t capacity)				noexcept;
+	};
+}

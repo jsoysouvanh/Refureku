@@ -8,19 +8,29 @@
 template <typename T>
 template <typename... Args>
 Pimpl<T>::Pimpl(Args&&... arguments):
-	_implementation{ new T(std::forward<Args>(arguments)...) }
+	_implementation{ new T(std::forward<Args>(arguments)...) },
+	_owning{true}
+{
+}
+
+template <typename T>
+Pimpl<T>::Pimpl(T* implementation) noexcept:
+	_implementation{implementation},
+	_owning{false}
 {
 }
 
 template <typename T>
 Pimpl<T>::Pimpl(Pimpl const& other):
-	_implementation{(other._implementation != nullptr) ? new T(*other._implementation) : nullptr}
+	_implementation{(other._implementation != nullptr) ? new T(*other._implementation) : nullptr},
+	_owning{true}
 {
 }
 
 template <typename T>
 Pimpl<T>::Pimpl(Pimpl&& other) noexcept:
-	_implementation{other._implementation}
+	_implementation{other._implementation},
+	_owning{other._owning}
 {
 	other._implementation = nullptr;
 }
@@ -36,7 +46,10 @@ void Pimpl<T>::checkedDelete()
 {
 	if (_implementation != nullptr)
 	{
-		delete _implementation;
+		if (_owning)
+		{
+			delete _implementation;
+		}
 
 		_implementation = nullptr;
 	}
@@ -55,11 +68,22 @@ T const* Pimpl<T>::get() const noexcept
 }
 
 template <typename T>
+void Pimpl<T>::set(T* implementation) noexcept
+{
+	//Free any implementation first
+	checkedDelete();
+
+	_implementation = implementation;
+	_owning = false;
+}
+
+template <typename T>
 Pimpl<T>& Pimpl<T>::operator=(Pimpl const& other)
 {
 	checkedDelete();
 
 	_implementation = (other._implementation != nullptr) ? new T(*other._implementation) : nullptr;
+	_owning = true;
 
 	return *this;
 }
@@ -70,6 +94,7 @@ Pimpl<T>& Pimpl<T>::operator=(Pimpl&& other) noexcept
 	checkedDelete();
 
 	_implementation = other._implementation;
+	_owning = other._owning;
 	other._implementation = nullptr;
 
 	return *this;

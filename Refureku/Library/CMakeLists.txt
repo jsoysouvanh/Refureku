@@ -13,6 +13,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/EnumValue.cpp
 					Source/TypeInfo/Database.cpp
 
+					Source/TypeInfo/Entity/Entity.cpp
+					Source/TypeInfo/Entity/EntityImpl.cpp
 					Source/TypeInfo/Entity/EntityImplementation.cpp
 					Source/TypeInfo/Entity/EntityCast.cpp
 					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp

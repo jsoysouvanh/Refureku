@@ -91,6 +91,22 @@ void containers()
 	}
 }
 
+void entities()
+{
+	rfk::EntityAPI entity("TestEntity", 12345u, rfk::EEntityKind::Undefined, nullptr);
+	entity.setPropertiesCapacity(0);
+
+	TEST(entity.getName() == std::string("TestEntity"));
+	TEST(entity.getId() == 12345u);
+	TEST(entity.getKind() == rfk::EEntityKind::Undefined);
+	TEST(entity.getOuterEntity() == nullptr);
+
+	rfk::EntityAPI entity2("TestEntity2", 6789u, rfk::EEntityKind::Class, nullptr);
+
+	entity.setOuterEntity(&entity2);
+	TEST(entity.getOuterEntity() == &entity2);
+}
+
 void outerEntities()
 {
 	TEST(rfk::getDatabase().getNamespace("namespace3")->getOuterEntity() == nullptr);
@@ -1090,9 +1106,8 @@ void templateClasses()
 	//TODO: Test with a mix of the above 3 (like std::array > Type template + non-type template param)
 }
 
-int main()
+void oldTests()
 {
-	containers();
 	inheritance();
 	classes();
 	structs();
@@ -1118,6 +1133,18 @@ int main()
 	classManualReflection();
 	structDirectChildren();
 	templateClasses();
+}
+
+void newTests()
+{
+	containers();
+	entities();
+}
+
+int main()
+{
+	oldTests();
+	newTests();
 
 	return EXIT_SUCCESS;
 }

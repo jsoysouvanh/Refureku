@@ -185,12 +185,12 @@ void Vector<T, Allocator>::resize(std::size_t size)
 		reserve(size);
 
 		//Construct new elements
-		constructElements(data() + (_size + 1u), size - _size);
+		constructElements(end(), size - _size);
 	}
 	else if (size < _size)
 	{
 		//Destroy overflowing elements
-		destroyElements(data() + size, _size - size);
+		destroyElements(end(), _size - size);
 	}
 
 	_size = size;
@@ -273,7 +273,7 @@ T const* Vector<T, Allocator>::cbegin() const noexcept
 template <typename T, typename Allocator>
 T* Vector<T, Allocator>::end() noexcept
 {
-	return (data() + _size);
+	return data() + _size;
 }
 
 template <typename T, typename Allocator>
@@ -285,7 +285,7 @@ T const* Vector<T, Allocator>::end() const noexcept
 template <typename T, typename Allocator>
 T const* Vector<T, Allocator>::cend() const noexcept
 {
-	return (data() + _size);
+	return data() + _size;
 }
 
 template <typename T, typename Allocator>

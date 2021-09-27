@@ -7,20 +7,24 @@
 
 #pragma once
 
-#include <utility>	//std::move, std::forward
+#include <utility>		//std::move, std::forward
 
 namespace rfk
 {
 	/**
 	*	Utility class used for the pimpl (pointer to implementation) idiom.
-	*	It holds (and owns) a pointer to the underlying class and propagates constness.
+	*	It holds a pointer to the underlying class and propagates constness.
+	*	It may or may not own the underlying pointer depending on how it was constructed.
 	*/
 	template <typename T>
 	class Pimpl
 	{
 		private:
 			/** Underlying class instance. */
-			T* _implementation;
+			T*		_implementation;
+
+			/** Is this class owning the _implementation pointer or not? */
+			bool	_owning;
 
 			/**
 			*	@brief Destroy the underlying object if it is valid.
@@ -31,6 +35,7 @@ namespace rfk
 			template <typename... Args>
 			explicit Pimpl(Args&&... arguments);
 
+			Pimpl(T* implementation)	noexcept;
 			Pimpl(Pimpl const& other);
 			Pimpl(Pimpl&& other)		noexcept;
 			~Pimpl();
@@ -40,14 +45,22 @@ namespace rfk
 			* 
 			*	@return The underlying object.
 			*/
-			T*			get()			noexcept;
+			T*			get()							noexcept;
 
 			/**
 			*	@brief Retrieve a const pointer to the underlying object.
 			* 
 			*	@return The const underlying object.
 			*/
-			T const*	get()	const	noexcept;
+			T const*	get()					const	noexcept;
+
+			/**
+			*	@brief	Set the implementation used by this pimpl object.
+			*			The provided implementation is considered not owned.
+			* 
+			*	@param implementation A pointer to implementation.
+			*/
+			void		set(T* implementation)			noexcept;
 
 			Pimpl&		operator=(Pimpl const& other);
 			Pimpl&		operator=(Pimpl&& other)		noexcept;
