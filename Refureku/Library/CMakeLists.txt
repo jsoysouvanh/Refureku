@@ -15,7 +15,7 @@ add_library(${RefurekuLibraryTarget}
 
 					Source/TypeInfo/Entity/Entity.cpp
 					Source/TypeInfo/Entity/EntityImpl.cpp
-					Source/TypeInfo/Entity/EntityImplementation.cpp
+					Source/TypeInfo/Entity/EntityImplementation.cpp	#Delete this
 					Source/TypeInfo/Entity/EntityCast.cpp
 					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
 
@@ -23,7 +23,9 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Namespaces/NamespaceFragment.cpp
 					Source/TypeInfo/Namespaces/NamespaceFragmentRegisterer.cpp
 
-					Source/TypeInfo/Archetypes/Archetype.cpp
+					Source/TypeInfo/Archetypes/ArchetypeAPI.cpp
+					Source/TypeInfo/Archetypes/ArchetypeImpl.cpp
+					Source/TypeInfo/Archetypes/Archetype.cpp	#Delete this
 					Source/TypeInfo/Archetypes/FundamentalArchetype.cpp
 					Source/TypeInfo/Archetypes/Enum.cpp
 					Source/TypeInfo/Archetypes/Struct.cpp

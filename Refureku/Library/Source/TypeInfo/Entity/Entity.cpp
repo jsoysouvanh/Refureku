@@ -1,5 +1,7 @@
 #include "Refureku/TypeInfo/Entity/Entity.h"
 
+#include <utility>	//std::forward
+
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 //#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
@@ -7,14 +9,13 @@
 using namespace rfk;
 
 EntityAPI::EntityAPI() noexcept:
-	_pimpl{static_cast<EntityAPI::EntityImpl*>(nullptr)}
+	_pimpl{static_cast<EntityImpl*>(nullptr)}
 {
 }
 
 EntityAPI::EntityAPI(char const* name, std::size_t id, EEntityKind kind, EntityAPI const* outerEntity) noexcept:
 	_pimpl(name, id, kind, outerEntity)
 {
-	//TODO: Forward argument to Pimpl<EntityImpl> constructor
 }
 
 EntityAPI::EntityAPI(EntityAPI const& other) noexcept:
@@ -32,7 +33,7 @@ EntityAPI::~EntityAPI() noexcept
 	//Must be defined in cpp since _pimpl is an incomplete type in the header file
 }
 
-void EntityAPI::setImpl(EntityAPI::EntityImpl* implementation) noexcept
+void EntityAPI::setImpl(EntityImpl* implementation) noexcept
 {
 	_pimpl.set(implementation);
 }
@@ -42,7 +43,7 @@ Property const* EntityAPI::getPropertyAt(std::size_t propertyIndex) const noexce
 	return _pimpl->getProperties()[propertyIndex];
 }
 
-Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildClassVali) const noexcept
+Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildClassValid) const noexcept
 {
 	//TODO
 
@@ -68,6 +69,7 @@ Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, boo
 
 	std::vector<Property const*> properties;
 
+	//TODO
 	//Iterate over all props to find a matching property
 	//if (isChildClassValid)
 	//{

@@ -29,9 +29,9 @@ if constexpr (!std::is_same_v<ChildClass, ParseAllNested>) const_cast<rfk::Struc
 }\
 \
 \
-public: REFUREKU_API static rfk::Struct const& staticGetArchetype() noexcept;\
+public: REFUREKU_API static rfk::Class const& staticGetArchetype() noexcept;\
 \
-public: REFUREKU_API virtual rfk::Struct const& getArchetype() const noexcept override;\
+public: REFUREKU_API virtual rfk::Class const& getArchetype() const noexcept override;\
 \
 )\
 

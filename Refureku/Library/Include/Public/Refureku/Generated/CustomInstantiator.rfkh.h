@@ -29,9 +29,9 @@ if constexpr (!std::is_same_v<ChildClass, CustomInstantiator>) const_cast<rfk::S
 }\
 \
 \
-public: REFUREKU_API static rfk::Struct const& staticGetArchetype() noexcept;\
+public: REFUREKU_API static rfk::Class const& staticGetArchetype() noexcept;\
 \
-public: REFUREKU_API virtual rfk::Struct const& getArchetype() const noexcept override;\
+public: REFUREKU_API virtual rfk::Class const& getArchetype() const noexcept override;\
 \
 )\
 

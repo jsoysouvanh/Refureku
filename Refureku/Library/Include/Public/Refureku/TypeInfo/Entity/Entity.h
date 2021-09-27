@@ -17,7 +17,7 @@
 namespace rfk
 {
 	class StructAPI;
-	struct Property;	//TODO: Replace struct by class
+	class Property;
 
 	/**
 	*	@brief Predicate defining if a property is valid or not.
@@ -30,13 +30,38 @@ namespace rfk
 	class EntityAPI //TODO: Rename in Entity
 	{
 		public:
+			//TODO: Delete this since it will never be used in real situations (just for tests)
 			REFUREKU_API EntityAPI(char const*		name,
 								   std::size_t		id,
 								   EEntityKind		kind = EEntityKind::Undefined,
 								   EntityAPI const*	outerEntity = nullptr)			noexcept;
 			EntityAPI(EntityAPI const&)												noexcept;
 			EntityAPI(EntityAPI&&)													noexcept;
-			REFUREKU_API ~EntityAPI()												noexcept;
+			REFUREKU_API ~EntityAPI()												noexcept;	//TODO: Maybe move this to protected as well
+
+			/**
+			*	@brief Add a property to this entity.
+			*	
+			*	@param property The property to add.
+			*	
+			*	@return	true if the property was added,
+			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
+			*/
+			REFUREKU_API bool									addProperty(Property const* property)								noexcept;
+
+			/**
+			*	@brief Inherit from another entity inheritable properties.
+			*	
+			*	@param from The entity this entity should inherit the properties from.
+			*/
+			REFUREKU_API void									inheritProperties(EntityAPI const& from)							noexcept;
+
+			/**
+			*	@brief Inherit all properties from another entity.
+			* 
+			*	@param from The entity this entity should inherit the properties from.
+			*/
+			REFUREKU_API void									inheritAllProperties(EntityAPI const& from)							noexcept;
 
 			/**
 			*	@brief	Retrieve the property at the given index.
@@ -100,30 +125,6 @@ namespace rfk
 			REFUREKU_API std::size_t							getPropertyCount()											const	noexcept;
 
 			/**
-			*	@brief Add a property to this entity.
-			*	
-			*	@param property The property to add.
-			*	
-			*	@return	true if the property was added,
-			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
-			*/
-			REFUREKU_API bool									addProperty(Property const* property)								noexcept;
-
-			/**
-			*	@brief Inherit from another entity inheritable properties.
-			*	
-			*	@param from The entity this entity should inherit the properties from.
-			*/
-			REFUREKU_API void									inheritProperties(EntityAPI const& from)							noexcept;
-
-			/**
-			*	@brief Inherit all properties from another entity.
-			* 
-			*	@param from The entity this entity should inherit the properties from.
-			*/
-			REFUREKU_API void									inheritAllProperties(EntityAPI const& from)							noexcept;
-
-			/**
 			*	@brief Getter for the field _name.
 			* 
 			*	@return _name.
@@ -172,6 +173,7 @@ namespace rfk
 			REFUREKU_API bool	operator!=(EntityAPI const& other)	const	 noexcept;
 
 		protected:
+			//Forward declaration
 			class EntityImpl;
 
 			EntityAPI()	noexcept;
@@ -185,6 +187,6 @@ namespace rfk
 
 		private:
 			/** Concrete implementation of the entity class. */
-			Pimpl<EntityAPI::EntityImpl> _pimpl;
+			Pimpl<EntityImpl> _pimpl;
 	};
 }

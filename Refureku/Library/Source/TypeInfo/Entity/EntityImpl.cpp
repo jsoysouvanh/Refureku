@@ -3,7 +3,7 @@
 using namespace rfk;
 
 EntityAPI::EntityImpl::EntityImpl(char const* name, std::size_t id, EEntityKind kind, EntityAPI const* outerEntity) noexcept:
-	_name{ name },
+	_name{name},
 	_properties{},
 	_id{id},
 	_outerEntity{outerEntity},

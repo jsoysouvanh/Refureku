@@ -25,3 +25,4 @@
 
 //WIP: Public headers
 #include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"

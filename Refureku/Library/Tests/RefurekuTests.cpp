@@ -111,16 +111,16 @@ void entities()
 	TEST(entity.getPropertyAt(0) == &testProperty);
 	TEST(entity.getPropertyAt(1) == &testProperty2);
 
-	TEST(entity.getProperty([](rfk::Property const& prop, void* data)
+	TEST(entity.getProperty([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }) == &testProperty);
-	TEST(entity.getProperty([](rfk::Property const& prop, void* data)
+	TEST(entity.getProperty([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }) == &testProperty2);
 
-	TEST(entity.getProperties([](rfk::Property const& prop, void* data)
+	TEST(entity.getProperties([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
 		 }).size() == 0u);
@@ -133,11 +133,11 @@ void entities()
 	entity2.inheritProperties(entity); //Inherit only inheritable properties
 
 	TEST(entity2.getPropertyCount() == 1u);
-	TEST(entity2.getProperty([](rfk::Property const& prop, void* data)
+	TEST(entity2.getProperty([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }) == &testProperty);
-	TEST(entity2.getProperty([](rfk::Property const& prop, void* data)
+	TEST(entity2.getProperty([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }) == nullptr);
@@ -147,16 +147,16 @@ void entities()
 	entity3.inheritAllProperties(entity);
 
 	TEST(entity3.getPropertyCount() == 2u);
-	TEST(entity3.getProperty([](rfk::Property const& prop, void* data)
+	TEST(entity3.getProperty([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }) == &testProperty);
-	TEST(entity3.getProperty([](rfk::Property const& prop, void* data)
+	TEST(entity3.getProperty([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }) == &testProperty2);
 
-	TEST(entity3.getProperties([](rfk::Property const& prop, void* data)
+	TEST(entity3.getProperties([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
 		 }).size() == 0u);
@@ -165,6 +165,23 @@ void entities()
 	//TODO: Add test getProperty(Struct const& archetype, true)
 	//TODO: Add test getProperties(Struct const& archetype, false)
 	//TODO: Add test getProperties(Struct const& archetype, true)
+}
+
+void archetypes()
+{
+	rfk::ArchetypeAPI archetype("TestArchetype", 123u, rfk::EEntityKind::Struct, 8u, nullptr);
+
+	TEST(archetype.getAccessSpecifier() == rfk::EAccessSpecifier::Undefined);
+	
+	archetype.setAccessSpecifier(rfk::EAccessSpecifier::Private);
+	
+	TEST(archetype.getAccessSpecifier() == rfk::EAccessSpecifier::Private);
+	TEST(archetype.getMemorySize() == 8u);
+
+	TEST(archetype.getName() == std::string("TestArchetype"));
+	TEST(archetype.getId() == 123u);
+	TEST(archetype.getKind() == rfk::EEntityKind::Struct);
+	TEST(archetype.getPropertyCount() == 0u);
 }
 
 void outerEntities()
@@ -1199,6 +1216,7 @@ void newTests()
 {
 	containers();
 	entities();
+	archetypes();
 }
 
 int main()

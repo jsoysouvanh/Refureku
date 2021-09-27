@@ -15,9 +15,9 @@
 namespace rfk
 {
 	/**
-	*	@brief Base struct to inherit from to define new properties.
+	*	@brief Base class to inherit from to define new properties.
 	*/
-	struct REFUREKU_API Property : public Object
+	class REFUREKU_API Property : public Object
 	{
 		protected:
 			Property() = default;
