@@ -7,11 +7,13 @@
 using namespace rfk;
 
 ArchetypeAPI::ArchetypeAPI() noexcept:
+	EntityAPI(),
 	_pimpl{static_cast<ArchetypeImpl*>(nullptr)}
 {
 }
 
 ArchetypeAPI::ArchetypeAPI(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, EntityAPI const* outerEntity) noexcept:
+	EntityAPI(),
 	_pimpl(name, id, kind, memorySize, outerEntity)
 {
 	//TODO: Delete this
@@ -21,11 +23,13 @@ ArchetypeAPI::ArchetypeAPI(char const* name, std::size_t id, EEntityKind kind, s
 ArchetypeAPI::ArchetypeAPI(ArchetypeAPI const& other) noexcept:
 	_pimpl{other._pimpl}
 {
+	EntityAPI::setImpl(_pimpl.get());
 }
 
 ArchetypeAPI::ArchetypeAPI(ArchetypeAPI&& other) noexcept:
 	_pimpl{std::forward<Pimpl<ArchetypeImpl>>(other._pimpl)}
 {
+	EntityAPI::setImpl(_pimpl.get());
 }
 
 ArchetypeAPI::~ArchetypeAPI() noexcept

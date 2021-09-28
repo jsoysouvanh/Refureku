@@ -27,7 +27,11 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/ArchetypeImpl.cpp
 					Source/TypeInfo/Archetypes/Archetype.cpp	#Delete this
 					Source/TypeInfo/Archetypes/FundamentalArchetype.cpp
-					Source/TypeInfo/Archetypes/Enum.cpp
+					Source/TypeInfo/Archetypes/EnumAPI.cpp
+					Source/TypeInfo/Archetypes/EnumImpl.cpp
+					Source/TypeInfo/Archetypes/Enum.cpp			#Delete this
+					Source/TypeInfo/Archetypes/EnumValueAPI.cpp
+					Source/TypeInfo/Archetypes/EnumValueImpl.cpp
 					Source/TypeInfo/Archetypes/Struct.cpp
 					Source/TypeInfo/Archetypes/Class.cpp
 					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp

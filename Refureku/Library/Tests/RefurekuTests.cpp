@@ -107,20 +107,20 @@ void entities()
 	entity.addProperty(&testProperty);
 	entity.addProperty(&testProperty2);
 
-	TEST(entity.getPropertyCount() == 2u);
+	TEST(entity.getPropertiesCount() == 2u);
 	TEST(entity.getPropertyAt(0) == &testProperty);
 	TEST(entity.getPropertyAt(1) == &testProperty2);
 
-	TEST(entity.getProperty([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }) == &testProperty);
-	TEST(entity.getProperty([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }) == &testProperty2);
 
-	TEST(entity.getProperties([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
 		 }).size() == 0u);
@@ -132,12 +132,12 @@ void entities()
 
 	entity2.inheritProperties(entity); //Inherit only inheritable properties
 
-	TEST(entity2.getPropertyCount() == 1u);
-	TEST(entity2.getProperty([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity2.getPropertiesCount() == 1u);
+	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }) == &testProperty);
-	TEST(entity2.getProperty([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }) == nullptr);
@@ -146,17 +146,17 @@ void entities()
 
 	entity3.inheritAllProperties(entity);
 
-	TEST(entity3.getPropertyCount() == 2u);
-	TEST(entity3.getProperty([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity3.getPropertiesCount() == 2u);
+	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }) == &testProperty);
-	TEST(entity3.getProperty([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }) == &testProperty2);
 
-	TEST(entity3.getProperties([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity3.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
 		 }).size() == 0u);
@@ -181,7 +181,49 @@ void archetypes()
 	TEST(archetype.getName() == std::string("TestArchetype"));
 	TEST(archetype.getId() == 123u);
 	TEST(archetype.getKind() == rfk::EEntityKind::Struct);
-	TEST(archetype.getPropertyCount() == 0u);
+	TEST(archetype.getPropertiesCount() == 0u);
+}
+
+void enumsAndEnumValues()
+{
+	rfk::ArchetypeAPI intArchetype("int", 1u, rfk::EEntityKind::FundamentalArchetype, sizeof(int), nullptr);
+	rfk::EnumAPI enum1("TestEnum1", 123u, &intArchetype, nullptr);
+
+	TEST(enum1.getName() == std::string("TestEnum1"));
+	TEST(enum1.getId() == 123u);
+	TEST(enum1.getUnderlyingArchetype() == intArchetype);
+	TEST(enum1.getKind() == rfk::EEntityKind::Enum);
+	TEST(enum1.getMemorySize() == sizeof(int));
+	TEST(enum1.getOuterEntity() == nullptr);
+
+	TestProperty testProperty;
+	enum1.addProperty(&testProperty);
+
+	TEST(enum1.getPropertiesCount() == 1u);
+	TEST(enum1.getPropertyAt(0) == &testProperty);
+
+	enum1.addEnumValue("TestEnumValue1", 10u, 0);
+	enum1.addEnumValue("TestEnumValue2", 11u, 1)->addProperty(&testProperty);
+	enum1.addEnumValue("TestEnumValue3", 12u, 42);
+
+	TEST(enum1.getEnumValuesCount() == 3u);
+	TEST(enum1.getEnumValueAt(0).getName() == std::string("TestEnumValue1"));
+	TEST(enum1.getEnumValueAt(0).getKind() == rfk::EEntityKind::EnumValue);
+
+	TEST(enum1.getEnumValue(0) != nullptr);
+	TEST(enum1.getEnumValue(2) == nullptr);
+	TEST(enum1.getEnumValueByName("TestEnumValue3")->getId() == 12u);
+	TEST(enum1.getEnumValueByName("TestEnumValue4") == nullptr);
+	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void* userData)
+		 {
+			 return value.getOuterEntity() == reinterpret_cast<rfk::EnumAPI*>(userData);
+		 }, &enum1) != nullptr);
+	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void* userData)
+		 {
+			 return value.getPropertiesCount() == 1u;
+		 }) == &enum1.getEnumValueAt(1));
+
+	TEST(enum1.getEnumValueAt(0).getValue<uint16_t>() == 0u);
 }
 
 void outerEntities()
@@ -1217,6 +1259,7 @@ void newTests()
 	containers();
 	entities();
 	archetypes();
+	enumsAndEnumValues();
 }
 
 int main()

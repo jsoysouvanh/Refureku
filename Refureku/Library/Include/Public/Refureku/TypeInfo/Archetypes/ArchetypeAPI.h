@@ -63,4 +63,6 @@ namespace rfk
 			/** Concrete implementation of the Archetype class. */
 			Pimpl<ArchetypeImpl> _pimpl;
 	};
+
+	//TODO: getArchetype base implementation should maybe be here?
 }
