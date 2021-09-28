@@ -22,7 +22,7 @@ namespace rfk
 			EFieldFlags		_flags			= EFieldFlags::Default;
 
 			/** Struct containing this field. */
-			Struct const*	_containedIn	= nullptr;
+			Struct const*	_containedIn	= nullptr;	//ownerStruct
 
 		protected:
 			FieldBase(std::string&&	name,

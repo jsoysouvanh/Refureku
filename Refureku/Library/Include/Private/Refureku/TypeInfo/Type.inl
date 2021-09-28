@@ -52,30 +52,30 @@ void Type::fillType(Type& out_type) noexcept
 	}
 }
 
-template <typename... ArgTypes>
-inline Type& Type::addPart(ArgTypes&&... args) noexcept
-{
-	getParts().emplace_back(std::forward<ArgTypes>(args)...);
+//template <typename... ArgTypes>
+//inline Type& Type::addPart(ArgTypes&&... args) noexcept
+//{
+//	getParts().emplace_back(std::forward<ArgTypes>(args)...);
+//
+//	return *this;
+//}
 
-	return *this;
-}
+//inline Type& Type::addPart(TypePart const& newPart) noexcept
+//{
+//	getParts().push_back(newPart);
+//
+//	return *this;
+//}
 
-inline Type& Type::addPart(TypePart const& newPart) noexcept
-{
-	getParts().push_back(newPart);
-
-	return *this;
-}
-
-inline Type& Type::removePart() noexcept
-{
-	if (!getParts().empty())
-	{
-		getParts().erase(getParts().cbegin());
-	}
-
-	return *this;
-}
+//inline Type& Type::removePart() noexcept
+//{
+//	if (!getParts().empty())
+//	{
+//		getParts().erase(getParts().cbegin());
+//	}
+//
+//	return *this;
+//}
 
 inline bool Type::isPointer() const noexcept
 {

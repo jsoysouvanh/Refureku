@@ -13,6 +13,9 @@
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/Utility/TypeTraitsMacros.h"
 
+
+#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
+
 namespace rfk
 {
 	RFK_GENERATE_IS_CALLABLE_METHOD_TRAITS(staticGetArchetype)
@@ -32,6 +35,12 @@ namespace rfk
 	*/
 	template <typename T>
 	Archetype const* getArchetype()	noexcept;
+
+	template <typename T>
+	ArchetypeAPI const* getArchetypeAPI() noexcept
+	{
+		return nullptr;
+	}
 
 	/**
 	*	@brief	Get archetype for template classes. Cover only most common cases.

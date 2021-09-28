@@ -48,8 +48,8 @@ namespace rfk
 			*
 			*	@return A reference to the modified Type (this).
 			*/
-			template <typename... ArgTypes>
-			inline Type&								addPart(ArgTypes&&... args)			noexcept;
+			//template <typename... ArgTypes>
+			//inline Type&								addPart(ArgTypes&&... args)			noexcept;
 
 			/**
 			*	@brief Add a TypePart to this type instance.
@@ -58,14 +58,14 @@ namespace rfk
 			*
 			*	@return A reference to the modified Type (this).
 			*/
-			inline Type&								addPart(TypePart const&	newPart)	noexcept;
+			//inline Type&								addPart(TypePart const&	newPart)	noexcept;
 
 			/**
 			*	@brief Remove the last TypePart from this type instance.
 			*
 			*	@return A reference to the modified Type (this).
 			*/
-			inline Type&								removePart()						noexcept;
+			//inline Type&								removePart()						noexcept;
 
 			/** 
 			*	@return true if this type is a pointer type (*), else false.

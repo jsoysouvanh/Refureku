@@ -226,6 +226,35 @@ void enumsAndEnumValues()
 	TEST(enum1.getEnumValueAt(0).getValue<uint16_t>() == 0u);
 }
 
+void types()
+{
+	rfk::TypeAPI const& intType = rfk::getTypeAPI<int>();
+
+	TEST(!intType.isPointer());
+	TEST(!intType.isRValueReference());
+	TEST(!intType.isVolatile());
+	TEST(!intType.isCArray());
+	TEST(!intType.isConst());
+	TEST(!intType.isLValueReference());
+	TEST(intType.isValue());
+	//TEST(intType.getArchetype() == rfk::getArchetypeAPI<int>());	//TODO: Uncomment later
+	TEST(intType.getTypePartsCount() == 1u);
+
+	rfk::TypeAPI const& floatConstPtrType = rfk::getTypeAPI<float const*>();
+
+	TEST(floatConstPtrType.isPointer());
+	TEST(!floatConstPtrType.isRValueReference());
+	TEST(!floatConstPtrType.isVolatile());
+	TEST(!floatConstPtrType.isCArray());
+	TEST(!floatConstPtrType.isConst());
+	TEST(!floatConstPtrType.isLValueReference());
+	TEST(!floatConstPtrType.isValue());
+	//TEST(floatConstPtrType.getArchetype() == rfk::getArchetypeAPI<float>());	//TODO: Uncomment later
+	TEST(floatConstPtrType.getTypePartsCount() == 2u);
+	TEST(floatConstPtrType.getTypePartAt(1).isValue());
+	TEST(floatConstPtrType.getTypePartAt(1).isConst());
+}
+
 void outerEntities()
 {
 	TEST(rfk::getDatabase().getNamespace("namespace3")->getOuterEntity() == nullptr);
@@ -1260,6 +1289,7 @@ void newTests()
 	entities();
 	archetypes();
 	enumsAndEnumValues();
+	types();
 }
 
 int main()

@@ -25,7 +25,7 @@ std::string Type::toString() const noexcept
 		result += "Archetype: Unknown\n";
 	}
 
-	for (rfk::TypePart part : _parts)
+	for (rfk::TypePart const& part : _parts)
 	{
 		result += "  - ";
 

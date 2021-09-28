@@ -8,9 +8,11 @@ add_library(${RefurekuLibraryTarget}
 				SHARED
 					Source/Object.cpp
 
-					Source/TypeInfo/TypePart.cpp
-					Source/TypeInfo/Type.cpp
-					Source/TypeInfo/EnumValue.cpp
+					Source/TypeInfo/TypePartAPI.cpp
+					Source/TypeInfo/TypePart.cpp	#Delete this
+					Source/TypeInfo/TypeAPI.cpp
+					Source/TypeInfo/Type.cpp	#Delete this
+					Source/TypeInfo/EnumValue.cpp	#Delete this
 					Source/TypeInfo/Database.cpp
 
 					Source/TypeInfo/Entity/Entity.cpp
