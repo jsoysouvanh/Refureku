@@ -218,7 +218,7 @@ void enumsAndEnumValues()
 		 {
 			 return value.getOuterEntity() == reinterpret_cast<rfk::EnumAPI*>(userData);
 		 }, &enum1) != nullptr);
-	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void* userData)
+	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void* /*userData*/)
 		 {
 			 return value.getPropertiesCount() == 1u;
 		 }) == &enum1.getEnumValueAt(1));

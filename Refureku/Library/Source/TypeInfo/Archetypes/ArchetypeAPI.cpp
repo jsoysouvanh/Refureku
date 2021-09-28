@@ -6,55 +6,35 @@
 
 using namespace rfk;
 
-ArchetypeAPI::ArchetypeAPI() noexcept:
-	EntityAPI(),
-	_pimpl{static_cast<ArchetypeImpl*>(nullptr)}
+ArchetypeAPI::ArchetypeAPI(ArchetypeImpl* implementation, void (*customDeleter)(EntityImpl*)) noexcept:
+	EntityAPI(implementation, customDeleter)
 {
 }
 
 ArchetypeAPI::ArchetypeAPI(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, EntityAPI const* outerEntity) noexcept:
-	EntityAPI(),
-	_pimpl(name, id, kind, memorySize, outerEntity)
+	EntityAPI(new ArchetypeImpl(name, id, kind, memorySize, outerEntity), [](EntityImpl* ptr) { delete reinterpret_cast<ArchetypeImpl*>(ptr); })
 {
 	//TODO: Delete this
-	EntityAPI::setImpl(_pimpl.get());
 }
 
-ArchetypeAPI::ArchetypeAPI(ArchetypeAPI const& other) noexcept:
-	_pimpl{other._pimpl}
-{
-	EntityAPI::setImpl(_pimpl.get());
-}
-
-ArchetypeAPI::ArchetypeAPI(ArchetypeAPI&& other) noexcept:
-	_pimpl{std::forward<Pimpl<ArchetypeImpl>>(other._pimpl)}
-{
-	EntityAPI::setImpl(_pimpl.get());
-}
+ArchetypeAPI::ArchetypeAPI(ArchetypeAPI&&) noexcept = default;
 
 ArchetypeAPI::~ArchetypeAPI() noexcept
 {
 	//Must be defined in cpp since _pimpl is an incomplete type in the header file
 }
 
-void ArchetypeAPI::setImpl(ArchetypeImpl* implementation) noexcept
-{
-	EntityAPI::setImpl(implementation);
-
-	_pimpl.set(implementation);
-}
-
 EAccessSpecifier ArchetypeAPI::getAccessSpecifier() const noexcept
 {
-	return _pimpl->getAccessSpecifier();
+	return reinterpret_cast<ArchetypeImpl const*>(getPimpl())->getAccessSpecifier();
 }
 
 void ArchetypeAPI::setAccessSpecifier(EAccessSpecifier accessSpecifier) noexcept
 {
-	_pimpl->setAccessSpecifier(accessSpecifier);
+	reinterpret_cast<ArchetypeImpl*>(getPimpl())->setAccessSpecifier(accessSpecifier);
 }
 
 std::size_t ArchetypeAPI::getMemorySize() const noexcept
 {
-	return _pimpl->getMemorySize();
+	return reinterpret_cast<ArchetypeImpl const*>(getPimpl())->getMemorySize();
 }

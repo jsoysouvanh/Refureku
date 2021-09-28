@@ -8,34 +8,31 @@
 
 using namespace rfk;
 
-EntityAPI::EntityAPI() noexcept:
-	_pimpl{static_cast<EntityImpl*>(nullptr)}
+EntityAPI::EntityAPI(EntityImpl* implementation, void (*customDeleter)(EntityImpl*)) noexcept:
+	_pimpl{implementation, customDeleter}
 {
 }
 
 EntityAPI::EntityAPI(char const* name, std::size_t id, EEntityKind kind, EntityAPI const* outerEntity) noexcept:
-	_pimpl(name, id, kind, outerEntity)
+	_pimpl{new EntityImpl(name, id, kind, outerEntity)}
 {
 }
 
-EntityAPI::EntityAPI(EntityAPI const& other) noexcept:
-	_pimpl{other._pimpl}
-{
-}
-
-EntityAPI::EntityAPI(EntityAPI&& other) noexcept:
-	_pimpl{std::forward<Pimpl<EntityImpl>>(other._pimpl)}
-{
-}
+EntityAPI::EntityAPI(EntityAPI&&) noexcept = default;
 
 EntityAPI::~EntityAPI() noexcept
 {
 	//Must be defined in cpp since _pimpl is an incomplete type in the header file
 }
 
-void EntityAPI::setImpl(EntityImpl* implementation) noexcept
+EntityAPI::EntityImpl* EntityAPI::getPimpl() noexcept
 {
-	_pimpl.set(implementation);
+	return _pimpl.get();
+}
+
+EntityAPI::EntityImpl const* EntityAPI::getPimpl() const noexcept
+{
+	return _pimpl.get();
 }
 
 Property const* EntityAPI::getPropertyAt(std::size_t propertyIndex) const noexcept

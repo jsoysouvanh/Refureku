@@ -35,7 +35,7 @@ namespace rfk
 								   std::size_t		id,
 								   EEntityKind		kind = EEntityKind::Undefined,
 								   EntityAPI const*	outerEntity = nullptr)			noexcept;
-			EntityAPI(EntityAPI const&)												noexcept;
+			EntityAPI(EntityAPI const&)												= delete;
 			EntityAPI(EntityAPI&&)													noexcept;
 			REFUREKU_API ~EntityAPI()												noexcept;	//TODO: Maybe move this to protected as well
 
@@ -169,6 +169,9 @@ namespace rfk
 			REFUREKU_API void						setPropertiesCapacity(std::size_t capacity)							noexcept;
 
 
+			EntityAPI&			operator=(EntityAPI const&)			= delete;
+			EntityAPI&			operator=(EntityAPI&&)				= delete;
+
 			REFUREKU_API bool	operator==(EntityAPI const& other)	const	 noexcept;
 			REFUREKU_API bool	operator!=(EntityAPI const& other)	const	 noexcept;
 
@@ -176,14 +179,16 @@ namespace rfk
 			//Forward declaration
 			class EntityImpl;
 
-			EntityAPI()	noexcept;
+			EntityAPI(EntityImpl* implementation,
+					  void		  (*customDeleter)(EntityImpl*))	noexcept;
 
 			/**
-			*	@brief Set the underlying implementation to the provided implementation.
-			*
-			*	@param implementation The implementation pointer to use.
+			*	@brief Get the _pimpl internal pointer.
+			* 
+			*	@return The _pimpl internal pointer.
 			*/
-			void setImpl(EntityImpl* implementation) noexcept;
+			EntityImpl*			getPimpl()								noexcept;
+			EntityImpl const*	getPimpl()						const	noexcept;
 
 		private:
 			/** Concrete implementation of the Entity class. */

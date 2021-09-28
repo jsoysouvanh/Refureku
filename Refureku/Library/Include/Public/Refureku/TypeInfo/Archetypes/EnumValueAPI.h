@@ -46,8 +46,12 @@ namespace rfk
 			class EnumValueImpl;
 
 		private:
-			/** Concrete implementation of the EnumValue class. */
-			Pimpl<EnumValueImpl> _pimpl;
+			/**
+			*	@brief Custom deleter forwarded to the pimpl object.
+			* 
+			*	@param ptr The underlying pimpl.
+			*/
+			static void customDeleter(EntityImpl* ptr) noexcept;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<EnumValueAPI const*>);

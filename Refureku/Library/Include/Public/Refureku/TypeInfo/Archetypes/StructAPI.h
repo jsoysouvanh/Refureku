@@ -32,16 +32,5 @@ namespace rfk
 
 			//Forward declaration
 			class StructImpl;
-
-			/**
-			*	@brief Set the underlying implementation to the provided implementation.
-			*
-			*	@param implementation The implementation pointer to use.
-			*/
-			void setImpl(StructImpl* implementation) noexcept;
-
-		private:
-			/** Concrete implementation of the Struct class. */
-			Pimpl<StructImpl> _pimpl;
 	};
 }

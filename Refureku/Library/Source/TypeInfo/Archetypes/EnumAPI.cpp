@@ -7,42 +7,40 @@
 using namespace rfk;
 
 EnumAPI::EnumAPI(char const* name, std::size_t id, ArchetypeAPI const* underlyingArchetype, EntityAPI const* outerEntity) noexcept:
-	ArchetypeAPI(),
-	_pimpl(name, id, underlyingArchetype, outerEntity)
+	ArchetypeAPI(new EnumImpl(name, id, underlyingArchetype, outerEntity), &EnumAPI::customDeleter)
 {
-	ArchetypeAPI::setImpl(_pimpl.get());
 }
 
 EnumAPI::EnumAPI(EnumAPI const& other) noexcept:
-	_pimpl{other._pimpl}
+	ArchetypeAPI(new EnumImpl(*reinterpret_cast<EnumImpl const*>(other.getPimpl())), &EnumAPI::customDeleter)
 {
-	ArchetypeAPI::setImpl(_pimpl.get());
 }
 
-EnumAPI::EnumAPI(EnumAPI&& other) noexcept:
-	_pimpl{std::forward<Pimpl<EnumImpl>>(other._pimpl)}
-{
-	ArchetypeAPI::setImpl(_pimpl.get());
-}
+EnumAPI::EnumAPI(EnumAPI&& other) noexcept = default;
 
 EnumAPI::~EnumAPI() noexcept
 {
 	//Must be defined in cpp since _pimpl is an incomplete type in the header file
 }
 
+void EnumAPI::customDeleter(EntityImpl* ptr) noexcept
+{
+	delete reinterpret_cast<EnumImpl*>(ptr);
+}
+
 EnumValueAPI* EnumAPI::addEnumValue(char const* name, std::size_t id, int64 value) noexcept
 {
-	return &_pimpl->addEnumValue(name, id, value, this);
+	return &reinterpret_cast<EnumImpl*>(getPimpl())->addEnumValue(name, id, value, this);
 }
 
 void EnumAPI::setEnumValuesCapacity(std::size_t capacity) noexcept
 {
-	_pimpl->setEnumValuesCapacity(capacity);
+	reinterpret_cast<EnumImpl*>(getPimpl())->setEnumValuesCapacity(capacity);
 }
 
 EnumValueAPI const* EnumAPI::getEnumValueByName(char const* name) const noexcept
 {
-	for (EnumValueAPI const& enumValue : _pimpl->getEnumValues())
+	for (EnumValueAPI const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
 		if (std::strcmp(enumValue.getName(), name) == 0)
 		{
@@ -55,7 +53,7 @@ EnumValueAPI const* EnumAPI::getEnumValueByName(char const* name) const noexcept
 
 EnumValueAPI const* EnumAPI::getEnumValue(int64 value) const noexcept
 {
-	for (EnumValueAPI const& enumValue : _pimpl->getEnumValues())
+	for (EnumValueAPI const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
 		if (enumValue.getValue() == value)
 		{
@@ -68,7 +66,7 @@ EnumValueAPI const* EnumAPI::getEnumValue(int64 value) const noexcept
 
 EnumValueAPI const* EnumAPI::getEnumValueByPredicate(EnumValuePredicate predicate, void* userData) const noexcept
 {
-	for (EnumValueAPI const& enumValue : _pimpl->getEnumValues())
+	for (EnumValueAPI const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
 		if (predicate(enumValue, userData))
 		{
@@ -83,7 +81,7 @@ Vector<EnumValueAPI const*> EnumAPI::getEnumValues(int64 value) const noexcept
 {
 	Vector<EnumValueAPI const*> result;
 
-	for (EnumValueAPI const& enumValue : _pimpl->getEnumValues())
+	for (EnumValueAPI const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
 		if (enumValue.getValue() == value)
 		{
@@ -98,7 +96,7 @@ Vector<EnumValueAPI const*> EnumAPI::getEnumValuesByPredicate(EnumValuePredicate
 {
 	Vector<EnumValueAPI const*> result;
 
-	for (EnumValueAPI const& enumValue : _pimpl->getEnumValues())
+	for (EnumValueAPI const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
 		if (predicate(enumValue, userData))
 		{
@@ -111,15 +109,15 @@ Vector<EnumValueAPI const*> EnumAPI::getEnumValuesByPredicate(EnumValuePredicate
 
 EnumValueAPI const& EnumAPI::getEnumValueAt(std::size_t valueIndex)	const noexcept
 {
-	return _pimpl->getEnumValues()[valueIndex];
+	return reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues()[valueIndex];
 }
 
 std::size_t EnumAPI::getEnumValuesCount() const noexcept
 {
-	return _pimpl->getEnumValues().size();
+	return reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues().size();
 }
 
 ArchetypeAPI const& EnumAPI::getUnderlyingArchetype() const noexcept
 {
-	return _pimpl->getUnderlyingArchetype();
+	return reinterpret_cast<EnumImpl const*>(getPimpl())->getUnderlyingArchetype();
 }

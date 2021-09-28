@@ -134,16 +134,13 @@ namespace rfk
 			//Forward declaration
 			class EnumImpl;
 
-			/**
-			*	@brief Set the underlying implementation to the provided implementation.
-			*
-			*	@param implementation The implementation pointer to use.
-			*/
-			void setImpl(EnumImpl* implementation) noexcept;
-
 		private:
-			/** Concrete implementation of the Archetype class. */
-			Pimpl<EnumImpl> _pimpl;
+			/**
+			*	@brief Custom deleter forwarded to the pimpl object.
+			* 
+			*	@param ptr The underlying pimpl.
+			*/
+			static void customDeleter(EntityImpl* ptr) noexcept;
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */

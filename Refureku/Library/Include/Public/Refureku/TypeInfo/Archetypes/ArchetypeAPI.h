@@ -21,7 +21,7 @@ namespace rfk
 									  EEntityKind		kind,
 									  std::size_t		memorySize,
 									  EntityAPI const*	outerEntity = nullptr)	noexcept;
-			ArchetypeAPI(ArchetypeAPI const&)									noexcept;
+			ArchetypeAPI(ArchetypeAPI const&)									= delete;
 			ArchetypeAPI(ArchetypeAPI&&)										noexcept;
 			REFUREKU_API ~ArchetypeAPI()										noexcept;	//TODO: Maybe move this to protected as well
 
@@ -46,22 +46,16 @@ namespace rfk
 			*/
 			REFUREKU_API std::size_t		getMemorySize()					const	noexcept;
 
+
+			ArchetypeAPI& operator=(ArchetypeAPI const&)	= delete;
+			ArchetypeAPI& operator=(ArchetypeAPI&&)			= delete;
+
 		protected:
 			//Forward declaration
 			class ArchetypeImpl;
 
-			ArchetypeAPI()	noexcept;
-
-			/**
-			*	@brief Set the underlying implementation to the provided implementation.
-			*
-			*	@param implementation The implementation pointer to use.
-			*/
-			void setImpl(ArchetypeImpl* implementation) noexcept;
-
-		private:
-			/** Concrete implementation of the Archetype class. */
-			Pimpl<ArchetypeImpl> _pimpl;
+			ArchetypeAPI(ArchetypeImpl* implementation,
+						 void			(*customDeleter)(EntityImpl*))	noexcept;
 	};
 
 	//TODO: getArchetype base implementation should maybe be here?

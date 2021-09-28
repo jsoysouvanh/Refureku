@@ -6,7 +6,8 @@
 
 using namespace rfk;
 
-TypeAPI::TypeAPI() noexcept
+TypeAPI::TypeAPI() noexcept:
+	_pimpl{new TypeImpl()}
 {
 }
 
