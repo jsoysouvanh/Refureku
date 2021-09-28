@@ -7,6 +7,6 @@ message("Cmake:		${CMAKE_VERSION}")
 message("Compiler:	${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
 # Enable tests
-enable_testing()
+include(CTest)
 
 add_subdirectory(Refureku)
