@@ -187,8 +187,8 @@ namespace rfk
 			* 
 			*	@return The _pimpl internal pointer.
 			*/
-			EntityImpl*			getPimpl()								noexcept;
-			EntityImpl const*	getPimpl()						const	noexcept;
+			EntityImpl*			getPimpl()			noexcept;
+			EntityImpl const*	getPimpl()	const	noexcept;
 
 		private:
 			/** Concrete implementation of the Entity class. */

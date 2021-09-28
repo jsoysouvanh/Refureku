@@ -9,7 +9,6 @@
 
 #include <cassert>
 #include <memory>		//std::allocator_traits
-#include <type_traits>	//std::is_nothrow_destructible_v
 
 #include "Refureku/Containers/Allocator.h"
 
@@ -18,8 +17,6 @@ namespace rfk
 	template <typename T, typename Allocator = rfk::Allocator<T>>
 	class Vector
 	{
-		static_assert(std::is_copy_constructible_v<T> || std::is_move_constructible_v<T>, "Can't make a vector with a non-copyable/non-movable class.");
-
 		private:
 			using AllocTraits = std::allocator_traits<Allocator>;
 
@@ -42,7 +39,7 @@ namespace rfk
 			*	@param count	Number of elements to construct.
 			*/
 			void constructElements(T*			from,
-								   std::size_t	count)	noexcept(std::is_nothrow_default_constructible_v<T>);
+								   std::size_t	count);
 
 			/**
 			*	@brief Copy count elements from from into to.
@@ -53,7 +50,7 @@ namespace rfk
 			*/
 			void copyElements(T const*	  from,
 							  T*		  to,
-							  std::size_t count)		noexcept(std::is_nothrow_copy_constructible_v<T>);
+							  std::size_t count);
 			
 			/**
 			*	@brief Move count elements from from into to.
@@ -64,7 +61,7 @@ namespace rfk
 			*/
 			void moveElements(T*		  from,
 							  T*		  to,
-							  std::size_t count)		noexcept(std::is_nothrow_move_constructible_v<T>);
+							  std::size_t count);
 
 			/**
 			*	@brief Destroy manually count elements from from.
@@ -73,12 +70,12 @@ namespace rfk
 			*	@param count	Number of elements to destroy.
 			*/
 			void destroyElements(T*			 from,
-								 std::size_t count)		noexcept(std::is_nothrow_destructible_v<T>);
+								 std::size_t count);
 
 			/**
 			*	@brief Completely delete the allocated memory if it is non-nullptr.
 			*/
-			void checkedDelete()						noexcept(std::is_nothrow_destructible_v<T>);
+			void checkedDelete();
 
 			/**
 			*	@brief	Reallocate the underlying memory if the container is full.
@@ -88,9 +85,9 @@ namespace rfk
 
 		public:
 			Vector()				noexcept;
-			Vector(Vector const&)	noexcept(std::is_nothrow_destructible_v<T>);
+			Vector(Vector const&);
 			Vector(Vector&&)		noexcept;
-			~Vector()				noexcept(std::is_nothrow_destructible_v<T>);
+			~Vector();
 
 			/**
 			*	@brief	Get a reference to the first element of the vector.
@@ -159,7 +156,7 @@ namespace rfk
 			/**
 			*	@brief Remove all elements from the vector.
 			*/
-			void		clear()					noexcept(std::is_nothrow_destructible_v<T>);
+			void		clear();
 
 			/**
 			*	@brief Add an element to the vector.

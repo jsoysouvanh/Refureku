@@ -31,7 +31,7 @@ namespace rfk
 			void	checkedDelete();
 
 		public:
-			Pimpl(T* implementation,
+			Pimpl(T*   implementation,
 				  void (*customDeleter)(T*) = [](T* ptr) { delete ptr; })	noexcept;
 			Pimpl(Pimpl const& other);
 			Pimpl(Pimpl&& other)											noexcept;
