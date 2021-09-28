@@ -19,6 +19,13 @@ namespace rfk
 	class REFUREKU_API TypePart
 	{
 		public:
+			/**
+			*	Padding to make sure sizeof(TypePart) is exactly 64 bits.
+			*	This is necessary since type parts are compared using std::memcmp
+			*	so all the memory must be initialized.
+			*/
+			uint16				padding			= 0u;
+
 			/** Actual data describing this type part */
 			ETypePartDescriptor	descriptor		= ETypePartDescriptor::Undefined;
 			
