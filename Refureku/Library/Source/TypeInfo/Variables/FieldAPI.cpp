@@ -21,15 +21,15 @@ void FieldAPI::setData(void* instance, void const* data, std::size_t dataSize) c
 		throw ConstViolation("Can't call Field::setData on a const field.");
 	}
 
-	std::memcpy(getDataPtr(instance), data, dataSize);
+	std::memcpy(getPtr(instance), data, dataSize);
 }
 
-void* FieldAPI::getDataPtr(void* instance) const noexcept
+void* FieldAPI::getPtr(void* instance) const noexcept
 {
 	return reinterpret_cast<uint8_t*>(instance) + reinterpret_cast<FieldImpl const*>(getPimpl())->getMemoryOffset();
 }
 
-void const* FieldAPI::getConstDataPtr(void const* instance) const noexcept
+void const* FieldAPI::getConstPtr(void const* instance) const noexcept
 {
 	return reinterpret_cast<uint8_t const*>(instance) + reinterpret_cast<FieldImpl const*>(getPimpl())->getMemoryOffset();
 }

@@ -79,17 +79,17 @@ namespace rfk
 			REFUREKU_API void						setData(void const* data, std::size_t dataSize)	const;
 
 			/**
-			*	@brief	Get a non-const pointer to this static field data.
-			*			Performing non-const operations if the static field is const is undefined behaviour.
+			*	@brief	Get a non-const pointer to this static field.
+			*			Performing non-const operations on the pointer if the static field is const is undefined behaviour.
 			* 
-			*	@return A pointer to this static field data.
+			*	@return A pointer to this static field.
 			*/
 			[[nodiscard]] REFUREKU_API	void*		getDataPtr()									const	noexcept;
 
 			/**
-			*	@brief	Get a const pointer to this static field data.
+			*	@brief	Get a const pointer to this static field.
 			* 
-			*	@return A const pointer to this static field data.
+			*	@return A const pointer to this static field.
 			*/
 			[[nodiscard]] REFUREKU_API	void const*	getConstDataPtr()								const	noexcept;
 

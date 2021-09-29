@@ -48,7 +48,8 @@ add_library(${RefurekuLibraryTarget}
 
 					Source/TypeInfo/Variables/VariableBaseAPI.cpp
 					Source/TypeInfo/Variables/VariableBase.cpp	#Delete this
-					Source/TypeInfo/Variables/Variable.cpp
+					Source/TypeInfo/Variables/VariableAPI.cpp
+					Source/TypeInfo/Variables/Variable.cpp		#Delete this
 					Source/TypeInfo/Variables/FieldBaseAPI.cpp
 					Source/TypeInfo/Variables/FieldBase.cpp		#Delete this
 					Source/TypeInfo/Variables/FieldAPI.cpp

@@ -99,24 +99,23 @@ namespace rfk
 															std::size_t	dataSize)			const;
 
 			/**
-			*	@brief	Get a pointer to this field data in the provided instance.
+			*	@brief	Get a pointer to this field in the provided instance.
 			*			Performing non-const operations on the pointer if the field is const is undefined behaviour.
 			*
-			*	@param instance Instance we get the data from.
+			*	@param instance Instance we get the field from.
 			*
-			*	@return Pointer to this field data in the provided instance.
+			*	@return Pointer to this field in the provided instance.
 			*/
-			[[nodiscard]] REFUREKU_API void*		getDataPtr(void* instance)				const	noexcept;
+			[[nodiscard]] REFUREKU_API void*		getPtr(void* instance)				const	noexcept;
 
 			/**
-			*	@brief	Get a const pointer to this field data in the provided instance.
-			*			This is only an overload of the same method with a const instance.
+			*	@brief Get a const pointer to this field in the provided instance.
 			*
-			*	@param instance Instance we get the data from.
+			*	@param instance Instance we get the field from.
 			*
-			*	@return Const pointer to this field data in the provided instance.
+			*	@return Const pointer to this field in the provided instance.
 			*/
-			[[nodiscard]] REFUREKU_API void const*	getConstDataPtr(void const* instance)	const	noexcept;
+			[[nodiscard]] REFUREKU_API void const*	getConstPtr(void const* instance)	const	noexcept;
 
 		protected:
 			//Forward declaration

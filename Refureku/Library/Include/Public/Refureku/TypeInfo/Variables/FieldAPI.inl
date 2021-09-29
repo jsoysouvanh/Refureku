@@ -15,7 +15,7 @@ DataType FieldAPI::getData(void* instance) const
 			throw ConstViolation("Field::getData can't be called with an rvalue DataType on const fields.");
 		}
 
-		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getDataPtr(instance)));
+		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getPtr(instance)));
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
@@ -27,11 +27,11 @@ DataType FieldAPI::getData(void* instance) const
 			}
 		}
 
-		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getDataPtr(instance));
+		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getPtr(instance));
 	}
 	else	//By value
 	{
-		return DataType(*reinterpret_cast<DataType*>(getDataPtr(instance)));
+		return DataType(*reinterpret_cast<DataType*>(getPtr(instance)));
 	}
 }
 
@@ -60,11 +60,11 @@ void FieldAPI::setData(void* instance, DataType&& data) const
 
 	if constexpr (std::is_rvalue_reference_v<DataType&&>)
 	{
-		*reinterpret_cast<DataType*>(getDataPtr(instance)) = std::forward<DataType&&>(data);
+		*reinterpret_cast<DataType*>(getPtr(instance)) = std::forward<DataType&&>(data);
 	}
 	else if constexpr (std::is_lvalue_reference_v<DataType&&>)
 	{
-		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(getDataPtr(instance)) = data;
+		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(getPtr(instance)) = data;
 	}
 	else
 	{
