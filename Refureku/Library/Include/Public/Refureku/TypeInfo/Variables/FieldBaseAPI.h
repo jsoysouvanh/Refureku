@@ -49,7 +49,7 @@ namespace rfk
 			REFUREKU_API EFieldFlags		getFlags()	const	noexcept;
 
 			/**
-			*	@brief	Get the struct owning this field.
+			*	@brief Get the struct owning this field.
 			* 
 			*	@return The struct owning this field.
 			*/

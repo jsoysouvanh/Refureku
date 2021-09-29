@@ -255,6 +255,11 @@ void types()
 	TEST(floatConstPtrType.getTypePartAt(1).isConst());
 }
 
+void fieldsAPI()
+{
+	//TODO
+}
+
 void outerEntities()
 {
 	TEST(rfk::getDatabase().getNamespace("namespace3")->getOuterEntity() == nullptr);
@@ -1290,6 +1295,7 @@ void newTests()
 	archetypes();
 	enumsAndEnumValues();
 	types();
+	fieldsAPI();
 }
 
 int main()

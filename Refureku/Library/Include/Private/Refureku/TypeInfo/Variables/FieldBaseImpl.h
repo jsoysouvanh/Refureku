@@ -34,14 +34,14 @@ namespace rfk
 			* 
 			*	@return _flags.
 			*/
-			inline EFieldFlags				getFlags()	const	noexcept;
+			inline EFieldFlags		getFlags()	const	noexcept;
 
 			/**
-			*	@brief Getter for the field _containedIn.
+			*	@brief Getter for the field _owner.
 			* 
-			*	@return _containedIn.
+			*	@return _owner.
 			*/
-			inline StructAPI const*			getOwner()	const	noexcept;
+			inline StructAPI const*	getOwner()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/FieldBaseImpl.inl"

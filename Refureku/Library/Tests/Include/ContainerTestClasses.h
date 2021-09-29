@@ -27,13 +27,17 @@ class HugeClass
 			//std::cout << "HugeClass(int i)" << std::endl;
 		}
 
-		HugeClass(HugeClass const&) noexcept
+		HugeClass(HugeClass const& other) noexcept:
+			_array{},
+			_i{other._i}
 		{
 			_instanceCount++;
 			//std::cout << "HugeClass(HugeClass const&)" << std::endl;
 		}
 
-		HugeClass(HugeClass&&) noexcept
+		HugeClass(HugeClass&& other) noexcept:
+			_array{},
+			_i{other._i}
 		{
 			//std::cout << "HugeClass(HugeClass&&)" << std::endl;
 		}
