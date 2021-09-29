@@ -2,6 +2,8 @@
 
 using namespace rfk;
 
+TypePartAPI::TypePartAPI() noexcept = default;
+
 TypePartAPI::TypePartAPI(ETypePartDescriptor descriptor, AdditionalDataType additionalData) noexcept:
 	_additionalData{additionalData},
 	_descriptor{descriptor}

@@ -9,6 +9,7 @@
 
 #include "Refureku/Config.h"
 #include "Refureku/TypeInfo/ETypePartDescriptor.h"
+#include "Refureku/Misc/DisableWarningMacros.h"
 
 namespace rfk
 {
@@ -17,21 +18,7 @@ namespace rfk
 		public:
 			using AdditionalDataType = uint32;
 
-		private:
-			/** Some additional data which might complement descriptor (for example CArray size) */
-			AdditionalDataType	_additionalData	= 0u;
-
-			/** Actual data describing this type part */
-			ETypePartDescriptor	_descriptor		= ETypePartDescriptor::Undefined;
-
-			/**
-			*	Padding to make sure that the class takes 8 complete bytes of fully initialized memory.
-			*	Used later to compare lists of TypePartAPI using std::memcmp.
-			*/
-			uint16				_padding		= 0u;
-
-		public:
-			TypePartAPI()									= default;
+			TypePartAPI()									noexcept;
 			TypePartAPI(ETypePartDescriptor	descriptor,
 						AdditionalDataType	additionalData)	noexcept;
 
@@ -57,6 +44,24 @@ namespace rfk
 			*	@param data The data to set.
 			*/
 			REFUREKU_API void				setAdditionalData(AdditionalDataType data)	noexcept;
+
+		private:
+			/** Some additional data which might complement descriptor (for example CArray size) */
+			AdditionalDataType	_additionalData	= 0u;
+
+			/** Actual data describing this type part */
+			ETypePartDescriptor	_descriptor		= ETypePartDescriptor::Undefined;
+
+__RFK_DISABLE_WARNING_PUSH
+__RFK_DISABLE_WARNING_UNUSED_PRIVATE_FIELD
+
+			/**
+			*	Padding to make sure that the class takes 8 complete bytes of fully initialized memory.
+			*	Used later to compare lists of TypePartAPI using std::memcmp.
+			*/
+			uint16				_padding		= 0u;
+
+__RFK_DISABLE_WARNING_POP
 	};
 
 	static_assert(sizeof(TypePartAPI) == 8u, "TypePartAPI must takes 8 bytes of fully initialized memory to allow the use of std::memcmp.");

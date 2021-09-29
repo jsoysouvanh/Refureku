@@ -191,6 +191,6 @@ namespace rfk
 
 		private:
 			/** Concrete implementation of the Entity class. */
-			REFUREKU_INTERNAL Pimpl<EntityImpl> _pimpl;
+			Pimpl<EntityImpl> _pimpl;
 	};
 }
