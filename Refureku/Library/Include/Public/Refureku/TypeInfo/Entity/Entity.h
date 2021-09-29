@@ -36,8 +36,7 @@ namespace rfk
 								   EEntityKind		kind = EEntityKind::Undefined,
 								   EntityAPI const*	outerEntity = nullptr)			noexcept;
 			EntityAPI(EntityAPI const&)												= delete;
-			EntityAPI(EntityAPI&&)													noexcept;
-			REFUREKU_API ~EntityAPI()												noexcept;	//TODO: Maybe move this to protected as well
+			REFUREKU_API ~EntityAPI()												noexcept;	//TODO: Move to protected + not part of the API
 
 			/**
 			*	@brief Add a property to this entity.
@@ -179,19 +178,19 @@ namespace rfk
 			//Forward declaration
 			class EntityImpl;
 
-			EntityAPI(EntityImpl* implementation,
-					  void		  (*customDeleter)(EntityImpl*))	noexcept;
+			REFUREKU_INTERNAL EntityAPI(EntityImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL EntityAPI(EntityAPI&&)				noexcept;
 
 			/**
 			*	@brief Get the _pimpl internal pointer.
 			* 
 			*	@return The _pimpl internal pointer.
 			*/
-			EntityImpl*			getPimpl()			noexcept;
-			EntityImpl const*	getPimpl()	const	noexcept;
+			REFUREKU_INTERNAL EntityImpl*		getPimpl()			noexcept;
+			REFUREKU_INTERNAL EntityImpl const*	getPimpl()	const	noexcept;
 
 		private:
 			/** Concrete implementation of the Entity class. */
-			Pimpl<EntityImpl> _pimpl;
+			REFUREKU_INTERNAL Pimpl<EntityImpl> _pimpl;
 	};
 }

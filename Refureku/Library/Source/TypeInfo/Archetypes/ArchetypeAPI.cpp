@@ -6,23 +6,18 @@
 
 using namespace rfk;
 
-ArchetypeAPI::ArchetypeAPI(ArchetypeImpl* implementation, void (*customDeleter)(EntityImpl*)) noexcept:
-	EntityAPI(implementation, customDeleter)
+ArchetypeAPI::ArchetypeAPI(ArchetypeImpl* implementation) noexcept:
+	EntityAPI(implementation)
 {
 }
 
 ArchetypeAPI::ArchetypeAPI(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, EntityAPI const* outerEntity) noexcept:
-	EntityAPI(new ArchetypeImpl(name, id, kind, memorySize, outerEntity), [](EntityImpl* ptr) { delete reinterpret_cast<ArchetypeImpl*>(ptr); })
+	EntityAPI(new ArchetypeImpl(name, id, kind, memorySize, outerEntity))
 {
 	//TODO: Delete this
 }
 
-ArchetypeAPI::ArchetypeAPI(ArchetypeAPI&&) noexcept = default;
-
-ArchetypeAPI::~ArchetypeAPI() noexcept
-{
-	//Must be defined in cpp since _pimpl is an incomplete type in the header file
-}
+ArchetypeAPI::~ArchetypeAPI() noexcept = default;
 
 EAccessSpecifier ArchetypeAPI::getAccessSpecifier() const noexcept
 {

@@ -21,15 +21,11 @@ TypeAPI::TypeAPI(TypeAPI&& other) noexcept:
 {
 }
 
-TypeAPI::~TypeAPI() noexcept
-{
-	//Must be defined in cpp since _pimpl is an incomplete type in the header file
-}
+TypeAPI::~TypeAPI() noexcept = default;
 
 void TypeAPI::optimizeMemory() noexcept
 {
-	//TODO
-	//_pimpl->getParts
+	_pimpl->optimizeMemory();
 }
 
 TypePartAPI& TypeAPI::addTypePart() noexcept

@@ -7,26 +7,11 @@
 using namespace rfk;
 
 EnumAPI::EnumAPI(char const* name, std::size_t id, ArchetypeAPI const* underlyingArchetype, EntityAPI const* outerEntity) noexcept:
-	ArchetypeAPI(new EnumImpl(name, id, underlyingArchetype, outerEntity), &EnumAPI::customDeleter)
+	ArchetypeAPI(new EnumImpl(name, id, underlyingArchetype, outerEntity))
 {
 }
 
-EnumAPI::EnumAPI(EnumAPI const& other) noexcept:
-	ArchetypeAPI(new EnumImpl(*reinterpret_cast<EnumImpl const*>(other.getPimpl())), &EnumAPI::customDeleter)
-{
-}
-
-EnumAPI::EnumAPI(EnumAPI&& other) noexcept = default;
-
-EnumAPI::~EnumAPI() noexcept
-{
-	//Must be defined in cpp since _pimpl is an incomplete type in the header file
-}
-
-void EnumAPI::customDeleter(EntityImpl* ptr) noexcept
-{
-	delete reinterpret_cast<EnumImpl*>(ptr);
-}
+EnumAPI::~EnumAPI() noexcept = default;
 
 EnumValueAPI* EnumAPI::addEnumValue(char const* name, std::size_t id, int64 value) noexcept
 {

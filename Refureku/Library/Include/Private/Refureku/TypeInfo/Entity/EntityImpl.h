@@ -43,6 +43,7 @@ namespace rfk
 					   std::size_t		id,
 					   EEntityKind		kind = EEntityKind::Undefined,
 					   EntityAPI const*	outerEntity = nullptr)			noexcept;
+			virtual ~EntityImpl()										= default;
 
 			/**
 			*	@brief Add a property to this entity.

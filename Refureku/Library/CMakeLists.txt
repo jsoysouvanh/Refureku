@@ -11,7 +11,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/TypePartAPI.cpp
 					Source/TypeInfo/TypePart.cpp	#Delete this
 					Source/TypeInfo/TypeAPI.cpp
-					Source/TypeInfo/Type.cpp	#Delete this
+					Source/TypeInfo/Type.cpp		#Delete this
 					Source/TypeInfo/EnumValue.cpp	#Delete this
 					Source/TypeInfo/Database.cpp
 

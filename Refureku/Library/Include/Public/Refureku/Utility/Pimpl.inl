@@ -6,26 +6,22 @@
 */
 
 template <typename T>
-Pimpl<T>::Pimpl(T* implementation, void (*customDeleter)(T*)) noexcept:
-	_implementation{implementation},
-	_customDeleter{customDeleter}
+Pimpl<T>::Pimpl(T* implementation) noexcept:
+	_implementation{implementation}
 {
 }
 
 template <typename T>
 Pimpl<T>::Pimpl(Pimpl const& other):
-	_implementation{(other._implementation != nullptr) ? new T(*other._implementation) : nullptr},
-	_customDeleter{other._customDeleter}
+	_implementation{(other._implementation != nullptr) ? new T(*other._implementation) : nullptr}
 {
 }
 
 template <typename T>
 Pimpl<T>::Pimpl(Pimpl&& other) noexcept:
-	_implementation{other._implementation},
-	_customDeleter{other._customDeleter}
+	_implementation{other._implementation}
 {
 	other._implementation = nullptr;
-	other._customDeleter = nullptr;
 }
 
 template <typename T>
@@ -39,7 +35,7 @@ void Pimpl<T>::checkedDelete()
 {
 	if (_implementation != nullptr)
 	{
-		_customDeleter(_implementation);
+		delete _implementation;
 
 		_implementation = nullptr;
 	}

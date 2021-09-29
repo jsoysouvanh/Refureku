@@ -20,7 +20,6 @@ namespace rfk
 						 std::size_t		id,
 						 int64				value,
 						 EntityAPI const*	outerEntity = nullptr)	noexcept;
-			EnumValueAPI(EnumValueAPI const&)						noexcept;
 			EnumValueAPI(EnumValueAPI&&)							noexcept;
 			~EnumValueAPI()											noexcept;
 
@@ -44,14 +43,6 @@ namespace rfk
 		protected:
 			//Forward declaration
 			class EnumValueImpl;
-
-		private:
-			/**
-			*	@brief Custom deleter forwarded to the pimpl object.
-			* 
-			*	@param ptr The underlying pimpl.
-			*/
-			static void customDeleter(EntityImpl* ptr) noexcept;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<EnumValueAPI const*>);

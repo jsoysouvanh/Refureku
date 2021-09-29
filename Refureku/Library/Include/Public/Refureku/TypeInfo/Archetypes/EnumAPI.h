@@ -27,8 +27,6 @@ namespace rfk
 								 std::size_t			id,
 								 ArchetypeAPI const*	underlyingArchetype,
 								 EntityAPI const*		outerEntity = nullptr)	noexcept;
-			EnumAPI(EnumAPI const&)												noexcept;
-			EnumAPI(EnumAPI&&)													noexcept;
 			REFUREKU_API ~EnumAPI()												noexcept;
 
 			/**
@@ -126,21 +124,9 @@ namespace rfk
 			*/
 			REFUREKU_API ArchetypeAPI const&			getUnderlyingArchetype()										const	noexcept;
 
-
-			EnumAPI& operator=(EnumAPI const&)	= delete;
-			EnumAPI& operator=(EnumAPI&&)		= delete;
-
 		protected:
 			//Forward declaration
 			class EnumImpl;
-
-		private:
-			/**
-			*	@brief Custom deleter forwarded to the pimpl object.
-			* 
-			*	@param ptr The underlying pimpl.
-			*/
-			static void customDeleter(EntityImpl* ptr) noexcept;
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */

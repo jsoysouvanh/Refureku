@@ -8,8 +8,8 @@
 
 using namespace rfk;
 
-EntityAPI::EntityAPI(EntityImpl* implementation, void (*customDeleter)(EntityImpl*)) noexcept:
-	_pimpl{implementation, customDeleter}
+EntityAPI::EntityAPI(EntityImpl* implementation) noexcept:
+	_pimpl{implementation}
 {
 }
 
@@ -20,10 +20,7 @@ EntityAPI::EntityAPI(char const* name, std::size_t id, EEntityKind kind, EntityA
 
 EntityAPI::EntityAPI(EntityAPI&&) noexcept = default;
 
-EntityAPI::~EntityAPI() noexcept
-{
-	//Must be defined in cpp since _pimpl is an incomplete type in the header file
-}
+EntityAPI::~EntityAPI() noexcept = default;
 
 EntityAPI::EntityImpl* EntityAPI::getPimpl() noexcept
 {

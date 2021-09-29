@@ -19,16 +19,14 @@ namespace rfk
 								   std::size_t	id,
 								   std::size_t	memorySize,
 								   bool			isClass)		noexcept;
-			StructAPI(StructAPI const&)							noexcept;
-			StructAPI(StructAPI&&)								noexcept;
 			REFUREKU_API ~StructAPI()							noexcept;
 
 		protected:
-			StructAPI(char const*	name,
-					  std::size_t	id,
-					  std::size_t	memorySize,
-					  bool			isClass,
-					  EClassKind	classKind)	noexcept;
+			REFUREKU_INTERNAL StructAPI(char const*	name,
+										std::size_t	id,
+										std::size_t	memorySize,
+										bool		isClass,
+										EClassKind	classKind)	noexcept;
 
 			//Forward declaration
 			class StructImpl;

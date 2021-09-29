@@ -28,4 +28,5 @@
 #include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
+#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 #include "Refureku/TypeInfo/TypeAPI.h"

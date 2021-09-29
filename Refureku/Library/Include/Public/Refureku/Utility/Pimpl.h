@@ -22,19 +22,15 @@ namespace rfk
 			/** Underlying class instance. */
 			T*		_implementation;
 
-			/** Custom deleter. */
-			void	(*_customDeleter)(T*);
-
 			/**
 			*	@brief Destroy the underlying object if it is valid.
 			*/
 			void	checkedDelete();
 
 		public:
-			Pimpl(T*   implementation,
-				  void (*customDeleter)(T*) = [](T* ptr) { delete ptr; })	noexcept;
+			Pimpl(T* implementation)	noexcept;
 			Pimpl(Pimpl const& other);
-			Pimpl(Pimpl&& other)											noexcept;
+			Pimpl(Pimpl&& other)		noexcept;
 			~Pimpl();
 
 			/**
@@ -50,6 +46,7 @@ namespace rfk
 			*	@return The const underlying object.
 			*/
 			T const*	get()					const	noexcept;
+
 
 			Pimpl&		operator=(Pimpl const& other);
 			Pimpl&		operator=(Pimpl&& other)		noexcept;

@@ -24,12 +24,16 @@ namespace rfk
 			/** Actual data describing this type part */
 			ETypePartDescriptor	_descriptor		= ETypePartDescriptor::Undefined;
 
+			/**
+			*	Padding to make sure that the class takes 8 complete bytes of fully initialized memory.
+			*	Used later to compare lists of TypePartAPI using std::memcmp.
+			*/
+			uint16				_padding		= 0u;
+
 		public:
 			TypePartAPI()									= default;
 			TypePartAPI(ETypePartDescriptor	descriptor,
 						AdditionalDataType	additionalData)	noexcept;
-			TypePartAPI(TypePartAPI const&)					= default;
-			TypePartAPI(TypePartAPI&&)						= default;
 
 			/**
 			*	@brief	Add a flag to the descriptor field.
@@ -53,8 +57,7 @@ namespace rfk
 			*	@param data The data to set.
 			*/
 			REFUREKU_API void				setAdditionalData(AdditionalDataType data)	noexcept;
-
-			TypePartAPI&	operator=(TypePartAPI const&)	= default;
-			TypePartAPI&	operator=(TypePartAPI&&)		= default;
 	};
+
+	static_assert(sizeof(TypePartAPI) == 8u, "TypePartAPI must takes 8 bytes of fully initialized memory to allow the use of std::memcmp.");
 }
