@@ -11,10 +11,6 @@
 #include "Refureku/TypeInfo/Functions/FunctionParameterAPI.h"
 #include "Refureku/TypeInfo/Functions/ICallable.h"
 
-#include "Refureku/Exceptions/ArgCountMismatch.h"	//TODO: Want to remove exceptions from API header...
-#include "Refureku/Exceptions/ReturnTypeMismatch.h"
-#include "Refureku/Exceptions/ArgTypeMismatch.h"
-
 namespace rfk
 {
 	class FunctionBaseAPI : public EntityAPI
@@ -109,13 +105,13 @@ namespace rfk
 			void									checkParametersCount()	const;
 
 			/**
-			*	@brief Check that the provided argument types are the same as this function's arguments.
+			*	@brief Check that the provided types are the same as this function parameter types.
 			*
 			*	@exception ArgCountMismatch if the argument count is different from this function arg count.
 			*	@exception ArgTypeMismatch if one the argument has a different type from the expected one.
 			*/
 			template <typename... ArgTypes>
-			void									checkParameters()		const;
+			void									checkParameterTypes()	const;
 
 			/**
 			*	@brief Check that the provided type is the same as this function return type.
@@ -139,7 +135,7 @@ namespace rfk
 			*	@return true if the provided type is the same as this function's, else false.
 			*/
 			template <typename ReturnType>
-			[[nodiscard]] bool						hasSameReturnType()			const	noexcept;
+			[[nodiscard]] bool						hasSameReturnType()										const	noexcept;
 
 			/**
 			*	@brief Check that the number of provided parameters is the same as this method's.
@@ -147,19 +143,46 @@ namespace rfk
 			*	@return true if provided types count is the same as this method's, else false.
 			*/
 			template <typename... ArgTypes>
-			[[nodiscard]] bool						hasSameParametersCount()	const	noexcept;
+			[[nodiscard]] bool						hasSameParametersCount()								const	noexcept;
 
 			/**
 			*	@brief Check that the provided parameters are the same as this method's.
 			* 
 			*	@return true if provided types are the same as this method parameters, else false.
 			*/
-			template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
-			[[nodiscard]] bool						hasSameParameterTypes()		const	noexcept;
-			template <size_t Rank, typename LastArgType>
-			[[nodiscard]] bool						hasSameParameterTypes()		const	noexcept;
+			template <std::size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+			[[nodiscard]] bool						hasSameParameterTypes()									const	noexcept;
+			template <std::size_t Rank, typename LastArgType>
+			[[nodiscard]] bool						hasSameParameterTypes()									const	noexcept;
 			template <typename... ArgTypes>
-			[[nodiscard]] bool						hasSameParameterTypes()		const	noexcept;
+			[[nodiscard]] bool						hasSameParameterTypes()									const	noexcept;
+
+			/**
+			*	@brief Check that the parameter types match, and throw an ArgTypeMismatch exception if it is not the case.
+			*/
+			template <std::size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+			void									checkParameterTypes()									const;
+			template <std::size_t Rank, typename LastArgType>
+			void									checkParameterTypes()									const;
+
+			/**
+			*	@brief Throw an ArgCountMismatch exception with an descriptive message.
+			* 
+			*	@param received Number of received parameters.
+			*/
+			REFUREKU_API void						throwArgCountMismatchException(std::size_t received)	const;
+
+			/**
+			*	@brief Throw an ArgTypeMismatch exception with a descriptive message.
+			* 
+			*	@param paramIndex Index of the mismatching parameter.
+			*/
+			REFUREKU_API void						throwArgTypeMismatchException(std::size_t paramIndex)	const;
+
+			/**
+			*	@brief Throw a ReturnTypeMismatch exception with a descriptive message.
+			*/
+			REFUREKU_API void						throwReturnTypeMismatchException()						const;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBaseAPI.inl"

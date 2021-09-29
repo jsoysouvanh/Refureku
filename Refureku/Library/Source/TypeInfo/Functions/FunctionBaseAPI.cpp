@@ -1,6 +1,11 @@
 #include "Refureku/TypeInfo/Functions/FunctionBaseAPI.h"
 
+#include <string>	//std::to_string
+
 #include "Refureku/TypeInfo/Functions/FunctionBaseImpl.h"
+#include "Refureku/Exceptions/ArgCountMismatch.h"
+#include "Refureku/Exceptions/ReturnTypeMismatch.h"
+#include "Refureku/Exceptions/ArgTypeMismatch.h"
 
 using namespace rfk;
 
@@ -65,4 +70,19 @@ void FunctionBaseAPI::setParametersCapacity(std::size_t capacity) noexcept
 ICallable* FunctionBaseAPI::getInternalFunction() const noexcept
 {
 	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getInternalFunction();
+}
+
+void FunctionBaseAPI::throwArgCountMismatchException(std::size_t received) const
+{
+	throw ArgCountMismatch("Tried to call " + std::string(getName()) + " with " + std::to_string(received) + " arguments but " + std::to_string(getParametersCount()) + " were expected.");
+}
+
+void FunctionBaseAPI::throwArgTypeMismatchException(std::size_t paramIndex) const
+{
+	throw ArgTypeMismatch("Tried to call " + std::string(getName()) + " but argument " + std::to_string(paramIndex) + " (" + getParameterAt(paramIndex).getName() + ") type doesn't match.");
+}
+
+void FunctionBaseAPI::throwReturnTypeMismatchException() const
+{
+	throw ReturnTypeMismatch("Tried to call " + std::string(getName()) + " but the specified return type is incorrect.");
 }

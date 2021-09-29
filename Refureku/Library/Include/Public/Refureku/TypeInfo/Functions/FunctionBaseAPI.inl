@@ -23,13 +23,13 @@ bool FunctionBaseAPI::hasSameParameterTypes() const noexcept
 	return hasSameParameterTypes<0u, ArgTypes...>();
 }
 
-template <size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+template <std::size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
 bool FunctionBaseAPI::hasSameParameterTypes() const noexcept
 {
 	return hasSameParameterTypes<Rank, FirstArgType>() && hasSameParameterTypes<Rank + 1, SecondArgType, OtherArgTypes...>();
 }
 
-template <size_t Rank, typename LastArgType>
+template <std::size_t Rank, typename LastArgType>
 bool FunctionBaseAPI::hasSameParameterTypes() const noexcept
 {
 	return getParameterAt(Rank).getType() == rfk::getTypeAPI<LastArgType>();
@@ -67,18 +67,36 @@ void FunctionBaseAPI::checkParametersCount() const
 {
 	if (!hasSameParametersCount<ArgTypes...>())
 	{
-		throw ArgCountMismatch("Provided number of parameters doesn't match");
+		throwArgCountMismatchException(sizeof...(ArgTypes));
 	}
 }
 
 template <typename... ArgTypes>
-void FunctionBaseAPI::checkParameters() const
+void FunctionBaseAPI::checkParameterTypes() const
 {
-	checkParametersCount();
+	//Check that there is the right amount of parameters
+	checkParametersCount<ArgTypes...>();
 
-	if (!hasSameParameters<ArgTypes...>())
+	//Check that provided types are matching this function parameter types
+	if constexpr (sizeof...(ArgTypes) != 0u)
 	{
-		throw ArgCountMismatch("Provided parameters doesn't match");
+		checkParameterTypes<0u, ArgTypes...>();
+	}
+}
+
+template <std::size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
+void FunctionBaseAPI::checkParameterTypes() const
+{
+	checkParameterTypes<Rank, FirstArgType>();
+	checkParameterTypes<Rank + 1, SecondArgType, OtherArgTypes...>();
+}
+
+template <std::size_t Rank, typename LastArgType>
+void FunctionBaseAPI::checkParameterTypes() const
+{
+	if (!getParameterAt(Rank).getType().match(rfk::getTypeAPI<LastArgType>()))
+	{
+		throwArgTypeMismatchException(Rank);
 	}
 }
 
@@ -87,6 +105,6 @@ void FunctionBaseAPI::checkReturnType() const
 {
 	if (!hasSameReturnType<ReturnType>())
 	{
-		throw ReturnTypeMismatch("Provided return type doesn't match");
+		throwReturnTypeMismatchException();
 	}
 }

@@ -12,7 +12,7 @@ ValueType VariableBaseAPI::get(void* ptr) const
 	{
 		if (getType().isConst())
 		{
-			throw ConstViolation("VariableBase::get can't be called with an rvalue ValueType on const variables.");
+			throwConstViolationException("VariableBase::get can't be called with an rvalue ValueType on const variables.");
 		}
 
 		return std::move(*reinterpret_cast<std::remove_reference_t<ValueType>*>(ptr));
@@ -23,7 +23,7 @@ ValueType VariableBaseAPI::get(void* ptr) const
 		{
 			if constexpr (!std::is_const_v<std::remove_reference_t<ValueType>>)
 			{
-				throw ConstViolation("VariableBase::get can't be called with an non-const reference ValueType on const variables.");
+				throwConstViolationException("VariableBase::get can't be called with an non-const reference ValueType on const variables.");
 			}
 		}
 
@@ -40,7 +40,7 @@ void VariableBaseAPI::set(void* ptr, ValueType&& data) const
 {
 	if (getType().isConst())
 	{
-		throw ConstViolation("Can't use Variable::setData on a const variable.");
+		throwConstViolationException("VariableBase::set can't be called on const variables.");
 	}
 
 	if constexpr (std::is_rvalue_reference_v<ValueType&&>)

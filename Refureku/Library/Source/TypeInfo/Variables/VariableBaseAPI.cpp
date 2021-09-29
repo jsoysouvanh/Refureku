@@ -3,6 +3,7 @@
 #include <cstring>	//std::memcpy
 
 #include "Refureku/TypeInfo/Variables/VariableBaseImpl.h"
+#include "Refureku/Exceptions/ConstViolation.h"
 
 using namespace rfk;
 
@@ -26,4 +27,9 @@ void VariableBaseAPI::set(void* target, void const* source, std::size_t dataSize
 	}
 
 	std::memcpy(target, source, dataSize);
+}
+
+void VariableBaseAPI::throwConstViolationException(char const* message)
+{
+	throw ConstViolation(message);
 }

@@ -13,7 +13,6 @@
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/TypeAPI.h"
-#include "Refureku/Exceptions/ConstViolation.h"	//TODO: Want to remove exceptions from API header....
 
 namespace rfk
 {
@@ -77,6 +76,14 @@ namespace rfk
 			REFUREKU_INTERNAL void			set(void*		target,
 												void const*	source,
 												std::size_t	dataSize)	const;
+
+		private:
+			/**
+			*	@brief Throw a ConstViolation exception with the specified message.
+			* 
+			*	@param message The message to forward to the exception.
+			*/
+			REFUREKU_API static void		throwConstViolationException(char const* message);
 	};
 
 	#include "Refureku/TypeInfo/Variables/VariableBaseAPI.inl"
