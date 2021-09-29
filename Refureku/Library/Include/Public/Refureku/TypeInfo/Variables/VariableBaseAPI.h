@@ -8,14 +8,25 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
-#include "Refureku/TypeInfo/Type.h"
+#include "Refureku/TypeInfo/TypeAPI.h"
 
 namespace rfk
 {
 	class VariableBaseAPI : public EntityAPI
 	{
+		public:
+			/**
+			*	@brief Get the type of this variable.
+			* 
+			*	@return The type of the variable.
+			*/
+			REFUREKU_API TypeAPI const& getType() const noexcept;
+
 		protected:
 			//Forward declaration
 			class VariableBaseImpl;
+
+			REFUREKU_INTERNAL VariableBaseAPI(VariableBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL ~VariableBaseAPI()								noexcept;
 	};
 }

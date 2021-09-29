@@ -5,13 +5,13 @@
 *	See the README.md file for full license details.
 */
 
-VariableBaseAPI::VariableBaseImpl::VariableBaseImpl(char const* name, std::size_t id, EEntityKind kind, Type const& type, EntityAPI const* outerEntity) noexcept:
+inline VariableBaseAPI::VariableBaseImpl::VariableBaseImpl(char const* name, std::size_t id, EEntityKind kind, TypeAPI const& type, EntityAPI const* outerEntity) noexcept:
 	EntityImpl(name, id, kind, outerEntity),
 	_type{type}
 {
 }
 
-inline Type const& VariableBaseAPI::VariableBaseImpl::getType() const noexcept
+inline TypeAPI const& VariableBaseAPI::VariableBaseImpl::getType() const noexcept
 {
 	return _type;
 }

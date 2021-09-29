@@ -9,7 +9,6 @@
 
 #include "Refureku/TypeInfo/Variables/VariableBaseAPI.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
-#include "Refureku/TypeInfo/Type.h"	//TODO: Replace by TypeAPI
 
 namespace rfk
 {
@@ -17,26 +16,21 @@ namespace rfk
 	{
 		private:
 			/** Type of this variable. */
-			Type const&	_type;	//TODO: Replace by TypeAPI
+			TypeAPI const&	_type;
 
 		public:
-			VariableBaseImpl(char const*		name,
-							 std::size_t		id,
-							 EEntityKind		kind,
-							 Type const&		type,	//TODO: Replace by TypeAPI
-							 EntityAPI const*	outerEntity)	noexcept;
-			VariableBaseImpl(VariableBaseImpl const&)			= delete;
-			VariableBaseImpl(VariableBaseImpl&&)				= delete;
+			inline VariableBaseImpl(char const*			name,
+									std::size_t			id,
+									EEntityKind			kind,
+									TypeAPI const&		type,
+									EntityAPI const*	outerEntity)	noexcept;
 
 			/**
 			*	@brief Getter for the field _type.
 			* 
 			*	@return _type.
 			*/
-			inline Type const& getType() const noexcept;	//TODO: Replace by TypeAPI
-
-			VariableBaseImpl& operator=(VariableBaseImpl const&)	= delete;
-			VariableBaseImpl& operator=(VariableBaseImpl&&)			= delete;
+			inline TypeAPI const& getType() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/VariableBaseImpl.inl"

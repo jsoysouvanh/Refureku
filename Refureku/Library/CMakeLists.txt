@@ -36,7 +36,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/EnumValueImpl.cpp
 					Source/TypeInfo/Archetypes/StructAPI.cpp
 					Source/TypeInfo/Archetypes/StructImpl.cpp
-					Source/TypeInfo/Archetypes/Struct.cpp	#Delete this
+					Source/TypeInfo/Archetypes/Struct.cpp		#Delete this
 					Source/TypeInfo/Archetypes/Class.cpp
 					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
 					Source/TypeInfo/Archetypes/GetArchetype.cpp
@@ -46,9 +46,11 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/ClassTemplateInstantiation.cpp
 					Source/TypeInfo/Archetypes/ClassTemplateInstantiationRegisterer.cpp
 
-					Source/TypeInfo/Variables/VariableBase.cpp
+					Source/TypeInfo/Variables/VariableBaseAPI.cpp
+					Source/TypeInfo/Variables/VariableBase.cpp	#Delete this
 					Source/TypeInfo/Variables/Variable.cpp
-					Source/TypeInfo/Variables/FieldBase.cpp
+					Source/TypeInfo/Variables/FieldBaseAPI.cpp
+					Source/TypeInfo/Variables/FieldBase.cpp		#Delete this
 					Source/TypeInfo/Variables/Field.cpp
 					Source/TypeInfo/Variables/StaticField.cpp
 

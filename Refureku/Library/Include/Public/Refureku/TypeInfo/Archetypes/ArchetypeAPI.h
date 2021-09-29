@@ -21,7 +21,7 @@ namespace rfk
 									  EEntityKind		kind,
 									  std::size_t		memorySize,
 									  EntityAPI const*	outerEntity = nullptr)	noexcept;
-			REFUREKU_API ~ArchetypeAPI()										noexcept;	//TODO: Maybe move this to protected as well
+			REFUREKU_API ~ArchetypeAPI()										noexcept;	//TODO: Maybe move this to protected as well + Do not need to export
 
 			/**
 			*	@brief Getter for the field _accessSpecifier.
