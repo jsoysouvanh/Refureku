@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include <type_traits>
-#include <utility>	//std::forward, std::move
+#include <cassert>
+#include <type_traits>	//std::is_rvalue_reference_v, std::is_lvalue_reference_v, std::is_const_v...
+#include <utility>		//std::forward, std::move
 
 #include "Refureku/TypeInfo/Variables/FieldBaseAPI.h"
 #include "Refureku/Exceptions/ConstViolation.h"
@@ -98,7 +99,8 @@ namespace rfk
 															std::size_t	dataSize)			const;
 
 			/**
-			*	@brief Get a pointer to this field data in the provided instance.
+			*	@brief	Get a pointer to this field data in the provided instance.
+			*			Performing non-const operations on the pointer if the field is const is undefined behaviour.
 			*
 			*	@param instance Instance we get the data from.
 			*
@@ -114,7 +116,7 @@ namespace rfk
 			*
 			*	@return Const pointer to this field data in the provided instance.
 			*/
-			[[nodiscard]] REFUREKU_API void const*	getDataPtr(void const* instance)		const	noexcept;
+			[[nodiscard]] REFUREKU_API void const*	getConstDataPtr(void const* instance)	const	noexcept;
 
 		protected:
 			//Forward declaration

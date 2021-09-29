@@ -29,7 +29,7 @@ void* FieldAPI::getDataPtr(void* instance) const noexcept
 	return reinterpret_cast<uint8_t*>(instance) + reinterpret_cast<FieldImpl const*>(getPimpl())->getMemoryOffset();
 }
 
-void const* FieldAPI::getDataPtr(void const* instance) const noexcept
+void const* FieldAPI::getConstDataPtr(void const* instance) const noexcept
 {
 	return reinterpret_cast<uint8_t const*>(instance) + reinterpret_cast<FieldImpl const*>(getPimpl())->getMemoryOffset();
 }

@@ -42,11 +42,11 @@ DataType const FieldAPI::getData(void const* instance) const noexcept
 
 	if constexpr (std::is_lvalue_reference_v<DataType>)
 	{
-		return *reinterpret_cast<std::remove_reference_t<DataType> const*>(getDataPtr(instance));
+		return *reinterpret_cast<std::remove_reference_t<DataType> const*>(getConstDataPtr(instance));
 	}
 	else	//By value
 	{
-		return DataType(*reinterpret_cast<DataType const*>(getDataPtr(instance)));
+		return DataType(*reinterpret_cast<DataType const*>(getConstDataPtr(instance)));
 	}
 }
 

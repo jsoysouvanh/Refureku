@@ -1,0 +1,58 @@
+/**
+*	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Refureku library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
+template <typename DataType>
+DataType StaticFieldAPI::getData() const
+{
+	if constexpr (std::is_rvalue_reference_v<DataType>)
+	{
+		if (getType().isConst())
+		{
+			throw ConstViolation("StaticField::getData can't be called with an rvalue DataType on const static fields.");
+		}
+
+		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getDataPtr()));
+	}
+	else if constexpr (std::is_lvalue_reference_v<DataType>)
+	{
+		if (getType().isConst())
+		{
+			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
+			{
+				throw ConstViolation("StaticField::getData can't be called with an non-const reference DataType on const static fields.");
+			}
+		}
+
+		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getDataPtr());
+	}
+	else	//By value
+	{
+		return DataType(*reinterpret_cast<DataType*>(getDataPtr()));
+	}
+}
+
+template <typename DataType>
+void StaticFieldAPI::setData(DataType&& data) const
+{
+	if (getType().isConst())
+	{
+		throw ConstViolation("Can't call StaticField::setData on a const static field.");
+	}
+
+	if constexpr (std::is_rvalue_reference_v<DataType&&>)
+	{
+		*reinterpret_cast<DataType*>(getDataPtr()) = std::forward<DataType&&>(data);
+	}
+	else if constexpr (std::is_lvalue_reference_v<DataType&&>)
+	{
+		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(getDataPtr()) = data;
+	}
+	else
+	{
+		assert(false);	//How can we get here?
+	}
+}
