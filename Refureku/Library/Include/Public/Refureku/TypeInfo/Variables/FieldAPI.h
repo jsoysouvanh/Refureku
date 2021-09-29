@@ -7,12 +7,7 @@
 
 #pragma once
 
-#include <cassert>
-#include <type_traits>	//std::is_rvalue_reference_v, std::is_lvalue_reference_v, std::is_const_v...
-#include <utility>		//std::forward, std::move
-
 #include "Refureku/TypeInfo/Variables/FieldBaseAPI.h"
-#include "Refureku/Exceptions/ConstViolation.h"
 
 namespace rfk
 {
@@ -30,73 +25,73 @@ namespace rfk
 			~FieldAPI()											noexcept;
 
 			/**
-			*	@brief Get the data corresponding to this field in the provided instance.
-			*		   This method in not safe if you provide a wrong DataType.
+			*	@brief Get the value corresponding to this field in the provided instance.
+			*		   This method in not safe if you provide a wrong ValueType.
 			*
-			*	@tparam DataType Type to retrieve from the field.
-			*		If DataType is an rvalue reference, the data is moved into the return value (so the class data is no longer safe to use).
-			*		If DataType is an lvalue reference, return a reference to the field.
-			*		If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
+			*	@tparam ValueType Type to retrieve from the field.
+			*		If ValueType is an rvalue reference, the value is moved into the return value (so the class value is no longer safe to use).
+			*		If ValueType is an lvalue reference, return a reference to the field.
+			*		If ValueType is a value type, the value is copied. If it is a class, ValueType must be copy-constructible.
 			*
-			*	@param instance Instance we retrieve the data from.
+			*	@param instance Instance we retrieve the value from.
 			* 
 			*	@exception ConstViolation if:
-			*		- the field is const and DataType is an RValue type (can't move a const field content);
-			*		- the field is const and DataType is a non-const reference;
+			*		- the field is const and ValueType is an RValue type (can't move a const field content);
+			*		- the field is const and ValueType is a non-const reference;
 			*
-			*	@return The queried data in the instance.
+			*	@return The queried value in the instance.
 			*/
-			template <typename DataType>
-			[[nodiscard]] DataType					getData(void* instance)					const;
+			template <typename ValueType>
+			[[nodiscard]] ValueType					get(void* instance)					const;
 
 			/**
-			*	@brief Get the data corresponding to this field in the provided instance.
-			*		   This method in not safe if you provide a wrong DataType.
+			*	@brief Get the value corresponding to this field in the provided instance.
+			*		   This method in not safe if you provide a wrong ValueType.
 
 			*	@note This is only an overload of the same method with a const instance.
 			*
-			*	@tparam DataType Type to retrieve from the field.
-			*		If DataType is an rvalue reference, the data is moved into the return value (so the class data is no longer safe to use).
-			*		If DataType is an lvalue reference, return a reference to the field.
-			*		If DataType is a value type, the data is copied. If it is a class, DataType must be copy-constructible.
+			*	@tparam ValueType Type to retrieve from the field.
+			*		If ValueType is an rvalue reference, the value is moved into the return value (so the class value is no longer safe to use).
+			*		If ValueType is an lvalue reference, return a reference to the field.
+			*		If ValueType is a value type, the value is copied. If it is a class, ValueType must be copy-constructible.
 			*
-			*	@param instance Instance we retrieve the data from.
+			*	@param instance Instance we retrieve the value from.
 			*
-			*	@return The queried data in the instance.
+			*	@return The queried value in the instance.
 			*/
-			template <typename DataType>
-			[[nodiscard]] DataType const			getData(void const* instance)			const	noexcept;
+			template <typename ValueType>
+			[[nodiscard]] ValueType const			get(void const* instance)			const	noexcept;
 
 
 			/**
-			*	@brief Set the data corresponding to this field in the provided instance.
-			*		   This method is not safe if you provide a wrong DataType.
+			*	@brief Set the value corresponding to this field in the provided instance.
+			*		   This method is not safe if you provide a wrong ValueType.
 			*
-			*	@tparam DataType Type to write into the field.
-			*		If DataType is an rvalue reference, the data is forwarded into the instance.
-			*		If DataType is an lvalue reference, the data is copied into the instance.
+			*	@tparam ValueType Type to write into the field.
+			*		If ValueType is an rvalue reference, the value is forwarded into the instance.
+			*		If ValueType is an lvalue reference, the value is copied into the instance.
 			*
-			*	@param instance Instance we set the data in.
-			*	@param data Data to set in the instance.
+			*	@param instance Instance we set the value in.
+			*	@param value Data to set in the instance.
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
 			*/
-			template <typename DataType>
-			void									setData(void*		instance,
-															DataType&&	data)				const;
+			template <typename ValueType>
+			void									set(void*		instance,
+														ValueType&&	value)				const;
 
 			/**
-			*	@brief Copy dataSize bytes starting from data into this field's address in instance.
+			*	@brief Copy dataSize bytes starting from valuePtr into this field's address in instance.
 			*
-			*	@param instance Instance we write the bytes in.
-			*	@param data Start address of the written bytes.
-			*	@param dataSize Number of bytes to copy
+			*	@param instance		Instance we write the bytes in.
+			*	@param valuePtr		Pointer to the value to copy.
+			*	@param valueSize	Number of bytes to copy into the field.
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
 			*/
-			REFUREKU_API void						setData(void*		instance,
-															void const* data,
-															std::size_t	dataSize)			const;
+			REFUREKU_API void						set(void*		instance,
+														void const* valuePtr,
+														std::size_t	valueSize)			const;
 
 			/**
 			*	@brief	Get a pointer to this field in the provided instance.

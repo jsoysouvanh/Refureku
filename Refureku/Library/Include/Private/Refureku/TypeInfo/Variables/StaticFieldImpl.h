@@ -15,11 +15,11 @@ namespace rfk
 	class StaticFieldAPI::StaticFieldImpl : public FieldBaseAPI::FieldBaseImpl
 	{
 		private:
-			/** Ptr to the static data. */
+			/** Ptr to the static field. */
 			union
 			{
-				void*		_dataPtr		= nullptr;
-				void const*	_constDataPtr;
+				void*		_ptr		= nullptr;
+				void const*	_constPtr;
 			};
 
 		public:
@@ -28,29 +28,29 @@ namespace rfk
 								   TypeAPI const&	type,
 								   EFieldFlags		flags,
 								   StructAPI const*	owner,
-								   void*			dataPtr,
+								   void*			ptr,
 								   EntityAPI const*	outerEntity)	noexcept;
 			inline StaticFieldImpl(char const*		name,
 								   std::size_t		id,
 								   TypeAPI const&	type,
 								   EFieldFlags		flags,
 								   StructAPI const*	owner,
-								   void const*		constDataPtr,
+								   void const*		constPtr,
 								   EntityAPI const*	outerEntity)	noexcept;
 
 			/**
-			*	@brief Getter for the field _dataPtr.
+			*	@brief Getter for the field _ptr.
 			* 
-			*	@return _dataPtr.
+			*	@return _ptr.
 			*/
-			[[nodiscard]] inline void*			getDataPtr()		const	noexcept;
+			[[nodiscard]] inline void*			getPtr()		const	noexcept;
 
 			/**
-			*	@brief Getter for the field _constDataPtr.
+			*	@brief Getter for the field _constPtr.
 			* 
-			*	@return _constDataPtr.
+			*	@return _constPtr.
 			*/
-			[[nodiscard]] inline void const*	getConstDataPtr()	const	noexcept;
+			[[nodiscard]] inline void const*	getConstPtr()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/StaticFieldImpl.inl"

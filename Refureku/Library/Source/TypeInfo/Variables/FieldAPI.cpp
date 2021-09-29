@@ -1,7 +1,5 @@
 #include "Refureku/TypeInfo/Variables/FieldAPI.h"
 
-#include <cstring>	//std::memcpy
-
 #include "Refureku/TypeInfo/Variables/FieldImpl.h"
 
 using namespace rfk;
@@ -14,14 +12,9 @@ FieldAPI::FieldAPI(char const* name, std::size_t id, TypeAPI const& type, EField
 
 FieldAPI::~FieldAPI() noexcept = default;
 
-void FieldAPI::setData(void* instance, void const* data, std::size_t dataSize) const
+void FieldAPI::set(void* instance, void const* valuePtr, std::size_t valueSize) const
 {
-	if (getType().isConst())
-	{
-		throw ConstViolation("Can't call Field::setData on a const field.");
-	}
-
-	std::memcpy(getPtr(instance), data, dataSize);
+	FieldBaseAPI::set(getPtr(instance), valuePtr, valueSize);
 }
 
 void* FieldAPI::getPtr(void* instance) const noexcept

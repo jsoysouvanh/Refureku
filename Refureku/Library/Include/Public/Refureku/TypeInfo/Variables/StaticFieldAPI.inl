@@ -5,54 +5,14 @@
 *	See the README.md file for full license details.
 */
 
-template <typename DataType>
-DataType StaticFieldAPI::getData() const
+template <typename ValueType>
+ValueType StaticFieldAPI::get() const
 {
-	if constexpr (std::is_rvalue_reference_v<DataType>)
-	{
-		if (getType().isConst())
-		{
-			throw ConstViolation("StaticField::getData can't be called with an rvalue DataType on const static fields.");
-		}
-
-		return std::move(*reinterpret_cast<std::remove_reference_t<DataType>*>(getDataPtr()));
-	}
-	else if constexpr (std::is_lvalue_reference_v<DataType>)
-	{
-		if (getType().isConst())
-		{
-			if constexpr (!std::is_const_v<std::remove_reference_t<DataType>>)
-			{
-				throw ConstViolation("StaticField::getData can't be called with an non-const reference DataType on const static fields.");
-			}
-		}
-
-		return *reinterpret_cast<std::remove_reference_t<DataType>*>(getDataPtr());
-	}
-	else	//By value
-	{
-		return DataType(*reinterpret_cast<DataType*>(getDataPtr()));
-	}
+	return VariableBaseAPI::get<ValueType>(getPtr());
 }
 
-template <typename DataType>
-void StaticFieldAPI::setData(DataType&& data) const
+template <typename ValueType>
+void StaticFieldAPI::set(ValueType&& data) const
 {
-	if (getType().isConst())
-	{
-		throw ConstViolation("Can't call StaticField::setData on a const static field.");
-	}
-
-	if constexpr (std::is_rvalue_reference_v<DataType&&>)
-	{
-		*reinterpret_cast<DataType*>(getDataPtr()) = std::forward<DataType&&>(data);
-	}
-	else if constexpr (std::is_lvalue_reference_v<DataType&&>)
-	{
-		*reinterpret_cast<std::remove_reference_t<DataType&&>*>(getDataPtr()) = data;
-	}
-	else
-	{
-		assert(false);	//How can we get here?
-	}
+	VariableBaseAPI::set(getPtr(), std::forward<ValueType>(data));
 }

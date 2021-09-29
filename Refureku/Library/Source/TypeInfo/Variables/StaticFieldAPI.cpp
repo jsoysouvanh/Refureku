@@ -1,41 +1,34 @@
 #include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
 
-#include <cstring>	//std::memcpy
-
 #include "Refureku/TypeInfo/Variables/StaticFieldImpl.h"
 
 using namespace rfk;
 
 StaticFieldAPI::StaticFieldAPI(char const* name, std::size_t id, TypeAPI const& type, EFieldFlags flags,
-							   StructAPI const* owner, void* dataPtr, EntityAPI const* outerEntity) noexcept:
-	FieldBaseAPI(new StaticFieldImpl(name, id, type, flags, owner, dataPtr, outerEntity))
+							   StructAPI const* owner, void* ptr, EntityAPI const* outerEntity) noexcept:
+	FieldBaseAPI(new StaticFieldImpl(name, id, type, flags, owner, ptr, outerEntity))
 {
 }
 
 StaticFieldAPI::StaticFieldAPI(char const* name, std::size_t id, TypeAPI const& type, EFieldFlags flags,
-							   StructAPI const* owner, void const* constDataPtr, EntityAPI const* outerEntity) noexcept:
-	FieldBaseAPI(new StaticFieldImpl(name, id, type, flags, owner, constDataPtr, outerEntity))
+							   StructAPI const* owner, void const* constPtr, EntityAPI const* outerEntity) noexcept:
+	FieldBaseAPI(new StaticFieldImpl(name, id, type, flags, owner, constPtr, outerEntity))
 {
 }
 
 StaticFieldAPI::~StaticFieldAPI() noexcept = default;
 
-void StaticFieldAPI::setData(void const* data, std::size_t dataSize) const
+void StaticFieldAPI::set(void const* valuePtr, std::size_t valueSize) const
 {
-	if (getType().isConst())
-	{
-		throw ConstViolation("Can't call StaticField::setData on a const static field.");
-	}
-
-	std::memcpy(getDataPtr(), data, dataSize);
+	VariableBaseAPI::set(getPtr(), valuePtr, valueSize);
 }
 
-void* StaticFieldAPI::getDataPtr() const noexcept
+void* StaticFieldAPI::getPtr() const noexcept
 {
-	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getDataPtr();
+	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getPtr();
 }
 
-void const* StaticFieldAPI::getConstDataPtr() const noexcept
+void const* StaticFieldAPI::getConstPtr() const noexcept
 {
-	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getConstDataPtr();
+	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getConstPtr();
 }
