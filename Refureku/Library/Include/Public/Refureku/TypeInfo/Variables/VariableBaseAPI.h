@@ -13,7 +13,7 @@
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/TypeAPI.h"
-#include "Refureku/Exceptions/ConstViolation.h"
+#include "Refureku/Exceptions/ConstViolation.h"	//TODO: Want to remove exceptions from API header....
 
 namespace rfk
 {

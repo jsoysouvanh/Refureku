@@ -57,12 +57,14 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Variables/StaticFieldAPI.cpp
 					Source/TypeInfo/Variables/StaticField.cpp	#Delete this
 
-					Source/TypeInfo/Functions/FunctionBase.cpp
+					Source/TypeInfo/Functions/FunctionBaseAPI.cpp
+					Source/TypeInfo/Functions/FunctionBase.cpp			#Delete this
 					Source/TypeInfo/Functions/Function.cpp
 					Source/TypeInfo/Functions/MethodBase.cpp
 					Source/TypeInfo/Functions/Method.cpp
 					Source/TypeInfo/Functions/StaticMethod.cpp
-					Source/TypeInfo/Functions/FunctionParameter.cpp
+					Source/TypeInfo/Functions/FunctionParameterAPI.cpp
+					Source/TypeInfo/Functions/FunctionParameter.cpp		#Delete this
 
 					Source/TypeInfo/Properties/Property.cpp
 					Source/TypeInfo/Properties/CustomInstantiator.cpp
