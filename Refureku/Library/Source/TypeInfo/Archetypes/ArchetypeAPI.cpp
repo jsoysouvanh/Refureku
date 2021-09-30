@@ -17,6 +17,8 @@ ArchetypeAPI::ArchetypeAPI(char const* name, std::size_t id, EEntityKind kind, s
 	//TODO: Delete this
 }
 
+ArchetypeAPI::ArchetypeAPI(ArchetypeAPI&&) noexcept = default;
+
 ArchetypeAPI::~ArchetypeAPI() noexcept = default;
 
 EAccessSpecifier ArchetypeAPI::getAccessSpecifier() const noexcept

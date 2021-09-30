@@ -60,7 +60,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Functions/FunctionBaseAPI.cpp
 					Source/TypeInfo/Functions/FunctionBase.cpp			#Delete this
 					Source/TypeInfo/Functions/Function.cpp
-					Source/TypeInfo/Functions/MethodBase.cpp
+					Source/TypeInfo/Functions/MethodBaseAPI.cpp
+					Source/TypeInfo/Functions/MethodBase.cpp			#Delete this
 					Source/TypeInfo/Functions/Method.cpp
 					Source/TypeInfo/Functions/StaticMethod.cpp
 					Source/TypeInfo/Functions/FunctionParameterAPI.cpp

@@ -10,6 +10,8 @@ FieldAPI::FieldAPI(char const* name, std::size_t id, TypeAPI const& type, EField
 {
 }
 
+FieldAPI::FieldAPI(FieldAPI&&) noexcept = default;
+
 FieldAPI::~FieldAPI() noexcept = default;
 
 void FieldAPI::set(void* instance, void const* valuePtr, std::size_t valueSize) const

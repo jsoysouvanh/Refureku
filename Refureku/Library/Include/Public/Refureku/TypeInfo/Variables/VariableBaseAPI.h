@@ -31,6 +31,7 @@ namespace rfk
 			class VariableBaseImpl;
 
 			REFUREKU_INTERNAL VariableBaseAPI(VariableBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL VariableBaseAPI(VariableBaseAPI&&)				noexcept;
 			REFUREKU_INTERNAL ~VariableBaseAPI()								noexcept;
 
 			/**

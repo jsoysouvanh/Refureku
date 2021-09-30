@@ -16,6 +16,8 @@ StaticFieldAPI::StaticFieldAPI(char const* name, std::size_t id, TypeAPI const& 
 {
 }
 
+StaticFieldAPI::StaticFieldAPI(StaticFieldAPI&&) noexcept = default;
+
 StaticFieldAPI::~StaticFieldAPI() noexcept = default;
 
 void StaticFieldAPI::set(void const* valuePtr, std::size_t valueSize) const

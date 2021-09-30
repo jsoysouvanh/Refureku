@@ -15,17 +15,18 @@ namespace rfk
 	class VariableAPI final : public VariableBaseAPI
 	{
 		public:
-			REFUREKU_API VariableAPI(char const*	name,
-									 std::size_t	id,
-									 TypeAPI const&	type,
-									 void*			ptr,
-									 EVarFlags		flags)		noexcept;
-			REFUREKU_API VariableAPI(char const*	name,
-									 std::size_t	id,
-									 TypeAPI const&	type,
-									 void const*	constPtr,
-									 EVarFlags		flags)		noexcept;
-			REFUREKU_API ~VariableAPI()							noexcept;
+			REFUREKU_API		VariableAPI(char const*	name,
+											std::size_t	id,
+											TypeAPI const&	type,
+											void*			ptr,
+											EVarFlags		flags)		noexcept;
+			REFUREKU_API		VariableAPI(char const*	name,
+											std::size_t	id,
+											TypeAPI const&	type,
+											void const*	constPtr,
+											EVarFlags		flags)		noexcept;
+			REFUREKU_INTERNAL	VariableAPI(VariableAPI&&)				noexcept;
+			REFUREKU_API		~VariableAPI()							noexcept;
 
 			/**
 			*	@brief Get the value stored in this variable.

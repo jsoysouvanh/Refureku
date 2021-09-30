@@ -12,6 +12,8 @@ VariableBaseAPI::VariableBaseAPI(VariableBaseImpl* implementation) noexcept:
 {
 }
 
+VariableBaseAPI::VariableBaseAPI(VariableBaseAPI&&) noexcept = default;
+
 VariableBaseAPI::~VariableBaseAPI() noexcept = default;
 
 TypeAPI const& VariableBaseAPI::getType() const noexcept

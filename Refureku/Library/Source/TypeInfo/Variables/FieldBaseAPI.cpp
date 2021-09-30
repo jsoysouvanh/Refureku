@@ -13,6 +13,8 @@ FieldBaseAPI::FieldBaseAPI(FieldBaseImpl* implementation) noexcept:
 {
 }
 
+FieldBaseAPI::FieldBaseAPI(FieldBaseAPI&&) noexcept = default;
+
 FieldBaseAPI::~FieldBaseAPI() noexcept = default;
 
 EAccessSpecifier FieldBaseAPI::getAccess() const noexcept

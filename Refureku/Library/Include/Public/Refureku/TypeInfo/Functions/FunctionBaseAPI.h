@@ -94,6 +94,7 @@ namespace rfk
 			class FunctionBaseImpl;
 
 			REFUREKU_INTERNAL FunctionBaseAPI(FunctionBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL FunctionBaseAPI(FunctionBaseAPI&&)				noexcept;
 			REFUREKU_INTERNAL ~FunctionBaseAPI()								noexcept;
 
 			/**

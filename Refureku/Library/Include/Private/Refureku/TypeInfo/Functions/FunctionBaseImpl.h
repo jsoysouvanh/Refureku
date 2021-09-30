@@ -27,12 +27,12 @@ namespace rfk
 			std::vector<FunctionParameterAPI>	_parameters;
 
 		public:
-			FunctionBaseImpl(char const*		name, 
-							 std::size_t		id,
-							 EEntityKind		kind,
-							 TypeAPI const&		returnType,
-							 ICallable*			internalFunction,
-							 EntityAPI const*	outerEntity)		noexcept;
+			inline FunctionBaseImpl(char const*		name, 
+									std::size_t		id,
+									EEntityKind		kind,
+									TypeAPI const&		returnType,
+									ICallable*			internalFunction,
+									EntityAPI const*	outerEntity)		noexcept;
 
 			/**
 			*	@brief Add a parameter to this function.
@@ -44,38 +44,38 @@ namespace rfk
 			*	
 			*	@return The added function parameter.
 			*/
-			FunctionParameterAPI&									addParameter(char const*			name,
-																				 std::size_t			id,
-																				 TypeAPI const&			type,
-																				 FunctionBaseAPI const*	outerEntity)	noexcept;
+			inline FunctionParameterAPI&									addParameter(char const*			name,
+																						 std::size_t			id,
+																						 TypeAPI const&			type,
+																						 FunctionBaseAPI const*	outerEntity)	noexcept;
 
 			/**
 			*	@brief Getter for the field _returnType.
 			* 
 			*	@return _returnType.
 			*/
-			[[nodiscard]] TypeAPI const&							getReturnType()								const	noexcept;
+			RFK_NODISCARD inline TypeAPI const&								getReturnType()								const	noexcept;
 
 			/**
 			*	@brief Getter for the field _internalFunction.
 			* 
 			*	@return _internalFunction.
 			*/
-			[[nodiscard]] ICallable*								getInternalFunction()						const	noexcept;
+			RFK_NODISCARD inline ICallable*									getInternalFunction()						const	noexcept;
 
 			/**
 			*	@brief Getter for the field _parameters.
 			* 
 			*	@return _parameters.
 			*/
-			[[nodiscard]] std::vector<FunctionParameterAPI> const&	getParameters()								const	noexcept;
+			RFK_NODISCARD inline std::vector<FunctionParameterAPI> const&	getParameters()								const	noexcept;
 
 			/**
 			*	@brief Set the _parameters vector capacity.
 			* 
 			*	@param capacity New capacity.
 			*/
-			void													setParametersCapacity(std::size_t capacity)			noexcept;
+			inline void														setParametersCapacity(std::size_t capacity)			noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBaseImpl.inl"

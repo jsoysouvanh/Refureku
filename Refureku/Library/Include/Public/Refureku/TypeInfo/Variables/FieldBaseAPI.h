@@ -60,6 +60,7 @@ namespace rfk
 			class FieldBaseImpl;
 
 			REFUREKU_INTERNAL FieldBaseAPI(FieldBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL FieldBaseAPI(FieldBaseAPI&&)					noexcept;
 			REFUREKU_INTERNAL ~FieldBaseAPI()								noexcept;
 	};
 }

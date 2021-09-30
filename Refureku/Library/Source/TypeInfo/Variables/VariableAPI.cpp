@@ -14,6 +14,10 @@ VariableAPI::VariableAPI(char const* name, std::size_t id, TypeAPI const& type, 
 {
 }
 
+VariableAPI::VariableAPI(VariableAPI&&) noexcept = default;
+
+VariableAPI::~VariableAPI() noexcept = default;
+
 bool VariableAPI::isStatic() const noexcept
 {
 	using EVarFlagsUnderlyingType = std::underlying_type_t<EVarFlags>;

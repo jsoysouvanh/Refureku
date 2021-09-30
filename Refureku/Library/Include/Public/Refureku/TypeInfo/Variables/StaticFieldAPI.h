@@ -32,7 +32,7 @@ namespace rfk
 						   StructAPI const*	owner,
 						   void const*		constPtr,
 						   EntityAPI const*	outerEntity = nullptr)	noexcept;
-			StaticFieldAPI(StaticFieldAPI&&)						= delete;
+			StaticFieldAPI(StaticFieldAPI&&)						noexcept;
 			~StaticFieldAPI()										noexcept;
 		
 			/**

@@ -21,7 +21,6 @@ namespace rfk
 									  EEntityKind		kind,
 									  std::size_t		memorySize,
 									  EntityAPI const*	outerEntity = nullptr)	noexcept;
-			ArchetypeAPI(ArchetypeAPI&&)										= delete;
 			REFUREKU_API ~ArchetypeAPI()										noexcept;	//TODO: Maybe move this to protected as well + Do not need to export
 
 			/**
@@ -50,6 +49,7 @@ namespace rfk
 			class ArchetypeImpl;
 
 			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeAPI&&)					noexcept;
 	};
 
 	//TODO: getArchetype base implementation should maybe be here?

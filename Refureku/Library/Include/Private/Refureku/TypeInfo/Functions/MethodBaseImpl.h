@@ -6,3 +6,28 @@
 */
 
 #pragma once
+
+#include "Refureku/TypeInfo/Functions/MethodBaseAPI.h"
+#include "Refureku/TypeInfo/Functions/FunctionBaseImpl.h"
+
+namespace rfk
+{
+	class MethodBaseAPI::MethodBaseImpl : public FunctionBaseAPI::FunctionBaseImpl
+	{
+		private:
+			/** Flags qualifying this method. */
+			EMethodFlags	_flags	= EMethodFlags::Default;
+
+		public:
+			inline MethodBaseImpl(char const*		name, 
+								  std::size_t		id,
+								  TypeAPI const&	returnType,
+								  ICallable*		internalMethod,
+								  EMethodFlags		flags,
+								  EntityAPI const*	outerEntity)	noexcept;
+
+			RFK_NODISCARD inline EMethodFlags getFlags()	const	noexcept;
+	};
+
+	#include "Refureku/TypeInfo/Functions/MethodBaseImpl.inl"
+}

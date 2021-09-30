@@ -14,6 +14,8 @@ FunctionBaseAPI::FunctionBaseAPI(FunctionBaseImpl* implementation) noexcept:
 {
 }
 
+FunctionBaseAPI::FunctionBaseAPI(FunctionBaseAPI&&) noexcept = default;
+
 FunctionBaseAPI::~FunctionBaseAPI() noexcept = default;
 
 FunctionParameterAPI& FunctionBaseAPI::addParameter(char const* name, std::size_t id, TypeAPI const& type) noexcept
