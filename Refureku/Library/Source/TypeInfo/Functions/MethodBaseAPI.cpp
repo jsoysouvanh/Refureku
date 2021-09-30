@@ -1,6 +1,6 @@
 #include "Refureku/TypeInfo/Functions/MethodBaseAPI.h"
 
-#include <type_traits>
+#include <type_traits>	//std::underlying_type_t
 
 #include "Refureku/TypeInfo/Functions/MethodBaseImpl.h"
 

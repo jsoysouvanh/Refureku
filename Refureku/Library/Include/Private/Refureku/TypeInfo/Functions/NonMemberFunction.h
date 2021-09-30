@@ -14,9 +14,7 @@
 namespace rfk
 {
 	template <typename FunctionPrototype>
-	class NonMemberFunction
-	{
-	};
+	class NonMemberFunction;
 
 	template <typename ReturnType, typename... ArgTypes>
 	class NonMemberFunction<ReturnType(ArgTypes...)> : public ICallable

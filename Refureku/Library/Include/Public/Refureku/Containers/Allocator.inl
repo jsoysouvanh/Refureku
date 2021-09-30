@@ -6,7 +6,7 @@
 */
 
 template <typename T>
-[[nodiscard]] constexpr T* Allocator<T>::allocate(std::size_t count)
+constexpr T* Allocator<T>::allocate(std::size_t count)
 {
 	if constexpr (alignof(T) > __STDCPP_DEFAULT_NEW_ALIGNMENT__)
 	{

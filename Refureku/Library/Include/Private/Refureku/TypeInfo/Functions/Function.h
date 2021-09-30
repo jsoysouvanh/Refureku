@@ -50,8 +50,8 @@ namespace rfk
 			*	If it is incorrect, a ArgCountMismatch exception is thrown.
 			*	Type checks are not performed so calling this function with bad parameters might lead to a crash or unexpected behavior.
 			*
-			*	\tparam ReturnType Return type of the function
-			*	\tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction.
+			*	@tparam ReturnType Return type of the function
+			*	@tparam... ArgTypes Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
 			*	@param arguments Arguments provided to the function call. 
 			*

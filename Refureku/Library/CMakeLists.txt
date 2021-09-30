@@ -71,7 +71,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Properties/CustomInstantiator.cpp
 					Source/TypeInfo/Properties/ParseAllNested.cpp
 					Source/TypeInfo/Properties/PropertySettings.cpp
-				)
+				 "Source/TypeInfo/Functions/FunctionAPI.cpp")
 
 target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)
 

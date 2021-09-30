@@ -260,6 +260,21 @@ void fieldsAPI()
 	//TODO
 }
 
+void functionAndMethods()
+{
+	auto lambda = [](int p1, float p2) -> void { std::cout << "lambda(" << p1 << ", " << p2 << ");" << std::endl; return; };
+
+	rfk::FunctionAPI function("testFunc", 123u, rfk::getTypeAPI<void>(), new rfk::NonMemberFunction<void(int, float)>(lambda), rfk::EFunctionFlags::Inline);
+	function.addParameter("p1", 0u, rfk::getTypeAPI<int>());
+	function.addParameter("p2", 0u, rfk::getTypeAPI<float>());
+
+	function.invoke<void>(1, 2.0f);
+	//std::cout << "Result: " << result << std::endl;
+
+	function.checkedInvoke<void>(3, 4.0f);
+	//std::cout << "Result: " << result2 << std::endl;
+}
+
 void outerEntities()
 {
 	TEST(rfk::getDatabase().getNamespace("namespace3")->getOuterEntity() == nullptr);
@@ -1296,6 +1311,7 @@ void newTests()
 	enumsAndEnumValues();
 	types();
 	fieldsAPI();
+	functionAndMethods();
 }
 
 int main()

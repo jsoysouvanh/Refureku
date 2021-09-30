@@ -10,6 +10,8 @@
 #include <cstddef>	//std::size_t, std::ptrdiff_t
 #include <new>		//operator new, align_val_t
 
+#include "Refureku/Config.h"
+
 namespace rfk
 {
 	template <typename T>
@@ -29,7 +31,7 @@ namespace rfk
 			* 
 			*	@return A pointer to the allocated memory.
 			*/
-			[[nodiscard]] constexpr T*	allocate(std::size_t count);
+			RFK_NODISCARD constexpr T*	allocate(std::size_t count);
 
 			/**
 			*	@brief Deallocate count * sizeof(T) bytes at the specified memory.

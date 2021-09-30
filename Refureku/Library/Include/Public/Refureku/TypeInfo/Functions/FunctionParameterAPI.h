@@ -28,7 +28,7 @@ namespace rfk
 			* 
 			*	@return _type;
 			*/
-			[[nodiscard]] REFUREKU_API TypeAPI const& getType()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API TypeAPI const& getType()	const	noexcept;
 
 		protected:
 			//Forward declaration

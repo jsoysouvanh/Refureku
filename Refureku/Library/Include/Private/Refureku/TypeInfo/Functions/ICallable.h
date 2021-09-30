@@ -11,5 +11,12 @@ namespace rfk
 {
 	class ICallable
 	{
+		public:
+			virtual	~ICallable() = default;
+
+		protected:
+			ICallable()					= default;
+			ICallable(ICallable const&)	= default;
+			ICallable(ICallable&&)		= default;
 	};
 }

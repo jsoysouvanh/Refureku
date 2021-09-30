@@ -43,14 +43,14 @@ namespace rfk
 			* 
 			*	@return _ptr.
 			*/
-			[[nodiscard]] inline void*			getPtr()		const	noexcept;
+			RFK_NODISCARD inline void*			getPtr()		const	noexcept;
 
 			/**
 			*	@brief Getter for the field _constPtr.
 			* 
 			*	@return _constPtr.
 			*/
-			[[nodiscard]] inline void const*	getConstPtr()	const	noexcept;
+			RFK_NODISCARD inline void const*	getConstPtr()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/StaticFieldImpl.inl"

@@ -105,7 +105,7 @@ bool TypeAPI::operator==(TypeAPI const& type) const noexcept
 {
 	return	(this == &type) ||
 			(_pimpl->getArchetype() == type.getArchetype() &&
-			 _pimpl->getParts().size() == type._pimpl->getParts().size() &&
+			_pimpl->getParts().size() == type._pimpl->getParts().size() &&
 			std::memcmp(_pimpl->getParts().data(), type._pimpl->getParts().data(), _pimpl->getParts().size() * sizeof(TypePartAPI)) == 0);
 }
 

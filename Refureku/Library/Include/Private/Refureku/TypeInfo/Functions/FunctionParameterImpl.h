@@ -31,7 +31,7 @@ namespace rfk
 			* 
 			*	@return _type;
 			*/
-			[[nodiscard]] TypeAPI const& getType()	const	noexcept;
+			RFK_NODISCARD TypeAPI const& getType()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionParameterImpl.inl"

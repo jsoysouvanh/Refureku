@@ -15,9 +15,7 @@
 namespace rfk
 {
 	template <typename CallerType, typename FunctionPrototype>
-	class MemberFunction
-	{
-	};
+	class MemberFunction;
 
 	template <typename CallerType, typename ReturnType, typename... ArgTypes>
 	class MemberFunction<CallerType, ReturnType(ArgTypes...)> : public ICallable

@@ -8,7 +8,7 @@
 template <typename ReturnType, typename... ArgTypes>
 template <typename Functor>
 NonMemberFunction<ReturnType(ArgTypes...)>::NonMemberFunction(Functor f) noexcept:
-	_function{reinterpret_cast<FunctionPrototype>(f)}
+	_function{static_cast<FunctionPrototype>(f)}
 {
 }
 
