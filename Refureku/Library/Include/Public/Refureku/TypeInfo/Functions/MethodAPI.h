@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class MethodAPI final : MethodBaseAPI
+	class MethodAPI final : public MethodBaseAPI
 	{
 		public:
 			REFUREKU_INTERNAL MethodAPI(char const*			name,

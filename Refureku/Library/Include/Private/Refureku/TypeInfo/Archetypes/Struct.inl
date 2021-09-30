@@ -517,19 +517,6 @@ void Struct::addCustomInstantiator(StaticMethod const* instantiator) noexcept
 	}
 }
 
-template <typename T>
-void* defaultInstantiator()
-{
-	if constexpr (std::is_default_constructible_v<T>)
-	{
-		return new T();
-	}
-	else
-	{
-		return nullptr;
-	}
-}
-
 inline bool Struct::isTemplate() const noexcept
 {
 	return _classKind == EClassKind::Template;
@@ -548,4 +535,17 @@ inline bool	Struct::isTemplateInstantiation() const noexcept
 inline ClassTemplateInstantiation const* Struct::asTemplateInstantiation() const noexcept
 {
 	return isTemplateInstantiation() ? reinterpret_cast<ClassTemplateInstantiation const*>(this) : nullptr;
+}
+
+template <typename T>
+void* defaultInstantiator()
+{
+	if constexpr (std::is_default_constructible_v<T>)
+	{
+		return new T();
+	}
+	else
+	{
+		return nullptr;
+	}
 }

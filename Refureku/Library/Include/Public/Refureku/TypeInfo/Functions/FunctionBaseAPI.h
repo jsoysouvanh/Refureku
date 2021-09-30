@@ -81,6 +81,13 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API std::size_t					getParametersCount()							const	noexcept;
 
 			/**
+			*	@brief Get the internal function handled by this object.
+			*	
+			*	@return The function handle.
+			*/
+			RFK_NODISCARD REFUREKU_API ICallable*					getInternalFunction()							const	noexcept;
+
+			/**
 			*	@brief	Set the number of parameters for this function.
 			*			Useful to avoid reallocations when adding a lot of parameters.
 			*			If the number of parameters is already >= to the provided count, this method has no effect.
@@ -121,13 +128,6 @@ namespace rfk
 			*/
 			template <typename ReturnType>
 			void									checkReturnType()		const;
-
-			/**
-			*	@brief Get the internal function handled by this object.
-			*	
-			*	@return The function handle.
-			*/
-			RFK_NODISCARD REFUREKU_API ICallable*	getInternalFunction()	const	noexcept;
 
 		private:
 			/**

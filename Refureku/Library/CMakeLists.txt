@@ -17,6 +17,7 @@ add_library(${RefurekuLibraryTarget}
 
 					Source/TypeInfo/Entity/Entity.cpp
 					Source/TypeInfo/Entity/EntityImpl.cpp
+					Source/TypeInfo/Entity/EntityHash.cpp
 					Source/TypeInfo/Entity/EntityImplementation.cpp	#Delete this
 					Source/TypeInfo/Entity/EntityCast.cpp
 					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
@@ -35,7 +36,6 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/EnumValueAPI.cpp
 					Source/TypeInfo/Archetypes/EnumValueImpl.cpp
 					Source/TypeInfo/Archetypes/StructAPI.cpp
-					Source/TypeInfo/Archetypes/StructImpl.cpp
 					Source/TypeInfo/Archetypes/Struct.cpp		#Delete this
 					Source/TypeInfo/Archetypes/Class.cpp
 					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
