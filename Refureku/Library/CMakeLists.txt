@@ -59,11 +59,14 @@ add_library(${RefurekuLibraryTarget}
 
 					Source/TypeInfo/Functions/FunctionBaseAPI.cpp
 					Source/TypeInfo/Functions/FunctionBase.cpp			#Delete this
-					Source/TypeInfo/Functions/Function.cpp
+					Source/TypeInfo/Functions/FunctionAPI.cpp
+					Source/TypeInfo/Functions/Function.cpp				#Delete this
 					Source/TypeInfo/Functions/MethodBaseAPI.cpp
 					Source/TypeInfo/Functions/MethodBase.cpp			#Delete this
-					Source/TypeInfo/Functions/Method.cpp
-					Source/TypeInfo/Functions/StaticMethod.cpp
+					Source/TypeInfo/Functions/MethodAPI.cpp
+					Source/TypeInfo/Functions/Method.cpp				#Delete this
+					Source/TypeInfo/Functions/StaticMethodAPI.cpp
+					Source/TypeInfo/Functions/StaticMethod.cpp			#Delete this
 					Source/TypeInfo/Functions/FunctionParameterAPI.cpp
 					Source/TypeInfo/Functions/FunctionParameter.cpp		#Delete this
 
@@ -71,7 +74,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Properties/CustomInstantiator.cpp
 					Source/TypeInfo/Properties/ParseAllNested.cpp
 					Source/TypeInfo/Properties/PropertySettings.cpp
-				 "Source/TypeInfo/Functions/FunctionAPI.cpp")
+				)
 
 target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)
 

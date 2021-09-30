@@ -89,7 +89,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API EFunctionFlags	getFlags()							const	noexcept;
 
-		protected:
+		private:
 			//Forward declaration
 			class FunctionImpl;
 

@@ -269,10 +269,36 @@ void functionAndMethods()
 	function.addParameter("p2", 0u, rfk::getTypeAPI<float>());
 
 	function.invoke<void>(1, 2.0f);
-	//std::cout << "Result: " << result << std::endl;
-
 	function.checkedInvoke<void>(3, 4.0f);
-	//std::cout << "Result: " << result2 << std::endl;
+
+	/*struct Foo
+	{
+		int bar(int i, float j) { std::cout << "Foo::bar(" << i << ", " << j << ")" << std::endl; return i + j; }
+
+		void baz() const { std::cout << "Foo::baz()" << std::endl; }
+	};*/
+
+	//rfk::MethodAPI fooBarMethod = rfk::MethodAPI("bar", 123u, rfk::getTypeAPI<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
+	//rfk::MethodAPI fooBazMethod = rfk::MethodAPI("baz", 1234u, rfk::getTypeAPI<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
+
+	//Foo foo;
+	//Foo const constFoo;
+
+	//TEST(fooBarMethod.invoke<int>(foo, 1, 2.0f) == 3);
+	//TEST(fooBarMethod.invoke<int, Foo, int, float>(foo, 2, 3) == 5);
+	//
+	//try
+	//{
+	//	fooBarMethod.invoke<int>(constFoo, 1, 2.0f);
+	//	assert(false);
+	//}
+	//catch (rfk::ConstViolation const& e)
+	//{
+	//	std::cout << e.what() << std::endl;
+	//}
+
+	//fooBazMethod.invoke<void>(constFoo);
+	//fooBazMethod.invoke<void>(foo);
 }
 
 void outerEntities()
@@ -359,12 +385,12 @@ void structs()
 	TEST(ExampleStruct::staticGetArchetype().getField("i")->getData<int>(&es) == 2);
 	
 	ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->invoke();
-	ExampleStruct::staticGetArchetype().getMethod("method")->invoke(&es, 1, 42.0f);
+	ExampleStruct::staticGetArchetype().getMethod("method")->invoke(es, 1, 42.0f);
 
 	try
 	{
-		ExampleStruct::staticGetArchetype().getMethod<void(int, float)>("method")->checkedInvoke(&es, 1, 2.0f);		//This passes
-		ExampleStruct::staticGetArchetype().getMethod<void(int, float)>("method")->checkedInvoke(&es, "a", "aa");	//This throws
+		ExampleStruct::staticGetArchetype().getMethod<void(int, float)>("method")->checkedInvoke(es, 1, 2.0f);		//This passes
+		ExampleStruct::staticGetArchetype().getMethod<void(int, float)>("method")->checkedInvoke(es, "a", "aa");	//This throws
 		TEST(false);	//Never reach this line
 	}
 	catch (std::exception const& e)
@@ -456,10 +482,10 @@ void methods()
 	namespace3::ParentClass	p;
 	rfk::Class const&		pc = namespace3::ParentClass::staticGetArchetype();
 
-	pc.getMethod("parentClassMethod1")->invoke(&p);
+	pc.getMethod("parentClassMethod1")->invoke(p);
 
 	rfk::Method const* pc_method1 = pc.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const);
-	TEST(pc_method1->checkedRInvoke<int>(&p) == 1);
+	TEST(pc_method1->checkedRInvoke<int>(p) == 1);
 	TEST(pc.getMethod("method1", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Virtual | rfk::EMethodFlags::Const) == nullptr);
 	TEST(pc_method1 == rfk::getDatabase().getMethod(pc_method1->getId()));
 
@@ -468,49 +494,49 @@ void methods()
 	rfk::Class const&			ec = namespace3::ExampleClass::staticGetArchetype();
 
 	rfk::Method const*			ec_method1 = ec.getMethod("method1", rfk::EMethodFlags::Public | rfk::EMethodFlags::Override | rfk::EMethodFlags::Final | rfk::EMethodFlags::Virtual);
-	TEST(ec_method1->rInvoke<int>(&e) != 1);
-	TEST(ec_method1->rInvoke<int>(&e) == 2);
+	TEST(ec_method1->rInvoke<int>(e) != 1);
+	TEST(ec_method1->rInvoke<int>(e) == 2);
 
 	rfk::Method const* ec_method2 = ec.getMethod("method2", rfk::EMethodFlags::Protected | rfk::EMethodFlags::Const);
-	ec_method2->invoke(&e);
+	ec_method2->invoke(e);
 
 	rfk::Method const* ec_method3int = ec.getMethod("method3", rfk::EMethodFlags::Protected);
-	TEST(ec_method3int->rInvoke<int>(&e) == 42);
+	TEST(ec_method3int->rInvoke<int>(e) == 42);
 
 	rfk::Method const* ec_method3float	= ec.getMethod("method3", rfk::EMethodFlags::Private);
 	
 	//Handle functions when they use an incomplete type (forward declared type)
 	rfk::Method const* ec_methodWithForwardDeclaredParam = ec.getMethod<void(D*)>("methodWithForwardDeclaredParam");
-	ec_methodWithForwardDeclaredParam->invoke(&e, nullptr);
+	ec_methodWithForwardDeclaredParam->invoke(e, nullptr);
 
 	rfk::Method const* ec_methodWithClassParam = ec.getMethod("methodWithClassParam");
-	ec_methodWithClassParam->invoke(&e, namespace3::ParentClass());
+	ec_methodWithClassParam->invoke(e, namespace3::ParentClass());
 
 	#if RFK_DEBUG
 
 	try
 	{
-		ec_method3float->invoke(&e);	// <- Bad number of arguments
+		ec_method3float->invoke(e);	// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^ in DEBUG only
 	}
 	catch (std::exception const&)
 	{
-		ec_method3float->invoke(&e, 7);	// <- Call with correct arguments count
+		ec_method3float->invoke(e, 7);	// <- Call with correct arguments count
 	}
 
 	#else
 
-	ec_method3float->invoke(&e);	// <- This should not throw in release eventhough bad arguments count
-	ec_method3float->invoke(&e, 7);
+	ec_method3float->invoke(e);	// <- This should not throw in release eventhough bad arguments count
+	ec_method3float->invoke(e, 7);
 
 	#endif
 
 	rfk::Method const*	ec_method4	= ec.getMethod("method4", rfk::EMethodFlags::Public);
-	TEST(ec_method4->rInvoke<unsigned long long>(&e, nullptr) == 0u);
+	TEST(ec_method4->rInvoke<unsigned long long>(e, nullptr) == 0u);
 
 	try
 	{
-		ec_method4->checkedRInvoke<unsigned long long>(&e, nullptr, 1);		// <- Bad number of arguments
+		ec_method4->checkedRInvoke<unsigned long long>(e, nullptr, 1);		// <- Bad number of arguments
 		TEST(false);	//Should not reach this line, throw here ^
 	}
 	catch (std::exception const&)
@@ -518,7 +544,7 @@ void methods()
 
 	try
 	{
-		ec_method4->checkedInvoke<unsigned long long>(&e, 1);		// <- Bad argument type
+		ec_method4->checkedInvoke<namespace3::ExampleClass, unsigned long long>(e, 1);		// <- Bad argument type
 		TEST(false);	//Should not reach this line, throw here ^
 	}
 	catch (std::exception const&)
@@ -531,7 +557,7 @@ void methods()
 	rfk::Method const*	ec_parentClassMethod1 = ec.getMethod("parentClassMethod1", rfk::EMethodFlags::Private, true);
 	TEST(ec_parentClassMethod1 != nullptr);
 
-	ec_parentClassMethod1->invoke(&e);
+	ec_parentClassMethod1->invoke(e);
 
 	//Check const / non-const
 	TEST(ec.getMethod("constMethod", rfk::EMethodFlags::Const) != nullptr);
@@ -540,10 +566,10 @@ void methods()
 	TEST(ec.getMethod<void(int) const>("constMethod", rfk::EMethodFlags::Const) != nullptr);
 
 	TEST(ec.getMethod("method3") != nullptr);			//We don't know if it's the const or non-const overload
-	TEST(ec.getMethod<int(int)>("method3")->rInvoke<int>(&e, 1) == 1);	//non-const
-	TEST(ec.getMethod<int(int) const>("method3")->rInvoke<int>(&e, 1) == 2);	//const
-	TEST(ec.getMethod("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
-	TEST(ec.getMethod<int(int) const>("method3", rfk::EMethodFlags::Const)->rInvoke<int>(&e, 1) == 2);	//const
+	TEST(ec.getMethod<int(int)>("method3")->rInvoke<int>(e, 1) == 1);	//non-const
+	TEST(ec.getMethod<int(int) const>("method3")->rInvoke<int>(e, 1) == 2);	//const
+	TEST(ec.getMethod("method3", rfk::EMethodFlags::Const)->rInvoke<int>(e, 1) == 2);	//const
+	TEST(ec.getMethod<int(int) const>("method3", rfk::EMethodFlags::Const)->rInvoke<int>(e, 1) == 2);	//const
 	TEST(ec.getMethod<int(int)>("method3", rfk::EMethodFlags::Const) == nullptr);	//Method signature is non const and flag is const -> contradiction
 
 	//Check methods non-const method call throw when instance is const
@@ -551,7 +577,7 @@ void methods()
 
 	try
 	{
-		pc.getMethod("parentClassMethod1")->invoke(&constP);
+		pc.getMethod("parentClassMethod1")->invoke(constP);
 		TEST(false);
 	}
 	catch (rfk::ConstViolation const&)
@@ -1250,7 +1276,7 @@ void testMultipleTypeTemplateClassTemplate()
 
 	TEST(ifdInstantiation->getMethod("returnT") != nullptr);
 	TEST(ifdInstantiation->getMethod("returnT")->getReturnType() == rfk::getType<int>());
-	TEST(ifdInstantiation->getMethod<int(int const&, int const&)>("returnT")->rInvoke<int, int const&, int const&>(&o, 3, 5) == 8);
+	TEST(ifdInstantiation->getMethod<int(int const&, int const&)>("returnT")->rInvoke<int, decltype(o), int const&, int const&>(o, 3, 5) == 8);
 	TEST(ifdInstantiation->getMethod("returnU") != nullptr);
 	TEST(ifdInstantiation->getMethod("returnU")->getReturnType() == rfk::getType<float>());
 	TEST(ifdInstantiation->getMethod("returnV") != nullptr);

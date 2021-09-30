@@ -18,19 +18,16 @@ MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(ConstFunctio
 {}
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
-ReturnType MemberFunction<CallerType, ReturnType(ArgTypes...)>::operator()(void* caller, ArgTypes&&... args) const
+ReturnType MemberFunction<CallerType, ReturnType(ArgTypes...)>::operator()(CallerType& caller, ArgTypes&&... args) const
 {
-	return _isConst ?	(reinterpret_cast<CallerType*>(caller)->*_constFunction)(std::forward<ArgTypes>(args)...) :
-						(reinterpret_cast<CallerType*>(caller)->*_function)(std::forward<ArgTypes>(args)...);
+	return _isConst ?	(caller.*_constFunction)(std::forward<ArgTypes>(args)...) :
+						(caller.*_function)(std::forward<ArgTypes>(args)...);
 }
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
-ReturnType MemberFunction<CallerType, ReturnType(ArgTypes...)>::operator()(void const* caller, ArgTypes&&... args) const
+ReturnType MemberFunction<CallerType, ReturnType(ArgTypes...)>::operator()(CallerType const& caller, ArgTypes&&... args) const
 {
-	if (!_isConst)
-	{
-		throw ConstViolation("Can't call a non-const member function on a const caller instance.");
-	}
+	assert(_isConst);
 
-	return (reinterpret_cast<CallerType const*>(caller)->*_constFunction)(std::forward<ArgTypes>(args)...);
+	return (caller.*_constFunction)(std::forward<ArgTypes>(args)...);
 }

@@ -8,9 +8,9 @@
 #pragma once
 
 #include <utility>	//std::forward
+#include <cassert>
 
 #include "Refureku/TypeInfo/Functions/ICallable.h"
-#include "Refureku/Exceptions/ConstViolation.h"
 
 namespace rfk
 {
@@ -46,7 +46,7 @@ namespace rfk
 			* 
 			*	@return The result forwarded from the method call.
 			*/
-			ReturnType operator()(void* caller, ArgTypes&&... args)			const;
+			ReturnType operator()(CallerType& caller, ArgTypes&&... args)		const;
 
 			/**
 			*	@brief Call the underlying function with on the provided caller forwarding the provided arguments.
@@ -54,11 +54,9 @@ namespace rfk
 			*	@param		caller	Instance the underlying method is called on.
 			*	@param...	args	Arguments forwarded to the method call.
 			* 
-			*	@exception ConstViolation if the underlying method is not const-qualified.
-			* 
 			*	@return The result forwarded from the method call.
 			*/
-			ReturnType operator()(void const* caller, ArgTypes&&... args)	const;
+			ReturnType operator()(CallerType const& caller, ArgTypes&&... args)	const;
 	};
 
 	#include "Refureku/TypeInfo/Functions/MemberFunction.inl"

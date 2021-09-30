@@ -13,14 +13,13 @@
 #include "Refureku/Misc/FundamentalTypes.h"
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
+#include "Refureku/Exceptions/ConstViolation.h"
 
 namespace rfk
 {
 	class Method final : public MethodBase
 	{
 		private:
-			class DummyClass {};
-
 			/**
 			*	@brief Invoke the internal method using passed arguments.
 			*	
@@ -34,11 +33,11 @@ namespace rfk
 			* 
 			*	@return The result of the internal method call.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(void* caller, ArgTypes&&... arguments)		const noexcept;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType	internalInvoke(CallerType& caller, ArgTypes&&... arguments)		const noexcept;
 
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType	internalInvoke(CallerType const& caller, ArgTypes&&... arguments)	const;
 
 		public:
 			Method(std::string&&				methodName,
@@ -68,11 +67,11 @@ namespace rfk
 			* 
 			*	@return The result of the method call.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType			rInvoke(void* caller, ArgTypes&&... arguments)				const	noexcept(RFK_RELEASE);
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			rInvoke(CallerType& caller, ArgTypes&&... arguments)				const	noexcept(RFK_RELEASE);
 
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType			rInvoke(void const* caller, ArgTypes&&... arguments)		const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			rInvoke(CallerType const& caller, ArgTypes&&... arguments)		const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
@@ -92,11 +91,11 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*/
-			template <typename... ArgTypes>
-			void				invoke(void* caller, ArgTypes&&... arguments)				const	noexcept(RFK_RELEASE);
+			template <typename CallerType, typename... ArgTypes>
+			void				invoke(CallerType& caller, ArgTypes&&... arguments)				const	noexcept(RFK_RELEASE);
 
-			template <typename... ArgTypes>
-			void				invoke(void const* caller, ArgTypes&&... arguments)			const;
+			template <typename CallerType, typename... ArgTypes>
+			void				invoke(CallerType const& caller, ArgTypes&&... arguments)			const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any, and return the result.
@@ -116,11 +115,11 @@ namespace rfk
 			*
 			*	@return The result of the method call.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType			checkedRInvoke(void* caller, ArgTypes&&... arguments)		const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			checkedRInvoke(CallerType& caller, ArgTypes&&... arguments)		const;
 
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType			checkedRInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			checkedRInvoke(CallerType const& caller, ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Call the method on an instance with the provided argument(s) if any.
@@ -140,11 +139,11 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*/
-			template <typename... ArgTypes>
-			void				checkedInvoke(void* caller, ArgTypes&&... arguments)		const;
+			template <typename CallerType, typename... ArgTypes>
+			void				checkedInvoke(CallerType& caller, ArgTypes&&... arguments)		const;
 
-			template <typename... ArgTypes>
-			void				checkedInvoke(void const* caller, ArgTypes&&... arguments)	const;
+			template <typename CallerType, typename... ArgTypes>
+			void				checkedInvoke(CallerType const& caller, ArgTypes&&... arguments)	const;
 
 			/**
 			*	@brief Inherit from the properties this method overrides (if it has the override method flag).
