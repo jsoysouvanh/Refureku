@@ -31,14 +31,14 @@ namespace rfk
 			*	@return The value contained in this enum value cast to T.
 			*/
 			template <typename T = int64, typename = std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
-			T					getValue()	const	noexcept;
+			RFK_NODISCARD T						getValue()	const	noexcept;
 
 			/**
 			*	@brief Get the enum value as an int64.
 			*
 			*	@return The enum value as an int64.
 			*/
-			REFUREKU_API int64	getValue()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API int64	getValue()	const	noexcept;
 
 		protected:
 			//Forward declaration

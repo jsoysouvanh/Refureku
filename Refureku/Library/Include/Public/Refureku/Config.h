@@ -13,15 +13,20 @@
 
 #ifndef NDEBUG
 
-	#define REFUREKU_DEBUG		1
-	#define REFUREKU_RELEASE	0
+	#define RFK_DEBUG	1
+	#define RFK_RELEASE	0
 
 #else	//RELEASE
 
-	#define REFUREKU_DEBUG		0
-	#define REFUREKU_RELEASE	1
+	#define RFK_DEBUG	0
+	#define RFK_RELEASE	1
 
 #endif
+
+//Attributes macro
+#define RFK_NODISCARD	[[nodiscard]]
+#define RFK_NORETURN	[[noreturn]]
+#define RFK_FALLTHROUGH	[[fallthrough]]
 
 //Dynamic library import/export macros
 #if defined(KODGEN_PARSING)

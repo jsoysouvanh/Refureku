@@ -36,7 +36,7 @@ ValueType VariableBaseAPI::get(void* ptr) const
 }
 
 template <typename ValueType>
-void VariableBaseAPI::set(void* ptr, ValueType&& data) const
+void VariableBaseAPI::set(void* ptr, ValueType&& value) const
 {
 	if (getType().isConst())
 	{
@@ -45,11 +45,11 @@ void VariableBaseAPI::set(void* ptr, ValueType&& data) const
 
 	if constexpr (std::is_rvalue_reference_v<ValueType&&>)
 	{
-		*reinterpret_cast<ValueType*>(ptr) = std::forward<ValueType&&>(data);
+		*reinterpret_cast<ValueType*>(ptr) = std::forward<ValueType&&>(value);
 	}
 	else if constexpr (std::is_lvalue_reference_v<ValueType&&>)
 	{
-		*reinterpret_cast<std::remove_reference_t<ValueType&&>*>(ptr) = data;
+		*reinterpret_cast<std::remove_reference_t<ValueType&&>*>(ptr) = value;
 	}
 	else
 	{

@@ -38,9 +38,9 @@ namespace rfk
 			*	
 			*	@return A pointer to the added enum value.
 			*/
-			REFUREKU_API EnumValueAPI*					addEnumValue(char const*	name,
-																	 std::size_t	id,
-																	 int64			value)										noexcept;
+			REFUREKU_API EnumValueAPI*								addEnumValue(char const*	name,
+																				 std::size_t	id,
+																				 int64			value)												noexcept;
 			
 			/**
 			*	@brief	Set the number of enum values for this entity.
@@ -49,7 +49,7 @@ namespace rfk
 			* 
 			*	@param propertiesCapacity The number of enum values in this enum.
 			*/
-			REFUREKU_API void							setEnumValuesCapacity(std::size_t capacity)								noexcept;
+			REFUREKU_API void										setEnumValuesCapacity(std::size_t capacity)										noexcept;
 
 			/**
 			*	@brief Search an enum value by name in this enum.
@@ -58,7 +58,7 @@ namespace rfk
 			*	
 			*	@return The EnumValue having the provided name if any, else nullptr.
 			*/
-			REFUREKU_API EnumValueAPI const*			getEnumValueByName(char const* name)							const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByName(char const* name)									const	noexcept;
 
 			/**
 			*	@brief Search an enum value by value in this enum.
@@ -67,7 +67,7 @@ namespace rfk
 			*
 			*	@return The first found EnumValue equals to the provided value if any, else nullptr.
 			*/
-			REFUREKU_API EnumValueAPI const*			getEnumValue(int64 value)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValue(int64 value)												const	noexcept;
 
 			/**
 			*	@brief Retrieve from this enum an enum value matching with a given predicate.
@@ -77,8 +77,8 @@ namespace rfk
 			*	
 			*	@return The first matching enum value if any is found, else nullptr.
 			*/
-			REFUREKU_API EnumValueAPI const*			getEnumValueByPredicate(EnumValuePredicate predicate,
-																				void*			   userData = nullptr)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByPredicate(EnumValuePredicate predicate,
+																							void*			   userData = nullptr)	const	noexcept;
 
 			/**
 			*	@brief Search all enum values in this enum holding the provided value.
@@ -87,7 +87,7 @@ namespace rfk
 			*
 			*	@return All the EnumValues equal to the provided value.
 			*/
-			REFUREKU_API Vector<EnumValueAPI const*>	getEnumValues(int64 value)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Vector<EnumValueAPI const*>	getEnumValues(int64 value)										const	noexcept;
 
 			/**
 			*	@brief Retrieve from this enum all enum values matching with a given predicate.
@@ -97,8 +97,8 @@ namespace rfk
 			*	
 			*	@return All the enum values matching with the given predicate.
 			*/
-			REFUREKU_API Vector<EnumValueAPI const*>	getEnumValuesByPredicate(EnumValuePredicate predicate,
-																				 void*				userData = nullptr)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Vector<EnumValueAPI const*>	getEnumValuesByPredicate(EnumValuePredicate predicate,
+																							 void*				userData = nullptr)	const	noexcept;
 
 			/**
 			*	@brief	Get the enum value located at the provided index in the enum.
@@ -108,21 +108,21 @@ namespace rfk
 			* 
 			*	@return The enum values at the provided index.
 			*/
-			REFUREKU_API EnumValueAPI const&			getEnumValueAt(std::size_t valueIndex)							const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValueAPI const&			getEnumValueAt(std::size_t valueIndex)							const	noexcept;
 
 			/**
 			*	@brief Get the number of enum values contained in this enum.
 			* 
 			*	@return The number of enum values contained in this enum.
 			*/
-			REFUREKU_API std::size_t					getEnumValuesCount()											const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t					getEnumValuesCount()											const	noexcept;
 
 			/**
 			*	@brief Getter for the field _underlyingArchetype.
 			* 
 			*	@return _underlyingArchetype.
 			*/
-			REFUREKU_API ArchetypeAPI const&			getUnderlyingArchetype()										const	noexcept;
+			RFK_NODISCARD REFUREKU_API ArchetypeAPI const&			getUnderlyingArchetype()										const	noexcept;
 
 		protected:
 			//Forward declaration

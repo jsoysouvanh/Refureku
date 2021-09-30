@@ -42,6 +42,8 @@ namespace rfk
 			*			If ValueType is an lvalue reference, return a reference to the variable.
 			*			If ValueType is a value type, the data is copied. If it is a struct/class, ValueType must be copy-constructible.
 			*
+			*	@param ptr Pointer to the variable to get.
+			* 
 			*	@exception ConstViolation if:
 			*		- the variable is const and ValueType is an RValue type (can't move a const field content);
 			*		- the variable is const and ValueType is a non-const reference;
@@ -49,7 +51,7 @@ namespace rfk
 			*	@return The data stored in the ptr.
 			*/
 			template <typename ValueType>
-			[[nodiscard]] ValueType			get(void* ptr)				const;
+			RFK_NODISCARD ValueType			get(void* ptr)				const;
 
 			/**
 			*	@brief Set the provided pointer content.
@@ -59,31 +61,36 @@ namespace rfk
 			*			If ValueType is an rvalue reference, the data is forwarded into the variable.
 			*			If ValueType is an lvalue reference, the data is copied into the variable.
 			* 
+			*	@param ptr		Pointer to the variable to set.
+			*	@param value	New value.
+			* 
 			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
 			template <typename ValueType>
 			void							set(void*		ptr,
-												ValueType&&	data)		const;
+												ValueType&&	value)		const;
 
 			/**
 			*	@brief Copy dataSize bytes starting from data into the variable.
 			*
-			*	@param data		Address of the data to copy.
-			*	@param dataSize Number of bytes to copy into the variable starting from data.
+			*	@param target		Pointer to the memory to set.
+			*	@param source		Pointer to the memory to from from.
+			*	@param bytesCount	Number of bytes to copy.
 			* 
 			*	@exception ConstViolation if the variable is actually const and therefore readonly.
 			*/
 			REFUREKU_INTERNAL void			set(void*		target,
 												void const*	source,
-												std::size_t	dataSize)	const;
+												std::size_t	bytesCount)	const;
 
 		private:
 			/**
-			*	@brief Throw a ConstViolation exception with the specified message.
+			*	@brief	Throw a ConstViolation exception with the specified message.
+			*			/!\ This method is called from template methods so it must be exported.
 			* 
 			*	@param message The message to forward to the exception.
 			*/
-			REFUREKU_API static void		throwConstViolationException(char const* message);
+			RFK_NORETURN REFUREKU_API static void	throwConstViolationException(char const* message);
 	};
 
 	#include "Refureku/TypeInfo/Variables/VariableBaseAPI.inl"

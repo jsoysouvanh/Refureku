@@ -69,7 +69,7 @@ namespace rfk
 			*	@return The result of the method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType			rInvoke(void* caller, ArgTypes&&... arguments)				const	noexcept(REFUREKU_RELEASE);
+			ReturnType			rInvoke(void* caller, ArgTypes&&... arguments)				const	noexcept(RFK_RELEASE);
 
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType			rInvoke(void const* caller, ArgTypes&&... arguments)		const;
@@ -93,7 +93,7 @@ namespace rfk
 			*	@exception ConstViolation if a non-const method is called on a const caller.
 			*/
 			template <typename... ArgTypes>
-			void				invoke(void* caller, ArgTypes&&... arguments)				const	noexcept(REFUREKU_RELEASE);
+			void				invoke(void* caller, ArgTypes&&... arguments)				const	noexcept(RFK_RELEASE);
 
 			template <typename... ArgTypes>
 			void				invoke(void const* caller, ArgTypes&&... arguments)			const;

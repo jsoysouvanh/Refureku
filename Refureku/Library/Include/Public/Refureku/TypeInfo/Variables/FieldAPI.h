@@ -42,7 +42,7 @@ namespace rfk
 			*	@return The queried value in the instance.
 			*/
 			template <typename ValueType>
-			[[nodiscard]] ValueType					get(void* instance)					const;
+			RFK_NODISCARD ValueType					get(void* instance)					const;
 
 			/**
 			*	@brief Get the value corresponding to this field in the provided instance.
@@ -60,7 +60,7 @@ namespace rfk
 			*	@return The queried value in the instance.
 			*/
 			template <typename ValueType>
-			[[nodiscard]] ValueType const			get(void const* instance)			const	noexcept;
+			RFK_NODISCARD ValueType const			get(void const* instance)			const	noexcept;
 
 
 			/**
@@ -101,7 +101,7 @@ namespace rfk
 			*
 			*	@return Pointer to this field in the provided instance.
 			*/
-			[[nodiscard]] REFUREKU_API void*		getPtr(void* instance)				const	noexcept;
+			RFK_NODISCARD REFUREKU_API void*		getPtr(void* instance)				const	noexcept;
 
 			/**
 			*	@brief Get a const pointer to this field in the provided instance.
@@ -110,7 +110,7 @@ namespace rfk
 			*
 			*	@return Const pointer to this field in the provided instance.
 			*/
-			[[nodiscard]] REFUREKU_API void const*	getConstPtr(void const* instance)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API void const*	getConstPtr(void const* instance)	const	noexcept;
 
 		protected:
 			//Forward declaration

@@ -471,7 +471,7 @@ void methods()
 	rfk::Method const* ec_methodWithClassParam = ec.getMethod("methodWithClassParam");
 	ec_methodWithClassParam->invoke(&e, namespace3::ParentClass());
 
-	#if REFUREKU_DEBUG
+	#if RFK_DEBUG
 
 	try
 	{

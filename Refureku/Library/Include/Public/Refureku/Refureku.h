@@ -33,3 +33,6 @@
 #include "Refureku/TypeInfo/Variables/VariableAPI.h"
 #include "Refureku/TypeInfo/Variables/FieldAPI.h"
 #include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
+#include "Refureku/TypeInfo/Functions/FunctionAPI.h"
+#include "Refureku/TypeInfo/Functions/MethodAPI.h"
+#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"

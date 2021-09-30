@@ -18,9 +18,9 @@ ReturnType Method::internalInvoke(void const* caller, ArgTypes&&... arguments) c
 }
 
 template <typename... ArgTypes>
-void Method::invoke(void* caller, ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
+void Method::invoke(void* caller, ArgTypes&&... arguments) const noexcept(RFK_RELEASE)
 {
-#if REFUREKU_DEBUG
+#if RFK_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
 
@@ -32,7 +32,7 @@ void Method::invoke(void* caller, ArgTypes&&... arguments) const noexcept(REFURE
 template <typename... ArgTypes>
 void Method::invoke(void const* caller, ArgTypes&&... arguments) const
 {
-#if REFUREKU_DEBUG
+#if RFK_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
 
@@ -42,11 +42,11 @@ void Method::invoke(void const* caller, ArgTypes&&... arguments) const
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Method::rInvoke(void* caller, ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
+ReturnType Method::rInvoke(void* caller, ArgTypes&&... arguments) const noexcept(RFK_RELEASE)
 {
 	static_assert(!std::is_void_v<ReturnType>, "ReturnType can't be void.");
 
-#if REFUREKU_DEBUG
+#if RFK_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
 
@@ -60,7 +60,7 @@ ReturnType Method::rInvoke(void const* caller, ArgTypes&&... arguments) const
 {
 	static_assert(!std::is_void_v<ReturnType>, "ReturnType can't be void.");
 
-#if REFUREKU_DEBUG
+#if RFK_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
 

@@ -12,9 +12,9 @@ ReturnType Function::internalInvoke(ArgTypes&&... arguments) const noexcept
 }
 
 template <typename... ArgTypes>
-void Function::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
+void Function::invoke(ArgTypes&&... arguments) const noexcept(RFK_RELEASE)
 {
-	#if REFUREKU_DEBUG
+	#if RFK_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
 
@@ -24,11 +24,11 @@ void Function::invoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType Function::rInvoke(ArgTypes&&... arguments) const noexcept(REFUREKU_RELEASE)
+ReturnType Function::rInvoke(ArgTypes&&... arguments) const noexcept(RFK_RELEASE)
 {
 	static_assert(!std::is_void_v<ReturnType>, "ReturnType can't be void.");
 
-	#if REFUREKU_DEBUG
+	#if RFK_DEBUG
 
 	checkArgumentsCount<ArgTypes...>();
 

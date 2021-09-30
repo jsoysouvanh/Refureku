@@ -58,7 +58,7 @@ namespace rfk
 			*	@return The result of the function call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType				rInvoke(ArgTypes&&... arguments)		const	noexcept(REFUREKU_RELEASE);
+			ReturnType				rInvoke(ArgTypes&&... arguments)		const	noexcept(RFK_RELEASE);
 
 			/**
 			*	@brief Call the function with the provided argument(s) if any.
@@ -73,7 +73,7 @@ namespace rfk
 			*	@param arguments... Arguments provided to the function call.
 			*/
 			template <typename... ArgTypes>
-			void					invoke(ArgTypes&&... arguments)			const	noexcept(REFUREKU_RELEASE);
+			void					invoke(ArgTypes&&... arguments)			const	noexcept(RFK_RELEASE);
 
 			/**
 			*	@brief Call the function with the provided argument(s) if any, and return the result.

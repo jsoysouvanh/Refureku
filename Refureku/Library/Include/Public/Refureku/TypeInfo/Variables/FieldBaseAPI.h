@@ -24,7 +24,7 @@ namespace rfk
 			* 
 			*	@return The access specifier of this field in its owner struct/class.
 			*/
-			REFUREKU_API EAccessSpecifier	getAccess()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API EAccessSpecifier	getAccess()	const	noexcept;
 
 			/**
 			*	@brief	Check whether this field is static or not.
@@ -32,28 +32,28 @@ namespace rfk
 			* 
 			*	@return true if this field is static, else false.
 			*/
-			REFUREKU_API bool				isStatic()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool				isStatic()	const	noexcept;
 
 			/**
 			*	@brief Check whether this field is mutable or not.
 			* 
 			*	@return true if this field is mutable, else false.
 			*/
-			REFUREKU_API bool				isMutable()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool				isMutable()	const	noexcept;
 
 			/**
 			*	@brief Get the flags qualifying this field.
 			* 
 			*	@return The flags qualifying this field.
 			*/
-			REFUREKU_API EFieldFlags		getFlags()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API EFieldFlags		getFlags()	const	noexcept;
 
 			/**
 			*	@brief Get the struct owning this field.
 			* 
 			*	@return The struct owning this field.
 			*/
-			REFUREKU_API StructAPI const*	getOwner()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API StructAPI const*	getOwner()	const	noexcept;
 
 		protected:
 			//Forward declaration

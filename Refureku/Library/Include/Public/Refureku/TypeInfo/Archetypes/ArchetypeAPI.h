@@ -29,21 +29,21 @@ namespace rfk
 			* 
 			*	@return _accessSpecifier.
 			*/
-			REFUREKU_API EAccessSpecifier	getAccessSpecifier()			const	noexcept;
-
-			/**
-			*	@brief Setter for the field _accessSpecifier.
-			* 
-			*	@param The access specifier to set.
-			*/
-			REFUREKU_API void				setAccessSpecifier(EAccessSpecifier)	noexcept;
+			RFK_NODISCARD REFUREKU_API EAccessSpecifier	getAccessSpecifier()			const	noexcept;
 
 			/**
 			*	@brief Getter for the field _memorySize.
 			* 
 			*	@return _memorySize.
 			*/
-			REFUREKU_API std::size_t		getMemorySize()					const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t		getMemorySize()					const	noexcept;
+
+			/**
+			*	@brief Setter for the field _accessSpecifier.
+			* 
+			*	@param The access specifier to set.
+			*/
+			REFUREKU_API void							setAccessSpecifier(EAccessSpecifier)	noexcept;
 
 		protected:
 			//Forward declaration

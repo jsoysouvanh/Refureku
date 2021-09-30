@@ -43,7 +43,7 @@ namespace rfk
 			*	@return The value stored in the variable.
 			*/
 			template <typename ValueType>
-			[[nodiscard]] ValueType					get()							const;
+			RFK_NODISCARD ValueType					get()							const;
 
 			/**
 			*	@brief Set some value in this variable.
@@ -74,14 +74,14 @@ namespace rfk
 			*
 			*	@return true if the variable is static, else false.
 			*/
-			[[nodiscard]] REFUREKU_API bool			isStatic()						const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool			isStatic()						const	noexcept;
 
 			/**
 			*	@brief Getter for the field _flags.
 			* 
 			*	@return _flags.
 			*/
-			[[nodiscard]] REFUREKU_API EVarFlags	getFlags()						const	noexcept;
+			RFK_NODISCARD REFUREKU_API EVarFlags	getFlags()						const	noexcept;
 
 			/**
 			*	@brief	Get a non-const pointer to this variable.
@@ -89,14 +89,14 @@ namespace rfk
 			* 
 			*	@return A pointer to this static field.
 			*/
-			[[nodiscard]] REFUREKU_API	void*		getPtr()						const	noexcept;
+			RFK_NODISCARD REFUREKU_API void*		getPtr()						const	noexcept;
 
 			/**
 			*	@brief	Get a const pointer to this static field.
 			* 
 			*	@return A const pointer to this static field.
 			*/
-			[[nodiscard]] REFUREKU_API	void const*	getConstPtr()					const	noexcept;
+			RFK_NODISCARD REFUREKU_API void const*	getConstPtr()					const	noexcept;
 
 		protected:
 			//Forward declaration

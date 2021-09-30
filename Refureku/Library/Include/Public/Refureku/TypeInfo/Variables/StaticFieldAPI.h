@@ -51,7 +51,7 @@ namespace rfk
 			*	@return The queried data.
 			*/
 			template <typename ValueType>
-			[[nodiscard]] ValueType					get()						const;
+			RFK_NODISCARD ValueType					get()						const;
 
 			/**
 			*	@brief Set the data corresponding to this static field.
@@ -86,14 +86,14 @@ namespace rfk
 			* 
 			*	@return A pointer to this static field.
 			*/
-			[[nodiscard]] REFUREKU_API	void*		getPtr()					const	noexcept;
+			RFK_NODISCARD REFUREKU_API	void*		getPtr()					const	noexcept;
 
 			/**
 			*	@brief	Get a const pointer to this static field.
 			* 
 			*	@return A const pointer to this static field.
 			*/
-			[[nodiscard]] REFUREKU_API	void const*	getConstPtr()				const	noexcept;
+			RFK_NODISCARD REFUREKU_API	void const*	getConstPtr()				const	noexcept;
 
 		protected:
 			//Forward declaration

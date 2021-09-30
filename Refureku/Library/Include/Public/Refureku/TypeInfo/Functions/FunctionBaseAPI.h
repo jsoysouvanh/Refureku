@@ -37,7 +37,7 @@ namespace rfk
 			*			parameter types as ArgTypes, else false.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			[[nodiscard]] bool										hasSamePrototype()								const	noexcept;
+			RFK_NODISCARD bool										hasSamePrototype()								const	noexcept;
 
 			/**
 			*	@brief Check that another function has the same prototype as this function.
@@ -46,7 +46,7 @@ namespace rfk
 			* 
 			*	@return true if the provided function has the same prototype as this function, else false.
 			*/
-			[[nodiscard]] REFUREKU_API bool							hasSamePrototype(FunctionBaseAPI const& other)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool							hasSamePrototype(FunctionBaseAPI const& other)	const	noexcept;
 
 			/**
 			*	@tparam... ArgTypes Argument types to compare with.
@@ -54,14 +54,14 @@ namespace rfk
 			*	@return true if this function has the same parameter types as ArgTypes, else false.
 			*/
 			template <typename... ArgTypes>
-			[[nodiscard]] bool										hasSameParameters()								const	noexcept;
+			RFK_NODISCARD bool										hasSameParameters()								const	noexcept;
 
 			/**
 			*	@brief Get the return type of this function.
 			* 
 			*	@return The return type of this function.
 			*/
-			[[nodiscard]] REFUREKU_API TypeAPI const&				getReturnType()									const	noexcept;
+			RFK_NODISCARD REFUREKU_API TypeAPI const&				getReturnType()									const	noexcept;
 
 			/**
 			*	@brief	Retrieve the parameter at the given index.
@@ -71,14 +71,14 @@ namespace rfk
 			* 
 			*	@return The parameter at the given index.
 			*/
-			[[nodiscard]] REFUREKU_API FunctionParameterAPI const&	getParameterAt(std::size_t index)				const	noexcept;	
+			RFK_NODISCARD REFUREKU_API FunctionParameterAPI const&	getParameterAt(std::size_t index)				const	noexcept;	
 
 			/**
 			*	@brief Get the number of parameters of this function.
 			* 
 			*	@return The number of parameters of this function.
 			*/
-			[[nodiscard]] REFUREKU_API std::size_t					getParametersCount()							const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t					getParametersCount()							const	noexcept;
 
 			/**
 			*	@brief	Set the number of parameters for this function.
@@ -126,7 +126,7 @@ namespace rfk
 			*	
 			*	@return The function handle.
 			*/
-			[[nodiscard]] REFUREKU_API ICallable*	getInternalFunction()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API ICallable*	getInternalFunction()	const	noexcept;
 
 		private:
 			/**
@@ -135,7 +135,7 @@ namespace rfk
 			*	@return true if the provided type is the same as this function's, else false.
 			*/
 			template <typename ReturnType>
-			[[nodiscard]] bool						hasSameReturnType()										const	noexcept;
+			RFK_NODISCARD bool						hasSameReturnType()										const	noexcept;
 
 			/**
 			*	@brief Check that the number of provided parameters is the same as this method's.
@@ -143,7 +143,7 @@ namespace rfk
 			*	@return true if provided types count is the same as this method's, else false.
 			*/
 			template <typename... ArgTypes>
-			[[nodiscard]] bool						hasSameParametersCount()								const	noexcept;
+			RFK_NODISCARD bool						hasSameParametersCount()								const	noexcept;
 
 			/**
 			*	@brief Check that the provided parameters are the same as this method's.
@@ -151,11 +151,11 @@ namespace rfk
 			*	@return true if provided types are the same as this method parameters, else false.
 			*/
 			template <std::size_t Rank, typename FirstArgType, typename SecondArgType, typename... OtherArgTypes>
-			[[nodiscard]] bool						hasSameParameterTypes()									const	noexcept;
+			RFK_NODISCARD bool						hasSameParameterTypes()									const	noexcept;
 			template <std::size_t Rank, typename LastArgType>
-			[[nodiscard]] bool						hasSameParameterTypes()									const	noexcept;
+			RFK_NODISCARD bool						hasSameParameterTypes()									const	noexcept;
 			template <typename... ArgTypes>
-			[[nodiscard]] bool						hasSameParameterTypes()									const	noexcept;
+			RFK_NODISCARD bool						hasSameParameterTypes()									const	noexcept;
 
 			/**
 			*	@brief Check that the parameter types match, and throw an ArgTypeMismatch exception if it is not the case.
@@ -166,23 +166,26 @@ namespace rfk
 			void									checkParameterTypes()									const;
 
 			/**
-			*	@brief Throw an ArgCountMismatch exception with an descriptive message.
+			*	@brief	Throw an ArgCountMismatch exception with an descriptive message.
+			*			/!\ This method is called from template methods so it must be exported.
 			* 
 			*	@param received Number of received parameters.
 			*/
-			REFUREKU_API void						throwArgCountMismatchException(std::size_t received)	const;
+			RFK_NORETURN REFUREKU_API void			throwArgCountMismatchException(std::size_t received)	const;
 
 			/**
-			*	@brief Throw an ArgTypeMismatch exception with a descriptive message.
+			*	@brief	Throw an ArgTypeMismatch exception with a descriptive message.
+			*			/!\ This method is called from template methods so it must be exported.
 			* 
 			*	@param paramIndex Index of the mismatching parameter.
 			*/
-			REFUREKU_API void						throwArgTypeMismatchException(std::size_t paramIndex)	const;
+			RFK_NORETURN REFUREKU_API void			throwArgTypeMismatchException(std::size_t paramIndex)	const;
 
 			/**
-			*	@brief Throw a ReturnTypeMismatch exception with a descriptive message.
+			*	@brief	Throw a ReturnTypeMismatch exception with a descriptive message.
+			*			/!\ This method is called from template methods so it must be exported.
 			*/
-			REFUREKU_API void						throwReturnTypeMismatchException()						const;
+			RFK_NORETURN REFUREKU_API void			throwReturnTypeMismatchException()						const;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBaseAPI.inl"
