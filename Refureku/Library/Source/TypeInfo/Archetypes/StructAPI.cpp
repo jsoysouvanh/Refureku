@@ -3,6 +3,7 @@
 #include "Refureku/TypeInfo/Archetypes/StructImpl.h"
 #include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
 #include "Refureku/TypeInfo/Archetypes/ClassTemplateInstantiation.h"
+#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 
 using namespace rfk;
 
@@ -68,6 +69,33 @@ ParentStruct const& StructAPI::getDirectParentAt(std::size_t index) const noexce
 std::size_t StructAPI::getDirectParentsCount() const noexcept
 {
 	return reinterpret_cast<StructImpl const*>(getPimpl())->getDirectParents().size();
+}
+
+StructAPI const* StructAPI::getNestedStruct(char const* name, EAccessSpecifier access) const noexcept
+{
+	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+
+	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Struct) ?
+				reinterpret_cast<StructAPI const*>(foundArchetype) :
+				nullptr;
+}
+
+ClassAPI const* StructAPI::getNestedClass(char const* name, EAccessSpecifier access) const noexcept
+{
+	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+
+	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Class) ?
+				reinterpret_cast<ClassAPI const*>(foundArchetype) :
+				nullptr;
+}
+
+EnumAPI const* StructAPI::getNestedEnum(char const* name, EAccessSpecifier access) const noexcept
+{
+	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+
+	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Enum) ?
+				reinterpret_cast<EnumAPI const*>(foundArchetype) :
+				nullptr;
 }
 
 bool StructAPI::foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&, void*), void* userData) const noexcept
@@ -255,4 +283,23 @@ void StructAPI::setDefaultInstantiator(void* (*instantiator)()) noexcept
 void StructAPI::addInstantiator(StaticMethodAPI const* instantiator) noexcept
 {
 	reinterpret_cast<StructImpl*>(getPimpl())->addInstantiator(instantiator);
+}
+
+void* StructAPI::makeInstanceFromDefaultInstantiator() const
+{
+	void* (*defaultInstantiator)() = reinterpret_cast<StructImpl const*>(getPimpl())->getDefaultInstantiator();
+
+	assert(defaultInstantiator != nullptr);
+
+	return (*defaultInstantiator)();
+}
+
+std::size_t StructAPI::getInstantiatorsCount() const noexcept
+{
+	return reinterpret_cast<StructImpl const*>(getPimpl())->getCustomInstantiators().size();
+}
+
+StaticMethodAPI const* StructAPI::getInstantiatorAt(std::size_t index) const noexcept
+{
+	return reinterpret_cast<StructImpl const*>(getPimpl())->getCustomInstantiators()[index];
 }

@@ -3,8 +3,7 @@
 #include <utility>	//std::forward
 
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
-
-//#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 
 using namespace rfk;
 

@@ -7,9 +7,10 @@
 
 #pragma once
 
-#include <type_traits>	//std::is_default_constructible_v
+#include <type_traits>	//std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
 
 #include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EClassKind.h"
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
@@ -19,9 +20,9 @@ namespace rfk
 	//Forward declarations
 	class ParentStruct;
 	class FieldAPI;
+	class EnumAPI;
 	class StaticFieldAPI;
 	class MethodAPI;
-	class StaticMethodAPI;
 	class TypeAPI;
 	class ICallable;
 	class ClassTemplate;				//TODO: Rename these if rework ClassTemplate API
@@ -38,13 +39,28 @@ namespace rfk
 			REFUREKU_API ~StructAPI()							noexcept;
 
 			/**
+			*	@brief	Make an instance of the class represented by this archetype.
+			*			If no argument is specified, the default constructor of the struct will be used.
+			*			In case the class isn't default constructible, the matching user-specified custom instantiator will be used.
+			*			If one or more arguments are provided, the matching user-specified custom instantiator will be used.
+			*			**WARNING**: Memory is not auto-managed and must be freed manually by the user.
+			*
+			*	@return an instance of this struct if a suitable constructor (no params only) / custom instantator was found,
+			*			else nullptr.
+			* 
+			*	@exception Any exception potentially thrown by the used instantiator.
+			*/
+			template <typename ReturnType = void, typename... ArgTypes>
+			ReturnType*														makeInstance(ArgTypes&&... args)										const;
+
+			/**
 			*	@brief	Compute the list of all direct reflected subclasses of this struct.
 			*			Direct subclasses are computed by iterating over all subclasses (direct or not), so this method
 			*			might have a heavy performance cost on big class hierarchies.
 			* 
 			*	@return A list of all direct reflected subclasses of this struct.
 			*/
-			RFK_NODISCARD REFUREKU_API rfk::Vector<StructAPI const*>		getDirectSubclasses()										const	noexcept;
+			RFK_NODISCARD REFUREKU_API rfk::Vector<StructAPI const*>		getDirectSubclasses()													const	noexcept;
 
 			/**
 			*	@brief Check if this struct is a subclass of another struct/class.
@@ -54,7 +70,7 @@ namespace rfk
 			*	@return true if this struct is a subclass of the provided archetype, else false.
 			*			Note that if the provided archetype is the same as this struct, false is returned.
 			*/
-			RFK_NODISCARD REFUREKU_API bool									isSubclassOf(StructAPI const& archetype)					const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool									isSubclassOf(StructAPI const& archetype)								const	noexcept;
 
 			/**
 			*	@brief Check if this struct is a base class of another struct/class.
@@ -64,7 +80,7 @@ namespace rfk
 			*	@return true if this struct is a base class of the provided archetype, else false.
 			*			Note that if the provided archetype is the same as this struct, true is returned.
 			*/
-			RFK_NODISCARD REFUREKU_API bool									isBaseOf(StructAPI const& archetype)						const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool									isBaseOf(StructAPI const& archetype)									const	noexcept;
 
 			/**
 			*	@brief	Get the index'th direct parent of this struct.
@@ -72,14 +88,41 @@ namespace rfk
 			* 
 			*	@return The index'th direct parent of this struct.
 			*/
-			RFK_NODISCARD REFUREKU_API ParentStruct const&					getDirectParentAt(std::size_t index)						const	noexcept;
+			RFK_NODISCARD REFUREKU_API ParentStruct const&					getDirectParentAt(std::size_t index)									const	noexcept;
 
 			/**
 			*	@brief Get the number of direct parents this struct is inheriting from.
 			* 
 			*	@return The number of direct parents this struct is inheriting from.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t							getDirectParentsCount()										const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t							getDirectParentsCount()													const	noexcept;
+
+			/**
+			*	@param structName	Name of the nested struct to look for.
+			*	@param access		Access specifier of the nested struct in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested struct if any, else nullptr.
+			*/
+			RFK_NODISCARD REFUREKU_API StructAPI const*						getNestedStruct(char const*		 name,
+																							EAccessSpecifier access = EAccessSpecifier::Undefined)	const	noexcept;
+
+			/**
+			*	@param className	Name of the nested class to look for.
+			*	@param access		Access specifier of the nested class in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if any, else nullptr.
+			*/
+			RFK_NODISCARD REFUREKU_API StructAPI const*						getNestedClass(char const*		name,
+																						   EAccessSpecifier	access = EAccessSpecifier::Undefined)	const	noexcept;
+
+			/**
+			*	@param enumName	Name of the nested enum to look for.
+			*	@param access	Access specifier of the nested enum in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			*
+			*	@return The found nested class if any, else nullptr.
+			*/
+			RFK_NODISCARD REFUREKU_API EnumAPI const*						getNestedEnum(char const*		name,
+																						  EAccessSpecifier	access = EAccessSpecifier::Undefined)	const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all archetypes nested in this struct.
@@ -92,7 +135,7 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&,
 																												   void*),
-																								   void* userData)						const	noexcept;
+																								   void* userData)									const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all fields in this struct.
@@ -105,7 +148,7 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachField(bool (*visitor)(FieldAPI const&,
 																										 void*),
-																						 void* userData)								const	noexcept;
+																						 void* userData)											const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all static fields in this struct.
@@ -118,7 +161,7 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachStaticField(bool (*visitor)(StaticFieldAPI const&,
 																											   void*),
-																							   void* userData)							const	noexcept;
+																							   void* userData)										const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all methods in this struct.
@@ -131,7 +174,7 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachMethod(bool (*visitor)(MethodAPI const&,
 																										  void*),
-																						  void* userData)								const	noexcept;
+																						  void* userData)											const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all static methods in this struct.
@@ -144,28 +187,28 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachStaticMethod(bool (*visitor)(StaticMethodAPI const&,
 																												void*),
-																								void* userData)							const	noexcept;
+																								void* userData)										const	noexcept;
 
 			/**
 			*	@brief Get the class kind of this instance.
 			* 
 			*	@return The class kind of this instance.
 			*/
-			RFK_NODISCARD REFUREKU_API EClassKind							getClassKind()												const	noexcept;
+			RFK_NODISCARD REFUREKU_API EClassKind							getClassKind()															const	noexcept;
 
 			/**
 			*	@brief Cast the struct to rfk::ClassTemplate const* if it is a template.
 			* 
 			*	@return A rfk::ClassTemplate const* if the struct is a struct template, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplate const*					asTemplate()												const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplate const*					asTemplate()															const	noexcept;
 
 			/**
 			*	@brief Cast the struct to rfk::ClassTemplateInstantiation const* if it is a template instantiation.
 			* 
 			*	@return A rfk::ClassTemplateInstantiation const* if the struct is a template instantiation, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	asTemplateInstantiation()									const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	asTemplateInstantiation()												const	noexcept;
 
 			/**
 			*	@brief Add a parent to this struct if the provided archetype is a valid struct/class.
@@ -348,7 +391,35 @@ namespace rfk
 										bool		isClass,
 										EClassKind	classKind)		noexcept;
 			REFUREKU_INTERNAL StructAPI(StructImpl* implementation)	noexcept;
+
+		private:
+			/**
+			*	@brief Invoke the default instantiator.
+			* 
+			*	@return The result of the default instantiator invocation.
+			* 
+			*	@exception Any exception potentially thrown from the default instantiator.
+			*/
+			RFK_NODISCARD REFUREKU_API void*					makeInstanceFromDefaultInstantiator()	const;
+
+			/**
+			*	@brief Get the number of instantiators (excluding the default one).
+			* 
+			*	@return The number of instantiators.
+			*/
+			RFK_NODISCARD REFUREKU_API std::size_t				getInstantiatorsCount()					const	noexcept;
+
+			/**
+			*	@brief	Get the instantiator at the specified index.
+			*			If index is greater or equal to getInstantiatorsCount(), the behaviour is undefined.
+			* 
+			*	@return The index'th registered instantiator.
+			*/
+			RFK_NODISCARD REFUREKU_API StaticMethodAPI const*	getInstantiatorAt(std::size_t index)	const	noexcept;
 	};
+
+	/* In C++, a struct and a class contains exactly the same data. Alias for convenience. */
+	using ClassAPI = StructAPI;
 
 	namespace internal
 	{

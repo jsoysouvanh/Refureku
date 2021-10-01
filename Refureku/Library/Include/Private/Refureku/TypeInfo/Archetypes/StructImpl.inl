@@ -129,6 +129,27 @@ inline void StructAPI::StructImpl::setStaticMethodsCapacity(std::size_t capacity
 	_staticMethods.reserve(capacity);
 }
 
+inline ArchetypeAPI const* StructAPI::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
+{
+	//Use an Entity instead of a Struct to avoid containers initialization
+	EntityAPI searchingStruct(name, 0u); //TODO: Find a way to avoid the dynamic allocation caused by EntityAPI construction
+
+	//We know the hash method only uses the name inherited from Entity so cast is fine
+	NestedArchetypes::const_iterator it = _nestedArchetypes.find(reinterpret_cast<ArchetypeAPI const*>(&searchingStruct));
+
+	if (it != _nestedArchetypes.cend())
+	{
+		ArchetypeAPI const* result = *it;
+
+		if (access == EAccessSpecifier::Undefined || access == result->getAccessSpecifier()) //access requirement is fulfilled
+		{
+			return result;
+		}
+	}
+
+	return nullptr;
+}
+
 inline StructAPI::StructImpl::ParentStructs const& StructAPI::StructImpl::getDirectParents() const noexcept
 {
 	return _directParents;

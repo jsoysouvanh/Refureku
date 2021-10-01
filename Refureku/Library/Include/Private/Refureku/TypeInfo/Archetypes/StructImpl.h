@@ -17,14 +17,13 @@
 #include "Refureku/TypeInfo/Variables/FieldAPI.h"
 #include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
 #include "Refureku/TypeInfo/Functions/MethodAPI.h"
-#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
 #include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
 
 namespace rfk
 {
 	class StructAPI::StructImpl : public ArchetypeAPI::ArchetypeImpl
 	{
-		private:
+		public:
 			using ParentStructs			= std::vector<ParentStruct>;
 			using Subclasses			= std::unordered_set<StructAPI const*>;
 			using NestedArchetypes		= std::unordered_set<ArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
@@ -34,7 +33,8 @@ namespace rfk
 			using StaticMethods			= std::unordered_multiset<StaticMethodAPI, EntityNameHash, EntityNameEqual>;
 			using CustomInstantiators	= std::vector<StaticMethodAPI const*>;
 			using CustomInstantiator	= void* (*)();
-
+		
+		private:
 			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
 			ParentStructs		_directParents;
 
@@ -253,6 +253,17 @@ namespace rfk
 			*	@param instantiator Pointer to the static method.
 			*/
 			inline void										addInstantiator(StaticMethodAPI const* instantiator)		noexcept;
+
+			/**
+			*	@brief Get a nested archetype by name / access specifier.
+			* 
+			*	@param name		Name of the searched nested archetype.
+			*	@param access	Access specifier of the nested struct in this struct. Use EAccessSpecifier::Undefined if it doesn't matter.
+			* 
+			*	@return The found nested archetype if any, else nullptr.
+			*/
+			RFK_NODISCARD inline ArchetypeAPI const*		getNestedArchetype(char const*		name,
+																			   EAccessSpecifier	access)			const	noexcept;
 
 			/**
 			*	@brief Getter for the field _directParents.
