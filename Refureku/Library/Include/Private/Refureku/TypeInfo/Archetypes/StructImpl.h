@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/ParentStruct.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
 #include "Refureku/TypeInfo/Variables/FieldAPI.h"
@@ -24,6 +25,8 @@ namespace rfk
 	class StructAPI::StructImpl : public ArchetypeAPI::ArchetypeImpl
 	{
 		private:
+			using ParentStructs			= std::vector<ParentStruct>;
+			using Subclasses			= std::unordered_set<StructAPI const*>;
 			using NestedArchetypes		= std::unordered_set<ArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using Fields				= std::unordered_multiset<FieldAPI, EntityNameHash, EntityNameEqual>;
 			using StaticFields			= std::unordered_multiset<StaticFieldAPI, EntityNameHash, EntityNameEqual>;
@@ -32,7 +35,11 @@ namespace rfk
 			using CustomInstantiators	= std::vector<StaticMethodAPI const*>;
 			using CustomInstantiator	= void* (*)();
 
-			//TODO: Order elements for memory efficiency =====================================
+			/** Structs this struct inherits directly in its declaration. This list includes ONLY reflected parents. */
+			ParentStructs		_directParents;
+
+			/** Classes/Structs inheriting from this struct, regardless of their inheritance depth. This list includes ONLY reflected subclasses. */
+			Subclasses			_subclasses;
 
 			/** All reflected nested structs/classes/enums contained in this struct. */
 			NestedArchetypes	_nestedArchetypes;
@@ -59,11 +66,76 @@ namespace rfk
 			EClassKind			_classKind;
 
 		public:
-			StructImpl(char const*	name,
-					   std::size_t	id,
-					   std::size_t	memorySize,
-					   bool			isClass,
-					   EClassKind	classKind)	noexcept;
+			inline StructImpl(char const*	name,
+							  std::size_t	id,
+							  std::size_t	memorySize,
+							  bool			isClass,
+							  EClassKind	classKind)	noexcept;
+
+			/**
+			*	@brief	Set the number of direct parents for this struct.
+			*			Useful to avoid reallocations and avoid having unused memory.
+			*			If the number of direct parents is already >= to the provided count, this method has no effect.
+			* 
+			*	@param capacity The number of direct parents of this struct.
+			*/
+			inline void										setDirectParentsCapacity(std::size_t capacity)				noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of nested archetypes.
+			*			If the number of nested archetypes is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of nested archetypes to pre-allocate.
+			*/
+			inline void										setNestedArchetypesCapacity(std::size_t capacity)			noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of fields.
+			*			If the number of fields is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of fields to pre-allocate.
+			*/
+			inline void										setFieldsCapacity(std::size_t capacity)						noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of static fields.
+			*			If the number of static fields is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of static fields to pre-allocate.
+			*/
+			inline void										setStaticFieldsCapacity(std::size_t capacity)				noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of methods.
+			*			If the number of methods is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of methods to pre-allocate.
+			*/
+			inline void										setMethodsCapacity(std::size_t capacity)					noexcept;
+
+			/**
+			*	@brief	Internally pre-allocate enough memory for the provided number of static methods.
+			*			If the number of static methods is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param capacity The number of static methods to pre-allocate.
+			*/
+			inline void										setStaticMethodsCapacity(std::size_t capacity)				noexcept;
+
+			/**
+			*	@brief Add a parent to this struct if the provided archetype is valid.
+			* 
+			*	@param archetype			Archetype of the parent struct/class.
+			*	@param inheritanceAccess	The inheritance access for the provided parent.
+			*/
+			inline void										addDirectParent(StructAPI const& archetype,
+																		EAccessSpecifier inheritanceAccess)				noexcept;
+
+			/**
+			*	@brief Add a subclass to this struct.
+			* 
+			*	@param subclass The subclass to add.
+			*/
+			inline void										addSubclass(StructAPI const& subclass)						noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.
@@ -74,9 +146,9 @@ namespace rfk
 			*	
 			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD ArchetypeAPI*					addNestedArchetype(ArchetypeAPI const*	nestedArchetype,
-																		   EAccessSpecifier		accessSpecifier,
-																		   StructAPI const*		outerEntity)		noexcept;
+			RFK_NODISCARD inline ArchetypeAPI*				addNestedArchetype(ArchetypeAPI const*	nestedArchetype,
+																			   EAccessSpecifier		accessSpecifier,
+																			   StructAPI const*		outerEntity)		noexcept;
 
 			/**
 			*	@brief Add a field to the struct.
@@ -92,13 +164,13 @@ namespace rfk
 			*	@return A pointer to the added field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			RFK_NODISCARD FieldAPI*						addField(char const*		name,
-																 std::size_t		id,
-																 TypeAPI const&		type,
-																 EFieldFlags		flags,
-																 StructAPI const*	owner,
-																 std::size_t		memoryOffset,
-																 StructAPI const*	outerEntity)					noexcept;
+			RFK_NODISCARD inline FieldAPI*					addField(char const*		name,
+																	 std::size_t		id,
+																	 TypeAPI const&		type,
+																	 EFieldFlags		flags,
+																	 StructAPI const*	owner,
+																	 std::size_t		memoryOffset,
+																	 StructAPI const*	outerEntity)					noexcept;
 
 			/**
 			*	@brief Add a static field to the struct.
@@ -114,20 +186,20 @@ namespace rfk
 			*	@return A pointer to the added static field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD StaticFieldAPI*				addStaticField(char const*		name,
-																	   std::size_t		id,
-																	   TypeAPI const&	type,
-																	   EFieldFlags		flags,
-																	   StructAPI const*	owner,
-																	   void*			fieldPtr,
-																	   StructAPI const*	outerEntity)				noexcept;
-			RFK_NODISCARD StaticFieldAPI*				addStaticField(char const*		name,
-																	   std::size_t		id,
-																	   TypeAPI const&	type,
-																	   EFieldFlags		flags,
-																	   StructAPI const*	owner,
-																	   void const*		fieldPtr,
-																	   StructAPI const*	outerEntity)				noexcept;
+			RFK_NODISCARD inline StaticFieldAPI*			addStaticField(char const*		name,
+																		   std::size_t		id,
+																		   TypeAPI const&	type,
+																		   EFieldFlags		flags,
+																		   StructAPI const*	owner,
+																		   void*			fieldPtr,
+																		   StructAPI const*	outerEntity)				noexcept;
+			RFK_NODISCARD inline StaticFieldAPI*			addStaticField(char const*		name,
+																		   std::size_t		id,
+																		   TypeAPI const&	type,
+																		   EFieldFlags		flags,
+																		   StructAPI const*	owner,
+																		   void const*		fieldPtr,
+																		   StructAPI const*	outerEntity)				noexcept;
 
 			/**
 			*	@brief Add a method to the struct.
@@ -141,12 +213,12 @@ namespace rfk
 			*
 			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD MethodAPI*					addMethod(char const*		name,
-																  std::size_t		id,
-																  TypeAPI const&	returnType,
-																  ICallable*		internalMethod,
-																  EMethodFlags		flags,
-																  StructAPI const*	outerEntity)					noexcept;
+			RFK_NODISCARD inline MethodAPI*					addMethod(char const*		name,
+																	  std::size_t		id,
+																	  TypeAPI const&	returnType,
+																	  ICallable*		internalMethod,
+																	  EMethodFlags		flags,
+																	  StructAPI const*	outerEntity)					noexcept;
 
 			/**
 			*	@brief Add a static method to the struct.
@@ -160,19 +232,19 @@ namespace rfk
 			*
 			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD StaticMethodAPI*				addStaticMethod(char const*			name,
-																		std::size_t			id,
-																		TypeAPI const&		returnType,
-																		ICallable*			internalMethod,
-																		EMethodFlags		flags,
-																		StructAPI const*	outerEntity)			noexcept;
+			RFK_NODISCARD inline StaticMethodAPI*			addStaticMethod(char const*			name,
+																			std::size_t			id,
+																			TypeAPI const&		returnType,
+																			ICallable*			internalMethod,
+																			EMethodFlags		flags,
+																			StructAPI const*	outerEntity)			noexcept;
 
 			/**
 			*	@brief Setup the default instantiator to use when Struct::makeInstance is called without parameters.
 			*
 			*	@param instantiator Pointer to the instantiator method.
 			*/
-			void										setDefaultInstantiator(void* (*instantiator)())				noexcept;
+			inline void										setDefaultInstantiator(void* (*instantiator)())				noexcept;
 
 			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
@@ -180,63 +252,77 @@ namespace rfk
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			void										addInstantiator(StaticMethodAPI const* instantiator)		noexcept;
+			inline void										addInstantiator(StaticMethodAPI const* instantiator)		noexcept;
+
+			/**
+			*	@brief Getter for the field _directParents.
+			* 
+			*	@return _directParents.
+			*/
+			RFK_NODISCARD inline ParentStructs const&		getDirectParents()									const	noexcept;
+
+			/**
+			*	@brief Getter for the field _subclasses.
+			* 
+			*	@return _subclasses.
+			*/
+			RFK_NODISCARD inline Subclasses const&			getSubclasses()										const	noexcept;
 
 			/**
 			*	@brief Getter for the field _nestedArchetypes.
 			* 
 			*	@return _nestedArchetypes.
 			*/
-			RFK_NODISCARD NestedArchetypes const&		getNestedArchetypes()								const	noexcept;
+			RFK_NODISCARD inline NestedArchetypes const&	getNestedArchetypes()								const	noexcept;
 
 			/**
 			*	@brief Getter for the field _fields.
 			* 
 			*	@return _fields.
 			*/
-			RFK_NODISCARD Fields const&					getFields()											const	noexcept;
+			RFK_NODISCARD inline Fields const&				getFields()											const	noexcept;
 
 			/**
 			*	@brief Getter for the field _staticFields.
 			* 
 			*	@return _staticFields.
 			*/
-			RFK_NODISCARD StaticFields const&			getStaticFields()									const	noexcept;
+			RFK_NODISCARD inline StaticFields const&		getStaticFields()									const	noexcept;
 
 			/**
 			*	@brief Getter for the field _methods.
 			* 
 			*	@return _methods.
 			*/
-			RFK_NODISCARD Methods const&				getMethods()										const	noexcept;
+			RFK_NODISCARD inline Methods const&				getMethods()										const	noexcept;
 
 			/**
 			*	@brief Getter for the field _staticMethods.
 			* 
 			*	@return _staticMethods.
 			*/
-			RFK_NODISCARD StaticMethods const&			getStaticMethohds()									const	noexcept;
+			RFK_NODISCARD inline StaticMethods const&		getStaticMethohds()									const	noexcept;
 
 			/**
 			*	@brief Getter for the field _customInstantiators.
 			* 
 			*	@return _customInstantiators.
 			*/
-			RFK_NODISCARD CustomInstantiators const&	getCustomInstantiators()							const	noexcept;
+			RFK_NODISCARD inline CustomInstantiators const&	getCustomInstantiators()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _defaultInstantiator.
 			* 
 			*	@return _defaultInstantiator.
 			*/
-			RFK_NODISCARD CustomInstantiator			getDefaultInstantiator()							const	noexcept;
+			RFK_NODISCARD inline CustomInstantiator			getDefaultInstantiator()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _classKind.
 			* 
 			*	@return _classKind.
 			*/
-			RFK_NODISCARD EClassKind					getClassKind()										const	noexcept;
+			RFK_NODISCARD inline EClassKind					getClassKind()										const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/StructImpl.inl"
