@@ -131,11 +131,13 @@ inline void StructAPI::StructImpl::setStaticMethodsCapacity(std::size_t capacity
 
 inline ArchetypeAPI const* StructAPI::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
 {
-	//Use an Entity instead of a Struct to avoid containers initialization
-	EntityAPI searchingStruct(name, 0u); //TODO: Find a way to avoid the dynamic allocation caused by EntityAPI construction
+	//Use an Entity instead of a Field to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedStruct(&entityImpl);
 
 	//We know the hash method only uses the name inherited from Entity so cast is fine
-	NestedArchetypes::const_iterator it = _nestedArchetypes.find(reinterpret_cast<ArchetypeAPI const*>(&searchingStruct));
+	NestedArchetypes::const_iterator it = _nestedArchetypes.find(reinterpret_cast<ArchetypeAPI const*>(&searchedStruct));
 
 	if (it != _nestedArchetypes.cend())
 	{
@@ -180,7 +182,7 @@ inline StructAPI::StructImpl::Methods const& StructAPI::StructImpl::getMethods()
 	return _methods;
 }
 
-inline StructAPI::StructImpl::StaticMethods const& StructAPI::StructImpl::getStaticMethohds() const noexcept
+inline StructAPI::StructImpl::StaticMethods const& StructAPI::StructImpl::getStaticMethods() const noexcept
 {
 	return _staticMethods;
 }

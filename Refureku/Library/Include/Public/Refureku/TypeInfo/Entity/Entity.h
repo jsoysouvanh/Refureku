@@ -178,9 +178,6 @@ namespace rfk
 			//Forward declaration
 			class EntityImpl;
 
-			REFUREKU_INTERNAL EntityAPI(EntityImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL EntityAPI(EntityAPI&&)				noexcept;
-
 			/**
 			*	@brief Get the _pimpl internal pointer.
 			* 
@@ -188,6 +185,10 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_INTERNAL EntityImpl*			getPimpl()			noexcept;
 			RFK_NODISCARD REFUREKU_INTERNAL EntityImpl const*	getPimpl()	const	noexcept;
+
+		public:
+			REFUREKU_INTERNAL EntityAPI(EntityAPI&&)				noexcept;
+			REFUREKU_INTERNAL EntityAPI(EntityImpl* implementation)	noexcept;
 
 		private:
 			/** Concrete implementation of the Entity class. */

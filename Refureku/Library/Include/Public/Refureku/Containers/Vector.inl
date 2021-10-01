@@ -241,6 +241,28 @@ void Vector<T, Allocator>::push_back(T&& value)
 }
 
 template <typename T, typename Allocator>
+void Vector<T, Allocator>::push_back(Vector const& other)
+{
+	if (!other.empty())
+	{
+		reserve(size() + other.size());
+
+		copyElements(other.cbegin(), end(), other.size());
+	}
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::push_back(Vector&& other)
+{
+	if (!other.empty())
+	{
+		reserve(size() + other.size());
+
+		moveElements(other.begin(), end(), other.size());
+	}
+}
+
+template <typename T, typename Allocator>
 template <typename... Args>
 T& Vector<T, Allocator>::emplace_back(Args&&... args)
 {
@@ -298,4 +320,31 @@ template <typename T, typename Allocator>
 T const& Vector<T, Allocator>::operator[](std::size_t index) const noexcept
 {
 	return *(data() + index);
+}
+
+template <typename T, typename Allocator>
+Vector<T, Allocator>& Vector<T, Allocator>::operator=(Vector const& other)
+{
+	destroyElements(data(), _size);
+
+	reserve(other.size());
+
+	copyElements(other.data(), data(), other.size());
+
+	return *this;
+}
+
+template <typename T, typename Allocator>
+Vector<T, Allocator>& Vector<T, Allocator>::operator=(Vector&& other) noexcept
+{
+	checkedDelete();
+
+	_data			= other._data;
+	_size			= other._size;
+	_capacity		= other._capacity;
+	other._data		= nullptr;
+	other._size		= 0u;
+	other._capacity	= 0u;
+
+	return *this;
 }

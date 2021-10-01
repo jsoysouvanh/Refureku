@@ -173,6 +173,14 @@ namespace rfk
 			void		push_back(T&& value);
 
 			/**
+			*	@brief	Add all elements from a vector at the end of this vector.
+			* 
+			*	@param other The vector which elements must be copied.
+			*/
+			void		push_back(Vector const& other);
+			void		push_back(Vector&& other);
+
+			/**
 			*	@brief Construct in place an element at the end of the vector with the provided arguments.
 			* 
 			*	@param... args Args forwarded to the object constructor.
@@ -208,8 +216,11 @@ namespace rfk
 			* 
 			*	@return A reference to the index(th) element in the vector.
 			*/
-			T&			operator[](std::size_t index)		noexcept;
-			T const&	operator[](std::size_t index) const	noexcept;
+			T&				operator[](std::size_t index)		noexcept;
+			T const&		operator[](std::size_t index) const	noexcept;
+
+			Vector&			operator=(Vector const&);
+			Vector&			operator=(Vector&&)					noexcept;
 	};
 
 	#include "Refureku/Containers/Vector.inl"

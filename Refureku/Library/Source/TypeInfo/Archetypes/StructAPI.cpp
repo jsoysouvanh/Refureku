@@ -71,7 +71,7 @@ std::size_t StructAPI::getDirectParentsCount() const noexcept
 	return reinterpret_cast<StructImpl const*>(getPimpl())->getDirectParents().size();
 }
 
-StructAPI const* StructAPI::getNestedStruct(char const* name, EAccessSpecifier access) const noexcept
+StructAPI const* StructAPI::getNestedStructByName(char const* name, EAccessSpecifier access) const noexcept
 {
 	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
 
@@ -80,7 +80,7 @@ StructAPI const* StructAPI::getNestedStruct(char const* name, EAccessSpecifier a
 				nullptr;
 }
 
-ClassAPI const* StructAPI::getNestedClass(char const* name, EAccessSpecifier access) const noexcept
+ClassAPI const* StructAPI::getNestedClassByName(char const* name, EAccessSpecifier access) const noexcept
 {
 	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
 
@@ -89,7 +89,7 @@ ClassAPI const* StructAPI::getNestedClass(char const* name, EAccessSpecifier acc
 				nullptr;
 }
 
-EnumAPI const* StructAPI::getNestedEnum(char const* name, EAccessSpecifier access) const noexcept
+EnumAPI const* StructAPI::getNestedEnumByName(char const* name, EAccessSpecifier access) const noexcept
 {
 	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
 
@@ -116,6 +116,64 @@ bool StructAPI::foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&, void
 	return false;
 }
 
+FieldAPI const* StructAPI::getFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	//Use an Entity instead of a Field to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = reinterpret_cast<StructImpl const*>(getPimpl())->getFields().equal_range(static_cast<FieldAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	fields variable contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->getOuterEntity() == this)
+		{
+			//We found a field which has minFlags
+			if ((it->getFlags() & minFlags) == minFlags)
+			{
+				return &*it;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+Vector<FieldAPI const*> StructAPI::getFieldsByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	Vector<FieldAPI const*> result;
+
+	//Use an Entity instead of a Field to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = reinterpret_cast<StructImpl const*>(getPimpl())->getFields().equal_range(static_cast<FieldAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	fields variable contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->getOuterEntity() == this)
+		{
+			//We found a field which has minFlags
+			if ((it->getFlags() & minFlags) == minFlags)
+			{
+				result.push_back(&*it);
+			}
+		}
+	}
+
+	return result;
+}
+
 bool StructAPI::foreachField(bool (*visitor)(FieldAPI const&, void*), void* userData) const noexcept
 {
 	if (visitor != nullptr)
@@ -132,6 +190,64 @@ bool StructAPI::foreachField(bool (*visitor)(FieldAPI const&, void*), void* user
 	}
 
 	return false;
+}
+
+StaticFieldAPI const* StructAPI::getStaticFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	//Use an Entity instead of a StaticField to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields().equal_range(static_cast<StaticFieldAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	fields variable contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->getOuterEntity() == this)
+		{
+			//We found a field which has minFlags
+			if ((it->getFlags() & minFlags) == minFlags)
+			{
+				return &*it;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+Vector<StaticFieldAPI const*> StructAPI::getStaticFieldsByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	Vector<StaticFieldAPI const*> result;
+
+	//Use an Entity instead of a StaticField to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields().equal_range(static_cast<StaticFieldAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		/**
+		*	fields variable contains both this struct fields and inherited fields,
+		*	make sure we check inherited fields only if requested
+		*/
+		if (shouldInspectInherited || it->getOuterEntity() == this)
+		{
+			//We found a field which has minFlags
+			if ((it->getFlags() & minFlags) == minFlags)
+			{
+				result.push_back(&*it);
+			}
+		}
+	}
+
+	return result;
 }
 
 bool StructAPI::foreachStaticField(bool (*visitor)(StaticFieldAPI const&, void*), void* userData) const noexcept
@@ -152,6 +268,78 @@ bool StructAPI::foreachStaticField(bool (*visitor)(StaticFieldAPI const&, void*)
 	return false;
 }
 
+MethodAPI const* StructAPI::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	StructImpl const* structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
+
+	//Use an Entity instead of a Method to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = structImpl->getMethods().equal_range(static_cast<MethodAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		//We found a field which has minFlags
+		if ((it->getFlags() & minFlags) == minFlags)
+		{
+			return &*it;
+		}
+	}
+
+	//If we reach this point, couldn't find a valid method
+	if (shouldInspectInherited)
+	{
+		MethodAPI const* result = nullptr;
+
+		for (ParentStruct const& parent : structImpl->getDirectParents())
+		{
+			result = parent.getArchetype().getMethodByName(name, minFlags, true);
+
+			if (result != nullptr)
+			{
+				return result;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+Vector<MethodAPI const*> StructAPI::getMethodsByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	Vector<MethodAPI const*>	result;
+	StructImpl const*			structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
+
+	//Use an Entity instead of a Method to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = structImpl->getMethods().equal_range(static_cast<MethodAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		//We found a field which has minFlags
+		if ((it->getFlags() & minFlags) == minFlags)
+		{
+			result.push_back(&*it);
+		}
+	}
+
+	//If we reach this point, couldn't find a valid method
+	if (shouldInspectInherited)
+	{
+		for (ParentStruct const& parent : structImpl->getDirectParents())
+		{
+			result.push_back(parent.getArchetype().getMethodsByName(name, minFlags, true));
+		}
+	}
+
+	return result;
+}
+
 bool StructAPI::foreachMethod(bool (*visitor)(MethodAPI const&, void*), void* userData) const noexcept
 {
 	if (visitor != nullptr)
@@ -170,11 +358,84 @@ bool StructAPI::foreachMethod(bool (*visitor)(MethodAPI const&, void*), void* us
 	return false;
 }
 
+StaticMethodAPI const* StructAPI::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	StructImpl const* structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
+
+	//Use an Entity instead of a StaticMethod to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = structImpl->getStaticMethods().equal_range(static_cast<StaticMethodAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		//We found a field which has minFlags
+		if ((it->getFlags() & minFlags) == minFlags)
+		{
+			return &*it;
+		}
+	}
+
+	//If we reach this point, couldn't find a valid static method
+	if (shouldInspectInherited)
+	{
+		StaticMethodAPI const* result = nullptr;
+
+		for (ParentStruct const& parent : structImpl->getDirectParents())
+		{
+			result = parent.getArchetype().getStaticMethodByName(name, minFlags, true);
+
+			if (result != nullptr)
+			{
+				return result;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+
+Vector<StaticMethodAPI const*> StructAPI::getStaticMethodsByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	Vector<StaticMethodAPI const*>	result;
+	StructImpl const*				structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
+
+	//Use an Entity instead of a Method to avoid unnecessary memory allocation overhead
+	//Also create the EntityImpl on the stack to avoid dynamic allocation
+	EntityAPI::EntityImpl	entityImpl(name, 0u);
+	EntityAPI				searchedEntity(&entityImpl);
+
+	auto range = structImpl->getStaticMethods().equal_range(static_cast<StaticMethodAPI&&>(std::move(searchedEntity)));
+
+	for (auto it = range.first; it != range.second; it++)
+	{
+		//We found a field which has minFlags
+		if ((it->getFlags() & minFlags) == minFlags)
+		{
+			result.push_back(&*it);
+		}
+	}
+
+	//If we reach this point, couldn't find a valid method
+	if (shouldInspectInherited)
+	{
+		for (ParentStruct const& parent : structImpl->getDirectParents())
+		{
+			result.push_back(parent.getArchetype().getStaticMethodsByName(name, minFlags, true));
+		}
+	}
+
+	return result;
+}
+
 bool StructAPI::foreachStaticMethod(bool (*visitor)(StaticMethodAPI const&, void*), void* userData) const noexcept
 {
 	if (visitor != nullptr)
 	{
-		for (StaticMethodAPI const& staticMethod : reinterpret_cast<StructImpl const*>(getPimpl())->getStaticMethohds())
+		for (StaticMethodAPI const& staticMethod : reinterpret_cast<StructImpl const*>(getPimpl())->getStaticMethods())
 		{
 			if (!visitor(staticMethod, userData))
 			{

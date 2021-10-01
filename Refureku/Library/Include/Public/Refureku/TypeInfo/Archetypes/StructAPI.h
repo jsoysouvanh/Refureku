@@ -103,8 +103,8 @@ namespace rfk
 			*
 			*	@return The found nested struct if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const*						getNestedStruct(char const*		 name,
-																							EAccessSpecifier access = EAccessSpecifier::Undefined)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API StructAPI const*						getNestedStructByName(char const*	   name,
+																								  EAccessSpecifier access = EAccessSpecifier::Undefined)	const	noexcept;
 
 			/**
 			*	@param className	Name of the nested class to look for.
@@ -112,8 +112,8 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const*						getNestedClass(char const*		name,
-																						   EAccessSpecifier	access = EAccessSpecifier::Undefined)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API StructAPI const*						getNestedClassByName(char const*		name,
+																								 EAccessSpecifier	access = EAccessSpecifier::Undefined)	const	noexcept;
 
 			/**
 			*	@param enumName	Name of the nested enum to look for.
@@ -121,8 +121,8 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumAPI const*						getNestedEnum(char const*		name,
-																						  EAccessSpecifier	access = EAccessSpecifier::Undefined)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumAPI const*						getNestedEnumByName(char const*		 name,
+																								EAccessSpecifier access = EAccessSpecifier::Undefined)		const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all archetypes nested in this struct.
@@ -138,6 +138,39 @@ namespace rfk
 																								   void* userData)									const	noexcept;
 
 			/**
+			*	@param name		Name of the field to retrieve.
+			*	@param minFlags Requirements the queried field should fulfill.
+			*					Keep in mind that the returned field should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return nullptr.
+			*					EFieldFlags::Default means no requirement, so the first field named fieldName will be returned.
+			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
+			*								  If false, only fields introduced by this struct will be considered.
+			*
+			*	@return The first field named fieldName fulfilling all requirements.
+			*			The method returns nullptr if none was found. 
+			*/
+			RFK_NODISCARD REFUREKU_API FieldAPI const*						getFieldByName(char const* name,
+																						   EFieldFlags minFlags = EFieldFlags::Default,
+																						   bool		   shouldInspectInherited	= false)			const	noexcept;
+
+
+
+			/**
+			*	@param name		Name of the fields to retrieve.
+			*	@param minFlags Requirements the queried fields should fulfill.
+			*					Keep in mind that the returned fields should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return an empty vector.
+			*					EFieldFlags::Default means no requirement, so all fields named fieldName will be returned.
+			*	@param shouldInspectInherited Should inherited fields be considered as well in the search process?
+			*								  If false, only fields introduced by this struct will be considered.
+			*
+			*	@return A vector of all fields named fieldName fulfilling all requirements.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<FieldAPI const*>				getFieldsByName(char const* name,
+																							EFieldFlags minFlags = EFieldFlags::Default,
+																							bool		shouldInspectInherited	= false)			const	noexcept;
+
+			/**
 			*	@brief Execute the given visitor on all fields in this struct.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -149,6 +182,41 @@ namespace rfk
 			REFUREKU_API bool												foreachField(bool (*visitor)(FieldAPI const&,
 																										 void*),
 																						 void* userData)											const	noexcept;
+
+			/**
+			*	@param name		Name of the static field to retrieve.
+			*	@param minFlags Requirements the queried static field should fulfill.
+			*					Keep in mind that the returned static field should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return nullptr.
+			*					EFieldFlags::Default means no requirement, so the first static field named fieldName will be returned.
+			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
+			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
+			*								  If false, only static fields introduced by this struct will be considered.
+			*
+			*	@return The first static field named fieldName fulfilling all requirements.
+			*			The method returns nullptr if none was found. 
+			*/
+			RFK_NODISCARD REFUREKU_API StaticFieldAPI const*				getStaticFieldByName(char const* name,
+																								 EFieldFlags minFlags = EFieldFlags::Default,
+																								 bool		 shouldInspectInherited	= false)		const	noexcept;
+
+
+
+			/**
+			*	@param name		Name of the static fields to retrieve.
+			*	@param minFlags Requirements the queried static fields should fulfill.
+			*					Keep in mind that the returned static fields should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return an empty vector.
+			*					EFieldFlags::Default means no requirement, so all static fields named fieldName will be returned.
+			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static fields only.
+			*	@param shouldInspectInherited Should inherited static fields be considered as well in the search process?
+			*								  If false, only static fields introduced by this struct will be considered.
+			*
+			*	@return A vector of all static fields named fieldName fulfilling all requirements.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<StaticFieldAPI const*>		getStaticFieldsByName(char const* name,
+																								  EFieldFlags minFlags = EFieldFlags::Default,
+																								  bool		  shouldInspectInherited = false)		const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all static fields in this struct.
@@ -164,6 +232,36 @@ namespace rfk
 																							   void* userData)										const	noexcept;
 
 			/**
+			*	@param name		Name of the method to retrieve.
+			*	@param minFlags Requirements the queried method should fulfill.
+			*					Keep in mind that the returned method should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return nullptr.
+			*					EMethodFlags::Default means no requirement, so the first method named methodName will be returned.
+			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
+			*								  If false, only methods introduced by this struct will be considered.
+			*
+			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
+			*/
+			RFK_NODISCARD REFUREKU_API MethodAPI const*						getMethodByName(char const*  name,
+																							EMethodFlags minFlags = EMethodFlags::Default,
+																							bool		 shouldInspectInherited	= false)			const	noexcept;
+
+			/**
+			*	@param name		Name of the methods to retrieve.
+			*	@param minFlags Requirements the queried methods should fulfill.
+			*					Keep in mind that the returned methods should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return an empty vector.
+			*					EMethodFlags::Default means no requirement, so all methods named methodName will be returned.
+			*	@param shouldInspectInherited Should inherited methods be considered as well in the search process?
+			*								  If false, only methods introduced by this struct will be considered.
+			*
+			*	@return A vector of all methods named methodName fulfilling all requirements. 
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<MethodAPI const*>				getMethodsByName(char const*  name,
+																							 EMethodFlags minFlags = EMethodFlags::Default,
+																							 bool		  shouldInspectInherited = false)			const	noexcept;
+
+			/**
 			*	@brief Execute the given visitor on all methods in this struct.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -175,6 +273,38 @@ namespace rfk
 			REFUREKU_API bool												foreachMethod(bool (*visitor)(MethodAPI const&,
 																										  void*),
 																						  void* userData)											const	noexcept;
+
+			/**
+			*	@param methodName Name of the static method to retrieve.
+			*	@param minFlags Requirements the queried static method should fulfill.
+			*					Keep in mind that the returned static method should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return nullptr.
+			*					EMethodFlags::Default means no requirement, so the first static method named methodName will be returned.
+			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static methods only.
+			*	@param shouldInspectInherited Should inherited static methods be considered as well in the search process?
+			*								  If false, only static methods introduced by this struct will be considered.
+			*
+			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
+			*/
+			RFK_NODISCARD REFUREKU_API StaticMethodAPI const*				getStaticMethodByName(char const*  name,
+																								  EMethodFlags minFlags = EMethodFlags::Default,
+																								  bool		   shouldInspectInherited = false)		const	noexcept;
+
+			/**
+			*	@param methodName Name of the static methods to retrieve.
+			*	@param minFlags Requirements the queried static methods should fulfill.
+			*					Keep in mind that the returned static methods should contain all of the specified flags,
+			*					so setting for example Public and Protected will always return an empty vector.
+			*					EMethodFlags::Default means no requirement, so all static methods named methodName will be returned.
+			*					Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static methods only.
+			*	@param shouldInspectInherited Should inherited static methods be considered as well in the search process?
+			*								  If false, only static methods introduced by this struct will be considered.
+			*
+			*	@return All static methods named methodName fulfilling all requirements. 
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<StaticMethodAPI const*>		getStaticMethodsByName(char const*  name,
+																								   EMethodFlags minFlags = EMethodFlags::Default,
+																								   bool			shouldInspectInherited = false)		const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all static methods in this struct.

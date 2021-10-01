@@ -312,7 +312,7 @@ namespace rfk
 			* 
 			*	@return _staticMethods.
 			*/
-			RFK_NODISCARD inline StaticMethods const&		getStaticMethohds()									const	noexcept;
+			RFK_NODISCARD inline StaticMethods const&		getStaticMethods()									const	noexcept;
 
 			/**
 			*	@brief Getter for the field _customInstantiators.
