@@ -8,10 +8,12 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
-#include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
 
 namespace rfk
 {
+	//Forward declaration
+	class EnumValueAPI;
+
 	/**
 	*	@brief Predicate defining if an enum value is valid or not.
 	* 

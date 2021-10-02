@@ -13,7 +13,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/TypeAPI.cpp
 					Source/TypeInfo/Type.cpp		#Delete this
 					Source/TypeInfo/EnumValue.cpp	#Delete this
-					Source/TypeInfo/Database.cpp
+					Source/TypeInfo/DatabaseAPI.cpp
+					Source/TypeInfo/Database.cpp	#Delete this
 
 					Source/TypeInfo/Entity/Entity.cpp
 					Source/TypeInfo/Entity/EntityImpl.cpp

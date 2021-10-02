@@ -11,6 +11,7 @@
 
 #include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
 
 namespace rfk
 {
