@@ -29,10 +29,11 @@ void containers()
 	rfk::Vector<int> intVec;
 
 	TEST(intVec.empty());
-	TEST(intVec.capacity() == 2u);
+	TEST(intVec.capacity() == 0u);
 
 	intVec.push_back(1);
 	TEST(!intVec.empty());
+	TEST(intVec.capacity() == 1u);
 
 	intVec.push_back(2);
 	TEST(intVec.capacity() == 2u);

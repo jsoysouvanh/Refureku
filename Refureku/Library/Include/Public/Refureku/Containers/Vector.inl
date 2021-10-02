@@ -6,12 +6,12 @@
 */
 
 template <typename T, typename Allocator>
-Vector<T, Allocator>::Vector() noexcept:
+Vector<T, Allocator>::Vector(std::size_t initialCapacity) noexcept:
 	_data{nullptr},
 	_size{0u},
 	_capacity{0u}
 {
-	reserve(2u);
+	reserve(computeNewCapacity(initialCapacity));
 }
 
 template <typename T, typename Allocator>
@@ -94,12 +94,21 @@ void Vector<T, Allocator>::checkedDelete()
 }
 
 template <typename T, typename Allocator>
-void Vector<T, Allocator>::reallocateIfFull()
+void Vector<T, Allocator>::reallocateIfNecessary(std::size_t minCapacity)
 {
-	if (_size == _capacity)
+	if (minCapacity > _capacity)
 	{
-		reserve(_capacity * 2);
+		reserve(computeNewCapacity(minCapacity));
 	}
+}
+
+template <typename T, typename Allocator>
+std::size_t	Vector<T, Allocator>::computeNewCapacity(std::size_t minCapacity) const noexcept
+{
+	//TODO: Should maybe handle the case when _capacity * _growthFactor > std::size_t max value
+	std::size_t newCapacity = static_cast<std::size_t>(_capacity * _growthFactor);
+
+	return (newCapacity > minCapacity) ? newCapacity : minCapacity;
 }
 
 template <typename T, typename Allocator>
@@ -182,7 +191,7 @@ void Vector<T, Allocator>::resize(std::size_t size)
 {
 	if (size > _size)
 	{
-		reserve(size);
+		reallocateIfNecessary(size);
 
 		//Construct new elements
 		constructElements(end(), size - _size);
@@ -225,7 +234,7 @@ void Vector<T, Allocator>::clear()
 template <typename T, typename Allocator>
 void Vector<T, Allocator>::push_back(T const& value)
 {
-	reallocateIfFull();
+	reallocateIfNecessary(size() + 1u);
 
 	AllocTraits::construct(_allocator, end(), value);
 	_size++;
@@ -234,7 +243,7 @@ void Vector<T, Allocator>::push_back(T const& value)
 template <typename T, typename Allocator>
 void Vector<T, Allocator>::push_back(T&& value)
 {
-	reallocateIfFull();
+	reallocateIfNecessary(size() + 1u);
 
 	AllocTraits::construct(_allocator, end(), std::forward<T>(value));
 	_size++;
@@ -245,7 +254,7 @@ void Vector<T, Allocator>::push_back(Vector const& other)
 {
 	if (!other.empty())
 	{
-		reserve(size() + other.size());
+		reallocateIfNecessary(size() + other.size());
 
 		copyElements(other.cbegin(), end(), other.size());
 	}
@@ -256,7 +265,7 @@ void Vector<T, Allocator>::push_back(Vector&& other)
 {
 	if (!other.empty())
 	{
-		reserve(size() + other.size());
+		reallocateIfNecessary(size() + other.size());
 
 		moveElements(other.begin(), end(), other.size());
 	}
@@ -266,7 +275,7 @@ template <typename T, typename Allocator>
 template <typename... Args>
 T& Vector<T, Allocator>::emplace_back(Args&&... args)
 {
-	reallocateIfFull();
+	reallocateIfNecessary(size() + 1u);
 
 	AllocTraits::construct(_allocator, end(), std::forward<Args>(args)...);
 	_size++;
@@ -327,7 +336,7 @@ Vector<T, Allocator>& Vector<T, Allocator>::operator=(Vector const& other)
 {
 	destroyElements(data(), _size);
 
-	reserve(other.size());
+	reallocateIfNecessary(other.size());
 
 	copyElements(other.data(), data(), other.size());
 

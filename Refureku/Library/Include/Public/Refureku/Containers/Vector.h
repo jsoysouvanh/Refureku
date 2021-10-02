@@ -20,6 +20,9 @@ namespace rfk
 		private:
 			using AllocTraits = std::allocator_traits<Allocator>;
 
+			/** Factor used to compute new memory size when a reallocation occurs. */
+			static constexpr float const _growthFactor = 2.0f;
+
 			/** Pointer to the allocated space. */
 			T*			_data;
 
@@ -38,8 +41,8 @@ namespace rfk
 			*	@param from		Address of the first element to construct.
 			*	@param count	Number of elements to construct.
 			*/
-			void constructElements(T*			from,
-								   std::size_t	count);
+			void		constructElements(T*			from,
+										  std::size_t	count);
 
 			/**
 			*	@brief Copy count elements from from into to.
@@ -48,9 +51,9 @@ namespace rfk
 			*	@param to		Address of the target first element receiving the copy.
 			*	@param count	Number of elements to copy.
 			*/
-			void copyElements(T const*	  from,
-							  T*		  to,
-							  std::size_t count);
+			void		copyElements(T const*	 from,
+									 T*			 to,
+									 std::size_t count);
 			
 			/**
 			*	@brief Move count elements from from into to.
@@ -59,9 +62,9 @@ namespace rfk
 			*	@param to		Address of the target first element receiving the move.
 			*	@param count	Number of elements to move.
 			*/
-			void moveElements(T*		  from,
-							  T*		  to,
-							  std::size_t count);
+			void		moveElements(T*			 from,
+									 T*			 to,
+									 std::size_t count);
 
 			/**
 			*	@brief Destroy manually count elements from from.
@@ -69,24 +72,33 @@ namespace rfk
 			*	@param from		Address of the first element to destroy.
 			*	@param count	Number of elements to destroy.
 			*/
-			void destroyElements(T*			 from,
-								 std::size_t count);
+			void		destroyElements(T*			from,
+										std::size_t count);
 
 			/**
 			*	@brief Completely delete the allocated memory if it is non-nullptr.
 			*/
-			void checkedDelete();
+			void		checkedDelete();
 
 			/**
-			*	@brief	Reallocate the underlying memory if the container is full.
-			*			The capacity is multiplied by 2.
+			*	@brief	Reallocate the underlying memory if the container capacity is < the provided capacity.
+			*			The capacity is computed using Vector::computeNewCapacity.
+			* 
+			*	@param minCapacity The minimum capacity that should be allocated.
 			*/
-			void reallocateIfFull();
+			void		reallocateIfNecessary(std::size_t minCapacity);
+
+			/**
+			*	@brief	Compute the new capacity of the vector using the _growthFactor.
+			* 
+			*	@param minCapacity The minimum capacity that should be allocated.
+			*/
+			std::size_t	computeNewCapacity(std::size_t minCapacity)	const noexcept;
 
 		public:
-			Vector()				noexcept;
+			Vector(std::size_t initialCapacity = 0u)	noexcept;
 			Vector(Vector const&);
-			Vector(Vector&&)		noexcept;
+			Vector(Vector&&)							noexcept;
 			~Vector();
 
 			/**
