@@ -18,6 +18,7 @@ namespace rfk
 {
 	class StructAPI;
 	class Property;
+	class EntityUtility;
 
 	/**
 	*	@brief Predicate defining if a property is valid or not.
@@ -178,6 +179,9 @@ namespace rfk
 			//Forward declaration
 			class EntityImpl;
 
+			REFUREKU_INTERNAL EntityAPI(EntityAPI&&)				noexcept;
+			REFUREKU_INTERNAL EntityAPI(EntityImpl* implementation)	noexcept;
+
 			/**
 			*	@brief Get the _pimpl internal pointer.
 			* 
@@ -186,12 +190,10 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_INTERNAL EntityImpl*			getPimpl()			noexcept;
 			RFK_NODISCARD REFUREKU_INTERNAL EntityImpl const*	getPimpl()	const	noexcept;
 
-		public:
-			REFUREKU_INTERNAL EntityAPI(EntityAPI&&)				noexcept;
-			REFUREKU_INTERNAL EntityAPI(EntityImpl* implementation)	noexcept;
-
 		private:
 			/** Concrete implementation of the Entity class. */
 			Pimpl<EntityImpl> _pimpl;
+
+		friend EntityUtility;
 	};
 }

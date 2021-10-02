@@ -377,8 +377,6 @@ namespace rfk
 																	 EFieldFlags	minFlags				= EFieldFlags::Default,
 																	 bool			shouldInspectInherited	= false)							const	noexcept;
 
-			
-
 			/**
 			*	@param fieldName Name of the fields to retrieve.
 			*	@param minFlags Requirements the queried fields should fulfill.
@@ -393,8 +391,6 @@ namespace rfk
 			REFUREKU_API std::vector<Field const*>			getFields(std::string	fieldName,
 																	  EFieldFlags	minFlags				= EFieldFlags::Default,
 																	  bool			shouldInspectInherited	= false)							const	noexcept;
-
-			
 
 			/**
 			*	@param fieldName Name of the static field to retrieve.
@@ -412,8 +408,6 @@ namespace rfk
 			REFUREKU_API StaticField const*					getStaticField(std::string	fieldName,
 																		   EFieldFlags	minFlags				= EFieldFlags::Default,
 																		   bool			shouldInspectInherited	= false)						const	noexcept;
-
-			
 
 			/**
 			*	@param fieldName Name of the static fields to retrieve.

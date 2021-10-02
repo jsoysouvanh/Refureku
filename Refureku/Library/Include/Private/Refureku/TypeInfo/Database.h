@@ -13,7 +13,7 @@
 #include <type_traits>	//std::enable_if / std::is_invocable_r
 #include <memory>		//std::shared_ptr
 
-#include "Refureku/TypeInfo/Namespaces/Namespace.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"

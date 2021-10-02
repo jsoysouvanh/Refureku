@@ -21,7 +21,7 @@
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
-#include "Refureku/TypeInfo/Namespaces/Namespace.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 
 namespace rfk
 {

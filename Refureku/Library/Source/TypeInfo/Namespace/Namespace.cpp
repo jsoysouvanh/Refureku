@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/Namespaces/Namespace.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/Class.h"

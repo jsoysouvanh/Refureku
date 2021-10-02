@@ -1,0 +1,62 @@
+#include "Refureku/TypeInfo/Namespace/NamespaceAPI.h"
+
+#include "Refureku/TypeInfo/Namespace/NamespaceImpl.h"
+#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
+#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+
+using namespace rfk;
+
+NamespaceAPI::NamespaceAPI(char const* name, std::size_t id) noexcept:
+	EntityAPI(new NamespaceImpl(name, id))
+{
+}
+
+NamespaceAPI::~NamespaceAPI() noexcept = default;
+
+NamespaceAPI const* NamespaceAPI::getNamespaceByName(char const* name) const noexcept
+{
+	return EntityUtility::getEntityPtrByNameAndPredicate(	reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(),
+															name,
+															[](NamespaceAPI const*) { return true; });
+}
+
+StructAPI const* NamespaceAPI::getStructByName(char const* name) const noexcept
+{
+	return reinterpret_cast<StructAPI const*>(
+		EntityUtility::getEntityPtrByNameAndPredicate(	reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+														name,
+														[](ArchetypeAPI const* arch) { return arch->getKind() == EEntityKind::Struct; }));
+}
+
+ClassAPI const* NamespaceAPI::getClassByName(char const* name) const noexcept
+{
+	return reinterpret_cast<ClassAPI const*>(
+		EntityUtility::getEntityPtrByNameAndPredicate(	reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+														name,
+														[](ArchetypeAPI const* arch) { return arch->getKind() == EEntityKind::Class; }));
+}
+
+EnumAPI const* NamespaceAPI::getEnumByName(char const* name) const noexcept
+{
+	return reinterpret_cast<EnumAPI const*>(
+		EntityUtility::getEntityPtrByNameAndPredicate(	reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+														name,
+														[](ArchetypeAPI const* arch) { return arch->getKind() == EEntityKind::Enum; }));
+}
+
+VariableAPI const* NamespaceAPI::getVariableByName(char const* name, EVarFlags flags) const noexcept
+{
+	return reinterpret_cast<VariableAPI const*>(
+		EntityUtility::getEntityPtrByNameAndPredicate(	reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(),
+														name,
+														[flags](VariableAPI const* var) { return (var->getFlags() & flags) == flags; }));
+}
+
+FunctionAPI const* NamespaceAPI::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
+{
+	return reinterpret_cast<FunctionAPI const*>(
+		EntityUtility::getEntityPtrByNameAndPredicate(	reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
+														name,
+														[flags](FunctionAPI const* func) { return (func->getFlags() & flags) == flags; }));
+}

@@ -22,9 +22,11 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Entity/EntityCast.cpp
 					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
 
-					Source/TypeInfo/Namespaces/Namespace.cpp
-					Source/TypeInfo/Namespaces/NamespaceFragment.cpp
-					Source/TypeInfo/Namespaces/NamespaceFragmentRegisterer.cpp
+					Source/TypeInfo/Namespace/NamespaceAPI.cpp
+					Source/TypeInfo/Namespace/Namespace.cpp					#Delete this
+					Source/TypeInfo/Namespace/NamespaceFragmentAPI.cpp
+					Source/TypeInfo/Namespace/NamespaceFragment.cpp			#Delete this
+					Source/TypeInfo/Namespace/NamespaceFragmentRegisterer.cpp
 
 					Source/TypeInfo/Archetypes/ArchetypeAPI.cpp
 					Source/TypeInfo/Archetypes/ArchetypeImpl.cpp

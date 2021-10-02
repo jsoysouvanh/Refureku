@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/Namespaces/NamespaceFragment.h"
+#include "Refureku/TypeInfo/Namespace/NamespaceFragment.h"
 
 using namespace rfk;
 

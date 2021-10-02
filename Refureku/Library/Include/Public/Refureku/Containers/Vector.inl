@@ -174,8 +174,9 @@ void Vector<T, Allocator>::reserve(std::size_t capacity)
 			else //Copy elements otherwise
 			{
 				copyElements(data(), newData, _size);
-				destroyElements(data(), _size);
 			}
+
+			destroyElements(data(), _size);
 
 			//Release previously allocated memory
 			_allocator.deallocate(_data, _capacity);

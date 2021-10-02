@@ -1,10 +1,10 @@
-#include "Refureku/TypeInfo/Namespaces/NamespaceFragmentRegisterer.h"
+#include "Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h"
 
 #include <cassert>
 #include <algorithm>
 
-#include "Refureku/TypeInfo/Namespaces/Namespace.h"
-#include "Refureku/TypeInfo/Namespaces/NamespaceFragment.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
+#include "Refureku/TypeInfo/Namespace/NamespaceFragment.h"
 #include "Refureku/TypeInfo/Database.h"
 
 using namespace rfk;

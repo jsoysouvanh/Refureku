@@ -54,12 +54,17 @@ void containers()
 	TEST(HugeClass::getInstanceCount() == 0u);
 	{
 		rfk::Vector<HugeClass> hugeClassVec;
+		TEST(hugeClassVec.capacity() == 0u);
 
 		hugeClassVec.emplace_back();
+		TEST(hugeClassVec.capacity() == 1u);
+
 		hugeClassVec.emplace_back(1);
+		TEST(hugeClassVec.capacity() == 2u);
 
 		//Trigger realloc here
-		hugeClassVec.push_back(hugeClassVec.back());
+		hugeClassVec.push_back(HugeClass());
+		TEST(hugeClassVec.capacity() == 4u);
 		TEST(HugeClass::getInstanceCount() == 3u);
 
 		hugeClassVec.resize(10);

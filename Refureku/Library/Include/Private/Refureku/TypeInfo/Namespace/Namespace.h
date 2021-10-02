@@ -281,5 +281,5 @@ namespace rfk
 			REFUREKU_INTERNAL void	removeFunction(Function const* function)			noexcept;
 	};
 
-	#include "Refureku/TypeInfo/Namespaces/Namespace.inl"
+	#include "Refureku/TypeInfo/Namespace/Namespace.inl"
 }

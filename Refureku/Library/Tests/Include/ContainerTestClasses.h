@@ -39,6 +39,7 @@ class HugeClass
 			_array{},
 			_i{other._i}
 		{
+			_instanceCount++;
 			//std::cout << "HugeClass(HugeClass&&)" << std::endl;
 		}
 

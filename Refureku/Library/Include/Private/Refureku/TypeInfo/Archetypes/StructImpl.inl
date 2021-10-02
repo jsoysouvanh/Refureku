@@ -131,25 +131,11 @@ inline void StructAPI::StructImpl::setStaticMethodsCapacity(std::size_t capacity
 
 inline ArchetypeAPI const* StructAPI::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
 {
-	//Use an Entity instead of a Field to avoid unnecessary memory allocation overhead
-	//Also create the EntityImpl on the stack to avoid dynamic allocation
-	EntityAPI::EntityImpl	entityImpl(name, 0u);
-	EntityAPI				searchedStruct(&entityImpl);
-
-	//We know the hash method only uses the name inherited from Entity so cast is fine
-	NestedArchetypes::const_iterator it = _nestedArchetypes.find(reinterpret_cast<ArchetypeAPI const*>(&searchedStruct));
-
-	if (it != _nestedArchetypes.cend())
-	{
-		ArchetypeAPI const* result = *it;
-
-		if (access == EAccessSpecifier::Undefined || access == result->getAccessSpecifier()) //access requirement is fulfilled
-		{
-			return result;
-		}
-	}
-
-	return nullptr;
+	return EntityUtility::getEntityPtrByNameAndPredicate(_nestedArchetypes, name,
+													     [access](ArchetypeAPI const* archetype)
+													     {
+													   	  return access == EAccessSpecifier::Undefined || access == archetype->getAccessSpecifier();
+													     });
 }
 
 inline StructAPI::StructImpl::ParentStructs const& StructAPI::StructImpl::getDirectParents() const noexcept
