@@ -32,35 +32,13 @@ namespace rfk
 			REFUREKU_API ~EnumAPI()												noexcept;
 
 			/**
-			*	@brief Add an enum value to this enum.
-			*	
-			*	@param name		Name of the enum value.
-			*	@param id		Unique entity id of the added enum value.
-			*	@param value	Integer value of the enum value.
-			*	
-			*	@return A pointer to the added enum value.
-			*/
-			REFUREKU_API EnumValueAPI*								addEnumValue(char const*	name,
-																				 std::size_t	id,
-																				 int64			value)												noexcept;
-			
-			/**
-			*	@brief	Set the number of enum values for this entity.
-			*			Useful to avoid reallocations when adding a lot of enum values.
-			*			If the number of enum values is already >= to the provided capacity, this method has no effect.
-			* 
-			*	@param propertiesCapacity The number of enum values in this enum.
-			*/
-			REFUREKU_API void										setEnumValuesCapacity(std::size_t capacity)										noexcept;
-
-			/**
 			*	@brief Search an enum value by name in this enum.
 			*
 			*	@param name Name of the enum value to look for.
 			*	
 			*	@return The EnumValue having the provided name if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByName(char const* name)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByName(char const* name)							const	noexcept;
 
 			/**
 			*	@brief Search an enum value by value in this enum.
@@ -69,7 +47,7 @@ namespace rfk
 			*
 			*	@return The first found EnumValue equals to the provided value if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValue(int64 value)												const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValue(int64 value)										const	noexcept;
 
 			/**
 			*	@brief Retrieve from this enum an enum value matching with a given predicate.
@@ -125,6 +103,41 @@ namespace rfk
 			*	@return _underlyingArchetype.
 			*/
 			RFK_NODISCARD REFUREKU_API ArchetypeAPI const&			getUnderlyingArchetype()										const	noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all enum values in this enum.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool										foreachEnumValue(bool (*visitor)(EnumValueAPI const&,
+																									 void*),
+																					 void* userData)								const	noexcept;
+
+			/**
+			*	@brief Add an enum value to this enum.
+			*	
+			*	@param name		Name of the enum value.
+			*	@param id		Unique entity id of the added enum value.
+			*	@param value	Integer value of the enum value.
+			*	
+			*	@return A pointer to the added enum value.
+			*/
+			REFUREKU_API EnumValueAPI*								addEnumValue(char const*	name,
+																				 std::size_t	id,
+																				 int64			value)										noexcept;
+
+			/**
+			*	@brief	Set the number of enum values for this entity.
+			*			Useful to avoid reallocations when adding a lot of enum values.
+			*			If the number of enum values is already >= to the provided capacity, this method has no effect.
+			* 
+			*	@param propertiesCapacity The number of enum values in this enum.
+			*/
+			REFUREKU_API void										setEnumValuesCapacity(std::size_t capacity)								noexcept;
 
 		protected:
 			//Forward declaration

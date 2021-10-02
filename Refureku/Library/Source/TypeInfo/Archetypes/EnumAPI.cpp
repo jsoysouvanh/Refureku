@@ -3,6 +3,7 @@
 #include <cstring> //std::strcmp
 
 #include "Refureku/TypeInfo/Archetypes/EnumImpl.h"
+#include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
 using namespace rfk;
 
@@ -105,4 +106,9 @@ std::size_t EnumAPI::getEnumValuesCount() const noexcept
 ArchetypeAPI const& EnumAPI::getUnderlyingArchetype() const noexcept
 {
 	return reinterpret_cast<EnumImpl const*>(getPimpl())->getUnderlyingArchetype();
+}
+
+bool EnumAPI::foreachEnumValue(bool (*visitor)(EnumValueAPI const&, void*), void* userData) const noexcept
+{
+	return EntityUtility::foreachEntity(reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues(), visitor, userData);
 }

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 namespace rfk
 {
@@ -46,7 +46,7 @@ namespace rfk
 			*	@param name			Name of the entity to look for.
 			*	@param predicate	Predicate that defines if an entity matches or not. Prototype must be bool(ContainerType::const_reference).
 			* 
-			*	@return 
+			*	@return A pointer to the first matching entity if any was found, else nullptr.
 			*/
 			template <typename ContainerType, typename Predicate>
 			static typename ContainerType::value_type const*	getEntityByNameAndPredicate(ContainerType const& container,
@@ -61,7 +61,7 @@ namespace rfk
 			*	@param name			Name of the entity to look for.
 			*	@param predicate	Predicate that defines if an entity matches or not. Prototype must be bool(ContainerType::value_type).
 			* 
-			*	@return 
+			*	@return A pointer to the first matching entity if any was found, else nullptr.
 			*/
 			template <typename ContainerType, typename Predicate>
 			static typename ContainerType::value_type			getEntityPtrByNameAndPredicate(ContainerType const& container,
@@ -69,7 +69,7 @@ namespace rfk
 																							   Predicate			predicate)		noexcept;
 
 			/**
-			*	TODO
+			*	@brief Iterate over all entities named with the given name.
 			*/
 			template <typename ContainerType, typename Visitor>
 			static bool											foreachEntityNamed(ContainerType const& container,
@@ -80,6 +80,13 @@ namespace rfk
 			static bool											foreachEntityPtrNamed(ContainerType const&	container,
 																					  char const*			name,
 																					  Visitor				visitor);
+
+			/**
+			*	@brief Find an entity by Id in a container containing EntityAPI*.
+			*/
+			template <typename ContainerType>
+			static typename ContainerType::value_type			getEntityPtrById(ContainerType const&	container,
+																				 std::size_t			id)							noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Entity/EntityUtility.inl"

@@ -104,13 +104,6 @@ namespace rfk
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
-			*	@param n The parent namespace.
-			*/
-			void						registerSubEntities(Namespace const& n)								noexcept;
-			
-			/**
-			*	@brief Add all nested entities to the _entitiesById map.
-			*	
 			*	@param s The parent struct.
 			*/
 			void						registerSubEntities(Struct const& s)								noexcept;

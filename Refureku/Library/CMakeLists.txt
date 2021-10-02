@@ -20,7 +20,8 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Entity/EntityImpl.cpp
 					Source/TypeInfo/Entity/EntityHash.cpp
 					Source/TypeInfo/Entity/EntityImplementation.cpp	#Delete this
-					Source/TypeInfo/Entity/EntityCast.cpp
+					Source/TypeInfo/Entity/EntityCastAPI.cpp
+					Source/TypeInfo/Entity/EntityCast.cpp			#Delete this
 					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
 
 					Source/TypeInfo/Namespace/NamespaceAPI.cpp

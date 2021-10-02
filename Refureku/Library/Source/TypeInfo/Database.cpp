@@ -16,6 +16,8 @@ Database& Database::getInternal() noexcept
 
 void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
+	assert(entity.getOuterEntity() == nullptr);
+
 	//Register by id
 	registerEntity(entity, shouldRegisterSubEntities);
 
@@ -73,10 +75,6 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 	{
 		switch (entity.getKind())
 		{
-			case EEntityKind::Namespace:
-				registerSubEntities(static_cast<Namespace const&>(entity));
-				break;
-
 			case EEntityKind::Struct:
 				[[fallthrough]];
 			case EEntityKind::Class:
@@ -87,6 +85,8 @@ void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntiti
 				registerSubEntities(static_cast<Enum const&>(entity));
 				break;
 
+			case EEntityKind::Namespace:
+				[[fallthrough]];	//Namespace nested entities are manually registered by NamespaceFragmentRegisterers
 			case EEntityKind::FundamentalArchetype:
 				[[fallthrough]];
 			case EEntityKind::Variable:
@@ -200,21 +200,6 @@ void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEn
 				assert(false);
 				break;
 		}
-	}
-}
-
-void Database::registerSubEntities(Namespace const& n) noexcept
-{
-	//Add nested namespaces
-	for (Namespace const* nn : n.getNamespaces())
-	{
-		registerEntity(*nn, true);
-	}
-
-	//Add nested archetypes
-	for (Archetype const* na : n.getArchetypes())
-	{
-		registerEntity(*na, true);
 	}
 }
 

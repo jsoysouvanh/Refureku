@@ -12,6 +12,10 @@
 
 namespace rfk
 {
+	//Forward declaration
+	class EntityAPI;
+	class NamespaceAPI;
+
 	class DatabaseAPI final
 	{
 		public:
@@ -20,7 +24,23 @@ namespace rfk
 			DatabaseAPI(DatabaseAPI&&)			= delete;
 			REFUREKU_INTERNAL ~DatabaseAPI()	noexcept;
 
+			/**
+			*	@brief Retrieve an entity by id.
+			*
+			*	@param id The id of the entity.
+			*
+			*	@return A constant pointer to the queried entity if it exists, else nullptr.
+			*/
+			REFUREKU_API EntityAPI const*					getEntityById(std::size_t id)		const	noexcept;
 
+			/**
+			*	@brief Retrieve a namespace by id.
+			*
+			*	@param id The id of the namespace.
+			*
+			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
+			*/
+			REFUREKU_API NamespaceAPI const*				getNamespaceById(std::size_t id)	const	noexcept;
 
 		private:
 			//Forward declaration

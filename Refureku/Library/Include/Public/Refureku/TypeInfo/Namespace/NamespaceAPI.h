@@ -19,6 +19,7 @@ namespace rfk
 	class EnumAPI;
 	class VariableAPI;
 	class FunctionAPI;
+	class ArchetypeAPI;
 
 	class NamespaceAPI final : public EntityAPI
 	{
@@ -36,6 +37,19 @@ namespace rfk
 			*	@return The found nested namespace if it exists, else nullptr.
 			*/
 			RFK_NODISCARD REFUREKU_API NamespaceAPI const*	getNamespaceByName(char const* name)								const	noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all nested namespaces.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool								foreachNestedNamespace(bool (*visitor)(NamespaceAPI const&,
+																								   void*),
+																				   void* userData)								const	noexcept;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.
@@ -65,6 +79,19 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API EnumAPI const*		getEnumByName(char const* name)										const	noexcept;
 
 			/**
+			*	@brief Execute the given visitor on all nested archetypes.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool								foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&,
+																								   void*),
+																				   void* userData)								const	noexcept;
+
+			/**
 			*	@brief Retrieve a variable from this namespace.
 			*	
 			*	@param name		The name of the variable.
@@ -77,6 +104,19 @@ namespace rfk
 																			  EVarFlags	  flags = EVarFlags::Default)			const	noexcept;
 
 			/**
+			*	@brief Execute the given visitor on all nested variables.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool								foreachNestedVariable(bool (*visitor)(VariableAPI const&,
+																								  void*),
+																				  void* userData)								const	noexcept;
+
+			/**
 			*	@brief Retrieve a function from this namespace.
 			*	
 			*	@param name		The name of the function.
@@ -87,6 +127,19 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API FunctionAPI const*	getFunctionByName(char const*	 name,
 																			  EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all nested functions.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool								foreachNestedFunction(bool (*visitor)(FunctionAPI const&,
+																								  void*),
+																				  void* userData)								const	noexcept;
 
 		private:
 			//Forward declaration

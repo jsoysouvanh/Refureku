@@ -100,3 +100,14 @@ bool EntityUtility::foreachEntityPtrNamed(ContainerType const& container, char c
 
 	return true;
 }
+
+template <typename ContainerType>
+typename ContainerType::value_type EntityUtility::getEntityPtrById(ContainerType const& container, std::size_t id) noexcept
+{
+	EntityAPI::EntityImpl	searchedImpl("", id);
+	EntityAPI				searchedEntity(&searchedImpl);
+
+	auto it = container.find(&searchedEntity);
+
+	return (it != container.cend()) ? *it : nullptr;
+}

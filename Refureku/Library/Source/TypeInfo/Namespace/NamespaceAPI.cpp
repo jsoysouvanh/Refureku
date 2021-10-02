@@ -21,6 +21,11 @@ NamespaceAPI const* NamespaceAPI::getNamespaceByName(char const* name) const noe
 															[](NamespaceAPI const*) { return true; });
 }
 
+bool NamespaceAPI::foreachNestedNamespace(bool (*visitor)(NamespaceAPI const&, void*), void* userData) const noexcept
+{
+	return EntityUtility::foreachEntityPtr(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(), visitor, userData);
+}
+
 StructAPI const* NamespaceAPI::getStructByName(char const* name) const noexcept
 {
 	return reinterpret_cast<StructAPI const*>(
@@ -45,6 +50,11 @@ EnumAPI const* NamespaceAPI::getEnumByName(char const* name) const noexcept
 														[](ArchetypeAPI const* arch) { return arch->getKind() == EEntityKind::Enum; }));
 }
 
+bool NamespaceAPI::foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&, void*), void* userData) const noexcept
+{
+	return EntityUtility::foreachEntityPtr(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(), visitor, userData);
+}
+
 VariableAPI const* NamespaceAPI::getVariableByName(char const* name, EVarFlags flags) const noexcept
 {
 	return reinterpret_cast<VariableAPI const*>(
@@ -53,10 +63,20 @@ VariableAPI const* NamespaceAPI::getVariableByName(char const* name, EVarFlags f
 														[flags](VariableAPI const* var) { return (var->getFlags() & flags) == flags; }));
 }
 
+bool NamespaceAPI::foreachNestedVariable(bool (*visitor)(VariableAPI const&, void*), void* userData) const noexcept
+{
+	return EntityUtility::foreachEntityPtr(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(), visitor, userData);
+}
+
 FunctionAPI const* NamespaceAPI::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
 	return reinterpret_cast<FunctionAPI const*>(
 		EntityUtility::getEntityPtrByNameAndPredicate(	reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
 														name,
 														[flags](FunctionAPI const* func) { return (func->getFlags() & flags) == flags; }));
+}
+
+bool NamespaceAPI::foreachNestedFunction(bool (*visitor)(FunctionAPI const&, void*), void* userData) const noexcept
+{
+	return EntityUtility::foreachEntityPtr(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(), visitor, userData);
 }
