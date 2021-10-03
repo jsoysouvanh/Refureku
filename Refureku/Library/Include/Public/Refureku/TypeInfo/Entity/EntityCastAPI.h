@@ -43,8 +43,8 @@ namespace rfk
 	template <>
 	REFUREKU_API ArchetypeAPI const*			entityCast<ArchetypeAPI>(EntityAPI const* entity)				noexcept;
 
-	//template <>
-	//REFUREKU_API FundamentalArchetypeAPI const*	entityCast<FundamentalArchetypeAPI>(EntityAPI const* entity)	noexcept;	//TODO
+	template <>
+	REFUREKU_API FundamentalArchetypeAPI const*	entityCast<FundamentalArchetypeAPI>(EntityAPI const* entity)	noexcept;
 
 	template <>
 	REFUREKU_API StructAPI const*				entityCast<StructAPI>(EntityAPI const* entity)					noexcept;

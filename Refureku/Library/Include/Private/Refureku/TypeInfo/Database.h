@@ -310,8 +310,6 @@ namespace rfk
 			*/
 			REFUREKU_API Archetype const*				getArchetype(std::string archetypeName)								const	noexcept;
 
-			
-
 			/**
 			*	@brief Retrieve a struct by id.
 			*

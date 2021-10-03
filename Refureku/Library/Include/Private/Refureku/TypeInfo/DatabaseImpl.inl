@@ -40,7 +40,7 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(EntityAPI const& entity,
 			break;
 
 		case EEntityKind::FundamentalArchetype:
-			//_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetype const*>(&entity));	//TODO
+			_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetypeAPI const*>(&entity));
 			break;
 
 		case EEntityKind::EnumValue:
@@ -132,7 +132,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(EntityAPI const& entity, bool s
 				break;
 
 			case EEntityKind::FundamentalArchetype:
-				//_fundamentalArchetypes.erase(reinterpret_cast<FundamentalArchetypeAPI const*>(&entity));	//TODO
+				_fundamentalArchetypes.erase(reinterpret_cast<FundamentalArchetypeAPI const*>(&entity));
 				break;
 
 			case EEntityKind::EnumValue:
@@ -334,10 +334,10 @@ inline DatabaseAPI::DatabaseImpl::NamespacesByName const& DatabaseAPI::DatabaseI
 	return _fileLevelNamespacesByName;
 }
 
-//inline DatabaseAPI::DatabaseImpl::FundamentalArchetypesByName const&	DatabaseAPI::DatabaseImpl::getFundamentalArchetypesByName() const noexcept
-//{
-//	return _fundamentalArchetypes;
-//}
+inline DatabaseAPI::DatabaseImpl::FundamentalArchetypesByName const& DatabaseAPI::DatabaseImpl::getFundamentalArchetypesByName() const noexcept
+{
+	return _fundamentalArchetypes;
+}
 
 inline DatabaseAPI::DatabaseImpl::StructsByName const& DatabaseAPI::DatabaseImpl::getFileLevelStructsByName() const noexcept
 {

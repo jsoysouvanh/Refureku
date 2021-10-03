@@ -10,7 +10,7 @@
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
-//#include "Refureku/TypeInfo/Archetypes/FundamentalArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/FundamentalArchetypeAPI.h"
 #include "Refureku/TypeInfo/Namespace/NamespaceAPI.h"
 
 using namespace rfk;
@@ -25,12 +25,11 @@ ArchetypeAPI const* rfk::entityCast<ArchetypeAPI>(EntityAPI const* entity) noexc
 		reinterpret_cast<ArchetypeAPI const*>(entity) : nullptr;
 }
 
-//TODO
-//template <>
-//FundamentalArchetype const* rfk::entityCast<FundamentalArchetype>(Entity const* entity) noexcept
-//{
-//	return internal::entityCast<FundamentalArchetype, EEntityKind::FundamentalArchetype>(entity);
-//}
+template <>
+FundamentalArchetypeAPI const* rfk::entityCast<FundamentalArchetypeAPI>(EntityAPI const* entity) noexcept
+{
+	return entityCast<FundamentalArchetypeAPI, EEntityKind::FundamentalArchetype>(entity);
+}
 
 template <>
 StructAPI const* rfk::entityCast<StructAPI>(EntityAPI const* entity) noexcept
