@@ -156,10 +156,10 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			RFKMethod()
 			virtual int	method1() const noexcept override final;
 
-			RFKMethod(CustomInstantiator)
+			RFKMethod(Instantiator)
 			static ExampleClass* customInstantiator(int, float) noexcept { return new ExampleClass(); }
 
-			RFKMethod(CustomInstantiator)
+			RFKMethod(Instantiator)
 			static ExampleClass* replaceDefaultInstantiator() noexcept
 			{
 				ExampleClass* result = new ExampleClass();
@@ -218,7 +218,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 
 	class RFKClass() ExampleClass2
 	{
-		RFKMethod(CustomInstantiator)
+		RFKMethod(Instantiator)
 		static ExampleClass2* customInstantiator(int i) noexcept { return new ExampleClass2(i); }
 
 		ExampleClass2() = delete;

@@ -7,5 +7,5 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Properties/ParseAllNested.h"
-#include "Refureku/TypeInfo/Properties/CustomInstantiator.h"
+#include "Refureku/Properties/ParseAllNested.h"
+#include "Refureku/Properties/Instantiator.h"

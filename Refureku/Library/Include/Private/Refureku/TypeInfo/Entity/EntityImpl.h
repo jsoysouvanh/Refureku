@@ -13,7 +13,7 @@
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Entity/EEntityKind.h"
-#include "Refureku/TypeInfo/Properties/Property.h"
+#include "Refureku/Properties/Property.h"
 
 namespace rfk
 {

@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class CustomInstantiatorPropertyCodeGen : public kodgen::MacroPropertyCodeGen
+	class InstantiatorPropertyCodeGen : public kodgen::MacroPropertyCodeGen
 	{
 		protected:
 			virtual bool	generateClassFooterCodeForEntity(kodgen::EntityInfo const&	entity,
@@ -22,7 +22,7 @@ namespace rfk
 															 std::string&				inout_result)	noexcept	override;
 
 		public:
-			CustomInstantiatorPropertyCodeGen() noexcept;
+			InstantiatorPropertyCodeGen() noexcept;
 
 			/**
 			*	@brief Generate code to add a custom instantiator to the generated class the method belongs to.

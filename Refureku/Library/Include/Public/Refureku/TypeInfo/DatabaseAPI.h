@@ -14,7 +14,7 @@
 
 namespace rfk
 {
-	//Forward declaration
+	//Forward declarations
 	class EntityAPI;
 	class NamespaceAPI;
 	class ArchetypeAPI;

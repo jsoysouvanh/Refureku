@@ -9,7 +9,7 @@ std::hash<std::string> ReflectionCodeGenModule::_stringHasher;
 ReflectionCodeGenModule::ReflectionCodeGenModule() noexcept:
 	_isGeneratingHiddenCode{false}
 {
-	addPropertyCodeGen(_customInstantiatorProperty);
+	addPropertyCodeGen(_instantiatorProperty);
 	addPropertyCodeGen(_propertySettingsProperty);
 }
 
@@ -603,12 +603,12 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		{
 			fillEntityProperties(method, env, "staticMethod->", inout_result);
 
-			//Generate specific code for the CustomInstantiator property here
+			//Generate specific code for the Instantiator property here
 			for (kodgen::uint8 i = 0; i < method.properties.size(); i++)
 			{
-				if (_customInstantiatorProperty.shouldGenerateCodeForEntity(method, method.properties[i], i))
+				if (_instantiatorProperty.shouldGenerateCodeForEntity(method, method.properties[i], i))
 				{
-					_customInstantiatorProperty.addCustomInstantiatorToClass(method, generatedEntityVarName, "staticMethod", inout_result);
+					_instantiatorProperty.addCustomInstantiatorToClass(method, generatedEntityVarName, "staticMethod", inout_result);
 					break;
 				}
 			}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Refureku/TypeInfo/Properties/ParseAllNested.h>
+#include <Refureku/Properties/ParseAllNested.h>
 #include <Refureku/Object.h>
 
 #include "ClassTemplates/TestClassAB.h"

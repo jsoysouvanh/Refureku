@@ -8,8 +8,8 @@
 #pragma once
 
 #include "Refureku/Config.h"
-#include "Refureku/TypeInfo/Properties/Property.h"
-#include "Refureku/TypeInfo/Properties/PropertySettings.h"
+#include "Refureku/Properties/Property.h"
+#include "Refureku/Properties/PropertySettings.h"
 
 #include "Refureku/Generated/ParseAllNested.rfkh.h"
 

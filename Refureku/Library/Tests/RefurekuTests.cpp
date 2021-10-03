@@ -128,7 +128,7 @@ void entities()
 
 	TEST(entity.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
-			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
+			 return prop.getArchetype().isSubclassOf(Instantiator::staticGetArchetype());
 		 }).size() == 0u);
 
 	rfk::EntityAPI entity2("TestEntity2", 6789u, rfk::EEntityKind::Class, nullptr);
@@ -164,7 +164,7 @@ void entities()
 
 	TEST(entity3.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
-			 return prop.getArchetype().isSubclassOf(CustomInstantiator::staticGetArchetype());
+			 return prop.getArchetype().isSubclassOf(Instantiator::staticGetArchetype());
 		 }).size() == 0u);
 
 	//TODO: Add test getProperty(Struct const& archetype, false)
@@ -971,7 +971,7 @@ void properties()
 {
 	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
-	TEST(ec.getStaticMethod("customInstantiator")->getProperty<CustomInstantiator>() != nullptr);
+	TEST(ec.getStaticMethod("customInstantiator")->getProperty<Instantiator>() != nullptr);
 
 	rfk::Class const& a = A::staticGetArchetype();
 

@@ -8,6 +8,11 @@ add_library(${RefurekuLibraryTarget}
 				SHARED
 					Source/Object.cpp
 
+					Source/Properties/Property.cpp
+					Source/Properties/Instantiator.cpp
+					Source/Properties/ParseAllNested.cpp
+					Source/Properties/PropertySettings.cpp
+
 					Source/TypeInfo/TypePartAPI.cpp
 					Source/TypeInfo/TypePart.cpp	#Delete this
 					Source/TypeInfo/TypeAPI.cpp
@@ -75,11 +80,6 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Functions/StaticMethod.cpp			#Delete this
 					Source/TypeInfo/Functions/FunctionParameterAPI.cpp
 					Source/TypeInfo/Functions/FunctionParameter.cpp		#Delete this
-
-					Source/TypeInfo/Properties/Property.cpp
-					Source/TypeInfo/Properties/CustomInstantiator.cpp
-					Source/TypeInfo/Properties/ParseAllNested.cpp
-					Source/TypeInfo/Properties/PropertySettings.cpp
 				)
 
 target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)

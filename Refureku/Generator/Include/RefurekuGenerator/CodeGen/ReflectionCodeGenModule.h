@@ -16,7 +16,7 @@
 #include <Kodgen/CodeGen/Macro/MacroCodeGenModule.h>
 #include "Kodgen/InfoStructures/EnumInfo.h"
 
-#include "RefurekuGenerator/Properties/CustomInstantiatorPropertyCodeGen.h"
+#include "RefurekuGenerator/Properties/InstantiatorPropertyCodeGen.h"
 #include "RefurekuGenerator/Properties/PropertySettingsPropertyCodeGen.h"
 
 namespace rfk
@@ -28,7 +28,7 @@ namespace rfk
 			static std::hash<std::string>				_stringHasher;
 
 			/** Code generator for the CustomInstantiator property. */
-			CustomInstantiatorPropertyCodeGen			_customInstantiatorProperty;
+			InstantiatorPropertyCodeGen					_instantiatorProperty;
 
 			/** Code generator for the PropertySettings property. */
 			PropertySettingsPropertyCodeGen				_propertySettingsProperty;

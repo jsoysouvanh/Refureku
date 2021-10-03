@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Refureku/TypeInfo/Properties/PropertySettings.h>
+#include <Refureku/Properties/PropertySettings.h>
 
 #include "Generated/Test.rfkh.h"
 

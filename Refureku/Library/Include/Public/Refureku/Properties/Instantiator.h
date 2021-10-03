@@ -8,21 +8,21 @@
 #pragma once
 
 #include "Refureku/Config.h"
-#include "Refureku/TypeInfo/Properties/Property.h"
-#include "Refureku/TypeInfo/Properties/PropertySettings.h"
+#include "Refureku/Properties/Property.h"
+#include "Refureku/Properties/PropertySettings.h"
 
-#include "Refureku/Generated/CustomInstantiator.rfkh.h"
+#include "Refureku/Generated/Instantiator.rfkh.h"
 
 /**
 *	@brief	Property used to add a new way to instantiate a struct or class through the rfk::Struct::makeInstance method.
 *			This property can only be attached to static methods returning a pointer to the class.
 */
-class RFKClass(PropertySettings(rfk::EEntityKind::Method)) CustomInstantiator : public rfk::Property
+class RFKClass(PropertySettings(rfk::EEntityKind::Method)) Instantiator : public rfk::Property
 {
 	public:
-		REFUREKU_API virtual ~CustomInstantiator() noexcept;
+		REFUREKU_API virtual ~Instantiator() noexcept;
 
-	CustomInstantiator_GENERATED
+	Instantiator_GENERATED
 };
 
-File_CustomInstantiator_GENERATED
+File_Instantiator_GENERATED

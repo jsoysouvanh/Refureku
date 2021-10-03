@@ -1,4 +1,4 @@
-#include "Refureku/TypeInfo/Properties/Property.h"
+#include "Refureku/Properties/Property.h"
 
 using namespace rfk;
 

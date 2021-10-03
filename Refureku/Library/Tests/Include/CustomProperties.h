@@ -2,7 +2,7 @@
 
 #include <utility>	//std::move
 
-#include <Refureku/TypeInfo/Properties/PropertySettings.h>
+#include <Refureku/Properties/PropertySettings.h>
 
 #include "Generated/CustomProperties.rfkh.h"
 

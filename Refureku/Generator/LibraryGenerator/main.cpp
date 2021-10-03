@@ -33,7 +33,7 @@ bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::Pa
 
 	result &= codeGenMgrSettings.addSupportedFileExtension(".h");
 	result &= codeGenMgrSettings.addSupportedFileExtension(".hpp");
-	codeGenMgrSettings.addToProcessDirectory(libraryDirectoryPath / "Include" / "Public" / "Refureku" / "TypeInfo" / "Properties");
+	codeGenMgrSettings.addToProcessDirectory(libraryDirectoryPath / "Include" / "Public" / "Refureku" / "Properties");
 	codeGenMgrSettings.addIgnoredDirectory(outputDirectory);
 
 	result &= codeGenUnitSettings.setOutputDirectory(outputDirectory);

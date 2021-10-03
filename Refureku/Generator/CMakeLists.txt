@@ -9,7 +9,7 @@ add_subdirectory(Submodules/Kodgen)
 set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
 add_library(${RefurekuGeneratorLibTarget}
 				STATIC
-					Source/Properties/CustomInstantiatorPropertyCodeGen.cpp
+					Source/Properties/InstantiatorPropertyCodeGen.cpp
 					Source/Properties/PropertySettingsPropertyCodeGen.cpp
 
 					Source/Parsing/FileParser.cpp
