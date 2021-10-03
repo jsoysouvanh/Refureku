@@ -12,7 +12,7 @@
 
 #include "Refureku/Utility/Pimpl.h"
 #include "Refureku/TypeInfo/TypePartAPI.h"
-#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
 
 namespace rfk
 {

@@ -10,15 +10,9 @@
 //Compiler dependant macros
 #if defined(__GNUC__)
 
-#define RFK_ATTRIBUTE(attr) __attribute__((attr))
-
 #elif defined(__clang__)
 
-#define RFK_ATTRIBUTE(attr) __attribute__((attr))
-
 #elif defined(_MSC_VER)
-
-#define RFK_ATTRIBUTE(attr) __declspec((attr))
 
 #else
 

@@ -145,7 +145,8 @@ namespace rfk
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */
-	//TODO
-	//template <typename T, typename = std::enable_if_t<std::is_enum_v<T>>>
-	//rfk::EnumAPI const* getEnum() noexcept;
+	template <typename T>
+	rfk::EnumAPI const* getEnumAPI() noexcept;
+
+	#include "Refureku/TypeInfo/Archetypes/EnumAPI.inl"
 }

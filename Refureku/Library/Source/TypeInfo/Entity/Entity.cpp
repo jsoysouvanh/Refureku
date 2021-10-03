@@ -1,7 +1,5 @@
 #include "Refureku/TypeInfo/Entity/Entity.h"
 
-#include <utility>	//std::forward
-
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 
@@ -38,7 +36,29 @@ Property const* EntityAPI::getPropertyAt(std::size_t propertyIndex) const noexce
 
 Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildClassValid) const noexcept
 {
-	//TODO
+	//Iterate over all props to find a matching property
+	if (isChildClassValid)
+	{
+		for (Property const* p : _pimpl->getProperties())
+		{
+			//Consider child classes as valid
+			if (archetype.isBaseOf(p->getArchetypeAPI()))
+			{
+				return p;
+			}
+		}
+	}
+	else
+	{
+		for (Property const* p : _pimpl->getProperties())
+		{
+			//Child classes are not considered
+			if (archetype == p->getArchetypeAPI())
+			{
+				return p;
+			}
+		}
+	}
 
 	return nullptr;
 }
@@ -60,32 +80,29 @@ Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, boo
 {
 	Vector<Property const*> result;
 
-	std::vector<Property const*> properties;
-
-	//TODO
 	//Iterate over all props to find a matching property
-	//if (isChildClassValid)
-	//{
-	//	for (Property const* p : properties)
-	//	{
-	//		//Consider child classes as valid
-	//		if (archetype.isBaseOf(p->getArchetype()))
-	//		{
-	//			result.emplace_back(p);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	for (Property const* p : properties)
-	//	{
-	//		//Child classes are not considered
-	//		if (archetype == p->getArchetype())
-	//		{
-	//			result.emplace_back(p);
-	//		}
-	//	}
-	//}
+	if (isChildClassValid)
+	{
+		for (Property const* p : _pimpl->getProperties())
+		{
+			//Consider child classes as valid
+			if (archetype.isBaseOf(p->getArchetypeAPI()))
+			{
+				result.push_back(p);
+			}
+		}
+	}
+	else
+	{
+		for (Property const* p : _pimpl->getProperties())
+		{
+			//Child classes are not considered
+			if (archetype == p->getArchetypeAPI())
+			{
+				result.push_back(p);
+			}
+		}
+	}
 
 	return result;
 }

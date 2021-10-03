@@ -36,12 +36,6 @@ namespace rfk
 	template <typename T>
 	Archetype const* getArchetype()	noexcept;
 
-	template <typename T>
-	ArchetypeAPI const* getArchetypeAPI() noexcept
-	{
-		return nullptr;
-	}
-
 	/**
 	*	@brief	Get archetype for template classes. Cover only most common cases.
 	* 

@@ -51,6 +51,4 @@ namespace rfk
 			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeAPI&&)					noexcept;
 	};
-
-	//TODO: getArchetype base implementation should maybe be here?
 }

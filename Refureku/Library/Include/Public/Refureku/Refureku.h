@@ -26,6 +26,7 @@
 //WIP: Public headers
 #include "Refureku/TypeInfo/TypeAPI.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
+#include "Refureku/TypeInfo/Entity/EntityCastAPI.h"
 #include "Refureku/TypeInfo/Variables/VariableAPI.h"
 #include "Refureku/TypeInfo/Variables/FieldAPI.h"
 #include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
@@ -36,5 +37,8 @@
 #include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
 #include "Refureku/TypeInfo/Namespace/NamespaceAPI.h"
 #include "Refureku/TypeInfo/DatabaseAPI.h"
+
+#include "Refureku/Properties/Property.h"
