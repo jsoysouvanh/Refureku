@@ -110,6 +110,24 @@ std::size_t EntityAPI::getPropertiesCount() const noexcept
 	return _pimpl->getProperties().size();
 }
 
+bool EntityAPI::foreachProperty(PropertyVisitor visitor, void* userData) const noexcept
+{
+	if (visitor != nullptr)
+	{
+		for (Property const* property : _pimpl->getProperties())
+		{
+			if (!visitor(*property, userData))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
 bool EntityAPI::addProperty(Property const* property) noexcept
 {
 	return _pimpl->addProperty(property);

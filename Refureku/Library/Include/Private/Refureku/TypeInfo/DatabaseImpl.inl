@@ -308,20 +308,33 @@ inline void DatabaseAPI::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<Na
 		//This shared pointer is used by database only so we can delete it
 		unregisterEntity(*npPtr, false);
 
-		for (auto it = _generatedNamespaces.cbegin(); it != _generatedNamespaces.cend(); it++)
-		{
-			if (*it == npPtr)
-			{
-				_generatedNamespaces.erase(it);
-				return;
-			}
-		}
+		_generatedNamespaces.erase(npPtr->getId());
 	}
 }
 
-inline std::shared_ptr<NamespaceAPI> DatabaseAPI::DatabaseImpl::generateNamespace(char const* name, std::size_t id) noexcept
+inline std::shared_ptr<NamespaceAPI> DatabaseAPI::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id, bool isFileLevelNamespace) noexcept
 {
-	return _generatedNamespaces.emplace_back(std::make_shared<NamespaceAPI>(name, id));
+	auto it = _generatedNamespaces.find(id);
+
+	if (it != _generatedNamespaces.cend())
+	{
+		return it->second;
+	}
+	else
+	{
+		//Generate a namespace
+		auto generatedNamespaceIt = _generatedNamespaces.emplace(id, std::make_shared<NamespaceAPI>(name, id));
+
+		assert(generatedNamespaceIt.second);
+
+		//Register the namespace to file level namespaces
+		if (isFileLevelNamespace)
+		{
+			registerFileLevelEntity(*generatedNamespaceIt.first->second, false);
+		}
+
+		return generatedNamespaceIt.first->second;
+	}
 }
 
 inline DatabaseAPI::DatabaseImpl::EntitiesById const& DatabaseAPI::DatabaseImpl::getEntitiesById() const noexcept

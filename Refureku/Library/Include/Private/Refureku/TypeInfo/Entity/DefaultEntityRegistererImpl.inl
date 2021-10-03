@@ -1,0 +1,27 @@
+/**
+*	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
+*
+*	This file is part of the Refureku library project which is released under the MIT License.
+*	See the README.md file for full license details.
+*/
+
+inline internal::DefaultEntityRegistererImpl::DefaultEntityRegistererImpl(EntityAPI const& entity) noexcept:
+	_registeredEntity{entity}
+{
+	//Entities which are not at file level should not be registered
+	assert(entity.getOuterEntity() == nullptr);
+
+	//Register to database
+	DatabaseAPI::getInstance()._pimpl->registerFileLevelEntity(entity, false);
+}
+
+inline internal::DefaultEntityRegistererImpl::~DefaultEntityRegistererImpl() noexcept
+{
+	//Unregister from database
+	DatabaseAPI::getInstance()._pimpl->unregisterEntity(_registeredEntity, false);
+}
+
+inline EntityAPI const& internal::DefaultEntityRegistererImpl::getRegisteredEntity() const noexcept
+{
+	return _registeredEntity;
+}

@@ -25,8 +25,20 @@ namespace rfk
 	* 
 	*	@param prop		The tested property.
 	*	@param userData	Data received from the user.
+	* 
+	*	@return true if the tested property is valid, else false.
 	*/
 	using PropertyPredicate = bool (*)(Property const& prop, void* userData);
+
+	/**
+	*	@brief Property visitor function.
+	* 
+	*	@param prop		The visited property.
+	*	@param userData	Data received from the user.
+	* 
+	*	@return true to make the visitor continue to the next property, else false (abort).
+	*/
+	using PropertyVisitor	= bool (*)(Property const& prop, void* userData);
 
 	class EntityAPI //TODO: Rename in Entity
 	{
@@ -38,30 +50,6 @@ namespace rfk
 								   EntityAPI const*	outerEntity = nullptr)			noexcept;
 			EntityAPI(EntityAPI const&)												= delete;
 			REFUREKU_API ~EntityAPI()												noexcept;	//TODO: Move to protected + not part of the API
-
-			/**
-			*	@brief Add a property to this entity.
-			*	
-			*	@param property The property to add.
-			*	
-			*	@return	true if the property was added,
-			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
-			*/
-			REFUREKU_API bool									addProperty(Property const* property)									noexcept;
-
-			/**
-			*	@brief Inherit from another entity inheritable properties.
-			*	
-			*	@param from The entity this entity should inherit the properties from.
-			*/
-			REFUREKU_API void									inheritProperties(EntityAPI const& from)								noexcept;
-
-			/**
-			*	@brief Inherit all properties from another entity.
-			* 
-			*	@param from The entity this entity should inherit the properties from.
-			*/
-			REFUREKU_API void									inheritAllProperties(EntityAPI const& from)								noexcept;
 
 			/**
 			*	@brief	Retrieve the property at the given index.
@@ -125,6 +113,18 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API std::size_t				getPropertiesCount()											const	noexcept;
 
 			/**
+			*	@brief Execute the given visitor on all properties attached to this entity.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			*/
+			REFUREKU_API bool									foreachProperty(PropertyVisitor visitor,
+																				void*			userData)						const	noexcept;
+
+			/**
 			*	@brief Getter for the field _name.
 			* 
 			*	@return _name.
@@ -151,6 +151,30 @@ namespace rfk
 			*	@return _outerEntity.
 			*/
 			RFK_NODISCARD REFUREKU_API EntityAPI const*			getOuterEntity()												const	noexcept;
+
+			/**
+			*	@brief Add a property to this entity.
+			*	
+			*	@param property The property to add.
+			*	
+			*	@return	true if the property was added,
+			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
+			*/
+			REFUREKU_API bool									addProperty(Property const* property)									noexcept;
+
+			/**
+			*	@brief Inherit from another entity inheritable properties.
+			*	
+			*	@param from The entity this entity should inherit the properties from.
+			*/
+			REFUREKU_API void									inheritProperties(EntityAPI const& from)								noexcept;
+
+			/**
+			*	@brief Inherit all properties from another entity.
+			* 
+			*	@param from The entity this entity should inherit the properties from.
+			*/
+			REFUREKU_API void									inheritAllProperties(EntityAPI const& from)								noexcept;
 
 			/**
 			*	@brief Setter for the field _outerEntity.

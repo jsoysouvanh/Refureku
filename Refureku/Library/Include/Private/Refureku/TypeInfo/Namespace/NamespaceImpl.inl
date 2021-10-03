@@ -10,44 +10,44 @@ inline NamespaceAPI::NamespaceImpl::NamespaceImpl(char const* name, std::size_t 
 {
 }
 
-inline void NamespaceAPI::NamespaceImpl::addNamespace(NamespaceAPI const* nestedNamespace) noexcept
+inline void NamespaceAPI::NamespaceImpl::addNamespace(NamespaceAPI const& nestedNamespace) noexcept
 {
-	_namespaces.emplace(nestedNamespace);
+	_namespaces.emplace(&nestedNamespace);
 }
 
-inline void NamespaceAPI::NamespaceImpl::addArchetype(ArchetypeAPI const* archetype) noexcept
+inline void NamespaceAPI::NamespaceImpl::addArchetype(ArchetypeAPI const& archetype) noexcept
 {
-	_archetypes.emplace(archetype);
+	_archetypes.emplace(&archetype);
 }
 
-inline void NamespaceAPI::NamespaceImpl::addVariable(VariableAPI const* variable) noexcept
+inline void NamespaceAPI::NamespaceImpl::addVariable(VariableAPI const& variable) noexcept
 {
-	_variables.emplace(variable);
+	_variables.emplace(&variable);
 }
 
-inline void NamespaceAPI::NamespaceImpl::addFunction(FunctionAPI const* function) noexcept
+inline void NamespaceAPI::NamespaceImpl::addFunction(FunctionAPI const& function) noexcept
 {
-	_functions.emplace(function);
+	_functions.emplace(&function);
 }
 
-inline void NamespaceAPI::NamespaceImpl::removeNamespace(NamespaceAPI const* nestedNamespace) noexcept
+inline void NamespaceAPI::NamespaceImpl::removeNamespace(NamespaceAPI const& nestedNamespace) noexcept
 {
-	_namespaces.erase(nestedNamespace);
+	_namespaces.erase(&nestedNamespace);
 }
 
-inline void NamespaceAPI::NamespaceImpl::removeArchetype(ArchetypeAPI const* archetype) noexcept
+inline void NamespaceAPI::NamespaceImpl::removeArchetype(ArchetypeAPI const& archetype) noexcept
 {
-	_archetypes.erase(archetype);
+	_archetypes.erase(&archetype);
 }
 
-inline void NamespaceAPI::NamespaceImpl::removeVariable(VariableAPI const* variable) noexcept
+inline void NamespaceAPI::NamespaceImpl::removeVariable(VariableAPI const& variable) noexcept
 {
-	_variables.erase(variable);
+	_variables.erase(&variable);
 }
 
-inline void NamespaceAPI::NamespaceImpl::removeFunction(FunctionAPI const* function) noexcept
+inline void NamespaceAPI::NamespaceImpl::removeFunction(FunctionAPI const& function) noexcept
 {
-	_functions.erase(function);
+	_functions.erase(&function);
 }
 
 inline NamespaceAPI::NamespaceImpl::NamespaceHashSet const& NamespaceAPI::NamespaceImpl::getNamespaces() const noexcept

@@ -30,6 +30,14 @@ namespace rfk
 	class StaticFieldAPI;
 	class EnumValueAPI;
 
+	namespace internal
+	{
+		class DefaultEntityRegistererImpl;
+		class ArchetypeRegistererImpl;
+		class NamespaceFragmentRegistererImpl;
+		class ClassTemplateInstantiationRegistererImpl;
+	}
+
 	class DatabaseAPI final
 	{
 		public:
@@ -255,9 +263,18 @@ namespace rfk
 			/** Pointer to the concrete Database implementation. */
 			Pimpl<DatabaseImpl>	_pimpl;
 
+			/**
+			*	@brief	Get the singleton database instance.
+			*			The method must be exported since it contains the singleton.
+			* 
+			*	@return The database singleton.
+			*/
 			REFUREKU_API static DatabaseAPI& getInstance() noexcept;
 
-
+		friend internal::DefaultEntityRegistererImpl;
+		friend internal::ArchetypeRegistererImpl;
+		friend internal::NamespaceFragmentRegistererImpl;
+		friend internal::ClassTemplateInstantiationRegistererImpl;
 		friend REFUREKU_API DatabaseAPI const& getDatabaseAPI() noexcept;
 	};
 

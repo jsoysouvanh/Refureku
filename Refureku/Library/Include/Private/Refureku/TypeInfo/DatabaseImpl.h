@@ -8,6 +8,7 @@
 #pragma once
 
 #include <unordered_set>
+#include <unordered_map>
 #include <vector>
 #include <memory>	//std::shared_ptr
 #include <cassert>
@@ -39,7 +40,7 @@ namespace rfk
 			using VariablesByName				= std::unordered_set<VariableAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FunctionsByName				= std::unordered_multiset<FunctionAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FundamentalArchetypesByName	= std::unordered_set<FundamentalArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using GenNamespaces					= std::vector<std::shared_ptr<NamespaceAPI>>;
+			using GenNamespaces					= std::unordered_map<std::size_t, std::shared_ptr<NamespaceAPI>>;
 			
 		private:
 			/** Collection of all registered entities hashed by Id.  */
@@ -137,15 +138,16 @@ namespace rfk
 			inline void											checkNamespaceRefCount(std::shared_ptr<NamespaceAPI> const& npPtr)		noexcept;
 
 			/**
-			*	@brief Generate a namespace object to share between different namespace fragments.
-			*	
-			*	@param name Name of the namespace to generate.
-			*	@param id Id of the namespace to generate.
-			*
-			*	@return The newly generated namespace.
+			*	@brief Get the namespace with the given name and id. If it doesn't exist yet, create and register it right away.
+			* 
+			*	@param name Name of the searched namespace.
+			*	@param id	Id of the namespace.
+			* 
+			*	@return A shared_ptr to the retrieved namespace.
 			*/
-			RFK_NODISCARD inline std::shared_ptr<NamespaceAPI>	generateNamespace(char const*	name,
-																				  std::size_t	id)										noexcept;
+			RFK_NODISCARD inline std::shared_ptr<NamespaceAPI>	getOrCreateNamespace(char const*	name,
+																					 std::size_t	id,
+																					 bool			isFileLevelNamespace)				noexcept;
 
 			/**
 			*	@brief Getters for each field.

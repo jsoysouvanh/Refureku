@@ -13,6 +13,7 @@ namespace rfk
 {
 	//Forward declaration
 	class Struct;
+	class StructAPI;
 
 	/**
 	*	Base class which implements the virtual getArchetype method.
@@ -26,6 +27,12 @@ namespace rfk
 			virtual ~Object()		= default;
 
 			virtual	Struct const& getArchetype() const noexcept = 0;
+
+			//TODO: Temporary, delete this
+			virtual StructAPI const& getArchetypeAPI() const noexcept
+			{
+				return *static_cast<StructAPI const*>(nullptr);
+			}
 			
 			Object& operator=(Object const&) 	= default;
 			Object& operator=(Object&&) 		= default;

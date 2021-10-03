@@ -24,16 +24,18 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Entity/Entity.cpp
 					Source/TypeInfo/Entity/EntityImpl.cpp
 					Source/TypeInfo/Entity/EntityHash.cpp
-					Source/TypeInfo/Entity/EntityImplementation.cpp	#Delete this
+					Source/TypeInfo/Entity/EntityImplementation.cpp		#Delete this
 					Source/TypeInfo/Entity/EntityCastAPI.cpp
-					Source/TypeInfo/Entity/EntityCast.cpp			#Delete this
-					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
+					Source/TypeInfo/Entity/EntityCast.cpp				#Delete this
+					Source/TypeInfo/Entity/DefaultEntityRegistererAPI.cpp
+					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp	#Delete this
 
 					Source/TypeInfo/Namespace/NamespaceAPI.cpp
-					Source/TypeInfo/Namespace/Namespace.cpp					#Delete this
+					Source/TypeInfo/Namespace/Namespace.cpp						#Delete this
 					Source/TypeInfo/Namespace/NamespaceFragmentAPI.cpp
-					Source/TypeInfo/Namespace/NamespaceFragment.cpp			#Delete this
-					Source/TypeInfo/Namespace/NamespaceFragmentRegisterer.cpp
+					Source/TypeInfo/Namespace/NamespaceFragment.cpp				#Delete this
+					Source/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.cpp
+					Source/TypeInfo/Namespace/NamespaceFragmentRegisterer.cpp	#Delete this
 
 					Source/TypeInfo/Archetypes/ArchetypeAPI.cpp
 					Source/TypeInfo/Archetypes/ArchetypeImpl.cpp
@@ -47,9 +49,10 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/EnumValueImpl.cpp
 					Source/TypeInfo/Archetypes/StructAPI.cpp
 					Source/TypeInfo/Archetypes/Struct.cpp				#Delete this
-					Source/TypeInfo/Archetypes/Class.cpp
+					Source/TypeInfo/Archetypes/Class.cpp				#Delete this
 					Source/TypeInfo/Archetypes/ParentStruct.cpp
-					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
+					Source/TypeInfo/Archetypes/ArchetypeRegistererAPI.cpp
+					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp	#Delete this
 					Source/TypeInfo/Archetypes/GetArchetype.cpp
 					Source/TypeInfo/Archetypes/ClassTemplate.cpp
 					Source/TypeInfo/Archetypes/TemplateParameter.cpp

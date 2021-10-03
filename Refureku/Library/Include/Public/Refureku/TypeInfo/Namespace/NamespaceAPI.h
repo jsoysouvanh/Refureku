@@ -14,12 +14,16 @@
 namespace rfk
 {
 	//Forward declarations
-	class NamespaceFragmentRegisterer;
 	class StructAPI;
 	class EnumAPI;
 	class VariableAPI;
 	class FunctionAPI;
 	class ArchetypeAPI;
+
+	namespace internal
+	{
+		class NamespaceFragmentRegistererImpl;
+	}
 
 	class NamespaceAPI final : public EntityAPI
 	{
@@ -145,6 +149,6 @@ namespace rfk
 			//Forward declaration
 			class NamespaceImpl;
 
-		friend NamespaceFragmentRegisterer; //Can access implementation
+		friend internal::NamespaceFragmentRegistererImpl; //Can access implementation
 	};
 }

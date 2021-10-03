@@ -48,56 +48,56 @@ namespace rfk
 			* 
 			*	@param nestedNamespace The namespace to add.
 			*/
-			inline void										addNamespace(NamespaceAPI const* nestedNamespace)			noexcept;
+			inline void										addNamespace(NamespaceAPI const& nestedNamespace)			noexcept;
 
 			/**
 			*	@brief Add a nested archetype to this namespace.
 			* 
 			*	@param archetype The archetype to add.
 			*/
-			inline void										addArchetype(ArchetypeAPI const* archetype)					noexcept;
+			inline void										addArchetype(ArchetypeAPI const& archetype)					noexcept;
 
 			/**
 			*	@brief Add a nested variable to this namespace.
 			* 
 			*	@param variable The variable to add.
 			*/
-			inline void										addVariable(VariableAPI const* variable)					noexcept;
+			inline void										addVariable(VariableAPI const& variable)					noexcept;
 
 			/**
 			*	@brief Add a nested function to this namespace.
 			* 
 			*	@param function The function to add.
 			*/
-			inline void										addFunction(FunctionAPI const* function)					noexcept;
+			inline void										addFunction(FunctionAPI const& function)					noexcept;
 
 			/**
 			*	@brief Remove a nested namespace from this namespace.
 			* 
 			*	@param nestedNamespace The namespace to add.
 			*/
-			inline void										removeNamespace(NamespaceAPI const* nestedNamespace)		noexcept;
+			inline void										removeNamespace(NamespaceAPI const& nestedNamespace)		noexcept;
 
 			/**
 			*	@brief Remove a nested archetype from this namespace.
 			* 
 			*	@param archetype The archetype to remove.
 			*/
-			inline void										removeArchetype(ArchetypeAPI const* archetype)				noexcept;
+			inline void										removeArchetype(ArchetypeAPI const& archetype)				noexcept;
 
 			/**
 			*	@brief Remove a nested variable from this namespace.
 			* 
 			*	@param variable The variable to remove.
 			*/
-			inline void										removeVariable(VariableAPI const* variable)					noexcept;
+			inline void										removeVariable(VariableAPI const& variable)					noexcept;
 
 			/**
 			*	@brief Remove a nested function from this namespace.
 			* 
 			*	@param function The function to remove.
 			*/
-			inline void										removeFunction(FunctionAPI const* function)					noexcept;
+			inline void										removeFunction(FunctionAPI const& function)					noexcept;
 
 			/**
 			*	@brief Getter for the field _namespaces.
