@@ -25,10 +25,10 @@ namespace rfk
 			ArchetypeAPI const&			_underlyingArchetype;
 
 		public:
-			EnumImpl(char const*			name,
-					 std::size_t			id,
-					 ArchetypeAPI const*	underlyingArchetype,
-					 EntityAPI const*		outerEntity = nullptr)	noexcept;
+			inline EnumImpl(char const*			name,
+							std::size_t			id,
+							ArchetypeAPI const*	underlyingArchetype,
+							EntityAPI const*	outerEntity = nullptr)	noexcept;
 
 			/**
 			*	@brief Add an enum value to this enum.
@@ -40,10 +40,10 @@ namespace rfk
 			*	
 			*	@return The added enum value.
 			*/
-			EnumValueAPI&						addEnumValue(char const*	name,
-															 std::size_t	id,
-															 int64			value,
-															 EnumAPI const*	backRef)			noexcept;
+			inline EnumValueAPI&					addEnumValue(char const*	name,
+																 std::size_t	id,
+																 int64			value,
+																 EnumAPI const*	backRef)			noexcept;
 
 			/**
 			*	@brief	Set the number of enum values for this entity.
@@ -52,20 +52,22 @@ namespace rfk
 			* 
 			*	@param propertiesCapacity The number of enum values in this enum.
 			*/
-			void								setEnumValuesCapacity(std::size_t capacity)		noexcept;
+			inline void								setEnumValuesCapacity(std::size_t capacity)		noexcept;
 
 			/**
 			*	@brief Getter for the field _enumValues.
 			* 
 			*	@return _enumValues.
 			*/
-			std::vector<EnumValueAPI> const&	getEnumValues()							const	noexcept;
+			inline std::vector<EnumValueAPI> const&	getEnumValues()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _underlyingArchetype.
 			* 
 			*	@return _underlyingArchetype.
 			*/
-			ArchetypeAPI const&					getUnderlyingArchetype()				const	noexcept;
+			inline ArchetypeAPI const&				getUnderlyingArchetype()				const	noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Archetypes/EnumImpl.inl"
 }

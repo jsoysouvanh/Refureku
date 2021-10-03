@@ -19,16 +19,18 @@ namespace rfk
 			int64	_value = 0;
 
 		public:
-			EnumValueImpl(char const*		name,
-						  std::size_t		id,
-						  int64				value,
-						  EntityAPI const*	outerEntity = nullptr)	noexcept;
+			inline EnumValueImpl(char const*		name,
+								 std::size_t		id,
+								 int64				value,
+								 EntityAPI const*	outerEntity = nullptr)	noexcept;
 
 			/**
 			*	@brief Getter for the field _value.
 			*
 			*	@return _value.
 			*/
-			int64 getValue() const noexcept;
+			inline int64 getValue() const noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Archetypes/EnumValueImpl.inl"
 }

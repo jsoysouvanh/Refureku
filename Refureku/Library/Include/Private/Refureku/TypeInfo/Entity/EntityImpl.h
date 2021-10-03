@@ -39,11 +39,11 @@ namespace rfk
 			EEntityKind						_kind;
 
 		public:
-			EntityImpl(char const*		name,
-					   std::size_t		id,
-					   EEntityKind		kind = EEntityKind::Undefined,
-					   EntityAPI const*	outerEntity = nullptr)			noexcept;
-			virtual ~EntityImpl()										= default;
+			inline EntityImpl(char const*		name,
+							  std::size_t		id,
+							  EEntityKind		kind = EEntityKind::Undefined,
+							  EntityAPI const*	outerEntity = nullptr)			noexcept;
+			virtual ~EntityImpl()												= default;
 
 			/**
 			*	@brief Add a property to this entity.
@@ -53,63 +53,63 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (for example, AllowMultiple is false and a property of the same kind is already in the entity).
 			*/
-			bool								addProperty(Property const* property)					noexcept;
+			inline bool									addProperty(Property const* property)					noexcept;
 
 			/**
 			*	@brief Inherit from another entity inheritable properties.
 			*	
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			void								inheritProperties(EntityImpl const& from)				noexcept;
+			inline void									inheritProperties(EntityImpl const& from)				noexcept;
 
 			/**
 			*	@brief Inherit all properties from another entity.
 			* 
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			void								inheritAllProperties(EntityImpl const& from)			noexcept;
+			inline void									inheritAllProperties(EntityImpl const& from)			noexcept;
 
 			/**
 			*	@brief Getter for the field _name.
 			* 
 			*	@return _name.
 			*/
-			std::string const&					getName()										const	noexcept;
+			inline std::string const&					getName()										const	noexcept;
 
 			/**
 			*	@brief Getter for the field _id.
 			* 
 			*	@return _id.
 			*/
-			std::size_t							getId()											const	noexcept;
+			inline std::size_t							getId()											const	noexcept;
 
 			/**
 			*	@brief Getter for the field _kind.
 			* 
 			*	@return _kind.
 			*/
-			EEntityKind							getKind()										const	noexcept;
+			inline EEntityKind							getKind()										const	noexcept;
 
 			/**
 			*	@brief Getter for the field _outerEntity.
 			* 
 			*	@return _outerEntity.
 			*/
-			EntityAPI const*					getOuterEntity()								const	noexcept;
+			inline EntityAPI const*						getOuterEntity()								const	noexcept;
 
 			/**
 			*	@brief Getter for the field _properties.
 			* 
 			*	@return _properties.
 			*/
-			std::vector<Property const*> const&	getProperties()									const	noexcept;
+			inline std::vector<Property const*> const&	getProperties()									const	noexcept;
 
 			/**
 			*	@brief Setter for the field _outerEntity.
 			* 
 			*	@param outerEntity The outer entity to set.
 			*/
-			void								setOuterEntity(EntityAPI const* outerEntity)			noexcept;
+			inline void									setOuterEntity(EntityAPI const* outerEntity)			noexcept;
 
 			/**
 			*	@brief	Set the number of properties for this entity.
@@ -118,6 +118,8 @@ namespace rfk
 			* 
 			*	@param capacity The number of properties of this entity.
 			*/
-			void								setPropertiesCapacity(std::size_t capacity)				noexcept;
+			inline void									setPropertiesCapacity(std::size_t capacity)				noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Entity/EntityImpl.inl"
 }

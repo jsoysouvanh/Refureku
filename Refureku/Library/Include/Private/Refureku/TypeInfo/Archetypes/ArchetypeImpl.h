@@ -22,31 +22,33 @@ namespace rfk
 			std::size_t			_memorySize			= 0;
 
 		public:
-			ArchetypeImpl(char const*		name,
-						  std::size_t		id,
-						  EEntityKind		kind,
-						  std::size_t		memorySize,
-						  EntityAPI const*	outerEntity = nullptr)	noexcept;
-
-			/**
-			*	@brief Getter for the field _accessSpecifier.
-			* 
-			*	@return _accessSpecifier.
-			*/
-			EAccessSpecifier	getAccessSpecifier()			const	noexcept;
-
-			/**
-			*	@brief Setter for the field _accessSpecifier.
-			* 
-			*	@param The access specifier to set.
-			*/
-			void				setAccessSpecifier(EAccessSpecifier)	noexcept;
+			inline ArchetypeImpl(char const*		name,
+								 std::size_t		id,
+								 EEntityKind		kind,
+								 std::size_t		memorySize,
+								 EntityAPI const*	outerEntity = nullptr)	noexcept;
 
 			/**
 			*	@brief Getter for the field _memorySize.
 			* 
 			*	@return _memorySize.
 			*/
-			std::size_t			getMemorySize()					const	noexcept;
+			inline std::size_t		getMemorySize()					const	noexcept;
+
+			/**
+			*	@brief Getter for the field _accessSpecifier.
+			* 
+			*	@return _accessSpecifier.
+			*/
+			inline EAccessSpecifier	getAccessSpecifier()			const	noexcept;
+
+			/**
+			*	@brief Setter for the field _accessSpecifier.
+			* 
+			*	@param The access specifier to set.
+			*/
+			inline void				setAccessSpecifier(EAccessSpecifier)	noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.inl"
 }

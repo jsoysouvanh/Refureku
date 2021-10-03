@@ -4,8 +4,6 @@
 
 #include <Refureku/Refureku.h>
 
-#include "Refureku/Containers/Vector.h"
-
 #include "AB.h"
 #include "ExampleClass.h"
 #include "TestPropertyUsage.h"
