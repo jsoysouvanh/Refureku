@@ -105,7 +105,7 @@ namespace rfk
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
 			* 
-			*	@exception Any exception poentially thrown from the provided visitor.
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool									foreachProperty(Visitor<Property>	visitor,
 																				void*				userData)				const;

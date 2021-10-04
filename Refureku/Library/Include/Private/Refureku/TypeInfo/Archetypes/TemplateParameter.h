@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "Refureku/Config.h"
-#include "Refureku/TypeInfo/Archetypes/ETemplateParameterKind.h"
+#include "Refureku/TypeInfo/Archetypes/Template/ETemplateParameterKind.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
 namespace rfk
