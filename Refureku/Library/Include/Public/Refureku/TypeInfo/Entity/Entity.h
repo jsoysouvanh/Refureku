@@ -13,32 +13,14 @@
 #include "Refureku/Utility/Pimpl.h"
 #include "Refureku/TypeInfo/Entity/EEntityKind.h"
 #include "Refureku/Containers/Vector.h"
+#include "Refureku/Misc/Visitor.h"
+#include "Refureku/Misc/Predicate.h"
 
 namespace rfk
 {
 	class StructAPI;
 	class Property;
 	class EntityUtility;
-
-	/**
-	*	@brief Predicate defining if a property is valid or not.
-	* 
-	*	@param prop		The tested property.
-	*	@param userData	Data received from the user.
-	* 
-	*	@return true if the tested property is valid, else false.
-	*/
-	using PropertyPredicate = bool (*)(Property const& prop, void* userData);
-
-	/**
-	*	@brief Property visitor function.
-	* 
-	*	@param prop		The visited property.
-	*	@param userData	Data received from the user.
-	* 
-	*	@return true to make the visitor continue to the next property, else false (abort).
-	*/
-	using PropertyVisitor	= bool (*)(Property const& prop, void* userData);
 
 	class EntityAPI //TODO: Rename in Entity
 	{
@@ -59,7 +41,7 @@ namespace rfk
 			* 
 			*	@return The property at the given index.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getPropertyAt(std::size_t propertyIndex)						const	noexcept;
+			RFK_NODISCARD REFUREKU_API Property const*			getPropertyAt(std::size_t propertyIndex)					const	noexcept;
 
 			/**
 			*	@brief Retrieve the first property matching with the provided archetype.
@@ -70,7 +52,7 @@ namespace rfk
 			*	@return The first property matching the provided archetype in this entity, nullptr if none is found.
 			*/
 			RFK_NODISCARD REFUREKU_API Property const*			getProperty(StructAPI const& archetype,
-																			bool			 isChildClassValid = true)			const	noexcept;
+																			bool			 isChildClassValid = true)		const	noexcept;
 
 			/**
 			*	@brief Retrieve a property matching with a predicate.
@@ -79,9 +61,11 @@ namespace rfk
 			*	@param userData		Optional data forwarded to the predicate.
 			*	
 			*	@return The first found property fulfilling the provided predicate if any, else nullptr.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getPropertyByPredicate(PropertyPredicate predicate,
-																					   void*			 userData = nullptr)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Property const*			getPropertyByPredicate(Predicate<Property>	predicate,
+																					   void*				userData)		const;
 
 			/**
 			*	@brief Retrieve all properties matching with the provided archetype.
@@ -92,7 +76,7 @@ namespace rfk
 			*	@return A collection of all properties matching the provided archetype in this entity.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getProperties(StructAPI const&	archetype,
-																			  bool				isChildClassValid = true)		const	noexcept;
+																			  bool				isChildClassValid = true)	const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with a predicate in this entity.
@@ -102,15 +86,15 @@ namespace rfk
 			*	
 			*	@return A collection of all properties fulfilling the provided predicate contained in this entity.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getPropertiesByPredicate(PropertyPredicate	predicate,
-																						 void*				userData = nullptr)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getPropertiesByPredicate(Predicate<Property>	predicate,
+																						 void*					userData)	const;
 
 			/**
 			*	@brief Get the number of properties attached to this entity.
 			* 
 			*	@return The number of properties attached to this entity.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t				getPropertiesCount()											const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t				getPropertiesCount()										const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all properties attached to this entity.
@@ -120,37 +104,39 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception poentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool									foreachProperty(PropertyVisitor visitor,
-																				void*			userData)						const	noexcept;
+			REFUREKU_API bool									foreachProperty(Visitor<Property>	visitor,
+																				void*				userData)				const;
 
 			/**
 			*	@brief Getter for the field _name.
 			* 
 			*	@return _name.
 			*/
-			RFK_NODISCARD REFUREKU_API char const*				getName()														const	noexcept;
+			RFK_NODISCARD REFUREKU_API char const*				getName()													const	noexcept;
 
 			/**
 			*	@brief Getter for the field _id.
 			* 
 			*	@return _id.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t				getId()															const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t				getId()														const	noexcept;
 
 			/**
 			*	@brief Getter for the field _kind.
 			* 
 			*	@return _kind.
 			*/
-			RFK_NODISCARD REFUREKU_API EEntityKind				getKind()														const	noexcept;
+			RFK_NODISCARD REFUREKU_API EEntityKind				getKind()													const	noexcept;
 
 			/**
 			*	@brief Getter for the field _outerEntity.
 			* 
 			*	@return _outerEntity.
 			*/
-			RFK_NODISCARD REFUREKU_API EntityAPI const*			getOuterEntity()												const	noexcept;
+			RFK_NODISCARD REFUREKU_API EntityAPI const*			getOuterEntity()											const	noexcept;
 
 			/**
 			*	@brief Add a property to this entity.
@@ -160,28 +146,28 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
 			*/
-			REFUREKU_API bool									addProperty(Property const* property)									noexcept;
+			REFUREKU_API bool									addProperty(Property const* property)								noexcept;
 
 			/**
 			*	@brief Inherit from another entity inheritable properties.
 			*	
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			REFUREKU_API void									inheritProperties(EntityAPI const& from)								noexcept;
+			REFUREKU_API void									inheritProperties(EntityAPI const& from)							noexcept;
 
 			/**
 			*	@brief Inherit all properties from another entity.
 			* 
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			REFUREKU_API void									inheritAllProperties(EntityAPI const& from)								noexcept;
+			REFUREKU_API void									inheritAllProperties(EntityAPI const& from)							noexcept;
 
 			/**
 			*	@brief Setter for the field _outerEntity.
 			* 
 			*	@param outerEntity The outer entity to set.
 			*/
-			REFUREKU_API void									setOuterEntity(EntityAPI const* outerEntity)							noexcept;
+			REFUREKU_API void									setOuterEntity(EntityAPI const* outerEntity)						noexcept;
 
 			/**
 			*	@brief	Set the number of properties for this entity.
@@ -190,7 +176,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of properties of this entity.
 			*/
-			REFUREKU_API void									setPropertiesCapacity(std::size_t capacity)								noexcept;
+			REFUREKU_API void									setPropertiesCapacity(std::size_t capacity)							noexcept;
 
 
 			EntityAPI&						operator=(EntityAPI const&)			= delete;

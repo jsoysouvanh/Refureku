@@ -19,6 +19,7 @@ namespace rfk
 	class VariableAPI;
 	class FunctionAPI;
 	class ArchetypeAPI;
+	class NamespaceAPI;
 
 	namespace internal
 	{
@@ -50,10 +51,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedNamespace(bool (*visitor)(NamespaceAPI const&,
-																								   void*),
-																				   void* userData)								const	noexcept;
+			REFUREKU_API bool								foreachNestedNamespace(Visitor<NamespaceAPI>	visitor,
+																				   void*					userData)			const;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.
@@ -90,10 +92,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially throw from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&,
-																								   void*),
-																				   void* userData)								const	noexcept;
+			REFUREKU_API bool								foreachNestedArchetype(Visitor<ArchetypeAPI>	visitor,
+																				   void*					userData)			const;
 
 			/**
 			*	@brief Retrieve a variable from this namespace.
@@ -115,10 +118,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedVariable(bool (*visitor)(VariableAPI const&,
-																								  void*),
-																				  void* userData)								const	noexcept;
+			REFUREKU_API bool								foreachNestedVariable(Visitor<VariableAPI>	visitor,
+																				  void*					userData)				const;
 
 			/**
 			*	@brief Retrieve a function from this namespace.
@@ -140,10 +144,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedFunction(bool (*visitor)(FunctionAPI const&,
-																								  void*),
-																				  void* userData)								const	noexcept;
+			REFUREKU_API bool								foreachNestedFunction(Visitor<FunctionAPI>	visitor,
+																				  void*					userData)				const;
 
 		private:
 			//Forward declaration

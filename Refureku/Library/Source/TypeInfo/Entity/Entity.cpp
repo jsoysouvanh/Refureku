@@ -63,7 +63,7 @@ Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildC
 	return nullptr;
 }
 
-Property const* EntityAPI::getPropertyByPredicate(PropertyPredicate predicate, void* userData) const noexcept
+Property const* EntityAPI::getPropertyByPredicate(Predicate<Property> predicate, void* userData) const
 {
 	for (Property const* prop : _pimpl->getProperties())
 	{
@@ -107,7 +107,7 @@ Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, boo
 	return result;
 }
 
-Vector<Property const*> EntityAPI::getPropertiesByPredicate(PropertyPredicate predicate, void* userData) const noexcept
+Vector<Property const*> EntityAPI::getPropertiesByPredicate(Predicate<Property> predicate, void* userData) const
 {
 	Vector<Property const*> result;
 
@@ -127,7 +127,7 @@ std::size_t EntityAPI::getPropertiesCount() const noexcept
 	return _pimpl->getProperties().size();
 }
 
-bool EntityAPI::foreachProperty(PropertyVisitor visitor, void* userData) const noexcept
+bool EntityAPI::foreachProperty(Visitor<Property> visitor, void* userData) const
 {
 	if (visitor != nullptr)
 	{

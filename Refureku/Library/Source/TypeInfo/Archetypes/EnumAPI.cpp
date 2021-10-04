@@ -50,7 +50,7 @@ EnumValueAPI const* EnumAPI::getEnumValue(int64 value) const noexcept
 	return nullptr;
 }
 
-EnumValueAPI const* EnumAPI::getEnumValueByPredicate(EnumValuePredicate predicate, void* userData) const noexcept
+EnumValueAPI const* EnumAPI::getEnumValueByPredicate(Predicate<EnumValueAPI> predicate, void* userData) const
 {
 	for (EnumValueAPI const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
@@ -78,7 +78,7 @@ Vector<EnumValueAPI const*> EnumAPI::getEnumValues(int64 value) const noexcept
 	return result;
 }
 
-Vector<EnumValueAPI const*> EnumAPI::getEnumValuesByPredicate(EnumValuePredicate predicate, void* userData) const noexcept
+Vector<EnumValueAPI const*> EnumAPI::getEnumValuesByPredicate(Predicate<EnumValueAPI> predicate, void* userData) const
 {
 	Vector<EnumValueAPI const*> result;
 
@@ -108,7 +108,7 @@ ArchetypeAPI const& EnumAPI::getUnderlyingArchetype() const noexcept
 	return reinterpret_cast<EnumImpl const*>(getPimpl())->getUnderlyingArchetype();
 }
 
-bool EnumAPI::foreachEnumValue(bool (*visitor)(EnumValueAPI const&, void*), void* userData) const noexcept
+bool EnumAPI::foreachEnumValue(Predicate<EnumValueAPI> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues(), visitor, userData);
 }

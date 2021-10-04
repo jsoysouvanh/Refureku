@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
+#include "Refureku/Misc/Visitor.h"
 
 namespace rfk
 {
@@ -28,16 +29,14 @@ namespace rfk
 			*			If the visitor is nullptr, return false.
 			*/
 			template <typename EntityType, typename ContainerType>
-			static bool											foreachEntity(ContainerType const& container,
-																			  bool				   (*visitor)(EntityType const&,
-																											  void*),
-																			  void*				   userData)						noexcept;
+			static bool											foreachEntity(ContainerType const&	container,
+																			  Visitor<EntityType>	visitor,
+																			  void*					userData)						noexcept;
 
 			template <typename EntityType, typename ContainerType>
-			static bool											foreachEntityPtr(ContainerType const& container,
-																				 bool				  (*visitor)(EntityType const&,
-																												 void*),
-																				 void*				  userData)						noexcept;
+			static bool											foreachEntityPtr(ContainerType const&	container,
+																				 Visitor<EntityType>	visitor,
+																				 void*					userData)					noexcept;
 
 			/**
 			*	@brief Get an element of a given name if it matches a predicate in an unordered_set like container.

@@ -132,10 +132,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&,
-																												   void*),
-																								   void* userData)									const	noexcept;
+			REFUREKU_API bool												foreachNestedArchetype(Visitor<ArchetypeAPI>	visitor,
+																								   void*					userData)						const;
 
 			/**
 			*	@param name		Name of the field to retrieve.
@@ -178,10 +179,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachField(bool (*visitor)(FieldAPI const&,
-																										 void*),
-																						 void* userData)											const	noexcept;
+			REFUREKU_API bool												foreachField(Visitor<FieldAPI>	visitor,
+																						 void*				userData)								const;
 
 			/**
 			*	@param name		Name of the static field to retrieve.
@@ -226,10 +228,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachStaticField(bool (*visitor)(StaticFieldAPI const&,
-																											   void*),
-																							   void* userData)										const	noexcept;
+			REFUREKU_API bool												foreachStaticField(Visitor<StaticFieldAPI>	visitor,
+																							   void*					userData)					const;
 
 			/**
 			*	@param name		Name of the method to retrieve.
@@ -269,10 +272,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachMethod(bool (*visitor)(MethodAPI const&,
-																										  void*),
-																						  void* userData)											const	noexcept;
+			REFUREKU_API bool												foreachMethod(Visitor<MethodAPI>	visitor,
+																						  void*					userData)							const;
 
 			/**
 			*	@param methodName Name of the static method to retrieve.
@@ -314,10 +318,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachStaticMethod(bool (*visitor)(StaticMethodAPI const&,
-																												void*),
-																								void* userData)										const	noexcept;
+			REFUREKU_API bool												foreachStaticMethod(Visitor<StaticMethodAPI>	visitor,
+																								void*						userData)				const;
 
 			/**
 			*	@brief Get the class kind of this instance.
@@ -565,6 +570,9 @@ namespace rfk
 		template <typename T>
 		void* defaultInstantiator();
 	}
+
+	REFUREKU_TEMPLATE_API(rfk::Allocator<StructAPI const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<StructAPI const*, rfk::Allocator<StructAPI const*>>);
 
 	#include "Refureku/TypeInfo/Archetypes/StructAPI.inl"
 }

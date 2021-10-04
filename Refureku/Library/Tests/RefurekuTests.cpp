@@ -118,16 +118,16 @@ void entities()
 	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
-		 }) == &testProperty);
+		 }, nullptr) == &testProperty);
 	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
-		 }) == &testProperty2);
+		 }, nullptr) == &testProperty2);
 
 	TEST(entity.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().isSubclassOf(Instantiator::staticGetArchetype());
-		 }).size() == 0u);
+		 }, nullptr).size() == 0u);
 
 	rfk::EntityAPI entity2("TestEntity2", 6789u, rfk::EEntityKind::Class, nullptr);
 
@@ -140,11 +140,11 @@ void entities()
 	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
-		 }) == &testProperty);
+		 }, nullptr) == &testProperty);
 	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
-		 }) == nullptr);
+		 }, nullptr) == nullptr);
 
 	rfk::EntityAPI entity3("TestEntity3", 101112u, rfk::EEntityKind::Enum, nullptr);
 
@@ -154,16 +154,16 @@ void entities()
 	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
-		 }) == &testProperty);
+		 }, nullptr) == &testProperty);
 	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
-		 }) == &testProperty2);
+		 }, nullptr) == &testProperty2);
 
 	TEST(entity3.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
 		 {
 			 return prop.getArchetype().isSubclassOf(Instantiator::staticGetArchetype());
-		 }).size() == 0u);
+		 }, nullptr).size() == 0u);
 
 	//TODO: Add test getProperty(Struct const& archetype, false)
 	//TODO: Add test getProperty(Struct const& archetype, true)
@@ -225,7 +225,7 @@ void enumsAndEnumValues()
 	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void* /*userData*/)
 		 {
 			 return value.getPropertiesCount() == 1u;
-		 }) == &enum1.getEnumValueAt(1));
+		 }, nullptr) == &enum1.getEnumValueAt(1));
 
 	TEST(enum1.getEnumValueAt(0).getValue<uint16_t>() == 0u);
 }

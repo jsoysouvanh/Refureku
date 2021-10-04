@@ -11,6 +11,8 @@
 #include "Refureku/Object.h"
 #include "Refureku/Containers/Vector.h"
 #include "Refureku/TypeInfo/Entity/EEntityKind.h"
+#include "Refureku/Misc/Visitor.h"
+#include "Refureku/Misc/Predicate.h"
 
 namespace rfk
 {

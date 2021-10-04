@@ -14,14 +14,6 @@ namespace rfk
 	//Forward declaration
 	class EnumValueAPI;
 
-	/**
-	*	@brief Predicate defining if an enum value is valid or not.
-	* 
-	*	@param prop		The tested enum value.
-	*	@param userData	Data received from the user.
-	*/
-	using EnumValuePredicate = bool (*)(EnumValueAPI const& value, void* userData);
-
 	class EnumAPI final : public ArchetypeAPI
 	{
 		public:
@@ -56,9 +48,11 @@ namespace rfk
 			*	@param userData		Optional data forwarded to the predicate.
 			*	
 			*	@return The first matching enum value if any is found, else nullptr.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByPredicate(EnumValuePredicate predicate,
-																							void*			   userData = nullptr)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByPredicate(Predicate<EnumValueAPI>	predicate,
+																							void*					userData)		const;
 
 			/**
 			*	@brief Search all enum values in this enum holding the provided value.
@@ -76,9 +70,11 @@ namespace rfk
 			*	@param userData		Optional data forwarded to the predicate.
 			*	
 			*	@return All the enum values matching with the given predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<EnumValueAPI const*>	getEnumValuesByPredicate(EnumValuePredicate predicate,
-																							 void*				userData = nullptr)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Vector<EnumValueAPI const*>	getEnumValuesByPredicate(Predicate<EnumValueAPI> predicate,
+																							 void*					userData)		const;
 
 			/**
 			*	@brief	Get the enum value located at the provided index in the enum.
@@ -112,10 +108,11 @@ namespace rfk
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachEnumValue(bool (*visitor)(EnumValueAPI const&,
-																									 void*),
-																					 void* userData)								const	noexcept;
+			REFUREKU_API bool										foreachEnumValue(Visitor<EnumValueAPI>	visitor,
+																					 void*					userData)				const;
 
 			/**
 			*	@brief Add an enum value to this enum.

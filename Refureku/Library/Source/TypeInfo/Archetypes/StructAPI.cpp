@@ -8,6 +8,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<StructAPI const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<StructAPI const*, rfk::Allocator<StructAPI const*>>;
+
 StructAPI::StructAPI(char const* name, std::size_t id, std::size_t memorySize, bool isClass, EClassKind classKind) noexcept:
 	ArchetypeAPI(new StructImpl(name, id, memorySize, isClass, classKind))
 {
@@ -99,7 +102,7 @@ EnumAPI const* StructAPI::getNestedEnumByName(char const* name, EAccessSpecifier
 				nullptr;
 }
 
-bool StructAPI::foreachNestedArchetype(bool (*visitor)(ArchetypeAPI const&, void*), void* userData) const noexcept
+bool StructAPI::foreachNestedArchetype(Visitor<ArchetypeAPI> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntityPtr(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(), visitor, userData);
 }
@@ -160,7 +163,7 @@ Vector<FieldAPI const*> StructAPI::getFieldsByName(char const* name, EFieldFlags
 	return result;
 }
 
-bool StructAPI::foreachField(bool (*visitor)(FieldAPI const&, void*), void* userData) const noexcept
+bool StructAPI::foreachField(Visitor<FieldAPI> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(), visitor, userData);
 }
@@ -221,7 +224,7 @@ Vector<StaticFieldAPI const*> StructAPI::getStaticFieldsByName(char const* name,
 	return result;
 }
 
-bool StructAPI::foreachStaticField(bool (*visitor)(StaticFieldAPI const&, void*), void* userData) const noexcept
+bool StructAPI::foreachStaticField(Visitor<StaticFieldAPI> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(), visitor, userData);
 }
@@ -299,7 +302,7 @@ Vector<MethodAPI const*> StructAPI::getMethodsByName(char const* name, EMethodFl
 	return result;
 }
 
-bool StructAPI::foreachMethod(bool (*visitor)(MethodAPI const&, void*), void* userData) const noexcept
+bool StructAPI::foreachMethod(Visitor<MethodAPI> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getMethods(), visitor, userData);
 }
@@ -378,7 +381,7 @@ Vector<StaticMethodAPI const*> StructAPI::getStaticMethodsByName(char const* nam
 	return result;
 }
 
-bool StructAPI::foreachStaticMethod(bool (*visitor)(StaticMethodAPI const&, void*), void* userData) const noexcept
+bool StructAPI::foreachStaticMethod(Visitor<StaticMethodAPI> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticMethods(), visitor, userData);
 }

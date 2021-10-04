@@ -6,7 +6,7 @@
 */
 
 template <typename EntityType, typename ContainerType>
-bool EntityUtility::foreachEntity(ContainerType const& container, bool (*visitor)(EntityType const&, void*), void* userData) noexcept
+bool EntityUtility::foreachEntity(ContainerType const& container, Visitor<EntityType> visitor, void* userData) noexcept
 {
 	if (visitor != nullptr)
 	{
@@ -25,7 +25,7 @@ bool EntityUtility::foreachEntity(ContainerType const& container, bool (*visitor
 }
 
 template <typename EntityType, typename ContainerType>
-bool EntityUtility::foreachEntityPtr(ContainerType const& container, bool (*visitor)(EntityType const&, void*), void* userData) noexcept
+bool EntityUtility::foreachEntityPtr(ContainerType const& container, Visitor<EntityType> visitor, void* userData) noexcept
 {
 	if (visitor != nullptr)
 	{

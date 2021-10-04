@@ -11,6 +11,7 @@
 #include "Refureku/Utility/Pimpl.h"
 #include "Refureku/TypeInfo/Variables/EVarFlags.h"
 #include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
+#include "Refureku/Misc/Visitor.h"
 
 namespace rfk
 {
@@ -78,6 +79,20 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API NamespaceAPI const*				getNamespaceByName(char const* name)									const;
 
 			/**
+			*	@brief Execute the given visitor on all file level namespaces.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool											foreachFileLevelNamespace(Visitor<NamespaceAPI> visitor,
+																								  void*					userData)				const;
+
+			/**
 			*	@brief Retrieve an archetype by id.
 			*
 			*	@param id The id of the archetype.
@@ -116,6 +131,20 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API StructAPI const*					getStructByName(char const* name)										const	noexcept;
 
 			/**
+			*	@brief Execute the given visitor on all file level structs.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool											foreachFileLevelStruct(Visitor<StructAPI>	visitor,
+																							   void*				userData)					const;
+
+			/**
 			*	@brief Retrieve a class by id.
 			*
 			*	@param id The id of the class.
@@ -134,6 +163,20 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API ClassAPI const*					getClassByName(char const* name)										const	noexcept;
 
 			/**
+			*	@brief Execute the given visitor on all file level classes.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool											foreachFileLevelClass(Visitor<ClassAPI>	visitor,
+																							  void*				userData)						const;
+
+			/**
 			*	@brief Retrieve an enum by id.
 			*
 			*	@param id The id of the enum.
@@ -150,6 +193,20 @@ namespace rfk
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
 			RFK_NODISCARD REFUREKU_API EnumAPI const*					getEnumByName(char const* name)											const	noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all file level enums.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool											foreachFileLevelEnum(Visitor<EnumAPI>	visitor,
+																							 void*				userData)						const;
 
 			/**
 			*	@brief Retrieve a fundamental archetype by id.
@@ -191,6 +248,20 @@ namespace rfk
 																						  EVarFlags	flags = EVarFlags::Default)					const	noexcept;
 
 			/**
+			*	@brief Execute the given visitor on all file level variables.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool											foreachFileLevelVariable(Visitor<VariableAPI>	visitor,
+																								 void*					userData)				const;
+
+			/**
 			*	@brief Retrieve a function by id.
 			*
 			*	@param id The id of the function.
@@ -210,6 +281,20 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API FunctionAPI const*				getFunctionByName(char const*		name,
 																						  EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all file level functions.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool											foreachFileLevelFunction(Visitor<FunctionAPI>	visitor,
+																								 void*					userData)				const;
 
 			/**
 			*	@brief Retrieve a method by id.
