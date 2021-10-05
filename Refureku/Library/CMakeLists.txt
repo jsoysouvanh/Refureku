@@ -53,14 +53,15 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/GetArchetype.cpp			#Delete this
 
 					Source/TypeInfo/Archetypes/Template/ClassTemplateAPI.cpp
-					Source/TypeInfo/Archetypes/ClassTemplate.cpp					#Delete this
+					Source/TypeInfo/Archetypes/ClassTemplate.cpp						#Delete this
 					Source/TypeInfo/Archetypes/Template/TemplateParameterAPI.cpp
-					Source/TypeInfo/Archetypes/TemplateParameter.cpp				#Delete this
+					Source/TypeInfo/Archetypes/TemplateParameter.cpp					#Delete this
 					Source/TypeInfo/Archetypes/Template/TemplateArgumentAPI.cpp
-					Source/TypeInfo/Archetypes/TemplateArgument.cpp					#Delete this
+					Source/TypeInfo/Archetypes/TemplateArgument.cpp						#Delete this
 					Source/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.cpp
-					Source/TypeInfo/Archetypes/ClassTemplateInstantiation.cpp		#Delete this
-					Source/TypeInfo/Archetypes/ClassTemplateInstantiationRegisterer.cpp
+					Source/TypeInfo/Archetypes/ClassTemplateInstantiation.cpp			#Delete this
+					Source/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.cpp
+					Source/TypeInfo/Archetypes/ClassTemplateInstantiationRegisterer.cpp	#Delete this
 
 					Source/TypeInfo/Variables/VariableBaseAPI.cpp
 					Source/TypeInfo/Variables/VariableBase.cpp	#Delete this

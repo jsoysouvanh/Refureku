@@ -95,6 +95,7 @@ void containers()
 	}
 }
 
+
 void entities()
 {
 	rfk::EntityAPI entity("TestEntity", 12345u, rfk::EEntityKind::Undefined, nullptr);
@@ -115,16 +116,16 @@ void entities()
 	TEST(entity.getPropertyAt(0) == &testProperty);
 	TEST(entity.getPropertyAt(1) == &testProperty2);
 
-	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }, nullptr) == &testProperty);
-	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }, nullptr) == &testProperty2);
 
-	TEST(entity.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity.getPropertiesByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().isSubclassOf(Instantiator::staticGetArchetype());
 		 }, nullptr).size() == 0u);
@@ -137,11 +138,11 @@ void entities()
 	entity2.inheritProperties(entity); //Inherit only inheritable properties
 
 	TEST(entity2.getPropertiesCount() == 1u);
-	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }, nullptr) == &testProperty);
-	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity2.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }, nullptr) == nullptr);
@@ -151,16 +152,16 @@ void entities()
 	entity3.inheritAllProperties(entity);
 
 	TEST(entity3.getPropertiesCount() == 2u);
-	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty";
 		 }, nullptr) == &testProperty);
-	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity3.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }, nullptr) == &testProperty2);
 
-	TEST(entity3.getPropertiesByPredicate([](rfk::Property const& prop, void* /*data*/)
+	TEST(entity3.getPropertiesByPredicate([](rfk::Property const& prop, void*)
 		 {
 			 return prop.getArchetype().isSubclassOf(Instantiator::staticGetArchetype());
 		 }, nullptr).size() == 0u);
@@ -222,7 +223,7 @@ void enumsAndEnumValues()
 		 {
 			 return value.getOuterEntity() == reinterpret_cast<rfk::EnumAPI*>(userData);
 		 }, &enum1) != nullptr);
-	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void* /*userData*/)
+	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void*)
 		 {
 			 return value.getPropertiesCount() == 1u;
 		 }, nullptr) == &enum1.getEnumValueAt(1));
@@ -275,12 +276,12 @@ void functionAndMethods()
 	function.invoke<void>(1, 2.0f);
 	function.checkedInvoke<void>(3, 4.0f);
 
-	/*struct Foo
-	{
-		int bar(int i, float j) { std::cout << "Foo::bar(" << i << ", " << j << ")" << std::endl; return i + j; }
-
-		void baz() const { std::cout << "Foo::baz()" << std::endl; }
-	};*/
+	//struct Foo
+	//{
+	//	int bar(int i, float j) { std::cout << "Foo::bar(" << i << ", " << j << ")" << std::endl; return i + j; }
+	//
+	//	void baz() const { std::cout << "Foo::baz()" << std::endl; }
+	//};
 
 	//rfk::MethodAPI fooBarMethod = rfk::MethodAPI("bar", 123u, rfk::getTypeAPI<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
 	//rfk::MethodAPI fooBazMethod = rfk::MethodAPI("baz", 1234u, rfk::getTypeAPI<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
@@ -1343,6 +1344,8 @@ void newTests()
 	fieldsAPI();
 	functionAndMethods();
 }
+
+
 
 int main()
 {

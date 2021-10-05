@@ -18,8 +18,7 @@ namespace rfk {class Function;class Variable;}
 #define PropertySettings_GENERATED	\
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Struct | rfk::EEntityKind::Class;\
 REFUREKU_API virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
-RFK_UNPACK_IF_NOT_PARSING(friend rfk::Struct;\
-friend rfk::CodeGenerationHelpers;\
+RFK_UNPACK_IF_NOT_PARSING(friend rfk::CodeGenerationHelpers;\
 friend implements_template1__rfk_registerChildClass<PropertySettings, void, void(rfk::Struct&)>; \
 \
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
