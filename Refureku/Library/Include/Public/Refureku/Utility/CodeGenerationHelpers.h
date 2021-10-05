@@ -12,9 +12,7 @@
 #include <type_traits>
 
 #include "Refureku/Utility/TypeTraitsMacros.h"
-#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"		//TODO: Delete this
 #include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
-#include "Refureku/TypeInfo/Archetypes/Struct.h"			//TODO: Delete this
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 
 RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass)
@@ -43,9 +41,6 @@ namespace rfk
 			*	@brief	Register a child class to a parent class if the parent class implements
 			*			the templated method "_registerChildClass" and the child class is reflected.
 			*/
-			template <typename ParentClass, typename ChildClass>											//TODO: Delete this
-			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;					//TODO: Delete this
-
 			template <typename ParentClass, typename ChildClass>
 			static constexpr void	registerChildClass(rfk::StructAPI& childClass)	noexcept;
 	};

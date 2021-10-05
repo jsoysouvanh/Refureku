@@ -30,8 +30,7 @@ bool InstantiatorPropertyCodeGen::generateClassFooterCodeForEntity(kodgen::Entit
 	return true;
 }
 
-void InstantiatorPropertyCodeGen::addCustomInstantiatorToClass(kodgen::MethodInfo const& method, std::string const& generatedClassVariableName,
-																	 std::string const& generatedMethodVarName, std::string& inout_result) const noexcept
+void InstantiatorPropertyCodeGen::addInstantiatorToClass(std::string const& generatedClassVariableName, std::string const& generatedMethodVarName, std::string& inout_result) const noexcept
 {
-	inout_result += generatedClassVariableName + "addCustomInstantiator<" + method.returnType.getCanonicalName() + ">(" + generatedMethodVarName + "); ";	//TODO: addInstantiator
+	inout_result += generatedClassVariableName + "addInstantiator(" + generatedMethodVarName + "); ";
 }

@@ -607,7 +607,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 			{
 				if (_instantiatorProperty.shouldGenerateCodeForEntity(method, method.properties[i], i))
 				{
-					_instantiatorProperty.addCustomInstantiatorToClass(method, generatedEntityVarName, "staticMethod", inout_result);
+					_instantiatorProperty.addInstantiatorToClass(generatedEntityVarName, "staticMethod", inout_result);
 					break;
 				}
 			}

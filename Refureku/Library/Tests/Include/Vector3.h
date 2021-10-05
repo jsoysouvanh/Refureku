@@ -2,8 +2,8 @@
 
 #include <type_traits>
 
-#include "Refureku/TypeInfo/Archetypes/Class.h"
-#include "Refureku/TypeInfo/Archetypes/GetArchetype.h" //To specialize rfk::getArchetype
+#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h" //To specialize rfk::getArchetypeAPI
 
 namespace some_namespace
 {
@@ -36,5 +36,5 @@ using Vector3f = some_namespace::Vector3<float>;
 namespace rfk
 {
 	template <>
-	Archetype const* getArchetype<Vector3f>() noexcept;
+	ArchetypeAPI const* getArchetypeAPI<Vector3f>() noexcept;
 }

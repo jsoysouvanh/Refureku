@@ -28,9 +28,9 @@ ArchetypeAPI const* getArchetypeAPI() noexcept
 			{
 				return getArchetypeAPI<RawType>();
 			}
-			else if constexpr (isCallable_staticGetArchetypeAPI<T, ArchetypeAPI const&()>::value)
+			else if constexpr (isCallable_staticGetArchetype<T, ArchetypeAPI const&()>::value)
 			{
-				return &T::staticGetArchetypeAPI();
+				return &T::staticGetArchetype();
 			}
 			else
 			{

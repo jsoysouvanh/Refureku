@@ -15,7 +15,7 @@
 
 namespace rfk
 {
-	RFK_GENERATE_IS_CALLABLE_METHOD_TRAITS(staticGetArchetypeAPI)
+	RFK_GENERATE_IS_CALLABLE_METHOD_TRAITS(staticGetArchetype)
 
 	/**
 	*	@brief	Get the archetype of any type if it exists.

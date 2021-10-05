@@ -29,7 +29,7 @@ inline bool EntityAPI::EntityImpl::addProperty(Property const* toAddProperty) no
 		}
 	}
 
-	_properties.emplace_back(toAddProperty);
+	_properties.push_back(toAddProperty);
 
 	return true;
 }

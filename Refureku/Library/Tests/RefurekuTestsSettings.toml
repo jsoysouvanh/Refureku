@@ -4,16 +4,11 @@ supportedFileExtensions = [".h", ".hpp"]
 
 # Files contained in the directories of this list will be parsed
 toProcessDirectories = [
-#	'''Include/'''
+	'''Include/'''
 ]
 
 # Files to parse which are not included in any directory of toParseDirectories
-toProcessFiles = [
-	'''Include/ReworkTest.h''',
-	'''Include/ClassTemplates/TestClassAB.h''',
-	'''Include/ClassTemplates/SingleTypeTemplateClassTemplate.h''',
-	'''Include/ClassTemplates/MultipleTypeTemplateClassTemplate.h'''
-]
+toProcessFiles = []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories = [
@@ -39,8 +34,7 @@ shouldParseAllEntities = false
 # Include directories of the project
 projectIncludeDirectories = [
 	'''./Include''',
-	'''../Include/Public''',
-	'''../Include/Private'''	#TODO: Remove this once the public API is ready
+	'''../Include/Public'''
 ]
 
 # Must be one of "msvc", "clang++", "g++"

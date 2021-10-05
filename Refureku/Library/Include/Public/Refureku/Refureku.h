@@ -7,23 +7,8 @@
 
 #pragma once
 
-//TODO: This should only include public headers
 #include "Refureku/Config.h"
 
-#include "Refureku/TypeInfo/Database.h"
-
-#include "Refureku/TypeInfo/Entity/EntityCast.h"
-#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
-#include "Refureku/TypeInfo/Archetypes/Class.h"
-#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
-#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstantiation.h"
-#include "Refureku/TypeInfo/Archetypes/Enum.h"
-#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
-#include "Refureku/TypeInfo/Namespace/Namespace.h"
-#include "Refureku/Properties/Property.h"
-
-
-//WIP: Public headers
 #include "Refureku/TypeInfo/TypeAPI.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Entity/EntityCastAPI.h"

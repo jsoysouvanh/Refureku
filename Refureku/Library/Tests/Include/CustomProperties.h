@@ -1,6 +1,7 @@
 #pragma once
 
 #include <utility>	//std::move
+#include <string>
 
 #include <Refureku/Properties/PropertySettings.h>
 

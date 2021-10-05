@@ -42,7 +42,7 @@ Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildC
 		for (Property const* p : _pimpl->getProperties())
 		{
 			//Consider child classes as valid
-			if (archetype.isBaseOf(p->getArchetypeAPI()))
+			if (archetype.isBaseOf(p->getArchetype()))
 			{
 				return p;
 			}
@@ -53,7 +53,7 @@ Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildC
 		for (Property const* p : _pimpl->getProperties())
 		{
 			//Child classes are not considered
-			if (archetype == p->getArchetypeAPI())
+			if (archetype == p->getArchetype())
 			{
 				return p;
 			}
@@ -86,7 +86,7 @@ Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, boo
 		for (Property const* p : _pimpl->getProperties())
 		{
 			//Consider child classes as valid
-			if (archetype.isBaseOf(p->getArchetypeAPI()))
+			if (archetype.isBaseOf(p->getArchetype()))
 			{
 				result.push_back(p);
 			}
@@ -97,7 +97,7 @@ Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, boo
 		for (Property const* p : _pimpl->getProperties())
 		{
 			//Child classes are not considered
-			if (archetype == p->getArchetypeAPI())
+			if (archetype == p->getArchetype())
 			{
 				result.push_back(p);
 			}

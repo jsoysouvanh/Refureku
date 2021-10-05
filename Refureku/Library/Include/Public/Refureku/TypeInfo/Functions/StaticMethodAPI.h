@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Functions/MethodBaseAPI.h"
+#include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
 
 namespace rfk
 {
@@ -84,4 +85,6 @@ namespace rfk
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType	internalInvoke(ArgTypes&&... args) const noexcept;
 	};
+
+	#include "Refureku/TypeInfo/Functions/StaticMethodAPI.inl"
 }

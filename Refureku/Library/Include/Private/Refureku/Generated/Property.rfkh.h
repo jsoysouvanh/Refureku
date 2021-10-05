@@ -3,17 +3,20 @@
 #include "EntityMacros.h"
 
 #include <Refureku/TypeInfo/Entity/EEntityKind.h>
-#include <cstddef>
-
-#include <Refureku/Utility/Macros.h>
-#include <Refureku/Misc/DisableWarningMacros.h>
 #include <Refureku/Utility/CodeGenerationHelpers.h>
-#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>
-#include <Refureku/TypeInfo/Archetypes/Class.h>
-#include <Refureku/TypeInfo/Archetypes/ClassTemplate.h>
-#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstantiation.h>
-#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstantiationRegisterer.h>
-namespace rfk {class Function;class Variable;}
+#include <Refureku/Misc/DisableWarningMacros.h>
+#include <Refureku/TypeInfo/Functions/MethodAPI.h>
+#include <Refureku/TypeInfo/Functions/StaticMethodAPI.h>
+#include <Refureku/TypeInfo/Variables/FieldAPI.h>
+#include <Refureku/TypeInfo/Variables/StaticFieldAPI.h>
+#include <Refureku/TypeInfo/Archetypes/EnumAPI.h>
+#include <Refureku/TypeInfo/Archetypes/EnumValueAPI.h>
+#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>
+#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h>
+#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h>
+
+namespace rfk { class VariableAPI; class FunctionAPI; }
+
 
 #define File_Property_GENERATED	\
 

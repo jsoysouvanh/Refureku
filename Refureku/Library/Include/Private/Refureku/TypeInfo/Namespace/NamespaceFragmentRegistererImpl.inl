@@ -51,7 +51,7 @@ inline void internal::NamespaceFragmentRegistererImpl::mergeFragmentPropertiesTo
 
 inline void internal::NamespaceFragmentRegistererImpl::addPropertyToNamespace(Property const& property) const noexcept
 {
-	if (_namespaceInstance->getProperty(property.getArchetypeAPI(), false) == nullptr)
+	if (_namespaceInstance->getProperty(property.getArchetype(), false) == nullptr)
 	{
 		_namespaceInstance->addProperty(&property);
 	}

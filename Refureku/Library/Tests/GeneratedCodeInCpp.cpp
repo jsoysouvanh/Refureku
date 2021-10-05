@@ -8,7 +8,7 @@
 
 void GeneratedCodeInCpp::testMethod(A* aptr)
 {
-	rfk::Archetype const* archetype = rfk::getArchetype<decltype(aptr)>();
+	rfk::ArchetypeAPI const* archetype = rfk::getArchetypeAPI<decltype(aptr)>();
 
 	std::cout << archetype << std::endl;
 }
