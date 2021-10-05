@@ -300,23 +300,6 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 
 void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	//TODO: Move includes in the GenerateHeaderFileHeaderCode and check for each entity what includes it needs
-	//inout_result += "#include <cstddef>" + env.getSeparator() + env.getSeparator() +	//cstddef contains the offsetof macro
-	//	"#include <Refureku/Utility/Macros.h>" + env.getSeparator() +
-	//	"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() + 
-	//	"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
-	//	"#include <Refureku/TypeInfo/Archetypes/GetArchetype.h>" + env.getSeparator() +
-	//	"#include <Refureku/TypeInfo/Archetypes/Class.h>" + env.getSeparator() +
-	//	"#include <Refureku/TypeInfo/Archetypes/ClassTemplate.h>" + env.getSeparator() +						//TODO: Only when there is a template class
-	//	"#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstantiation.h>" + env.getSeparator() +			//TODO: Only when there is a template class
-	//	"#include <Refureku/TypeInfo/Archetypes/ClassTemplateInstantiationRegisterer.h>" + env.getSeparator();	//TODO: Only when there is a non-nested template class
-	//
-	//																											//Forward declare some types
-	//inout_result += "namespace rfk {"
-	//	"class Function;"
-	//	"class Variable;"
-	//	"}" + env.getSeparator();
-
 	inout_result += "#include <string>" + env.getSeparator() +
 					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
 					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() +
@@ -326,11 +309,10 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Variables/StaticFieldAPI.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/EnumAPI.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/EnumValueAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>" + env.getSeparator() +							//TODO: Only when there is a template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h>" + env.getSeparator() +				//TODO: Only when there is a template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h>" + env.getSeparator() +		//TODO: Only when there is a non-nested template class
 					env.getSeparator();
-
 
 	//Forward declarations
 	inout_result += "namespace rfk { "
@@ -341,21 +323,14 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 
 void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	//inout_result += "#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +
-	//	"#include <Refureku/TypeInfo/Namespace/NamespaceFragment.h>" + env.getSeparator() +
-	//	"#include <Refureku/TypeInfo/Archetypes/TemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
-	//	"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() +
-	//	"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() + 
-	//	"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h>" + env.getSeparator();
-
-	inout_result += "#include <Refureku/TypeInfo/Variables/VariableAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Functions/FunctionAPI.h>" + env.getSeparator() +
+	inout_result += "#include <Refureku/TypeInfo/Variables/VariableAPI.h>" + env.getSeparator() +						//TODO: Only if there is a variable
+					"#include <Refureku/TypeInfo/Functions/FunctionAPI.h>" + env.getSeparator() +						//TODO: Only if there is a function
 					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegistererAPI.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegistererAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Namespace/NamespaceAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameterAPI.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Namespace/NamespaceAPI.h>" + env.getSeparator() +						//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentAPI.h>" + env.getSeparator() +				//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.h>" + env.getSeparator() +	//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameterAPI.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
 					 env.getSeparator();
 }
 
@@ -1333,50 +1308,46 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 		//Reserve space first
 		inout_result += "fragment.setNestedEntitiesCapacity(" + std::to_string(nestedEntityCount) + "u);" + env.getSeparator();
 
-		//Chain fill all nested entities at once
-		inout_result += "rfk::NamespaceFragmentAPI* fragmentPtr = &fragment;" + env.getSeparator() +
-			"fragmentPtr";
-
 		//Nested...
 		//Namespaces
 		for (kodgen::NamespaceInfo const& nestedNamespace : namespace_.namespaces)
 		{
-			inout_result += "->addNestedEntity(rfk::generated::" + computeNamespaceFragmentRegistererName(nestedNamespace, env.getFileParsingResult()->parsedFile) + ".getNamespaceInstance())" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(rfk::generated::" + computeNamespaceFragmentRegistererName(nestedNamespace, env.getFileParsingResult()->parsedFile) + ".getNamespaceInstance());" + env.getSeparator();
 		}
 
 		//Structs
 		for (kodgen::StructClassInfo const& nestedStruct : namespace_.structs)
 		{
-			inout_result += "->addNestedEntity(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype())" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype());" + env.getSeparator();
 		}
 
 		//Classes
 		for (kodgen::StructClassInfo const& nestedClass : namespace_.classes)
 		{
-			inout_result += "->addNestedEntity(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype())" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype());" + env.getSeparator();
 		}
 
 		//Enums
 		for (kodgen::EnumInfo const& nestedEnum : namespace_.enums)
 		{
-			inout_result += "->addNestedEntity(rfk::getEnumAPI<" + nestedEnum.type.getCanonicalName() + ">())" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(rfk::getEnumAPI<" + nestedEnum.type.getCanonicalName() + ">());" + env.getSeparator();
 		}
 
 		//Variables
 		for (kodgen::VariableInfo const& variable : namespace_.variables)
 		{
-			inout_result += "->addNestedEntity(&rfk::generated::" + computeGetVariableFunctionName(variable) + "())" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(&rfk::generated::" + computeGetVariableFunctionName(variable) + "());" + env.getSeparator();
 		}
 
 		//Functions
 		for (kodgen::FunctionInfo const& function : namespace_.functions)
 		{
-			inout_result += "->addNestedEntity(&rfk::generated::" + computeGetFunctionFunctionName(function) + "())" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(&rfk::generated::" + computeGetFunctionFunctionName(function) + "());" + env.getSeparator();
 		}
 	}
 
 	//End initialization if
-	inout_result += "; }";
+	inout_result += "}" + env.getSeparator();
 
 	inout_result += "return fragment; }" + env.getSeparator();
 }

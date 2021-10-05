@@ -11,12 +11,6 @@ ArchetypeAPI::ArchetypeAPI(ArchetypeImpl* implementation) noexcept:
 {
 }
 
-ArchetypeAPI::ArchetypeAPI(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, EntityAPI const* outerEntity) noexcept:
-	EntityAPI(new ArchetypeImpl(name, id, kind, memorySize, outerEntity))
-{
-	//TODO: Delete this
-}
-
 ArchetypeAPI::ArchetypeAPI(ArchetypeAPI&&) noexcept = default;
 
 ArchetypeAPI::~ArchetypeAPI() noexcept = default;

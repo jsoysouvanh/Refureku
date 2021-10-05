@@ -15,14 +15,6 @@ namespace rfk
 	class ArchetypeAPI : public EntityAPI
 	{
 		public:
-			//TODO: Delete this since it will never be used in real situations (just for tests)
-			REFUREKU_API ArchetypeAPI(char const*		name,
-									  std::size_t		id,
-									  EEntityKind		kind,
-									  std::size_t		memorySize,
-									  EntityAPI const*	outerEntity = nullptr)	noexcept;
-			REFUREKU_API ~ArchetypeAPI()										noexcept;	//TODO: Maybe move this to protected as well + Do not need to export
-
 			/**
 			*	@brief Getter for the field _accessSpecifier.
 			* 
@@ -50,5 +42,6 @@ namespace rfk
 
 			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeAPI&&)					noexcept;
+			REFUREKU_INTERNAL ~ArchetypeAPI()								noexcept;
 	};
 }

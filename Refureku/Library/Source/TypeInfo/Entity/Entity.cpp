@@ -10,11 +10,6 @@ EntityAPI::EntityAPI(EntityImpl* implementation) noexcept:
 {
 }
 
-EntityAPI::EntityAPI(char const* name, std::size_t id, EEntityKind kind, EntityAPI const* outerEntity) noexcept:
-	_pimpl{new EntityImpl(name, id, kind, outerEntity)}
-{
-}
-
 EntityAPI::EntityAPI(EntityAPI&&) noexcept = default;
 
 EntityAPI::~EntityAPI() noexcept = default;

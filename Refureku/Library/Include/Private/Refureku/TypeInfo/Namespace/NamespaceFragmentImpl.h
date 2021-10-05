@@ -41,11 +41,6 @@ namespace rfk
 			inline void									setNestedEntitiesCapacity(std::size_t capacity)		noexcept;
 
 			/**
-			*	@brief Reallocate the underlying dynamic memory to use no more than needed.
-			*/
-			inline void									optimizeMemory();
-
-			/**
 			*	@brief Getter for the field _nestedEntities.
 			* 
 			*	@return _nestedEntities.

@@ -8,7 +8,6 @@
 template <typename... Types>
 bool ClassTemplateInstantiation::hasSameTemplateArguments() const noexcept
 {
-	//TODO: Remove the std::array dependency
 	static Archetype const* archetypes[] = { rfk::getArchetype<Types>()... };
 
 	return hasSameTemplateArguments<sizeof...(Types)>(archetypes);
@@ -19,7 +18,6 @@ bool ClassTemplateInstantiation::hasSameTemplateArguments(Archetype const* (&arc
 {
 	std::size_t templateArgumentsCount = getTemplateArgumentsCount();
 
-	//TODO: Remove the std::array dependency
 	if (templateArgumentsCount != ArraySize)
 	{
 		return false;

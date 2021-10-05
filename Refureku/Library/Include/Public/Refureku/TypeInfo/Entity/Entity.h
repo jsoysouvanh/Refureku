@@ -25,13 +25,7 @@ namespace rfk
 	class EntityAPI //TODO: Rename in Entity
 	{
 		public:
-			//TODO: Delete this since it will never be used in real situations (just for tests)
-			REFUREKU_API EntityAPI(char const*		name,
-								   std::size_t		id,
-								   EEntityKind		kind = EEntityKind::Undefined,
-								   EntityAPI const*	outerEntity = nullptr)			noexcept;
-			EntityAPI(EntityAPI const&)												= delete;
-			REFUREKU_API ~EntityAPI()												noexcept;	//TODO: Move to protected + not part of the API
+			EntityAPI(EntityAPI const&)	= delete;
 
 			/**
 			*	@brief	Retrieve the property at the given index.
@@ -191,6 +185,7 @@ namespace rfk
 
 			REFUREKU_INTERNAL EntityAPI(EntityAPI&&)				noexcept;
 			REFUREKU_INTERNAL EntityAPI(EntityImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL ~EntityAPI()							noexcept;
 
 			/**
 			*	@brief Get the _pimpl internal pointer.

@@ -100,7 +100,7 @@ void runForPublicDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGen
 	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, outputDirectory))
 	{
 		//Parse
-		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
+		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
 
 		//Result
 		printGenerationResult(logger, genResult);

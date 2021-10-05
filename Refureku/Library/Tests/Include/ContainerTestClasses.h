@@ -56,7 +56,7 @@ class HugeClass
 struct CopyOnly
 {
 	CopyOnly() = default;
-	CopyOnly(CopyOnly const&) { /*std::cout << "CopyOnly(CopyOnly const&)" << std::endl;*/ }
+	CopyOnly(CopyOnly const&) noexcept { /*std::cout << "CopyOnly(CopyOnly const&)" << std::endl;*/ }
 	CopyOnly(CopyOnly&&) = delete;
 	~CopyOnly() = default;
 };
@@ -65,7 +65,7 @@ struct MoveOnly
 {
 	MoveOnly() = default;
 	MoveOnly(MoveOnly const&) = delete;
-	MoveOnly(MoveOnly&&) { /*std::cout << "MoveOnly(MoveOnly&&)" << std::endl;*/ }
+	MoveOnly(MoveOnly&&) noexcept { /*std::cout << "MoveOnly(MoveOnly&&)" << std::endl;*/ }
 	~MoveOnly() = default;
 };
 

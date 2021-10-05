@@ -12,24 +12,17 @@ NamespaceFragmentAPI::NamespaceFragmentAPI(char const* name, std::size_t id) noe
 
 NamespaceFragmentAPI::~NamespaceFragmentAPI() noexcept = default;
 
-bool NamespaceFragmentAPI::foreachNestedEntity(bool (*visitor)(EntityAPI const&, void*), void* userData) const noexcept
+bool NamespaceFragmentAPI::foreachNestedEntity(Visitor<EntityAPI> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntityPtr(reinterpret_cast<NamespaceFragmentImpl const*>(getPimpl())->getNestedEntities(), visitor, userData);
 }
 
-NamespaceFragmentAPI* NamespaceFragmentAPI::addNestedEntity(EntityAPI const* nestedEntity) noexcept
+void NamespaceFragmentAPI::addNestedEntity(EntityAPI const* nestedEntity) noexcept
 {
 	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->addNestedEntity(nestedEntity);
-
-	return this;
 }
 
 void NamespaceFragmentAPI::setNestedEntitiesCapacity(std::size_t capacity) noexcept
 {
 	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->setNestedEntitiesCapacity(capacity);
-}
-
-void NamespaceFragmentAPI::optimizeMemory()
-{
-	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->optimizeMemory();
 }

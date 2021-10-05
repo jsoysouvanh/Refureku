@@ -20,17 +20,18 @@ namespace rfk
 			REFUREKU_API ~NamespaceFragmentAPI()						noexcept;
 
 			/**
-			*	@brief Execute the given visitor on all entities nested in this namespace fragment.
+			*	@brief Execute the given visitor on all nested entities.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
 			*	@param userData	Optional user data forwarded to the visitor.
 			* 
 			*	@return	The last visitor result before exiting the loop.
 			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedEntity(bool (*visitor)(EntityAPI const&,
-																								void*),
-																				void* userData)						const	noexcept;
+			REFUREKU_API bool		foreachNestedEntity(Visitor<EntityAPI>	visitor,
+														void*				userData)	const;
 
 			/**
 			*	@brief Add a nested entity to the namespace.
@@ -39,7 +40,7 @@ namespace rfk
 			*	
 			*	@param this.
 			*/
-			REFUREKU_API NamespaceFragmentAPI*				addNestedEntity(EntityAPI const* nestedEntity)					noexcept;
+			REFUREKU_API void		addNestedEntity(EntityAPI const* nestedEntity)				noexcept;
 
 			/**
 			*	@brief	Set the number of nested entities for this entity.
@@ -48,12 +49,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of entities of this namespace fragment.
 			*/
-			REFUREKU_API void								setNestedEntitiesCapacity(std::size_t capacity)					noexcept;
-
-			/**
-			*	@brief Reallocate the underlying dynamic memory to use no more than needed.
-			*/
-			REFUREKU_API void								optimizeMemory();
+			REFUREKU_API void		setNestedEntitiesCapacity(std::size_t capacity)				noexcept;
 
 		private:
 			//Forward declaration

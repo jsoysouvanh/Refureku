@@ -20,11 +20,6 @@ inline void NamespaceFragmentAPI::NamespaceFragmentImpl::setNestedEntitiesCapaci
 	_nestedEntities.reserve(capacity);
 }
 
-inline void NamespaceFragmentAPI::NamespaceFragmentImpl::optimizeMemory()
-{
-	_nestedEntities.shrink_to_fit();
-}
-
 inline std::vector<EntityAPI const*> const& NamespaceFragmentAPI::NamespaceFragmentImpl::getNestedEntities() const noexcept
 {
 	return _nestedEntities;
