@@ -10,8 +10,7 @@
 #include "RefurekuGenerator/CodeGen/CodeGenManager.h"
 #include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
 
-#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule2.h"
-#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"	//TODO: Delete this
+#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
 
 fs::path getLibraryDirectoryPath()
 {
@@ -146,11 +145,8 @@ int main()
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
 	
-	//rfk::ReflectionCodeGenModule reflectionCodeGenModule;	//TODO: Delete this
-	//codeGenUnit.addModule(reflectionCodeGenModule);		//TODO: Delete this
-	
-	rfk::ReflectionCodeGenModule2 reflectionCodeGenModule2;
-	codeGenUnit.addModule(reflectionCodeGenModule2);
+	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
+	codeGenUnit.addModule(reflectionCodeGenModule);
 
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);

@@ -9,9 +9,7 @@
 #include "RefurekuGenerator/CodeGen/CodeGenManager.h"
 #include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
 
-//#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"	//TODO: Delete this
-#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule2.h"
-
+#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
 
 void printGenerationSetup(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings const& codeGenMgrSettings, kodgen::ParsingSettings const& parsingSettings,
 						  kodgen::MacroCodeGenUnitSettings const& codeGenUnitSettings)
@@ -129,10 +127,8 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
 	
-	//rfk::ReflectionCodeGenModule reflectionCodeGenModule;	//TODO: Delete this
-	//codeGenUnit.addModule(reflectionCodeGenModule);		//TODO: Delete this
-	rfk::ReflectionCodeGenModule2 reflectionCodeGenModule2;
-	codeGenUnit.addModule(reflectionCodeGenModule2);
+	rfk::ReflectionCodeGenModule reflectionCodeGenModule;	
+	codeGenUnit.addModule(reflectionCodeGenModule);		
 
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);

@@ -3,6 +3,7 @@
 #include "EntityMacros.h"
 
 #include <Refureku/TypeInfo/Entity/EEntityKind.h>
+#include <string>
 #include <Refureku/Utility/CodeGenerationHelpers.h>
 #include <Refureku/Misc/DisableWarningMacros.h>
 #include <Refureku/TypeInfo/Functions/MethodAPI.h>
