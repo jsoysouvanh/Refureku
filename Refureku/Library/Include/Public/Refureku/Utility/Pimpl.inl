@@ -54,6 +54,12 @@ T const* Pimpl<T>::get() const noexcept
 }
 
 template <typename T>
+void Pimpl<T>::uncheckedSet(T* impl) noexcept
+{
+	_implementation = impl;
+}
+
+template <typename T>
 Pimpl<T>& Pimpl<T>::operator=(Pimpl const& other)
 {
 	checkedDelete();

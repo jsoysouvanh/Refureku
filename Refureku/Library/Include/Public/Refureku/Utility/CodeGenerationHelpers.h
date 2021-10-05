@@ -9,12 +9,27 @@
 
 #include <array>
 #include <cstddef>
+#include <type_traits>
 
 #include "Refureku/Utility/TypeTraitsMacros.h"
-#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
-#include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"		//TODO: Delete this
+#include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"			//TODO: Delete this
+#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 
 RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass)
+
+#ifndef _RFK_UNPACK_IF_NOT_PARSING
+
+//This macro "KODGEN_PARSING" must match the name defined by the kodgen parser when parsing source files
+//It is used by the generated code to hide some portions of code to the parser
+#ifdef KODGEN_PARSING
+#define RFK_UNPACK_IF_NOT_PARSING(...)
+#else
+#define RFK_UNPACK_IF_NOT_PARSING(...) __VA_ARGS__
+#endif
+
+#endif
 
 namespace rfk
 {
@@ -28,8 +43,11 @@ namespace rfk
 			*	@brief	Register a child class to a parent class if the parent class implements
 			*			the templated method "_registerChildClass" and the child class is reflected.
 			*/
+			template <typename ParentClass, typename ChildClass>											//TODO: Delete this
+			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;					//TODO: Delete this
+
 			template <typename ParentClass, typename ChildClass>
-			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;
+			static constexpr void	registerChildClass(rfk::StructAPI& childClass)	noexcept;
 	};
 
 	template <auto>

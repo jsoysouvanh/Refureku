@@ -109,6 +109,11 @@ inline void StructAPI::StructImpl::setDirectParentsCapacity(std::size_t capacity
 	_directParents.reserve(capacity);
 }
 
+inline void StructAPI::StructImpl::setNestedArchetypesCapacity(std::size_t capacity) noexcept
+{
+	_nestedArchetypes.rehash(capacity);
+}
+
 inline void StructAPI::StructImpl::setFieldsCapacity(std::size_t capacity) noexcept
 {
 	_fields.reserve(capacity);

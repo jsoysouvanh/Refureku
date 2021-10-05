@@ -10,7 +10,7 @@
 #include <type_traits>	//std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
 
 #include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
-#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
+#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"	//makeInstance<> uses StaticMethod wrapper so must include
 #include "Refureku/TypeInfo/Archetypes/EClassKind.h"
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
@@ -19,14 +19,14 @@ namespace rfk
 {
 	//Forward declarations
 	class ParentStruct;
-	class FieldAPI;
 	class EnumAPI;
+	class FieldAPI;
 	class StaticFieldAPI;
 	class MethodAPI;
 	class TypeAPI;
 	class ICallable;
-	class ClassTemplate;				//TODO: Rename these if rework ClassTemplate API
-	class ClassTemplateInstantiation;	//TODO: Rename these if rework ClassTemplateInstantiation API
+	class ClassTemplateAPI;
+	class ClassTemplateInstantiationAPI;
 
 	class StructAPI : public ArchetypeAPI
 	{
@@ -336,14 +336,14 @@ namespace rfk
 			* 
 			*	@return A rfk::ClassTemplate const* if the struct is a struct template, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplate const*					asTemplate()															const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplateAPI const*				asTemplate()															const	noexcept;
 
 			/**
 			*	@brief Cast the struct to rfk::ClassTemplateInstantiation const* if it is a template instantiation.
 			* 
 			*	@return A rfk::ClassTemplateInstantiation const* if the struct is a template instantiation, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	asTemplateInstantiation()												const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiationAPI const*	asTemplateInstantiation()												const	noexcept;
 
 			/**
 			*	@brief Add a parent to this struct if the provided archetype is a valid struct/class.

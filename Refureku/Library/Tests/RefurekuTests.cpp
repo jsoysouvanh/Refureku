@@ -4,16 +4,16 @@
 
 #include <Refureku/Refureku.h>
 
-#include "AB.h"
-#include "ExampleClass.h"
-#include "TestPropertyUsage.h"
-#include "ThirdPartyEnumReflectionCode.h"
-#include "CustomString.h"
+//#include "AB.h"
+//#include "ExampleClass.h"
+//#include "TestPropertyUsage.h"
+//#include "ThirdPartyEnumReflectionCode.h"
+//#include "CustomString.h"
 #include "ContainerTestClasses.h"
 
 //Template
-#include "ClassTemplates/SingleTypeTemplateClassTemplate.h"
-#include "ClassTemplates/MultipleTypeTemplateClassTemplate.h"
+//#include "ClassTemplates/SingleTypeTemplateClassTemplate.h"
+//#include "ClassTemplates/MultipleTypeTemplateClassTemplate.h"
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -95,7 +95,7 @@ void containers()
 	}
 }
 
-
+/*
 void entities()
 {
 	rfk::EntityAPI entity("TestEntity", 12345u, rfk::EEntityKind::Undefined, nullptr);
@@ -1344,13 +1344,16 @@ void newTests()
 	fieldsAPI();
 	functionAndMethods();
 }
-
-
+*/
 
 int main()
 {
-	oldTests();
-	newTests();
+	//oldTests();
+	//newTests();
+
+	TEST(rfk::getDatabaseAPI().getNamespaceByName("rework_namespace") != nullptr);
+	TEST(rfk::getDatabaseAPI().getNamespaceByName("rework_namespace")->getVariableByName("reworkNamespaceVariable") != nullptr);
+	TEST(rfk::getDatabaseAPI().getNamespaceByName("rework_namespace")->getFunctionByName("reworkNamespaceFunction") != nullptr);
 
 	return EXIT_SUCCESS;
 }

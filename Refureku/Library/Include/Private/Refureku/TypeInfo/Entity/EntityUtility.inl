@@ -47,8 +47,14 @@ template <typename ContainerType, typename Predicate>
 typename ContainerType::value_type const* EntityUtility::getEntityByNameAndPredicate(ContainerType const& container, char const* name, Predicate predicate) noexcept
 {
 	EntityAPI::EntityImpl	searchedImpl(name, 0u);
+	EntityAPI				searchedEntity(&searchedImpl);
 
-	typename ContainerType::const_iterator it = container.find(static_cast<typename ContainerType::value_type&&>(EntityAPI(&searchedImpl)));
+	typename ContainerType::const_iterator it = container.find(static_cast<typename ContainerType::value_type const&>(searchedEntity));
+
+	//When deleted, the EntityAPI will try to delete the implementation pointer.
+	//As the implementation was not dynamically newed (to save perf), it crashes here.
+	//To avoid that, we force set the implementation to nullptr without deleting the previous one before entering ~EntityAPI.
+	searchedEntity._pimpl.uncheckedSet(nullptr);
 
 	return (it != container.cend() && predicate(*it)) ? *it : nullptr;
 }
@@ -61,15 +67,26 @@ typename ContainerType::value_type EntityUtility::getEntityPtrByNameAndPredicate
 
 	typename ContainerType::const_iterator it = container.find(reinterpret_cast<typename ContainerType::value_type>(&searchedEntity));
 
+	//When deleted, the EntityAPI will try to delete the implementation pointer.
+	//As the implementation was not dynamically newed (to save perf), it crashes here.
+	//To avoid that, we force set the implementation to nullptr without deleting the previous one before entering ~EntityAPI.
+	searchedEntity._pimpl.uncheckedSet(nullptr);
+
 	return (it != container.cend() && predicate(*it)) ? *it : nullptr;
 }
 
 template <typename ContainerType, typename Visitor>
 bool EntityUtility::foreachEntityNamed(ContainerType const& container, char const* name, Visitor visitor)
 {
-	EntityAPI::EntityImpl searchedImpl(name, 0u);
+	EntityAPI::EntityImpl	searchedImpl(name, 0u);
+	EntityAPI				searchedEntity(&searchedImpl);
 
-	auto range = container.equal_range(static_cast<typename ContainerType::value_type&&>(EntityAPI(&searchedImpl)));
+	auto range = container.equal_range(static_cast<typename ContainerType::value_type const&>(searchedEntity));
+
+	//When deleted, the EntityAPI will try to delete the implementation pointer.
+	//As the implementation was not dynamically newed (to save perf), it crashes here.
+	//To avoid that, we force set the implementation to nullptr without deleting the previous one before entering ~EntityAPI.
+	searchedEntity._pimpl.uncheckedSet(nullptr);
 
 	for (auto it = range.first; it != range.second; it++)
 	{
@@ -90,6 +107,11 @@ bool EntityUtility::foreachEntityPtrNamed(ContainerType const& container, char c
 
 	auto range = container.equal_range(reinterpret_cast<typename ContainerType::value_type>(&searchedEntity));
 
+	//When deleted, the EntityAPI will try to delete the implementation pointer.
+	//As the implementation was not dynamically newed (to save perf), it crashes here.
+	//To avoid that, we force set the implementation to nullptr without deleting the previous one before entering ~EntityAPI.
+	searchedEntity._pimpl.uncheckedSet(nullptr);
+
 	for (auto it = range.first; it != range.second; it++)
 	{
 		if (!visitor(*it))
@@ -108,6 +130,11 @@ typename ContainerType::value_type EntityUtility::getEntityPtrById(ContainerType
 	EntityAPI				searchedEntity(&searchedImpl);
 
 	auto it = container.find(&searchedEntity);
+
+	//When deleted, the EntityAPI will try to delete the implementation pointer.
+	//As the implementation was not dynamically newed (to save perf), it crashes here.
+	//To avoid that, we force set the implementation to nullptr without deleting the previous one before entering ~EntityAPI.
+	searchedEntity._pimpl.uncheckedSet(nullptr);
 
 	return (it != container.cend()) ? *it : nullptr;
 }

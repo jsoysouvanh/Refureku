@@ -60,8 +60,17 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API std::size_t					getTemplateInstantiationsCount()						const	noexcept;
 
+			/**
+			*	@brief Append a template parameter the list of template parameters.
+			* 
+			*	//TODO
+			*/
+			REFUREKU_API void										addTemplateParameter(TemplateParameterAPI const& param)			noexcept;
+
 		private:
 			//Forward declaration
 			class ClassTemplateImpl;
+
+		friend ClassTemplateInstantiationAPI;
 	};
 }

@@ -20,3 +20,13 @@ std::size_t ClassTemplateAPI::getTemplateParametersCount() const noexcept
 {
 	return reinterpret_cast<ClassTemplateImpl const*>(getPimpl())->getTemplateParameters().size();
 }
+
+std::size_t ClassTemplateAPI::getTemplateInstantiationsCount() const noexcept
+{
+	return reinterpret_cast<ClassTemplateImpl const*>(getPimpl())->getTemplateInstantiations().size();
+}
+
+void ClassTemplateAPI::addTemplateParameter(TemplateParameterAPI const& param) noexcept
+{
+	reinterpret_cast<ClassTemplateImpl*>(getPimpl())->addTemplateParameter(param);
+}

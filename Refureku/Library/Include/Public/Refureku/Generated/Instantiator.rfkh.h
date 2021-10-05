@@ -5,7 +5,6 @@
 #include <Refureku/TypeInfo/Entity/EEntityKind.h>
 #include <cstddef>
 
-#include <Refureku/Utility/Macros.h>
 #include <Refureku/Misc/DisableWarningMacros.h>
 #include <Refureku/Utility/CodeGenerationHelpers.h>
 #include <Refureku/TypeInfo/Archetypes/GetArchetype.h>

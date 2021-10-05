@@ -17,19 +17,6 @@ namespace rfk
 	{
 		public:
 			/**
-			*	@brief Add a parameter to the function.
-			*	
-			*	@param name	Name of the parameter, can be empty.
-			*	@param id	Id of the parameter entity.
-			*	@param type	Type of the parameter.
-			*	
-			*	@return The added function parameter.
-			*/
-			REFUREKU_API FunctionParameterAPI&						addParameter(char const*	name,
-																				 std::size_t	id,
-																				 TypeAPI const&	type)						noexcept;
-
-			/**
 			*	@tparam		ReturnType	Return type to compare with.
 			*	@tparam...	ArgTypes	Argument types to compare with.
 			*
@@ -86,6 +73,19 @@ namespace rfk
 			*	@return The function handle.
 			*/
 			RFK_NODISCARD REFUREKU_API ICallable*					getInternalFunction()							const	noexcept;
+
+			/**
+			*	@brief Add a parameter to the function.
+			*	
+			*	@param name	Name of the parameter, can be empty.
+			*	@param id	Id of the parameter entity.
+			*	@param type	Type of the parameter.
+			*	
+			*	@return The added function parameter.
+			*/
+			REFUREKU_API FunctionParameterAPI&						addParameter(char const*	name,
+																				 std::size_t	id,
+																				 TypeAPI const&	type)						noexcept;
 
 			/**
 			*	@brief	Set the number of parameters for this function.

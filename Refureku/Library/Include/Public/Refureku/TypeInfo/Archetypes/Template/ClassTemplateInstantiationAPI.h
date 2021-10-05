@@ -56,8 +56,8 @@ namespace rfk
 			*	@param parameter The template parameter bounded to this argument.
 			*	@param archetype The archetype of the template argument. //TODO: Change this to be able to store values as well
 			*/
-			REFUREKU_API void									addTemplateArgument(TemplateParameterAPI const&	parameter,
-																					ArchetypeAPI const*			archetype)		noexcept;
+			REFUREKU_API void										addTemplateArgument(TemplateParameterAPI const&	parameter,
+																						ArchetypeAPI const*			archetype)	noexcept;
 
 		private:
 			//Forward declaration

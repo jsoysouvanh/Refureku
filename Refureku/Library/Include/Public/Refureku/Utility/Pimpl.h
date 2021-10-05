@@ -47,6 +47,11 @@ namespace rfk
 			*/
 			T const*	get()					const	noexcept;
 
+			/**
+			*	@brief	Set a new implementation without checking the state of the previous one.
+			*			**WARNING**: If a valid implementation was set before, it is not deleted!!
+			*/
+			void		uncheckedSet(T* impl)			noexcept;
 
 			Pimpl&		operator=(Pimpl const& other);
 			Pimpl&		operator=(Pimpl&& other)		noexcept;

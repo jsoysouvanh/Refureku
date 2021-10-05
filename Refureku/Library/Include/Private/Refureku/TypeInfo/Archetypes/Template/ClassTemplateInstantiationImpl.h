@@ -12,7 +12,7 @@
 
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h"
 #include "Refureku/TypeInfo/Archetypes/StructImpl.h"
-#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateImpl.h"
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateArgumentAPI.h"
 
 namespace rfk
@@ -27,11 +27,12 @@ namespace rfk
 			std::vector<TemplateArgumentAPI>	_templateArguments;
 
 		public:
-			inline ClassTemplateInstantiationImpl(char const*			name,
-												  std::size_t			id,
-												  std::size_t			memorySize,
-												  bool					isClass,
-												  ArchetypeAPI const&	classTemplate)	noexcept;
+			inline ClassTemplateInstantiationImpl(char const*							name,
+												  std::size_t							id,
+												  std::size_t							memorySize,
+												  bool									isClass,
+												  ArchetypeAPI const&					classTemplate,
+												  ClassTemplateInstantiationAPI const&	backRef)			noexcept;
 
 			/**
 			*	@brief Getter for the field _classTemplate.

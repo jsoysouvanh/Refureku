@@ -23,7 +23,7 @@ namespace rfk
 			std::vector<TemplateParameterAPI const*>			_templateParameters;
 			
 			/** All different instantiations of this class template in the program (with different template parameters). */
-			std::vector<ClassTemplateInstantiationAPI const*>	_instantiations;
+			std::vector<ClassTemplateInstantiationAPI const*>	_templateInstantiations;
 
 		public:
 			inline ClassTemplateImpl(char const*	name,
@@ -31,11 +31,32 @@ namespace rfk
 									 bool			isClass)	noexcept;
 
 			/**
+			*	@brief Add an template instantiation to _instantiations.
+			* 
+			*	//TODO
+			*/
+			inline void																addTemplateInstantiation(ClassTemplateInstantiationAPI const& instantiation)	noexcept;
+
+			/**
+			*	@brief Append a template parameter to _templateParameters.
+			* 
+			*	//TODO
+			*/
+			inline void																addTemplateParameter(TemplateParameterAPI const& param)							noexcept;
+
+			/**
 			*	@brief Getter for the field _templateParameters.
 			* 
 			*	@return _templateParameters.
 			*/
-			RFK_NODISCARD inline std::vector<TemplateParameterAPI const*> const&	getTemplateParameters()	const	noexcept;
+			RFK_NODISCARD inline std::vector<TemplateParameterAPI const*> const&			getTemplateParameters()													const	noexcept;
+
+			/**
+			*	@brief Getter for the field _templateInstantiations.
+			* 
+			*	@return _templateInstantiations.
+			*/
+			RFK_NODISCARD inline std::vector<ClassTemplateInstantiationAPI const*> const&	getTemplateInstantiations()												const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateImpl.inl"

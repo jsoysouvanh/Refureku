@@ -26,7 +26,10 @@ namespace rfk
 			Object(Object&&)		= default;
 			virtual ~Object()		= default;
 
-			virtual	Struct const& getArchetype() const noexcept = 0;
+			virtual	Struct const& getArchetype() const noexcept
+			{
+				return *static_cast<Struct const*>(nullptr);
+			}
 
 			//TODO: Temporary, delete this
 			virtual StructAPI const& getArchetypeAPI() const noexcept
@@ -34,7 +37,7 @@ namespace rfk
 				return *static_cast<StructAPI const*>(nullptr);
 			}
 			
-			Object& operator=(Object const&) 	= default;
-			Object& operator=(Object&&) 		= default;
+			Object& operator=(Object const&)	= default;
+			Object& operator=(Object&&)			= default;
 	};
 }

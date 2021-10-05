@@ -6,7 +6,7 @@
 */
 
 inline ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::ClassTemplateInstantiationImpl(char const* name, std::size_t id, std::size_t memorySize,
-																									 bool isClass, ArchetypeAPI const& classTemplate) noexcept:
+																									 bool isClass, ArchetypeAPI const& classTemplate, ClassTemplateInstantiationAPI const&	backRef) noexcept:
 	StructImpl(name, id, memorySize, isClass, EClassKind::TemplateInstantiation),
 	_classTemplate{static_cast<ClassTemplateAPI const&>(classTemplate)}
 {
@@ -14,7 +14,7 @@ inline ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::ClassTempl
 	assert(classTemplate.getKind() == rfk::EEntityKind::Class || classTemplate.getKind() == rfk::EEntityKind::Struct);
 	assert(static_cast<ClassAPI const&>(classTemplate).getClassKind() == EClassKind::Template);
 
-	//const_cast<ClassTemplateAPI&>(_classTemplate).registerClassTemplateInstantiation(*this);	//TODO
+	reinterpret_cast<ClassTemplateAPI::ClassTemplateImpl*>(const_cast<ClassTemplateAPI&>(_classTemplate).getPimpl())->addTemplateInstantiation(backRef);
 }
 
 inline ClassTemplateAPI const& ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::getClassTemplate() const noexcept

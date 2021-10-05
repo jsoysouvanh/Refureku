@@ -1,8 +1,6 @@
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 
 #include "Refureku/TypeInfo/Archetypes/StructImpl.h"
-#include "Refureku/TypeInfo/Archetypes/ClassTemplate.h"
-#include "Refureku/TypeInfo/Archetypes/ClassTemplateInstantiation.h"
 #include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 #include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
@@ -386,16 +384,16 @@ bool StructAPI::foreachStaticMethod(Visitor<StaticMethodAPI> visitor, void* user
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticMethods(), visitor, userData);
 }
 
-ClassTemplate const* StructAPI::asTemplate() const noexcept
+ClassTemplateAPI const* StructAPI::asTemplate() const noexcept
 {
 	return (getClassKind() == EClassKind::Template) ?
-		reinterpret_cast<ClassTemplate const*>(this) : nullptr;
+		reinterpret_cast<ClassTemplateAPI const*>(this) : nullptr;
 }
 
-ClassTemplateInstantiation const* StructAPI::asTemplateInstantiation() const noexcept
+ClassTemplateInstantiationAPI const* StructAPI::asTemplateInstantiation() const noexcept
 {
 	return (getClassKind() == EClassKind::TemplateInstantiation) ?
-		reinterpret_cast<ClassTemplateInstantiation const*>(this) : nullptr;
+		reinterpret_cast<ClassTemplateInstantiationAPI const*>(this) : nullptr;
 }
 
 void StructAPI::addDirectParent(ArchetypeAPI const* archetype, EAccessSpecifier inheritanceAccess) noexcept
@@ -421,6 +419,11 @@ void StructAPI::addSubclass(StructAPI const& subclass) noexcept
 ArchetypeAPI* StructAPI::addNestedArchetype(ArchetypeAPI const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addNestedArchetype(nestedArchetype, accessSpecifier, this);
+}
+
+void StructAPI::setNestedArchetypesCapacity(std::size_t capacity) noexcept
+{
+	reinterpret_cast<StructImpl*>(getPimpl())->setNestedArchetypesCapacity(capacity);
 }
 
 FieldAPI* StructAPI::addField(char const* name, std::size_t id, TypeAPI const& type,

@@ -8,7 +8,10 @@
 #include "RefurekuGenerator/Parsing/FileParser.h"
 #include "RefurekuGenerator/CodeGen/CodeGenManager.h"
 #include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
-#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
+
+//#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"	//TODO: Delete this
+#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule2.h"
+
 
 void printGenerationSetup(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings const& codeGenMgrSettings, kodgen::ParsingSettings const& parsingSettings,
 						  kodgen::MacroCodeGenUnitSettings const& codeGenUnitSettings)
@@ -126,8 +129,10 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
 	
-	rfk::ReflectionCodeGenModule reflectionCodeGenModule;
-	codeGenUnit.addModule(reflectionCodeGenModule);
+	//rfk::ReflectionCodeGenModule reflectionCodeGenModule;	//TODO: Delete this
+	//codeGenUnit.addModule(reflectionCodeGenModule);		//TODO: Delete this
+	rfk::ReflectionCodeGenModule2 reflectionCodeGenModule2;
+	codeGenUnit.addModule(reflectionCodeGenModule2);
 
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
@@ -136,7 +141,7 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	loadSettings(logger, codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, std::forward<fs::path>(settingsFilePath));
 
 	//Parse
-	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, false);
+	kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
 
 	//Result
 	printGenerationResult(logger, genResult);

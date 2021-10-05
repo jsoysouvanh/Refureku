@@ -17,6 +17,7 @@ add_library(${RefurekuGeneratorLibTarget}
 					Source/CodeGen/CodeGenManager.cpp
 					Source/CodeGen/MacroCodeGenUnitSettings.cpp
 					Source/CodeGen/ReflectionCodeGenModule.cpp
+					Source/CodeGen/ReflectionCodeGenModule2.cpp	#TODO: Delete this
 				)
 
 # Warning level
