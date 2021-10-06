@@ -11,7 +11,7 @@
 #include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetypeAPI.h"
-#include "Refureku/TypeInfo/Namespace/NamespaceAPI.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 
 using namespace rfk;
 
@@ -95,9 +95,9 @@ EnumValueAPI const* rfk::entityCast<EnumValueAPI>(Entity const* entity) noexcept
 }
 
 template <>
-NamespaceAPI const* rfk::entityCast<NamespaceAPI>(Entity const* entity) noexcept
+Namespace const* rfk::entityCast<Namespace>(Entity const* entity) noexcept
 {
-	return entityCast<NamespaceAPI, EEntityKind::Namespace>(entity);
+	return entityCast<Namespace, EEntityKind::Namespace>(entity);
 }
 
 template <>

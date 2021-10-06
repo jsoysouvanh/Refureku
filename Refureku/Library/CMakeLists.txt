@@ -22,7 +22,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Entity/EntityCastAPI.cpp
 					Source/TypeInfo/Entity/DefaultEntityRegistererAPI.cpp
 
-					Source/TypeInfo/Namespace/NamespaceAPI.cpp
+					Source/TypeInfo/Namespace/Namespace.cpp
 					Source/TypeInfo/Namespace/NamespaceFragmentAPI.cpp
 					Source/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.cpp
 

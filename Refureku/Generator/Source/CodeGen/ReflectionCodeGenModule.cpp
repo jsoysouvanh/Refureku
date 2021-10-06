@@ -327,7 +327,7 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Functions/FunctionAPI.h>" + env.getSeparator() +						//TODO: Only if there is a function
 					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegistererAPI.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegistererAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Namespace/NamespaceAPI.h>" + env.getSeparator() +						//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +							//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentAPI.h>" + env.getSeparator() +				//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.h>" + env.getSeparator() +	//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameterAPI.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data

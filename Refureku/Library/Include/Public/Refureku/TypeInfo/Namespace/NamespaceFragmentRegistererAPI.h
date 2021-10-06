@@ -13,7 +13,7 @@
 namespace rfk
 {
 	//Forward declarations
-	class NamespaceAPI;
+	class Namespace;
 	class NamespaceFragmentAPI;
 
 	namespace internal
@@ -38,7 +38,7 @@ namespace rfk
 			*	
 			*	@return The namespace instance this fragment has been merged to.
 			*/
-			RFK_NODISCARD REFUREKU_API NamespaceAPI const* getNamespaceInstance()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Namespace const* getNamespaceInstance()	const	noexcept;
 
 		private:
 			Pimpl<internal::NamespaceFragmentRegistererImpl> _pimpl;

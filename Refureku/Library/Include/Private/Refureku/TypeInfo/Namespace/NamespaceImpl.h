@@ -9,7 +9,7 @@
 
 #include <unordered_set>
 
-#include "Refureku/TypeInfo/Namespace/NamespaceAPI.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
 #include "Refureku/TypeInfo/Variables/VariableAPI.h"
@@ -18,10 +18,10 @@
 
 namespace rfk
 {
-	class NamespaceAPI::NamespaceImpl final : public Entity::EntityImpl
+	class Namespace::NamespaceImpl final : public Entity::EntityImpl
 	{
 		public:
-			using NamespaceHashSet	= std::unordered_set<NamespaceAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using NamespaceHashSet	= std::unordered_set<Namespace const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using ArchetypeHashSet	= std::unordered_set<ArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using VariableHashSet	= std::unordered_set<VariableAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FunctionHashSet	= std::unordered_multiset<FunctionAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
@@ -48,7 +48,7 @@ namespace rfk
 			* 
 			*	@param nestedNamespace The namespace to add.
 			*/
-			inline void										addNamespace(NamespaceAPI const& nestedNamespace)			noexcept;
+			inline void										addNamespace(Namespace const& nestedNamespace)			noexcept;
 
 			/**
 			*	@brief Add a nested archetype to this namespace.
@@ -76,7 +76,7 @@ namespace rfk
 			* 
 			*	@param nestedNamespace The namespace to add.
 			*/
-			inline void										removeNamespace(NamespaceAPI const& nestedNamespace)		noexcept;
+			inline void										removeNamespace(Namespace const& nestedNamespace)		noexcept;
 
 			/**
 			*	@brief Remove a nested archetype from this namespace.

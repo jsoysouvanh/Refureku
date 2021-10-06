@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/Function.h"
+#include "Refureku/TypeInfo/Functions/FunctionAPI.h"
 
 namespace rfk::internal
 {
@@ -20,7 +20,7 @@ namespace rfk::internal
 	class FunctionHelper<ReturnType(ArgTypes...)>
 	{
 		public:
-			static bool hasSamePrototype(Function const& function) noexcept;
+			static bool hasSamePrototype(FunctionAPI const& function) noexcept;
 	};
 
 	/** Overload for noexcept functions. */
@@ -28,7 +28,7 @@ namespace rfk::internal
 	class FunctionHelper<ReturnType(ArgTypes...) noexcept>
 	{
 		public:
-			static bool hasSamePrototype(Function const& function) noexcept;
+			static bool hasSamePrototype(FunctionAPI const& function) noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionHelper.inl"

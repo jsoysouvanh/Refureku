@@ -28,12 +28,12 @@ Entity const* DatabaseAPI::getEntityById(std::size_t id) const noexcept
 	return EntityUtility::getEntityPtrById(_pimpl->getEntitiesById(), id);
 }
 
-NamespaceAPI const* DatabaseAPI::getNamespaceById(std::size_t id) const noexcept
+Namespace const* DatabaseAPI::getNamespaceById(std::size_t id) const noexcept
 {
-	return entityCast<NamespaceAPI>(getEntityById(id));
+	return entityCast<Namespace>(getEntityById(id));
 }
 
-NamespaceAPI const* DatabaseAPI::getNamespaceByName(char const* name) const
+Namespace const* DatabaseAPI::getNamespaceByName(char const* name) const
 {
 	std::string namespaceName(name);
 
@@ -45,7 +45,7 @@ NamespaceAPI const* DatabaseAPI::getNamespaceByName(char const* name) const
 		throw BadNamespaceFormat("The provided namespace name is ill formed.");
 	}
 
-	NamespaceAPI const* result = EntityUtility::getEntityByName(_pimpl->getFileLevelNamespacesByName(), namespaceName.substr(0u, index).data());
+	Namespace const* result = EntityUtility::getEntityByName(_pimpl->getFileLevelNamespacesByName(), namespaceName.substr(0u, index).data());
 
 	//Couldn't find first namespace part, abort search
 	if (result == nullptr)
@@ -71,7 +71,7 @@ NamespaceAPI const* DatabaseAPI::getNamespaceByName(char const* name) const
 	return result;
 }
 
-bool DatabaseAPI::foreachFileLevelNamespace(Visitor<NamespaceAPI> visitor, void* userData) const
+bool DatabaseAPI::foreachFileLevelNamespace(Visitor<Namespace> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelNamespacesByName(), visitor, userData);
 }

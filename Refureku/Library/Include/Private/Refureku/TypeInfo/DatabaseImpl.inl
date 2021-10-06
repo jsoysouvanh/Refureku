@@ -16,7 +16,7 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bo
 	switch (entity.getKind())
 	{
 		case EEntityKind::Namespace:
-			_fileLevelNamespacesByName.emplace(reinterpret_cast<NamespaceAPI const*>(&entity));
+			_fileLevelNamespacesByName.emplace(reinterpret_cast<Namespace const*>(&entity));
 			break;
 
 		case EEntityKind::Struct:
@@ -108,7 +108,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 		switch (entity.getKind())
 		{
 			case EEntityKind::Namespace:
-				_fileLevelNamespacesByName.erase(reinterpret_cast<NamespaceAPI const*>(&entity));
+				_fileLevelNamespacesByName.erase(reinterpret_cast<Namespace const*>(&entity));
 				break;
 
 			case EEntityKind::Struct:
@@ -298,7 +298,7 @@ inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(EnumAPI const& e) n
 					   }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<NamespaceAPI> const& npPtr) noexcept
+inline void DatabaseAPI::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr) noexcept
 {
 	assert(npPtr.use_count() >= 2);
 
@@ -312,7 +312,7 @@ inline void DatabaseAPI::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<Na
 	}
 }
 
-inline std::shared_ptr<NamespaceAPI> DatabaseAPI::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id, bool isFileLevelNamespace) noexcept
+inline std::shared_ptr<Namespace> DatabaseAPI::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id, bool isFileLevelNamespace) noexcept
 {
 	auto it = _generatedNamespaces.find(id);
 
@@ -323,7 +323,7 @@ inline std::shared_ptr<NamespaceAPI> DatabaseAPI::DatabaseImpl::getOrCreateNames
 	else
 	{
 		//Generate a namespace
-		auto generatedNamespaceIt = _generatedNamespaces.emplace(id, std::make_shared<NamespaceAPI>(name, id));
+		auto generatedNamespaceIt = _generatedNamespaces.emplace(id, std::make_shared<Namespace>(name, id));
 
 		assert(generatedNamespaceIt.second);
 

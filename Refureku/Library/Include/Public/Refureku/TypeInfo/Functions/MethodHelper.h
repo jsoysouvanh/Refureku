@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/MethodBase.h"
+#include "Refureku/TypeInfo/Functions/MethodBaseAPI.h"
 
 namespace rfk::internal
 {

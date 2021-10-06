@@ -13,7 +13,7 @@
 
 #include "Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.h"
 #include "Refureku/TypeInfo/Namespace/NamespaceFragmentAPI.h"
-#include "Refureku/TypeInfo/Namespace/NamespaceImpl.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/DatabaseImpl.h"
 #include "Refureku/Properties/Property.h"
 
@@ -26,7 +26,7 @@ namespace rfk
 			NamespaceFragmentAPI const&		_registeredFragment;
 
 			/** Namespace this fragment is bound to. */
-			std::shared_ptr<NamespaceAPI>	_namespaceInstance;
+			std::shared_ptr<Namespace>	_namespaceInstance;
 
 			/**
 			*	@brief Add namespace fragment entities to the namespace held by this registerer.
@@ -55,7 +55,7 @@ namespace rfk
 			* 
 			*	@return _namespaceInstance.
 			*/
-			RFK_NODISCARD NamespaceAPI const* getNamespaceInstance() const	noexcept;
+			RFK_NODISCARD Namespace const* getNamespaceInstance() const	noexcept;
 
 			//===============================================================================
 			//** Next methods are public but are only used internally by the implementation. **

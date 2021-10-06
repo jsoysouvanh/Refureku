@@ -65,7 +65,7 @@ inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(Enti
 	switch (entity.getKind())
 	{
 		case EEntityKind::Namespace:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->addNamespace(static_cast<NamespaceAPI const&>(entity));
+			_namespaceInstance->addNamespace(static_cast<Namespace const&>(entity));
 
 			//Register the nested namespace but don't register sub entities
 			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
@@ -76,21 +76,21 @@ inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(Enti
 		case EEntityKind::Class:
 			[[fallthrough]];
 		case EEntityKind::Enum:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->addArchetype(static_cast<ArchetypeAPI const&>(entity));
+			_namespaceInstance->addArchetype(static_cast<ArchetypeAPI const&>(entity));
 
 			//Register the archetype and its sub entities to the database.
 			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, true);
 			break;
 
 		case EEntityKind::Variable:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->addVariable(static_cast<VariableAPI const&>(entity));
+			_namespaceInstance->addVariable(static_cast<VariableAPI const&>(entity));
 
 			//Register the variable to the database, a variable doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
 			break;
 
 		case EEntityKind::Function:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->addFunction(static_cast<FunctionAPI const&>(entity));
+			_namespaceInstance->addFunction(static_cast<FunctionAPI const&>(entity));
 
 			//Register the function to the database, a function doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
@@ -127,7 +127,7 @@ inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace
 	switch (entity.getKind())
 	{
 		case EEntityKind::Namespace:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->removeNamespace(static_cast<NamespaceAPI const&>(entity));
+			_namespaceInstance->removeNamespace(static_cast<Namespace const&>(entity));
 
 			//Namespaces unregister automatically from the database, don't need to do it here
 			break;
@@ -137,21 +137,21 @@ inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace
 		case EEntityKind::Class:
 			[[fallthrough]];
 		case EEntityKind::Enum:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->removeArchetype(static_cast<ArchetypeAPI const&>(entity));
+			_namespaceInstance->removeArchetype(static_cast<ArchetypeAPI const&>(entity));
 
 			//Unregister archetypes and their sub entities from the database
 			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, true);
 			break;
 
 		case EEntityKind::Variable:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->removeVariable(static_cast<VariableAPI const&>(entity));
+			_namespaceInstance->removeVariable(static_cast<VariableAPI const&>(entity));
 
 			//Unregister the variable from the database, a variable doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, false);
 			break;
 
 		case EEntityKind::Function:
-			reinterpret_cast<NamespaceAPI::NamespaceImpl*>(_namespaceInstance->getPimpl())->removeFunction(static_cast<FunctionAPI const&>(entity));
+			_namespaceInstance->removeFunction(static_cast<FunctionAPI const&>(entity));
 
 			//Unregister the function from the database, a function doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, false);
@@ -171,7 +171,7 @@ inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace
 	}
 }
 
-inline NamespaceAPI const* internal::NamespaceFragmentRegistererImpl::getNamespaceInstance() const noexcept
+inline Namespace const* internal::NamespaceFragmentRegistererImpl::getNamespaceInstance() const noexcept
 {
 	return _namespaceInstance.get();
 }

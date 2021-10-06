@@ -17,7 +17,7 @@ namespace rfk
 {
 	//Forward declarations
 	class Entity;
-	class NamespaceAPI;
+	class Namespace;
 	class ArchetypeAPI;
 	class StructAPI;
 	using ClassAPI = StructAPI;
@@ -63,7 +63,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried namespace if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API NamespaceAPI const*				getNamespaceById(std::size_t id)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Namespace const*				getNamespaceById(std::size_t id)										const	noexcept;
 
 			/**
 			*	@brief	Retrieve a namespace by name.
@@ -76,7 +76,7 @@ namespace rfk
 			*
 			*	@exception BadNamespaceFormat if the provided namespace name has : instead of :: as a separator, or ends with :.
 			*/
-			RFK_NODISCARD REFUREKU_API NamespaceAPI const*				getNamespaceByName(char const* name)									const;
+			RFK_NODISCARD REFUREKU_API Namespace const*				getNamespaceByName(char const* name)									const;
 
 			/**
 			*	@brief Execute the given visitor on all file level namespaces.
@@ -89,7 +89,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelNamespace(Visitor<NamespaceAPI> visitor,
+			REFUREKU_API bool											foreachFileLevelNamespace(Visitor<Namespace> visitor,
 																								  void*					userData)				const;
 
 			/**

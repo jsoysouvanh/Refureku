@@ -23,7 +23,7 @@
 #include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
-#include "Refureku/TypeInfo/Namespace/NamespaceAPI.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/DatabaseAPI.h"
 
 #include "Refureku/Properties/Property.h"

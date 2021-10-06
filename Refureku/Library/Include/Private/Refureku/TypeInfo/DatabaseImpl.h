@@ -15,7 +15,7 @@
 
 #include "Refureku/TypeInfo/DatabaseAPI.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
-#include "Refureku/TypeInfo/Namespace/NamespaceAPI.h"
+#include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
@@ -33,14 +33,14 @@ namespace rfk
 	{
 		public:
 			using EntitiesById					= std::unordered_set<Entity const*, EntityPtrIdHash, EntityPtrIdEqual>;
-			using NamespacesByName				= std::unordered_set<NamespaceAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using NamespacesByName				= std::unordered_set<Namespace const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using StructsByName					= std::unordered_set<StructAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using ClassesByName					= std::unordered_set<ClassAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using EnumsByName					= std::unordered_set<EnumAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using VariablesByName				= std::unordered_set<VariableAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FunctionsByName				= std::unordered_multiset<FunctionAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FundamentalArchetypesByName	= std::unordered_set<FundamentalArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using GenNamespaces					= std::unordered_map<std::size_t, std::shared_ptr<NamespaceAPI>>;
+			using GenNamespaces					= std::unordered_map<std::size_t, std::shared_ptr<Namespace>>;
 			
 		private:
 			/** Collection of all registered entities hashed by Id.  */
@@ -135,7 +135,7 @@ namespace rfk
 			*
 			*	@param npPtr Pointer to the namespace to check.
 			*/
-			inline void											checkNamespaceRefCount(std::shared_ptr<NamespaceAPI> const& npPtr)		noexcept;
+			inline void											checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr)		noexcept;
 
 			/**
 			*	@brief Get the namespace with the given name and id. If it doesn't exist yet, create and register it right away.
@@ -145,7 +145,7 @@ namespace rfk
 			* 
 			*	@return A shared_ptr to the retrieved namespace.
 			*/
-			RFK_NODISCARD inline std::shared_ptr<NamespaceAPI>	getOrCreateNamespace(char const*	name,
+			RFK_NODISCARD inline std::shared_ptr<Namespace>	getOrCreateNamespace(char const*	name,
 																					 std::size_t	id,
 																					 bool			isFileLevelNamespace)				noexcept;
 

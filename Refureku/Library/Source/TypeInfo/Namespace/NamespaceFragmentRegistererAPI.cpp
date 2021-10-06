@@ -11,7 +11,7 @@ NamespaceFragmentRegistererAPI::NamespaceFragmentRegistererAPI(char const* name,
 
 NamespaceFragmentRegistererAPI::~NamespaceFragmentRegistererAPI() noexcept = default;
 
-NamespaceAPI const* NamespaceFragmentRegistererAPI::getNamespaceInstance() const noexcept
+Namespace const* NamespaceFragmentRegistererAPI::getNamespaceInstance() const noexcept
 {
 	return _pimpl->getNamespaceInstance();
 }

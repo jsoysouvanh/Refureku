@@ -20,7 +20,7 @@ namespace rfk
 											  TypeAPI const&	returnType,
 											  ICallable*		internalMethod,
 											  EMethodFlags		flags,
-											  Entity const*	outerEntity)	noexcept;
+											  Entity const*		outerEntity)	noexcept;
 			REFUREKU_INTERNAL StaticMethodAPI(StaticMethodAPI&&)				noexcept;
 			REFUREKU_INTERNAL ~StaticMethodAPI()								noexcept;
 

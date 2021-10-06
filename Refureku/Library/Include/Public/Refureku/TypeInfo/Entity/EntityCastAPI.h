@@ -17,7 +17,7 @@ namespace rfk
 	class StructAPI;
 	class EnumAPI;
 	class EnumValueAPI;
-	class NamespaceAPI;
+	class Namespace;
 	class FieldBaseAPI;
 	class FieldAPI;
 	class StaticFieldAPI;
@@ -74,7 +74,7 @@ namespace rfk
 	REFUREKU_API EnumValueAPI const*			entityCast<EnumValueAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API NamespaceAPI const*			entityCast<NamespaceAPI>(Entity const* entity)				noexcept;
+	REFUREKU_API Namespace const*			entityCast<Namespace>(Entity const* entity)				noexcept;
 
 	template <>
 	REFUREKU_API VariableAPI const*				entityCast<VariableAPI>(Entity const* entity)				noexcept;
