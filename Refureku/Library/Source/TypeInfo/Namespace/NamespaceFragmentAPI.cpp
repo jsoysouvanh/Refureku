@@ -14,7 +14,7 @@ NamespaceFragmentAPI::~NamespaceFragmentAPI() noexcept = default;
 
 bool NamespaceFragmentAPI::foreachNestedEntity(Visitor<Entity> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(reinterpret_cast<NamespaceFragmentImpl const*>(getPimpl())->getNestedEntities(), visitor, userData);
+	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceFragmentImpl const*>(getPimpl())->getNestedEntities(), visitor, userData);
 }
 
 void NamespaceFragmentAPI::addNestedEntity(Entity const* nestedEntity) noexcept

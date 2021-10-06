@@ -41,7 +41,33 @@ namespace rfk
 			*
 			*	@return The found nested namespace if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API NamespaceAPI const*	getNamespaceByName(char const* name)								const	noexcept;
+			RFK_NODISCARD REFUREKU_API NamespaceAPI const*			getNamespaceByName(char const* name)						const	noexcept;
+
+			/**
+			*	@brief Retrieve the first nested namespace satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid namespace.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return The first found namespace satisfying the predicate if any, else nullptr.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API NamespaceAPI const*			getNamespaceByPredicate(Predicate<NamespaceAPI> predicate,
+																							void*					userData)	const;
+
+			/**
+			*	@brief Retrieve all nested namespaces satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid namespace.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All nested namespaces satisfying the provided predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<NamespaceAPI const*>	getNamespacesByPredicate(Predicate<NamespaceAPI> predicate,
+																							 void*					userData)	const;
 
 			/**
 			*	@brief Execute the given visitor on all nested namespaces.
@@ -54,8 +80,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedNamespace(Visitor<NamespaceAPI>	visitor,
-																				   void*					userData)			const;
+			REFUREKU_API bool										foreachNamespace(Visitor<NamespaceAPI>	visitor,
+																					 void*					userData)			const;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.
@@ -95,8 +121,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially throw from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedArchetype(Visitor<ArchetypeAPI>	visitor,
-																				   void*					userData)			const;
+			REFUREKU_API bool								foreachArchetype(Visitor<ArchetypeAPI>	visitor,
+																			 void*					userData)					const;
 
 			/**
 			*	@brief Retrieve a variable from this namespace.
@@ -121,8 +147,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedVariable(Visitor<VariableAPI>	visitor,
-																				  void*					userData)				const;
+			REFUREKU_API bool								foreachVariable(Visitor<VariableAPI>	visitor,
+																			void*					userData)					const;
 
 			/**
 			*	@brief Retrieve a function from this namespace.
@@ -147,8 +173,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool								foreachNestedFunction(Visitor<FunctionAPI>	visitor,
-																				  void*					userData)				const;
+			REFUREKU_API bool								foreachFunction(Visitor<FunctionAPI>	visitor,
+																			void*					userData)					const;
 
 		private:
 			//Forward declaration

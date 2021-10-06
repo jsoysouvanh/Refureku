@@ -136,11 +136,11 @@ inline void StructAPI::StructImpl::setStaticMethodsCapacity(std::size_t capacity
 
 inline ArchetypeAPI const* StructAPI::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
 {
-	return EntityUtility::getEntityPtrByNameAndPredicate(_nestedArchetypes, name,
-													     [access](ArchetypeAPI const* archetype)
-													     {
-													   	  return access == EAccessSpecifier::Undefined || access == archetype->getAccessSpecifier();
-													     });
+	return EntityUtility::getEntityByNameAndPredicate(_nestedArchetypes, name,
+													  [access](ArchetypeAPI const& archetype)
+													  {
+														  return access == EAccessSpecifier::Undefined || access == archetype.getAccessSpecifier();
+													  });
 }
 
 inline StructAPI::StructImpl::ParentStructs const& StructAPI::StructImpl::getDirectParents() const noexcept

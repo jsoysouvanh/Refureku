@@ -45,8 +45,7 @@ NamespaceAPI const* DatabaseAPI::getNamespaceByName(char const* name) const
 		throw BadNamespaceFormat("The provided namespace name is ill formed.");
 	}
 
-	NamespaceAPI const* result = EntityUtility::getEntityPtrByNameAndPredicate(_pimpl->getFileLevelNamespacesByName(), namespaceName.substr(0u, index).data(),
-																			   [](NamespaceAPI const*) { return true; });
+	NamespaceAPI const* result = EntityUtility::getEntityByName(_pimpl->getFileLevelNamespacesByName(), namespaceName.substr(0u, index).data());
 
 	//Couldn't find first namespace part, abort search
 	if (result == nullptr)
@@ -74,7 +73,7 @@ NamespaceAPI const* DatabaseAPI::getNamespaceByName(char const* name) const
 
 bool DatabaseAPI::foreachFileLevelNamespace(Visitor<NamespaceAPI> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(_pimpl->getFileLevelNamespacesByName(), visitor, userData);
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelNamespacesByName(), visitor, userData);
 }
 
 ArchetypeAPI const* DatabaseAPI::getArchetypeById(std::size_t id) const noexcept
@@ -111,12 +110,12 @@ StructAPI const* DatabaseAPI::getStructById(std::size_t id) const noexcept
 
 StructAPI const* DatabaseAPI::getStructByName(char const* name) const noexcept
 {
-	return EntityUtility::getEntityPtrByNameAndPredicate(_pimpl->getFileLevelStructsByName(), name, [](StructAPI const*) { return true; });
+	return EntityUtility::getEntityByName(_pimpl->getFileLevelStructsByName(), name);
 }
 
 bool DatabaseAPI::foreachFileLevelStruct(Visitor<StructAPI> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(_pimpl->getFileLevelStructsByName(), visitor, userData);
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelStructsByName(), visitor, userData);
 }
 
 ClassAPI const* DatabaseAPI::getClassById(std::size_t id) const noexcept
@@ -126,12 +125,12 @@ ClassAPI const* DatabaseAPI::getClassById(std::size_t id) const noexcept
 
 ClassAPI const* DatabaseAPI::getClassByName(char const* name) const noexcept
 {
-	return EntityUtility::getEntityPtrByNameAndPredicate(_pimpl->getFileLevelClassesByName(), name, [](ClassAPI const*) { return true; });
+	return EntityUtility::getEntityByName(_pimpl->getFileLevelClassesByName(), name);
 }
 
 bool DatabaseAPI::foreachFileLevelClass(Visitor<ClassAPI> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(_pimpl->getFileLevelClassesByName(), visitor, userData);
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelClassesByName(), visitor, userData);
 }
 
 EnumAPI const* DatabaseAPI::getEnumById(std::size_t id) const noexcept
@@ -141,12 +140,12 @@ EnumAPI const* DatabaseAPI::getEnumById(std::size_t id) const noexcept
 
 EnumAPI const* DatabaseAPI::getEnumByName(char const* name) const noexcept
 {
-	return EntityUtility::getEntityPtrByNameAndPredicate(_pimpl->getFileLevelEnumsByName(), name, [](EnumAPI const*) { return true; });
+	return EntityUtility::getEntityByName(_pimpl->getFileLevelEnumsByName(), name);
 }
 
 bool DatabaseAPI::foreachFileLevelEnum(Visitor<EnumAPI> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(_pimpl->getFileLevelEnumsByName(), visitor, userData);
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelEnumsByName(), visitor, userData);
 }
 
 FundamentalArchetypeAPI const* DatabaseAPI::getFundamentalArchetypeById(std::size_t id) const noexcept
@@ -156,7 +155,7 @@ FundamentalArchetypeAPI const* DatabaseAPI::getFundamentalArchetypeById(std::siz
 
 FundamentalArchetypeAPI const* DatabaseAPI::getFundamentalArchetypeByName(char const* name) const noexcept
 {
-	return EntityUtility::getEntityPtrByNameAndPredicate(_pimpl->getFundamentalArchetypesByName(), name, [](FundamentalArchetypeAPI const*) { return true; });
+	return EntityUtility::getEntityByName(_pimpl->getFundamentalArchetypesByName(), name);
 }
 
 VariableAPI const* DatabaseAPI::getVariableById(std::size_t id) const noexcept
@@ -166,13 +165,14 @@ VariableAPI const* DatabaseAPI::getVariableById(std::size_t id) const noexcept
 
 VariableAPI const* DatabaseAPI::getVariableByName(char const* name, EVarFlags flags) const noexcept
 {
-	return EntityUtility::getEntityPtrByNameAndPredicate(_pimpl->getFileLevelVariablesByName(), name,
-														 [flags](VariableAPI const* var) { return (var->getFlags() & flags) == flags; });
+	return EntityUtility::getEntityByNameAndPredicate(_pimpl->getFileLevelVariablesByName(),
+													  name,
+													  [flags](VariableAPI const& var) { return (var.getFlags() & flags) == flags; });
 }
 
 bool DatabaseAPI::foreachFileLevelVariable(Visitor<VariableAPI> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(_pimpl->getFileLevelVariablesByName(), visitor, userData);
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelVariablesByName(), visitor, userData);
 }
 
 FunctionAPI const* DatabaseAPI::getFunctionById(std::size_t id) const noexcept
@@ -182,13 +182,14 @@ FunctionAPI const* DatabaseAPI::getFunctionById(std::size_t id) const noexcept
 
 FunctionAPI const* DatabaseAPI::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
-	return EntityUtility::getEntityPtrByNameAndPredicate(_pimpl->getFileLevelFunctionsByName(), name,
-														 [flags](FunctionAPI const* func) { return (func->getFlags() & flags) == flags; });
+	return EntityUtility::getEntityByNameAndPredicate(_pimpl->getFileLevelFunctionsByName(),
+													  name,
+													  [flags](FunctionAPI const& func) { return (func.getFlags() & flags) == flags; });
 }
 
 bool DatabaseAPI::foreachFileLevelFunction(Visitor<FunctionAPI> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(_pimpl->getFileLevelFunctionsByName(), visitor, userData);
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelFunctionsByName(), visitor, userData);
 }
 
 MethodAPI const* DatabaseAPI::getMethodById(std::size_t id) const noexcept

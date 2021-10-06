@@ -102,7 +102,7 @@ EnumAPI const* StructAPI::getNestedEnumByName(char const* name, EAccessSpecifier
 
 bool StructAPI::foreachNestedArchetype(Visitor<ArchetypeAPI> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntityPtr(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(), visitor, userData);
+	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(), visitor, userData);
 }
 
 FieldAPI const* StructAPI::getFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
