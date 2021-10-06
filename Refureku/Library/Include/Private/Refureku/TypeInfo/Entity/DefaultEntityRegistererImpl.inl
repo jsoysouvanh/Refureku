@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline internal::DefaultEntityRegistererImpl::DefaultEntityRegistererImpl(EntityAPI const& entity) noexcept:
+inline internal::DefaultEntityRegistererImpl::DefaultEntityRegistererImpl(Entity const& entity) noexcept:
 	_registeredEntity{entity}
 {
 	//Entities which are not at file level should not be registered
@@ -21,7 +21,7 @@ inline internal::DefaultEntityRegistererImpl::~DefaultEntityRegistererImpl() noe
 	DatabaseAPI::getInstance()._pimpl->unregisterEntity(_registeredEntity, false);
 }
 
-inline EntityAPI const& internal::DefaultEntityRegistererImpl::getRegisteredEntity() const noexcept
+inline Entity const& internal::DefaultEntityRegistererImpl::getRegisteredEntity() const noexcept
 {
 	return _registeredEntity;
 }

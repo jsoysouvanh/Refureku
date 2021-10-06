@@ -7,7 +7,7 @@
 
 using namespace rfk;
 
-EnumAPI::EnumAPI(char const* name, std::size_t id, ArchetypeAPI const* underlyingArchetype, EntityAPI const* outerEntity) noexcept:
+EnumAPI::EnumAPI(char const* name, std::size_t id, ArchetypeAPI const* underlyingArchetype, Entity const* outerEntity) noexcept:
 	ArchetypeAPI(new EnumImpl(name, id, underlyingArchetype, outerEntity))
 {
 }

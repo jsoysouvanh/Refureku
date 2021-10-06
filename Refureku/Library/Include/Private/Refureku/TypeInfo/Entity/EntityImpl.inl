@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline EntityAPI::EntityImpl::EntityImpl(char const* name, std::size_t id, EEntityKind kind, EntityAPI const* outerEntity) noexcept:
+inline Entity::EntityImpl::EntityImpl(char const* name, std::size_t id, EEntityKind kind, Entity const* outerEntity) noexcept:
 	_name{name},
 	_properties{},
 	_id{id},
@@ -14,7 +14,7 @@ inline EntityAPI::EntityImpl::EntityImpl(char const* name, std::size_t id, EEnti
 {
 }
 
-inline bool EntityAPI::EntityImpl::addProperty(Property const* toAddProperty) noexcept
+inline bool Entity::EntityImpl::addProperty(Property const* toAddProperty) noexcept
 {
 	if (!toAddProperty->getAllowMultiple())
 	{
@@ -34,7 +34,7 @@ inline bool EntityAPI::EntityImpl::addProperty(Property const* toAddProperty) no
 	return true;
 }
 
-inline void EntityAPI::EntityImpl::inheritProperties(EntityImpl const& from) noexcept
+inline void Entity::EntityImpl::inheritProperties(EntityImpl const& from) noexcept
 {
 	for (Property const* property : from._properties)
 	{
@@ -45,7 +45,7 @@ inline void EntityAPI::EntityImpl::inheritProperties(EntityImpl const& from) noe
 	}
 }
 
-inline void EntityAPI::EntityImpl::inheritAllProperties(EntityImpl const& from) noexcept
+inline void Entity::EntityImpl::inheritAllProperties(EntityImpl const& from) noexcept
 {
 	for (Property const* property : from._properties)
 	{
@@ -53,37 +53,37 @@ inline void EntityAPI::EntityImpl::inheritAllProperties(EntityImpl const& from) 
 	}
 }
 
-inline std::string const& EntityAPI::EntityImpl::getName() const noexcept
+inline std::string const& Entity::EntityImpl::getName() const noexcept
 {
 	return _name;
 }
 
-inline std::size_t EntityAPI::EntityImpl::getId() const noexcept
+inline std::size_t Entity::EntityImpl::getId() const noexcept
 {
 	return _id;
 }
 
-inline EEntityKind EntityAPI::EntityImpl::getKind() const noexcept
+inline EEntityKind Entity::EntityImpl::getKind() const noexcept
 {
 	return _kind;
 }
 
-inline EntityAPI const* EntityAPI::EntityImpl::getOuterEntity() const noexcept
+inline Entity const* Entity::EntityImpl::getOuterEntity() const noexcept
 {
 	return _outerEntity;
 }
 
-inline std::vector<Property const*> const& EntityAPI::EntityImpl::getProperties() const noexcept
+inline std::vector<Property const*> const& Entity::EntityImpl::getProperties() const noexcept
 {
 	return _properties;
 }
 
-inline void EntityAPI::EntityImpl::setOuterEntity(EntityAPI const* outerEntity) noexcept
+inline void Entity::EntityImpl::setOuterEntity(Entity const* outerEntity) noexcept
 {
 	_outerEntity = outerEntity;
 }
 
-inline void EntityAPI::EntityImpl::setPropertiesCapacity(std::size_t capacity) noexcept
+inline void Entity::EntityImpl::setPropertiesCapacity(std::size_t capacity) noexcept
 {
 	_properties.reserve(capacity);
 }

@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class EnumValueAPI::EnumValueImpl final : public EntityAPI::EntityImpl
+	class EnumValueAPI::EnumValueImpl final : public Entity::EntityImpl
 	{
 		private:
 			/** Value of this enum value. */
@@ -22,7 +22,7 @@ namespace rfk
 			inline EnumValueImpl(char const*		name,
 								 std::size_t		id,
 								 int64				value,
-								 EntityAPI const*	outerEntity = nullptr)	noexcept;
+								 Entity const*	outerEntity = nullptr)	noexcept;
 
 			/**
 			*	@brief Getter for the field _value.

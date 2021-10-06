@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline EnumValueAPI::EnumValueImpl::EnumValueImpl(char const* name, std::size_t id, int64 value, EntityAPI const* outerEntity) noexcept:
+inline EnumValueAPI::EnumValueImpl::EnumValueImpl(char const* name, std::size_t id, int64 value, Entity const* outerEntity) noexcept:
 	EntityImpl(name, id, EEntityKind::EnumValue, outerEntity),
 	_value{value}
 {

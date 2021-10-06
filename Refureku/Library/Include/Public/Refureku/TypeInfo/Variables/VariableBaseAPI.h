@@ -16,7 +16,7 @@
 
 namespace rfk
 {
-	class VariableBaseAPI : public EntityAPI
+	class VariableBaseAPI : public Entity
 	{
 		public:
 			/**

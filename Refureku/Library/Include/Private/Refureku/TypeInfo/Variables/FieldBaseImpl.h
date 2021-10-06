@@ -27,7 +27,7 @@ namespace rfk
 								 TypeAPI const&		type,
 								 EFieldFlags		flags,
 								 StructAPI const*	owner,
-								 EntityAPI const*	outerEntity = nullptr)	noexcept;
+								 Entity const*	outerEntity = nullptr)	noexcept;
 
 			/**
 			*	@brief Getter for the field _flags.

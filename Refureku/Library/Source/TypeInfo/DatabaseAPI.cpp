@@ -23,7 +23,7 @@ DatabaseAPI& DatabaseAPI::getInstance() noexcept
 	return database;
 }
 
-EntityAPI const* DatabaseAPI::getEntityById(std::size_t id) const noexcept
+Entity const* DatabaseAPI::getEntityById(std::size_t id) const noexcept
 {
 	return EntityUtility::getEntityPtrById(_pimpl->getEntitiesById(), id);
 }

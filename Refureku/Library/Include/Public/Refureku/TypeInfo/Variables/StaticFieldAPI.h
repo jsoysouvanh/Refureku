@@ -24,14 +24,14 @@ namespace rfk
 						   EFieldFlags		flags,
 						   StructAPI const*	owner,
 						   void*			ptr,
-						   EntityAPI const*	outerEntity = nullptr)	noexcept;
+						   Entity const*	outerEntity = nullptr)	noexcept;
 			StaticFieldAPI(char const*		name,
 						   std::size_t		id,
 						   TypeAPI const&	type,
 						   EFieldFlags		flags,
 						   StructAPI const*	owner,
 						   void const*		constPtr,
-						   EntityAPI const*	outerEntity = nullptr)	noexcept;
+						   Entity const*	outerEntity = nullptr)	noexcept;
 			StaticFieldAPI(StaticFieldAPI&&)						noexcept;
 			~StaticFieldAPI()										noexcept;
 		

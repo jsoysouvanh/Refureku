@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline EnumAPI::EnumImpl::EnumImpl(char const* name, std::size_t id, ArchetypeAPI const* underlyingArchetype, EntityAPI const* outerEntity) noexcept:
+inline EnumAPI::EnumImpl::EnumImpl(char const* name, std::size_t id, ArchetypeAPI const* underlyingArchetype, Entity const* outerEntity) noexcept:
 	ArchetypeImpl(name, id, EEntityKind::Enum, underlyingArchetype->getMemorySize(), outerEntity),
 	_underlyingArchetype{*underlyingArchetype}
 {

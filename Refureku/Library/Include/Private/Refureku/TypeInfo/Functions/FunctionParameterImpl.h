@@ -14,7 +14,7 @@
 
 namespace rfk
 {
-	class FunctionParameterAPI::FunctionParameterImpl : public EntityAPI::EntityImpl
+	class FunctionParameterAPI::FunctionParameterImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Type of this parameter. */
@@ -24,7 +24,7 @@ namespace rfk
 			FunctionParameterImpl(char const*		name,
 								  std::size_t		id,
 								  TypeAPI const&	type,
-								  EntityAPI const*	outerEntity)	noexcept;
+								  Entity const*	outerEntity)	noexcept;
 
 			/**
 			*	@brief Getter for the field _type.

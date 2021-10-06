@@ -10,7 +10,7 @@ inline NamespaceFragmentAPI::NamespaceFragmentImpl::NamespaceFragmentImpl(char c
 {
 }
 
-inline void NamespaceFragmentAPI::NamespaceFragmentImpl::addNestedEntity(EntityAPI const* nestedEntity) noexcept
+inline void NamespaceFragmentAPI::NamespaceFragmentImpl::addNestedEntity(Entity const* nestedEntity) noexcept
 {
 	_nestedEntities.push_back(nestedEntity);
 }
@@ -20,7 +20,7 @@ inline void NamespaceFragmentAPI::NamespaceFragmentImpl::setNestedEntitiesCapaci
 	_nestedEntities.reserve(capacity);
 }
 
-inline std::vector<EntityAPI const*> const& NamespaceFragmentAPI::NamespaceFragmentImpl::getNestedEntities() const noexcept
+inline std::vector<Entity const*> const& NamespaceFragmentAPI::NamespaceFragmentImpl::getNestedEntities() const noexcept
 {
 	return _nestedEntities;
 }

@@ -75,7 +75,7 @@ namespace rfk
 			* 
 			*	@param entity Entity to add/register.
 			*/
-			inline void	addEntityToNamespace(EntityAPI const& entity)		const	noexcept;
+			inline void	addEntityToNamespace(Entity const& entity)		const	noexcept;
 
 			/**
 			*	@brief	**INTERNAL USAGE ONLY**
@@ -83,7 +83,7 @@ namespace rfk
 			* 
 			*	@param entity	Entity to remove/unregister.
 			*/
-			inline void	removeEntityFromNamespace(EntityAPI const& entity)	const	noexcept;
+			inline void	removeEntityFromNamespace(Entity const& entity)	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererImpl.inl"

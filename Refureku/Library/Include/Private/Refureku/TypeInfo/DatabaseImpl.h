@@ -32,7 +32,7 @@ namespace rfk
 	class DatabaseAPI::DatabaseImpl final
 	{
 		public:
-			using EntitiesById					= std::unordered_set<EntityAPI const*, EntityPtrIdHash, EntityPtrIdEqual>;
+			using EntitiesById					= std::unordered_set<Entity const*, EntityPtrIdHash, EntityPtrIdEqual>;
 			using NamespacesByName				= std::unordered_set<NamespaceAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using StructsByName					= std::unordered_set<StructAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using ClassesByName					= std::unordered_set<ClassAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
@@ -108,7 +108,7 @@ namespace rfk
 			*	@param entity						The entity to register.
 			*	@param shouldRegisterSubEntities	Should sub entities be registered by id recursively?
 			*/
-			inline void											registerFileLevelEntity(EntityAPI const&	entity,
+			inline void											registerFileLevelEntity(Entity const&	entity,
 																						bool				shouldRegisterSubEntities)	noexcept;
 
 			/**
@@ -117,7 +117,7 @@ namespace rfk
 			*	@param entity						The entity to register.
 			*	@param shouldRegisterSubEntities	Should sub entities be registered recursively?
 			*/
-			inline void											registerEntityId(EntityAPI const&	entity,
+			inline void											registerEntityId(Entity const&	entity,
 																				 bool				shouldRegisterSubEntities)			noexcept;
 
 			/**
@@ -126,7 +126,7 @@ namespace rfk
 			*	@param entity						The entity to unregister.
 			*	@param shouldUnregisterSubEntities	Should sub entities be unregistered recursively?
 			*/
-			inline void											unregisterEntity(EntityAPI const&	entity,
+			inline void											unregisterEntity(Entity const&	entity,
 																				 bool				shouldUnregisterSubEntities)		noexcept;
 
 			/**

@@ -28,7 +28,7 @@ namespace rfk
 			inline EnumImpl(char const*			name,
 							std::size_t			id,
 							ArchetypeAPI const*	underlyingArchetype,
-							EntityAPI const*	outerEntity = nullptr)	noexcept;
+							Entity const*	outerEntity = nullptr)	noexcept;
 
 			/**
 			*	@brief Add an enum value to this enum.

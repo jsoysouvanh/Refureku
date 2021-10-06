@@ -20,7 +20,7 @@ namespace rfk
 					 EFieldFlags		flags,
 					 StructAPI const*	owner,
 					 std::size_t		memoryOffset,
-					 EntityAPI const*	outerEntity = nullptr)	noexcept;
+					 Entity const*	outerEntity = nullptr)	noexcept;
 			FieldAPI(FieldAPI&&)								noexcept;
 			~FieldAPI()											noexcept;
 

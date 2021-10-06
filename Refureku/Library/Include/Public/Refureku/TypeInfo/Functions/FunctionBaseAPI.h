@@ -13,7 +13,7 @@
 
 namespace rfk
 {
-	class FunctionBaseAPI : public EntityAPI
+	class FunctionBaseAPI : public Entity
 	{
 		public:
 			/**

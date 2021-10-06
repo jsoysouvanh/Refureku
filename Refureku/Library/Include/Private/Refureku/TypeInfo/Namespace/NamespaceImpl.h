@@ -18,7 +18,7 @@
 
 namespace rfk
 {
-	class NamespaceAPI::NamespaceImpl final : public EntityAPI::EntityImpl
+	class NamespaceAPI::NamespaceImpl final : public Entity::EntityImpl
 	{
 		public:
 			using NamespaceHashSet	= std::unordered_set<NamespaceAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;

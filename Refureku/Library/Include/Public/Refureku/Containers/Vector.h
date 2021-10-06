@@ -17,6 +17,10 @@ namespace rfk
 	template <typename T, typename Allocator = rfk::Allocator<T>>
 	class Vector
 	{
+		//Friendship for move constructor from Vector holding another type of data
+		template <typename U, typename UAllocator>
+		friend class Vector;
+
 		private:
 			using AllocTraits = std::allocator_traits<Allocator>;
 
@@ -97,6 +101,11 @@ namespace rfk
 
 		public:
 			Vector(std::size_t initialCapacity = 0u)	noexcept;
+
+			/** Retrieve data from another type U. NOT SAFE UNLESS YOU EXACTLY KNOW WHAT YOU DO. */
+			template <typename U, typename UAlloc>
+			Vector(Vector<U, UAlloc>&&)					noexcept;
+
 			Vector(Vector const&);
 			Vector(Vector&&)							noexcept;
 			~Vector();

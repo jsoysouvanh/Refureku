@@ -5,8 +5,8 @@
 *	See the README.md file for full license details.
 */
 
-inline ArchetypeAPI::ArchetypeImpl::ArchetypeImpl(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, EntityAPI const* outerEntity) noexcept:
-	EntityAPI::EntityImpl(name, id, kind, outerEntity),
+inline ArchetypeAPI::ArchetypeImpl::ArchetypeImpl(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, Entity const* outerEntity) noexcept:
+	Entity::EntityImpl(name, id, kind, outerEntity),
 	_memorySize{memorySize}
 {
 }

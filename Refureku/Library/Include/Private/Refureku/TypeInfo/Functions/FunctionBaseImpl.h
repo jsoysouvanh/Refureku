@@ -14,7 +14,7 @@
 
 namespace rfk
 {
-	class FunctionBaseAPI::FunctionBaseImpl : public EntityAPI::EntityImpl
+	class FunctionBaseAPI::FunctionBaseImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Type returned by this function. */
@@ -32,7 +32,7 @@ namespace rfk
 									EEntityKind		kind,
 									TypeAPI const&		returnType,
 									ICallable*			internalFunction,
-									EntityAPI const*	outerEntity)		noexcept;
+									Entity const*	outerEntity)		noexcept;
 
 			/**
 			*	@brief Add a parameter to this function.

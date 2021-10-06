@@ -8,7 +8,7 @@
 using namespace rfk;
 
 NamespaceAPI::NamespaceAPI(char const* name, std::size_t id) noexcept:
-	EntityAPI(new NamespaceImpl(name, id))
+	Entity(new NamespaceImpl(name, id))
 {
 }
 

@@ -6,7 +6,7 @@
 */
 
 inline MethodBaseAPI::MethodBaseImpl::MethodBaseImpl(char const* name, std::size_t id, TypeAPI const& returnType,
-													 ICallable* internalMethod, EMethodFlags flags, EntityAPI const* outerEntity) noexcept:
+													 ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
 	FunctionBaseImpl(name, id, EEntityKind::Method, returnType, internalMethod, outerEntity),
 	_flags{flags}
 {

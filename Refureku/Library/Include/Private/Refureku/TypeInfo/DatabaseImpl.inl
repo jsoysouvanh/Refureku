@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(EntityAPI const& entity, bool shouldRegisterSubEntities) noexcept
+void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	assert(entity.getOuterEntity() == nullptr);
 
@@ -58,7 +58,7 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(EntityAPI const& entity,
 	}
 }
 
-void DatabaseAPI::DatabaseImpl::unregisterEntity(EntityAPI const& entity, bool shouldUnregisterSubEntities) noexcept
+void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEntities) noexcept
 {
 	if (shouldUnregisterSubEntities)
 	{
@@ -151,7 +151,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(EntityAPI const& entity, bool s
 	}
 }
 
-void DatabaseAPI::DatabaseImpl::registerEntityId(EntityAPI const& entity, bool shouldRegisterSubEntities) noexcept
+void DatabaseAPI::DatabaseImpl::registerEntityId(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	_entitiesById.emplace(&entity);
 

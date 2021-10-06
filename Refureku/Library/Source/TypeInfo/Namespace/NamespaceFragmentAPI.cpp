@@ -6,18 +6,18 @@
 using namespace rfk;
 
 NamespaceFragmentAPI::NamespaceFragmentAPI(char const* name, std::size_t id) noexcept:
-	EntityAPI(new NamespaceFragmentImpl(name, id))
+	Entity(new NamespaceFragmentImpl(name, id))
 {
 }
 
 NamespaceFragmentAPI::~NamespaceFragmentAPI() noexcept = default;
 
-bool NamespaceFragmentAPI::foreachNestedEntity(Visitor<EntityAPI> visitor, void* userData) const
+bool NamespaceFragmentAPI::foreachNestedEntity(Visitor<Entity> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntityPtr(reinterpret_cast<NamespaceFragmentImpl const*>(getPimpl())->getNestedEntities(), visitor, userData);
 }
 
-void NamespaceFragmentAPI::addNestedEntity(EntityAPI const* nestedEntity) noexcept
+void NamespaceFragmentAPI::addNestedEntity(Entity const* nestedEntity) noexcept
 {
 	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->addNestedEntity(nestedEntity);
 }

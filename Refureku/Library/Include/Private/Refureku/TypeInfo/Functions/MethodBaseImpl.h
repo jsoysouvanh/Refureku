@@ -24,7 +24,7 @@ namespace rfk
 								  TypeAPI const&	returnType,
 								  ICallable*		internalMethod,
 								  EMethodFlags		flags,
-								  EntityAPI const*	outerEntity)	noexcept;
+								  Entity const*	outerEntity)	noexcept;
 
 			RFK_NODISCARD inline EMethodFlags getFlags()	const	noexcept;
 	};

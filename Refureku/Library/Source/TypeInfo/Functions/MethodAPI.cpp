@@ -8,7 +8,7 @@
 using namespace rfk;
 
 MethodAPI::MethodAPI(char const* name, std::size_t id, TypeAPI const& returnType,
-					 ICallable* internalMethod, EMethodFlags flags, EntityAPI const* outerEntity) noexcept:
+					 ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
 	MethodBaseAPI(new MethodImpl(name, id, returnType, internalMethod, flags, outerEntity))
 {
 }

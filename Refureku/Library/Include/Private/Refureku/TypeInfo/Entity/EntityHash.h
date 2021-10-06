@@ -12,49 +12,49 @@
 namespace rfk
 {
 	//Forward declaration
-	class EntityAPI;
+	class Entity;
 
 	struct EntityNameHash
 	{
-		std::size_t operator()(EntityAPI const& entity)	const;
+		std::size_t operator()(Entity const& entity)	const;
 	};
 
 	struct EntityIdHash
 	{
-		std::size_t operator()(EntityAPI const& entity)	const;
+		std::size_t operator()(Entity const& entity)	const;
 	};
 
 	struct EntityNameEqual
 	{
-		bool operator()(EntityAPI const& lhs,
-						EntityAPI const& rhs)	const;
+		bool operator()(Entity const& lhs,
+						Entity const& rhs)	const;
 	};
 
 	struct EntityIdEqual
 	{
-		bool operator()(EntityAPI const& lhs,
-						EntityAPI const& rhs)	const;
+		bool operator()(Entity const& lhs,
+						Entity const& rhs)	const;
 	};
 
 	struct EntityPtrNameHash
 	{
-		std::size_t operator()(EntityAPI const* entity) const;
+		std::size_t operator()(Entity const* entity) const;
 	};
 
 	struct EntityPtrIdHash
 	{
-		std::size_t operator()(EntityAPI const* entity) const;
+		std::size_t operator()(Entity const* entity) const;
 	};
 
 	struct EntityPtrNameEqual
 	{
-		bool operator()(EntityAPI const* lhs,
-						EntityAPI const* rhs)	const;
+		bool operator()(Entity const* lhs,
+						Entity const* rhs)	const;
 	};
 
 	struct EntityPtrIdEqual
 	{
-		bool operator()(EntityAPI const* lhs,
-						EntityAPI const* rhs)	const;
+		bool operator()(Entity const* lhs,
+						Entity const* rhs)	const;
 	};
 }

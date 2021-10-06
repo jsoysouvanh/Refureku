@@ -81,7 +81,7 @@ namespace rfk
 																					  Visitor				visitor);
 
 			/**
-			*	@brief Find an entity by Id in a container containing EntityAPI*.
+			*	@brief Find an entity by Id in a container containing Entity*.
 			*/
 			template <typename ContainerType>
 			static typename ContainerType::value_type			getEntityPtrById(ContainerType const&	container,

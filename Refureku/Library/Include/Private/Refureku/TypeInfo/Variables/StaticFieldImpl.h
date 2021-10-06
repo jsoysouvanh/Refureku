@@ -29,14 +29,14 @@ namespace rfk
 								   EFieldFlags		flags,
 								   StructAPI const*	owner,
 								   void*			ptr,
-								   EntityAPI const*	outerEntity)	noexcept;
+								   Entity const*	outerEntity)	noexcept;
 			inline StaticFieldImpl(char const*		name,
 								   std::size_t		id,
 								   TypeAPI const&	type,
 								   EFieldFlags		flags,
 								   StructAPI const*	owner,
 								   void const*		constPtr,
-								   EntityAPI const*	outerEntity)	noexcept;
+								   Entity const*	outerEntity)	noexcept;
 
 			/**
 			*	@brief Getter for the field _ptr.

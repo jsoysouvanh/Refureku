@@ -99,7 +99,7 @@ void containers()
 
 void entities()
 {
-	rfk::EntityAPI entity("TestEntity", 12345u, rfk::EEntityKind::Undefined, nullptr);
+	rfk::Entity entity("TestEntity", 12345u, rfk::EEntityKind::Undefined, nullptr);
 	entity.setPropertiesCapacity(0);
 
 	TEST(entity.getName() == std::string("TestEntity"));
@@ -131,7 +131,7 @@ void entities()
 			 return prop.getArchetype().isSubclassOf(Instantiator::staticGetArchetype());
 		 }, nullptr).size() == 0u);
 
-	rfk::EntityAPI entity2("TestEntity2", 6789u, rfk::EEntityKind::Class, nullptr);
+	rfk::Entity entity2("TestEntity2", 6789u, rfk::EEntityKind::Class, nullptr);
 
 	entity.setOuterEntity(&entity2);
 	TEST(entity.getOuterEntity() == &entity2);
@@ -148,7 +148,7 @@ void entities()
 			 return prop.getArchetype().getName() == "TestProperty2";
 		 }, nullptr) == nullptr);
 
-	rfk::EntityAPI entity3("TestEntity3", 101112u, rfk::EEntityKind::Enum, nullptr);
+	rfk::Entity entity3("TestEntity3", 101112u, rfk::EEntityKind::Enum, nullptr);
 
 	entity3.inheritAllProperties(entity);
 

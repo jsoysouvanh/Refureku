@@ -7,8 +7,8 @@ using namespace rfk;
 template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<EnumValueAPI const*>;
 template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<EnumValueAPI const*, rfk::Allocator<EnumValueAPI const*>>;
 
-EnumValueAPI::EnumValueAPI(char const* name, std::size_t id, int64 value, EntityAPI const* outerEntity) noexcept:
-	EntityAPI(new EnumValueImpl(name, id, value, outerEntity))
+EnumValueAPI::EnumValueAPI(char const* name, std::size_t id, int64 value, Entity const* outerEntity) noexcept:
+	Entity(new EnumValueImpl(name, id, value, outerEntity))
 {
 }
 

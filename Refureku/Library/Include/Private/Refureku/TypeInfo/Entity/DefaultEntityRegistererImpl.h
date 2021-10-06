@@ -18,10 +18,10 @@ namespace rfk
 	class internal::DefaultEntityRegistererImpl final
 	{
 		private:
-			EntityAPI const& _registeredEntity;
+			Entity const& _registeredEntity;
 
 		public:
-			inline DefaultEntityRegistererImpl(EntityAPI const& entity)	noexcept;
+			inline DefaultEntityRegistererImpl(Entity const& entity)	noexcept;
 			inline ~DefaultEntityRegistererImpl()						noexcept;
 
 			/**
@@ -29,7 +29,7 @@ namespace rfk
 			* 
 			*	@return _registeredEntity.
 			*/
-			inline EntityAPI const& getRegisteredEntity() const noexcept;
+			inline Entity const& getRegisteredEntity() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Entity/DefaultEntityRegistererImpl.inl"

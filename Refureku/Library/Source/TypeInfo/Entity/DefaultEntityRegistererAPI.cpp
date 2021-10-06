@@ -4,7 +4,7 @@
 
 using namespace rfk;
 
-DefaultEntityRegistererAPI::DefaultEntityRegistererAPI(EntityAPI const& entity) noexcept:
+DefaultEntityRegistererAPI::DefaultEntityRegistererAPI(Entity const& entity) noexcept:
 	_pimpl(new internal::DefaultEntityRegistererImpl(entity))
 {
 }

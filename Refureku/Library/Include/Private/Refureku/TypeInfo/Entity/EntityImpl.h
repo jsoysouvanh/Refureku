@@ -17,7 +17,7 @@
 
 namespace rfk
 {
-	class EntityAPI::EntityImpl
+	class Entity::EntityImpl
 	{
 		private:
 			/** Name qualifying this entity. */
@@ -33,7 +33,7 @@ namespace rfk
 			*	The outer entity is the entity in which this entity has been declared.
 			*	If this entity is declared at file level, outerEntity will be nullptr.
 			*/
-			EntityAPI const*				_outerEntity;
+			Entity const*				_outerEntity;
 
 			/** Kind of this entity. */
 			EEntityKind						_kind;
@@ -42,7 +42,7 @@ namespace rfk
 			inline EntityImpl(char const*		name,
 							  std::size_t		id,
 							  EEntityKind		kind = EEntityKind::Undefined,
-							  EntityAPI const*	outerEntity = nullptr)			noexcept;
+							  Entity const*	outerEntity = nullptr)			noexcept;
 			virtual ~EntityImpl()												= default;
 
 			/**
@@ -95,7 +95,7 @@ namespace rfk
 			* 
 			*	@return _outerEntity.
 			*/
-			inline EntityAPI const*						getOuterEntity()								const	noexcept;
+			inline Entity const*						getOuterEntity()								const	noexcept;
 
 			/**
 			*	@brief Getter for the field _properties.
@@ -109,7 +109,7 @@ namespace rfk
 			* 
 			*	@param outerEntity The outer entity to set.
 			*/
-			inline void									setOuterEntity(EntityAPI const* outerEntity)			noexcept;
+			inline void									setOuterEntity(Entity const* outerEntity)			noexcept;
 
 			/**
 			*	@brief	Set the number of properties for this entity.

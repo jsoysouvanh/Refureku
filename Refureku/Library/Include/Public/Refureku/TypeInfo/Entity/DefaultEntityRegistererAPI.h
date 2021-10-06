@@ -13,7 +13,7 @@
 namespace rfk
 {
 	//Forward declaration
-	class EntityAPI;
+	class Entity;
 
 	namespace internal
 	{
@@ -23,7 +23,7 @@ namespace rfk
 	class DefaultEntityRegistererAPI final
 	{
 		public:
-			REFUREKU_API DefaultEntityRegistererAPI(EntityAPI const& entity)	noexcept;
+			REFUREKU_API DefaultEntityRegistererAPI(Entity const& entity)	noexcept;
 			DefaultEntityRegistererAPI(DefaultEntityRegistererAPI const&)		= delete;
 			DefaultEntityRegistererAPI(DefaultEntityRegistererAPI&&)			= delete;
 			REFUREKU_API ~DefaultEntityRegistererAPI()							noexcept;

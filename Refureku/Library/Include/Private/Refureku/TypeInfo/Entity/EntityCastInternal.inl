@@ -6,7 +6,7 @@
 */
 
 template <typename T, EEntityKind CheckKind>
-T const* entityCast(EntityAPI const* entity) noexcept
+T const* entityCast(Entity const* entity) noexcept
 {
 	return (entity != nullptr && entity->getKind() == CheckKind) ? reinterpret_cast<T const*>(entity) : nullptr;
 }

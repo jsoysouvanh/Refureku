@@ -13,13 +13,13 @@
 
 namespace rfk
 {
-	class EnumValueAPI final : public EntityAPI
+	class EnumValueAPI final : public Entity
 	{
 		public:
 			EnumValueAPI(char const*		name,
 						 std::size_t		id,
 						 int64				value,
-						 EntityAPI const*	outerEntity = nullptr)	noexcept;
+						 Entity const*	outerEntity = nullptr)	noexcept;
 			EnumValueAPI(EnumValueAPI&&)							noexcept;
 			~EnumValueAPI()											noexcept;
 

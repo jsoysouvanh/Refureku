@@ -4,8 +4,8 @@
 
 using namespace rfk;
 
-FunctionParameterAPI::FunctionParameterAPI(char const* name, std::size_t id, TypeAPI const& type, EntityAPI const* outerEntity) noexcept:
-	EntityAPI(new FunctionParameterImpl(name, id, type, outerEntity))
+FunctionParameterAPI::FunctionParameterAPI(char const* name, std::size_t id, TypeAPI const& type, Entity const* outerEntity) noexcept:
+	Entity(new FunctionParameterImpl(name, id, type, outerEntity))
 {
 }
 

@@ -6,7 +6,7 @@
 */
 
 inline StaticMethodAPI::StaticMethodImpl::StaticMethodImpl(char const* name, std::size_t id, TypeAPI const& returnType,
-													ICallable* internalMethod, EMethodFlags flags, EntityAPI const* outerEntity) noexcept:
+													ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
 	MethodBaseImpl(name, id, returnType, internalMethod, flags, outerEntity)
 {
 }

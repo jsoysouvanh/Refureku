@@ -26,7 +26,7 @@ namespace rfk
 		class NamespaceFragmentRegistererImpl;
 	}
 
-	class NamespaceAPI final : public EntityAPI
+	class NamespaceAPI final : public Entity
 	{
 		public:
 			REFUREKU_INTERNAL NamespaceAPI(char const*	name,

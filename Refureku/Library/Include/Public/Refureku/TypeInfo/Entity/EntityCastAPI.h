@@ -35,50 +35,50 @@ namespace rfk
 	*	@return The casted entity if the provided type matched the concrete entity type, else nullptr.
 	*/
 	template <typename T>
-	T const*									entityCast(EntityAPI const* entity)								noexcept;
+	T const*									entityCast(Entity const* entity)								noexcept;
 
 	/**
 	*	rfk::entityCast<> specialization for all Entity types.
 	*/
 	template <>
-	REFUREKU_API ArchetypeAPI const*			entityCast<ArchetypeAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API ArchetypeAPI const*			entityCast<ArchetypeAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API FundamentalArchetypeAPI const*	entityCast<FundamentalArchetypeAPI>(EntityAPI const* entity)	noexcept;
+	REFUREKU_API FundamentalArchetypeAPI const*	entityCast<FundamentalArchetypeAPI>(Entity const* entity)	noexcept;
 
 	template <>
-	REFUREKU_API StructAPI const*				entityCast<StructAPI>(EntityAPI const* entity)					noexcept;
+	REFUREKU_API StructAPI const*				entityCast<StructAPI>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API FieldBaseAPI const*			entityCast<FieldBaseAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API FieldBaseAPI const*			entityCast<FieldBaseAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API FieldAPI const*				entityCast<FieldAPI>(EntityAPI const* entity)					noexcept;
+	REFUREKU_API FieldAPI const*				entityCast<FieldAPI>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API StaticFieldAPI const*			entityCast<StaticFieldAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API StaticFieldAPI const*			entityCast<StaticFieldAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API MethodBaseAPI const*			entityCast<MethodBaseAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API MethodBaseAPI const*			entityCast<MethodBaseAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API MethodAPI const*				entityCast<MethodAPI>(EntityAPI const* entity)					noexcept;
+	REFUREKU_API MethodAPI const*				entityCast<MethodAPI>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API StaticMethodAPI const*			entityCast<StaticMethodAPI>(EntityAPI const* entity)			noexcept;
+	REFUREKU_API StaticMethodAPI const*			entityCast<StaticMethodAPI>(Entity const* entity)			noexcept;
 
 	template <>
-	REFUREKU_API EnumAPI const*					entityCast<EnumAPI>(EntityAPI const* entity)					noexcept;
+	REFUREKU_API EnumAPI const*					entityCast<EnumAPI>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API EnumValueAPI const*			entityCast<EnumValueAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API EnumValueAPI const*			entityCast<EnumValueAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API NamespaceAPI const*			entityCast<NamespaceAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API NamespaceAPI const*			entityCast<NamespaceAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API VariableAPI const*				entityCast<VariableAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API VariableAPI const*				entityCast<VariableAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API FunctionAPI const*				entityCast<FunctionAPI>(EntityAPI const* entity)				noexcept;
+	REFUREKU_API FunctionAPI const*				entityCast<FunctionAPI>(Entity const* entity)				noexcept;
 }

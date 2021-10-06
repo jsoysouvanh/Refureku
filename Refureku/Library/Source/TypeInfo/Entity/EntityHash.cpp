@@ -7,42 +7,42 @@
 
 using namespace rfk;
 
-std::size_t EntityNameHash::operator()(EntityAPI const& entity) const
+std::size_t EntityNameHash::operator()(Entity const& entity) const
 {
 	return std::hash<std::string_view>()(entity.getName());
 }
 
-std::size_t EntityIdHash::operator()(EntityAPI const& entity) const
+std::size_t EntityIdHash::operator()(Entity const& entity) const
 {
 	return entity.getId();
 }
 
-bool EntityNameEqual::operator()(EntityAPI const& lhs, EntityAPI const& rhs) const
+bool EntityNameEqual::operator()(Entity const& lhs, Entity const& rhs) const
 {
 	return std::strcmp(lhs.getName(), rhs.getName()) == 0;
 }
 
-bool EntityIdEqual::operator()(EntityAPI const& lhs, EntityAPI const& rhs) const
+bool EntityIdEqual::operator()(Entity const& lhs, Entity const& rhs) const
 {
 	return lhs.getId() == rhs.getId();
 }
 
-std::size_t EntityPtrNameHash::operator()(EntityAPI const* entity) const
+std::size_t EntityPtrNameHash::operator()(Entity const* entity) const
 {
 	return std::hash<std::string_view>()(entity->getName());
 }
 
-std::size_t EntityPtrIdHash::operator()(EntityAPI const* entity) const
+std::size_t EntityPtrIdHash::operator()(Entity const* entity) const
 {
 	return entity->getId();
 }
 
-bool EntityPtrNameEqual::operator()(EntityAPI const* lhs, EntityAPI const* rhs)	const
+bool EntityPtrNameEqual::operator()(Entity const* lhs, Entity const* rhs)	const
 {
 	return std::strcmp(lhs->getName(), rhs->getName()) == 0;
 }
 
-bool EntityPtrIdEqual::operator()(EntityAPI const* lhs, EntityAPI const* rhs) const
+bool EntityPtrIdEqual::operator()(Entity const* lhs, Entity const* rhs) const
 {
 	return lhs->getId() == rhs->getId();
 }

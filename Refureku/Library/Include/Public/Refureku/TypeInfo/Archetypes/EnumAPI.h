@@ -20,7 +20,7 @@ namespace rfk
 			REFUREKU_API EnumAPI(char const*			name,
 								 std::size_t			id,
 								 ArchetypeAPI const*	underlyingArchetype,
-								 EntityAPI const*		outerEntity = nullptr)	noexcept;
+								 Entity const*		outerEntity = nullptr)	noexcept;
 			REFUREKU_API ~EnumAPI()												noexcept;
 
 			/**

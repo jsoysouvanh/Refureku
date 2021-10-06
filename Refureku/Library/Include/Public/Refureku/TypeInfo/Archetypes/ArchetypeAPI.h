@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class ArchetypeAPI : public EntityAPI
+	class ArchetypeAPI : public Entity
 	{
 		public:
 			/**

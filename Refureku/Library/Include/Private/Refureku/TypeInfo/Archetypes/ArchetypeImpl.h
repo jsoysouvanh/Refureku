@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class ArchetypeAPI::ArchetypeImpl : public EntityAPI::EntityImpl
+	class ArchetypeAPI::ArchetypeImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */
@@ -26,7 +26,7 @@ namespace rfk
 								 std::size_t		id,
 								 EEntityKind		kind,
 								 std::size_t		memorySize,
-								 EntityAPI const*	outerEntity = nullptr)	noexcept;
+								 Entity const*	outerEntity = nullptr)	noexcept;
 
 			/**
 			*	@brief Getter for the field _memorySize.

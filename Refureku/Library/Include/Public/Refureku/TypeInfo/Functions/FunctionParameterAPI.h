@@ -12,13 +12,13 @@
 
 namespace rfk
 {
-	class FunctionParameterAPI : public EntityAPI
+	class FunctionParameterAPI : public Entity
 	{
 		public:
 			REFUREKU_INTERNAL FunctionParameterAPI(char const*		name,
 												   std::size_t		id,
 												   TypeAPI const&	type,
-												   EntityAPI const*	outerEntity = nullptr)	noexcept;
+												   Entity const*	outerEntity = nullptr)	noexcept;
 			FunctionParameterAPI(FunctionParameterAPI const&)								= delete;
 			REFUREKU_INTERNAL FunctionParameterAPI(FunctionParameterAPI&&)					noexcept;
 			REFUREKU_INTERNAL ~FunctionParameterAPI()										noexcept;

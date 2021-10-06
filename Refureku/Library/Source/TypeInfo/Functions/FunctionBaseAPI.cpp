@@ -10,7 +10,7 @@
 using namespace rfk;
 
 FunctionBaseAPI::FunctionBaseAPI(FunctionBaseImpl* implementation) noexcept:
-	EntityAPI(implementation)
+	Entity(implementation)
 {
 }
 

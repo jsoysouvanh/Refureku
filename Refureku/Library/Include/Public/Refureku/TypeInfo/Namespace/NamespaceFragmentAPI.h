@@ -11,7 +11,7 @@
 
 namespace rfk
 {
-	class NamespaceFragmentAPI final : public EntityAPI
+	class NamespaceFragmentAPI final : public Entity
 	{
 		public:
 			REFUREKU_API NamespaceFragmentAPI(char const*	name,
@@ -30,7 +30,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool		foreachNestedEntity(Visitor<EntityAPI>	visitor,
+			REFUREKU_API bool		foreachNestedEntity(Visitor<Entity>	visitor,
 														void*				userData)	const;
 
 			/**
@@ -40,7 +40,7 @@ namespace rfk
 			*	
 			*	@param this.
 			*/
-			REFUREKU_API void		addNestedEntity(EntityAPI const* nestedEntity)				noexcept;
+			REFUREKU_API void		addNestedEntity(Entity const* nestedEntity)				noexcept;
 
 			/**
 			*	@brief	Set the number of nested entities for this entity.

@@ -14,11 +14,11 @@
 
 namespace rfk
 {
-	class NamespaceFragmentAPI::NamespaceFragmentImpl final : public EntityAPI::EntityImpl
+	class NamespaceFragmentAPI::NamespaceFragmentImpl final : public Entity::EntityImpl
 	{
 		private:
 			/** Collection of all entities contained in this namespace fragment. */
-			std::vector<EntityAPI const*>	_nestedEntities;	
+			std::vector<Entity const*>	_nestedEntities;	
 
 		public:
 			inline NamespaceFragmentImpl(char const* name,
@@ -29,7 +29,7 @@ namespace rfk
 			*	
 			*	@param nestedEntity The nested entity to add to the namespace fragment.
 			*/
-			inline void									addNestedEntity(EntityAPI const* nestedEntity)		noexcept;
+			inline void									addNestedEntity(Entity const* nestedEntity)		noexcept;
 
 			/**
 			*	@brief	Set the number of nested entities for this entity.
@@ -45,7 +45,7 @@ namespace rfk
 			* 
 			*	@return _nestedEntities.
 			*/
-			inline std::vector<EntityAPI const*> const&	getNestedEntities()							const	noexcept;
+			inline std::vector<Entity const*> const&	getNestedEntities()							const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Namespace/NamespaceFragmentImpl.inl"

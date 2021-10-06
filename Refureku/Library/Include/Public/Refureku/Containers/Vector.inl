@@ -15,6 +15,18 @@ Vector<T, Allocator>::Vector(std::size_t initialCapacity) noexcept:
 }
 
 template <typename T, typename Allocator>
+template <typename U, typename UAlloc>
+Vector<T, Allocator>::Vector(Vector<U, UAlloc>&& other) noexcept:
+	_data{reinterpret_cast<T*>(other._data)},
+	_size{other._size},
+	_capacity{other._capacity}
+{
+	other._data		= nullptr;
+	other._size		= 0u;
+	other._capacity	= 0u;
+}
+
+template <typename T, typename Allocator>
 Vector<T, Allocator>::Vector(Vector const& other):
 	_data{nullptr},
 	_size{0u},

@@ -5,31 +5,31 @@
 
 using namespace rfk;
 
-EntityAPI::EntityAPI(EntityImpl* implementation) noexcept:
+Entity::Entity(EntityImpl* implementation) noexcept:
 	_pimpl{implementation}
 {
 }
 
-EntityAPI::EntityAPI(EntityAPI&&) noexcept = default;
+Entity::Entity(Entity&&) noexcept = default;
 
-EntityAPI::~EntityAPI() noexcept = default;
+Entity::~Entity() noexcept = default;
 
-EntityAPI::EntityImpl* EntityAPI::getPimpl() noexcept
+Entity::EntityImpl* Entity::getPimpl() noexcept
 {
 	return _pimpl.get();
 }
 
-EntityAPI::EntityImpl const* EntityAPI::getPimpl() const noexcept
+Entity::EntityImpl const* Entity::getPimpl() const noexcept
 {
 	return _pimpl.get();
 }
 
-Property const* EntityAPI::getPropertyAt(std::size_t propertyIndex) const noexcept
+Property const* Entity::getPropertyAt(std::size_t propertyIndex) const noexcept
 {
 	return _pimpl->getProperties()[propertyIndex];
 }
 
-Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildClassValid) const noexcept
+Property const* Entity::getProperty(StructAPI const& archetype, bool isChildClassValid) const noexcept
 {
 	//Iterate over all props to find a matching property
 	if (isChildClassValid)
@@ -58,7 +58,7 @@ Property const* EntityAPI::getProperty(StructAPI const& archetype, bool isChildC
 	return nullptr;
 }
 
-Property const* EntityAPI::getPropertyByPredicate(Predicate<Property> predicate, void* userData) const
+Property const* Entity::getPropertyByPredicate(Predicate<Property> predicate, void* userData) const
 {
 	for (Property const* prop : _pimpl->getProperties())
 	{
@@ -71,7 +71,7 @@ Property const* EntityAPI::getPropertyByPredicate(Predicate<Property> predicate,
 	return nullptr;
 }
 
-Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, bool isChildClassValid) const noexcept
+Vector<Property const*> Entity::getProperties(StructAPI const& archetype, bool isChildClassValid) const noexcept
 {
 	Vector<Property const*> result;
 
@@ -102,7 +102,7 @@ Vector<Property const*> EntityAPI::getProperties(StructAPI const& archetype, boo
 	return result;
 }
 
-Vector<Property const*> EntityAPI::getPropertiesByPredicate(Predicate<Property> predicate, void* userData) const
+Vector<Property const*> Entity::getPropertiesByPredicate(Predicate<Property> predicate, void* userData) const
 {
 	Vector<Property const*> result;
 
@@ -117,12 +117,12 @@ Vector<Property const*> EntityAPI::getPropertiesByPredicate(Predicate<Property> 
 	return result;
 }
 
-std::size_t EntityAPI::getPropertiesCount() const noexcept
+std::size_t Entity::getPropertiesCount() const noexcept
 {
 	return _pimpl->getProperties().size();
 }
 
-bool EntityAPI::foreachProperty(Visitor<Property> visitor, void* userData) const
+bool Entity::foreachProperty(Visitor<Property> visitor, void* userData) const
 {
 	if (visitor != nullptr)
 	{
@@ -140,57 +140,57 @@ bool EntityAPI::foreachProperty(Visitor<Property> visitor, void* userData) const
 	return false;
 }
 
-bool EntityAPI::addProperty(Property const* property) noexcept
+bool Entity::addProperty(Property const* property) noexcept
 {
 	return _pimpl->addProperty(property);
 }
 
-void EntityAPI::inheritProperties(EntityAPI const& from) noexcept
+void Entity::inheritProperties(Entity const& from) noexcept
 {
 	_pimpl->inheritProperties(*from._pimpl);
 }
 
-void EntityAPI::inheritAllProperties(EntityAPI const& from) noexcept
+void Entity::inheritAllProperties(Entity const& from) noexcept
 {
 	_pimpl->inheritAllProperties(*from._pimpl);
 }
 
-char const* EntityAPI::getName() const noexcept
+char const* Entity::getName() const noexcept
 {
 	return _pimpl->getName().data();
 }
 
-std::size_t EntityAPI::getId() const noexcept
+std::size_t Entity::getId() const noexcept
 {
 	return _pimpl->getId();
 }
 
-EEntityKind EntityAPI::getKind() const noexcept
+EEntityKind Entity::getKind() const noexcept
 {
 	return _pimpl->getKind();
 }
 
-EntityAPI const* EntityAPI::getOuterEntity() const noexcept
+Entity const* Entity::getOuterEntity() const noexcept
 {
 	return _pimpl->getOuterEntity();
 }
 
-void EntityAPI::setOuterEntity(EntityAPI const* outerEntity) noexcept
+void Entity::setOuterEntity(Entity const* outerEntity) noexcept
 {
 	_pimpl->setOuterEntity(outerEntity);
 }
 
-void EntityAPI::setPropertiesCapacity(std::size_t capacity) noexcept
+void Entity::setPropertiesCapacity(std::size_t capacity) noexcept
 {
 	_pimpl->setPropertiesCapacity(capacity);
 }
 
-bool EntityAPI::operator==(EntityAPI const& other) const noexcept
+bool Entity::operator==(Entity const& other) const noexcept
 {
 	return &other == this;
 }
 
-bool EntityAPI::operator!=(EntityAPI const& other) const noexcept
+bool Entity::operator!=(Entity const& other) const noexcept
 {
 	return &other != this;
 }

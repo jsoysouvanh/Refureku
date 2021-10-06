@@ -7,7 +7,7 @@
 using namespace rfk;
 
 ArchetypeAPI::ArchetypeAPI(ArchetypeImpl* implementation) noexcept:
-	EntityAPI(implementation)
+	Entity(implementation)
 {
 }
 

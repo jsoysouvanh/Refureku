@@ -8,7 +8,7 @@
 using namespace rfk;
 
 VariableBaseAPI::VariableBaseAPI(VariableBaseImpl* implementation) noexcept:
-	EntityAPI(implementation)
+	Entity(implementation)
 {
 }
 

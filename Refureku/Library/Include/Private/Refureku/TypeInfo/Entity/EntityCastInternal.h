@@ -21,7 +21,7 @@ namespace rfk
 	*	@return The casted entity if the entity concrete type was correct, else nullptr.
 	*/
 	template <typename T, EEntityKind CheckKind>
-	T const* entityCast(EntityAPI const* entity) noexcept;
+	T const* entityCast(Entity const* entity) noexcept;
 
 	#include "Refureku/TypeInfo/Entity/EntityCastInternal.inl"
 }

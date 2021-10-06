@@ -31,7 +31,7 @@ inline void internal::NamespaceFragmentRegistererImpl::mergeFragmentToNamespace(
 	//Merge properties
 	mergeFragmentPropertiesToNamespaceProperties();
 
-	_registeredFragment.foreachNestedEntity([](rfk::EntityAPI const& entity, void* userData)
+	_registeredFragment.foreachNestedEntity([](rfk::Entity const& entity, void* userData)
 											{
 												reinterpret_cast<NamespaceFragmentRegistererImpl*>(userData)->addEntityToNamespace(entity);
 
@@ -57,10 +57,10 @@ inline void internal::NamespaceFragmentRegistererImpl::addPropertyToNamespace(Pr
 	}
 }
 
-inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(EntityAPI const& entity) const noexcept
+inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(Entity const& entity) const noexcept
 {
 	//Setup outer entity
-	const_cast<EntityAPI&>(entity).setOuterEntity(_namespaceInstance.get());	//Don't tell anyone I actually wrote const_cast...
+	const_cast<Entity&>(entity).setOuterEntity(_namespaceInstance.get());	//Don't tell anyone I actually wrote const_cast...
 
 	switch (entity.getKind())
 	{
@@ -114,7 +114,7 @@ inline void internal::NamespaceFragmentRegistererImpl::removeFragmentFromNamespa
 {
 	//TODO: Should find a solution to remove registered properties?...
 
-	_registeredFragment.foreachNestedEntity([](rfk::EntityAPI const& entity, void* userData)
+	_registeredFragment.foreachNestedEntity([](rfk::Entity const& entity, void* userData)
 											{
 												reinterpret_cast<NamespaceFragmentRegistererImpl*>(userData)->removeEntityFromNamespace(entity);
 												
@@ -122,7 +122,7 @@ inline void internal::NamespaceFragmentRegistererImpl::removeFragmentFromNamespa
 											}, this);
 }
 
-inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace(EntityAPI const& entity) const noexcept
+inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace(Entity const& entity) const noexcept
 {
 	switch (entity.getKind())
 	{

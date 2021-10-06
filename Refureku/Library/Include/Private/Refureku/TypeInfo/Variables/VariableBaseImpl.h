@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class VariableBaseAPI::VariableBaseImpl : public EntityAPI::EntityImpl
+	class VariableBaseAPI::VariableBaseImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Type of this variable. */
@@ -23,7 +23,7 @@ namespace rfk
 									std::size_t			id,
 									EEntityKind			kind,
 									TypeAPI const&		type,
-									EntityAPI const*	outerEntity)	noexcept;
+									Entity const*	outerEntity)	noexcept;
 
 			/**
 			*	@brief Getter for the field _type.

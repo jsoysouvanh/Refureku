@@ -6,7 +6,7 @@
 */
 
 inline FunctionBaseAPI::FunctionBaseImpl::FunctionBaseImpl(char const* name, std::size_t id, EEntityKind kind,
-														   TypeAPI const& returnType, ICallable* internalFunction, EntityAPI const* outerEntity) noexcept:
+														   TypeAPI const& returnType, ICallable* internalFunction, Entity const* outerEntity) noexcept:
 	EntityImpl(name, id, kind, outerEntity),
 	_returnType{returnType},
 	_internalFunction{internalFunction}
