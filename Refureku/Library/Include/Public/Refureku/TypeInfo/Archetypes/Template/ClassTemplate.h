@@ -19,8 +19,8 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API ClassTemplate(char const*	name,
-										  std::size_t	id,
-										  bool			isClass)	noexcept;
+									   std::size_t	id,
+									   bool			isClass)	noexcept;
 			REFUREKU_API ~ClassTemplate()						noexcept;
 
 			/**
@@ -38,7 +38,7 @@ namespace rfk
 			*
 			*	@return The number of template parameters for this class template.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t					getTemplateParametersCount()							const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t				getTemplateParametersCount()							const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all template instantiations of this class.
@@ -51,21 +51,21 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachTemplateInstantiation(/* TODO */)				const	noexcept;
+			REFUREKU_API bool									foreachTemplateInstantiation(/* TODO */)				const	noexcept;
 
 			/**
 			*	@brief Get the number of instantiations (with different template parameters) of this class template within the program.
 			* 
 			*	@return The number of instantiations of this class template within the program.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t					getTemplateInstantiationsCount()						const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t				getTemplateInstantiationsCount()						const	noexcept;
 
 			/**
 			*	@brief Append a template parameter the list of template parameters.
 			* 
 			*	//TODO
 			*/
-			REFUREKU_API void										addTemplateParameter(TemplateParameter const& param)			noexcept;
+			REFUREKU_API void									addTemplateParameter(TemplateParameter const& param)			noexcept;
 
 		private:
 			//Forward declaration

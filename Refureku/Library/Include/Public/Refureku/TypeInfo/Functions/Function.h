@@ -16,12 +16,12 @@ namespace rfk
 	class Function final : public FunctionBase
 	{
 		public:
-			REFUREKU_API Function(char const*	name, 
-									 std::size_t	id,
-									 Type const&	returnType,
-									 ICallable*		internalFunction,
-									 EFunctionFlags	flags)			noexcept;
-			Function(Function&&)								= delete;
+			REFUREKU_API Function(char const*		name, 
+								  std::size_t		id,
+								  Type const&		returnType,
+								  ICallable*		internalFunction,
+								  EFunctionFlags	flags)			noexcept;
+			Function(Function&&)									= delete;
 			REFUREKU_API ~Function()								noexcept;
 
 			/**

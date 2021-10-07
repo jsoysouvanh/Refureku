@@ -14,15 +14,15 @@ namespace rfk
 	class Field final : public FieldBase
 	{
 		public:
-			Field(char const*		name,
-					 std::size_t		id,
-					 Type const&		type,
-					 EFieldFlags		flags,
-					 Struct const*	owner,
-					 std::size_t		memoryOffset,
-					 Entity const*	outerEntity = nullptr)	noexcept;
-			Field(Field&&)								noexcept;
-			~Field()											noexcept;
+			REFUREKU_INTERNAL Field(char const*		name,
+									std::size_t		id,
+									Type const&		type,
+									EFieldFlags		flags,
+									Struct const*	owner,
+									std::size_t		memoryOffset,
+									Entity const*	outerEntity = nullptr)	noexcept;
+			REFUREKU_INTERNAL Field(Field&&)								noexcept;
+			REFUREKU_INTERNAL ~Field()										noexcept;
 
 			/**
 			*	@brief Get the value corresponding to this field in the provided instance.

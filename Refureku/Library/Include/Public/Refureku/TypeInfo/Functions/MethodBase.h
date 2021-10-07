@@ -83,7 +83,7 @@ namespace rfk
 			class MethodBaseImpl;
 
 			REFUREKU_INTERNAL MethodBase(MethodBaseImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL MethodBase(MethodBase&&)				noexcept;
-			REFUREKU_INTERNAL ~MethodBase()								noexcept;
+			REFUREKU_INTERNAL MethodBase(MethodBase&&)						noexcept;
+			REFUREKU_INTERNAL ~MethodBase()									noexcept;
 	};
 }

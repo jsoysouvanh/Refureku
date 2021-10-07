@@ -24,12 +24,12 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API ClassTemplateInstantiationRegisterer(ClassTemplateInstantiation const& instantiation)	noexcept;
-			ClassTemplateInstantiationRegisterer(ClassTemplateInstantiationRegisterer const&)						= delete;
-			ClassTemplateInstantiationRegisterer(ClassTemplateInstantiationRegisterer&&)							= delete;
-			REFUREKU_API ~ClassTemplateInstantiationRegisterer()														noexcept;
+			ClassTemplateInstantiationRegisterer(ClassTemplateInstantiationRegisterer const&)					= delete;
+			ClassTemplateInstantiationRegisterer(ClassTemplateInstantiationRegisterer&&)						= delete;
+			REFUREKU_API ~ClassTemplateInstantiationRegisterer()												noexcept;
 
 		private:
-			/** Pointer to the concrete implementation. */
+			/** Pointer to the concrete ClassTemplateInstantiationRegisterer implementation. */
 			Pimpl<internal::ClassTemplateInstantiationRegistererImpl> _pimpl;
 	};
 }

@@ -16,12 +16,12 @@ namespace rfk
 	{
 		public:
 			REFUREKU_INTERNAL StaticMethod(char const*		name,
-											  std::size_t		id,
+											  std::size_t	id,
 											  Type const&	returnType,
-											  ICallable*		internalMethod,
-											  EMethodFlags		flags,
-											  Entity const*		outerEntity)	noexcept;
-			REFUREKU_INTERNAL StaticMethod(StaticMethod&&)				noexcept;
+											  ICallable*	internalMethod,
+											  EMethodFlags	flags,
+											  Entity const*	outerEntity)	noexcept;
+			REFUREKU_INTERNAL StaticMethod(StaticMethod&&)					noexcept;
 			REFUREKU_INTERNAL ~StaticMethod()								noexcept;
 
 			/**

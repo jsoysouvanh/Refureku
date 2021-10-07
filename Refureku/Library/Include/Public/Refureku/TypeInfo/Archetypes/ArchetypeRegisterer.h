@@ -24,11 +24,12 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API ArchetypeRegisterer(Archetype const& archetype)	noexcept;
-			ArchetypeRegisterer(ArchetypeRegisterer const&)				= delete;
-			ArchetypeRegisterer(ArchetypeRegisterer&&)					= delete;
+			ArchetypeRegisterer(ArchetypeRegisterer const&)					= delete;
+			ArchetypeRegisterer(ArchetypeRegisterer&&)						= delete;
 			REFUREKU_API ~ArchetypeRegisterer()								noexcept;
 
 		private:
+			/** Pointer to ArchetypeRegisterer implementation. */
 			Pimpl<internal::ArchetypeRegistererImpl> _pimpl;
 	};
 }

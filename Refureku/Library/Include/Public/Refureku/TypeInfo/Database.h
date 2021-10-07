@@ -44,7 +44,7 @@ namespace rfk
 	class Database final
 	{
 		public:
-			REFUREKU_INTERNAL Database()		noexcept;
+			REFUREKU_INTERNAL Database()	noexcept;
 			Database(Database const&)		= delete;
 			Database(Database&&)			= delete;
 			REFUREKU_INTERNAL ~Database()	noexcept;
@@ -91,7 +91,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Namespace const*				getNamespaceByPredicate(Predicate<Namespace>	predicate,
-																							void*					userData)			const;
+																							void*					userData)				const;
 
 			/**
 			*	@brief Retrieve all file level namespaces satisfying the provided predicate.
@@ -104,7 +104,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Namespace const*>		getNamespacesByPredicate(Predicate<Namespace>	predicate,
-																							 void*					userData)			const;
+																							 void*					userData)				const;
 
 			/**
 			*	@brief Execute the given visitor on all file level namespaces.
@@ -151,7 +151,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Archetype const*>		getArchetypesByPredicate(Predicate<Archetype>	predicate,
-																							 void*					userData)					const;
+																							 void*					userData)				const;
 
 			/**
 			*	@brief Retrieve a struct by id.
@@ -160,7 +160,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Struct const*					getStructById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const*				getStructById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level struct by name.
@@ -169,7 +169,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Struct const*					getStructByName(char const* name)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const*				getStructByName(char const* name)										const	noexcept;
 
 			/**
 			*	@brief Retrieve all file level structs satisfying the provided predicate.
@@ -181,8 +181,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Struct const*>			getStructsByPredicate(Predicate<Struct>	predicate,
-																							  void*				userData)						const;
+			RFK_NODISCARD REFUREKU_API Vector<Struct const*>		getStructsByPredicate(Predicate<Struct>	predicate,
+																						  void*				userData)						const;
 
 			/**
 			*	@brief Execute the given visitor on all file level structs.
@@ -195,8 +195,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelStruct(Visitor<Struct>	visitor,
-																							   void*				userData)					const;
+			REFUREKU_API bool										foreachFileLevelStruct(Visitor<Struct>	visitor,
+																						   void*			userData)						const;
 
 			/**
 			*	@brief Retrieve a class by id.
@@ -240,8 +240,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelClass(Visitor<Class>	visitor,
-																							  void*				userData)						const;
+			REFUREKU_API bool										foreachFileLevelClass(Visitor<Class>	visitor,
+																						  void*				userData)						const;
 
 			/**
 			*	@brief Retrieve an enum by id.
@@ -285,8 +285,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelEnum(Visitor<Enum>	visitor,
-																							 void*				userData)						const;
+			REFUREKU_API bool										foreachFileLevelEnum(Visitor<Enum>	visitor,
+																						 void*			userData)							const;
 
 			/**
 			*	@brief Retrieve a fundamental archetype by id.
@@ -324,8 +324,8 @@ namespace rfk
 			*	
 			*	@return A constant pointer to the queried variable if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Variable const*				getVariableByName(char const* name,
-																						  EVarFlags	flags = EVarFlags::Default)					const	noexcept;
+			RFK_NODISCARD REFUREKU_API Variable const*				getVariableByName(char const*	name,
+																					  EVarFlags		flags = EVarFlags::Default)				const	noexcept;
 
 			/**
 			*	@brief Retrieve all file level variables satisfying the provided predicate.
@@ -338,7 +338,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Variable const*>		getVariablesByPredicate(Predicate<Variable>	predicate,
-																							void*				userData)						const;
+																							void*				userData)					const;
 
 			/**
 			*	@brief Execute the given visitor on all file level variables.
@@ -351,8 +351,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelVariable(Visitor<Variable>	visitor,
-																								 void*					userData)				const;
+			REFUREKU_API bool										foreachFileLevelVariable(Visitor<Variable>	visitor,
+																							 void*				userData)					const;
 
 			/**
 			*	@brief Retrieve a function by id.
@@ -373,7 +373,7 @@ namespace rfk
 			*	@return A constant pointer to the first function matching the name and flags if it exists, else nullptr.
 			*/
 			RFK_NODISCARD REFUREKU_API Function const*				getFunctionByName(char const*		name,
-																						  EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
+																					  EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
 			*	@brief Retrieve all file level functions satisfying the provided predicate.
@@ -386,7 +386,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Function const*>		getFunctionsByPredicate(Predicate<Function>	predicate,
-																							void*				userData)						const;
+																							void*				userData)					const;
 
 			/**
 			*	@brief Execute the given visitor on all file level functions.
@@ -399,8 +399,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelFunction(Visitor<Function>	visitor,
-																								 void*					userData)				const;
+			REFUREKU_API bool										foreachFileLevelFunction(Visitor<Function>	visitor,
+																							 void*				userData)					const;
 
 			/**
 			*	@brief Retrieve a method by id.

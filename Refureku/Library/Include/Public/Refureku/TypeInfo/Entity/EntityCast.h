@@ -35,13 +35,13 @@ namespace rfk
 	*	@return The casted entity if the provided type matched the concrete entity type, else nullptr.
 	*/
 	template <typename T>
-	T const*									entityCast(Entity const* entity)							noexcept;
+	T const*									entityCast(Entity const* entity)						noexcept;
 
 	/**
 	*	rfk::entityCast<> specialization for all Entity types.
 	*/
 	template <>
-	REFUREKU_API Archetype const*			entityCast<Archetype>(Entity const* entity)				noexcept;
+	REFUREKU_API Archetype const*				entityCast<Archetype>(Entity const* entity)				noexcept;
 
 	template <>
 	REFUREKU_API FundamentalArchetype const*	entityCast<FundamentalArchetype>(Entity const* entity)	noexcept;
@@ -51,22 +51,22 @@ namespace rfk
 	*	Make sure to check if the result's kind is EEntityKind::Class.
 	*/
 	template <>
-	REFUREKU_API Struct const*				entityCast<Struct>(Entity const* entity)					noexcept;
+	REFUREKU_API Struct const*					entityCast<Struct>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API FieldBase const*			entityCast<FieldBase>(Entity const* entity)				noexcept;
+	REFUREKU_API FieldBase const*				entityCast<FieldBase>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API Field const*				entityCast<Field>(Entity const* entity)					noexcept;
+	REFUREKU_API Field const*					entityCast<Field>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API StaticField const*			entityCast<StaticField>(Entity const* entity)			noexcept;
+	REFUREKU_API StaticField const*				entityCast<StaticField>(Entity const* entity)			noexcept;
 
 	template <>
-	REFUREKU_API MethodBase const*			entityCast<MethodBase>(Entity const* entity)				noexcept;
+	REFUREKU_API MethodBase const*				entityCast<MethodBase>(Entity const* entity)			noexcept;
 
 	template <>
-	REFUREKU_API Method const*				entityCast<Method>(Entity const* entity)					noexcept;
+	REFUREKU_API Method const*					entityCast<Method>(Entity const* entity)				noexcept;
 
 	template <>
 	REFUREKU_API StaticMethod const*			entityCast<StaticMethod>(Entity const* entity)			noexcept;
@@ -75,10 +75,10 @@ namespace rfk
 	REFUREKU_API Enum const*					entityCast<Enum>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API EnumValue const*			entityCast<EnumValue>(Entity const* entity)				noexcept;
+	REFUREKU_API EnumValue const*				entityCast<EnumValue>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API Namespace const*				entityCast<Namespace>(Entity const* entity)					noexcept;
+	REFUREKU_API Namespace const*				entityCast<Namespace>(Entity const* entity)				noexcept;
 
 	template <>
 	REFUREKU_API Variable const*				entityCast<Variable>(Entity const* entity)				noexcept;

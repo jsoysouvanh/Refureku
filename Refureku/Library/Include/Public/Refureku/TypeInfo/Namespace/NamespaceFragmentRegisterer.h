@@ -25,12 +25,12 @@ namespace rfk
 	class NamespaceFragmentRegisterer final
 	{
 		public:
-			REFUREKU_API NamespaceFragmentRegisterer(char const*					name,
-														std::size_t					id,
-														NamespaceFragment const&	namespaceFragment,
-														bool						isFileLevelNamespace)	noexcept;
-			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer const&)							= delete;
-			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer&&)								= delete;
+			REFUREKU_API NamespaceFragmentRegisterer(char const*				name,
+													 std::size_t				id,
+													 NamespaceFragment const&	namespaceFragment,
+													 bool						isFileLevelNamespace)	noexcept;
+			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer const&)								= delete;
+			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer&&)									= delete;
 			REFUREKU_API ~NamespaceFragmentRegisterer()													noexcept;
 
 			/**

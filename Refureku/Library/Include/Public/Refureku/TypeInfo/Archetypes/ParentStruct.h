@@ -18,11 +18,11 @@ namespace rfk
 	class ParentStruct
 	{
 		public:
-			ParentStruct(Struct const&	archetype,
-						 EAccessSpecifier	inheritanceAccessSpecifier)	noexcept;
-			ParentStruct(ParentStruct const&)							= delete;
-			ParentStruct(ParentStruct&&)								noexcept;
-			~ParentStruct()												noexcept;
+			REFUREKU_INTERNAL ParentStruct(Struct const&	archetype,
+										   EAccessSpecifier	inheritanceAccessSpecifier)	noexcept;
+			REFUREKU_INTERNAL ParentStruct(ParentStruct const&)							= delete;
+			REFUREKU_INTERNAL ParentStruct(ParentStruct&&)								noexcept;
+			REFUREKU_INTERNAL ~ParentStruct()											noexcept;
 
 			/**
 			*	@brief Get the archetype of the parent struct.
@@ -40,7 +40,7 @@ namespace rfk
 
 		private:
 			/** Archetype of the parent struct. */
-			Struct const&	_archetype;
+			Struct const&		_archetype;
 
 			/** Inheritance access specifier. */
 			EAccessSpecifier	_inheritanceAccessSpecifier;

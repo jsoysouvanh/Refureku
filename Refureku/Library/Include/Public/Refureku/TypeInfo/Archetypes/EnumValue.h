@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <type_traits>
+
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/Misc/FundamentalTypes.h"
 #include "Refureku/Containers/Vector.h"
@@ -16,12 +18,12 @@ namespace rfk
 	class EnumValue final : public Entity
 	{
 		public:
-			EnumValue(char const*		name,
-						 std::size_t		id,
-						 int64				value,
-						 Entity const*	outerEntity = nullptr)	noexcept;
-			EnumValue(EnumValue&&)							noexcept;
-			~EnumValue()											noexcept;
+			REFUREKU_INTERNAL EnumValue(char const*		name,
+										std::size_t		id,
+										int64			value,
+										Entity const*	outerEntity = nullptr)	noexcept;
+			REFUREKU_INTERNAL EnumValue(EnumValue&&)							noexcept;
+			REFUREKU_INTERNAL ~EnumValue()										noexcept;
 
 			/**
 			*	@brief Cast the enum value as the provided template type.
@@ -30,7 +32,7 @@ namespace rfk
 			*
 			*	@return The value contained in this enum value cast to T.
 			*/
-			template <typename T = int64, typename = std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>>>
+			template <typename T = int64>
 			RFK_NODISCARD T						getValue()	const	noexcept;
 
 			/**

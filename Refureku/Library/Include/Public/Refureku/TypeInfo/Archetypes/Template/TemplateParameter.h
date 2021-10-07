@@ -17,7 +17,7 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API TemplateParameter(char const*				name,
-											  ETemplateParameterKind	kind)	noexcept;
+										   ETemplateParameterKind	kind)	noexcept;
 			REFUREKU_API ~TemplateParameter()								noexcept;
 
 		private:
@@ -25,6 +25,6 @@ namespace rfk
 			class TemplateParameterImpl;
 
 			/** Pointer to the TemplateParameter concrete implementation. */
-			Pimpl<TemplateParameterImpl>	_pimpl;
+			Pimpl<TemplateParameterImpl> _pimpl;
 	};
 }

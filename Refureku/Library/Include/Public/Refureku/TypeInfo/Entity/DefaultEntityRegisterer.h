@@ -29,6 +29,7 @@ namespace rfk
 			REFUREKU_API ~DefaultEntityRegisterer()						noexcept;
 
 		private:
+			/** Pointer to DefaultEntityRegisterer implementation. */
 			Pimpl<internal::DefaultEntityRegistererImpl> _pimpl;
 	};
 }

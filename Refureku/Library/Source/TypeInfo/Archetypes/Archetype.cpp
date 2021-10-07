@@ -11,8 +11,6 @@ Archetype::Archetype(ArchetypeImpl* implementation) noexcept:
 {
 }
 
-Archetype::Archetype(Archetype&&) noexcept = default;
-
 Archetype::~Archetype() noexcept = default;
 
 EAccessSpecifier Archetype::getAccessSpecifier() const noexcept

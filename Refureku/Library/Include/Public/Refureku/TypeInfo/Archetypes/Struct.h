@@ -37,11 +37,10 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API Struct(char const*	name,
-								   std::size_t	id,
-								   std::size_t	memorySize,
-								   bool			isClass)		noexcept;
-			Struct(Struct&&)								= delete;
-			REFUREKU_API ~Struct()							noexcept;
+								std::size_t	id,
+								std::size_t	memorySize,
+								bool		isClass)	noexcept;
+			REFUREKU_API ~Struct()						noexcept;
 
 			/**
 			*	@brief	Make an instance of the class represented by this archetype.
@@ -56,7 +55,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown by the used instantiator.
 			*/
 			template <typename ReturnType = void, typename... ArgTypes>
-			ReturnType*														makeInstance(ArgTypes&&... args)										const;
+			ReturnType*														makeInstance(ArgTypes&&... args)													const;
 
 			/**
 			*	@brief	Compute the list of all direct reflected subclasses of this struct.
@@ -65,7 +64,7 @@ namespace rfk
 			* 
 			*	@return A list of all direct reflected subclasses of this struct.
 			*/
-			RFK_NODISCARD REFUREKU_API rfk::Vector<Struct const*>		getDirectSubclasses()													const	noexcept;
+			RFK_NODISCARD REFUREKU_API rfk::Vector<Struct const*>			getDirectSubclasses()																const	noexcept;
 
 			/**
 			*	@brief Check if this struct is a subclass of another struct/class.
@@ -75,7 +74,7 @@ namespace rfk
 			*	@return true if this struct is a subclass of the provided archetype, else false.
 			*			Note that if the provided archetype is the same as this struct, false is returned.
 			*/
-			RFK_NODISCARD REFUREKU_API bool									isSubclassOf(Struct const& archetype)								const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool									isSubclassOf(Struct const& archetype)												const	noexcept;
 
 			/**
 			*	@brief Check if this struct is a base class of another struct/class.
@@ -85,7 +84,7 @@ namespace rfk
 			*	@return true if this struct is a base class of the provided archetype, else false.
 			*			Note that if the provided archetype is the same as this struct, true is returned.
 			*/
-			RFK_NODISCARD REFUREKU_API bool									isBaseOf(Struct const& archetype)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool									isBaseOf(Struct const& archetype)													const	noexcept;
 
 			/**
 			*	@brief	Get the index'th direct parent of this struct.
@@ -93,14 +92,14 @@ namespace rfk
 			* 
 			*	@return The index'th direct parent of this struct.
 			*/
-			RFK_NODISCARD REFUREKU_API ParentStruct const&					getDirectParentAt(std::size_t index)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API ParentStruct const&					getDirectParentAt(std::size_t index)												const	noexcept;
 
 			/**
 			*	@brief Get the number of direct parents this struct is inheriting from.
 			* 
 			*	@return The number of direct parents this struct is inheriting from.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t							getDirectParentsCount()													const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t							getDirectParentsCount()																const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all direct parents of this struct.
@@ -114,7 +113,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool												foreachDirectParent(Visitor<ParentStruct>	visitor,
-																								void*					userData)					const;
+																								void*					userData)								const;
 
 			/**
 			*	@param structName	Name of the nested struct to look for.
@@ -122,8 +121,8 @@ namespace rfk
 			*
 			*	@return The found nested struct if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Struct const*						getNestedStructByName(char const*	   name,
-																								  EAccessSpecifier access = EAccessSpecifier::Undefined)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const*						getNestedStructByName(char const*		name,
+																								  EAccessSpecifier	access = EAccessSpecifier::Undefined)		const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested struct satisfying the provided predicate.
@@ -135,8 +134,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Struct const*						getNestedStructByPredicate(Predicate<Struct> predicate,
-																									   void*				userData)						const;
+			RFK_NODISCARD REFUREKU_API Struct const*						getNestedStructByPredicate(Predicate<Struct>	predicate,
+																									   void*				userData)							const;
 
 			/**
 			*	@brief Retrieve all nested structs satisfying the provided predicate.
@@ -148,8 +147,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Struct const*>				getNestedStructsByPredicate(Predicate<Struct> predicate,
-																										void*				userData)						const;
+			RFK_NODISCARD REFUREKU_API Vector<Struct const*>				getNestedStructsByPredicate(Predicate<Struct>	predicate,
+																										void*				userData)							const;
 
 			/**
 			*	@param className	Name of the nested class to look for.
@@ -157,8 +156,8 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Class const*						getNestedClassByName(char const*		name,
-																								 EAccessSpecifier	access = EAccessSpecifier::Undefined)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Class const*							getNestedClassByName(char const*		name,
+																								 EAccessSpecifier	access = EAccessSpecifier::Undefined)		const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested class satisfying the provided predicate.
@@ -170,8 +169,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Class const*						getNestedClassByPredicate(Predicate<Class> predicate,
-																									   void*				userData)						const;
+			RFK_NODISCARD REFUREKU_API Class const*							getNestedClassByPredicate(Predicate<Class>	predicate,
+																									  void*				userData)								const;
 
 			/**
 			*	@brief Retrieve all nested classes satisfying the provided predicate.
@@ -183,8 +182,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Class const*>				getNestedClassesByPredicate(Predicate<Class> predicate,
-																										void*				userData)						const;
+			RFK_NODISCARD REFUREKU_API Vector<Class const*>					getNestedClassesByPredicate(Predicate<Class> predicate,
+																										void*			 userData)								const;
 
 			/**
 			*	@param enumName	Name of the nested enum to look for.
@@ -192,8 +191,8 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Enum const*						getNestedEnumByName(char const*		 name,
-																								EAccessSpecifier access = EAccessSpecifier::Undefined)		const	noexcept;
+			RFK_NODISCARD REFUREKU_API Enum const*							getNestedEnumByName(char const*		 name,
+																								EAccessSpecifier access = EAccessSpecifier::Undefined)			const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested enum satisfying the provided predicate.
@@ -205,8 +204,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Enum const*						getNestedEnumByPredicate(Predicate<Enum>	predicate,
-																								 void*				userData)						const;
+			RFK_NODISCARD REFUREKU_API Enum const*							getNestedEnumByPredicate(Predicate<Enum>	predicate,
+																									 void*				userData)								const;
 
 			/**
 			*	@brief Retrieve all nested enums satisfying the provided predicate.
@@ -218,8 +217,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Enum const*>				getNestedEnumsByPredicate(Predicate<Enum> predicate,
-																									void*				userData)						const;
+			RFK_NODISCARD REFUREKU_API Vector<Enum const*>					getNestedEnumsByPredicate(Predicate<Enum>	predicate,
+																									  void*				userData)								const;
 
 			/**
 			*	@brief Execute the given visitor on all archetypes nested in this struct.
@@ -233,7 +232,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool												foreachNestedArchetype(Visitor<Archetype>	visitor,
-																								   void*				userData)						const;
+																								   void*				userData)								const;
 
 			/**
 			*	@param name						Name of the field to retrieve.
@@ -247,9 +246,9 @@ namespace rfk
 			*	@return The first field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			RFK_NODISCARD REFUREKU_API Field const*						getFieldByName(char const* name,
-																					   EFieldFlags minFlags = EFieldFlags::Default,
-																					   bool		   shouldInspectInherited	= false)				const	noexcept;
+			RFK_NODISCARD REFUREKU_API Field const*							getFieldByName(char const* name,
+																						   EFieldFlags minFlags = EFieldFlags::Default,
+																						   bool		   shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	@brief Retrieve the first field satisfying the provided predicate.
@@ -263,9 +262,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Field const*						getFieldByPredicate(Predicate<Field>	predicate,
-																							void*				userData,
-																							bool				shouldInspectInherited	= false)	const;
+			RFK_NODISCARD REFUREKU_API Field const*							getFieldByPredicate(Predicate<Field>	predicate,
+																								void*				userData,
+																								bool				shouldInspectInherited = false)				const;
 
 			/**
 			*	@brief Retrieve all fields satisfying the provided predicate.
@@ -279,9 +278,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Field const*>				getFieldsByPredicate(Predicate<Field> predicate,
-																							void*				userData,
-																							 bool				shouldInspectInherited	= false)	const;
+			RFK_NODISCARD REFUREKU_API Vector<Field const*>					getFieldsByPredicate(Predicate<Field>	predicate,
+																								 void*				userData,
+																								 bool				shouldInspectInherited = false)				const;
 
 			/**
 			*	@brief Execute the given visitor on all fields in this struct.
@@ -298,7 +297,7 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachField(Visitor<Field>	visitor,
 																						 void*			userData,
-																						 bool			shouldInspectInherited	= false)								const;
+																						 bool			shouldInspectInherited = false)							const;
 
 			/**
 			*	@param name						Name of the static field to retrieve.
@@ -313,9 +312,9 @@ namespace rfk
 			*	@return The first static field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			RFK_NODISCARD REFUREKU_API StaticField const*				getStaticFieldByName(char const* name,
+			RFK_NODISCARD REFUREKU_API StaticField const*					getStaticFieldByName(char const* name,
 																								 EFieldFlags minFlags = EFieldFlags::Default,
-																								 bool		 shouldInspectInherited	= false)		const	noexcept;
+																								 bool		 shouldInspectInherited	= false)					const	noexcept;
 
 			/**
 			*	@brief Retrieve the first static field satisfying the provided predicate.
@@ -329,9 +328,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API StaticField const*						getStaticFieldByPredicate(Predicate<StaticField>	predicate,
-																							void*				userData,
-																										  bool		 shouldInspectInherited	= false)						const;
+			RFK_NODISCARD REFUREKU_API StaticField const*					getStaticFieldByPredicate(Predicate<StaticField> predicate,
+																									  void*					 userData,
+																									  bool					 shouldInspectInherited	= false)	const;
 
 			/**
 			*	@brief Retrieve all static fields satisfying the provided predicate.
@@ -345,9 +344,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<StaticField const*>				getStaticFieldsByPredicate(Predicate<StaticField> predicate,
-																							 void*				userData,
-																										   bool		 shouldInspectInherited	= false)						const;
+			RFK_NODISCARD REFUREKU_API Vector<StaticField const*>			getStaticFieldsByPredicate(Predicate<StaticField>	predicate,
+																									   void*					userData,
+																									   bool						shouldInspectInherited = false)	const;
 
 			/**
 			*	@brief Execute the given visitor on all static fields in this struct.
@@ -363,8 +362,8 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool												foreachStaticField(Visitor<StaticField>	visitor,
-																							   void*					userData,
-																							   bool		 shouldInspectInherited	= false)					const;
+																							   void*				userData,
+																							   bool					shouldInspectInherited	= false)			const;
 
 			/**
 			*	@brief	Get a method by name and signature. This template overload using signature comes handy when wanting to disambiguate
@@ -383,7 +382,7 @@ namespace rfk
 			template <typename MethodSignature>
 			RFK_NODISCARD Method const*										getMethodByName(char const*  name,
 																							EMethodFlags minFlags = EMethodFlags::Default,
-																							bool		 shouldInspectInherited	= false)			const	noexcept;
+																							bool		 shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	@param name						Name of the method to retrieve.
@@ -398,7 +397,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API Method const*						getMethodByName(char const*  name,
 																							EMethodFlags minFlags = EMethodFlags::Default,
-																							bool		 shouldInspectInherited	= false)			const	noexcept;
+																							bool		 shouldInspectInherited	= false)						const	noexcept;
 
 			/**
 			*	@param name						Name of the methods to retrieve.
@@ -413,7 +412,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Method const*>				getMethodsByName(char const*  name,
 																							 EMethodFlags minFlags = EMethodFlags::Default,
-																							 bool		  shouldInspectInherited = false)			const	noexcept;
+																							 bool		  shouldInspectInherited = false)						const	noexcept;
 
 			/**
 			*	@brief Retrieve the first method satisfying the provided predicate.
@@ -427,9 +426,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Method const*					getMethodByPredicate(Predicate<Method>	predicate,
-																							 void*				userData,
-																							 bool				shouldInspectInherited = false)							const;
+			RFK_NODISCARD REFUREKU_API Method const*						getMethodByPredicate(Predicate<Method>	predicate,
+																								 void*				userData,
+																								 bool				shouldInspectInherited = false)				const;
 
 			/**
 			*	@brief Retrieve all methods satisfying the provided predicate.
@@ -443,9 +442,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Method const*>			getMethodsByPredicate(Predicate<Method> predicate,
-																							  void*				userData,
-																							  bool				shouldInspectInherited = false)						const;
+			RFK_NODISCARD REFUREKU_API Vector<Method const*>				getMethodsByPredicate(Predicate<Method> predicate,
+																								  void*				userData,
+																								  bool				shouldInspectInherited = false)				const;
 
 			/**
 			*	@brief Execute the given visitor on all methods in this struct.
@@ -461,7 +460,7 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachMethod(Visitor<Method>	visitor,
 																						  void*				userData,
-																						  bool				shouldInspectInherited = false)			const;
+																						  bool				shouldInspectInherited = false)						const;
 
 			/**
 			*	@param methodName				Name of the static method to retrieve.
@@ -475,9 +474,9 @@ namespace rfk
 			*
 			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			RFK_NODISCARD REFUREKU_API StaticMethod const*				getStaticMethodByName(char const*  name,
+			RFK_NODISCARD REFUREKU_API StaticMethod const*					getStaticMethodByName(char const*  name,
 																								  EMethodFlags minFlags = EMethodFlags::Default,
-																								  bool		   shouldInspectInherited = false)		const	noexcept;
+																								  bool		   shouldInspectInherited = false)					const	noexcept;
 
 			/**
 			*	@param methodName				Name of the static methods to retrieve.
@@ -491,9 +490,9 @@ namespace rfk
 			*
 			*	@return All static methods named methodName fulfilling all requirements. 
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<StaticMethod const*>		getStaticMethodsByName(char const*  name,
+			RFK_NODISCARD REFUREKU_API Vector<StaticMethod const*>			getStaticMethodsByName(char const*  name,
 																								   EMethodFlags minFlags = EMethodFlags::Default,
-																								   bool			shouldInspectInherited = false)		const	noexcept;
+																								   bool			shouldInspectInherited = false)					const	noexcept;
 
 			/**
 			*	@brief Retrieve the first static method satisfying the provided predicate.
@@ -507,9 +506,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API StaticMethod const*				getStaticMethodByPredicate(Predicate<StaticMethod>	predicate,
-																							 void*				userData,
-																							 bool				shouldInspectInherited = false)							const;
+			RFK_NODISCARD REFUREKU_API StaticMethod const*					getStaticMethodByPredicate(Predicate<StaticMethod>	predicate,
+																									   void*					userData,
+																									   bool						shouldInspectInherited = false)	const;
 
 			/**
 			*	@brief Retrieve all static methods satisfying the provided predicate.
@@ -523,9 +522,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<StaticMethod const*>		getStaticMethodsByPredicate(Predicate<StaticMethod> predicate,
-																							  void*				userData,
-																							  bool				shouldInspectInherited = false)						const;
+			RFK_NODISCARD REFUREKU_API Vector<StaticMethod const*>			getStaticMethodsByPredicate(Predicate<StaticMethod> predicate,
+																										void*					userData,
+																										bool					shouldInspectInherited = false)	const;
 
 			/**
 			*	@brief Execute the given visitor on all static methods in this struct.
@@ -541,28 +540,28 @@ namespace rfk
 			*/
 			REFUREKU_API bool												foreachStaticMethod(Visitor<StaticMethod>	visitor,
 																								void*					userData,
-																								bool					shouldInspectInherited = false)		const;
+																								bool					shouldInspectInherited = false)			const;
 
 			/**
 			*	@brief Get the class kind of this instance.
 			* 
 			*	@return The class kind of this instance.
 			*/
-			RFK_NODISCARD REFUREKU_API EClassKind							getClassKind()															const	noexcept;
+			RFK_NODISCARD REFUREKU_API EClassKind							getClassKind()																		const	noexcept;
 
 			/**
 			*	@brief Cast the struct to rfk::ClassTemplate const* if it is a template.
 			* 
 			*	@return A rfk::ClassTemplate const* if the struct is a struct template, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplate const*				asTemplate()															const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplate const*					asTemplate()																		const	noexcept;
 
 			/**
 			*	@brief Cast the struct to rfk::ClassTemplateInstantiation const* if it is a template instantiation.
 			* 
 			*	@return A rfk::ClassTemplateInstantiation const* if the struct is a template instantiation, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	asTemplateInstantiation()												const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	asTemplateInstantiation()															const	noexcept;
 
 			/**
 			*	@brief Add a parent to this struct if the provided archetype is a valid struct/class.
@@ -570,8 +569,8 @@ namespace rfk
 			*	@param archetype			Archetype of the parent struct/class.
 			*	@param inheritanceAccess	The inheritance access for the provided parent.
 			*/
-			REFUREKU_API void						addDirectParent(Archetype const*	archetype,
-																	EAccessSpecifier	inheritanceAccess)		noexcept;
+			REFUREKU_API void			addDirectParent(Archetype const*	archetype,
+														EAccessSpecifier	inheritanceAccess)		noexcept;
 
 			/**
 			*	@brief	Set the number of direct parents for this struct.
@@ -580,14 +579,14 @@ namespace rfk
 			* 
 			*	@param capacity The number of direct parents of this struct.
 			*/
-			REFUREKU_API void						setDirectParentsCapacity(std::size_t capacity)				noexcept;
+			REFUREKU_API void			setDirectParentsCapacity(std::size_t capacity)				noexcept;
 
 			/**
 			*	@brief Add a subclass to this struct.
 			* 
 			*	@param subclass The subclass to add.
 			*/
-			REFUREKU_API void						addSubclass(Struct const& subclass)						noexcept;
+			REFUREKU_API void			addSubclass(Struct const& subclass)							noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.
@@ -597,8 +596,8 @@ namespace rfk
 			*	
 			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API Archetype*				addNestedArchetype(Archetype const*	nestedArchetype,
-																	   EAccessSpecifier		accessSpecifier)	noexcept;
+			REFUREKU_API Archetype*		addNestedArchetype(Archetype const*	nestedArchetype,
+														   EAccessSpecifier	accessSpecifier)		noexcept;
 
 			/**
 			*	@brief	Internally pre-allocate enough memory for the provided number of nested archetypes.
@@ -606,7 +605,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of nested archetypes to pre-allocate.
 			*/
-			REFUREKU_API void						setNestedArchetypesCapacity(std::size_t capacity)			noexcept;
+			REFUREKU_API void			setNestedArchetypesCapacity(std::size_t capacity)			noexcept;
 
 			/**
 			*	@brief Add a field to the struct.
@@ -621,12 +620,12 @@ namespace rfk
 			*	@return A pointer to the added field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API Field*					addField(char const*		name,
-															 std::size_t		id,
-															 Type const&		type,
-															 EFieldFlags		flags,
-															 std::size_t		memoryOffset,
-															 Struct const*	outerEntity)					noexcept;
+			REFUREKU_API Field*			addField(char const*	name,
+												 std::size_t	id,
+												 Type const&	type,
+												 EFieldFlags	flags,
+												 std::size_t	memoryOffset,
+												 Struct const*	outerEntity)						noexcept;
 
 			/**
 			*	@brief	Internally pre-allocate enough memory for the provided number of fields.
@@ -634,7 +633,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of fields to pre-allocate.
 			*/
-			REFUREKU_API void						setFieldsCapacity(std::size_t capacity)						noexcept;
+			REFUREKU_API void			setFieldsCapacity(std::size_t capacity)						noexcept;
 
 			/**
 			*	@brief Add a static field to the struct.
@@ -649,18 +648,18 @@ namespace rfk
 			*	@return A pointer to the added static field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API StaticField*			addStaticField(char const*		name,
-																   std::size_t		id,
-																   Type const&	type,
-																   EFieldFlags		flags,
-																   void*			fieldPtr,
-																   Struct const*	outerEntity)				noexcept;
-			REFUREKU_API StaticField*			addStaticField(char const*		name,
-																   std::size_t		id,
-																   Type const&	type,
-																   EFieldFlags		flags,
-																   void const*		fieldPtr,
-																   Struct const*	outerEntity)				noexcept;
+			REFUREKU_API StaticField*	addStaticField(char const*		name,
+													   std::size_t		id,
+													   Type const&		type,
+													   EFieldFlags		flags,
+													   void*			fieldPtr,
+													   Struct const*	outerEntity)				noexcept;
+			REFUREKU_API StaticField*	addStaticField(char const*		name,
+													   std::size_t		id,
+													   Type const&		type,
+													   EFieldFlags		flags,
+													   void const*		fieldPtr,
+													   Struct const*	outerEntity)				noexcept;
 
 			/**
 			*	@brief	Internally pre-allocate enough memory for the provided number of static fields.
@@ -668,7 +667,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of static fields to pre-allocate.
 			*/
-			REFUREKU_API void						setStaticFieldsCapacity(std::size_t capacity)				noexcept;
+			REFUREKU_API void			setStaticFieldsCapacity(std::size_t capacity)				noexcept;
 
 			/**
 			*	@brief Add a method to the struct.
@@ -681,11 +680,11 @@ namespace rfk
 			*
 			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API Method*					addMethod(char const*		name,
-															  std::size_t		id,
-															  Type const&	returnType,
-															  ICallable*		internalMethod,
-															  EMethodFlags		flags)							noexcept;
+			REFUREKU_API Method*		addMethod(char const*	name,
+												  std::size_t	id,
+												  Type const&	returnType,
+												  ICallable*	internalMethod,
+												  EMethodFlags	flags)								noexcept;
 
 			/**
 			*	@brief	Internally pre-allocate enough memory for the provided number of methods.
@@ -693,7 +692,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of methods to pre-allocate.
 			*/
-			REFUREKU_API void						setMethodsCapacity(std::size_t capacity)					noexcept;
+			REFUREKU_API void			setMethodsCapacity(std::size_t capacity)					noexcept;
 
 			/**
 			*	@brief Add a static method to the struct.
@@ -706,11 +705,11 @@ namespace rfk
 			*
 			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API StaticMethod*			addStaticMethod(char const*		name,
-																	std::size_t		id,
-																	Type const&	returnType,
-																	ICallable*		internalMethod,
-																	EMethodFlags	flags)					noexcept;
+			REFUREKU_API StaticMethod*	addStaticMethod(char const*		name,
+														std::size_t		id,
+														Type const&		returnType,
+														ICallable*		internalMethod,
+														EMethodFlags	flags)						noexcept;
 
 			/**
 			*	@brief	Internally pre-allocate enough memory for the provided number of static methods.
@@ -718,14 +717,14 @@ namespace rfk
 			* 
 			*	@param capacity The number of static methods to pre-allocate.
 			*/
-			REFUREKU_API void						setStaticMethodsCapacity(std::size_t capacity)			noexcept;
+			REFUREKU_API void			setStaticMethodsCapacity(std::size_t capacity)				noexcept;
 
 			/**
 			*	@brief Setup the default instantiator to use when Struct::makeInstance is called without parameters.
 			*
 			*	@param instantiator Pointer to the instantiator method.
 			*/
-			REFUREKU_API void						setDefaultInstantiator(void* (*instantiator)())			noexcept;
+			REFUREKU_API void			setDefaultInstantiator(void* (*instantiator)())				noexcept;
 
 			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
@@ -733,17 +732,17 @@ namespace rfk
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			REFUREKU_API void						addInstantiator(StaticMethod const* instantiator)		noexcept;
+			REFUREKU_API void			addInstantiator(StaticMethod const* instantiator)			noexcept;
 
 		protected:
 			//Forward declaration
 			class StructImpl;
 
 			REFUREKU_INTERNAL Struct(char const*	name,
-										std::size_t	id,
-										std::size_t	memorySize,
-										bool		isClass,
-										EClassKind	classKind)		noexcept;
+									 std::size_t	id,
+									 std::size_t	memorySize,
+									 bool			isClass,
+									 EClassKind		classKind)		noexcept;
 			REFUREKU_INTERNAL Struct(StructImpl* implementation)	noexcept;
 
 		private:

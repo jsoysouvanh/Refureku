@@ -31,8 +31,8 @@ namespace rfk
 			class VariableBaseImpl;
 
 			REFUREKU_INTERNAL VariableBase(VariableBaseImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL VariableBase(VariableBase&&)				noexcept;
-			REFUREKU_INTERNAL ~VariableBase()								noexcept;
+			REFUREKU_INTERNAL VariableBase(VariableBase&&)						noexcept;
+			REFUREKU_INTERNAL ~VariableBase()									noexcept;
 
 			/**
 			*	@brief Get the data stored in the provided ptr.
@@ -45,11 +45,11 @@ namespace rfk
 			*
 			*	@param ptr Pointer to the variable to get.
 			* 
+			*	@return The data stored in the ptr.
+			* 
 			*	@exception ConstViolation if:
 			*		- the variable is const and ValueType is an RValue type (can't move a const field content);
 			*		- the variable is const and ValueType is a non-const reference;
-			* 
-			*	@return The data stored in the ptr.
 			*/
 			template <typename ValueType>
 			RFK_NODISCARD ValueType			get(void* ptr)				const;

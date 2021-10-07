@@ -17,11 +17,11 @@ namespace rfk
 	class Enum final : public Archetype
 	{
 		public:
-			REFUREKU_API Enum(char const*			name,
-								 std::size_t			id,
-								 Archetype const*	underlyingArchetype,
-								 Entity const*		outerEntity = nullptr)	noexcept;
-			REFUREKU_API ~Enum()												noexcept;
+			REFUREKU_API Enum(char const*		name,
+							  std::size_t		id,
+							  Archetype const*	underlyingArchetype,
+							  Entity const*		outerEntity = nullptr)	noexcept;
+			REFUREKU_API ~Enum()										noexcept;
 
 			/**
 			*	@brief Search an enum value by name in this enum.
@@ -52,7 +52,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API EnumValue const*			getEnumValueByPredicate(Predicate<EnumValue>	predicate,
-																							void*					userData)		const;
+																						void*					userData)		const;
 
 			/**
 			*	@brief Search all enum values in this enum holding the provided value.
@@ -73,8 +73,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<EnumValue const*>	getEnumValuesByPredicate(Predicate<EnumValue> predicate,
-																							 void*					userData)		const;
+			RFK_NODISCARD REFUREKU_API Vector<EnumValue const*>	getEnumValuesByPredicate(Predicate<EnumValue>	predicate,
+																						 void*					userData)		const;
 
 			/**
 			*	@brief	Get the enum value located at the provided index in the enum.
@@ -91,7 +91,7 @@ namespace rfk
 			* 
 			*	@return The number of enum values contained in this enum.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t					getEnumValuesCount()											const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t				getEnumValuesCount()											const	noexcept;
 
 			/**
 			*	@brief Getter for the field _underlyingArchetype.
@@ -111,8 +111,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachEnumValue(Visitor<EnumValue>	visitor,
-																					 void*					userData)				const;
+			REFUREKU_API bool									foreachEnumValue(Visitor<EnumValue>	visitor,
+																				 void*				userData)					const;
 
 			/**
 			*	@brief Add an enum value to this enum.
@@ -124,8 +124,8 @@ namespace rfk
 			*	@return A pointer to the added enum value.
 			*/
 			REFUREKU_API EnumValue*								addEnumValue(char const*	name,
-																				 std::size_t	id,
-																				 int64			value)										noexcept;
+																			 std::size_t	id,
+																			 int64			value)										noexcept;
 
 			/**
 			*	@brief	Set the number of enum values for this entity.
@@ -134,7 +134,7 @@ namespace rfk
 			* 
 			*	@param propertiesCapacity The number of enum values in this enum.
 			*/
-			REFUREKU_API void										setEnumValuesCapacity(std::size_t capacity)								noexcept;
+			REFUREKU_API void									setEnumValuesCapacity(std::size_t capacity)								noexcept;
 
 		protected:
 			//Forward declaration

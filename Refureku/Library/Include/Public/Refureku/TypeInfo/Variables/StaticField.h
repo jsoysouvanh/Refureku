@@ -18,22 +18,22 @@ namespace rfk
 	class StaticField final : public FieldBase
 	{
 		public:
-			StaticField(char const*		name,
-						   std::size_t		id,
-						   Type const&	type,
-						   EFieldFlags		flags,
-						   Struct const*	owner,
-						   void*			ptr,
-						   Entity const*	outerEntity = nullptr)	noexcept;
-			StaticField(char const*		name,
-						   std::size_t		id,
-						   Type const&	type,
-						   EFieldFlags		flags,
-						   Struct const*	owner,
-						   void const*		constPtr,
-						   Entity const*	outerEntity = nullptr)	noexcept;
-			StaticField(StaticField&&)						noexcept;
-			~StaticField()										noexcept;
+			REFUREKU_INTERNAL StaticField(char const*	name,
+										  std::size_t	id,
+										  Type const&	type,
+										  EFieldFlags	flags,
+										  Struct const*	owner,
+										  void*			ptr,
+										  Entity const*	outerEntity = nullptr)	noexcept;
+			REFUREKU_INTERNAL StaticField(char const*	name,
+										  std::size_t	id,
+										  Type const&	type,
+										  EFieldFlags	flags,
+										  Struct const*	owner,
+										  void const*	constPtr,
+										  Entity const*	outerEntity = nullptr)	noexcept;
+			REFUREKU_INTERNAL StaticField(StaticField&&)						noexcept;
+			REFUREKU_INTERNAL ~StaticField()									noexcept;
 		
 			/**
 			*	@brief Get the data corresponding to this static field.
@@ -43,12 +43,12 @@ namespace rfk
 			*			If ValueType is an rvalue reference, the data is moved into the return value (so the class data is no longer safe to use).
 			*			If ValueType is an lvalue reference, return a reference to the field.
 			*			If ValueType is a value type, the data is copied. If it is a class, ValueType must be copy-constructible.
-			*
+			* 
+			*	@return The queried data.
+			* 
 			*	@exception ConstViolation if:
 			*		- the static field is const and ValueType is an RValue type (can't move a const field content);
 			*		- the static field is const and ValueType is a non-const reference;
-			* 
-			*	@return The queried data.
 			*/
 			template <typename ValueType>
 			RFK_NODISCARD ValueType					get()						const;

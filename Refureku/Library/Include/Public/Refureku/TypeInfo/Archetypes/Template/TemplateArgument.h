@@ -20,9 +20,9 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API TemplateArgument(TemplateParameter const& boundParameter)	noexcept;
-			TemplateArgument(TemplateArgument const&)									= delete;
-			TemplateArgument(TemplateArgument&&)										= delete;
-			REFUREKU_API ~TemplateArgument()												noexcept;
+			TemplateArgument(TemplateArgument const&)								= delete;
+			TemplateArgument(TemplateArgument&&)									= delete;
+			REFUREKU_API ~TemplateArgument()										noexcept;
 
 			/**
 			*	@brief Getter for the field _boundParameter.

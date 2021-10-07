@@ -16,15 +16,15 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API		Variable(char const*	name,
-											std::size_t	id,
-											Type const&	type,
-											void*			ptr,
-											EVarFlags		flags)		noexcept;
+										 std::size_t	id,
+										 Type const&	type,
+										 void*			ptr,
+										 EVarFlags		flags)		noexcept;
 			REFUREKU_API		Variable(char const*	name,
-											std::size_t	id,
-											Type const&	type,
-											void const*	constPtr,
-											EVarFlags		flags)		noexcept;
+										 std::size_t	id,
+										 Type const&	type,
+										 void const*	constPtr,
+										 EVarFlags		flags)		noexcept;
 			REFUREKU_INTERNAL	Variable(Variable&&)				noexcept;
 			REFUREKU_API		~Variable()							noexcept;
 

@@ -15,6 +15,8 @@ namespace rfk
 	class Archetype : public Entity
 	{
 		public:
+			Archetype(Archetype&&) = delete;
+
 			/**
 			*	@brief Getter for the field _accessSpecifier.
 			* 
@@ -41,7 +43,6 @@ namespace rfk
 			class ArchetypeImpl;
 
 			REFUREKU_INTERNAL Archetype(ArchetypeImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL Archetype(Archetype&&)					noexcept;
 			REFUREKU_INTERNAL ~Archetype()								noexcept;
 	};
 }

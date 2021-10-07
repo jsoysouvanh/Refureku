@@ -15,9 +15,8 @@ namespace rfk
 	{
 		public:
 			REFUREKU_INTERNAL FundamentalArchetype(char const*	name,
-													  std::size_t	id,
-													  std::size_t	memorySize)	noexcept;
-			FundamentalArchetype(FundamentalArchetype&&)					= delete;
+												   std::size_t	id,
+												   std::size_t	memorySize)	noexcept;
 			REFUREKU_INTERNAL ~FundamentalArchetype()						noexcept;
 
 		private:

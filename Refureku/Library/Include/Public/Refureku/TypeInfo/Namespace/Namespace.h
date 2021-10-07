@@ -25,7 +25,7 @@ namespace rfk
 	{
 		public:
 			REFUREKU_INTERNAL Namespace(char const*	name,
-										   std::size_t	id)	noexcept;
+										std::size_t	id)		noexcept;
 			Namespace(Namespace&&)							= delete;
 			REFUREKU_INTERNAL ~Namespace()					noexcept;
 
@@ -36,7 +36,7 @@ namespace rfk
 			*
 			*	@return The found nested namespace if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Namespace const*			getNamespaceByName(char const* name)								const	noexcept;
+			RFK_NODISCARD REFUREKU_API Namespace const*			getNamespaceByName(char const* name)									const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested namespace satisfying the provided predicate.
@@ -48,8 +48,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Namespace const*			getNamespaceByPredicate(Predicate<Namespace> predicate,
-																							void*					userData)			const;
+			RFK_NODISCARD REFUREKU_API Namespace const*			getNamespaceByPredicate(Predicate<Namespace>	predicate,
+																						void*					userData)				const;
 
 			/**
 			*	@brief Retrieve all nested namespaces satisfying the provided predicate.
@@ -61,8 +61,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Namespace const*>	getNamespacesByPredicate(Predicate<Namespace> predicate,
-																							 void*					userData)			const;
+			RFK_NODISCARD REFUREKU_API Vector<Namespace const*>	getNamespacesByPredicate(Predicate<Namespace>	predicate,
+																						 void*					userData)				const;
 
 			/**
 			*	@brief Execute the given visitor on all nested namespaces.
@@ -75,8 +75,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachNamespace(Visitor<Namespace>	visitor,
-																					 void*					userData)					const;
+			REFUREKU_API bool									foreachNamespace(Visitor<Namespace>	visitor,
+																				 void*				userData)							const;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.
@@ -98,7 +98,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Struct const*				getStructByPredicate(Predicate<Struct>	predicate,
-																						 void*					userData)				const;
+																						 void*				userData)					const;
 
 			/**
 			*	@brief Retrieve all nested structs satisfying the provided predicate.
@@ -111,7 +111,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Struct const*>		getStructsByPredicate(Predicate<Struct> predicate,
-																						  void*					userData)				const;
+																						  void*				userData)					const;
 
 			/**
 			*	@brief Retrieve a class from this namespace.
@@ -120,7 +120,7 @@ namespace rfk
 			*
 			*	@return The found class if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Class const*				getClassByName(char const* name)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API Class const*					getClassByName(char const* name)									const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested class satisfying the provided predicate.
@@ -132,7 +132,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Class const*				getClassByPredicate(Predicate<Class>	predicate,
+			RFK_NODISCARD REFUREKU_API Class const*					getClassByPredicate(Predicate<Class>	predicate,
 																						void*				userData)					const;
 
 			/**
@@ -145,8 +145,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Class const*>		getClassesByPredicate(Predicate<Class>	predicate,
-																						  void*					userData)				const;
+			RFK_NODISCARD REFUREKU_API Vector<Class const*>			getClassesByPredicate(Predicate<Class>	predicate,
+																						  void*				userData)					const;
 
 			/**
 			*	@brief Retrieve an enum from this namespace.
@@ -155,7 +155,7 @@ namespace rfk
 			*
 			*	@return The found enum if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Enum const*				getEnumByName(char const* name)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Enum const*					getEnumByName(char const* name)										const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested enum satisfying the provided predicate.
@@ -167,8 +167,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Enum const*				getEnumByPredicate(Predicate<Enum>	predicate,
-																						void*				userData)					const;
+			RFK_NODISCARD REFUREKU_API Enum const*					getEnumByPredicate(Predicate<Enum>	predicate,
+																					   void*			userData)						const;
 
 			/**
 			*	@brief Retrieve all nested enums satisfying the provided predicate.
@@ -180,8 +180,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Enum const*>		getEnumsByPredicate(Predicate<Enum>	predicate,
-																						void*				userData)					const;
+			RFK_NODISCARD REFUREKU_API Vector<Enum const*>			getEnumsByPredicate(Predicate<Enum>	predicate,
+																						void*			userData)						const;
 
 			/**
 			*	@brief Execute the given visitor on all nested archetypes.
@@ -195,7 +195,7 @@ namespace rfk
 			*	@exception Any exception potentially throw from the provided visitor.
 			*/
 			REFUREKU_API bool										foreachArchetype(Visitor<Archetype>	visitor,
-																					 void*					userData)					const;
+																					 void*				userData)						const;
 
 			/**
 			*	@brief Retrieve a variable from this namespace.
@@ -206,8 +206,8 @@ namespace rfk
 			*	
 			*	@return The found variable if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Variable const*			getVariableByName(char const* name,
-																					  EVarFlags	  flags = EVarFlags::Default)			const	noexcept;
+			RFK_NODISCARD REFUREKU_API Variable const*				getVariableByName(char const*	name,
+																					  EVarFlags		flags = EVarFlags::Default)			const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested variable satisfying the provided predicate.
@@ -219,8 +219,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Variable const*			getVariableByPredicate(Predicate<Variable>	predicate,
-																						   void*					userData)			const;
+			RFK_NODISCARD REFUREKU_API Variable const*				getVariableByPredicate(Predicate<Variable>	predicate,
+																						   void*				userData)				const;
 
 			/**
 			*	@brief Retrieve all nested variables satisfying the provided predicate.
@@ -232,8 +232,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Variable const*>	getVariablesByPredicate(Predicate<Variable>	predicate,
-																							void*					userData)			const;
+			RFK_NODISCARD REFUREKU_API Vector<Variable const*>		getVariablesByPredicate(Predicate<Variable>	predicate,
+																							void*				userData)				const;
 
 			/**
 			*	@brief Execute the given visitor on all nested variables.
@@ -247,7 +247,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool										foreachVariable(Visitor<Variable>	visitor,
-																					void*					userData)					const;
+																					void*				userData)						const;
 
 			/**
 			*	@brief Retrieve a function with a given name from this namespace.
@@ -258,7 +258,7 @@ namespace rfk
 			*	
 			*	@return The first function matching the provided name and flags if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Function const*			getFunctionByName(char const*	 name,
+			RFK_NODISCARD REFUREKU_API Function const*				getFunctionByName(char const*	 name,
 																					  EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
@@ -270,7 +270,7 @@ namespace rfk
 			*	
 			*	@return All functions matching the provided name and flags.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Function const*>	getFunctionsByName(char const*	 name,
+			RFK_NODISCARD REFUREKU_API Vector<Function const*>		getFunctionsByName(char const*	  name,
 																					   EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
@@ -283,8 +283,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Function const*			getFunctionByPredicate(Predicate<Function>	predicate,
-																						   void*					userData)			const;
+			RFK_NODISCARD REFUREKU_API Function const*				getFunctionByPredicate(Predicate<Function>	predicate,
+																						   void*				userData)				const;
 
 			/**
 			*	@brief Retrieve all nested functions satisfying the provided predicate.
@@ -296,8 +296,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Function const*>	getFunctionsByPredicate(Predicate<Function>	predicate,
-																							void*					userData)			const;
+			RFK_NODISCARD REFUREKU_API Vector<Function const*>		getFunctionsByPredicate(Predicate<Function>	predicate,
+																							void*				userData)				const;
 
 			/**
 			*	@brief Execute the given visitor on all nested functions.
@@ -311,14 +311,14 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool										foreachFunction(Visitor<Function>	visitor,
-																					void*					userData)					const;
+																					void*				userData)						const;
 
 			/**
 			*	@brief Add a nested namespace to this namespace.
 			* 
 			*	@param nestedNamespace The namespace to add.
 			*/
-			REFUREKU_API void										addNamespace(Namespace const& nestedNamespace)							noexcept;
+			REFUREKU_API void										addNamespace(Namespace const& nestedNamespace)								noexcept;
 
 			/**
 			*	@brief Add a nested archetype to this namespace.
@@ -332,28 +332,28 @@ namespace rfk
 			* 
 			*	@param variable The variable to add.
 			*/
-			REFUREKU_API void										addVariable(Variable const& variable)									noexcept;
+			REFUREKU_API void										addVariable(Variable const& variable)										noexcept;
 
 			/**
 			*	@brief Add a nested function to this namespace.
 			* 
 			*	@param function The function to add.
 			*/
-			REFUREKU_API void										addFunction(Function const& function)									noexcept;
+			REFUREKU_API void										addFunction(Function const& function)										noexcept;
 
 			/**
 			*	@brief Remove a nested namespace from this namespace.
 			* 
 			*	@param nestedNamespace The namespace to add.
 			*/
-			REFUREKU_API void										removeNamespace(Namespace const& nestedNamespace)						noexcept;
+			REFUREKU_API void										removeNamespace(Namespace const& nestedNamespace)							noexcept;
 
 			/**
 			*	@brief Remove a nested archetype from this namespace.
 			* 
 			*	@param archetype The archetype to remove.
 			*/
-			REFUREKU_API void										removeArchetype(Archetype const& archetype)								noexcept;
+			REFUREKU_API void										removeArchetype(Archetype const& archetype)									noexcept;
 
 			/**
 			*	@brief Remove a nested variable from this namespace.

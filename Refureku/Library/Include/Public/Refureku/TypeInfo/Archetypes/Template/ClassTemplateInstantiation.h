@@ -20,9 +20,9 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API ClassTemplateInstantiation(char const*			name,
-													   std::size_t			id,
-													   std::size_t			memorySize,
-													   bool					isClass,
+													   std::size_t		id,
+													   std::size_t		memorySize,
+													   bool				isClass,
 													   Archetype const&	classTemplate)	noexcept;
 			REFUREKU_API ~ClassTemplateInstantiation()									noexcept;
 
@@ -48,7 +48,7 @@ namespace rfk
 			* 
 			*	@return The total number of template arguments in this instantiation..
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t					getTemplateArgumentsCount()							const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t				getTemplateArgumentsCount()							const	noexcept;
 
 			/**
 			*	@brief Add a template argument to this instantiation
@@ -56,8 +56,8 @@ namespace rfk
 			*	@param parameter The template parameter bounded to this argument.
 			*	@param archetype The archetype of the template argument. //TODO: Change this to be able to store values as well
 			*/
-			REFUREKU_API void										addTemplateArgument(TemplateParameter const&	parameter,
-																						Archetype const*			archetype)	noexcept;
+			REFUREKU_API void									addTemplateArgument(TemplateParameter const&	parameter,
+																					Archetype const*			archetype)	noexcept;
 
 		private:
 			//Forward declaration

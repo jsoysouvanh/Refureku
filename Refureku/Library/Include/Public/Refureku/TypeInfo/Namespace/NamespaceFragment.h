@@ -15,8 +15,8 @@ namespace rfk
 	{
 		public:
 			REFUREKU_API NamespaceFragment(char const*	name,
-											  std::size_t	id	= 0u)	noexcept;
-			NamespaceFragment(NamespaceFragment&&)				= delete;
+										   std::size_t	id = 0u)	noexcept;
+			NamespaceFragment(NamespaceFragment&&)					= delete;
 			REFUREKU_API ~NamespaceFragment()						noexcept;
 
 			/**

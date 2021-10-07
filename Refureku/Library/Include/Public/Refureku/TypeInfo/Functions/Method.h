@@ -15,13 +15,13 @@ namespace rfk
 	class Method final : public MethodBase
 	{
 		public:
-			REFUREKU_INTERNAL Method(char const*			name,
-										std::size_t			id,
+			REFUREKU_INTERNAL Method(char const*		name,
+										std::size_t		id,
 										Type const&		returnType,
-										ICallable*			internalMethod,
-										EMethodFlags		flags,
+										ICallable*		internalMethod,
+										EMethodFlags	flags,
 										Entity const*	outerEntity)	noexcept;
-			REFUREKU_INTERNAL Method(Method&&)						noexcept;
+			REFUREKU_INTERNAL Method(Method&&)							noexcept;
 			REFUREKU_INTERNAL ~Method()									noexcept;
 
 			/**
@@ -79,7 +79,7 @@ namespace rfk
 			*	@brief	Inherit from the properties this method overrides.
 			*			If the method is not an override, this method does nothing.
 			*/
-			REFUREKU_API void	inheritBaseMethodProperties()									noexcept;
+			REFUREKU_API void	inheritBaseMethodProperties()										noexcept;
 
 		private:
 			//Forward declaration
