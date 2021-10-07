@@ -11,7 +11,7 @@
 
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
-#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Variables/VariableAPI.h"
 #include "Refureku/TypeInfo/Functions/FunctionAPI.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
@@ -22,7 +22,7 @@ namespace rfk
 	{
 		public:
 			using NamespaceHashSet	= std::unordered_set<Namespace const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using ArchetypeHashSet	= std::unordered_set<ArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using ArchetypeHashSet	= std::unordered_set<Archetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using VariableHashSet	= std::unordered_set<VariableAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FunctionHashSet	= std::unordered_multiset<FunctionAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 
@@ -55,7 +55,7 @@ namespace rfk
 			* 
 			*	@param archetype The archetype to add.
 			*/
-			inline void										addArchetype(ArchetypeAPI const& archetype)					noexcept;
+			inline void										addArchetype(Archetype const& archetype)					noexcept;
 
 			/**
 			*	@brief Add a nested variable to this namespace.
@@ -83,7 +83,7 @@ namespace rfk
 			* 
 			*	@param archetype The archetype to remove.
 			*/
-			inline void										removeArchetype(ArchetypeAPI const& archetype)				noexcept;
+			inline void										removeArchetype(Archetype const& archetype)				noexcept;
 
 			/**
 			*	@brief Remove a nested variable from this namespace.

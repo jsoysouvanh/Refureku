@@ -25,11 +25,11 @@ inline void StructAPI::StructImpl::addSubclass(StructAPI const& subclass) noexce
 	_subclasses.insert(&subclass);
 }
 
-inline ArchetypeAPI* StructAPI::StructImpl::addNestedArchetype(ArchetypeAPI const* nestedArchetype,
+inline Archetype* StructAPI::StructImpl::addNestedArchetype(Archetype const* nestedArchetype,
 															   EAccessSpecifier accessSpecifier, StructAPI const* outerEntity) noexcept
 {
 	//The hash is based on the archetype name which is immutable, so it's safe to const_cast to update other members.
-	ArchetypeAPI* result = const_cast<ArchetypeAPI*>(*_nestedArchetypes.emplace(nestedArchetype).first);
+	Archetype* result = const_cast<Archetype*>(*_nestedArchetypes.emplace(nestedArchetype).first);
 
 	result->setAccessSpecifier(accessSpecifier);
 	result->setOuterEntity(outerEntity);
@@ -134,10 +134,10 @@ inline void StructAPI::StructImpl::setStaticMethodsCapacity(std::size_t capacity
 	_staticMethods.reserve(capacity);
 }
 
-inline ArchetypeAPI const* StructAPI::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
+inline Archetype const* StructAPI::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
 {
 	return EntityUtility::getEntityByNameAndPredicate(_nestedArchetypes, name,
-													  [access](ArchetypeAPI const& archetype)
+													  [access](Archetype const& archetype)
 													  {
 														  return access == EAccessSpecifier::Undefined || access == archetype.getAccessSpecifier();
 													  });

@@ -23,7 +23,7 @@ namespace rfk
 													   std::size_t			id,
 													   std::size_t			memorySize,
 													   bool					isClass,
-													   ArchetypeAPI const&	classTemplate)	noexcept;
+													   Archetype const&	classTemplate)	noexcept;
 			REFUREKU_API ~ClassTemplateInstantiationAPI()									noexcept;
 
 			/**
@@ -57,7 +57,7 @@ namespace rfk
 			*	@param archetype The archetype of the template argument. //TODO: Change this to be able to store values as well
 			*/
 			REFUREKU_API void										addTemplateArgument(TemplateParameterAPI const&	parameter,
-																						ArchetypeAPI const*			archetype)	noexcept;
+																						Archetype const*			archetype)	noexcept;
 
 		private:
 			//Forward declaration

@@ -9,7 +9,7 @@
 
 #include <type_traits>	//std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
 
-#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"	//makeInstance<> uses StaticMethod wrapper so must include
 #include "Refureku/TypeInfo/Archetypes/EClassKind.h"
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
@@ -19,7 +19,7 @@ namespace rfk
 {
 	//Forward declarations
 	class ParentStruct;
-	class EnumAPI;
+	class Enum;
 	class FieldAPI;
 	class StaticFieldAPI;
 	class MethodAPI;
@@ -28,7 +28,7 @@ namespace rfk
 	class ClassTemplateAPI;
 	class ClassTemplateInstantiationAPI;
 
-	class StructAPI : public ArchetypeAPI
+	class StructAPI : public Archetype
 	{
 		public:
 			REFUREKU_API StructAPI(char const*	name,
@@ -121,7 +121,7 @@ namespace rfk
 			*
 			*	@return The found nested class if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumAPI const*						getNestedEnumByName(char const*		 name,
+			RFK_NODISCARD REFUREKU_API Enum const*						getNestedEnumByName(char const*		 name,
 																								EAccessSpecifier access = EAccessSpecifier::Undefined)		const	noexcept;
 
 			/**
@@ -135,7 +135,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachNestedArchetype(Visitor<ArchetypeAPI>	visitor,
+			REFUREKU_API bool												foreachNestedArchetype(Visitor<Archetype>	visitor,
 																								   void*					userData)						const;
 
 			/**
@@ -351,7 +351,7 @@ namespace rfk
 			*	@param archetype			Archetype of the parent struct/class.
 			*	@param inheritanceAccess	The inheritance access for the provided parent.
 			*/
-			REFUREKU_API void						addDirectParent(ArchetypeAPI const*	archetype,
+			REFUREKU_API void						addDirectParent(Archetype const*	archetype,
 																	EAccessSpecifier	inheritanceAccess)		noexcept;
 
 			/**
@@ -378,7 +378,7 @@ namespace rfk
 			*	
 			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API ArchetypeAPI*				addNestedArchetype(ArchetypeAPI const*	nestedArchetype,
+			REFUREKU_API Archetype*				addNestedArchetype(Archetype const*	nestedArchetype,
 																	   EAccessSpecifier		accessSpecifier)	noexcept;
 
 			/**

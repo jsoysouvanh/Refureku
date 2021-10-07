@@ -31,7 +31,7 @@ namespace rfk
 												  std::size_t							id,
 												  std::size_t							memorySize,
 												  bool									isClass,
-												  ArchetypeAPI const&					classTemplate,
+												  Archetype const&					classTemplate,
 												  ClassTemplateInstantiationAPI const&	backRef)			noexcept;
 
 			/**

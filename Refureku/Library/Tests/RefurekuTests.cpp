@@ -119,11 +119,11 @@ void entities()
 
 	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
-			 return prop.getArchetypeAPI().getName() == "TestProperty";
+			 return prop.getArchetype().getName() == "TestProperty";
 		 }, nullptr) == &testProperty);
 	TEST(entity.getPropertyByPredicate([](rfk::Property const& prop, void*)
 		 {
-			 return prop.getArchetypeAPI().getName() == "TestProperty2";
+			 return prop.getArchetype().getName() == "TestProperty2";
 		 }, nullptr) == &testProperty2);
 
 	TEST(entity.getPropertiesByPredicate([](rfk::Property const& prop, void*)
@@ -175,7 +175,7 @@ void entities()
 
 void archetypes()
 {
-	rfk::ArchetypeAPI archetype("TestArchetype", 123u, rfk::EEntityKind::Struct, 8u, nullptr);
+	rfk::Archetype archetype("TestArchetype", 123u, rfk::EEntityKind::Struct, 8u, nullptr);
 
 	TEST(archetype.getAccessSpecifier() == rfk::EAccessSpecifier::Undefined);
 	
@@ -192,8 +192,8 @@ void archetypes()
 
 void enumsAndEnumValues()
 {
-	rfk::ArchetypeAPI intArchetype("int", 1u, rfk::EEntityKind::FundamentalArchetype, sizeof(int), nullptr);
-	rfk::EnumAPI enum1("TestEnum1", 123u, &intArchetype, nullptr);
+	rfk::Archetype intArchetype("int", 1u, rfk::EEntityKind::FundamentalArchetype, sizeof(int), nullptr);
+	rfk::Enum enum1("TestEnum1", 123u, &intArchetype, nullptr);
 
 	TEST(enum1.getName() == std::string("TestEnum1"));
 	TEST(enum1.getId() == 123u);
@@ -220,11 +220,11 @@ void enumsAndEnumValues()
 	TEST(enum1.getEnumValue(2) == nullptr);
 	TEST(enum1.getEnumValueByName("TestEnumValue3")->getId() == 12u);
 	TEST(enum1.getEnumValueByName("TestEnumValue4") == nullptr);
-	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void* userData)
+	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValue const& value, void* userData)
 		 {
-			 return value.getOuterEntity() == reinterpret_cast<rfk::EnumAPI*>(userData);
+			 return value.getOuterEntity() == reinterpret_cast<rfk::Enum*>(userData);
 		 }, &enum1) != nullptr);
-	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValueAPI const& value, void*)
+	TEST(enum1.getEnumValueByPredicate([](rfk::EnumValue const& value, void*)
 		 {
 			 return value.getPropertiesCount() == 1u;
 		 }, nullptr) == &enum1.getEnumValueAt(1));
@@ -243,7 +243,7 @@ void types()
 	TEST(!intType.isConst());
 	TEST(!intType.isLValueReference());
 	TEST(intType.isValue());
-	//TEST(intType.getArchetype() == rfk::getArchetypeAPI<int>());	//TODO: Uncomment later
+	//TEST(intType.getArchetype() == rfk::getArchetype<int>());	//TODO: Uncomment later
 	TEST(intType.getTypePartsCount() == 1u);
 
 	rfk::Type const& floatConstPtrType = rfk::getType<float const*>();
@@ -255,7 +255,7 @@ void types()
 	TEST(!floatConstPtrType.isConst());
 	TEST(!floatConstPtrType.isLValueReference());
 	TEST(!floatConstPtrType.isValue());
-	//TEST(floatConstPtrType.getArchetype() == rfk::getArchetypeAPI<float>());	//TODO: Uncomment later
+	//TEST(floatConstPtrType.getArchetype() == rfk::getArchetype<float>());	//TODO: Uncomment later
 	TEST(floatConstPtrType.getTypePartsCount() == 2u);
 	TEST(floatConstPtrType.getTypePartAt(1).isValue());
 	TEST(floatConstPtrType.getTypePartAt(1).isConst());
@@ -946,9 +946,9 @@ void instantiation()
 	namespace3::ParentClass2*	pc2I	= pc2.makeInstance<namespace3::ParentClass2>();
 	namespace3::ExampleClass*	ecI		= ec.makeInstance<namespace3::ExampleClass>();
 
-	TEST(&pcI->getArchetypeAPI() == &pc);
+	TEST(&pcI->getArchetype() == &pc);
 	//TEST(&pc2I->getArchetype() == &pc2);	//Can't do that test because ParentClass2 is not a ReflectedObject
-	TEST(&ecI->getArchetypeAPI() == &ec);
+	TEST(&ecI->getArchetype() == &ec);
 
 	TEST(pcI->pInt64 == 666u);
 	TEST(ecI->someInt == 1);	//ExampleClass has a custom instantiator without parameters, which sets someInt to 1
@@ -1242,7 +1242,7 @@ void testSingleTypeTemplateClassTemplate()
 
 	TEST(c->asTemplate()->getInstantiation<TestClassA>() != nullptr);
 
-	rfk::ArchetypeAPI const* testClassA[] = { &TestClassA::staticGetArchetype() };
+	rfk::Archetype const* testClassA[] = { &TestClassA::staticGetArchetype() };
 	//TEST(c->asTemplate()->getInstantiation(testClassA) != nullptr);
 	//TEST(c->asTemplate()->getInstantiation<TestClassB>() == nullptr);
 	//TEST(c->asTemplate()->getInstantiation<int>() == nullptr);

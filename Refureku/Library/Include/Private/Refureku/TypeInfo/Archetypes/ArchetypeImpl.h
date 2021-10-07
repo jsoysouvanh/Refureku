@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 namespace rfk
 {
-	class ArchetypeAPI::ArchetypeImpl : public Entity::EntityImpl
+	class Archetype::ArchetypeImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Access specifier of this archetype. Relevant only when this archetype is nested (Undefined otherwise). */

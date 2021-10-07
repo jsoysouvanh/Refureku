@@ -26,14 +26,14 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Namespace/NamespaceFragment.cpp
 					Source/TypeInfo/Namespace/NamespaceFragmentRegisterer.cpp
 
-					Source/TypeInfo/Archetypes/ArchetypeAPI.cpp
-					Source/TypeInfo/Archetypes/FundamentalArchetypeAPI.cpp
-					Source/TypeInfo/Archetypes/EnumAPI.cpp
-					Source/TypeInfo/Archetypes/EnumValueAPI.cpp
-					Source/TypeInfo/Archetypes/StructAPI.cpp
+					Source/TypeInfo/Archetypes/Archetype.cpp
+					Source/TypeInfo/Archetypes/FundamentalArchetype.cpp
+					Source/TypeInfo/Archetypes/Enum.cpp
+					Source/TypeInfo/Archetypes/EnumValue.cpp
+					Source/TypeInfo/Archetypes/StructAPI.cpp	#TODO: Rename
 					Source/TypeInfo/Archetypes/ParentStruct.cpp
-					Source/TypeInfo/Archetypes/ArchetypeRegistererAPI.cpp
-					Source/TypeInfo/Archetypes/GetArchetypeAPI.cpp
+					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
+					Source/TypeInfo/Archetypes/GetArchetype.cpp
 
 					Source/TypeInfo/Archetypes/Template/ClassTemplateAPI.cpp
 					Source/TypeInfo/Archetypes/Template/TemplateParameterAPI.cpp

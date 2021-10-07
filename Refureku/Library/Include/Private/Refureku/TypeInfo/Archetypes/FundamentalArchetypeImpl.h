@@ -5,12 +5,12 @@
 *	See the README.md file for full license details.
 */
 
-#include "Refureku/TypeInfo/Archetypes/FundamentalArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
 
 namespace rfk
 {
-	class FundamentalArchetypeAPI::FundamentalArchetypeImpl final : public ArchetypeAPI::ArchetypeImpl
+	class FundamentalArchetype::FundamentalArchetypeImpl final : public Archetype::ArchetypeImpl
 	{
 		public:
 			inline FundamentalArchetypeImpl(char const*	name,

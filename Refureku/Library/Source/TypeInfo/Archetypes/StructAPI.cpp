@@ -1,7 +1,7 @@
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 
 #include "Refureku/TypeInfo/Archetypes/StructImpl.h"
-#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
 using namespace rfk;
@@ -10,7 +10,7 @@ template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<StructAPI const*>;
 template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<StructAPI const*, rfk::Allocator<StructAPI const*>>;
 
 StructAPI::StructAPI(char const* name, std::size_t id, std::size_t memorySize, bool isClass, EClassKind classKind) noexcept:
-	ArchetypeAPI(new StructImpl(name, id, memorySize, isClass, classKind))
+	Archetype(new StructImpl(name, id, memorySize, isClass, classKind))
 {
 }
 
@@ -20,7 +20,7 @@ StructAPI::StructAPI(char const* name, std::size_t id, std::size_t memorySize, b
 }
 
 StructAPI::StructAPI(StructImpl* implementation) noexcept:
-	ArchetypeAPI(implementation)
+	Archetype(implementation)
 {
 }
 
@@ -75,7 +75,7 @@ std::size_t StructAPI::getDirectParentsCount() const noexcept
 
 StructAPI const* StructAPI::getNestedStructByName(char const* name, EAccessSpecifier access) const noexcept
 {
-	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+	Archetype const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
 
 	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Struct) ?
 				reinterpret_cast<StructAPI const*>(foundArchetype) :
@@ -84,23 +84,23 @@ StructAPI const* StructAPI::getNestedStructByName(char const* name, EAccessSpeci
 
 ClassAPI const* StructAPI::getNestedClassByName(char const* name, EAccessSpecifier access) const noexcept
 {
-	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+	Archetype const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
 
 	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Class) ?
 				reinterpret_cast<ClassAPI const*>(foundArchetype) :
 				nullptr;
 }
 
-EnumAPI const* StructAPI::getNestedEnumByName(char const* name, EAccessSpecifier access) const noexcept
+Enum const* StructAPI::getNestedEnumByName(char const* name, EAccessSpecifier access) const noexcept
 {
-	ArchetypeAPI const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+	Archetype const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
 
 	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Enum) ?
-				reinterpret_cast<EnumAPI const*>(foundArchetype) :
+				reinterpret_cast<Enum const*>(foundArchetype) :
 				nullptr;
 }
 
-bool StructAPI::foreachNestedArchetype(Visitor<ArchetypeAPI> visitor, void* userData) const
+bool StructAPI::foreachNestedArchetype(Visitor<Archetype> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(), visitor, userData);
 }
@@ -396,7 +396,7 @@ ClassTemplateInstantiationAPI const* StructAPI::asTemplateInstantiation() const 
 		reinterpret_cast<ClassTemplateInstantiationAPI const*>(this) : nullptr;
 }
 
-void StructAPI::addDirectParent(ArchetypeAPI const* archetype, EAccessSpecifier inheritanceAccess) noexcept
+void StructAPI::addDirectParent(Archetype const* archetype, EAccessSpecifier inheritanceAccess) noexcept
 {
 	if (archetype != nullptr)
 	{
@@ -416,7 +416,7 @@ void StructAPI::addSubclass(StructAPI const& subclass) noexcept
 	reinterpret_cast<StructImpl*>(getPimpl())->addSubclass(subclass);
 }
 
-ArchetypeAPI* StructAPI::addNestedArchetype(ArchetypeAPI const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
+Archetype* StructAPI::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addNestedArchetype(nestedArchetype, accessSpecifier, this);
 }

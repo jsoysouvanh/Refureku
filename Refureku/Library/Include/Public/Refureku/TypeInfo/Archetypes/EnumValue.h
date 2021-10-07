@@ -13,15 +13,15 @@
 
 namespace rfk
 {
-	class EnumValueAPI final : public Entity
+	class EnumValue final : public Entity
 	{
 		public:
-			EnumValueAPI(char const*		name,
+			EnumValue(char const*		name,
 						 std::size_t		id,
 						 int64				value,
 						 Entity const*	outerEntity = nullptr)	noexcept;
-			EnumValueAPI(EnumValueAPI&&)							noexcept;
-			~EnumValueAPI()											noexcept;
+			EnumValue(EnumValue&&)							noexcept;
+			~EnumValue()											noexcept;
 
 			/**
 			*	@brief Cast the enum value as the provided template type.
@@ -45,8 +45,8 @@ namespace rfk
 			class EnumValueImpl;
 	};
 
-	REFUREKU_TEMPLATE_API(rfk::Allocator<EnumValueAPI const*>);
-	REFUREKU_TEMPLATE_API(rfk::Vector<EnumValueAPI const*, rfk::Allocator<EnumValueAPI const*>>);
+	REFUREKU_TEMPLATE_API(rfk::Allocator<EnumValue const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<EnumValue const*, rfk::Allocator<EnumValue const*>>);
 
-	#include "Refureku/TypeInfo/Archetypes/EnumValueAPI.inl"
+	#include "Refureku/TypeInfo/Archetypes/EnumValue.inl"
 }

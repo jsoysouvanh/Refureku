@@ -19,7 +19,7 @@ namespace rfk
 			
 			/** Archetype used for a template argument. */
 			//TODO: Change THIS
-			ArchetypeAPI const*			_archetype = nullptr;
+			Archetype const*			_archetype = nullptr;
 
 		public:
 			inline TemplateArgumentImpl(TemplateParameterAPI const& boundParameter) noexcept;

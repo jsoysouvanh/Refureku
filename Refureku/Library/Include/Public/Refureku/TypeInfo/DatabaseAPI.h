@@ -18,18 +18,18 @@ namespace rfk
 	//Forward declarations
 	class Entity;
 	class Namespace;
-	class ArchetypeAPI;
+	class Archetype;
 	class StructAPI;
 	using ClassAPI = StructAPI;
-	class EnumAPI;
-	class FundamentalArchetypeAPI;
+	class Enum;
+	class FundamentalArchetype;
 	class VariableAPI;
 	class FunctionAPI;
 	class MethodAPI;
 	class StaticMethodAPI;
 	class FieldAPI;
 	class StaticFieldAPI;
-	class EnumValueAPI;
+	class EnumValue;
 
 	namespace internal
 	{
@@ -99,7 +99,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ArchetypeAPI const*				getArchetypeById(std::size_t id)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Archetype const*				getArchetypeById(std::size_t id)										const	noexcept;
 
 			/**
 			*	@brief	Retrieve a file level archetype by name.
@@ -110,7 +110,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried archetype if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ArchetypeAPI const*				getArchetypeByName(char const* name)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API Archetype const*				getArchetypeByName(char const* name)									const	noexcept;
 
 			/**
 			*	@brief Retrieve a struct by id.
@@ -183,7 +183,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumAPI const*					getEnumById(std::size_t id)												const	noexcept;
+			RFK_NODISCARD REFUREKU_API Enum const*					getEnumById(std::size_t id)												const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level enum by name.
@@ -192,7 +192,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumAPI const*					getEnumByName(char const* name)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Enum const*					getEnumByName(char const* name)											const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all file level enums.
@@ -205,7 +205,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelEnum(Visitor<EnumAPI>	visitor,
+			REFUREKU_API bool											foreachFileLevelEnum(Visitor<Enum>	visitor,
 																							 void*				userData)						const;
 
 			/**
@@ -215,7 +215,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API FundamentalArchetypeAPI const*	getFundamentalArchetypeById(std::size_t id)								const	noexcept;
+			RFK_NODISCARD REFUREKU_API FundamentalArchetype const*	getFundamentalArchetypeById(std::size_t id)								const	noexcept;
 
 			/**
 			*	@brief Retrieve a fundamental archetype by name.
@@ -224,7 +224,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried fundamental archetype if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API FundamentalArchetypeAPI const*	getFundamentalArchetypeByName(char const* name)							const	noexcept;
+			RFK_NODISCARD REFUREKU_API FundamentalArchetype const*	getFundamentalArchetypeByName(char const* name)							const	noexcept;
 
 			/**
 			*	@brief Retrieve a variable by id.
@@ -339,7 +339,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried enum value if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const*				getEnumValueById(std::size_t id)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValue const*				getEnumValueById(std::size_t id)										const	noexcept;
 
 		private:
 			//Forward declaration

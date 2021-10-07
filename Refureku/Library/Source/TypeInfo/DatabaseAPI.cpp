@@ -76,14 +76,14 @@ bool DatabaseAPI::foreachFileLevelNamespace(Visitor<Namespace> visitor, void* us
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelNamespacesByName(), visitor, userData);
 }
 
-ArchetypeAPI const* DatabaseAPI::getArchetypeById(std::size_t id) const noexcept
+Archetype const* DatabaseAPI::getArchetypeById(std::size_t id) const noexcept
 {
-	return entityCast<ArchetypeAPI>(getEntityById(id));
+	return entityCast<Archetype>(getEntityById(id));
 }
 
-ArchetypeAPI const* DatabaseAPI::getArchetypeByName(char const* name) const noexcept
+Archetype const* DatabaseAPI::getArchetypeByName(char const* name) const noexcept
 {
-	ArchetypeAPI const* result = getClassByName(name);
+	Archetype const* result = getClassByName(name);
 
 	if (result == nullptr)
 	{
@@ -133,27 +133,27 @@ bool DatabaseAPI::foreachFileLevelClass(Visitor<ClassAPI> visitor, void* userDat
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelClassesByName(), visitor, userData);
 }
 
-EnumAPI const* DatabaseAPI::getEnumById(std::size_t id) const noexcept
+Enum const* DatabaseAPI::getEnumById(std::size_t id) const noexcept
 {
-	return entityCast<EnumAPI>(getEntityById(id));
+	return entityCast<Enum>(getEntityById(id));
 }
 
-EnumAPI const* DatabaseAPI::getEnumByName(char const* name) const noexcept
+Enum const* DatabaseAPI::getEnumByName(char const* name) const noexcept
 {
 	return EntityUtility::getEntityByName(_pimpl->getFileLevelEnumsByName(), name);
 }
 
-bool DatabaseAPI::foreachFileLevelEnum(Visitor<EnumAPI> visitor, void* userData) const
+bool DatabaseAPI::foreachFileLevelEnum(Visitor<Enum> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelEnumsByName(), visitor, userData);
 }
 
-FundamentalArchetypeAPI const* DatabaseAPI::getFundamentalArchetypeById(std::size_t id) const noexcept
+FundamentalArchetype const* DatabaseAPI::getFundamentalArchetypeById(std::size_t id) const noexcept
 {
-	return entityCast<FundamentalArchetypeAPI>(getEntityById(id));
+	return entityCast<FundamentalArchetype>(getEntityById(id));
 }
 
-FundamentalArchetypeAPI const* DatabaseAPI::getFundamentalArchetypeByName(char const* name) const noexcept
+FundamentalArchetype const* DatabaseAPI::getFundamentalArchetypeByName(char const* name) const noexcept
 {
 	return EntityUtility::getEntityByName(_pimpl->getFundamentalArchetypesByName(), name);
 }
@@ -212,9 +212,9 @@ StaticFieldAPI const* DatabaseAPI::getStaticFieldById(std::size_t id) const noex
 	return entityCast<StaticFieldAPI>(getEntityById(id));
 }
 
-EnumValueAPI const* DatabaseAPI::getEnumValueById(std::size_t id) const noexcept
+EnumValue const* DatabaseAPI::getEnumValueById(std::size_t id) const noexcept
 {
-	return entityCast<EnumValueAPI>(getEntityById(id));
+	return entityCast<EnumValue>(getEntityById(id));
 }
 
 DatabaseAPI const& rfk::getDatabaseAPI() noexcept

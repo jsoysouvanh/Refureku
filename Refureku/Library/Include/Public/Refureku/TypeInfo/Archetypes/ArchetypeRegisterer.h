@@ -13,20 +13,20 @@
 namespace rfk
 {
 	//Forward declarations
-	class ArchetypeAPI;
+	class Archetype;
 
 	namespace internal
 	{
 		class ArchetypeRegistererImpl;
 	}
 
-	class ArchetypeRegistererAPI final
+	class ArchetypeRegisterer final
 	{
 		public:
-			REFUREKU_API ArchetypeRegistererAPI(ArchetypeAPI const& archetype)	noexcept;
-			ArchetypeRegistererAPI(ArchetypeRegistererAPI const&)				= delete;
-			ArchetypeRegistererAPI(ArchetypeRegistererAPI&&)					= delete;
-			REFUREKU_API ~ArchetypeRegistererAPI()								noexcept;
+			REFUREKU_API ArchetypeRegisterer(Archetype const& archetype)	noexcept;
+			ArchetypeRegisterer(ArchetypeRegisterer const&)				= delete;
+			ArchetypeRegisterer(ArchetypeRegisterer&&)					= delete;
+			REFUREKU_API ~ArchetypeRegisterer()								noexcept;
 
 		private:
 			Pimpl<internal::ArchetypeRegistererImpl> _pimpl;

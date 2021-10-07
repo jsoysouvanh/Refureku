@@ -6,7 +6,7 @@
 */
 
 inline ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::ClassTemplateInstantiationImpl(char const* name, std::size_t id, std::size_t memorySize,
-																									 bool isClass, ArchetypeAPI const& classTemplate, ClassTemplateInstantiationAPI const&	backRef) noexcept:
+																									 bool isClass, Archetype const& classTemplate, ClassTemplateInstantiationAPI const&	backRef) noexcept:
 	StructImpl(name, id, memorySize, isClass, EClassKind::TemplateInstantiation),
 	_classTemplate{static_cast<ClassTemplateAPI const&>(classTemplate)}
 {

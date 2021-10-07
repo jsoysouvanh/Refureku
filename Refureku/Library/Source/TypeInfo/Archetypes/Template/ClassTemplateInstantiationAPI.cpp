@@ -4,7 +4,7 @@
 
 using namespace rfk;
 
-ClassTemplateInstantiationAPI::ClassTemplateInstantiationAPI(char const* name, std::size_t id, std::size_t memorySize, bool isClass, ArchetypeAPI const& classTemplate) noexcept:
+ClassTemplateInstantiationAPI::ClassTemplateInstantiationAPI(char const* name, std::size_t id, std::size_t memorySize, bool isClass, Archetype const& classTemplate) noexcept:
 	StructAPI(new ClassTemplateInstantiationImpl(name, id, memorySize, isClass, classTemplate, *this))
 {
 }
@@ -27,7 +27,7 @@ std::size_t ClassTemplateInstantiationAPI::getTemplateArgumentsCount() const noe
 	return reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments().size();
 }
 
-void ClassTemplateInstantiationAPI::addTemplateArgument(TemplateParameterAPI const& /*parameter*/, ArchetypeAPI const* /*archetype*/) noexcept
+void ClassTemplateInstantiationAPI::addTemplateArgument(TemplateParameterAPI const& /*parameter*/, Archetype const* /*archetype*/) noexcept
 {
 	//TODO
 }

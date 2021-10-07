@@ -1,28 +1,31 @@
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
-#include <cassert>
+#include <utility>	//std::forward
 
-#include "Refureku/TypeInfo/Functions/StaticMethod.h"
+#include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
 
 using namespace rfk;
 
-Archetype::Archetype(std::string&& newName, std::size_t id, EEntityKind kind, std::size_t memorySize, Entity const*	outerEntity) noexcept:
-	Entity(std::forward<std::string>(newName), id, kind, outerEntity),
-	_memorySize{memorySize}
+Archetype::Archetype(ArchetypeImpl* implementation) noexcept:
+	Entity(implementation)
 {
 }
 
+Archetype::Archetype(Archetype&&) noexcept = default;
+
+Archetype::~Archetype() noexcept = default;
+
 EAccessSpecifier Archetype::getAccessSpecifier() const noexcept
 {
-	return _accessSpecifier;
+	return reinterpret_cast<ArchetypeImpl const*>(getPimpl())->getAccessSpecifier();
 }
 
 void Archetype::setAccessSpecifier(EAccessSpecifier accessSpecifier) noexcept
 {
-	_accessSpecifier = accessSpecifier;
+	reinterpret_cast<ArchetypeImpl*>(getPimpl())->setAccessSpecifier(accessSpecifier);
 }
 
 std::size_t Archetype::getMemorySize() const noexcept
 {
-	return _memorySize;
+	return reinterpret_cast<ArchetypeImpl const*>(getPimpl())->getMemorySize();
 }

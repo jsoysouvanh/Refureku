@@ -6,7 +6,7 @@
 */
 
 template <typename T>
-ArchetypeAPI const* getArchetypeAPI() noexcept
+Archetype const* getArchetype() noexcept
 {
 	//Eliminate all unsupported types first
 	if constexpr (std::is_function_v<T> || std::is_member_object_pointer_v<T>)
@@ -20,15 +20,15 @@ ArchetypeAPI const* getArchetypeAPI() noexcept
 
 		if constexpr (std::is_pointer_v<RawType>)
 		{
-			return getArchetypeAPI<std::remove_pointer_t<RawType>>();
+			return getArchetype<std::remove_pointer_t<RawType>>();
 		}
 		else if constexpr (std::is_class_v<RawType>)
 		{
 			if constexpr (std::is_const_v<T> || std::is_volatile_v<T> || std::is_reference_v<T>)
 			{
-				return getArchetypeAPI<RawType>();
+				return getArchetype<RawType>();
 			}
-			else if constexpr (isCallable_staticGetArchetype<T, ArchetypeAPI const&()>::value)
+			else if constexpr (isCallable_staticGetArchetype<T, Archetype const&()>::value)
 			{
 				return &T::staticGetArchetype();
 			}
@@ -49,25 +49,25 @@ ArchetypeAPI const* getArchetypeAPI() noexcept
 }
 
 template <template <typename...> typename T>
-ArchetypeAPI const* getArchetypeAPI() noexcept
+Archetype const* getArchetype() noexcept
 {
 	return nullptr;
 }
 
 template <template <auto...> typename T>
-ArchetypeAPI const* getArchetypeAPI() noexcept
+Archetype const* getArchetype() noexcept
 {
 	return nullptr;
 }
 
 template <template <template <typename...> typename...> typename T>
-ArchetypeAPI const* getArchetypeAPI() noexcept
+Archetype const* getArchetype() noexcept
 {
 	return nullptr;
 }
 
 template <template <typename, auto> typename T>
-ArchetypeAPI const* getArchetypeAPI() noexcept
+Archetype const* getArchetype() noexcept
 {
 	return nullptr;
 }

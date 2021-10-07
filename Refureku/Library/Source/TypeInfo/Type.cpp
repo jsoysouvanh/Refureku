@@ -87,16 +87,16 @@ bool Type::match(Type const& other) const noexcept
 {
 	return	(this == &other) ||																	//Types have the same address, don't need any further check
 			(*this == other) ||																	//Strictly the same type
-			((isPointer() && other.getArchetype() == rfk::getArchetypeAPI<std::nullptr_t>()) ||	//Pointer - nullptr_t correspondance
-			(getArchetype() == rfk::getArchetypeAPI<std::nullptr_t>() && other.isPointer()));
+			((isPointer() && other.getArchetype() == rfk::getArchetype<std::nullptr_t>()) ||	//Pointer - nullptr_t correspondance
+			(getArchetype() == rfk::getArchetype<std::nullptr_t>() && other.isPointer()));
 }
 
-ArchetypeAPI const* Type::getArchetype() const noexcept
+Archetype const* Type::getArchetype() const noexcept
 {
 	return _pimpl->getArchetype();
 }
 
-void Type::setArchetype(ArchetypeAPI const* archetype) noexcept
+void Type::setArchetype(Archetype const* archetype) noexcept
 {
 	_pimpl->setArchetype(archetype);
 }

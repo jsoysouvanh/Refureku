@@ -15,7 +15,7 @@ inline void Namespace::NamespaceImpl::addNamespace(Namespace const& nestedNamesp
 	_namespaces.emplace(&nestedNamespace);
 }
 
-inline void Namespace::NamespaceImpl::addArchetype(ArchetypeAPI const& archetype) noexcept
+inline void Namespace::NamespaceImpl::addArchetype(Archetype const& archetype) noexcept
 {
 	_archetypes.emplace(&archetype);
 }
@@ -35,7 +35,7 @@ inline void Namespace::NamespaceImpl::removeNamespace(Namespace const& nestedNam
 	_namespaces.erase(&nestedNamespace);
 }
 
-inline void Namespace::NamespaceImpl::removeArchetype(ArchetypeAPI const& archetype) noexcept
+inline void Namespace::NamespaceImpl::removeArchetype(Archetype const& archetype) noexcept
 {
 	_archetypes.erase(&archetype);
 }

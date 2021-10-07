@@ -1,13 +1,13 @@
 #include "Vector3.h"
 
-#include <Refureku/TypeInfo/Archetypes/ArchetypeRegistererAPI.h>
+#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
 
 #include "CustomProperties.h"
 
 std::hash<std::string> stringHasher;
 
 template <>
-rfk::ArchetypeAPI const* rfk::getArchetypeAPI<Vector3f>() noexcept
+rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 {
 	static bool				initialized = false;
 	static rfk::ClassAPI	type("Vector3f", stringHasher("some_namespace::Vector3<float>"), sizeof(Vector3f), true);
@@ -53,4 +53,4 @@ rfk::ArchetypeAPI const* rfk::getArchetypeAPI<Vector3f>() noexcept
 }
 
 //Register the class to the database (note that it is not registered in any namespace, so it's accessible at file level)
-rfk::ArchetypeRegistererAPI vector3fRegisterer = *rfk::getArchetypeAPI<Vector3f>();
+rfk::ArchetypeRegisterer vector3fRegisterer = *rfk::getArchetype<Vector3f>();

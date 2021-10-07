@@ -5,23 +5,23 @@
 *	See the README.md file for full license details.
 */
 
-inline ArchetypeAPI::ArchetypeImpl::ArchetypeImpl(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, Entity const* outerEntity) noexcept:
+inline Archetype::ArchetypeImpl::ArchetypeImpl(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, Entity const* outerEntity) noexcept:
 	Entity::EntityImpl(name, id, kind, outerEntity),
 	_memorySize{memorySize}
 {
 }
 
-inline EAccessSpecifier ArchetypeAPI::ArchetypeImpl::getAccessSpecifier() const noexcept
+inline EAccessSpecifier Archetype::ArchetypeImpl::getAccessSpecifier() const noexcept
 {
 	return _accessSpecifier;
 }
 
-inline void ArchetypeAPI::ArchetypeImpl::setAccessSpecifier(EAccessSpecifier accessSpecifier) noexcept
+inline void Archetype::ArchetypeImpl::setAccessSpecifier(EAccessSpecifier accessSpecifier) noexcept
 {
 	_accessSpecifier = accessSpecifier;
 }
 
-inline std::size_t ArchetypeAPI::ArchetypeImpl::getMemorySize() const noexcept
+inline std::size_t Archetype::ArchetypeImpl::getMemorySize() const noexcept
 {
 	return _memorySize;
 }

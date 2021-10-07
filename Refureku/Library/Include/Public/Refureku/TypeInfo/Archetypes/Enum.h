@@ -7,21 +7,21 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
 namespace rfk
 {
 	//Forward declaration
-	class EnumValueAPI;
+	class EnumValue;
 
-	class EnumAPI final : public ArchetypeAPI
+	class Enum final : public Archetype
 	{
 		public:
-			REFUREKU_API EnumAPI(char const*			name,
+			REFUREKU_API Enum(char const*			name,
 								 std::size_t			id,
-								 ArchetypeAPI const*	underlyingArchetype,
+								 Archetype const*	underlyingArchetype,
 								 Entity const*		outerEntity = nullptr)	noexcept;
-			REFUREKU_API ~EnumAPI()												noexcept;
+			REFUREKU_API ~Enum()												noexcept;
 
 			/**
 			*	@brief Search an enum value by name in this enum.
@@ -30,7 +30,7 @@ namespace rfk
 			*	
 			*	@return The EnumValue having the provided name if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByName(char const* name)							const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValue const*			getEnumValueByName(char const* name)							const	noexcept;
 
 			/**
 			*	@brief Search an enum value by value in this enum.
@@ -39,7 +39,7 @@ namespace rfk
 			*
 			*	@return The first found EnumValue equals to the provided value if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValue(int64 value)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValue const*			getEnumValue(int64 value)										const	noexcept;
 
 			/**
 			*	@brief Retrieve from this enum an enum value matching with a given predicate.
@@ -51,7 +51,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const*			getEnumValueByPredicate(Predicate<EnumValueAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API EnumValue const*			getEnumValueByPredicate(Predicate<EnumValue>	predicate,
 																							void*					userData)		const;
 
 			/**
@@ -61,7 +61,7 @@ namespace rfk
 			*
 			*	@return All the EnumValues equal to the provided value.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<EnumValueAPI const*>	getEnumValues(int64 value)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Vector<EnumValue const*>	getEnumValues(int64 value)										const	noexcept;
 
 			/**
 			*	@brief Retrieve from this enum all enum values matching with a given predicate.
@@ -73,7 +73,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<EnumValueAPI const*>	getEnumValuesByPredicate(Predicate<EnumValueAPI> predicate,
+			RFK_NODISCARD REFUREKU_API Vector<EnumValue const*>	getEnumValuesByPredicate(Predicate<EnumValue> predicate,
 																							 void*					userData)		const;
 
 			/**
@@ -84,7 +84,7 @@ namespace rfk
 			* 
 			*	@return The enum values at the provided index.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumValueAPI const&			getEnumValueAt(std::size_t valueIndex)							const	noexcept;
+			RFK_NODISCARD REFUREKU_API EnumValue const&			getEnumValueAt(std::size_t valueIndex)							const	noexcept;
 
 			/**
 			*	@brief Get the number of enum values contained in this enum.
@@ -98,7 +98,7 @@ namespace rfk
 			* 
 			*	@return _underlyingArchetype.
 			*/
-			RFK_NODISCARD REFUREKU_API ArchetypeAPI const&			getUnderlyingArchetype()										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Archetype const&			getUnderlyingArchetype()										const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all enum values in this enum.
@@ -111,7 +111,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachEnumValue(Visitor<EnumValueAPI>	visitor,
+			REFUREKU_API bool										foreachEnumValue(Visitor<EnumValue>	visitor,
 																					 void*					userData)				const;
 
 			/**
@@ -123,7 +123,7 @@ namespace rfk
 			*	
 			*	@return A pointer to the added enum value.
 			*/
-			REFUREKU_API EnumValueAPI*								addEnumValue(char const*	name,
+			REFUREKU_API EnumValue*								addEnumValue(char const*	name,
 																				 std::size_t	id,
 																				 int64			value)										noexcept;
 
@@ -143,7 +143,7 @@ namespace rfk
 
 	/** Base implementation of getEnum, specialized for each reflected enum */
 	template <typename T>
-	rfk::EnumAPI const* getEnumAPI() noexcept;
+	rfk::Enum const* getEnumAPI() noexcept;
 
-	#include "Refureku/TypeInfo/Archetypes/EnumAPI.inl"
+	#include "Refureku/TypeInfo/Archetypes/Enum.inl"
 }

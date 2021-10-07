@@ -22,12 +22,12 @@
 
 namespace rfk
 {
-	class StructAPI::StructImpl : public ArchetypeAPI::ArchetypeImpl
+	class StructAPI::StructImpl : public Archetype::ArchetypeImpl
 	{
 		public:
 			using ParentStructs			= std::vector<ParentStruct>;
 			using Subclasses			= std::unordered_set<StructAPI const*>;
-			using NestedArchetypes		= std::unordered_set<ArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using NestedArchetypes		= std::unordered_set<Archetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using Fields				= std::unordered_multiset<FieldAPI, EntityNameHash, EntityNameEqual>;
 			using StaticFields			= std::unordered_multiset<StaticFieldAPI, EntityNameHash, EntityNameEqual>;
 			using Methods				= std::unordered_multiset<MethodAPI, EntityNameHash, EntityNameEqual>;
@@ -147,7 +147,7 @@ namespace rfk
 			*	
 			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD inline ArchetypeAPI*				addNestedArchetype(ArchetypeAPI const*	nestedArchetype,
+			RFK_NODISCARD inline Archetype*				addNestedArchetype(Archetype const*	nestedArchetype,
 																			   EAccessSpecifier		accessSpecifier,
 																			   StructAPI const*		outerEntity)		noexcept;
 
@@ -263,7 +263,7 @@ namespace rfk
 			* 
 			*	@return The found nested archetype if any, else nullptr.
 			*/
-			RFK_NODISCARD inline ArchetypeAPI const*		getNestedArchetype(char const*		name,
+			RFK_NODISCARD inline Archetype const*		getNestedArchetype(char const*		name,
 																			   EAccessSpecifier	access)			const	noexcept;
 
 			/**

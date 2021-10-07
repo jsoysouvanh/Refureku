@@ -48,7 +48,7 @@ void Type::fillType(Type& out_type) noexcept
 	{
 		currPart.addDescriptorFlag(ETypePartDescriptor::Value);
 
-		out_type.setArchetype(rfk::getArchetypeAPI<std::decay_t<T>>());
+		out_type.setArchetype(rfk::getArchetype<std::decay_t<T>>());
 	}
 }
 

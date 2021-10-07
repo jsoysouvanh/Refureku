@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline FundamentalArchetypeAPI::FundamentalArchetypeImpl::FundamentalArchetypeImpl(char const* name, std::size_t id, std::size_t memorySize) noexcept:
+inline FundamentalArchetype::FundamentalArchetypeImpl::FundamentalArchetypeImpl(char const* name, std::size_t id, std::size_t memorySize) noexcept:
 	ArchetypeImpl(name, id, EEntityKind::FundamentalArchetype, memorySize)
 {
 }

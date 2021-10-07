@@ -9,8 +9,8 @@
 
 #include <cassert>
 
-#include "Refureku/TypeInfo/Archetypes/ArchetypeRegistererAPI.h"
-#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/DatabaseImpl.h"
 
 namespace rfk
@@ -18,10 +18,10 @@ namespace rfk
 	class internal::ArchetypeRegistererImpl final
 	{
 		private:
-			ArchetypeAPI const& _registeredArchetype;
+			Archetype const& _registeredArchetype;
 
 		public:
-			inline ArchetypeRegistererImpl(ArchetypeAPI const& archetype)	noexcept;
+			inline ArchetypeRegistererImpl(Archetype const& archetype)	noexcept;
 			inline ~ArchetypeRegistererImpl()								noexcept;
 
 			/**
@@ -29,7 +29,7 @@ namespace rfk
 			* 
 			*	@return _registeredEntity.
 			*/
-			inline ArchetypeAPI const& getRegisteredArchetype() const noexcept;
+			inline Archetype const& getRegisteredArchetype() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/ArchetypeRegistererImpl.inl"

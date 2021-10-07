@@ -20,12 +20,12 @@ inline std::vector<TypePart> const& Type::TypeImpl::getParts() const noexcept
 	return _parts;
 }
 
-inline ArchetypeAPI const* Type::TypeImpl::getArchetype() const noexcept
+inline Archetype const* Type::TypeImpl::getArchetype() const noexcept
 {
 	return _archetype;
 }
 
-inline void Type::TypeImpl::setArchetype(ArchetypeAPI const* archetype) noexcept
+inline void Type::TypeImpl::setArchetype(Archetype const* archetype) noexcept
 {
 	_archetype = archetype;
 }

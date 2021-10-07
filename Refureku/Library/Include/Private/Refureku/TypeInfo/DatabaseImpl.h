@@ -17,15 +17,15 @@
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
-#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
-#include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 #include "Refureku/TypeInfo/Variables/VariableAPI.h"
 #include "Refureku/TypeInfo/Variables/FieldAPI.h"
 #include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
 #include "Refureku/TypeInfo/Functions/FunctionAPI.h"
 #include "Refureku/TypeInfo/Functions/MethodAPI.h"
 #include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
-#include "Refureku/TypeInfo/Archetypes/FundamentalArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 
 namespace rfk
 {
@@ -36,10 +36,10 @@ namespace rfk
 			using NamespacesByName				= std::unordered_set<Namespace const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using StructsByName					= std::unordered_set<StructAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using ClassesByName					= std::unordered_set<ClassAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using EnumsByName					= std::unordered_set<EnumAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using EnumsByName					= std::unordered_set<Enum const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using VariablesByName				= std::unordered_set<VariableAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FunctionsByName				= std::unordered_multiset<FunctionAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using FundamentalArchetypesByName	= std::unordered_set<FundamentalArchetypeAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using FundamentalArchetypesByName	= std::unordered_set<FundamentalArchetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using GenNamespaces					= std::unordered_map<std::size_t, std::shared_ptr<Namespace>>;
 			
 		private:
@@ -89,14 +89,14 @@ namespace rfk
 			*	
 			*	@param e The parent enum.
 			*/
-			inline void		registerSubEntities(EnumAPI const& e)		noexcept;
+			inline void		registerSubEntities(Enum const& e)		noexcept;
 
 			/**
 			*	@brief Remove all nested entities from the _entitiesById map.
 			*	
 			*	@param e The parent enum.
 			*/
-			inline void		unregisterSubEntities(EnumAPI const& e)		noexcept;
+			inline void		unregisterSubEntities(Enum const& e)		noexcept;
 
 		public:
 			DatabaseImpl()	= default;

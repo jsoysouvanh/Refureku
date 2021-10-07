@@ -14,7 +14,7 @@ namespace rfk
 {
 	//Forward declaration
 	class TemplateParameterAPI;
-	class ArchetypeAPI;	//TODO: Replace this by a template arg
+	class Archetype;	//TODO: Replace this by a template arg
 
 	class TemplateArgumentAPI final
 	{
@@ -37,7 +37,7 @@ namespace rfk
 			*	@return _archetype.
 			*/
 			//TODO: This will change to a different return type to support non-type template and template template type arguments
-			RFK_NODISCARD REFUREKU_API ArchetypeAPI const*			getArchetype()		const	noexcept;
+			RFK_NODISCARD REFUREKU_API Archetype const*			getArchetype()		const	noexcept;
 
 		private:
 			//Forward declaration

@@ -2,7 +2,7 @@
 
 #include "Refureku/TypeInfo/Namespace/NamespaceImpl.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
-#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
 using namespace rfk;
@@ -46,7 +46,7 @@ StructAPI const* Namespace::getStructByName(char const* name) const noexcept
 	return reinterpret_cast<StructAPI const*>(
 		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
 													name,
-													[](ArchetypeAPI const& arch) { return arch.getKind() == EEntityKind::Struct; }));
+													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Struct; }));
 }
 
 StructAPI const* Namespace::getStructByPredicate(Predicate<StructAPI> predicate, void* userData) const
@@ -54,7 +54,7 @@ StructAPI const* Namespace::getStructByPredicate(Predicate<StructAPI> predicate,
 	return (predicate != nullptr) ?
 		reinterpret_cast<StructAPI const*>(
 			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
-												[predicate, userData](ArchetypeAPI const& archetype)
+												[predicate, userData](Archetype const& archetype)
 												{
 													return archetype.getKind() == EEntityKind::Struct &&
 															predicate(static_cast<StructAPI const&>(archetype), userData);
@@ -66,7 +66,7 @@ Vector<StructAPI const*> Namespace::getStructsByPredicate(Predicate<StructAPI> p
 	if (predicate != nullptr)
 	{
 		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
-													 [predicate, userData](ArchetypeAPI const& archetype)
+													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Struct &&
 															 predicate(static_cast<StructAPI const&>(archetype), userData);
@@ -83,7 +83,7 @@ ClassAPI const* Namespace::getClassByName(char const* name) const noexcept
 	return reinterpret_cast<ClassAPI const*>(
 		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
 													name,
-													[](ArchetypeAPI const& arch) { return arch.getKind() == EEntityKind::Class; }));
+													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Class; }));
 }
 
 ClassAPI const* Namespace::getClassByPredicate(Predicate<ClassAPI> predicate, void* userData) const
@@ -91,7 +91,7 @@ ClassAPI const* Namespace::getClassByPredicate(Predicate<ClassAPI> predicate, vo
 	return (predicate != nullptr) ?
 		reinterpret_cast<StructAPI const*>(
 			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
-			[predicate, userData](ArchetypeAPI const& archetype)
+			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Class &&
 					predicate(static_cast<ClassAPI const&>(archetype), userData);
@@ -103,7 +103,7 @@ Vector<ClassAPI const*> Namespace::getClassesByPredicate(Predicate<ClassAPI> pre
 	if (predicate != nullptr)
 	{
 		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
-													 [predicate, userData](ArchetypeAPI const& archetype)
+													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Class &&
 															 predicate(static_cast<ClassAPI const&>(archetype), userData);
@@ -115,44 +115,44 @@ Vector<ClassAPI const*> Namespace::getClassesByPredicate(Predicate<ClassAPI> pre
 	}
 }
 
-EnumAPI const* Namespace::getEnumByName(char const* name) const noexcept
+Enum const* Namespace::getEnumByName(char const* name) const noexcept
 {
-	return reinterpret_cast<EnumAPI const*>(
+	return reinterpret_cast<Enum const*>(
 		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
 													name,
-													[](ArchetypeAPI const& arch) { return arch.getKind() == EEntityKind::Enum; }));
+													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Enum; }));
 }
 
-EnumAPI const* Namespace::getEnumByPredicate(Predicate<EnumAPI> predicate, void* userData) const
+Enum const* Namespace::getEnumByPredicate(Predicate<Enum> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		reinterpret_cast<EnumAPI const*>(
+		reinterpret_cast<Enum const*>(
 			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
-			[predicate, userData](ArchetypeAPI const& archetype)
+			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Enum &&
-					predicate(static_cast<EnumAPI const&>(archetype), userData);
+					predicate(static_cast<Enum const&>(archetype), userData);
 			})) : nullptr;
 }
 
-Vector<EnumAPI const*> Namespace::getEnumsByPredicate(Predicate<EnumAPI> predicate, void* userData) const
+Vector<Enum const*> Namespace::getEnumsByPredicate(Predicate<Enum> predicate, void* userData) const
 {
 	if (predicate != nullptr)
 	{
 		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
-													 [predicate, userData](ArchetypeAPI const& archetype)
+													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Enum &&
-															 predicate(static_cast<EnumAPI const&>(archetype), userData);
+															 predicate(static_cast<Enum const&>(archetype), userData);
 													 });
 	}
 	else
 	{
-		return Vector<EnumAPI const*>(0);
+		return Vector<Enum const*>(0);
 	}
 }
 
-bool Namespace::foreachArchetype(Visitor<ArchetypeAPI> visitor, void* userData) const
+bool Namespace::foreachArchetype(Visitor<Archetype> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(), visitor, userData);
 }
@@ -241,7 +241,7 @@ void Namespace::addNamespace(Namespace const& nestedNamespace) noexcept
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->addNamespace(nestedNamespace);
 }
 
-void Namespace::addArchetype(ArchetypeAPI const& archetype) noexcept
+void Namespace::addArchetype(Archetype const& archetype) noexcept
 {
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->addArchetype(archetype);
 }
@@ -261,7 +261,7 @@ void Namespace::removeNamespace(Namespace const& nestedNamespace) noexcept
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeNamespace(nestedNamespace);
 }
 
-void Namespace::removeArchetype(ArchetypeAPI const& archetype) noexcept
+void Namespace::removeArchetype(Archetype const& archetype) noexcept
 {
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeArchetype(archetype);
 }

@@ -17,7 +17,7 @@ TemplateParameterAPI const& TemplateArgumentAPI::getBoundParameter() const noexc
 	return _pimpl->getBoundParameter();
 }
 
-ArchetypeAPI const* TemplateArgumentAPI::getArchetype() const noexcept
+Archetype const* TemplateArgumentAPI::getArchetype() const noexcept
 {
 	return nullptr;
 }

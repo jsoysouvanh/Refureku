@@ -7,18 +7,18 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
 namespace rfk
 {
-	class FundamentalArchetypeAPI final : public ArchetypeAPI
+	class FundamentalArchetype final : public Archetype
 	{
 		public:
-			REFUREKU_INTERNAL FundamentalArchetypeAPI(char const*	name,
+			REFUREKU_INTERNAL FundamentalArchetype(char const*	name,
 													  std::size_t	id,
 													  std::size_t	memorySize)	noexcept;
-			FundamentalArchetypeAPI(FundamentalArchetypeAPI&&)					= delete;
-			REFUREKU_INTERNAL ~FundamentalArchetypeAPI()						noexcept;
+			FundamentalArchetype(FundamentalArchetype&&)					= delete;
+			REFUREKU_INTERNAL ~FundamentalArchetype()						noexcept;
 
 		private:
 			//Forward declaration

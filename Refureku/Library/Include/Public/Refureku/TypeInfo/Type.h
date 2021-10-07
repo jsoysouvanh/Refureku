@@ -12,7 +12,7 @@
 
 #include "Refureku/Utility/Pimpl.h"
 #include "Refureku/TypeInfo/TypePart.h"
-#include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 
 namespace rfk
 {
@@ -102,14 +102,14 @@ namespace rfk
 			* 
 			*	@return This type's archetype.
 			*/
-			REFUREKU_API ArchetypeAPI const*	getArchetype()						const	noexcept;
+			REFUREKU_API Archetype const*	getArchetype()						const	noexcept;
 
 			/**
 			*	@brief Set this type's archetype.
 			* 
 			*	@param archetype The archetype to set.
 			*/
-			REFUREKU_API void					setArchetype(ArchetypeAPI const* archetype)	noexcept;
+			REFUREKU_API void					setArchetype(Archetype const* archetype)	noexcept;
 
 			/**
 			*	@brief Add a default-constructed type part to this type.

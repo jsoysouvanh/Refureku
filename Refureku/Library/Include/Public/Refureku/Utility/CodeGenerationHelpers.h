@@ -12,7 +12,7 @@
 #include <type_traits>
 
 #include "Refureku/Utility/TypeTraitsMacros.h"
-#include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 
 RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass)

@@ -12,11 +12,11 @@
 namespace rfk
 {
 	//Forward declarations
-	class ArchetypeAPI;
-	class FundamentalArchetypeAPI;
+	class Archetype;
+	class FundamentalArchetype;
 	class StructAPI;
-	class EnumAPI;
-	class EnumValueAPI;
+	class Enum;
+	class EnumValue;
 	class Namespace;
 	class FieldBaseAPI;
 	class FieldAPI;
@@ -41,10 +41,10 @@ namespace rfk
 	*	rfk::entityCast<> specialization for all Entity types.
 	*/
 	template <>
-	REFUREKU_API ArchetypeAPI const*			entityCast<ArchetypeAPI>(Entity const* entity)				noexcept;
+	REFUREKU_API Archetype const*			entityCast<Archetype>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API FundamentalArchetypeAPI const*	entityCast<FundamentalArchetypeAPI>(Entity const* entity)	noexcept;
+	REFUREKU_API FundamentalArchetype const*	entityCast<FundamentalArchetype>(Entity const* entity)	noexcept;
 
 	/**
 	*	This entity cast specialization doesn't work to check if an entity is a class (it will return a non-nullptr pointer when it is a struct as well).
@@ -72,10 +72,10 @@ namespace rfk
 	REFUREKU_API StaticMethodAPI const*			entityCast<StaticMethodAPI>(Entity const* entity)			noexcept;
 
 	template <>
-	REFUREKU_API EnumAPI const*					entityCast<EnumAPI>(Entity const* entity)					noexcept;
+	REFUREKU_API Enum const*					entityCast<Enum>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API EnumValueAPI const*			entityCast<EnumValueAPI>(Entity const* entity)				noexcept;
+	REFUREKU_API EnumValue const*			entityCast<EnumValue>(Entity const* entity)				noexcept;
 
 	template <>
 	REFUREKU_API Namespace const*				entityCast<Namespace>(Entity const* entity)					noexcept;

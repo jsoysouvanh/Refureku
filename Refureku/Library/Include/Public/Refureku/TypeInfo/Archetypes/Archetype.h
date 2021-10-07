@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class ArchetypeAPI : public Entity
+	class Archetype : public Entity
 	{
 		public:
 			/**
@@ -40,8 +40,8 @@ namespace rfk
 			//Forward declaration
 			class ArchetypeImpl;
 
-			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL ArchetypeAPI(ArchetypeAPI&&)					noexcept;
-			REFUREKU_INTERNAL ~ArchetypeAPI()								noexcept;
+			REFUREKU_INTERNAL Archetype(ArchetypeImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL Archetype(Archetype&&)					noexcept;
+			REFUREKU_INTERNAL ~Archetype()								noexcept;
 	};
 }

@@ -6,7 +6,7 @@
 */
 
 template <typename T, typename>
-T EnumValueAPI::getValue() const noexcept
+T EnumValue::getValue() const noexcept
 {
 	return static_cast<T>(getValue());
 }

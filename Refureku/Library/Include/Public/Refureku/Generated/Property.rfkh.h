@@ -10,8 +10,8 @@
 #include <Refureku/TypeInfo/Functions/StaticMethodAPI.h>
 #include <Refureku/TypeInfo/Variables/FieldAPI.h>
 #include <Refureku/TypeInfo/Variables/StaticFieldAPI.h>
-#include <Refureku/TypeInfo/Archetypes/EnumAPI.h>
-#include <Refureku/TypeInfo/Archetypes/EnumValueAPI.h>
+#include <Refureku/TypeInfo/Archetypes/Enum.h>
+#include <Refureku/TypeInfo/Archetypes/EnumValue.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h>

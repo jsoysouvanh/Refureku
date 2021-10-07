@@ -17,9 +17,9 @@ namespace rfk
 	//Forward declarations
 	class StructAPI;
 	using ClassAPI = StructAPI;
-	class EnumAPI;
+	class Enum;
 	class VariableAPI;
-	class ArchetypeAPI;
+	class Archetype;
 
 	class Namespace final : public Entity
 	{
@@ -155,7 +155,7 @@ namespace rfk
 			*
 			*	@return The found enum if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumAPI const*				getEnumByName(char const* name)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Enum const*				getEnumByName(char const* name)										const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested enum satisfying the provided predicate.
@@ -167,7 +167,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API EnumAPI const*				getEnumByPredicate(Predicate<EnumAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Enum const*				getEnumByPredicate(Predicate<Enum>	predicate,
 																						void*				userData)					const;
 
 			/**
@@ -180,7 +180,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<EnumAPI const*>		getEnumsByPredicate(Predicate<EnumAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Vector<Enum const*>		getEnumsByPredicate(Predicate<Enum>	predicate,
 																						void*				userData)					const;
 
 			/**
@@ -194,7 +194,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially throw from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachArchetype(Visitor<ArchetypeAPI>	visitor,
+			REFUREKU_API bool										foreachArchetype(Visitor<Archetype>	visitor,
 																					 void*					userData)					const;
 
 			/**
@@ -341,7 +341,7 @@ namespace rfk
 			* 
 			*	@param archetype The archetype to add.
 			*/
-			REFUREKU_API void										addArchetype(ArchetypeAPI const& archetype)									noexcept;
+			REFUREKU_API void										addArchetype(Archetype const& archetype)									noexcept;
 
 			/**
 			*	@brief Add a nested variable to this namespace.
@@ -369,7 +369,7 @@ namespace rfk
 			* 
 			*	@param archetype The archetype to remove.
 			*/
-			REFUREKU_API void										removeArchetype(ArchetypeAPI const& archetype)								noexcept;
+			REFUREKU_API void										removeArchetype(Archetype const& archetype)								noexcept;
 
 			/**
 			*	@brief Remove a nested variable from this namespace.

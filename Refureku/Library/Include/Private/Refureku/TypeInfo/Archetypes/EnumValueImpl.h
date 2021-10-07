@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 namespace rfk
 {
-	class EnumValueAPI::EnumValueImpl final : public Entity::EntityImpl
+	class EnumValue::EnumValueImpl final : public Entity::EntityImpl
 	{
 		private:
 			/** Value of this enum value. */

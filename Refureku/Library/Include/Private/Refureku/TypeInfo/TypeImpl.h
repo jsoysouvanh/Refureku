@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "Refureku/TypeInfo/Type.h"
-#include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 
 namespace rfk
 {
@@ -21,7 +21,7 @@ namespace rfk
 			std::vector<TypePart>	_parts;
 
 			/** Archetype of this type. */
-			ArchetypeAPI const*		_archetype = nullptr;
+			Archetype const*		_archetype = nullptr;
 
 		public:
 			/**
@@ -49,14 +49,14 @@ namespace rfk
 			* 
 			*	@return _archetype.
 			*/
-			inline ArchetypeAPI const*				getArchetype()						const	noexcept;
+			inline Archetype const*				getArchetype()						const	noexcept;
 
 			/**
 			*	@brief Setter for the field _archetype.
 			* 
 			*	@param archetype The archetype to set.
 			*/
-			inline void								setArchetype(ArchetypeAPI const* archetype)	noexcept;
+			inline void								setArchetype(Archetype const* archetype)	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/TypeImpl.inl"

@@ -8,27 +8,27 @@
 #include "Refureku/TypeInfo/Functions/MethodAPI.h"
 #include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
-#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
-#include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
-#include "Refureku/TypeInfo/Archetypes/FundamentalArchetypeAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Enum.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValue.h"
+#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 
 using namespace rfk;
 
 template <>
-ArchetypeAPI const* rfk::entityCast<ArchetypeAPI>(Entity const* entity) noexcept
+Archetype const* rfk::entityCast<Archetype>(Entity const* entity) noexcept
 {
 	EEntityKind kind = entity->getKind();
 
 	return (entity != nullptr &&
 			(kind == EEntityKind::FundamentalArchetype || kind == EEntityKind::Struct || kind == EEntityKind::Class || kind == EEntityKind::Enum)) ?
-		reinterpret_cast<ArchetypeAPI const*>(entity) : nullptr;
+		reinterpret_cast<Archetype const*>(entity) : nullptr;
 }
 
 template <>
-FundamentalArchetypeAPI const* rfk::entityCast<FundamentalArchetypeAPI>(Entity const* entity) noexcept
+FundamentalArchetype const* rfk::entityCast<FundamentalArchetype>(Entity const* entity) noexcept
 {
-	return internal::entityCast<FundamentalArchetypeAPI, EEntityKind::FundamentalArchetype>(entity);
+	return internal::entityCast<FundamentalArchetype, EEntityKind::FundamentalArchetype>(entity);
 }
 
 template <>
@@ -83,15 +83,15 @@ StaticMethodAPI const* rfk::entityCast<StaticMethodAPI>(Entity const* entity) no
 }
 
 template <>
-EnumAPI const* rfk::entityCast<EnumAPI>(Entity const* entity) noexcept
+Enum const* rfk::entityCast<Enum>(Entity const* entity) noexcept
 {
-	return internal::entityCast<EnumAPI, EEntityKind::Enum>(entity);
+	return internal::entityCast<Enum, EEntityKind::Enum>(entity);
 }
 
 template <>
-EnumValueAPI const* rfk::entityCast<EnumValueAPI>(Entity const* entity) noexcept
+EnumValue const* rfk::entityCast<EnumValue>(Entity const* entity) noexcept
 {
-	return internal::entityCast<EnumValueAPI, EEntityKind::EnumValue>(entity);
+	return internal::entityCast<EnumValue, EEntityKind::EnumValue>(entity);
 }
 
 template <>

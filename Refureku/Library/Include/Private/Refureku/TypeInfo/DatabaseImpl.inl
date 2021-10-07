@@ -28,7 +28,7 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bo
 			break;
 
 		case EEntityKind::Enum:
-			_fileLevelEnumsByName.emplace(reinterpret_cast<EnumAPI const*>(&entity));
+			_fileLevelEnumsByName.emplace(reinterpret_cast<Enum const*>(&entity));
 			break;
 
 		case EEntityKind::Variable:
@@ -40,7 +40,7 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bo
 			break;
 
 		case EEntityKind::FundamentalArchetype:
-			_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetypeAPI const*>(&entity));
+			_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetype const*>(&entity));
 			break;
 
 		case EEntityKind::EnumValue:
@@ -75,7 +75,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 				break;
 
 			case EEntityKind::Enum:
-				unregisterSubEntities(static_cast<EnumAPI const&>(entity));
+				unregisterSubEntities(static_cast<Enum const&>(entity));
 				break;
 
 			case EEntityKind::Variable:
@@ -120,7 +120,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 				break;
 
 			case EEntityKind::Enum:
-				_fileLevelEnumsByName.erase(reinterpret_cast<EnumAPI const*>(&entity));
+				_fileLevelEnumsByName.erase(reinterpret_cast<Enum const*>(&entity));
 				break;
 
 			case EEntityKind::Variable:
@@ -132,7 +132,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 				break;
 
 			case EEntityKind::FundamentalArchetype:
-				_fundamentalArchetypes.erase(reinterpret_cast<FundamentalArchetypeAPI const*>(&entity));
+				_fundamentalArchetypes.erase(reinterpret_cast<FundamentalArchetype const*>(&entity));
 				break;
 
 			case EEntityKind::EnumValue:
@@ -166,7 +166,7 @@ void DatabaseAPI::DatabaseImpl::registerEntityId(Entity const& entity, bool shou
 				break;
 
 			case EEntityKind::Enum:
-				registerSubEntities(static_cast<EnumAPI const&>(entity));
+				registerSubEntities(static_cast<Enum const&>(entity));
 				break;
 
 			case EEntityKind::Namespace:
@@ -197,7 +197,7 @@ void DatabaseAPI::DatabaseImpl::registerEntityId(Entity const& entity, bool shou
 inline void DatabaseAPI::DatabaseImpl::registerSubEntities(StructAPI const& s) noexcept
 {
 	//Add nested archetypes
-	s.foreachNestedArchetype([](ArchetypeAPI const& archetype, void* userData)
+	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
 							 {
 								 reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(archetype, true);
 
@@ -238,7 +238,7 @@ inline void DatabaseAPI::DatabaseImpl::registerSubEntities(StructAPI const& s) n
 inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(StructAPI const& s) noexcept
 {
 	//Remove nested archetypes
-	s.foreachNestedArchetype([](ArchetypeAPI const& archetype, void* userData)
+	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
 							 {
 								 reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(archetype, true);
 
@@ -276,10 +276,10 @@ inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(StructAPI const& s)
 						  }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::registerSubEntities(EnumAPI const& e) noexcept
+inline void DatabaseAPI::DatabaseImpl::registerSubEntities(Enum const& e) noexcept
 {
 	//Enum values
-	e.foreachEnumValue([](EnumValueAPI const& enumValue, void* userData)
+	e.foreachEnumValue([](EnumValue const& enumValue, void* userData)
 					   {
 						   reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(enumValue, false);
 
@@ -287,10 +287,10 @@ inline void DatabaseAPI::DatabaseImpl::registerSubEntities(EnumAPI const& e) noe
 					   }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(EnumAPI const& e) noexcept
+inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(Enum const& e) noexcept
 {
 	//Enum values
-	e.foreachEnumValue([](EnumValueAPI const& enumValue, void* userData)
+	e.foreachEnumValue([](EnumValue const& enumValue, void* userData)
 					   {
 						   reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(enumValue, false);
 

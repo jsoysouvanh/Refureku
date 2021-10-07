@@ -10,8 +10,8 @@
 #include <Refureku/TypeInfo/Functions/StaticMethodAPI.h>
 #include <Refureku/TypeInfo/Variables/FieldAPI.h>
 #include <Refureku/TypeInfo/Variables/StaticFieldAPI.h>
-#include <Refureku/TypeInfo/Archetypes/EnumAPI.h>
-#include <Refureku/TypeInfo/Archetypes/EnumValueAPI.h>
+#include <Refureku/TypeInfo/Archetypes/Enum.h>
+#include <Refureku/TypeInfo/Archetypes/EnumValue.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h>
@@ -40,6 +40,6 @@ public: REFUREKU_API virtual rfk::ClassAPI const& getArchetype() const noexcept 
 
 
 #define File_PropertySettings_GENERATED	\
-template <> REFUREKU_API rfk::ArchetypeAPI const* rfk::getArchetypeAPI<PropertySettings>() noexcept;\
+template <> REFUREKU_API rfk::Archetype const* rfk::getArchetype<PropertySettings>() noexcept;\
 
 

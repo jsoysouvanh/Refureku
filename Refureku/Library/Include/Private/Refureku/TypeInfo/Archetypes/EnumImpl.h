@@ -9,25 +9,25 @@
 
 #include <vector>
 
-#include "Refureku/TypeInfo/Archetypes/EnumAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
-#include "Refureku/TypeInfo/Archetypes/EnumValueAPI.h"
+#include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 
 namespace rfk
 {
-	class EnumAPI::EnumImpl final : public ArchetypeAPI::ArchetypeImpl
+	class Enum::EnumImpl final : public Archetype::ArchetypeImpl
 	{
 		private:
 			/** Values contained in this enum. */
-			std::vector<EnumValueAPI>	_enumValues;
+			std::vector<EnumValue>	_enumValues;
 
 			/** Underlying type of this enum. */
-			ArchetypeAPI const&			_underlyingArchetype;
+			Archetype const&			_underlyingArchetype;
 
 		public:
 			inline EnumImpl(char const*			name,
 							std::size_t			id,
-							ArchetypeAPI const*	underlyingArchetype,
+							Archetype const*	underlyingArchetype,
 							Entity const*	outerEntity = nullptr)	noexcept;
 
 			/**
@@ -36,14 +36,14 @@ namespace rfk
 			*	@param name		Name of the enum value.
 			*	@param id		Unique entity id of the added enum value.
 			*	@param value	Integer value of the enum value.
-			*	@param backRef	Ref to the owner EnumAPI.
+			*	@param backRef	Ref to the owner Enum.
 			*	
 			*	@return The added enum value.
 			*/
-			inline EnumValueAPI&					addEnumValue(char const*	name,
+			inline EnumValue&					addEnumValue(char const*	name,
 																 std::size_t	id,
 																 int64			value,
-																 EnumAPI const*	backRef)			noexcept;
+																 Enum const*	backRef)			noexcept;
 
 			/**
 			*	@brief	Set the number of enum values for this entity.
@@ -59,14 +59,14 @@ namespace rfk
 			* 
 			*	@return _enumValues.
 			*/
-			inline std::vector<EnumValueAPI> const&	getEnumValues()							const	noexcept;
+			inline std::vector<EnumValue> const&	getEnumValues()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _underlyingArchetype.
 			* 
 			*	@return _underlyingArchetype.
 			*/
-			inline ArchetypeAPI const&				getUnderlyingArchetype()				const	noexcept;
+			inline Archetype const&				getUnderlyingArchetype()				const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/EnumImpl.inl"

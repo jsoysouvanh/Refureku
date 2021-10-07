@@ -76,7 +76,7 @@ inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(Enti
 		case EEntityKind::Class:
 			[[fallthrough]];
 		case EEntityKind::Enum:
-			_namespaceInstance->addArchetype(static_cast<ArchetypeAPI const&>(entity));
+			_namespaceInstance->addArchetype(static_cast<Archetype const&>(entity));
 
 			//Register the archetype and its sub entities to the database.
 			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, true);
@@ -137,7 +137,7 @@ inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace
 		case EEntityKind::Class:
 			[[fallthrough]];
 		case EEntityKind::Enum:
-			_namespaceInstance->removeArchetype(static_cast<ArchetypeAPI const&>(entity));
+			_namespaceInstance->removeArchetype(static_cast<Archetype const&>(entity));
 
 			//Unregister archetypes and their sub entities from the database
 			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, true);

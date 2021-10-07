@@ -1,36 +1,47 @@
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 
-#include <cassert>
+#include <cstring> //std::strcmp
 
-#include "Refureku/TypeInfo/Type.h"
+#include "Refureku/TypeInfo/Archetypes/EnumImpl.h"
+#include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
 using namespace rfk;
 
-Enum::Enum(std::string&& name, std::size_t id, std::size_t memorySize, Archetype const* underlyingType, Entity const* outerEntity) noexcept:
-	Archetype(std::forward<std::string>(name), id, EEntityKind::Enum, memorySize, outerEntity),
-	_underlyingType{*underlyingType}
+Enum::Enum(char const* name, std::size_t id, Archetype const* underlyingArchetype, Entity const* outerEntity) noexcept:
+	Archetype(new EnumImpl(name, id, underlyingArchetype, outerEntity))
 {
-	assert(underlyingType != nullptr);
 }
 
-EnumValue const* Enum::getEnumValue(std::string enumValueName)  const noexcept
+Enum::~Enum() noexcept = default;
+
+EnumValue* Enum::addEnumValue(char const* name, std::size_t id, int64 value) noexcept
 {
-	for (EnumValue const& enumValue : _enumValues)
+	return &reinterpret_cast<EnumImpl*>(getPimpl())->addEnumValue(name, id, value, this);
+}
+
+void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
+{
+	reinterpret_cast<EnumImpl*>(getPimpl())->setEnumValuesCapacity(capacity);
+}
+
+EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
+{
+	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
-		if (enumValue.getName() == enumValueName)
+		if (std::strcmp(enumValue.getName(), name) == 0)
 		{
 			return &enumValue;
 		}
 	}
-	
+
 	return nullptr;
 }
 
 EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 {
-	for (EnumValue const& enumValue : _enumValues)
+	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
-		if (enumValue.value() == value)
+		if (enumValue.getValue() == value)
 		{
 			return &enumValue;
 		}
@@ -39,42 +50,65 @@ EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 	return nullptr;
 }
 
-std::vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
+EnumValue const* Enum::getEnumValueByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	std::vector<EnumValue const*> result;
-
-	for (EnumValue const& ev : _enumValues)
+	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
 	{
-		if (ev.value() == value)
+		if (predicate(enumValue, userData))
 		{
-			result.push_back(&ev);
+			return &enumValue;
+		}
+	}
+
+	return nullptr;
+}
+
+Vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
+{
+	Vector<EnumValue const*> result;
+
+	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
+	{
+		if (enumValue.getValue() == value)
+		{
+			result.push_back(&enumValue);
 		}
 	}
 
 	return result;
 }
 
-EnumValue* Enum::addEnumValue(std::string enumValueName, std::size_t entityId, int64 value) noexcept
+Vector<EnumValue const*> Enum::getEnumValuesByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	return &_enumValues.emplace_back(std::move(enumValueName), entityId, value, this);
+	Vector<EnumValue const*> result;
+
+	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
+	{
+		if (predicate(enumValue, userData))
+		{
+			result.push_back(&enumValue);
+		}
+	}
+
+	return result;
 }
 
-void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
+EnumValue const& Enum::getEnumValueAt(std::size_t valueIndex)	const noexcept
 {
-	_enumValues.reserve(capacity);
-}
-
-EnumValue const& Enum::getEnumValueAt(std::size_t valueIndex) const
-{
-	return _enumValues.at(valueIndex);
+	return reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues()[valueIndex];
 }
 
 std::size_t Enum::getEnumValuesCount() const noexcept
 {
-	return _enumValues.size();
+	return reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues().size();
 }
 
-Archetype const& Enum::getUnderlyingType() const noexcept
+Archetype const& Enum::getUnderlyingArchetype() const noexcept
 {
-	return _underlyingType;
+	return reinterpret_cast<EnumImpl const*>(getPimpl())->getUnderlyingArchetype();
+}
+
+bool Enum::foreachEnumValue(Predicate<EnumValue> visitor, void* userData) const
+{
+	return EntityUtility::foreachEntity(reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues(), visitor, userData);
 }
