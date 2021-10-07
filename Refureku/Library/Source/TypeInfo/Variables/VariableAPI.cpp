@@ -4,12 +4,12 @@
 
 using namespace rfk;
 
-VariableAPI::VariableAPI(char const* name, std::size_t id, TypeAPI const& type, void* ptr, EVarFlags flags) noexcept:
+VariableAPI::VariableAPI(char const* name, std::size_t id, Type const& type, void* ptr, EVarFlags flags) noexcept:
 	VariableBaseAPI(new VariableImpl(name, id, type, ptr, flags))
 {
 }
 
-VariableAPI::VariableAPI(char const* name, std::size_t id, TypeAPI const& type, void const* constPtr, EVarFlags flags) noexcept:
+VariableAPI::VariableAPI(char const* name, std::size_t id, Type const& type, void const* constPtr, EVarFlags flags) noexcept:
 	VariableBaseAPI(new VariableImpl(name, id, type, constPtr, flags))
 {
 }

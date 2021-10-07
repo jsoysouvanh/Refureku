@@ -16,7 +16,7 @@ namespace rfk
 		public:
 			FieldAPI(char const*		name,
 					 std::size_t		id,
-					 TypeAPI const&		type,
+					 Type const&		type,
 					 EFieldFlags		flags,
 					 StructAPI const*	owner,
 					 std::size_t		memoryOffset,

@@ -9,9 +9,9 @@
 
 #include "Refureku/Config.h"
 
-#include "Refureku/TypeInfo/TypeAPI.h"
+#include "Refureku/TypeInfo/Type.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
-#include "Refureku/TypeInfo/Entity/EntityCastAPI.h"
+#include "Refureku/TypeInfo/Entity/EntityCast.h"
 #include "Refureku/TypeInfo/Variables/VariableAPI.h"
 #include "Refureku/TypeInfo/Variables/FieldAPI.h"
 #include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"

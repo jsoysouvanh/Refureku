@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline FieldAPI::FieldImpl::FieldImpl(char const* name, std::size_t id, TypeAPI const& type, EFieldFlags flags,
+inline FieldAPI::FieldImpl::FieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
 									  StructAPI const* owner, std::size_t memoryOffset, Entity const* outerEntity) noexcept:
 	FieldBaseImpl(name, id, type, flags, owner, outerEntity),
 	_memoryOffset{memoryOffset}

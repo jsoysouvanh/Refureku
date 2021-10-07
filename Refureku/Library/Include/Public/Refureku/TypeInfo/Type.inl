@@ -6,9 +6,9 @@
 */
 
 template <typename T>
-void TypeAPI::fillType(TypeAPI& out_type) noexcept
+void Type::fillType(Type& out_type) noexcept
 {
-	TypePartAPI& currPart = out_type.addTypePart();
+	TypePart& currPart = out_type.addTypePart();
 
 	//Const
 	if constexpr (std::is_const_v<T>)
@@ -25,7 +25,7 @@ void TypeAPI::fillType(TypeAPI& out_type) noexcept
 	if constexpr (std::is_array_v<T>)
 	{
 		currPart.addDescriptorFlag(ETypePartDescriptor::CArray);
-		currPart.setAdditionalData(static_cast<TypePartAPI::AdditionalDataType>(std::extent_v<T>));
+		currPart.setAdditionalData(static_cast<TypePart::AdditionalDataType>(std::extent_v<T>));
 
 		fillType<std::remove_extent_t<T>>(out_type);
 	}
@@ -53,16 +53,16 @@ void TypeAPI::fillType(TypeAPI& out_type) noexcept
 }
 
 template <typename T>
-TypeAPI const& getTypeAPI() noexcept
+Type const& getType() noexcept
 {
-	static TypeAPI	result;
+	static Type	result;
 	static bool		initialized = false;
 
 	if (!initialized)
 	{
 		initialized = true;
 
-		TypeAPI::fillType<T>(result);
+		Type::fillType<T>(result);
 		result.optimizeMemory();
 	}
 

@@ -11,8 +11,8 @@
 #include <memory>	//std::shared_ptr
 #include <cassert>
 
-#include "Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.h"
-#include "Refureku/TypeInfo/Namespace/NamespaceFragmentAPI.h"
+#include "Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h"
+#include "Refureku/TypeInfo/Namespace/NamespaceFragment.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/DatabaseImpl.h"
 #include "Refureku/Properties/Property.h"
@@ -23,7 +23,7 @@ namespace rfk
 	{
 		private:
 			/** Fragment registered by this registerer. */
-			NamespaceFragmentAPI const&		_registeredFragment;
+			NamespaceFragment const&		_registeredFragment;
 
 			/** Namespace this fragment is bound to. */
 			std::shared_ptr<Namespace>	_namespaceInstance;
@@ -46,7 +46,7 @@ namespace rfk
 		public:
 			inline NamespaceFragmentRegistererImpl(char const*					name,
 												   std::size_t					id,
-												   NamespaceFragmentAPI const&	namespaceFragment,
+												   NamespaceFragment const&	namespaceFragment,
 												   bool							isFileLevelNamespace)	noexcept;
 			inline ~NamespaceFragmentRegistererImpl();
 

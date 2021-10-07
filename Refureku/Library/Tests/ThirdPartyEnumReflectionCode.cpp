@@ -3,7 +3,7 @@
 #include <string_view>
 
 #include <Refureku/TypeInfo/Archetypes/ArchetypeRegistererAPI.h>
-#include <Refureku/TypeInfo/TypeAPI.h>
+#include <Refureku/TypeInfo/Type.h>
 
 //Register the enum to the database
 rfk::ArchetypeRegistererAPI NonReflectedEnumRegisterer = *rfk::getEnumAPI<ThirdPartyEnum>();

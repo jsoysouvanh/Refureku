@@ -24,7 +24,7 @@ namespace rfk
 		public:
 			inline FieldBaseImpl(char const*		name,
 								 std::size_t		id,
-								 TypeAPI const&		type,
+								 Type const&		type,
 								 EFieldFlags		flags,
 								 StructAPI const*	owner,
 								 Entity const*	outerEntity = nullptr)	noexcept;

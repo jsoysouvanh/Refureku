@@ -16,13 +16,13 @@ namespace rfk
 	{
 		private:
 			/** Type of this variable. */
-			TypeAPI const&	_type;
+			Type const&	_type;
 
 		public:
 			inline VariableBaseImpl(char const*			name,
 									std::size_t			id,
 									EEntityKind			kind,
-									TypeAPI const&		type,
+									Type const&		type,
 									Entity const*	outerEntity)	noexcept;
 
 			/**
@@ -30,7 +30,7 @@ namespace rfk
 			* 
 			*	@return _type.
 			*/
-			inline TypeAPI const& getType() const noexcept;
+			inline Type const& getType() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/VariableBaseImpl.inl"

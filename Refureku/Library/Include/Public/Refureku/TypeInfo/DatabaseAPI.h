@@ -54,7 +54,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried entity if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Entity const*					getEntityById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Entity const*				getEntityById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a namespace by id.

@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline internal::NamespaceFragmentRegistererImpl::NamespaceFragmentRegistererImpl(char const* name, std::size_t id, NamespaceFragmentAPI const& namespaceFragment, bool isFileLevelNamespace) noexcept:
+inline internal::NamespaceFragmentRegistererImpl::NamespaceFragmentRegistererImpl(char const* name, std::size_t id, NamespaceFragment const& namespaceFragment, bool isFileLevelNamespace) noexcept:
 	_registeredFragment{namespaceFragment},
 	_namespaceInstance(nullptr)
 {

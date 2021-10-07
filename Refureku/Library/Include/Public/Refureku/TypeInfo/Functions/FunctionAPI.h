@@ -18,7 +18,7 @@ namespace rfk
 		public:
 			REFUREKU_API FunctionAPI(char const*	name, 
 									 std::size_t	id,
-									 TypeAPI const&	returnType,
+									 Type const&	returnType,
 									 ICallable*		internalFunction,
 									 EFunctionFlags	flags)			noexcept;
 			FunctionAPI(FunctionAPI&&)								= delete;

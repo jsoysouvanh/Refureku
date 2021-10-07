@@ -11,30 +11,18 @@
 #include <type_traits>	//std::is_const_v, std::is_volatile_v, std::is_array_v, ...
 
 #include "Refureku/Utility/Pimpl.h"
-#include "Refureku/TypeInfo/TypePartAPI.h"
+#include "Refureku/TypeInfo/TypePart.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetypeAPI.h"
 
 namespace rfk
 {
-	class TypeAPI
+	class Type
 	{
 		public:
-			REFUREKU_API TypeAPI()	noexcept;
-			TypeAPI(TypeAPI const&)	noexcept;
-			TypeAPI(TypeAPI&&)		noexcept;
-			REFUREKU_API ~TypeAPI()	noexcept;
-
-			/**
-			*	@brief Add a default-constructed type part to this type.
-			* 
-			*	@return The newly constructed type part.
-			*/
-			REFUREKU_API TypePartAPI&			addTypePart()								noexcept;
-
-			/**
-			*	@brief Reallocate the underlying dynamic memory to use no more than needed.
-			*/
-			REFUREKU_API void					optimizeMemory()							noexcept;
+			REFUREKU_API Type()		noexcept;
+			Type(Type const&)		noexcept;
+			Type(Type&&)			noexcept;
+			REFUREKU_API ~Type()	noexcept;
 
 			/**
 			*	@brief	Get the type part at the specified index.
@@ -44,7 +32,7 @@ namespace rfk
 			* 
 			*	@return The type part at the specified index.
 			*/
-			REFUREKU_API TypePartAPI const&		getTypePartAt(std::size_t index)	const	noexcept;
+			REFUREKU_API TypePart const&		getTypePartAt(std::size_t index)	const	noexcept;
 
 			/**
 			*	@brief Get the number of type parts constituting this type.
@@ -107,7 +95,7 @@ namespace rfk
 			*	@return true if two types match together if they represent the same type.
 			*			Pointers and nullptr_t types also match together.
 			*/
-			REFUREKU_API bool					match(TypeAPI const& other)			const	noexcept;
+			REFUREKU_API bool					match(Type const& other)			const	noexcept;
 
 			/**
 			*	@brief Get this type's archetype.
@@ -123,9 +111,21 @@ namespace rfk
 			*/
 			REFUREKU_API void					setArchetype(ArchetypeAPI const* archetype)	noexcept;
 
+			/**
+			*	@brief Add a default-constructed type part to this type.
+			* 
+			*	@return The newly constructed type part.
+			*/
+			REFUREKU_API TypePart&				addTypePart()								noexcept;
 
-			REFUREKU_API bool operator==(TypeAPI const&)		const	noexcept;
-			REFUREKU_API bool operator!=(TypeAPI const&)		const	noexcept;
+			/**
+			*	@brief Reallocate the underlying dynamic memory to use no more than needed.
+			*/
+			REFUREKU_API void					optimizeMemory()							noexcept;
+
+
+			REFUREKU_API bool operator==(Type const&)		const	noexcept;
+			REFUREKU_API bool operator!=(Type const&)		const	noexcept;
 
 		protected:
 			//Forward declaration
@@ -135,17 +135,17 @@ namespace rfk
 			/** Concrete implementation of the Type class. */
 			Pimpl<TypeImpl> _pimpl;
 
-			//The rfk::getTypeAPI<T> method can access Type internal methods to fill the type
+			//The rfk::getType<T> method can access Type internal methods to fill the type
 			template <typename T>
-			friend TypeAPI const& getTypeAPI() noexcept;
+			friend Type const& getType() noexcept;
 
 			/**
-			*	@brief Fill the provided TypeAPI according to template type T.
+			*	@brief Fill the provided Type according to template type T.
 			* 
 			*	@param out_type The Type object to fill.
 			*/
 			template <typename T>
-			static void		fillType(TypeAPI& out_type)	noexcept;
+			static void		fillType(Type& out_type)	noexcept;
 	};
 
 	/**
@@ -156,31 +156,31 @@ namespace rfk
 	*/
 	//TODO: Replace this by getType
 	template <typename T>
-	TypeAPI const& getTypeAPI() noexcept;
+	Type const& getType() noexcept;
 
-	#include "Refureku/TypeInfo/TypeAPI.inl"
+	#include "Refureku/TypeInfo/Type.inl"
 
 	/*
 	*	Export getType<T> instantiations for all fundamental types so that their address is shared among all consumers
 	*/
-	template REFUREKU_API TypeAPI const& getTypeAPI<void>()					noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<std::nullptr_t>()		noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<bool>()					noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<char>()					noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<signed char>()			noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<unsigned char>()		noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<wchar_t>()				noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<char16_t>()				noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<char32_t>()				noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<short>()				noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<unsigned short>()		noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<int>()					noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<unsigned int>()			noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<long>()					noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<unsigned long>()		noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<long long>()			noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<unsigned long long>()	noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<float>()				noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<double>()				noexcept;
-	template REFUREKU_API TypeAPI const& getTypeAPI<long double>()			noexcept;
+	template REFUREKU_API Type const& getType<void>()				noexcept;
+	template REFUREKU_API Type const& getType<std::nullptr_t>()		noexcept;
+	template REFUREKU_API Type const& getType<bool>()				noexcept;
+	template REFUREKU_API Type const& getType<char>()				noexcept;
+	template REFUREKU_API Type const& getType<signed char>()			noexcept;
+	template REFUREKU_API Type const& getType<unsigned char>()		noexcept;
+	template REFUREKU_API Type const& getType<wchar_t>()				noexcept;
+	template REFUREKU_API Type const& getType<char16_t>()			noexcept;
+	template REFUREKU_API Type const& getType<char32_t>()			noexcept;
+	template REFUREKU_API Type const& getType<short>()				noexcept;
+	template REFUREKU_API Type const& getType<unsigned short>()		noexcept;
+	template REFUREKU_API Type const& getType<int>()					noexcept;
+	template REFUREKU_API Type const& getType<unsigned int>()		noexcept;
+	template REFUREKU_API Type const& getType<long>()				noexcept;
+	template REFUREKU_API Type const& getType<unsigned long>()		noexcept;
+	template REFUREKU_API Type const& getType<long long>()			noexcept;
+	template REFUREKU_API Type const& getType<unsigned long long>()	noexcept;
+	template REFUREKU_API Type const& getType<float>()				noexcept;
+	template REFUREKU_API Type const& getType<double>()				noexcept;
+	template REFUREKU_API Type const& getType<long double>()			noexcept;
 }

@@ -16,7 +16,7 @@ VariableBaseAPI::VariableBaseAPI(VariableBaseAPI&&) noexcept = default;
 
 VariableBaseAPI::~VariableBaseAPI() noexcept = default;
 
-TypeAPI const& VariableBaseAPI::getType() const noexcept
+Type const& VariableBaseAPI::getType() const noexcept
 {
 	return reinterpret_cast<VariableBaseImpl const*>(getPimpl())->getType();
 }

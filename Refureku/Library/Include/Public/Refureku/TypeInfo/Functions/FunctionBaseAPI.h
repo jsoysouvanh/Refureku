@@ -48,7 +48,7 @@ namespace rfk
 			* 
 			*	@return The return type of this function.
 			*/
-			RFK_NODISCARD REFUREKU_API TypeAPI const&				getReturnType()									const	noexcept;
+			RFK_NODISCARD REFUREKU_API Type const&				getReturnType()									const	noexcept;
 
 			/**
 			*	@brief	Retrieve the parameter at the given index.
@@ -85,7 +85,7 @@ namespace rfk
 			*/
 			REFUREKU_API FunctionParameterAPI&						addParameter(char const*	name,
 																				 std::size_t	id,
-																				 TypeAPI const&	type)						noexcept;
+																				 Type const&	type)						noexcept;
 
 			/**
 			*	@brief	Set the number of parameters for this function.

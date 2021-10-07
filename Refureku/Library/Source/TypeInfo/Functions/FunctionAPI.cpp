@@ -8,7 +8,7 @@ using namespace rfk;
 
 using EFunctionFlagsUnderlyingType = std::underlying_type_t<EFunctionFlags>;
 
-FunctionAPI::FunctionAPI(char const* name, std::size_t id, TypeAPI const& returnType, ICallable* internalFunction, EFunctionFlags flags) noexcept:
+FunctionAPI::FunctionAPI(char const* name, std::size_t id, Type const& returnType, ICallable* internalFunction, EFunctionFlags flags) noexcept:
 	FunctionBaseAPI(new FunctionImpl(name, id, returnType, internalFunction, flags))
 {
 }

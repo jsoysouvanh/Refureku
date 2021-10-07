@@ -18,7 +18,7 @@ namespace rfk
 	{
 		private:
 			/** Type returned by this function. */
-			TypeAPI const&						_returnType;
+			Type const&						_returnType;
 
 			/** Handle pointing to the actual function in memory. */
 			std::unique_ptr<ICallable>			_internalFunction;
@@ -30,7 +30,7 @@ namespace rfk
 			inline FunctionBaseImpl(char const*		name, 
 									std::size_t		id,
 									EEntityKind		kind,
-									TypeAPI const&		returnType,
+									Type const&		returnType,
 									ICallable*			internalFunction,
 									Entity const*	outerEntity)		noexcept;
 
@@ -46,7 +46,7 @@ namespace rfk
 			*/
 			inline FunctionParameterAPI&									addParameter(char const*			name,
 																						 std::size_t			id,
-																						 TypeAPI const&			type,
+																						 Type const&			type,
 																						 FunctionBaseAPI const*	outerEntity)	noexcept;
 
 			/**
@@ -54,7 +54,7 @@ namespace rfk
 			* 
 			*	@return _returnType.
 			*/
-			RFK_NODISCARD inline TypeAPI const&								getReturnType()								const	noexcept;
+			RFK_NODISCARD inline Type const&								getReturnType()								const	noexcept;
 
 			/**
 			*	@brief Getter for the field _internalFunction.

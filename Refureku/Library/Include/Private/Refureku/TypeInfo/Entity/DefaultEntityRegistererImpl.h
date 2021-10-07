@@ -9,7 +9,7 @@
 
 #include <cassert>
 
-#include "Refureku/TypeInfo/Entity/DefaultEntityRegistererAPI.h"
+#include "Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h"
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/DatabaseImpl.h"
 

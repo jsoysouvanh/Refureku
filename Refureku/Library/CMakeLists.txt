@@ -13,18 +13,18 @@ add_library(${RefurekuLibraryTarget}
 					Source/Properties/ParseAllNested.cpp
 					Source/Properties/PropertySettings.cpp
 
-					Source/TypeInfo/TypePartAPI.cpp
-					Source/TypeInfo/TypeAPI.cpp
+					Source/TypeInfo/TypePart.cpp
+					Source/TypeInfo/Type.cpp
 					Source/TypeInfo/DatabaseAPI.cpp
 
 					Source/TypeInfo/Entity/Entity.cpp
 					Source/TypeInfo/Entity/EntityHash.cpp
-					Source/TypeInfo/Entity/EntityCastAPI.cpp
-					Source/TypeInfo/Entity/DefaultEntityRegistererAPI.cpp
+					Source/TypeInfo/Entity/EntityCast.cpp
+					Source/TypeInfo/Entity/DefaultEntityRegisterer.cpp
 
 					Source/TypeInfo/Namespace/Namespace.cpp
-					Source/TypeInfo/Namespace/NamespaceFragmentAPI.cpp
-					Source/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.cpp
+					Source/TypeInfo/Namespace/NamespaceFragment.cpp
+					Source/TypeInfo/Namespace/NamespaceFragmentRegisterer.cpp
 
 					Source/TypeInfo/Archetypes/ArchetypeAPI.cpp
 					Source/TypeInfo/Archetypes/FundamentalArchetypeAPI.cpp

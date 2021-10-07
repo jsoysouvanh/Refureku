@@ -5,14 +5,14 @@
 *	See the README.md file for full license details.
 */
 
-inline VariableAPI::VariableImpl::VariableImpl(char const* name, std::size_t id, TypeAPI const& type, void* ptr, EVarFlags flags) noexcept:
+inline VariableAPI::VariableImpl::VariableImpl(char const* name, std::size_t id, Type const& type, void* ptr, EVarFlags flags) noexcept:
 	VariableBaseImpl(name, id, EEntityKind::Variable, type, nullptr),
 	_flags{flags},
 	_ptr{ptr}
 {
 }
 
-inline VariableAPI::VariableImpl::VariableImpl(char const* name, std::size_t id, TypeAPI const& type, void const* constPtr, EVarFlags flags) noexcept:
+inline VariableAPI::VariableImpl::VariableImpl(char const* name, std::size_t id, Type const& type, void const* constPtr, EVarFlags flags) noexcept:
 	VariableBaseImpl(name, id, EEntityKind::Variable, type, nullptr),
 	_flags{flags},
 	_constPtr{constPtr}

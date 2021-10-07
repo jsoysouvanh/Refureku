@@ -5,13 +5,13 @@
 *	See the README.md file for full license details.
 */
 
-FunctionParameterAPI::FunctionParameterImpl::FunctionParameterImpl(char const* name, std::size_t id, TypeAPI const& type, Entity const* outerEntity) noexcept:
+FunctionParameterAPI::FunctionParameterImpl::FunctionParameterImpl(char const* name, std::size_t id, Type const& type, Entity const* outerEntity) noexcept:
 	EntityImpl(name, id, EEntityKind::Undefined /* TODO: Add new entity kind for parameters */, outerEntity),
 	_type{type}
 {
 }
 
-TypeAPI const& FunctionParameterAPI::FunctionParameterImpl::getType() const noexcept
+Type const& FunctionParameterAPI::FunctionParameterImpl::getType() const noexcept
 {
 	return _type;
 }

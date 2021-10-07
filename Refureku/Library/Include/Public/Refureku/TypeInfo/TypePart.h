@@ -13,14 +13,14 @@
 
 namespace rfk
 {
-	class TypePartAPI
+	class TypePart
 	{
 		public:
 			using AdditionalDataType = uint32;
 
-			TypePartAPI()									noexcept;
-			TypePartAPI(ETypePartDescriptor	descriptor,
-						AdditionalDataType	additionalData)	noexcept;
+			REFUREKU_INTERNAL TypePart()										noexcept;
+			REFUREKU_INTERNAL TypePart(ETypePartDescriptor	descriptor,
+										  AdditionalDataType	additionalData)	noexcept;
 
 			/**
 			*	@brief	Add a flag to the descriptor field.
@@ -57,12 +57,12 @@ __RFK_DISABLE_WARNING_UNUSED_PRIVATE_FIELD
 
 			/**
 			*	Padding to make sure that the class takes 8 complete bytes of fully initialized memory.
-			*	Used later to compare lists of TypePartAPI using std::memcmp.
+			*	Used later to compare lists of TypePart using std::memcmp.
 			*/
 			uint16				_padding		= 0u;
 
 __RFK_DISABLE_WARNING_POP
 	};
 
-	static_assert(sizeof(TypePartAPI) == 8u, "TypePartAPI must takes 8 bytes of fully initialized memory to allow the use of std::memcmp.");
+	static_assert(sizeof(TypePart) == 8u, "TypePart must takes 8 bytes of fully initialized memory to allow the use of std::memcmp.");
 }

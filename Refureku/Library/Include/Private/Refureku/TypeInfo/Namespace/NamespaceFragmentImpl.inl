@@ -5,22 +5,22 @@
 *	See the README.md file for full license details.
 */
 
-inline NamespaceFragmentAPI::NamespaceFragmentImpl::NamespaceFragmentImpl(char const* name, std::size_t id) noexcept:
+inline NamespaceFragment::NamespaceFragmentImpl::NamespaceFragmentImpl(char const* name, std::size_t id) noexcept:
 	EntityImpl(name, id, EEntityKind::Undefined)	//Fragments are used internally only, so it's fine to let it as undefined
 {
 }
 
-inline void NamespaceFragmentAPI::NamespaceFragmentImpl::addNestedEntity(Entity const* nestedEntity) noexcept
+inline void NamespaceFragment::NamespaceFragmentImpl::addNestedEntity(Entity const* nestedEntity) noexcept
 {
 	_nestedEntities.push_back(nestedEntity);
 }
 
-inline void NamespaceFragmentAPI::NamespaceFragmentImpl::setNestedEntitiesCapacity(std::size_t capacity) noexcept
+inline void NamespaceFragment::NamespaceFragmentImpl::setNestedEntitiesCapacity(std::size_t capacity) noexcept
 {
 	_nestedEntities.reserve(capacity);
 }
 
-inline std::vector<Entity const*> const& NamespaceFragmentAPI::NamespaceFragmentImpl::getNestedEntities() const noexcept
+inline std::vector<Entity const*> const& NamespaceFragment::NamespaceFragmentImpl::getNestedEntities() const noexcept
 {
 	return _nestedEntities;
 }

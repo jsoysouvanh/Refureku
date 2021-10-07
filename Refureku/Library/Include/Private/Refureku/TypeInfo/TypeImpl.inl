@@ -5,27 +5,27 @@
 *	See the README.md file for full license details.
 */
 
-inline TypePartAPI& TypeAPI::TypeImpl::addTypePart() noexcept
+inline TypePart& Type::TypeImpl::addTypePart() noexcept
 {
 	return _parts.emplace_back();
 }
 
-inline void TypeAPI::TypeImpl::optimizeMemory() noexcept
+inline void Type::TypeImpl::optimizeMemory() noexcept
 {
 	_parts.shrink_to_fit();
 }
 
-inline std::vector<TypePartAPI> const& TypeAPI::TypeImpl::getParts() const noexcept
+inline std::vector<TypePart> const& Type::TypeImpl::getParts() const noexcept
 {
 	return _parts;
 }
 
-inline ArchetypeAPI const* TypeAPI::TypeImpl::getArchetype() const noexcept
+inline ArchetypeAPI const* Type::TypeImpl::getArchetype() const noexcept
 {
 	return _archetype;
 }
 
-inline void TypeAPI::TypeImpl::setArchetype(ArchetypeAPI const* archetype) noexcept
+inline void Type::TypeImpl::setArchetype(ArchetypeAPI const* archetype) noexcept
 {
 	_archetype = archetype;
 }

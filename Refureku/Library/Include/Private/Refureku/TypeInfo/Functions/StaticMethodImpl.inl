@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline StaticMethodAPI::StaticMethodImpl::StaticMethodImpl(char const* name, std::size_t id, TypeAPI const& returnType,
+inline StaticMethodAPI::StaticMethodImpl::StaticMethodImpl(char const* name, std::size_t id, Type const& returnType,
 													ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
 	MethodBaseImpl(name, id, returnType, internalMethod, flags, outerEntity)
 {

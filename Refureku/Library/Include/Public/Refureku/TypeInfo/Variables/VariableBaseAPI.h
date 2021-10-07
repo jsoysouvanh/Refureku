@@ -12,7 +12,7 @@
 #include <type_traits>	//std::is_rvalue_reference_v, std::is_lvalue_reference_v, std::is_const_v...
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
-#include "Refureku/TypeInfo/TypeAPI.h"
+#include "Refureku/TypeInfo/Type.h"
 
 namespace rfk
 {
@@ -24,7 +24,7 @@ namespace rfk
 			* 
 			*	@return The type of the variable.
 			*/
-			REFUREKU_API TypeAPI const& getType() const noexcept;
+			REFUREKU_API Type const& getType() const noexcept;
 
 		protected:
 			//Forward declaration

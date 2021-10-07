@@ -234,7 +234,7 @@ void enumsAndEnumValues()
 
 void types()
 {
-	rfk::TypeAPI const& intType = rfk::getTypeAPI<int>();
+	rfk::Type const& intType = rfk::getType<int>();
 
 	TEST(!intType.isPointer());
 	TEST(!intType.isRValueReference());
@@ -246,7 +246,7 @@ void types()
 	//TEST(intType.getArchetype() == rfk::getArchetypeAPI<int>());	//TODO: Uncomment later
 	TEST(intType.getTypePartsCount() == 1u);
 
-	rfk::TypeAPI const& floatConstPtrType = rfk::getTypeAPI<float const*>();
+	rfk::Type const& floatConstPtrType = rfk::getType<float const*>();
 
 	TEST(floatConstPtrType.isPointer());
 	TEST(!floatConstPtrType.isRValueReference());
@@ -270,9 +270,9 @@ void functionAndMethods()
 {
 	auto lambda = [](int p1, float p2) -> void { std::cout << "lambda(" << p1 << ", " << p2 << ");" << std::endl; return; };
 
-	rfk::FunctionAPI function("testFunc", 123u, rfk::getTypeAPI<void>(), new rfk::NonMemberFunction<void(int, float)>(lambda), rfk::EFunctionFlags::Inline);
-	function.addParameter("p1", 0u, rfk::getTypeAPI<int>());
-	function.addParameter("p2", 0u, rfk::getTypeAPI<float>());
+	rfk::FunctionAPI function("testFunc", 123u, rfk::getType<void>(), new rfk::NonMemberFunction<void(int, float)>(lambda), rfk::EFunctionFlags::Inline);
+	function.addParameter("p1", 0u, rfk::getType<int>());
+	function.addParameter("p2", 0u, rfk::getType<float>());
 
 	function.invoke<void>(1, 2.0f);
 	function.checkedInvoke<void>(3, 4.0f);
@@ -284,8 +284,8 @@ void functionAndMethods()
 	//	void baz() const { std::cout << "Foo::baz()" << std::endl; }
 	//};
 
-	//rfk::MethodAPI fooBarMethod = rfk::MethodAPI("bar", 123u, rfk::getTypeAPI<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
-	//rfk::MethodAPI fooBazMethod = rfk::MethodAPI("baz", 1234u, rfk::getTypeAPI<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
+	//rfk::MethodAPI fooBarMethod = rfk::MethodAPI("bar", 123u, rfk::getType<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
+	//rfk::MethodAPI fooBazMethod = rfk::MethodAPI("baz", 1234u, rfk::getType<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
 
 	//Foo foo;
 	//Foo const constFoo;

@@ -18,12 +18,12 @@ namespace rfk
 	{
 		private:
 			/** Type of this parameter. */
-			TypeAPI const&	_type;
+			Type const&	_type;
 
 		public:
 			FunctionParameterImpl(char const*		name,
 								  std::size_t		id,
-								  TypeAPI const&	type,
+								  Type const&	type,
 								  Entity const*	outerEntity)	noexcept;
 
 			/**
@@ -31,7 +31,7 @@ namespace rfk
 			* 
 			*	@return _type;
 			*/
-			RFK_NODISCARD TypeAPI const& getType()	const	noexcept;
+			RFK_NODISCARD Type const& getType()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionParameterImpl.inl"

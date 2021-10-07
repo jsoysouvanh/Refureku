@@ -1,25 +1,28 @@
 #include "Refureku/TypeInfo/Namespace/NamespaceFragment.h"
 
+#include "Refureku/TypeInfo/Namespace/NamespaceFragmentImpl.h"
+#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+
 using namespace rfk;
 
-NamespaceFragment::NamespaceFragment(std::string&& newName, std::size_t id) noexcept:
-	Entity(std::forward<std::string>(newName), id, EEntityKind::Undefined)	//Fragments are used internally only, so it's fine to let it as undefined
+NamespaceFragment::NamespaceFragment(char const* name, std::size_t id) noexcept:
+	Entity(new NamespaceFragmentImpl(name, id))
 {
 }
 
-NamespaceFragment* NamespaceFragment::addNestedEntity(Entity const* nestedEntity) noexcept
-{
-	_nestedEntities.emplace_back(nestedEntity);
+NamespaceFragment::~NamespaceFragment() noexcept = default;
 
-	return this;
+bool NamespaceFragment::foreachNestedEntity(Visitor<Entity> visitor, void* userData) const
+{
+	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceFragmentImpl const*>(getPimpl())->getNestedEntities(), visitor, userData);
+}
+
+void NamespaceFragment::addNestedEntity(Entity const* nestedEntity) noexcept
+{
+	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->addNestedEntity(nestedEntity);
 }
 
 void NamespaceFragment::setNestedEntitiesCapacity(std::size_t capacity) noexcept
 {
-	_nestedEntities.reserve(capacity);
-}
-
-std::vector<Entity const*> const& NamespaceFragment::getNestedEntities() const noexcept
-{
-	return _nestedEntities;
+	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->setNestedEntitiesCapacity(capacity);
 }

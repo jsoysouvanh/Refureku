@@ -17,7 +17,7 @@ namespace rfk
 		public:
 			inline MethodImpl(char const*		name,
 							  std::size_t		id,
-							  TypeAPI const&	returnType,
+							  Type const&	returnType,
 							  ICallable*		internalMethod,
 							  EMethodFlags		flags,
 							  Entity const*	outerEntity)	noexcept;

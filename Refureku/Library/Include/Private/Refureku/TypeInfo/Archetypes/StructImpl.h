@@ -167,7 +167,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline FieldAPI*					addField(char const*		name,
 																	 std::size_t		id,
-																	 TypeAPI const&		type,
+																	 Type const&		type,
 																	 EFieldFlags		flags,
 																	 StructAPI const*	owner,
 																	 std::size_t		memoryOffset,
@@ -189,14 +189,14 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline StaticFieldAPI*			addStaticField(char const*		name,
 																		   std::size_t		id,
-																		   TypeAPI const&	type,
+																		   Type const&	type,
 																		   EFieldFlags		flags,
 																		   StructAPI const*	owner,
 																		   void*			fieldPtr,
 																		   StructAPI const*	outerEntity)				noexcept;
 			RFK_NODISCARD inline StaticFieldAPI*			addStaticField(char const*		name,
 																		   std::size_t		id,
-																		   TypeAPI const&	type,
+																		   Type const&	type,
 																		   EFieldFlags		flags,
 																		   StructAPI const*	owner,
 																		   void const*		fieldPtr,
@@ -216,7 +216,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline MethodAPI*					addMethod(char const*		name,
 																	  std::size_t		id,
-																	  TypeAPI const&	returnType,
+																	  Type const&	returnType,
 																	  ICallable*		internalMethod,
 																	  EMethodFlags		flags,
 																	  StructAPI const*	outerEntity)					noexcept;
@@ -235,7 +235,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline StaticMethodAPI*			addStaticMethod(char const*			name,
 																			std::size_t			id,
-																			TypeAPI const&		returnType,
+																			Type const&		returnType,
 																			ICallable*			internalMethod,
 																			EMethodFlags		flags,
 																			StructAPI const*	outerEntity)			noexcept;

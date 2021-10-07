@@ -325,11 +325,11 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 {
 	inout_result += "#include <Refureku/TypeInfo/Variables/VariableAPI.h>" + env.getSeparator() +						//TODO: Only if there is a variable
 					"#include <Refureku/TypeInfo/Functions/FunctionAPI.h>" + env.getSeparator() +						//TODO: Only if there is a function
-					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegistererAPI.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegistererAPI.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +							//TODO: Only if there is a namespace
-					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentAPI.h>" + env.getSeparator() +				//TODO: Only if there is a namespace
-					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererAPI.h>" + env.getSeparator() +	//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/NamespaceFragment.h>" + env.getSeparator() +				//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h>" + env.getSeparator() +	//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameterAPI.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
 					 env.getSeparator();
 }
@@ -572,7 +572,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		{
 			inout_result += "staticMethod = " + generatedEntityVarName + "addStaticMethod(\"" + method.name + "\", " +
 				(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
-				"rfk::getTypeAPI<" + method.returnType.getName() + ">(), "
+				"rfk::getType<" + method.returnType.getName() + ">(), "
 				"new rfk::NonMemberFunction<" + method.getPrototype(true) + ">(& " + structClass.name + "::" + method.name + "), "
 				"static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
 
@@ -582,7 +582,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		{
 			inout_result += "method = " + generatedEntityVarName + "addMethod(\"" + method.name + "\", " +
 				(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
-				"rfk::getTypeAPI<" + method.returnType.getName() + ">(), "
+				"rfk::getType<" + method.returnType.getName() + ">(), "
 				"new rfk::MemberFunction<" + structClass.name + ", " + method.getPrototype(true) + ">(static_cast<" + computeFullMethodPointerType(structClass, method) + ">(& " + structClass.name + "::" + method.name + ")), "
 				"static_cast<rfk::EMethodFlags>(" + std::to_string(computeRefurekuMethodFlags(method)) + "));" + env.getSeparator();
 
@@ -597,7 +597,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 
 			for (kodgen::FunctionParamInfo const& param : method.parameters)
 			{
-				generatedCode += currentMethodVariable + "->addParameter(\"" + param.name + "\", 0u, rfk::getTypeAPI<" + param.type.getName() + ">());" + env.getSeparator();	//TODO: Build Id for parameters
+				generatedCode += currentMethodVariable + "->addParameter(\"" + param.name + "\", 0u, rfk::getType<" + param.type.getName() + ">());" + env.getSeparator();	//TODO: Build Id for parameters
 			}
 
 			//Write generated parameters string to file
@@ -742,7 +742,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			{
 				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
 					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
-					"rfk::getTypeAPI<" + field.type.getName() + ">(), "
+					"rfk::getType<" + field.type.getName() + ">(), "
 					"static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 					"&" + structClass.name + "::" + field.name + ", "
 					"&thisClass);" + env.getSeparator();
@@ -753,7 +753,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			{
 				inout_result += "field = childClass.addField(\"" + field.name + "\", " +
 					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
-					"rfk::getTypeAPI<" + field.type.getName() + ">(), "
+					"rfk::getType<" + field.type.getName() + ">(), "
 					"static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 					"offsetof(ChildClass, " + field.name + "), "
 					"&thisClass);" + env.getSeparator();
@@ -1168,7 +1168,7 @@ void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo con
 		"static bool initialized = false;" + env.getSeparator() + 
 		"static rfk::VariableAPI variable(\"" + variable.name + "\", " +
 		getEntityId(variable) + ", "
-		"rfk::getTypeAPI<" + variable.type.getCanonicalName() + ">(), "
+		"rfk::getType<" + variable.type.getCanonicalName() + ">(), "
 		"const_cast<" + variable.type.getName(true) + "*>(&" + variable.getFullName() + "), "
 		"static_cast<rfk::EVarFlags>(" + std::to_string(computeRefurekuVariableFlags(variable)) + ")"
 		");" + env.getSeparator();
@@ -1189,7 +1189,7 @@ void ReflectionCodeGenModule::declareAndDefineVariableRegistererVariable(kodgen:
 {
 	if (variable.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegistererAPI registerer_" + getEntityId(variable) +
+		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer_" + getEntityId(variable) +
 			" = rfk::generated::" + computeGetVariableFunctionName(variable) + "(); }" + env.getSeparator();
 	}
 }
@@ -1226,7 +1226,7 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 		"static bool initialized = false;" + env.getSeparator() + 
 		"static rfk::FunctionAPI function(\"" + function.name + "\", " +
 		getEntityId(function) + ", "
-		"rfk::getTypeAPI<" + function.returnType.getCanonicalName() + ">(), "
+		"rfk::getType<" + function.returnType.getCanonicalName() + ">(), "
 		"new rfk::NonMemberFunction<" + function.getPrototype(true) + ">(&" + function.getFullName() + "), "
 		"static_cast<rfk::EFunctionFlags>(" + std::to_string(computeRefurekuFunctionFlags(function)) + ")"
 		");" + env.getSeparator();
@@ -1244,7 +1244,7 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 
 		for (kodgen::FunctionParamInfo const& param : function.parameters)
 		{
-			inout_result += "function.addParameter(\"" + param.name + "\", 0u, rfk::getTypeAPI<" + param.type.getName() + ">());" + env.getSeparator();	//TODO: Build an id for the parameter
+			inout_result += "function.addParameter(\"" + param.name + "\", 0u, rfk::getType<" + param.type.getName() + ">());" + env.getSeparator();	//TODO: Build an id for the parameter
 		}
 
 		inout_result += ";" + env.getSeparator();
@@ -1260,7 +1260,7 @@ void ReflectionCodeGenModule::declareAndDefineFunctionRegistererVariable(kodgen:
 {
 	if (function.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegistererAPI registerer" + getEntityId(function) +
+		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer" + getEntityId(function) +
 			" = rfk::generated::" + computeGetFunctionFunctionName(function) + "(); }" + env.getSeparator();
 	}
 }
@@ -1289,8 +1289,8 @@ std::string ReflectionCodeGenModule::computeGetFunctionFunctionName(kodgen::Func
 
 void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += env.getInternalSymbolMacro() + " static rfk::NamespaceFragmentAPI const& " + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "() noexcept {" + env.getSeparator() +
-		"static rfk::NamespaceFragmentAPI fragment(\"" + namespace_.name + "\", " + getEntityId(namespace_) + ");" + env.getSeparator() +
+	inout_result += env.getInternalSymbolMacro() + " static rfk::NamespaceFragment const& " + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "() noexcept {" + env.getSeparator() +
+		"static rfk::NamespaceFragment fragment(\"" + namespace_.name + "\", " + getEntityId(namespace_) + ");" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator();
 
 
@@ -1354,8 +1354,8 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 
 void ReflectionCodeGenModule::declareAndDefineNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += "static rfk::NamespaceFragmentRegistererAPI " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + " = "
-		"rfk::NamespaceFragmentRegistererAPI(\"" + namespace_.name + "\", " +
+	inout_result += "static rfk::NamespaceFragmentRegisterer " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) + " = "
+		"rfk::NamespaceFragmentRegisterer(\"" + namespace_.name + "\", " +
 		getEntityId(namespace_) + ", "
 		"rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "(), " +
 		std::to_string(namespace_.outerEntity == nullptr) +

@@ -28,12 +28,12 @@ namespace rfk
 		public:
 			inline VariableImpl(char const*		name,
 								std::size_t		id,
-								TypeAPI const&	type,
+								Type const&	type,
 								void*			ptr,
 								EVarFlags		flags)		noexcept;
 			inline VariableImpl(char const*		name,
 								std::size_t		id,
-								TypeAPI const&	type,
+								Type const&	type,
 								void const*		constPtr,
 								EVarFlags		flags)		noexcept;
 

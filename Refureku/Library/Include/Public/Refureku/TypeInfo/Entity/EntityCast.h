@@ -35,7 +35,7 @@ namespace rfk
 	*	@return The casted entity if the provided type matched the concrete entity type, else nullptr.
 	*/
 	template <typename T>
-	T const*									entityCast(Entity const* entity)								noexcept;
+	T const*									entityCast(Entity const* entity)							noexcept;
 
 	/**
 	*	rfk::entityCast<> specialization for all Entity types.
@@ -46,6 +46,10 @@ namespace rfk
 	template <>
 	REFUREKU_API FundamentalArchetypeAPI const*	entityCast<FundamentalArchetypeAPI>(Entity const* entity)	noexcept;
 
+	/**
+	*	This entity cast specialization doesn't work to check if an entity is a class (it will return a non-nullptr pointer when it is a struct as well).
+	*	Make sure to check if the result's kind is EEntityKind::Class.
+	*/
 	template <>
 	REFUREKU_API StructAPI const*				entityCast<StructAPI>(Entity const* entity)					noexcept;
 
@@ -56,7 +60,7 @@ namespace rfk
 	REFUREKU_API FieldAPI const*				entityCast<FieldAPI>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API StaticFieldAPI const*			entityCast<StaticFieldAPI>(Entity const* entity)				noexcept;
+	REFUREKU_API StaticFieldAPI const*			entityCast<StaticFieldAPI>(Entity const* entity)			noexcept;
 
 	template <>
 	REFUREKU_API MethodBaseAPI const*			entityCast<MethodBaseAPI>(Entity const* entity)				noexcept;
@@ -74,7 +78,7 @@ namespace rfk
 	REFUREKU_API EnumValueAPI const*			entityCast<EnumValueAPI>(Entity const* entity)				noexcept;
 
 	template <>
-	REFUREKU_API Namespace const*			entityCast<Namespace>(Entity const* entity)				noexcept;
+	REFUREKU_API Namespace const*				entityCast<Namespace>(Entity const* entity)					noexcept;
 
 	template <>
 	REFUREKU_API VariableAPI const*				entityCast<VariableAPI>(Entity const* entity)				noexcept;

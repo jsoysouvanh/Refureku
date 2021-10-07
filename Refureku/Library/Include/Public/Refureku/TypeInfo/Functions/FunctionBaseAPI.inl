@@ -8,7 +8,7 @@
 template <typename ReturnType>
 bool FunctionBaseAPI::hasSameReturnType() const noexcept
 {
-	return rfk::getTypeAPI<ReturnType>() == getReturnType();
+	return rfk::getType<ReturnType>() == getReturnType();
 }
 
 template <typename... ArgTypes>
@@ -32,7 +32,7 @@ bool FunctionBaseAPI::hasSameParameterTypes() const noexcept
 template <std::size_t Rank, typename LastArgType>
 bool FunctionBaseAPI::hasSameParameterTypes() const noexcept
 {
-	return getParameterAt(Rank).getType() == rfk::getTypeAPI<LastArgType>();
+	return getParameterAt(Rank).getType() == rfk::getType<LastArgType>();
 }
 
 template <typename... ArgTypes>
@@ -94,7 +94,7 @@ void FunctionBaseAPI::checkParameterTypes() const
 template <std::size_t Rank, typename LastArgType>
 void FunctionBaseAPI::checkParameterTypes() const
 {
-	if (!getParameterAt(Rank).getType().match(rfk::getTypeAPI<LastArgType>()))
+	if (!getParameterAt(Rank).getType().match(rfk::getType<LastArgType>()))
 	{
 		throwArgTypeMismatchException(Rank);
 	}

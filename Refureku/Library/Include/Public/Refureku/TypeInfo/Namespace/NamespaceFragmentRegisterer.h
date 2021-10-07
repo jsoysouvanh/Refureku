@@ -14,7 +14,7 @@ namespace rfk
 {
 	//Forward declarations
 	class Namespace;
-	class NamespaceFragmentAPI;
+	class NamespaceFragment;
 
 	namespace internal
 	{
@@ -22,16 +22,16 @@ namespace rfk
 		class NamespaceFragmentRegistererImpl;
 	}
 
-	class NamespaceFragmentRegistererAPI final
+	class NamespaceFragmentRegisterer final
 	{
 		public:
-			REFUREKU_API NamespaceFragmentRegistererAPI(char const*					name,
+			REFUREKU_API NamespaceFragmentRegisterer(char const*					name,
 														std::size_t					id,
-														NamespaceFragmentAPI const&	namespaceFragment,
+														NamespaceFragment const&	namespaceFragment,
 														bool						isFileLevelNamespace)	noexcept;
-			NamespaceFragmentRegistererAPI(NamespaceFragmentRegistererAPI const&)							= delete;
-			NamespaceFragmentRegistererAPI(NamespaceFragmentRegistererAPI&&)								= delete;
-			REFUREKU_API ~NamespaceFragmentRegistererAPI()													noexcept;
+			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer const&)							= delete;
+			NamespaceFragmentRegisterer(NamespaceFragmentRegisterer&&)								= delete;
+			REFUREKU_API ~NamespaceFragmentRegisterer()													noexcept;
 
 			/**
 			*	@brief Get the namespace instance this fragment has been merged to.

@@ -9,7 +9,7 @@
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
 
-namespace rfk
+namespace rfk::internal
 {
 	/**
 	*	@brief Helper function to cast simple entity types.

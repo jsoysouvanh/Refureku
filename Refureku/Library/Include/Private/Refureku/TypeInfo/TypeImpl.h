@@ -9,19 +9,19 @@
 
 #include <vector>
 
-#include "Refureku/TypeInfo/TypeAPI.h"
+#include "Refureku/TypeInfo/Type.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeAPI.h"
 
 namespace rfk
 {
-	class TypeAPI::TypeImpl
+	class Type::TypeImpl
 	{
 		private:
 			/** Parts of this type. */
-			std::vector<TypePartAPI>	_parts;
+			std::vector<TypePart>	_parts;
 
 			/** Archetype of this type. */
-			ArchetypeAPI const*			_archetype = nullptr;
+			ArchetypeAPI const*		_archetype = nullptr;
 
 		public:
 			/**
@@ -29,7 +29,7 @@ namespace rfk
 			* 
 			*	@return The newly constructed type part.
 			*/
-			inline TypePartAPI&						addTypePart()								noexcept;
+			inline TypePart&						addTypePart()								noexcept;
 
 
 			/**
@@ -42,7 +42,7 @@ namespace rfk
 			* 
 			*	@return _parts.
 			*/
-			inline std::vector<TypePartAPI> const&	getParts()							const	noexcept;
+			inline std::vector<TypePart> const&	getParts()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _archetype.

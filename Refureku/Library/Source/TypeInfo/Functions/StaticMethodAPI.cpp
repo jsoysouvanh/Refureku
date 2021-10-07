@@ -4,7 +4,7 @@
 
 using namespace rfk;
 
-StaticMethodAPI::StaticMethodAPI(char const* name, std::size_t id, TypeAPI const& returnType,
+StaticMethodAPI::StaticMethodAPI(char const* name, std::size_t id, Type const& returnType,
 								 ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
 	MethodBaseAPI(new StaticMethodImpl(name, id, returnType, internalMethod, flags, outerEntity))
 {

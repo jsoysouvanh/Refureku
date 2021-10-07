@@ -11,13 +11,13 @@
 
 namespace rfk
 {
-	class NamespaceFragmentAPI final : public Entity
+	class NamespaceFragment final : public Entity
 	{
 		public:
-			REFUREKU_API NamespaceFragmentAPI(char const*	name,
+			REFUREKU_API NamespaceFragment(char const*	name,
 											  std::size_t	id	= 0u)	noexcept;
-			NamespaceFragmentAPI(NamespaceFragmentAPI&&)				= delete;
-			REFUREKU_API ~NamespaceFragmentAPI()						noexcept;
+			NamespaceFragment(NamespaceFragment&&)				= delete;
+			REFUREKU_API ~NamespaceFragment()						noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all nested entities.
@@ -31,7 +31,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool		foreachNestedEntity(Visitor<Entity>	visitor,
-														void*				userData)	const;
+														void*			userData)	const;
 
 			/**
 			*	@brief Add a nested entity to the namespace.
@@ -49,7 +49,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of entities of this namespace fragment.
 			*/
-			REFUREKU_API void		setNestedEntitiesCapacity(std::size_t capacity)				noexcept;
+			REFUREKU_API void		setNestedEntitiesCapacity(std::size_t capacity)			noexcept;
 
 		private:
 			//Forward declaration

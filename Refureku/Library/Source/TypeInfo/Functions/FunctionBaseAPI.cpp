@@ -18,7 +18,7 @@ FunctionBaseAPI::FunctionBaseAPI(FunctionBaseAPI&&) noexcept = default;
 
 FunctionBaseAPI::~FunctionBaseAPI() noexcept = default;
 
-FunctionParameterAPI& FunctionBaseAPI::addParameter(char const* name, std::size_t id, TypeAPI const& type) noexcept
+FunctionParameterAPI& FunctionBaseAPI::addParameter(char const* name, std::size_t id, Type const& type) noexcept
 {
 	return reinterpret_cast<FunctionBaseImpl*>(getPimpl())->addParameter(name, id, type, this);
 }
@@ -49,7 +49,7 @@ bool FunctionBaseAPI::hasSamePrototype(FunctionBaseAPI const& other) const noexc
 	return true;
 }
 
-TypeAPI const& FunctionBaseAPI::getReturnType() const noexcept
+Type const& FunctionBaseAPI::getReturnType() const noexcept
 {
 	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getReturnType();
 }

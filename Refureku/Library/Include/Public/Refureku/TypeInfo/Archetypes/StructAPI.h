@@ -23,7 +23,7 @@ namespace rfk
 	class FieldAPI;
 	class StaticFieldAPI;
 	class MethodAPI;
-	class TypeAPI;
+	class Type;
 	class ICallable;
 	class ClassTemplateAPI;
 	class ClassTemplateInstantiationAPI;
@@ -35,7 +35,7 @@ namespace rfk
 								   std::size_t	id,
 								   std::size_t	memorySize,
 								   bool			isClass)		noexcept;
-			StructAPI(StructAPI&&)								= delete;	//TODO: Might change this later
+			StructAPI(StructAPI&&)								= delete;
 			REFUREKU_API ~StructAPI()							noexcept;
 
 			/**
@@ -404,7 +404,7 @@ namespace rfk
 			*/
 			REFUREKU_API FieldAPI*					addField(char const*		name,
 															 std::size_t		id,
-															 TypeAPI const&		type,
+															 Type const&		type,
 															 EFieldFlags		flags,
 															 std::size_t		memoryOffset,
 															 StructAPI const*	outerEntity)					noexcept;
@@ -432,13 +432,13 @@ namespace rfk
 			*/
 			REFUREKU_API StaticFieldAPI*			addStaticField(char const*		name,
 																   std::size_t		id,
-																   TypeAPI const&	type,
+																   Type const&	type,
 																   EFieldFlags		flags,
 																   void*			fieldPtr,
 																   StructAPI const*	outerEntity)				noexcept;
 			REFUREKU_API StaticFieldAPI*			addStaticField(char const*		name,
 																   std::size_t		id,
-																   TypeAPI const&	type,
+																   Type const&	type,
 																   EFieldFlags		flags,
 																   void const*		fieldPtr,
 																   StructAPI const*	outerEntity)				noexcept;
@@ -464,7 +464,7 @@ namespace rfk
 			*/
 			REFUREKU_API MethodAPI*					addMethod(char const*		name,
 															  std::size_t		id,
-															  TypeAPI const&	returnType,
+															  Type const&	returnType,
 															  ICallable*		internalMethod,
 															  EMethodFlags		flags)							noexcept;
 
@@ -489,7 +489,7 @@ namespace rfk
 			*/
 			REFUREKU_API StaticMethodAPI*			addStaticMethod(char const*		name,
 																	std::size_t		id,
-																	TypeAPI const&	returnType,
+																	Type const&	returnType,
 																	ICallable*		internalMethod,
 																	EMethodFlags	flags)						noexcept;
 

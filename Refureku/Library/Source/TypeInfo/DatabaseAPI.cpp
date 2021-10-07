@@ -4,7 +4,7 @@
 
 #include "Refureku/TypeInfo/DatabaseImpl.h"
 #include "Refureku/TypeInfo/Entity/EntityUtility.h"
-#include "Refureku/TypeInfo/Entity/EntityCastAPI.h"
+#include "Refureku/TypeInfo/Entity/EntityCast.h"
 #include "Refureku/Exceptions/BadNamespaceFormat.h"
 
 using namespace rfk;

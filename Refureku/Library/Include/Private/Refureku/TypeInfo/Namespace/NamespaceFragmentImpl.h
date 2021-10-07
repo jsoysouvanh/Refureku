@@ -9,12 +9,12 @@
 
 #include <vector>
 
-#include "Refureku/TypeInfo/Namespace/NamespaceFragmentAPI.h"
+#include "Refureku/TypeInfo/Namespace/NamespaceFragment.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 namespace rfk
 {
-	class NamespaceFragmentAPI::NamespaceFragmentImpl final : public Entity::EntityImpl
+	class NamespaceFragment::NamespaceFragmentImpl final : public Entity::EntityImpl
 	{
 		private:
 			/** Collection of all entities contained in this namespace fragment. */

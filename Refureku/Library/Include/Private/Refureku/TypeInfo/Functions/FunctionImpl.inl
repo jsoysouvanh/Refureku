@@ -6,7 +6,7 @@
 */
 
 inline FunctionAPI::FunctionImpl::FunctionImpl(char const* name, std::size_t id,
-											   TypeAPI const& returnType, ICallable* internalFunction, EFunctionFlags flags) noexcept:
+											   Type const& returnType, ICallable* internalFunction, EFunctionFlags flags) noexcept:
 	FunctionBaseImpl(name, id, EEntityKind::Function, returnType, internalFunction, nullptr),
 	_flags{flags}
 {

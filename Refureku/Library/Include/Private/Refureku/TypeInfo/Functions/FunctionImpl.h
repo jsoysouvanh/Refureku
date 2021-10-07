@@ -21,7 +21,7 @@ namespace rfk
 		public:
 			inline FunctionImpl(char const*		name, 
 								std::size_t		id,
-								TypeAPI const&	returnType,
+								Type const&	returnType,
 								ICallable*		internalFunction,
 								EFunctionFlags	flags)			noexcept;
 

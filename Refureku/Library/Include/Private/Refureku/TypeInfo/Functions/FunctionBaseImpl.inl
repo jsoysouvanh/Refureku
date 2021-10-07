@@ -6,19 +6,19 @@
 */
 
 inline FunctionBaseAPI::FunctionBaseImpl::FunctionBaseImpl(char const* name, std::size_t id, EEntityKind kind,
-														   TypeAPI const& returnType, ICallable* internalFunction, Entity const* outerEntity) noexcept:
+														   Type const& returnType, ICallable* internalFunction, Entity const* outerEntity) noexcept:
 	EntityImpl(name, id, kind, outerEntity),
 	_returnType{returnType},
 	_internalFunction{internalFunction}
 {
 }
 
-inline FunctionParameterAPI& FunctionBaseAPI::FunctionBaseImpl::addParameter(char const* name, std::size_t id, TypeAPI const& type, FunctionBaseAPI const* outerEntity) noexcept
+inline FunctionParameterAPI& FunctionBaseAPI::FunctionBaseImpl::addParameter(char const* name, std::size_t id, Type const& type, FunctionBaseAPI const* outerEntity) noexcept
 {
 	return _parameters.emplace_back(name, id, type, outerEntity);
 }
 
-inline TypeAPI const& FunctionBaseAPI::FunctionBaseImpl::getReturnType() const noexcept
+inline Type const& FunctionBaseAPI::FunctionBaseImpl::getReturnType() const noexcept
 {
 	return _returnType;
 }

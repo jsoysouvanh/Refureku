@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
-#include "Refureku/TypeInfo/TypeAPI.h"
+#include "Refureku/TypeInfo/Type.h"
 
 namespace rfk
 {
@@ -17,7 +17,7 @@ namespace rfk
 		public:
 			REFUREKU_INTERNAL FunctionParameterAPI(char const*		name,
 												   std::size_t		id,
-												   TypeAPI const&	type,
+												   Type const&	type,
 												   Entity const*	outerEntity = nullptr)	noexcept;
 			FunctionParameterAPI(FunctionParameterAPI const&)								= delete;
 			REFUREKU_INTERNAL FunctionParameterAPI(FunctionParameterAPI&&)					noexcept;
@@ -28,7 +28,7 @@ namespace rfk
 			* 
 			*	@return _type;
 			*/
-			RFK_NODISCARD REFUREKU_API TypeAPI const& getType()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Type const& getType()	const	noexcept;
 
 		protected:
 			//Forward declaration

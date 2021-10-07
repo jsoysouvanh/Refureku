@@ -21,7 +21,7 @@ namespace rfk
 		public:
 			inline FieldImpl(char const*		name,
 							 std::size_t		id,
-							 TypeAPI const&		type,
+							 Type const&		type,
 							 EFieldFlags		flags,
 							 StructAPI const*	owner,
 							 std::size_t		memoryOffset,

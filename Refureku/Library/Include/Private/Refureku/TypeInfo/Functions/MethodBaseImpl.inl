@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline MethodBaseAPI::MethodBaseImpl::MethodBaseImpl(char const* name, std::size_t id, TypeAPI const& returnType,
+inline MethodBaseAPI::MethodBaseImpl::MethodBaseImpl(char const* name, std::size_t id, Type const& returnType,
 													 ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
 	FunctionBaseImpl(name, id, EEntityKind::Method, returnType, internalMethod, outerEntity),
 	_flags{flags}

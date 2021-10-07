@@ -37,7 +37,7 @@ inline ArchetypeAPI* StructAPI::StructImpl::addNestedArchetype(ArchetypeAPI cons
 	return result;
 }
 
-inline FieldAPI* StructAPI::StructImpl::addField(char const* name, std::size_t id, TypeAPI const& type, EFieldFlags flags, 
+inline FieldAPI* StructAPI::StructImpl::addField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
 												 StructAPI const* owner, std::size_t memoryOffset, StructAPI const* outerEntity) noexcept
 {
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
@@ -46,7 +46,7 @@ inline FieldAPI* StructAPI::StructImpl::addField(char const* name, std::size_t i
 	return const_cast<FieldAPI*>(&*_fields.emplace(name, id, type, flags, owner, memoryOffset, outerEntity));
 }
 
-inline StaticFieldAPI* StructAPI::StructImpl::addStaticField(char const* name, std::size_t id, TypeAPI const& type, EFieldFlags flags, 
+inline StaticFieldAPI* StructAPI::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
 															 StructAPI const* owner, void* fieldPtr, StructAPI const* outerEntity) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
@@ -55,7 +55,7 @@ inline StaticFieldAPI* StructAPI::StructImpl::addStaticField(char const* name, s
 	return const_cast<StaticFieldAPI*>(&*_staticFields.emplace(name, id, type, flags, owner, fieldPtr, outerEntity));
 }
 
-inline StaticFieldAPI* StructAPI::StructImpl::addStaticField(char const* name, std::size_t id, TypeAPI const& type, EFieldFlags flags, 
+inline StaticFieldAPI* StructAPI::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
 															 StructAPI const* owner, void const* fieldPtr, StructAPI const* outerEntity) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
@@ -64,7 +64,7 @@ inline StaticFieldAPI* StructAPI::StructImpl::addStaticField(char const* name, s
 	return const_cast<StaticFieldAPI*>(&*_staticFields.emplace(name, id, type, flags, owner, fieldPtr, outerEntity));
 }
 
-inline MethodAPI* StructAPI::StructImpl::addMethod(char const* name, std::size_t id, TypeAPI const& returnType,
+inline MethodAPI* StructAPI::StructImpl::addMethod(char const* name, std::size_t id, Type const& returnType,
 												   ICallable* internalMethod, EMethodFlags flags, StructAPI const*	outerEntity) noexcept
 {
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
@@ -73,7 +73,7 @@ inline MethodAPI* StructAPI::StructImpl::addMethod(char const* name, std::size_t
 	return const_cast<MethodAPI*>(&*_methods.emplace(name, id, returnType, internalMethod, flags, outerEntity));
 }
 
-inline StaticMethodAPI* StructAPI::StructImpl::addStaticMethod(char const* name, std::size_t id, TypeAPI const& returnType,
+inline StaticMethodAPI* StructAPI::StructImpl::addStaticMethod(char const* name, std::size_t id, Type const& returnType,
 															   ICallable* internalMethod, EMethodFlags flags, StructAPI const* outerEntity) noexcept
 {
 	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);

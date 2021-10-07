@@ -20,14 +20,14 @@ namespace rfk
 		public:
 			StaticFieldAPI(char const*		name,
 						   std::size_t		id,
-						   TypeAPI const&	type,
+						   Type const&	type,
 						   EFieldFlags		flags,
 						   StructAPI const*	owner,
 						   void*			ptr,
 						   Entity const*	outerEntity = nullptr)	noexcept;
 			StaticFieldAPI(char const*		name,
 						   std::size_t		id,
-						   TypeAPI const&	type,
+						   Type const&	type,
 						   EFieldFlags		flags,
 						   StructAPI const*	owner,
 						   void const*		constPtr,

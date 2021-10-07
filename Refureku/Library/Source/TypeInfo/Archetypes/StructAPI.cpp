@@ -426,7 +426,7 @@ void StructAPI::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 	reinterpret_cast<StructImpl*>(getPimpl())->setNestedArchetypesCapacity(capacity);
 }
 
-FieldAPI* StructAPI::addField(char const* name, std::size_t id, TypeAPI const& type,
+FieldAPI* StructAPI::addField(char const* name, std::size_t id, Type const& type,
 							  EFieldFlags flags, std::size_t memoryOffset, StructAPI const* outerEntity) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addField(name, id, type, flags, this, memoryOffset, outerEntity);
@@ -437,13 +437,13 @@ void StructAPI::setFieldsCapacity(std::size_t capacity) noexcept
 	return reinterpret_cast<StructImpl*>(getPimpl())->setFieldsCapacity(capacity);
 }
 
-StaticFieldAPI* StructAPI::addStaticField(char const* name, std::size_t id, TypeAPI const& type,
+StaticFieldAPI* StructAPI::addStaticField(char const* name, std::size_t id, Type const& type,
 										  EFieldFlags flags, void* fieldPtr, StructAPI const* outerEntity) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
 }
 
-StaticFieldAPI* StructAPI::addStaticField(char const* name, std::size_t id, TypeAPI const& type,
+StaticFieldAPI* StructAPI::addStaticField(char const* name, std::size_t id, Type const& type,
 										  EFieldFlags flags, void const* fieldPtr, StructAPI const* outerEntity) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
@@ -455,7 +455,7 @@ void StructAPI::setStaticFieldsCapacity(std::size_t capacity) noexcept
 }
 
 MethodAPI* StructAPI::addMethod(char const* name, std::size_t id,
-								TypeAPI const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
+								Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addMethod(name, id, returnType, internalMethod, flags, this);
 }
@@ -466,7 +466,7 @@ void StructAPI::setMethodsCapacity(std::size_t capacity) noexcept
 }
 
 StaticMethodAPI* StructAPI::addStaticMethod(char const* name, std::size_t id,
-											TypeAPI const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
+											Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticMethod(name, id, returnType, internalMethod, flags, this);
 }
