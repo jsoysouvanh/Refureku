@@ -23,12 +23,12 @@ namespace rfk
 	using ClassAPI = StructAPI;
 	class Enum;
 	class FundamentalArchetype;
-	class VariableAPI;
-	class FunctionAPI;
-	class MethodAPI;
-	class StaticMethodAPI;
-	class FieldAPI;
-	class StaticFieldAPI;
+	class Variable;
+	class Function;
+	class Method;
+	class StaticMethod;
+	class Field;
+	class StaticField;
 	class EnumValue;
 
 	namespace internal
@@ -233,7 +233,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried variable if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API VariableAPI const*				getVariableById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Variable const*				getVariableById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) variable by name.
@@ -244,7 +244,7 @@ namespace rfk
 			*	
 			*	@return A constant pointer to the queried variable if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API VariableAPI const*				getVariableByName(char const* name,
+			RFK_NODISCARD REFUREKU_API Variable const*				getVariableByName(char const* name,
 																						  EVarFlags	flags = EVarFlags::Default)					const	noexcept;
 
 			/**
@@ -258,7 +258,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelVariable(Visitor<VariableAPI>	visitor,
+			REFUREKU_API bool											foreachFileLevelVariable(Visitor<Variable>	visitor,
 																								 void*					userData)				const;
 
 			/**
@@ -268,7 +268,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried function if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API FunctionAPI const*				getFunctionById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Function const*				getFunctionById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level (non-member) function by name.
@@ -279,7 +279,7 @@ namespace rfk
 			*	
 			*	@return A constant pointer to the first function matching the name and flags if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API FunctionAPI const*				getFunctionByName(char const*		name,
+			RFK_NODISCARD REFUREKU_API Function const*				getFunctionByName(char const*		name,
 																						  EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
@@ -293,7 +293,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelFunction(Visitor<FunctionAPI>	visitor,
+			REFUREKU_API bool											foreachFileLevelFunction(Visitor<Function>	visitor,
 																								 void*					userData)				const;
 
 			/**
@@ -303,7 +303,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried method if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API MethodAPI const*					getMethodById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Method const*					getMethodById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a static method by id.
@@ -312,7 +312,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried static method if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API StaticMethodAPI const*			getStaticMethodById(std::size_t id)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API StaticMethod const*			getStaticMethodById(std::size_t id)										const	noexcept;
 
 			/**
 			*	@brief Retrieve a field by id.
@@ -321,7 +321,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried field if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API FieldAPI const*					getFieldById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Field const*					getFieldById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a static field by id.
@@ -330,7 +330,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried static field if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API StaticFieldAPI const*			getStaticFieldById(std::size_t id)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API StaticField const*			getStaticFieldById(std::size_t id)										const	noexcept;
 
 			/**
 			*	@brief Retrieve an enum value by id.

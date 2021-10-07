@@ -7,22 +7,22 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Variables/FieldBaseAPI.h"
+#include "Refureku/TypeInfo/Variables/FieldBase.h"
 
 namespace rfk
 {
-	class FieldAPI final : public FieldBaseAPI
+	class Field final : public FieldBase
 	{
 		public:
-			FieldAPI(char const*		name,
+			Field(char const*		name,
 					 std::size_t		id,
 					 Type const&		type,
 					 EFieldFlags		flags,
 					 StructAPI const*	owner,
 					 std::size_t		memoryOffset,
 					 Entity const*	outerEntity = nullptr)	noexcept;
-			FieldAPI(FieldAPI&&)								noexcept;
-			~FieldAPI()											noexcept;
+			Field(Field&&)								noexcept;
+			~Field()											noexcept;
 
 			/**
 			*	@brief Get the value corresponding to this field in the provided instance.
@@ -117,5 +117,5 @@ namespace rfk
 			class FieldImpl;
 	};
 
-	#include "Refureku/TypeInfo/Variables/FieldAPI.inl"
+	#include "Refureku/TypeInfo/Variables/Field.inl"
 }

@@ -11,29 +11,29 @@
 #include <type_traits>	//std::is_rvalue_reference_v, std::is_lvalue_reference_v, std::is_const_v...
 #include <utility>		//std::forward, std::move
 
-#include "Refureku/TypeInfo/Variables/FieldBaseAPI.h"
+#include "Refureku/TypeInfo/Variables/FieldBase.h"
 
 namespace rfk
 {
-	class StaticFieldAPI final : public FieldBaseAPI
+	class StaticField final : public FieldBase
 	{
 		public:
-			StaticFieldAPI(char const*		name,
+			StaticField(char const*		name,
 						   std::size_t		id,
 						   Type const&	type,
 						   EFieldFlags		flags,
 						   StructAPI const*	owner,
 						   void*			ptr,
 						   Entity const*	outerEntity = nullptr)	noexcept;
-			StaticFieldAPI(char const*		name,
+			StaticField(char const*		name,
 						   std::size_t		id,
 						   Type const&	type,
 						   EFieldFlags		flags,
 						   StructAPI const*	owner,
 						   void const*		constPtr,
 						   Entity const*	outerEntity = nullptr)	noexcept;
-			StaticFieldAPI(StaticFieldAPI&&)						noexcept;
-			~StaticFieldAPI()										noexcept;
+			StaticField(StaticField&&)						noexcept;
+			~StaticField()										noexcept;
 		
 			/**
 			*	@brief Get the data corresponding to this static field.
@@ -100,5 +100,5 @@ namespace rfk
 			class StaticFieldImpl;
 	};
 
-	#include "Refureku/TypeInfo/Variables/StaticFieldAPI.inl"
+	#include "Refureku/TypeInfo/Variables/StaticField.inl"
 }

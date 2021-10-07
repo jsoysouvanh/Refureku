@@ -7,22 +7,22 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/FunctionBaseAPI.h"
-#include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
+#include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
 
 namespace rfk
 {
-	class FunctionAPI final : public FunctionBaseAPI
+	class StaticMethod final : public MethodBase
 	{
 		public:
-			REFUREKU_API FunctionAPI(char const*	name, 
-									 std::size_t	id,
-									 Type const&	returnType,
-									 ICallable*		internalFunction,
-									 EFunctionFlags	flags)			noexcept;
-			FunctionAPI(FunctionAPI&&)								= delete;
-			REFUREKU_API ~FunctionAPI()								noexcept;
+			REFUREKU_INTERNAL StaticMethod(char const*		name,
+											  std::size_t		id,
+											  Type const&	returnType,
+											  ICallable*		internalMethod,
+											  EMethodFlags		flags,
+											  Entity const*		outerEntity)	noexcept;
+			REFUREKU_INTERNAL StaticMethod(StaticMethod&&)				noexcept;
+			REFUREKU_INTERNAL ~StaticMethod()								noexcept;
 
 			/**
 			*	@brief	Call the function with the forwarded argument(s) if any, and return the result.
@@ -41,7 +41,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the underlying function.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType									invoke(ArgTypes&&... args)			const;
+			ReturnType	invoke(ArgTypes&&... args)			const;
 
 			/**
 			*	@brief	Call the function with the forwarded argument(s) if any, and return the result.
@@ -66,46 +66,25 @@ namespace rfk
 			*	@exception	Any exception potentially thrown from the underlying function.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType									checkedInvoke(ArgTypes&&... args)	const;
-
-			/**
-			*	@brief Check whether this function is inline or not.
-			*
-			*	@return true if this function is inline, else false.
-			*/
-			RFK_NODISCARD REFUREKU_API bool				isInline()							const	noexcept;
-
-			/**
-			*	@brief Check whether this function is static or not.
-			*
-			*	@return true if this function is static, else false.
-			*/
-			RFK_NODISCARD REFUREKU_API bool				isStatic()							const	noexcept;
-
-			/**
-			*	@brief Get the flags qualifying this function.
-			* 
-			*	@return The flags qualifying this function.
-			*/
-			RFK_NODISCARD REFUREKU_API EFunctionFlags	getFlags()							const	noexcept;
+			ReturnType	checkedInvoke(ArgTypes&&... args)	const;
 
 		private:
 			//Forward declaration
-			class FunctionImpl;
+			class StaticMethodImpl;
 
 			/**
-			*	@brief Call the underlying function with the forwarded args.
+			*	@brief Call the underlying static method with the forwarded args.
 			* 
-			*	@tparam ReturnType	Return type of the function.
+			*	@tparam ReturnType	Return type of the static method.
 			*	@tparam... ArgTypes	Type of all arguments.
 			*
-			*	@param args Arguments forwarded to the underlying function call.
+			*	@param args Arguments forwarded to the underlying static method call.
 			*
-			*	@return The result of the underlying function call.
+			*	@return The result of the underlying static method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(ArgTypes&&... args)	const;
+			ReturnType	internalInvoke(ArgTypes&&... args) const noexcept;
 	};
 
-	#include "Refureku/TypeInfo/Functions/FunctionAPI.inl"
+	#include "Refureku/TypeInfo/Functions/StaticMethod.inl"
 }

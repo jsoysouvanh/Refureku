@@ -32,11 +32,11 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bo
 			break;
 
 		case EEntityKind::Variable:
-			_fileLevelVariablesByName.emplace(reinterpret_cast<VariableAPI const*>(&entity));
+			_fileLevelVariablesByName.emplace(reinterpret_cast<Variable const*>(&entity));
 			break;
 
 		case EEntityKind::Function:
-			_fileLevelFunctionsByName.emplace(reinterpret_cast<FunctionAPI const*>(&entity));
+			_fileLevelFunctionsByName.emplace(reinterpret_cast<Function const*>(&entity));
 			break;
 
 		case EEntityKind::FundamentalArchetype:
@@ -124,11 +124,11 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 				break;
 
 			case EEntityKind::Variable:
-				_fileLevelVariablesByName.erase(reinterpret_cast<VariableAPI const*>(&entity));
+				_fileLevelVariablesByName.erase(reinterpret_cast<Variable const*>(&entity));
 				break;
 
 			case EEntityKind::Function:
-				_fileLevelFunctionsByName.erase(reinterpret_cast<FunctionAPI const*>(&entity));
+				_fileLevelFunctionsByName.erase(reinterpret_cast<Function const*>(&entity));
 				break;
 
 			case EEntityKind::FundamentalArchetype:
@@ -205,14 +205,14 @@ inline void DatabaseAPI::DatabaseImpl::registerSubEntities(StructAPI const& s) n
 							 }, this);
 
 	//Add fields
-	s.foreachField([](FieldAPI const& field, void* userData)
+	s.foreachField([](Field const& field, void* userData)
 				   {
 					   reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(field, false);
 
 					   return true;
 				   }, this);
 
-	s.foreachStaticField([](StaticFieldAPI const& staticField, void* userData)
+	s.foreachStaticField([](StaticField const& staticField, void* userData)
 						 {
 							 reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(staticField, false);
 
@@ -220,14 +220,14 @@ inline void DatabaseAPI::DatabaseImpl::registerSubEntities(StructAPI const& s) n
 						 }, this);
 
 	//Add methods
-	s.foreachMethod([](MethodAPI const& method, void* userData)
+	s.foreachMethod([](Method const& method, void* userData)
 					{
 						reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(method, false);
 
 						return true;
 					}, this);
 
-	s.foreachStaticMethod([](StaticMethodAPI const& staticMethod, void* userData)
+	s.foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
 						  {
 							  reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(staticMethod, false);
 
@@ -246,14 +246,14 @@ inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(StructAPI const& s)
 							 }, this);
 
 	//Remove fields
-	s.foreachField([](FieldAPI const& field, void* userData)
+	s.foreachField([](Field const& field, void* userData)
 				   {
 					   reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(field, false);
 
 					   return true;
 				   }, this);
 
-	s.foreachStaticField([](StaticFieldAPI const& staticField, void* userData)
+	s.foreachStaticField([](StaticField const& staticField, void* userData)
 						 {
 							 reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(staticField, false);
 
@@ -261,14 +261,14 @@ inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(StructAPI const& s)
 						 }, this);
 
 	//Remove methods
-	s.foreachMethod([](MethodAPI const& method, void* userData)
+	s.foreachMethod([](Method const& method, void* userData)
 					{
 						reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(method, false);
 
 						return true;
 					}, this);
 
-	s.foreachStaticMethod([](StaticMethodAPI const& staticMethod, void* userData)
+	s.foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
 						  {
 							  reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(staticMethod, false);
 

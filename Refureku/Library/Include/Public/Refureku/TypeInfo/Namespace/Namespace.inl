@@ -6,9 +6,9 @@
 */
 
 template <typename FunctionSignature>
-FunctionAPI const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
+Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
-	for (FunctionAPI const* function : getFunctionsByName(name, flags))
+	for (Function const* function : getFunctionsByName(name, flags))
 	{
 		if (internal::FunctionHelper<FunctionSignature>::hasSamePrototype(*function))
 		{

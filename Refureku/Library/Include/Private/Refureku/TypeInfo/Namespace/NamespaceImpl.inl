@@ -20,12 +20,12 @@ inline void Namespace::NamespaceImpl::addArchetype(Archetype const& archetype) n
 	_archetypes.emplace(&archetype);
 }
 
-inline void Namespace::NamespaceImpl::addVariable(VariableAPI const& variable) noexcept
+inline void Namespace::NamespaceImpl::addVariable(Variable const& variable) noexcept
 {
 	_variables.emplace(&variable);
 }
 
-inline void Namespace::NamespaceImpl::addFunction(FunctionAPI const& function) noexcept
+inline void Namespace::NamespaceImpl::addFunction(Function const& function) noexcept
 {
 	_functions.emplace(&function);
 }
@@ -40,12 +40,12 @@ inline void Namespace::NamespaceImpl::removeArchetype(Archetype const& archetype
 	_archetypes.erase(&archetype);
 }
 
-inline void Namespace::NamespaceImpl::removeVariable(VariableAPI const& variable) noexcept
+inline void Namespace::NamespaceImpl::removeVariable(Variable const& variable) noexcept
 {
 	_variables.erase(&variable);
 }
 
-inline void Namespace::NamespaceImpl::removeFunction(FunctionAPI const& function) noexcept
+inline void Namespace::NamespaceImpl::removeFunction(Function const& function) noexcept
 {
 	_functions.erase(&function);
 }

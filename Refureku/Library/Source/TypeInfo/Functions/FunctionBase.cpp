@@ -1,31 +1,46 @@
 #include "Refureku/TypeInfo/Functions/FunctionBase.h"
 
+#include <string>	//std::to_string
+
+#include "Refureku/TypeInfo/Functions/FunctionBaseImpl.h"
+#include "Refureku/Exceptions/ArgCountMismatch.h"
+#include "Refureku/Exceptions/ReturnTypeMismatch.h"
+#include "Refureku/Exceptions/ArgTypeMismatch.h"
+
 using namespace rfk;
 
-FunctionBase::FunctionBase(std::string&& name, std::size_t id, EEntityKind kind, Type const& returnType, std::unique_ptr<ICallable>&& internalFunction, Entity const* outerEntity) noexcept:
-	Entity(std::forward<std::string>(name), id, kind, outerEntity),
-	_returnType{returnType},
-	_internalFunction{std::forward<std::unique_ptr<ICallable>>(internalFunction)}
+FunctionBase::FunctionBase(FunctionBaseImpl* implementation) noexcept:
+	Entity(implementation)
 {
+}
+
+FunctionBase::FunctionBase(FunctionBase&&) noexcept = default;
+
+FunctionBase::~FunctionBase() noexcept = default;
+
+FunctionParameter& FunctionBase::addParameter(char const* name, std::size_t id, Type const& type) noexcept
+{
+	return reinterpret_cast<FunctionBaseImpl*>(getPimpl())->addParameter(name, id, type, this);
 }
 
 bool FunctionBase::hasSamePrototype(FunctionBase const& other) const noexcept
 {
 	//Compare return type
-	if (_returnType != other._returnType)
+	if (getReturnType() != other.getReturnType())
 	{
 		return false;
 	}
 
 	//Compare parameters
-	if (_parameters.size() != other._parameters.size())
+	std::size_t paramsCount = getParametersCount();
+	if (paramsCount != other.getParametersCount())
 	{
 		return false;
 	}
 
-	for (std::size_t i = 0u; i < _parameters.size(); i++)
+	for (std::size_t i = 0u; i < paramsCount; i++)
 	{
-		if (_parameters[i].getType() != other._parameters[i].getType())
+		if (getParameterAt(i) != other.getParameterAt(i))
 		{
 			return false;
 		}
@@ -34,29 +49,42 @@ bool FunctionBase::hasSamePrototype(FunctionBase const& other) const noexcept
 	return true;
 }
 
-FunctionBase* FunctionBase::addParameter(std::string parameterName, Type const& parameterType) noexcept
+Type const& FunctionBase::getReturnType() const noexcept
 {
-	_parameters.emplace_back(std::move(parameterName), parameterType);
-
-	return this;
+	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getReturnType();
 }
 
-std::size_t FunctionBase::getParameterCount() const noexcept
+FunctionParameter const& FunctionBase::getParameterAt(std::size_t index) const noexcept
 {
-	return _parameters.size();
+	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getParameters()[index];
 }
 
-FunctionParameter const& FunctionBase::getParameter(std::size_t paramIndex) const
+std::size_t FunctionBase::getParametersCount() const noexcept
 {
-	return _parameters.at(paramIndex);
+	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getParameters().size();
+}
+
+void FunctionBase::setParametersCapacity(std::size_t capacity) noexcept
+{
+	return reinterpret_cast<FunctionBaseImpl*>(getPimpl())->setParametersCapacity(capacity);
 }
 
 ICallable* FunctionBase::getInternalFunction() const noexcept
 {
-	return _internalFunction.get();
+	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getInternalFunction();
 }
 
-void FunctionBase::setParametersCapacity(std::size_t paramCapacity) noexcept
+void FunctionBase::throwArgCountMismatchException(std::size_t received) const
 {
-	_parameters.reserve(paramCapacity);
+	throw ArgCountMismatch("Tried to call " + std::string(getName()) + " with " + std::to_string(received) + " arguments but " + std::to_string(getParametersCount()) + " were expected.");
+}
+
+void FunctionBase::throwArgTypeMismatchException(std::size_t paramIndex) const
+{
+	throw ArgTypeMismatch("Tried to call " + std::string(getName()) + " but argument " + std::to_string(paramIndex) + " (" + getParameterAt(paramIndex).getName() + ") type doesn't match.");
+}
+
+void FunctionBase::throwReturnTypeMismatchException() const
+{
+	throw ReturnTypeMismatch("Tried to call " + std::string(getName()) + " but the specified return type is incorrect.");
 }

@@ -6,26 +6,26 @@
 */
 
 
-inline StaticFieldAPI::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+inline StaticField::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
 														StructAPI const* owner, void* ptr, Entity const* outerEntity) noexcept:
 	FieldBaseImpl(name, id, type, flags, owner, outerEntity),
 	_ptr{ptr}
 {
 }
 
-inline StaticFieldAPI::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+inline StaticField::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
 														StructAPI const* owner, void const* constPtr, Entity const* outerEntity) noexcept:
 	FieldBaseImpl(name, id, type, flags, owner, outerEntity),
 	_constPtr{constPtr}
 {
 }
 
-inline void* StaticFieldAPI::StaticFieldImpl::getPtr() const noexcept
+inline void* StaticField::StaticFieldImpl::getPtr() const noexcept
 {
 	return _ptr;
 }
 
-inline void const* StaticFieldAPI::StaticFieldImpl::getConstPtr() const noexcept
+inline void const* StaticField::StaticFieldImpl::getConstPtr() const noexcept
 {
 	return _constPtr;
 }

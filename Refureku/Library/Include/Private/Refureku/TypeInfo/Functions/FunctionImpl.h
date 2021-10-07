@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/FunctionAPI.h"
+#include "Refureku/TypeInfo/Functions/Function.h"
 #include "Refureku/TypeInfo/Functions/FunctionBaseImpl.h"
 
 namespace rfk
 {
-	class FunctionAPI::FunctionImpl final : public FunctionBaseAPI::FunctionBaseImpl
+	class Function::FunctionImpl final : public FunctionBase::FunctionBaseImpl
 	{
 		private:
 			/** Flags describing this function. */

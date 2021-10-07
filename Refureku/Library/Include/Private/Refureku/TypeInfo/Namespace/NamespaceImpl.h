@@ -12,8 +12,8 @@
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/Variables/VariableAPI.h"
-#include "Refureku/TypeInfo/Functions/FunctionAPI.h"
+#include "Refureku/TypeInfo/Variables/Variable.h"
+#include "Refureku/TypeInfo/Functions/Function.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
 
 namespace rfk
@@ -23,8 +23,8 @@ namespace rfk
 		public:
 			using NamespaceHashSet	= std::unordered_set<Namespace const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using ArchetypeHashSet	= std::unordered_set<Archetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using VariableHashSet	= std::unordered_set<VariableAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using FunctionHashSet	= std::unordered_multiset<FunctionAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using VariableHashSet	= std::unordered_set<Variable const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using FunctionHashSet	= std::unordered_multiset<Function const*, EntityPtrNameHash, EntityPtrNameEqual>;
 
 		private:
 			/** Collection of all namespaces contained in this namespace. */
@@ -62,14 +62,14 @@ namespace rfk
 			* 
 			*	@param variable The variable to add.
 			*/
-			inline void										addVariable(VariableAPI const& variable)					noexcept;
+			inline void										addVariable(Variable const& variable)					noexcept;
 
 			/**
 			*	@brief Add a nested function to this namespace.
 			* 
 			*	@param function The function to add.
 			*/
-			inline void										addFunction(FunctionAPI const& function)					noexcept;
+			inline void										addFunction(Function const& function)					noexcept;
 
 			/**
 			*	@brief Remove a nested namespace from this namespace.
@@ -90,14 +90,14 @@ namespace rfk
 			* 
 			*	@param variable The variable to remove.
 			*/
-			inline void										removeVariable(VariableAPI const& variable)					noexcept;
+			inline void										removeVariable(Variable const& variable)					noexcept;
 
 			/**
 			*	@brief Remove a nested function from this namespace.
 			* 
 			*	@param function The function to remove.
 			*/
-			inline void										removeFunction(FunctionAPI const& function)					noexcept;
+			inline void										removeFunction(Function const& function)					noexcept;
 
 			/**
 			*	@brief Getter for the field _namespaces.

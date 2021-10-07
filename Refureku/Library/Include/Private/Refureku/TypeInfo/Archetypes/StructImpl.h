@@ -14,9 +14,9 @@
 #include "Refureku/TypeInfo/Archetypes/ParentStruct.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
-#include "Refureku/TypeInfo/Variables/FieldAPI.h"
-#include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
-#include "Refureku/TypeInfo/Functions/MethodAPI.h"
+#include "Refureku/TypeInfo/Variables/Field.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
+#include "Refureku/TypeInfo/Functions/Method.h"
 #include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
 #include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
@@ -28,11 +28,11 @@ namespace rfk
 			using ParentStructs			= std::vector<ParentStruct>;
 			using Subclasses			= std::unordered_set<StructAPI const*>;
 			using NestedArchetypes		= std::unordered_set<Archetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using Fields				= std::unordered_multiset<FieldAPI, EntityNameHash, EntityNameEqual>;
-			using StaticFields			= std::unordered_multiset<StaticFieldAPI, EntityNameHash, EntityNameEqual>;
-			using Methods				= std::unordered_multiset<MethodAPI, EntityNameHash, EntityNameEqual>;
-			using StaticMethods			= std::unordered_multiset<StaticMethodAPI, EntityNameHash, EntityNameEqual>;
-			using CustomInstantiators	= std::vector<StaticMethodAPI const*>;
+			using Fields				= std::unordered_multiset<Field, EntityNameHash, EntityNameEqual>;
+			using StaticFields			= std::unordered_multiset<StaticField, EntityNameHash, EntityNameEqual>;
+			using Methods				= std::unordered_multiset<Method, EntityNameHash, EntityNameEqual>;
+			using StaticMethods			= std::unordered_multiset<StaticMethod, EntityNameHash, EntityNameEqual>;
+			using CustomInstantiators	= std::vector<StaticMethod const*>;
 			using CustomInstantiator	= void* (*)();
 		
 		private:
@@ -165,7 +165,7 @@ namespace rfk
 			*	@return A pointer to the added field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*			The name of the field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
-			RFK_NODISCARD inline FieldAPI*					addField(char const*		name,
+			RFK_NODISCARD inline Field*					addField(char const*		name,
 																	 std::size_t		id,
 																	 Type const&		type,
 																	 EFieldFlags		flags,
@@ -187,14 +187,14 @@ namespace rfk
 			*	@return A pointer to the added static field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD inline StaticFieldAPI*			addStaticField(char const*		name,
+			RFK_NODISCARD inline StaticField*			addStaticField(char const*		name,
 																		   std::size_t		id,
 																		   Type const&	type,
 																		   EFieldFlags		flags,
 																		   StructAPI const*	owner,
 																		   void*			fieldPtr,
 																		   StructAPI const*	outerEntity)				noexcept;
-			RFK_NODISCARD inline StaticFieldAPI*			addStaticField(char const*		name,
+			RFK_NODISCARD inline StaticField*			addStaticField(char const*		name,
 																		   std::size_t		id,
 																		   Type const&	type,
 																		   EFieldFlags		flags,
@@ -214,7 +214,7 @@ namespace rfk
 			*
 			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD inline MethodAPI*					addMethod(char const*		name,
+			RFK_NODISCARD inline Method*					addMethod(char const*		name,
 																	  std::size_t		id,
 																	  Type const&	returnType,
 																	  ICallable*		internalMethod,
@@ -233,7 +233,7 @@ namespace rfk
 			*
 			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD inline StaticMethodAPI*			addStaticMethod(char const*			name,
+			RFK_NODISCARD inline StaticMethod*			addStaticMethod(char const*			name,
 																			std::size_t			id,
 																			Type const&		returnType,
 																			ICallable*			internalMethod,
@@ -253,7 +253,7 @@ namespace rfk
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			inline void										addInstantiator(StaticMethodAPI const* instantiator)		noexcept;
+			inline void										addInstantiator(StaticMethod const* instantiator)		noexcept;
 
 			/**
 			*	@brief Get a nested archetype by name / access specifier.

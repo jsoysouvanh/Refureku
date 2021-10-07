@@ -1,17 +1,36 @@
 #include "Refureku/TypeInfo/Variables/StaticField.h"
 
+#include "Refureku/TypeInfo/Variables/StaticFieldImpl.h"
+
 using namespace rfk;
 
-StaticField::StaticField(std::string&& name, std::size_t id, Type const& type, EFieldFlags flags, Struct const* containedIn, void* address, Entity const* outerEntity) noexcept:
-	FieldBase(std::forward<std::string>(name), id, type, flags, containedIn, outerEntity),
-	_address{address}
+StaticField::StaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+							   StructAPI const* owner, void* ptr, Entity const* outerEntity) noexcept:
+	FieldBase(new StaticFieldImpl(name, id, type, flags, owner, ptr, outerEntity))
 {
-	assert(static_cast<std::underlying_type_t<EFieldFlags>>(flags & EFieldFlags::Static));
 }
 
-StaticField::StaticField(std::string&& name, std::size_t id, Type const& type, EFieldFlags flags, Struct const* containedIn, void const* address, Entity const* outerEntity) noexcept:
-	FieldBase(std::forward<std::string>(name), id, type, flags, containedIn, outerEntity),
-	_constAddress{address}
+StaticField::StaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+							   StructAPI const* owner, void const* constPtr, Entity const* outerEntity) noexcept:
+	FieldBase(new StaticFieldImpl(name, id, type, flags, owner, constPtr, outerEntity))
 {
-	assert(static_cast<std::underlying_type_t<EFieldFlags>>(flags & EFieldFlags::Static));
+}
+
+StaticField::StaticField(StaticField&&) noexcept = default;
+
+StaticField::~StaticField() noexcept = default;
+
+void StaticField::set(void const* valuePtr, std::size_t valueSize) const
+{
+	VariableBase::set(getPtr(), valuePtr, valueSize);
+}
+
+void* StaticField::getPtr() const noexcept
+{
+	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getPtr();
+}
+
+void const* StaticField::getConstPtr() const noexcept
+{
+	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getConstPtr();
 }

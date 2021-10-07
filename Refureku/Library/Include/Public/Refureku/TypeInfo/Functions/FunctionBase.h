@@ -8,12 +8,12 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Entity/Entity.h"
-#include "Refureku/TypeInfo/Functions/FunctionParameterAPI.h"
+#include "Refureku/TypeInfo/Functions/FunctionParameter.h"
 #include "Refureku/TypeInfo/Functions/ICallable.h"
 
 namespace rfk
 {
-	class FunctionBaseAPI : public Entity
+	class FunctionBase : public Entity
 	{
 		public:
 			/**
@@ -33,7 +33,7 @@ namespace rfk
 			* 
 			*	@return true if the provided function has the same prototype as this function, else false.
 			*/
-			RFK_NODISCARD REFUREKU_API bool							hasSamePrototype(FunctionBaseAPI const& other)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool							hasSamePrototype(FunctionBase const& other)	const	noexcept;
 
 			/**
 			*	@tparam... ArgTypes Argument types to compare with.
@@ -58,7 +58,7 @@ namespace rfk
 			* 
 			*	@return The parameter at the given index.
 			*/
-			RFK_NODISCARD REFUREKU_API FunctionParameterAPI const&	getParameterAt(std::size_t index)				const	noexcept;	
+			RFK_NODISCARD REFUREKU_API FunctionParameter const&	getParameterAt(std::size_t index)				const	noexcept;	
 
 			/**
 			*	@brief Get the number of parameters of this function.
@@ -83,7 +83,7 @@ namespace rfk
 			*	
 			*	@return The added function parameter.
 			*/
-			REFUREKU_API FunctionParameterAPI&						addParameter(char const*	name,
+			REFUREKU_API FunctionParameter&						addParameter(char const*	name,
 																				 std::size_t	id,
 																				 Type const&	type)						noexcept;
 
@@ -100,9 +100,9 @@ namespace rfk
 			//Forward declaration
 			class FunctionBaseImpl;
 
-			REFUREKU_INTERNAL FunctionBaseAPI(FunctionBaseImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL FunctionBaseAPI(FunctionBaseAPI&&)				noexcept;
-			REFUREKU_INTERNAL ~FunctionBaseAPI()								noexcept;
+			REFUREKU_INTERNAL FunctionBase(FunctionBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL FunctionBase(FunctionBase&&)				noexcept;
+			REFUREKU_INTERNAL ~FunctionBase()								noexcept;
 
 			/**
 			*	@brief Check that the provided argument count is the same as this function's.
@@ -189,5 +189,5 @@ namespace rfk
 			RFK_NORETURN REFUREKU_API void			throwReturnTypeMismatchException()						const;
 	};
 
-	#include "Refureku/TypeInfo/Functions/FunctionBaseAPI.inl"
+	#include "Refureku/TypeInfo/Functions/FunctionBase.inl"
 }

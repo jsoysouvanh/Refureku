@@ -83,14 +83,14 @@ inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(Enti
 			break;
 
 		case EEntityKind::Variable:
-			_namespaceInstance->addVariable(static_cast<VariableAPI const&>(entity));
+			_namespaceInstance->addVariable(static_cast<Variable const&>(entity));
 
 			//Register the variable to the database, a variable doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
 			break;
 
 		case EEntityKind::Function:
-			_namespaceInstance->addFunction(static_cast<FunctionAPI const&>(entity));
+			_namespaceInstance->addFunction(static_cast<Function const&>(entity));
 
 			//Register the function to the database, a function doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
@@ -144,14 +144,14 @@ inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace
 			break;
 
 		case EEntityKind::Variable:
-			_namespaceInstance->removeVariable(static_cast<VariableAPI const&>(entity));
+			_namespaceInstance->removeVariable(static_cast<Variable const&>(entity));
 
 			//Unregister the variable from the database, a variable doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, false);
 			break;
 
 		case EEntityKind::Function:
-			_namespaceInstance->removeFunction(static_cast<FunctionAPI const&>(entity));
+			_namespaceInstance->removeFunction(static_cast<Function const&>(entity));
 
 			//Unregister the function from the database, a function doesn't have sub entities so can write false right away
 			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, false);

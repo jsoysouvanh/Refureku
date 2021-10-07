@@ -6,21 +6,21 @@
 */
 
 template <typename ValueType>
-ValueType FieldAPI::get(void* instance) const
+ValueType Field::get(void* instance) const
 {
-	return FieldBaseAPI::get<ValueType>(getPtr(instance));
+	return FieldBase::get<ValueType>(getPtr(instance));
 }
 
 template <typename ValueType>
-ValueType const FieldAPI::get(void const* instance) const noexcept
+ValueType const Field::get(void const* instance) const noexcept
 {
 	static_assert(!std::is_rvalue_reference_v<ValueType>, "Can't call Field::get with an rvalue reference ValueType from a const instance.");
 
-	return FieldBaseAPI::get<ValueType>(const_cast<void*>(getConstPtr(instance)));
+	return FieldBase::get<ValueType>(const_cast<void*>(getConstPtr(instance)));
 }
 
 template <typename ValueType>
-void FieldAPI::set(void* instance, ValueType&& value) const
+void Field::set(void* instance, ValueType&& value) const
 {
-	FieldBaseAPI::set(getPtr(instance), std::forward<ValueType>(value));
+	FieldBase::set(getPtr(instance), std::forward<ValueType>(value));
 }

@@ -5,31 +5,31 @@
 *	See the README.md file for full license details.
 */
 
-inline VariableAPI::VariableImpl::VariableImpl(char const* name, std::size_t id, Type const& type, void* ptr, EVarFlags flags) noexcept:
+inline Variable::VariableImpl::VariableImpl(char const* name, std::size_t id, Type const& type, void* ptr, EVarFlags flags) noexcept:
 	VariableBaseImpl(name, id, EEntityKind::Variable, type, nullptr),
 	_flags{flags},
 	_ptr{ptr}
 {
 }
 
-inline VariableAPI::VariableImpl::VariableImpl(char const* name, std::size_t id, Type const& type, void const* constPtr, EVarFlags flags) noexcept:
+inline Variable::VariableImpl::VariableImpl(char const* name, std::size_t id, Type const& type, void const* constPtr, EVarFlags flags) noexcept:
 	VariableBaseImpl(name, id, EEntityKind::Variable, type, nullptr),
 	_flags{flags},
 	_constPtr{constPtr}
 {
 }
 
-inline EVarFlags VariableAPI::VariableImpl::getFlags() const noexcept
+inline EVarFlags Variable::VariableImpl::getFlags() const noexcept
 {
 	return _flags;
 }
 
-inline void* VariableAPI::VariableImpl::getPtr() const noexcept
+inline void* Variable::VariableImpl::getPtr() const noexcept
 {
 	return _ptr;
 }
 
-inline void const* VariableAPI::VariableImpl::getConstPtr() const noexcept
+inline void const* Variable::VariableImpl::getConstPtr() const noexcept
 {
 	return _constPtr;
 }

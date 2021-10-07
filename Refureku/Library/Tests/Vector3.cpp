@@ -21,7 +21,7 @@ rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 		type.addProperty(&vector3fProp);
 
 		//Register fields
-		rfk::FieldAPI* field;
+		rfk::Field* field;
 		field = type.addField("x", stringHasher("some_namespace::Vector3<float>::x"), rfk::getType<float>(), rfk::EFieldFlags::Public, offsetof(Vector3f, x), &type);
 		field = type.addField("y", stringHasher("some_namespace::Vector3<float>::y"), rfk::getType<float>(), rfk::EFieldFlags::Public, offsetof(Vector3f, y), &type);
 		field = type.addField("z", stringHasher("some_namespace::Vector3<float>::z"), rfk::getType<float>(), rfk::EFieldFlags::Public, offsetof(Vector3f, z), &type);
@@ -31,16 +31,16 @@ rfk::Archetype const* rfk::getArchetype<Vector3f>() noexcept
 		field->addProperty(&fieldProp);
 
 		//Register static fields
-		/*rfk::StaticFieldAPI* staticField = */type.addStaticField("exampleStaticField", stringHasher("some_namespace::Vector3<float>::exampleStaticField"), rfk::getType<float>(), rfk::EFieldFlags::Public | rfk::EFieldFlags::Static, &some_namespace::Vector3<float>::exampleStaticField, &type);
+		/*rfk::StaticField* staticField = */type.addStaticField("exampleStaticField", stringHasher("some_namespace::Vector3<float>::exampleStaticField"), rfk::getType<float>(), rfk::EFieldFlags::Public | rfk::EFieldFlags::Static, &some_namespace::Vector3<float>::exampleStaticField, &type);
 
 
 		//Register methods
-		/*rfk::MethodAPI* method = */type.addMethod("sqrSize", stringHasher("some_namespace::Vector3<float>::sqrSize()"), rfk::getType<float>(), 
+		/*rfk::Method* method = */type.addMethod("sqrSize", stringHasher("some_namespace::Vector3<float>::sqrSize()"), rfk::getType<float>(), 
 											 new rfk::MemberFunction<Vector3f, float()>(&Vector3f::sqrSize),
 											 rfk::EMethodFlags::Public | rfk::EMethodFlags::Inline | rfk::EMethodFlags::Const);
 
 		//Register static methods
-		rfk::StaticMethodAPI* staticMethod = type.addStaticMethod("dot", stringHasher("some_namespace::Vector3<float>::dot(Vector3 const&, Vector3 const&)"), rfk::getType<float>(),
+		rfk::StaticMethod* staticMethod = type.addStaticMethod("dot", stringHasher("some_namespace::Vector3<float>::dot(Vector3 const&, Vector3 const&)"), rfk::getType<float>(),
 																  new rfk::NonMemberFunction<float(Vector3f const&, Vector3f const&)>(&Vector3f::dot),
 																  rfk::EMethodFlags::Public | rfk::EMethodFlags::Static | rfk::EMethodFlags::Inline);
 

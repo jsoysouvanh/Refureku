@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/FunctionBaseAPI.h"
+#include "Refureku/TypeInfo/Functions/FunctionBase.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
 
 namespace rfk
 {
-	class MethodBaseAPI : public FunctionBaseAPI
+	class MethodBase : public FunctionBase
 	{
 		public:
 			/**
@@ -82,8 +82,8 @@ namespace rfk
 			//Forward declaration
 			class MethodBaseImpl;
 
-			REFUREKU_INTERNAL MethodBaseAPI(MethodBaseImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL MethodBaseAPI(MethodBaseAPI&&)				noexcept;
-			REFUREKU_INTERNAL ~MethodBaseAPI()								noexcept;
+			REFUREKU_INTERNAL MethodBase(MethodBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL MethodBase(MethodBase&&)				noexcept;
+			REFUREKU_INTERNAL ~MethodBase()								noexcept;
 	};
 }

@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
 #include "Refureku/TypeInfo/Variables/FieldBaseImpl.h"
 
 namespace rfk
 {
-	class StaticFieldAPI::StaticFieldImpl : public FieldBaseAPI::FieldBaseImpl
+	class StaticField::StaticFieldImpl : public FieldBase::FieldBaseImpl
 	{
 		private:
 			/** Ptr to the static field. */

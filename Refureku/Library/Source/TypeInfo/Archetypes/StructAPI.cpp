@@ -105,13 +105,13 @@ bool StructAPI::foreachNestedArchetype(Visitor<Archetype> visitor, void* userDat
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(), visitor, userData);
 }
 
-FieldAPI const* StructAPI::getFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+Field const* StructAPI::getFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	FieldAPI const* result = nullptr;
+	Field const* result = nullptr;
 
 	EntityUtility::foreachEntityNamed(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(),
 									  name,
-									  [this, &result, minFlags, shouldInspectInherited](FieldAPI const& field)
+									  [this, &result, minFlags, shouldInspectInherited](Field const& field)
 									  {
 										  /**
 										  *	fields variable contains both this struct fields and inherited fields,
@@ -133,14 +133,14 @@ FieldAPI const* StructAPI::getFieldByName(char const* name, EFieldFlags minFlags
 	return result;
 }
 
-Vector<FieldAPI const*> StructAPI::getFieldsByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+Vector<Field const*> StructAPI::getFieldsByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	//Users using this method likely are waiting for at least 2 results, so default capacity to 2.
-	Vector<FieldAPI const*> result(2);
+	Vector<Field const*> result(2);
 
 	EntityUtility::foreachEntityNamed(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(),
 									  name,
-									  [this, &result, minFlags, shouldInspectInherited](FieldAPI const& field)
+									  [this, &result, minFlags, shouldInspectInherited](Field const& field)
 									  {
 										  /**
 										  *	fields variable contains both this struct fields and inherited fields,
@@ -161,18 +161,18 @@ Vector<FieldAPI const*> StructAPI::getFieldsByName(char const* name, EFieldFlags
 	return result;
 }
 
-bool StructAPI::foreachField(Visitor<FieldAPI> visitor, void* userData) const
+bool StructAPI::foreachField(Visitor<Field> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(), visitor, userData);
 }
 
-StaticFieldAPI const* StructAPI::getStaticFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+StaticField const* StructAPI::getStaticFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	StaticFieldAPI const* result = nullptr;
+	StaticField const* result = nullptr;
 
 	EntityUtility::foreachEntityNamed(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(),
 									  name,
-									  [this, &result, minFlags, shouldInspectInherited](StaticFieldAPI const& staticField)
+									  [this, &result, minFlags, shouldInspectInherited](StaticField const& staticField)
 									  {
 										  /**
 										  *	static fields container contains both this struct static fields and inherited static fields,
@@ -194,14 +194,14 @@ StaticFieldAPI const* StructAPI::getStaticFieldByName(char const* name, EFieldFl
 	return result;
 }
 
-Vector<StaticFieldAPI const*> StructAPI::getStaticFieldsByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
+Vector<StaticField const*> StructAPI::getStaticFieldsByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	//Users using this method likely are waiting for at least 2 results, so default capacity to 2.
-	Vector<StaticFieldAPI const*> result(2);
+	Vector<StaticField const*> result(2);
 
 	EntityUtility::foreachEntityNamed(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(),
 									  name,
-									  [this, &result, minFlags, shouldInspectInherited](StaticFieldAPI const& staticField)
+									  [this, &result, minFlags, shouldInspectInherited](StaticField const& staticField)
 									  {
 										  /**
 										  *	static fields container contains both this struct static fields and inherited static fields,
@@ -222,19 +222,19 @@ Vector<StaticFieldAPI const*> StructAPI::getStaticFieldsByName(char const* name,
 	return result;
 }
 
-bool StructAPI::foreachStaticField(Visitor<StaticFieldAPI> visitor, void* userData) const
+bool StructAPI::foreachStaticField(Visitor<StaticField> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(), visitor, userData);
 }
 
-MethodAPI const* StructAPI::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+Method const* StructAPI::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-	MethodAPI const*	result		= nullptr;
+	Method const*	result		= nullptr;
 
 	bool foundMethod = EntityUtility::foreachEntityNamed(structImpl->getMethods(),
 									  name,
-									  [&result, minFlags](MethodAPI const& method)
+									  [&result, minFlags](Method const& method)
 									  {
 										  if ((method.getFlags() & minFlags) == minFlags)
 										  {
@@ -270,15 +270,15 @@ MethodAPI const* StructAPI::getMethodByName(char const* name, EMethodFlags minFl
 	}
 }
 
-Vector<MethodAPI const*> StructAPI::getMethodsByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+Vector<Method const*> StructAPI::getMethodsByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	//Users using this method likely are waiting for at least 2 results, so default capacity to 2.
-	Vector<MethodAPI const*>	result(2);
+	Vector<Method const*>	result(2);
 	StructImpl const*			structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
 
 	EntityUtility::foreachEntityNamed(structImpl->getMethods(),
 									 name,
-									 [&result, minFlags](MethodAPI const& method)
+									 [&result, minFlags](Method const& method)
 									 {
 										 if ((method.getFlags() & minFlags) == minFlags)
 										 {
@@ -300,19 +300,19 @@ Vector<MethodAPI const*> StructAPI::getMethodsByName(char const* name, EMethodFl
 	return result;
 }
 
-bool StructAPI::foreachMethod(Visitor<MethodAPI> visitor, void* userData) const
+bool StructAPI::foreachMethod(Visitor<Method> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getMethods(), visitor, userData);
 }
 
-StaticMethodAPI const* StructAPI::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+StaticMethod const* StructAPI::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	StructImpl const*		structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-	StaticMethodAPI const*	result		= nullptr;
+	StaticMethod const*	result		= nullptr;
 
 	bool foundMethod = EntityUtility::foreachEntityNamed(structImpl->getStaticMethods(),
 														 name,
-														 [&result, minFlags](StaticMethodAPI const& staticMethod)
+														 [&result, minFlags](StaticMethod const& staticMethod)
 														 {
 															 if ((staticMethod.getFlags() & minFlags) == minFlags)
 															 {
@@ -348,15 +348,15 @@ StaticMethodAPI const* StructAPI::getStaticMethodByName(char const* name, EMetho
 	}
 }
 
-Vector<StaticMethodAPI const*> StructAPI::getStaticMethodsByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+Vector<StaticMethod const*> StructAPI::getStaticMethodsByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	//Users using this method likely are waiting for at least 2 results, so default capacity to 2.
-	Vector<StaticMethodAPI const*>	result(2);
+	Vector<StaticMethod const*>	result(2);
 	StructImpl const*				structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
 
 	EntityUtility::foreachEntityNamed(structImpl->getStaticMethods(),
 								   	 name,
-								   	 [&result, minFlags](StaticMethodAPI const& staticMethod)
+								   	 [&result, minFlags](StaticMethod const& staticMethod)
 								   	 {
 								   		 if ((staticMethod.getFlags() & minFlags) == minFlags)
 								   		 {
@@ -379,7 +379,7 @@ Vector<StaticMethodAPI const*> StructAPI::getStaticMethodsByName(char const* nam
 	return result;
 }
 
-bool StructAPI::foreachStaticMethod(Visitor<StaticMethodAPI> visitor, void* userData) const
+bool StructAPI::foreachStaticMethod(Visitor<StaticMethod> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticMethods(), visitor, userData);
 }
@@ -426,7 +426,7 @@ void StructAPI::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 	reinterpret_cast<StructImpl*>(getPimpl())->setNestedArchetypesCapacity(capacity);
 }
 
-FieldAPI* StructAPI::addField(char const* name, std::size_t id, Type const& type,
+Field* StructAPI::addField(char const* name, std::size_t id, Type const& type,
 							  EFieldFlags flags, std::size_t memoryOffset, StructAPI const* outerEntity) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addField(name, id, type, flags, this, memoryOffset, outerEntity);
@@ -437,13 +437,13 @@ void StructAPI::setFieldsCapacity(std::size_t capacity) noexcept
 	return reinterpret_cast<StructImpl*>(getPimpl())->setFieldsCapacity(capacity);
 }
 
-StaticFieldAPI* StructAPI::addStaticField(char const* name, std::size_t id, Type const& type,
+StaticField* StructAPI::addStaticField(char const* name, std::size_t id, Type const& type,
 										  EFieldFlags flags, void* fieldPtr, StructAPI const* outerEntity) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
 }
 
-StaticFieldAPI* StructAPI::addStaticField(char const* name, std::size_t id, Type const& type,
+StaticField* StructAPI::addStaticField(char const* name, std::size_t id, Type const& type,
 										  EFieldFlags flags, void const* fieldPtr, StructAPI const* outerEntity) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
@@ -454,7 +454,7 @@ void StructAPI::setStaticFieldsCapacity(std::size_t capacity) noexcept
 	return reinterpret_cast<StructImpl*>(getPimpl())->setStaticFieldsCapacity(capacity);
 }
 
-MethodAPI* StructAPI::addMethod(char const* name, std::size_t id,
+Method* StructAPI::addMethod(char const* name, std::size_t id,
 								Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addMethod(name, id, returnType, internalMethod, flags, this);
@@ -465,7 +465,7 @@ void StructAPI::setMethodsCapacity(std::size_t capacity) noexcept
 	return reinterpret_cast<StructImpl*>(getPimpl())->setMethodsCapacity(capacity);
 }
 
-StaticMethodAPI* StructAPI::addStaticMethod(char const* name, std::size_t id,
+StaticMethod* StructAPI::addStaticMethod(char const* name, std::size_t id,
 											Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
 {
 	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticMethod(name, id, returnType, internalMethod, flags, this);
@@ -481,7 +481,7 @@ void StructAPI::setDefaultInstantiator(void* (*instantiator)()) noexcept
 	reinterpret_cast<StructImpl*>(getPimpl())->setDefaultInstantiator(instantiator);
 }
 
-void StructAPI::addInstantiator(StaticMethodAPI const* instantiator) noexcept
+void StructAPI::addInstantiator(StaticMethod const* instantiator) noexcept
 {
 	reinterpret_cast<StructImpl*>(getPimpl())->addInstantiator(instantiator);
 }
@@ -500,7 +500,7 @@ std::size_t StructAPI::getInstantiatorsCount() const noexcept
 	return reinterpret_cast<StructImpl const*>(getPimpl())->getCustomInstantiators().size();
 }
 
-StaticMethodAPI const* StructAPI::getInstantiatorAt(std::size_t index) const noexcept
+StaticMethod const* StructAPI::getInstantiatorAt(std::size_t index) const noexcept
 {
 	return reinterpret_cast<StructImpl const*>(getPimpl())->getCustomInstantiators()[index];
 }

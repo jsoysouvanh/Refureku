@@ -7,26 +7,26 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Variables/VariableBaseAPI.h"
+#include "Refureku/TypeInfo/Variables/VariableBase.h"
 #include "Refureku/TypeInfo/Variables/EVarFlags.h"
 
 namespace rfk
 {
-	class VariableAPI final : public VariableBaseAPI
+	class Variable final : public VariableBase
 	{
 		public:
-			REFUREKU_API		VariableAPI(char const*	name,
+			REFUREKU_API		Variable(char const*	name,
 											std::size_t	id,
 											Type const&	type,
 											void*			ptr,
 											EVarFlags		flags)		noexcept;
-			REFUREKU_API		VariableAPI(char const*	name,
+			REFUREKU_API		Variable(char const*	name,
 											std::size_t	id,
 											Type const&	type,
 											void const*	constPtr,
 											EVarFlags		flags)		noexcept;
-			REFUREKU_INTERNAL	VariableAPI(VariableAPI&&)				noexcept;
-			REFUREKU_API		~VariableAPI()							noexcept;
+			REFUREKU_INTERNAL	Variable(Variable&&)				noexcept;
+			REFUREKU_API		~Variable()							noexcept;
 
 			/**
 			*	@brief Get the value stored in this variable.
@@ -104,5 +104,5 @@ namespace rfk
 			class VariableImpl;
 	};
 
-	#include "Refureku/TypeInfo/Variables/VariableAPI.inl"
+	#include "Refureku/TypeInfo/Variables/Variable.inl"
 }

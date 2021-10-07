@@ -6,19 +6,19 @@
 */
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType FunctionAPI::internalInvoke(ArgTypes&&... args) const
+ReturnType StaticMethod::internalInvoke(ArgTypes&&... args) const noexcept
 {
 	return reinterpret_cast<NonMemberFunction<ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(std::forward<ArgTypes>(args)...);
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType FunctionAPI::invoke(ArgTypes&&... args) const
+ReturnType StaticMethod::invoke(ArgTypes&&... args) const
 {
 	return internalInvoke<ReturnType, ArgTypes...>(std::forward<ArgTypes>(args)...);
 }
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType FunctionAPI::checkedInvoke(ArgTypes&&... args) const
+ReturnType StaticMethod::checkedInvoke(ArgTypes&&... args) const
 {
 	checkReturnType<ReturnType>();
 	checkParameterTypes<ArgTypes...>();

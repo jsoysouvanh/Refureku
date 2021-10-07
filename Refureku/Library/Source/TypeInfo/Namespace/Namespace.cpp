@@ -157,81 +157,81 @@ bool Namespace::foreachArchetype(Visitor<Archetype> visitor, void* userData) con
 	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(), visitor, userData);
 }
 
-VariableAPI const* Namespace::getVariableByName(char const* name, EVarFlags flags) const noexcept
+Variable const* Namespace::getVariableByName(char const* name, EVarFlags flags) const noexcept
 {
-	return reinterpret_cast<VariableAPI const*>(
+	return reinterpret_cast<Variable const*>(
 		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(),
 													name,
-													[flags](VariableAPI const& var) { return (var.getFlags() & flags) == flags; }));
+													[flags](Variable const& var) { return (var.getFlags() & flags) == flags; }));
 }
 
-VariableAPI const* Namespace::getVariableByPredicate(Predicate<VariableAPI> predicate, void* userData) const
+Variable const* Namespace::getVariableByPredicate(Predicate<Variable> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
 		EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(),
-		[predicate, userData](VariableAPI const& variable)
+		[predicate, userData](Variable const& variable)
 		{
 			return predicate(variable, userData);
 		}) : nullptr;
 }
 
-Vector<VariableAPI const*> Namespace::getVariablesByPredicate(Predicate<VariableAPI> predicate, void* userData) const
+Vector<Variable const*> Namespace::getVariablesByPredicate(Predicate<Variable> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
 		EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(),
-											  [predicate, userData](VariableAPI const& variable)
+											  [predicate, userData](Variable const& variable)
 											  {
 												  return predicate(variable, userData);
-											  }) : Vector<VariableAPI const*>(0);
+											  }) : Vector<Variable const*>(0);
 }
 
-bool Namespace::foreachVariable(Visitor<VariableAPI> visitor, void* userData) const
+bool Namespace::foreachVariable(Visitor<Variable> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(), visitor, userData);
 }
 
-FunctionAPI const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
+Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
-	return reinterpret_cast<FunctionAPI const*>(
+	return reinterpret_cast<Function const*>(
 		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
 													name,
-													[flags](FunctionAPI const& func)
+													[flags](Function const& func)
 													{
 														return (func.getFlags() & flags) == flags;
 													}));
 }
 
-Vector<FunctionAPI const*> Namespace::getFunctionsByName(char const* name, EFunctionFlags flags) const noexcept
+Vector<Function const*> Namespace::getFunctionsByName(char const* name, EFunctionFlags flags) const noexcept
 {
 	return EntityUtility::getEntitiesByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
 														name,
-														[flags](FunctionAPI const& func)
+														[flags](Function const& func)
 														{
 															return (func.getFlags() & flags) == flags;
 														});
 }
 
-FunctionAPI const* Namespace::getFunctionByPredicate(Predicate<FunctionAPI> predicate, void* userData) const
+Function const* Namespace::getFunctionByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
 		EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
-											[predicate, userData](FunctionAPI const& function)
+											[predicate, userData](Function const& function)
 											{
 												return predicate(function, userData);
 											}) : nullptr;
 }
 
-Vector<FunctionAPI const*> Namespace::getFunctionsByPredicate(Predicate<FunctionAPI> predicate, void* userData) const
+Vector<Function const*> Namespace::getFunctionsByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
 		EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
-											  [predicate, userData](FunctionAPI const& function)
+											  [predicate, userData](Function const& function)
 											  {
 												  return predicate(function, userData);
-											  }) : Vector<FunctionAPI const*>(0);
+											  }) : Vector<Function const*>(0);
 }
 
-bool Namespace::foreachFunction(Visitor<FunctionAPI> visitor, void* userData) const
+bool Namespace::foreachFunction(Visitor<Function> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(), visitor, userData);
 }
@@ -246,12 +246,12 @@ void Namespace::addArchetype(Archetype const& archetype) noexcept
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->addArchetype(archetype);
 }
 
-void Namespace::addVariable(VariableAPI const& variable) noexcept
+void Namespace::addVariable(Variable const& variable) noexcept
 {
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->addVariable(variable);
 }
 
-void Namespace::addFunction(FunctionAPI const& function) noexcept
+void Namespace::addFunction(Function const& function) noexcept
 {
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->addFunction(function);
 }
@@ -266,12 +266,12 @@ void Namespace::removeArchetype(Archetype const& archetype) noexcept
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeArchetype(archetype);
 }
 
-void Namespace::removeVariable(VariableAPI const& variable) noexcept
+void Namespace::removeVariable(Variable const& variable) noexcept
 {
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeVariable(variable);
 }
 
-void Namespace::removeFunction(FunctionAPI const& function) noexcept
+void Namespace::removeFunction(Function const& function) noexcept
 {
 	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeFunction(function);
 }

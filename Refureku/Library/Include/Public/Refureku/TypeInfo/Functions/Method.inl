@@ -6,25 +6,25 @@
 */
 
 template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType MethodAPI::internalInvoke(CallerType& caller, ArgTypes&&... args) const
+ReturnType Method::internalInvoke(CallerType& caller, ArgTypes&&... args) const
 {
 	return reinterpret_cast<MemberFunction<CallerType, ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(caller, std::forward<ArgTypes>(args)...);
 }
 
 template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType MethodAPI::internalInvoke(CallerType const& caller, ArgTypes&&... args) const
+ReturnType Method::internalInvoke(CallerType const& caller, ArgTypes&&... args) const
 {
 	return reinterpret_cast<MemberFunction<CallerType, ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(caller, std::forward<ArgTypes>(args)...);
 }
 
 template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType MethodAPI::invoke(CallerType& caller, ArgTypes&&... args) const
+ReturnType Method::invoke(CallerType& caller, ArgTypes&&... args) const
 {
 	return internalInvoke<ReturnType, CallerType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
 }
 
 template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType MethodAPI::invoke(CallerType const& caller, ArgTypes&&... args) const
+ReturnType Method::invoke(CallerType const& caller, ArgTypes&&... args) const
 {
 	if (!isConst())
 	{
@@ -35,7 +35,7 @@ ReturnType MethodAPI::invoke(CallerType const& caller, ArgTypes&&... args) const
 }
 
 template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType MethodAPI::checkedInvoke(CallerType& caller, ArgTypes&&... args) const
+ReturnType Method::checkedInvoke(CallerType& caller, ArgTypes&&... args) const
 {
 	checkReturnType<ReturnType>();
 	checkParameterTypes<ArgTypes...>();
@@ -45,7 +45,7 @@ ReturnType MethodAPI::checkedInvoke(CallerType& caller, ArgTypes&&... args) cons
 }
 
 template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType MethodAPI::checkedInvoke(CallerType const& caller, ArgTypes&&... args) const
+ReturnType Method::checkedInvoke(CallerType const& caller, ArgTypes&&... args) const
 {
 	checkReturnType<ReturnType>();
 	checkParameterTypes<ArgTypes...>();

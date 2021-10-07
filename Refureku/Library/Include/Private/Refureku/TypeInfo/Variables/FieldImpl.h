@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Variables/FieldAPI.h"
+#include "Refureku/TypeInfo/Variables/Field.h"
 #include "Refureku/TypeInfo/Variables/FieldBaseImpl.h"
 
 namespace rfk
 {
-	class FieldAPI::FieldImpl final : public FieldBaseAPI::FieldBaseImpl
+	class Field::FieldImpl final : public FieldBase::FieldBaseImpl
 	{
 		private:
 			/** Memory offset in bytes of this field in its owner class. */

@@ -16,7 +16,7 @@
 
 namespace rfk
 {
-	class VariableBaseAPI : public Entity
+	class VariableBase : public Entity
 	{
 		public:
 			/**
@@ -30,9 +30,9 @@ namespace rfk
 			//Forward declaration
 			class VariableBaseImpl;
 
-			REFUREKU_INTERNAL VariableBaseAPI(VariableBaseImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL VariableBaseAPI(VariableBaseAPI&&)				noexcept;
-			REFUREKU_INTERNAL ~VariableBaseAPI()								noexcept;
+			REFUREKU_INTERNAL VariableBase(VariableBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL VariableBase(VariableBase&&)				noexcept;
+			REFUREKU_INTERNAL ~VariableBase()								noexcept;
 
 			/**
 			*	@brief Get the data stored in the provided ptr.
@@ -94,5 +94,5 @@ namespace rfk
 			RFK_NORETURN REFUREKU_API static void	throwConstViolationException(char const* message);
 	};
 
-	#include "Refureku/TypeInfo/Variables/VariableBaseAPI.inl"
+	#include "Refureku/TypeInfo/Variables/VariableBase.inl"
 }

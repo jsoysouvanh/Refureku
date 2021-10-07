@@ -17,7 +17,7 @@ ReturnType* StructAPI::makeInstance(ArgTypes&&... args) const
 	}
 	else
 	{
-		StaticMethodAPI const* instantiator;
+		StaticMethod const* instantiator;
 
 		for (std::size_t i = 0u; i < getInstantiatorsCount(); i++)
 		{

@@ -158,58 +158,58 @@ FundamentalArchetype const* DatabaseAPI::getFundamentalArchetypeByName(char cons
 	return EntityUtility::getEntityByName(_pimpl->getFundamentalArchetypesByName(), name);
 }
 
-VariableAPI const* DatabaseAPI::getVariableById(std::size_t id) const noexcept
+Variable const* DatabaseAPI::getVariableById(std::size_t id) const noexcept
 {
-	return entityCast<VariableAPI>(getEntityById(id));
+	return entityCast<Variable>(getEntityById(id));
 }
 
-VariableAPI const* DatabaseAPI::getVariableByName(char const* name, EVarFlags flags) const noexcept
+Variable const* DatabaseAPI::getVariableByName(char const* name, EVarFlags flags) const noexcept
 {
 	return EntityUtility::getEntityByNameAndPredicate(_pimpl->getFileLevelVariablesByName(),
 													  name,
-													  [flags](VariableAPI const& var) { return (var.getFlags() & flags) == flags; });
+													  [flags](Variable const& var) { return (var.getFlags() & flags) == flags; });
 }
 
-bool DatabaseAPI::foreachFileLevelVariable(Visitor<VariableAPI> visitor, void* userData) const
+bool DatabaseAPI::foreachFileLevelVariable(Visitor<Variable> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelVariablesByName(), visitor, userData);
 }
 
-FunctionAPI const* DatabaseAPI::getFunctionById(std::size_t id) const noexcept
+Function const* DatabaseAPI::getFunctionById(std::size_t id) const noexcept
 {
-	return entityCast<FunctionAPI>(getEntityById(id));
+	return entityCast<Function>(getEntityById(id));
 }
 
-FunctionAPI const* DatabaseAPI::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
+Function const* DatabaseAPI::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
 	return EntityUtility::getEntityByNameAndPredicate(_pimpl->getFileLevelFunctionsByName(),
 													  name,
-													  [flags](FunctionAPI const& func) { return (func.getFlags() & flags) == flags; });
+													  [flags](Function const& func) { return (func.getFlags() & flags) == flags; });
 }
 
-bool DatabaseAPI::foreachFileLevelFunction(Visitor<FunctionAPI> visitor, void* userData) const
+bool DatabaseAPI::foreachFileLevelFunction(Visitor<Function> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelFunctionsByName(), visitor, userData);
 }
 
-MethodAPI const* DatabaseAPI::getMethodById(std::size_t id) const noexcept
+Method const* DatabaseAPI::getMethodById(std::size_t id) const noexcept
 {
-	return entityCast<MethodAPI>(getEntityById(id));
+	return entityCast<Method>(getEntityById(id));
 }
 
-StaticMethodAPI const* DatabaseAPI::getStaticMethodById(std::size_t id) const noexcept
+StaticMethod const* DatabaseAPI::getStaticMethodById(std::size_t id) const noexcept
 {
-	return entityCast<StaticMethodAPI>(getEntityById(id));
+	return entityCast<StaticMethod>(getEntityById(id));
 }
 
-FieldAPI const* DatabaseAPI::getFieldById(std::size_t id) const noexcept
+Field const* DatabaseAPI::getFieldById(std::size_t id) const noexcept
 {
-	return entityCast<FieldAPI>(getEntityById(id));
+	return entityCast<Field>(getEntityById(id));
 }
 
-StaticFieldAPI const* DatabaseAPI::getStaticFieldById(std::size_t id) const noexcept
+StaticField const* DatabaseAPI::getStaticFieldById(std::size_t id) const noexcept
 {
-	return entityCast<StaticFieldAPI>(getEntityById(id));
+	return entityCast<StaticField>(getEntityById(id));
 }
 
 EnumValue const* DatabaseAPI::getEnumValueById(std::size_t id) const noexcept

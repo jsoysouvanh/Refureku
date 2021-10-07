@@ -7,22 +7,22 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/MethodBaseAPI.h"
-#include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
+#include "Refureku/TypeInfo/Functions/MethodBase.h"
+#include "Refureku/TypeInfo/Functions/MemberFunction.h"
 
 namespace rfk
 {
-	class StaticMethodAPI final : public MethodBaseAPI
+	class Method final : public MethodBase
 	{
 		public:
-			REFUREKU_INTERNAL StaticMethodAPI(char const*		name,
-											  std::size_t		id,
-											  Type const&	returnType,
-											  ICallable*		internalMethod,
-											  EMethodFlags		flags,
-											  Entity const*		outerEntity)	noexcept;
-			REFUREKU_INTERNAL StaticMethodAPI(StaticMethodAPI&&)				noexcept;
-			REFUREKU_INTERNAL ~StaticMethodAPI()								noexcept;
+			REFUREKU_INTERNAL Method(char const*			name,
+										std::size_t			id,
+										Type const&		returnType,
+										ICallable*			internalMethod,
+										EMethodFlags		flags,
+										Entity const*	outerEntity)	noexcept;
+			REFUREKU_INTERNAL Method(Method&&)						noexcept;
+			REFUREKU_INTERNAL ~Method()									noexcept;
 
 			/**
 			*	@brief	Call the function with the forwarded argument(s) if any, and return the result.
@@ -32,6 +32,7 @@ namespace rfk
 			*			to explicitly specify all template types when calling the function.
 			*
 			*	@tparam ReturnType	Return type of the function.
+			*	@tparam CallerType	Type of the calling struct/class.
 			*	@tparam... ArgTypes	Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
 			*	@param args Arguments forwarded to the function call.
@@ -39,9 +40,12 @@ namespace rfk
 			*	@return The result of the function call.
 			* 
 			*	@exception Any exception potentially thrown from the underlying function.
+			*	@exception ConstViolation if the caller is const but the method is non-const.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	invoke(ArgTypes&&... args)			const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			invoke(CallerType& caller, ArgTypes&&... args)				const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			invoke(CallerType const& caller, ArgTypes&&... args)		const;
 
 			/**
 			*	@brief	Call the function with the forwarded argument(s) if any, and return the result.
@@ -53,6 +57,7 @@ namespace rfk
 			*			to explicitly specify all template types when calling the function.
 			*
 			*	@tparam ReturnType	Return type of the function.
+			*	@tparam CallerType	Type of the calling struct/class.
 			*	@tparam... ArgTypes	Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
 			*	@param args Arguments forwarded to the function call.
@@ -65,26 +70,45 @@ namespace rfk
 			*	@exception	ReturnTypeMismatch if ReturnType is not strictly the same as this function return type.
 			*	@exception	Any exception potentially thrown from the underlying function.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	checkedInvoke(ArgTypes&&... args)	const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			checkedInvoke(CallerType& caller, ArgTypes&&... args)		const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType			checkedInvoke(CallerType const& caller, ArgTypes&&... args)	const;
+
+			/**
+			*	@brief	Inherit from the properties this method overrides.
+			*			If the method is not an override, this method does nothing.
+			*/
+			REFUREKU_API void	inheritBaseMethodProperties()									noexcept;
 
 		private:
 			//Forward declaration
-			class StaticMethodImpl;
+			class MethodImpl;
 
 			/**
-			*	@brief Call the underlying static method with the forwarded args.
+			*	@brief Call the underlying method with the forwarded args.
 			* 
-			*	@tparam ReturnType	Return type of the static method.
+			*	@tparam ReturnType	Return type of the method.
+			*	@tparam CallerType	Type of the calling struct/class.
 			*	@tparam... ArgTypes	Type of all arguments.
 			*
-			*	@param args Arguments forwarded to the underlying static method call.
+			*	@param caller	Reference to the caller struct/class.
+			*	@param args		Arguments forwarded to the underlying method call.
 			*
-			*	@return The result of the underlying static method call.
+			*	@return The result of the underlying method call.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(ArgTypes&&... args) const noexcept;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType						internalInvoke(CallerType& caller, ArgTypes&&... args)			const;
+			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			ReturnType						internalInvoke(CallerType const& caller, ArgTypes&&... args)	const;
+
+			/**
+			*	@brief Throw a const violation exception with the provided message.
+			* 
+			*	@param message Message forwarded to the exception.
+			*/
+			RFK_NORETURN REFUREKU_API void	throwConstViolationException(char const* message)				const;
 	};
 
-	#include "Refureku/TypeInfo/Functions/StaticMethodAPI.inl"
+	#include "Refureku/TypeInfo/Functions/Method.inl"
 }

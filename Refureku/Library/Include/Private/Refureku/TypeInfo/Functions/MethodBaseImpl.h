@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/MethodBaseAPI.h"
+#include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/FunctionBaseImpl.h"
 
 namespace rfk
 {
-	class MethodBaseAPI::MethodBaseImpl : public FunctionBaseAPI::FunctionBaseImpl
+	class MethodBase::MethodBaseImpl : public FunctionBase::FunctionBaseImpl
 	{
 		private:
 			/** Flags qualifying this method. */

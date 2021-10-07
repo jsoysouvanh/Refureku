@@ -303,10 +303,10 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 	inout_result += "#include <string>" + env.getSeparator() +
 					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
 					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Functions/MethodAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Functions/StaticMethodAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Variables/FieldAPI.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Variables/StaticFieldAPI.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Functions/Method.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Functions/StaticMethod.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Variables/Field.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Variables/StaticField.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Enum.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/EnumValue.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>" + env.getSeparator() +							//TODO: Only when there is a template class
@@ -316,15 +316,15 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 
 	//Forward declarations
 	inout_result += "namespace rfk { "
-					"class VariableAPI; "
-					"class FunctionAPI;"
+					"class Variable; "
+					"class Function;"
 					" }" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "#include <Refureku/TypeInfo/Variables/VariableAPI.h>" + env.getSeparator() +						//TODO: Only if there is a variable
-					"#include <Refureku/TypeInfo/Functions/FunctionAPI.h>" + env.getSeparator() +						//TODO: Only if there is a function
+	inout_result += "#include <Refureku/TypeInfo/Variables/Variable.h>" + env.getSeparator() +						//TODO: Only if there is a variable
+					"#include <Refureku/TypeInfo/Functions/Function.h>" + env.getSeparator() +						//TODO: Only if there is a function
 					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +							//TODO: Only if there is a namespace
@@ -561,7 +561,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 {
 	if (!structClass.methods.empty())
 	{
-		inout_result += "[[maybe_unused]] rfk::MethodAPI* method = nullptr; [[maybe_unused]] rfk::StaticMethodAPI* staticMethod = nullptr;" + env.getSeparator();
+		inout_result += "[[maybe_unused]] rfk::Method* method = nullptr; [[maybe_unused]] rfk::StaticMethod* staticMethod = nullptr;" + env.getSeparator();
 	}
 
 	std::string generatedCode;
@@ -718,7 +718,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	//Make the child class inherit from the parents class fields
 	if (!structClass.fields.empty())
 	{
-		inout_result += "[[maybe_unused]] rfk::FieldAPI* field = nullptr; [[maybe_unused]] rfk::StaticFieldAPI* staticField = nullptr;" + env.getSeparator();
+		inout_result += "[[maybe_unused]] rfk::Field* field = nullptr; [[maybe_unused]] rfk::StaticField* staticField = nullptr;" + env.getSeparator();
 
 		//Trick to have the pragma statement outside of the UNPACK_IF_NOT_PARSING macro
 		//If not doing that, the pragma is ignored and offsetof warnings are issued on gcc & clang.
@@ -1157,16 +1157,16 @@ void ReflectionCodeGenModule::declareGetVariableFunction(kodgen::VariableInfo co
 {
 	beginHiddenGeneratedCode(env, inout_result);
 
-	inout_result += "namespace rfk::generated { rfk::VariableAPI const& " + computeGetVariableFunctionName(variable) + "() noexcept; }" + env.getSeparator();
+	inout_result += "namespace rfk::generated { rfk::Variable const& " + computeGetVariableFunctionName(variable) + "() noexcept; }" + env.getSeparator();
 
 	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += "rfk::VariableAPI const& rfk::generated::" + computeGetVariableFunctionName(variable) + "() noexcept {" + env.getSeparator() +
+	inout_result += "rfk::Variable const& rfk::generated::" + computeGetVariableFunctionName(variable) + "() noexcept {" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator() + 
-		"static rfk::VariableAPI variable(\"" + variable.name + "\", " +
+		"static rfk::Variable variable(\"" + variable.name + "\", " +
 		getEntityId(variable) + ", "
 		"rfk::getType<" + variable.type.getCanonicalName() + ">(), "
 		"const_cast<" + variable.type.getName(true) + "*>(&" + variable.getFullName() + "), "
@@ -1215,16 +1215,16 @@ void ReflectionCodeGenModule::declareGetFunctionFunction(kodgen::FunctionInfo co
 {
 	beginHiddenGeneratedCode(env, inout_result);
 
-	inout_result += "namespace rfk::generated { rfk::FunctionAPI const& " + computeGetFunctionFunctionName(function) + "() noexcept; }" + env.getSeparator();
+	inout_result += "namespace rfk::generated { rfk::Function const& " + computeGetFunctionFunctionName(function) + "() noexcept; }" + env.getSeparator();
 
 	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += "rfk::FunctionAPI const& rfk::generated::" + computeGetFunctionFunctionName(function) + "() noexcept {" + env.getSeparator() +
+	inout_result += "rfk::Function const& rfk::generated::" + computeGetFunctionFunctionName(function) + "() noexcept {" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator() + 
-		"static rfk::FunctionAPI function(\"" + function.name + "\", " +
+		"static rfk::Function function(\"" + function.name + "\", " +
 		getEntityId(function) + ", "
 		"rfk::getType<" + function.returnType.getCanonicalName() + ">(), "
 		"new rfk::NonMemberFunction<" + function.getPrototype(true) + ">(&" + function.getFullName() + "), "

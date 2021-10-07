@@ -1,14 +1,19 @@
 #include "Refureku/TypeInfo/Functions/FunctionParameter.h"
 
+#include "Refureku/TypeInfo/Functions/FunctionParameterImpl.h"
+
 using namespace rfk;
 
-FunctionParameter::FunctionParameter(std::string&& name, Type const& type) noexcept:
-	_name{std::forward<std::string>(name)},
-	_type{type}
+FunctionParameter::FunctionParameter(char const* name, std::size_t id, Type const& type, Entity const* outerEntity) noexcept:
+	Entity(new FunctionParameterImpl(name, id, type, outerEntity))
 {
 }
 
-std::string const& FunctionParameter::getName() const noexcept
+FunctionParameter::FunctionParameter(FunctionParameter&&) noexcept = default;
+
+FunctionParameter::~FunctionParameter() noexcept = default;
+
+Type const& FunctionParameter::getType() const noexcept
 {
-	return _name;
+	return reinterpret_cast<FunctionParameterImpl const*>(getPimpl())->getType();
 }

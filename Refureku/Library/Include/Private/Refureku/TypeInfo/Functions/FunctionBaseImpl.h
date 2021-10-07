@@ -9,12 +9,12 @@
 
 #include <memory>	//std::unique_ptr
 
-#include "Refureku/TypeInfo/Functions/FunctionBaseAPI.h"
+#include "Refureku/TypeInfo/Functions/FunctionBase.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 namespace rfk
 {
-	class FunctionBaseAPI::FunctionBaseImpl : public Entity::EntityImpl
+	class FunctionBase::FunctionBaseImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Type returned by this function. */
@@ -24,7 +24,7 @@ namespace rfk
 			std::unique_ptr<ICallable>			_internalFunction;
 
 			/** Parameters of this function. */
-			std::vector<FunctionParameterAPI>	_parameters;
+			std::vector<FunctionParameter>	_parameters;
 
 		public:
 			inline FunctionBaseImpl(char const*		name, 
@@ -44,10 +44,10 @@ namespace rfk
 			*	
 			*	@return The added function parameter.
 			*/
-			inline FunctionParameterAPI&									addParameter(char const*			name,
+			inline FunctionParameter&									addParameter(char const*			name,
 																						 std::size_t			id,
 																						 Type const&			type,
-																						 FunctionBaseAPI const*	outerEntity)	noexcept;
+																						 FunctionBase const*	outerEntity)	noexcept;
 
 			/**
 			*	@brief Getter for the field _returnType.
@@ -68,7 +68,7 @@ namespace rfk
 			* 
 			*	@return _parameters.
 			*/
-			RFK_NODISCARD inline std::vector<FunctionParameterAPI> const&	getParameters()								const	noexcept;
+			RFK_NODISCARD inline std::vector<FunctionParameter> const&	getParameters()								const	noexcept;
 
 			/**
 			*	@brief Set the _parameters vector capacity.

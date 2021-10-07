@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline FunctionBaseAPI::FunctionBaseImpl::FunctionBaseImpl(char const* name, std::size_t id, EEntityKind kind,
+inline FunctionBase::FunctionBaseImpl::FunctionBaseImpl(char const* name, std::size_t id, EEntityKind kind,
 														   Type const& returnType, ICallable* internalFunction, Entity const* outerEntity) noexcept:
 	EntityImpl(name, id, kind, outerEntity),
 	_returnType{returnType},
@@ -13,27 +13,27 @@ inline FunctionBaseAPI::FunctionBaseImpl::FunctionBaseImpl(char const* name, std
 {
 }
 
-inline FunctionParameterAPI& FunctionBaseAPI::FunctionBaseImpl::addParameter(char const* name, std::size_t id, Type const& type, FunctionBaseAPI const* outerEntity) noexcept
+inline FunctionParameter& FunctionBase::FunctionBaseImpl::addParameter(char const* name, std::size_t id, Type const& type, FunctionBase const* outerEntity) noexcept
 {
 	return _parameters.emplace_back(name, id, type, outerEntity);
 }
 
-inline Type const& FunctionBaseAPI::FunctionBaseImpl::getReturnType() const noexcept
+inline Type const& FunctionBase::FunctionBaseImpl::getReturnType() const noexcept
 {
 	return _returnType;
 }
 
-inline ICallable* FunctionBaseAPI::FunctionBaseImpl::getInternalFunction() const noexcept
+inline ICallable* FunctionBase::FunctionBaseImpl::getInternalFunction() const noexcept
 {
 	return _internalFunction.get();
 }
 
-inline std::vector<FunctionParameterAPI> const& FunctionBaseAPI::FunctionBaseImpl::getParameters() const noexcept
+inline std::vector<FunctionParameter> const& FunctionBase::FunctionBaseImpl::getParameters() const noexcept
 {
 	return _parameters;
 }
 
-inline void FunctionBaseAPI::FunctionBaseImpl::setParametersCapacity(std::size_t capacity) noexcept
+inline void FunctionBase::FunctionBaseImpl::setParametersCapacity(std::size_t capacity) noexcept
 {
 	_parameters.reserve(capacity);
 }

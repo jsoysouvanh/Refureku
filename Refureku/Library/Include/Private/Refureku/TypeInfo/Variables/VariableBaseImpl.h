@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Variables/VariableBaseAPI.h"
+#include "Refureku/TypeInfo/Variables/VariableBase.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 namespace rfk
 {
-	class VariableBaseAPI::VariableBaseImpl : public Entity::EntityImpl
+	class VariableBase::VariableBaseImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Type of this variable. */

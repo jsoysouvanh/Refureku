@@ -18,7 +18,7 @@ namespace rfk
 	class StructAPI;
 	using ClassAPI = StructAPI;
 	class Enum;
-	class VariableAPI;
+	class Variable;
 	class Archetype;
 
 	class Namespace final : public Entity
@@ -206,7 +206,7 @@ namespace rfk
 			*	
 			*	@return The found variable if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API VariableAPI const*			getVariableByName(char const* name,
+			RFK_NODISCARD REFUREKU_API Variable const*			getVariableByName(char const* name,
 																					  EVarFlags	  flags = EVarFlags::Default)			const	noexcept;
 
 			/**
@@ -219,7 +219,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API VariableAPI const*			getVariableByPredicate(Predicate<VariableAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Variable const*			getVariableByPredicate(Predicate<Variable>	predicate,
 																						   void*					userData)			const;
 
 			/**
@@ -232,7 +232,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<VariableAPI const*>	getVariablesByPredicate(Predicate<VariableAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Vector<Variable const*>	getVariablesByPredicate(Predicate<Variable>	predicate,
 																							void*					userData)			const;
 
 			/**
@@ -246,7 +246,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachVariable(Visitor<VariableAPI>	visitor,
+			REFUREKU_API bool										foreachVariable(Visitor<Variable>	visitor,
 																					void*					userData)					const;
 
 			/**
@@ -262,7 +262,7 @@ namespace rfk
 			*	@return The function matching with the provided prototype, name and flags if it exists, else nullptr.
 			*/
 			template <typename FunctionSignature>
-			RFK_NODISCARD FunctionAPI const*						getFunctionByName(char const*	 name,
+			RFK_NODISCARD Function const*						getFunctionByName(char const*	 name,
 																					  EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
@@ -274,7 +274,7 @@ namespace rfk
 			*	
 			*	@return The first function matching the provided name and flags if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API FunctionAPI const*			getFunctionByName(char const*	 name,
+			RFK_NODISCARD REFUREKU_API Function const*			getFunctionByName(char const*	 name,
 																					  EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
@@ -286,7 +286,7 @@ namespace rfk
 			*	
 			*	@return All functions matching the provided name and flags.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<FunctionAPI const*>	getFunctionsByName(char const*	 name,
+			RFK_NODISCARD REFUREKU_API Vector<Function const*>	getFunctionsByName(char const*	 name,
 																					   EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
@@ -299,7 +299,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API FunctionAPI const*			getFunctionByPredicate(Predicate<FunctionAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Function const*			getFunctionByPredicate(Predicate<Function>	predicate,
 																						   void*					userData)			const;
 
 			/**
@@ -312,7 +312,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<FunctionAPI const*>	getFunctionsByPredicate(Predicate<FunctionAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Vector<Function const*>	getFunctionsByPredicate(Predicate<Function>	predicate,
 																							void*					userData)			const;
 
 			/**
@@ -326,7 +326,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool										foreachFunction(Visitor<FunctionAPI>	visitor,
+			REFUREKU_API bool										foreachFunction(Visitor<Function>	visitor,
 																					void*					userData)					const;
 
 			/**
@@ -348,14 +348,14 @@ namespace rfk
 			* 
 			*	@param variable The variable to add.
 			*/
-			REFUREKU_API void										addVariable(VariableAPI const& variable)									noexcept;
+			REFUREKU_API void										addVariable(Variable const& variable)									noexcept;
 
 			/**
 			*	@brief Add a nested function to this namespace.
 			* 
 			*	@param function The function to add.
 			*/
-			REFUREKU_API void										addFunction(FunctionAPI const& function)									noexcept;
+			REFUREKU_API void										addFunction(Function const& function)									noexcept;
 
 			/**
 			*	@brief Remove a nested namespace from this namespace.
@@ -376,14 +376,14 @@ namespace rfk
 			* 
 			*	@param variable The variable to remove.
 			*/
-			REFUREKU_API void										removeVariable(VariableAPI const& variable)									noexcept;
+			REFUREKU_API void										removeVariable(Variable const& variable)									noexcept;
 
 			/**
 			*	@brief Remove a nested function from this namespace.
 			* 
 			*	@param function The function to remove.
 			*/
-			REFUREKU_API void										removeFunction(FunctionAPI const& function)									noexcept;
+			REFUREKU_API void										removeFunction(Function const& function)									noexcept;
 
 		private:
 			//Forward declaration

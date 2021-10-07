@@ -6,13 +6,13 @@
 */
 
 template <typename ValueType>
-ValueType StaticFieldAPI::get() const
+ValueType StaticField::get() const
 {
-	return VariableBaseAPI::get<ValueType>(getPtr());
+	return VariableBase::get<ValueType>(getPtr());
 }
 
 template <typename ValueType>
-void StaticFieldAPI::set(ValueType&& data) const
+void StaticField::set(ValueType&& data) const
 {
-	VariableBaseAPI::set(getPtr(), std::forward<ValueType>(data));
+	VariableBase::set(getPtr(), std::forward<ValueType>(data));
 }

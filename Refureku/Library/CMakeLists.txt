@@ -15,7 +15,7 @@ add_library(${RefurekuLibraryTarget}
 
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
-					Source/TypeInfo/DatabaseAPI.cpp
+					Source/TypeInfo/DatabaseAPI.cpp	#TODO: Rename
 
 					Source/TypeInfo/Entity/Entity.cpp
 					Source/TypeInfo/Entity/EntityHash.cpp
@@ -41,18 +41,18 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.cpp
 					Source/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.cpp
 
-					Source/TypeInfo/Variables/VariableBaseAPI.cpp
-					Source/TypeInfo/Variables/VariableAPI.cpp
-					Source/TypeInfo/Variables/FieldBaseAPI.cpp
-					Source/TypeInfo/Variables/FieldAPI.cpp
-					Source/TypeInfo/Variables/StaticFieldAPI.cpp
+					Source/TypeInfo/Variables/VariableBase.cpp
+					Source/TypeInfo/Variables/Variable.cpp
+					Source/TypeInfo/Variables/FieldBase.cpp
+					Source/TypeInfo/Variables/Field.cpp
+					Source/TypeInfo/Variables/StaticField.cpp
 
-					Source/TypeInfo/Functions/FunctionBaseAPI.cpp
-					Source/TypeInfo/Functions/FunctionAPI.cpp
-					Source/TypeInfo/Functions/MethodBaseAPI.cpp
-					Source/TypeInfo/Functions/MethodAPI.cpp
-					Source/TypeInfo/Functions/StaticMethodAPI.cpp
-					Source/TypeInfo/Functions/FunctionParameterAPI.cpp
+					Source/TypeInfo/Functions/FunctionBase.cpp
+					Source/TypeInfo/Functions/Function.cpp
+					Source/TypeInfo/Functions/MethodBase.cpp
+					Source/TypeInfo/Functions/Method.cpp
+					Source/TypeInfo/Functions/StaticMethod.cpp
+					Source/TypeInfo/Functions/FunctionParameter.cpp
 				)
 
 target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)

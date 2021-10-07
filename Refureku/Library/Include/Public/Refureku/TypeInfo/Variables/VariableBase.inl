@@ -6,7 +6,7 @@
 */
 
 template <typename ValueType>
-ValueType VariableBaseAPI::get(void* ptr) const
+ValueType VariableBase::get(void* ptr) const
 {
 	if constexpr (std::is_rvalue_reference_v<ValueType>)
 	{
@@ -36,7 +36,7 @@ ValueType VariableBaseAPI::get(void* ptr) const
 }
 
 template <typename ValueType>
-void VariableBaseAPI::set(void* ptr, ValueType&& value) const
+void VariableBase::set(void* ptr, ValueType&& value) const
 {
 	if (getType().isConst())
 	{

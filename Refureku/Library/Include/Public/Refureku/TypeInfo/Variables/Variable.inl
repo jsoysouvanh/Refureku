@@ -6,13 +6,13 @@
 */
 
 template <typename ValueType>
-ValueType VariableAPI::get() const
+ValueType Variable::get() const
 {
-	return VariableBaseAPI::get<ValueType>(getPtr());
+	return VariableBase::get<ValueType>(getPtr());
 }
 
 template <typename ValueType>
-void VariableAPI::set(ValueType&& value) const
+void Variable::set(ValueType&& value) const
 {
-	VariableBaseAPI::set(getPtr(), std::forward<ValueType>(value));
+	VariableBase::set(getPtr(), std::forward<ValueType>(value));
 }

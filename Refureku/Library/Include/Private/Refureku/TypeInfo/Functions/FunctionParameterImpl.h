@@ -9,12 +9,12 @@
 
 #include <string>
 
-#include "Refureku/TypeInfo/Functions/FunctionParameterAPI.h"
+#include "Refureku/TypeInfo/Functions/FunctionParameter.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 
 namespace rfk
 {
-	class FunctionParameterAPI::FunctionParameterImpl : public Entity::EntityImpl
+	class FunctionParameter::FunctionParameterImpl : public Entity::EntityImpl
 	{
 		private:
 			/** Type of this parameter. */

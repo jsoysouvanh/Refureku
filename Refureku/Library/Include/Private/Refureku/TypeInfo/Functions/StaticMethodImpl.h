@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/TypeInfo/Functions/MethodBaseImpl.h"
 
 namespace rfk
 {
-	class StaticMethodAPI::StaticMethodImpl final : public MethodBaseAPI::MethodBaseImpl
+	class StaticMethod::StaticMethodImpl final : public MethodBase::MethodBaseImpl
 	{
 		public:
 			inline StaticMethodImpl(char const*		name,

@@ -7,12 +7,12 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Variables/FieldBaseAPI.h"
+#include "Refureku/TypeInfo/Variables/FieldBase.h"
 #include "Refureku/TypeInfo/Variables/VariableBaseImpl.h"
 
 namespace rfk
 {
-	class FieldBaseAPI::FieldBaseImpl : public VariableBaseAPI::VariableBaseImpl
+	class FieldBase::FieldBaseImpl : public VariableBase::VariableBaseImpl
 	{
 		private:
 			/** Flags describing this field. */

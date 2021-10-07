@@ -10,7 +10,7 @@
 #include <type_traits>	//std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"	//makeInstance<> uses StaticMethod wrapper so must include
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"	//makeInstance<> uses StaticMethod wrapper so must include
 #include "Refureku/TypeInfo/Archetypes/EClassKind.h"
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
@@ -20,9 +20,9 @@ namespace rfk
 	//Forward declarations
 	class ParentStruct;
 	class Enum;
-	class FieldAPI;
-	class StaticFieldAPI;
-	class MethodAPI;
+	class Field;
+	class StaticField;
+	class Method;
 	class Type;
 	class ICallable;
 	class ClassTemplateAPI;
@@ -150,7 +150,7 @@ namespace rfk
 			*	@return The first field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			RFK_NODISCARD REFUREKU_API FieldAPI const*						getFieldByName(char const* name,
+			RFK_NODISCARD REFUREKU_API Field const*						getFieldByName(char const* name,
 																						   EFieldFlags minFlags = EFieldFlags::Default,
 																						   bool		   shouldInspectInherited	= false)			const	noexcept;
 
@@ -167,7 +167,7 @@ namespace rfk
 			*
 			*	@return A vector of all fields named fieldName fulfilling all requirements.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<FieldAPI const*>				getFieldsByName(char const* name,
+			RFK_NODISCARD REFUREKU_API Vector<Field const*>				getFieldsByName(char const* name,
 																							EFieldFlags minFlags = EFieldFlags::Default,
 																							bool		shouldInspectInherited	= false)			const	noexcept;
 
@@ -182,7 +182,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachField(Visitor<FieldAPI>	visitor,
+			REFUREKU_API bool												foreachField(Visitor<Field>	visitor,
 																						 void*				userData)								const;
 
 			/**
@@ -198,7 +198,7 @@ namespace rfk
 			*	@return The first static field named fieldName fulfilling all requirements.
 			*			The method returns nullptr if none was found. 
 			*/
-			RFK_NODISCARD REFUREKU_API StaticFieldAPI const*				getStaticFieldByName(char const* name,
+			RFK_NODISCARD REFUREKU_API StaticField const*				getStaticFieldByName(char const* name,
 																								 EFieldFlags minFlags = EFieldFlags::Default,
 																								 bool		 shouldInspectInherited	= false)		const	noexcept;
 
@@ -216,7 +216,7 @@ namespace rfk
 			*
 			*	@return A vector of all static fields named fieldName fulfilling all requirements.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<StaticFieldAPI const*>		getStaticFieldsByName(char const* name,
+			RFK_NODISCARD REFUREKU_API Vector<StaticField const*>		getStaticFieldsByName(char const* name,
 																								  EFieldFlags minFlags = EFieldFlags::Default,
 																								  bool		  shouldInspectInherited = false)		const	noexcept;
 
@@ -231,7 +231,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachStaticField(Visitor<StaticFieldAPI>	visitor,
+			REFUREKU_API bool												foreachStaticField(Visitor<StaticField>	visitor,
 																							   void*					userData)					const;
 
 			/**
@@ -245,7 +245,7 @@ namespace rfk
 			*
 			*	@return The first method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			RFK_NODISCARD REFUREKU_API MethodAPI const*						getMethodByName(char const*  name,
+			RFK_NODISCARD REFUREKU_API Method const*						getMethodByName(char const*  name,
 																							EMethodFlags minFlags = EMethodFlags::Default,
 																							bool		 shouldInspectInherited	= false)			const	noexcept;
 
@@ -260,7 +260,7 @@ namespace rfk
 			*
 			*	@return A vector of all methods named methodName fulfilling all requirements. 
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<MethodAPI const*>				getMethodsByName(char const*  name,
+			RFK_NODISCARD REFUREKU_API Vector<Method const*>				getMethodsByName(char const*  name,
 																							 EMethodFlags minFlags = EMethodFlags::Default,
 																							 bool		  shouldInspectInherited = false)			const	noexcept;
 
@@ -275,7 +275,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachMethod(Visitor<MethodAPI>	visitor,
+			REFUREKU_API bool												foreachMethod(Visitor<Method>	visitor,
 																						  void*					userData)							const;
 
 			/**
@@ -290,7 +290,7 @@ namespace rfk
 			*
 			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
 			*/
-			RFK_NODISCARD REFUREKU_API StaticMethodAPI const*				getStaticMethodByName(char const*  name,
+			RFK_NODISCARD REFUREKU_API StaticMethod const*				getStaticMethodByName(char const*  name,
 																								  EMethodFlags minFlags = EMethodFlags::Default,
 																								  bool		   shouldInspectInherited = false)		const	noexcept;
 
@@ -306,7 +306,7 @@ namespace rfk
 			*
 			*	@return All static methods named methodName fulfilling all requirements. 
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<StaticMethodAPI const*>		getStaticMethodsByName(char const*  name,
+			RFK_NODISCARD REFUREKU_API Vector<StaticMethod const*>		getStaticMethodsByName(char const*  name,
 																								   EMethodFlags minFlags = EMethodFlags::Default,
 																								   bool			shouldInspectInherited = false)		const	noexcept;
 
@@ -321,7 +321,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool												foreachStaticMethod(Visitor<StaticMethodAPI>	visitor,
+			REFUREKU_API bool												foreachStaticMethod(Visitor<StaticMethod>	visitor,
 																								void*						userData)				const;
 
 			/**
@@ -402,7 +402,7 @@ namespace rfk
 			*	@return A pointer to the added field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API FieldAPI*					addField(char const*		name,
+			REFUREKU_API Field*					addField(char const*		name,
 															 std::size_t		id,
 															 Type const&		type,
 															 EFieldFlags		flags,
@@ -430,13 +430,13 @@ namespace rfk
 			*	@return A pointer to the added static field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API StaticFieldAPI*			addStaticField(char const*		name,
+			REFUREKU_API StaticField*			addStaticField(char const*		name,
 																   std::size_t		id,
 																   Type const&	type,
 																   EFieldFlags		flags,
 																   void*			fieldPtr,
 																   StructAPI const*	outerEntity)				noexcept;
-			REFUREKU_API StaticFieldAPI*			addStaticField(char const*		name,
+			REFUREKU_API StaticField*			addStaticField(char const*		name,
 																   std::size_t		id,
 																   Type const&	type,
 																   EFieldFlags		flags,
@@ -462,7 +462,7 @@ namespace rfk
 			*
 			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API MethodAPI*					addMethod(char const*		name,
+			REFUREKU_API Method*					addMethod(char const*		name,
 															  std::size_t		id,
 															  Type const&	returnType,
 															  ICallable*		internalMethod,
@@ -487,7 +487,7 @@ namespace rfk
 			*
 			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API StaticMethodAPI*			addStaticMethod(char const*		name,
+			REFUREKU_API StaticMethod*			addStaticMethod(char const*		name,
 																	std::size_t		id,
 																	Type const&	returnType,
 																	ICallable*		internalMethod,
@@ -514,7 +514,7 @@ namespace rfk
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			REFUREKU_API void						addInstantiator(StaticMethodAPI const* instantiator)		noexcept;
+			REFUREKU_API void						addInstantiator(StaticMethod const* instantiator)		noexcept;
 
 		protected:
 			//Forward declaration
@@ -550,7 +550,7 @@ namespace rfk
 			* 
 			*	@return The index'th registered instantiator.
 			*/
-			RFK_NODISCARD REFUREKU_API StaticMethodAPI const*	getInstantiatorAt(std::size_t index)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API StaticMethod const*	getInstantiatorAt(std::size_t index)	const	noexcept;
 	};
 
 	/* In C++, a struct and a class contains exactly the same data. Alias for convenience. */

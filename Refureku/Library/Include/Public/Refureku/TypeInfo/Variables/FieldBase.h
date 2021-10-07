@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Variables/VariableBaseAPI.h"
+#include "Refureku/TypeInfo/Variables/VariableBase.h"
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 #include "Refureku/TypeInfo/EAccessSpecifier.h"
 
@@ -16,7 +16,7 @@ namespace rfk
 	//Forward declaration
 	class StructAPI;
 
-	class FieldBaseAPI : public VariableBaseAPI
+	class FieldBase : public VariableBase
 	{
 		public:
 			/**
@@ -59,8 +59,8 @@ namespace rfk
 			//Forward declaration
 			class FieldBaseImpl;
 
-			REFUREKU_INTERNAL FieldBaseAPI(FieldBaseImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL FieldBaseAPI(FieldBaseAPI&&)					noexcept;
-			REFUREKU_INTERNAL ~FieldBaseAPI()								noexcept;
+			REFUREKU_INTERNAL FieldBase(FieldBaseImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL FieldBase(FieldBase&&)					noexcept;
+			REFUREKU_INTERNAL ~FieldBase()								noexcept;
 	};
 }

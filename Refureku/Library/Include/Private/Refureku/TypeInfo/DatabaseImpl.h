@@ -19,12 +19,12 @@
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
-#include "Refureku/TypeInfo/Variables/VariableAPI.h"
-#include "Refureku/TypeInfo/Variables/FieldAPI.h"
-#include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
-#include "Refureku/TypeInfo/Functions/FunctionAPI.h"
-#include "Refureku/TypeInfo/Functions/MethodAPI.h"
-#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
+#include "Refureku/TypeInfo/Variables/Variable.h"
+#include "Refureku/TypeInfo/Variables/Field.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
+#include "Refureku/TypeInfo/Functions/Function.h"
+#include "Refureku/TypeInfo/Functions/Method.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 
 namespace rfk
@@ -37,8 +37,8 @@ namespace rfk
 			using StructsByName					= std::unordered_set<StructAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using ClassesByName					= std::unordered_set<ClassAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using EnumsByName					= std::unordered_set<Enum const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using VariablesByName				= std::unordered_set<VariableAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using FunctionsByName				= std::unordered_multiset<FunctionAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using VariablesByName				= std::unordered_set<Variable const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using FunctionsByName				= std::unordered_multiset<Function const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FundamentalArchetypesByName	= std::unordered_set<FundamentalArchetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using GenNamespaces					= std::unordered_map<std::size_t, std::shared_ptr<Namespace>>;
 			

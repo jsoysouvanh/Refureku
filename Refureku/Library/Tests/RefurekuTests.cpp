@@ -270,7 +270,7 @@ void functionAndMethods()
 {
 	auto lambda = [](int p1, float p2) -> void { std::cout << "lambda(" << p1 << ", " << p2 << ");" << std::endl; return; };
 
-	rfk::FunctionAPI function("testFunc", 123u, rfk::getType<void>(), new rfk::NonMemberFunction<void(int, float)>(lambda), rfk::EFunctionFlags::Inline);
+	rfk::Function function("testFunc", 123u, rfk::getType<void>(), new rfk::NonMemberFunction<void(int, float)>(lambda), rfk::EFunctionFlags::Inline);
 	function.addParameter("p1", 0u, rfk::getType<int>());
 	function.addParameter("p2", 0u, rfk::getType<float>());
 
@@ -284,8 +284,8 @@ void functionAndMethods()
 	//	void baz() const { std::cout << "Foo::baz()" << std::endl; }
 	//};
 
-	//rfk::MethodAPI fooBarMethod = rfk::MethodAPI("bar", 123u, rfk::getType<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
-	//rfk::MethodAPI fooBazMethod = rfk::MethodAPI("baz", 1234u, rfk::getType<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
+	//rfk::Method fooBarMethod = rfk::Method("bar", 123u, rfk::getType<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
+	//rfk::Method fooBazMethod = rfk::Method("baz", 1234u, rfk::getType<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
 
 	//Foo foo;
 	//Foo const constFoo;
@@ -1159,8 +1159,8 @@ void entityCast()
 	TEST(rfk::entityCast<rfk::Class>(rfk::getDatabase().getEntity(c.getId())) != nullptr);
 
 	//Fields
-	rfk::FieldAPI const* field = s.getFieldByName("i");
-	rfk::StaticFieldAPI const* sField = s.getStaticFieldByName("staticInt");
+	rfk::Field const* field = s.getFieldByName("i");
+	rfk::StaticField const* sField = s.getStaticFieldByName("staticInt");
 
 	TEST(rfk::entityCast<rfk::FieldBase>(rfk::getDatabase().getEntity(field->getId())) != nullptr);
 	TEST(rfk::entityCast<rfk::Field>(rfk::getDatabase().getEntity(field->getId())) != nullptr);
@@ -1168,8 +1168,8 @@ void entityCast()
 	TEST(rfk::entityCast<rfk::StaticField>(rfk::getDatabase().getEntity(sField->getId())) != nullptr);
 
 	//Methods
-	rfk::MethodAPI const* method = s.getMethodByName("method");
-	rfk::StaticMethodAPI const* sMethod = s.getStaticMethodByName("staticMethod");
+	rfk::Method const* method = s.getMethodByName("method");
+	rfk::StaticMethod const* sMethod = s.getStaticMethodByName("staticMethod");
 
 	TEST(rfk::entityCast<rfk::MethodBase>(rfk::getDatabase().getEntity(method->getId())) != nullptr);
 	TEST(rfk::entityCast<rfk::Method>(rfk::getDatabase().getEntity(method->getId())) != nullptr);

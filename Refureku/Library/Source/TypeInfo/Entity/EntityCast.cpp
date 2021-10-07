@@ -1,12 +1,12 @@
 #include "Refureku/TypeInfo/Entity/EntityCast.h"
 
 #include "Refureku/TypeInfo/Entity/EntityCastInternal.h"
-#include "Refureku/TypeInfo/Variables/VariableAPI.h"
-#include "Refureku/TypeInfo/Variables/FieldAPI.h"
-#include "Refureku/TypeInfo/Variables/StaticFieldAPI.h"
-#include "Refureku/TypeInfo/Functions/FunctionAPI.h"
-#include "Refureku/TypeInfo/Functions/MethodAPI.h"
-#include "Refureku/TypeInfo/Functions/StaticMethodAPI.h"
+#include "Refureku/TypeInfo/Variables/Variable.h"
+#include "Refureku/TypeInfo/Variables/Field.h"
+#include "Refureku/TypeInfo/Variables/StaticField.h"
+#include "Refureku/TypeInfo/Functions/Function.h"
+#include "Refureku/TypeInfo/Functions/Method.h"
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/TypeInfo/Archetypes/StructAPI.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
@@ -47,39 +47,39 @@ StructAPI const* rfk::entityCast<StructAPI>(Entity const* entity) noexcept
 }
 
 template <>
-FieldBaseAPI const* rfk::entityCast<FieldBaseAPI>(Entity const* entity) noexcept
+FieldBase const* rfk::entityCast<FieldBase>(Entity const* entity) noexcept
 {
-	return internal::entityCast<FieldBaseAPI, EEntityKind::Field>(entity);
+	return internal::entityCast<FieldBase, EEntityKind::Field>(entity);
 }
 
 template <>
-FieldAPI const* rfk::entityCast<FieldAPI>(Entity const* entity) noexcept
+Field const* rfk::entityCast<Field>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->getKind() == EEntityKind::Field && !reinterpret_cast<FieldBaseAPI const*>(entity)->isStatic()) ? reinterpret_cast<FieldAPI const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Field && !reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<Field const*>(entity) : nullptr;
 }
 
 template <>
-StaticFieldAPI const* rfk::entityCast<StaticFieldAPI>(Entity const* entity) noexcept
+StaticField const* rfk::entityCast<StaticField>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->getKind() == EEntityKind::Field && reinterpret_cast<FieldBaseAPI const*>(entity)->isStatic()) ? reinterpret_cast<StaticFieldAPI const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Field && reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticField const*>(entity) : nullptr;
 }
 
 template <>
-MethodBaseAPI const* rfk::entityCast<MethodBaseAPI>(Entity const* entity) noexcept
+MethodBase const* rfk::entityCast<MethodBase>(Entity const* entity) noexcept
 {
-	return internal::entityCast<MethodBaseAPI, EEntityKind::Method>(entity);
+	return internal::entityCast<MethodBase, EEntityKind::Method>(entity);
 }
 
 template <>
-MethodAPI const* rfk::entityCast<MethodAPI>(Entity const* entity) noexcept
+Method const* rfk::entityCast<Method>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->getKind() == EEntityKind::Method && !reinterpret_cast<MethodBaseAPI const*>(entity)->isStatic()) ? reinterpret_cast<MethodAPI const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Method && !reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<Method const*>(entity) : nullptr;
 }
 
 template <>
-StaticMethodAPI const* rfk::entityCast<StaticMethodAPI>(Entity const* entity) noexcept
+StaticMethod const* rfk::entityCast<StaticMethod>(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->getKind() == EEntityKind::Method && reinterpret_cast<MethodBaseAPI const*>(entity)->isStatic()) ? reinterpret_cast<StaticMethodAPI const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Method && reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticMethod const*>(entity) : nullptr;
 }
 
 template <>
@@ -101,13 +101,13 @@ Namespace const* rfk::entityCast<Namespace>(Entity const* entity) noexcept
 }
 
 template <>
-VariableAPI const* rfk::entityCast<VariableAPI>(Entity const* entity) noexcept
+Variable const* rfk::entityCast<Variable>(Entity const* entity) noexcept
 {
-	return internal::entityCast<VariableAPI, EEntityKind::Variable>(entity);
+	return internal::entityCast<Variable, EEntityKind::Variable>(entity);
 }
 
 template <>
-FunctionAPI const* rfk::entityCast<FunctionAPI>(Entity const* entity) noexcept
+Function const* rfk::entityCast<Function>(Entity const* entity) noexcept
 {
-	return internal::entityCast<FunctionAPI, EEntityKind::Function>(entity);
+	return internal::entityCast<Function, EEntityKind::Function>(entity);
 }
