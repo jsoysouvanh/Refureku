@@ -3,6 +3,7 @@
 #include <cmath>  //std::fabs
 
 #include <Refureku/Refureku.h>
+#include <Refureku/Exceptions/ConstViolation.h>
 
 #include "AB.h"
 #include "ExampleClass.h"
@@ -14,6 +15,7 @@
 //Template
 #include "ClassTemplates/SingleTypeTemplateClassTemplate.h"
 #include "ClassTemplates/MultipleTypeTemplateClassTemplate.h"
+
 
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
@@ -232,6 +234,10 @@ void enumsAndEnumValues()
 	TEST(enum1.getEnumValueAt(0).getValue<uint16_t>() == 0u);
 }
 
+*/
+
+
+
 void types()
 {
 	rfk::Type const& intType = rfk::getType<int>();
@@ -277,86 +283,97 @@ void functionAndMethods()
 	function.invoke<void>(1, 2.0f);
 	function.checkedInvoke<void>(3, 4.0f);
 
-	//struct Foo
-	//{
-	//	int bar(int i, float j) { std::cout << "Foo::bar(" << i << ", " << j << ")" << std::endl; return i + j; }
-	//
-	//	void baz() const { std::cout << "Foo::baz()" << std::endl; }
-	//};
+	/*struct Foo
+	{
+		int bar(int i, float j) { std::cout << "Foo::bar(" << i << ", " << j << ")" << std::endl; return i + j; }
+	
+		void baz() const { std::cout << "Foo::baz()" << std::endl; }
+	};
 
-	//rfk::Method fooBarMethod = rfk::Method("bar", 123u, rfk::getType<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
-	//rfk::Method fooBazMethod = rfk::Method("baz", 1234u, rfk::getType<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
+	rfk::Method fooBarMethod = rfk::Method("bar", 123u, rfk::getType<int>(), new rfk::MemberFunction<Foo, int(int, float)>(&Foo::bar), rfk::EMethodFlags::Public, nullptr);
+	rfk::Method fooBazMethod = rfk::Method("baz", 1234u, rfk::getType<void>(), new rfk::MemberFunction<Foo, void()>(&Foo::baz), rfk::EMethodFlags::Public | rfk::EMethodFlags::Const, nullptr);
 
-	//Foo foo;
-	//Foo const constFoo;
+	Foo foo;
+	Foo const constFoo;
 
-	//TEST(fooBarMethod.invoke<int>(foo, 1, 2.0f) == 3);
-	//TEST(fooBarMethod.invoke<int, Foo, int, float>(foo, 2, 3) == 5);
-	//
-	//try
-	//{
-	//	fooBarMethod.invoke<int>(constFoo, 1, 2.0f);
-	//	assert(false);
-	//}
-	//catch (rfk::ConstViolation const& e)
-	//{
-	//	std::cout << e.what() << std::endl;
-	//}
+	TEST(fooBarMethod.invoke<int>(foo, 1, 2.0f) == 3);
+	TEST(fooBarMethod.invoke<int, Foo, int, float>(foo, 2, 3) == 5);
+	
+	try
+	{
+		fooBarMethod.invoke<int>(constFoo, 1, 2.0f);
+		assert(false);
+	}
+	catch (rfk::ConstViolation const& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 
-	//fooBazMethod.invoke<void>(constFoo);
-	//fooBazMethod.invoke<void>(foo);
+	fooBazMethod.invoke<void>(constFoo);
+	fooBazMethod.invoke<void>(foo);*/
 }
 
 void outerEntities()
 {
-	//TEST(rfk::getDatabase().getNamespace("namespace3")->getOuterEntity() == nullptr);
-	//TEST(rfk::getDatabase().getNamespace("namespace4")->getNamespace("namespace4_nested")->getOuterEntity() == rfk::getDatabase().getNamespace("namespace4"));
-	//TEST(rfk::getDatabase().getNamespace("namespace3")->getClass("AnotherClassInNamespace3")->getOuterEntity() == rfk::getDatabase().getNamespace("namespace3"));
-	//TEST(namespace3::ExampleClass::staticGetArchetype().getNestedStruct("NestedExampleStruct")->getOuterEntity() == rfk::getDatabase().getNamespace("namespace3")->getClass("ExampleClass"));
-	//TEST(rfk::getDatabase().getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getOuterEntity() == rfk::getDatabase().getNamespace("test1")->getNamespace("test2"));
-	//TEST(rfk::getDatabase().getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->getOuterEntity() == rfk::getDatabase().getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace"));
-	//TEST(ExampleStruct::staticGetArchetype().getStaticField("staticInt")->getOuterEntity() == &ExampleStruct::staticGetArchetype());
-	//TEST(ExampleStruct::staticGetArchetype().getField("i")->getOuterEntity() == &ExampleStruct::staticGetArchetype());
-	//TEST(ExampleStruct::staticGetArchetype().getStaticMethod("staticMethod")->getOuterEntity() == &ExampleStruct::staticGetArchetype());
-	//TEST(rfk::getDatabase().getFunction("function1")->getOuterEntity() == nullptr);
-	//TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction("function1")->getOuterEntity() == rfk::getDatabase().getNamespace("namespace3"));
-	//TEST(rfk::getDatabase().getVariable("variableInsideGlobalScope")->getOuterEntity() == nullptr);
-	//TEST(rfk::getDatabase().getNamespace("namespace3")->getVariable("variableInsideNamespace")->getOuterEntity() == rfk::getDatabase().getNamespace("namespace3"));
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getOuterEntity() == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace4")->getNamespaceByName("namespace4_nested")->getOuterEntity() ==
+		 rfk::getDatabase().getNamespaceByName("namespace4"));
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getClassByName("AnotherClassInNamespace3")->getOuterEntity() ==
+		 rfk::getDatabase().getNamespaceByName("namespace3"));
+	TEST(namespace3::ExampleClass::staticGetArchetype().getNestedStructByName("NestedExampleStruct")->getOuterEntity() ==
+		 rfk::getDatabase().getNamespaceByName("namespace3")->getClassByName("ExampleClass"));
+	
+	TEST(rfk::getDatabase().getNamespaceByName("test1")->getNamespaceByName("test2")->getEnumByName("NestedEnumInNestedNamespace")->getOuterEntity() ==
+		 rfk::getDatabase().getNamespaceByName("test1")->getNamespaceByName("test2"));
+
+	TEST(rfk::getDatabase().getNamespaceByName("test1")->getNamespaceByName("test2")->getEnumByName("NestedEnumInNestedNamespace")->getEnumValueByName("SomeValue")->getOuterEntity() ==
+		 rfk::getDatabase().getNamespaceByName("test1")->getNamespaceByName("test2")->getEnumByName("NestedEnumInNestedNamespace"));
+
+	TEST(ExampleStruct::staticGetArchetype().getStaticFieldByName("staticInt")->getOuterEntity() == &ExampleStruct::staticGetArchetype());
+	TEST(ExampleStruct::staticGetArchetype().getFieldByName("i")->getOuterEntity() == &ExampleStruct::staticGetArchetype());
+	
+	TEST(ExampleStruct::staticGetArchetype().getStaticMethodByName("staticMethod")->getOuterEntity() == &ExampleStruct::staticGetArchetype());
+	TEST(rfk::getDatabase().getFunctionByName("function1")->getOuterEntity() == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName("function1")->getOuterEntity() == rfk::getDatabase().getNamespaceByName("namespace3"));
+	TEST(rfk::getDatabase().getVariableByName("variableInsideGlobalScope")->getOuterEntity() == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getVariableByName("variableInsideNamespace")->getOuterEntity() == rfk::getDatabase().getNamespaceByName("namespace3"));
 }
 
 void namespaces()
 {
-	TEST(rfk::getDatabase().getNamespace("namespace3") != nullptr);
-	TEST(rfk::getDatabase().getNamespace(rfk::getDatabase().getNamespace("namespace3")->getId()) != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace4") != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace4_nested") == nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace4")->getNamespace("namespace4_nested") != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getClass("AnotherClassInNamespace3") != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getClass("OtherClass") != nullptr);
-	TEST(rfk::getDatabase().getNamespace("test1")->getNamespace("test2")->getEnum("NestedEnumInNestedNamespace")->getEnumValue("SomeValue")->value() == 42u);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3") != nullptr);
+	TEST(rfk::getDatabase().getNamespaceById(rfk::getDatabase().getNamespaceByName("namespace3")->getId()) != nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace4") != nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace4_nested") == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace4")->getNamespaceByName("namespace4_nested") != nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getClassByName("AnotherClassInNamespace3") != nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getClassByName("OtherClass") != nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("test1")->getNamespaceByName("test2")->getEnumByName("NestedEnumInNestedNamespace")->getEnumValueByName("SomeValue")->getValue() == 42u);
 	
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getVariable("variableInsideNamespace")->getData<int>() == 42);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getVariable("variableInsideNamespace", rfk::EVarFlags::Static) == nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getVariable("variableInsideGlobalScope") == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getVariableByName("variableInsideNamespace")->get<int>() == 42);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getVariableByName("variableInsideNamespace", rfk::EVarFlags::Static) == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getVariableByName("variableInsideGlobalScope") == nullptr);
 
-	rfk::getDatabase().getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Inline)->invoke(1);
-	rfk::getDatabase().getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Default)->invoke(2);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction("functionInsideNamespace", rfk::EFunctionFlags::Static) == nullptr);
+	rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName("functionInsideNamespace", rfk::EFunctionFlags::Inline)->invoke(1);
+	rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName("functionInsideNamespace", rfk::EFunctionFlags::Default)->invoke(2);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName("functionInsideNamespace", rfk::EFunctionFlags::Static) == nullptr);
 
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction<int(int)>("function1")->rInvoke<int>(1) == 1);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction<int(int, int)>("function1")->rInvoke<int>(1, 2) == 3);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction<void(int, int)>("function1") == nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction<int()>("function1") == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName<int(int)>("function1")->invoke<int>(1) == 1);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName<int(int, int)>("function1")->invoke<int>(1, 2) == 3);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName<void(int, int)>("function1") == nullptr);
+	TEST(rfk::getDatabase().getNamespaceByName("namespace3")->getFunctionByName<int()>("function1") == nullptr);
 
-	//By predicate
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getNamespace([](rfk::Namespace const*) { return true; }) == nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getArchetype([](rfk::Archetype const* a) { return a->getMemorySize() == sizeof(namespace3::ParentClass); }) != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getStruct([](rfk::Struct const*) { return true; }) == nullptr );
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getClass([](rfk::Class const* c) { return c->getName() == "AnotherClassInNamespace3"; }) != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getEnum([](rfk::Enum const* e) { return e->getEnumValuesCount() == 5; }) != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getVariable([](rfk::Variable const* v) { return v->getData<int>() == 42; }) != nullptr);
-	TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction([](rfk::Function const* f) { return f->getReturnType() == rfk::getType<int>() && f->getParameterCount() == 2; }) != nullptr);
+	////By predicate
+	//TEST(rfk::getDatabase().getNamespace("namespace3")->getNamespace([](rfk::Namespace const*) { return true; }) == nullptr);
+	//TEST(rfk::getDatabase().getNamespace("namespace3")->getArchetype([](rfk::Archetype const* a) { return a->getMemorySize() == sizeof(namespace3::ParentClass); }) != nullptr);
+	//TEST(rfk::getDatabase().getNamespace("namespace3")->getStruct([](rfk::Struct const*) { return true; }) == nullptr );
+	//TEST(rfk::getDatabase().getNamespace("namespace3")->getClass([](rfk::Class const* c) { return c->getName() == "AnotherClassInNamespace3"; }) != nullptr);
+	//TEST(rfk::getDatabase().getNamespace("namespace3")->getEnum([](rfk::Enum const* e) { return e->getEnumValuesCount() == 5; }) != nullptr);
+	//TEST(rfk::getDatabase().getNamespace("namespace3")->getVariable([](rfk::Variable const* v) { return v->getData<int>() == 42; }) != nullptr);
+	//TEST(rfk::getDatabase().getNamespace("namespace3")->getFunction([](rfk::Function const* f) { return f->getReturnType() == rfk::getType<int>() && f->getParameterCount() == 2; }) != nullptr);
 }
+
+/*
 
 void classes()
 {
@@ -1306,13 +1323,15 @@ void templateClasses()
 	//TODO: Test with a mix of the above 3 (like std::array > Type template + non-type template param)
 }
 
+*/
+
 void oldTests()
 {
-	inheritance();
+//	inheritance();
 //	classes();
 //	structs();
 //	database();
-//	outerEntities();
+	outerEntities();
 //	namespaces();
 //	templateEnums();
 //	getArchetypes();
@@ -1337,21 +1356,19 @@ void oldTests()
 
 void newTests()
 {
+	//entities();
+	//archetypes();
+	//enumsAndEnumValues();
 	containers();
-	entities();
-	archetypes();
-	enumsAndEnumValues();
 	types();
 	fieldsAPI();
 	functionAndMethods();
 }
 
-*/
-
 int main()
 {
-	//oldTests();
-	//newTests();
+	oldTests();
+	newTests();
 
 	return EXIT_SUCCESS;
 }

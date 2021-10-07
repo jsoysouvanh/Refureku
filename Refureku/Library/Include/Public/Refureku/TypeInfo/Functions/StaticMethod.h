@@ -40,7 +40,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the underlying function.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
+			template <typename ReturnType = void, typename... ArgTypes>
 			ReturnType	invoke(ArgTypes&&... args)			const;
 
 			/**
@@ -65,7 +65,7 @@ namespace rfk
 			*	@exception	ReturnTypeMismatch if ReturnType is not strictly the same as this function return type.
 			*	@exception	Any exception potentially thrown from the underlying function.
 			*/
-			template <typename ReturnType, typename... ArgTypes>
+			template <typename ReturnType = void, typename... ArgTypes>
 			ReturnType	checkedInvoke(ArgTypes&&... args)	const;
 
 		private:

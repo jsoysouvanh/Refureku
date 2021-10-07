@@ -48,6 +48,20 @@ Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, b
 	return nullptr;
 }
 
+template <typename StaticMethodSignature>
+StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	for (StaticMethod const* staticMethod : getStaticMethodsByName(name, minFlags, shouldInspectInherited))
+	{
+		if (internal::MethodHelper<StaticMethodSignature>::hasSamePrototype(*staticMethod))
+		{
+			return staticMethod;
+		}
+	}
+
+	return nullptr;
+}
+
 template <typename T>
 void* internal::defaultInstantiator()
 {

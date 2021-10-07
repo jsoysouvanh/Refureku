@@ -14,6 +14,7 @@
 #include "Refureku/Containers/Vector.h"
 #include "Refureku/TypeInfo/Variables/EVarFlags.h"
 #include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
+#include "Refureku/TypeInfo/Functions/FunctionHelper.h"
 
 namespace rfk
 {
@@ -364,7 +365,20 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API Function const*				getFunctionById(std::size_t id)											const	noexcept;
 
 			/**
-			*	@brief Retrieve a file level (non-member) function by name.
+			*	@brief Retrieve a file level function by name and signature.
+			*	
+			*	@param name		The name of the function.
+			*	@param flags	Flags describing the queried function.
+			*					The result function will have at least the provided flags.
+			*	
+			*	@return A constant pointer to the first function matching the name and flags if it exists, else nullptr.
+			*/
+			template <typename FunctionSignature>
+			RFK_NODISCARD Function const*							getFunctionByName(char const*		name,
+																					  EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
+
+			/**
+			*	@brief Retrieve a file level function by name.
 			*	
 			*	@param name		The name of the function.
 			*	@param flags	Flags describing the queried function.
@@ -374,6 +388,18 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API Function const*				getFunctionByName(char const*		name,
 																					  EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
+
+			/**
+			*	@brief Retrieve all file level functions by name.
+			*	
+			*	@param name		The name of the function.
+			*	@param flags	Flags describing the queried function.
+			*					The result function will have at least the provided flags.
+			*	
+			*	@return All file level functions by name.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Function const*>		getFunctionsByName(char const*		name,
+																					   EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
 			*	@brief Retrieve all file level functions satisfying the provided predicate.
@@ -475,4 +501,6 @@ namespace rfk
 	*	@return A reference to the database of this program.
 	*/
 	REFUREKU_API Database const& getDatabase() noexcept;
+
+	#include "Refureku/TypeInfo/Database.inl"
 }

@@ -10,6 +10,7 @@
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Variables/EVarFlags.h"
 #include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
+#include "Refureku/TypeInfo/Functions/FunctionHelper.h"
 
 namespace rfk
 {
@@ -36,7 +37,7 @@ namespace rfk
 			*
 			*	@return The found nested namespace if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Namespace const*			getNamespaceByName(char const* name)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API Namespace const*				getNamespaceByName(char const* name)								const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested namespace satisfying the provided predicate.
@@ -48,8 +49,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Namespace const*			getNamespaceByPredicate(Predicate<Namespace>	predicate,
-																						void*					userData)				const;
+			RFK_NODISCARD REFUREKU_API Namespace const*				getNamespaceByPredicate(Predicate<Namespace>	predicate,
+																							void*					userData)			const;
 
 			/**
 			*	@brief Retrieve all nested namespaces satisfying the provided predicate.
@@ -61,8 +62,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Namespace const*>	getNamespacesByPredicate(Predicate<Namespace>	predicate,
-																						 void*					userData)				const;
+			RFK_NODISCARD REFUREKU_API Vector<Namespace const*>		getNamespacesByPredicate(Predicate<Namespace>	predicate,
+																							 void*					userData)			const;
 
 			/**
 			*	@brief Execute the given visitor on all nested namespaces.
@@ -75,8 +76,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool									foreachNamespace(Visitor<Namespace>	visitor,
-																				 void*				userData)							const;
+			REFUREKU_API bool										foreachNamespace(Visitor<Namespace>	visitor,
+																					 void*				userData)						const;
 
 			/**
 			*	@brief Retrieve a struct from this namespace.
@@ -248,6 +249,19 @@ namespace rfk
 			*/
 			REFUREKU_API bool										foreachVariable(Visitor<Variable>	visitor,
 																					void*				userData)						const;
+
+			/**
+			*	@brief Retrieve a function with a given name and signature from this namespace.
+			*	
+			*	@param name		The name of the function.
+			*	@param flags	Flags describing the queried function.
+			*					The result function will have at least the provided flags.
+			*	
+			*	@return The first function matching the provided name and flags if it exists, else nullptr.
+			*/
+			template <typename FunctionSignature>
+			RFK_NODISCARD Function const*							getFunctionByName(char const*	 name,
+																					  EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
 			*	@brief Retrieve a function with a given name from this namespace.

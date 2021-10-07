@@ -470,10 +470,10 @@ bool Struct::foreachMethod(Visitor<Method> visitor, void* userData, bool shouldI
 
 StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	StructImpl const*		structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
+	StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
 	StaticMethod const*	result		= nullptr;
 
-	bool foundMethod = EntityUtility::foreachEntityNamed(structImpl->getStaticMethods(),
+	bool foundMethod = !EntityUtility::foreachEntityNamed(structImpl->getStaticMethods(),
 														 name,
 														 [&result, minFlags](StaticMethod const& staticMethod)
 														 {

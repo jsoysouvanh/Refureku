@@ -463,7 +463,24 @@ namespace rfk
 																						  bool				shouldInspectInherited = false)						const;
 
 			/**
-			*	@param methodName				Name of the static method to retrieve.
+			*	@param name						Name of the static method to retrieve.
+			*	@param minFlags					Requirements the queried static method should fulfill.
+			*										Keep in mind that the returned static method should contain all of the specified flags,
+			*										so setting for example Public and Protected will always return nullptr.
+			*										EMethodFlags::Default means no requirement, so the first static method named methodName will be returned.
+			*										Note: It doesn't matter whether you set the Static flag or not as this method is designed to return static methods only.
+			*	@param shouldInspectInherited	Should inherited static methods be considered as well in the search process?
+			*										If false, only static methods introduced by this struct will be considered.
+			*
+			*	@return The first static method named methodName fulfilling all requirements, nullptr if none was found. 
+			*/
+			template <typename StaticMethodSignature>
+			RFK_NODISCARD StaticMethod const*								getStaticMethodByName(char const*  name,
+																								  EMethodFlags minFlags = EMethodFlags::Default,
+																								  bool		   shouldInspectInherited = false)					const	noexcept;
+
+			/**
+			*	@param name						Name of the static method to retrieve.
 			*	@param minFlags					Requirements the queried static method should fulfill.
 			*										Keep in mind that the returned static method should contain all of the specified flags,
 			*										so setting for example Public and Protected will always return nullptr.

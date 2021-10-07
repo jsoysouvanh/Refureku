@@ -42,9 +42,9 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the underlying function.
 			*	@exception ConstViolation if the caller is const but the method is non-const.
 			*/
-			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
 			ReturnType			invoke(CallerType& caller, ArgTypes&&... args)				const;
-			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
 			ReturnType			invoke(CallerType const& caller, ArgTypes&&... args)		const;
 
 			/**
@@ -70,9 +70,9 @@ namespace rfk
 			*	@exception	ReturnTypeMismatch if ReturnType is not strictly the same as this function return type.
 			*	@exception	Any exception potentially thrown from the underlying function.
 			*/
-			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
 			ReturnType			checkedInvoke(CallerType& caller, ArgTypes&&... args)		const;
-			template <typename ReturnType, typename CallerType, typename... ArgTypes>
+			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
 			ReturnType			checkedInvoke(CallerType const& caller, ArgTypes&&... args)	const;
 
 			/**

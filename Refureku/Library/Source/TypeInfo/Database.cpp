@@ -227,6 +227,13 @@ Function const* Database::getFunctionByName(char const* name, EFunctionFlags fla
 													  [flags](Function const& func) { return (func.getFlags() & flags) == flags; });
 }
 
+Vector<Function const*> Database::getFunctionsByName(char const* name, EFunctionFlags flags) const noexcept
+{
+	return EntityUtility::getEntitiesByNameAndPredicate(_pimpl->getFileLevelFunctionsByName(),
+														name,
+														[flags](Function const& func) { return (func.getFlags() & flags) == flags; });
+}
+
 Vector<Function const*> Database::getFunctionsByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelFunctionsByName(), predicate, userData);
