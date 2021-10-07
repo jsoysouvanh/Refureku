@@ -9,9 +9,11 @@
 
 #include "Refureku/Config.h"
 #include "Refureku/Utility/Pimpl.h"
+#include "Refureku/Misc/Visitor.h"
+#include "Refureku/Misc/Predicate.h"
+#include "Refureku/Containers/Vector.h"
 #include "Refureku/TypeInfo/Variables/EVarFlags.h"
 #include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
-#include "Refureku/Misc/Visitor.h"
 
 namespace rfk
 {
@@ -39,13 +41,13 @@ namespace rfk
 		class ClassTemplateInstantiationRegistererImpl;
 	}
 
-	class DatabaseAPI final
+	class Database final
 	{
 		public:
-			REFUREKU_INTERNAL DatabaseAPI()		noexcept;
-			DatabaseAPI(DatabaseAPI const&)		= delete;
-			DatabaseAPI(DatabaseAPI&&)			= delete;
-			REFUREKU_INTERNAL ~DatabaseAPI()	noexcept;
+			REFUREKU_INTERNAL Database()		noexcept;
+			Database(Database const&)		= delete;
+			Database(Database&&)			= delete;
+			REFUREKU_INTERNAL ~Database()	noexcept;
 
 			/**
 			*	@brief Retrieve an entity by id.
@@ -79,6 +81,32 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API Namespace const*				getNamespaceByName(char const* name)									const;
 
 			/**
+			*	@brief Retrieve the first file level namespace satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid namespace.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return The first file level namespace satisfying the predicate if any, else nullptr.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Namespace const*				getNamespaceByPredicate(Predicate<Namespace>	predicate,
+																							void*					userData)			const;
+
+			/**
+			*	@brief Retrieve all file level namespaces satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid namespace.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All file level namespaces satisfying the predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Namespace const*>		getNamespacesByPredicate(Predicate<Namespace>	predicate,
+																							 void*					userData)			const;
+
+			/**
 			*	@brief Execute the given visitor on all file level namespaces.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -89,8 +117,8 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelNamespace(Visitor<Namespace> visitor,
-																								  void*					userData)				const;
+			REFUREKU_API bool										foreachFileLevelNamespace(Visitor<Namespace>	visitor,
+																							  void*					userData)				const;
 
 			/**
 			*	@brief Retrieve an archetype by id.
@@ -113,6 +141,19 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API Archetype const*				getArchetypeByName(char const* name)									const	noexcept;
 
 			/**
+			*	@brief Retrieve all file level archetypes satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid archetype.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All file level archetypes satisfying the predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Archetype const*>		getArchetypesByPredicate(Predicate<Archetype>	predicate,
+																							 void*					userData)					const;
+
+			/**
 			*	@brief Retrieve a struct by id.
 			*
 			*	@param id The id of the struct.
@@ -129,6 +170,19 @@ namespace rfk
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
 			RFK_NODISCARD REFUREKU_API Struct const*					getStructByName(char const* name)										const	noexcept;
+
+			/**
+			*	@brief Retrieve all file level structs satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid struct.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All file level structs satisfying the predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Struct const*>			getStructsByPredicate(Predicate<Struct>	predicate,
+																							  void*				userData)						const;
 
 			/**
 			*	@brief Execute the given visitor on all file level structs.
@@ -163,6 +217,19 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API Class const*					getClassByName(char const* name)										const	noexcept;
 
 			/**
+			*	@brief Retrieve all file level classes satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid class.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All file level classes satisfying the predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Class const*>			getClassesByPredicate(Predicate<Class>	predicate,
+																						  void*				userData)						const;
+
+			/**
 			*	@brief Execute the given visitor on all file level classes.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -193,6 +260,19 @@ namespace rfk
 			*	@return A constant pointer to the queried enum if it exists, else nullptr.
 			*/
 			RFK_NODISCARD REFUREKU_API Enum const*					getEnumByName(char const* name)											const	noexcept;
+
+			/**
+			*	@brief Retrieve all file level enums satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid enum.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All file level enums satisfying the predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Enum const*>			getEnumsByPredicate(Predicate<Enum>	predicate,
+																						void*			userData)							const;
 
 			/**
 			*	@brief Execute the given visitor on all file level enums.
@@ -248,6 +328,19 @@ namespace rfk
 																						  EVarFlags	flags = EVarFlags::Default)					const	noexcept;
 
 			/**
+			*	@brief Retrieve all file level variables satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid variable.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All file level variables satisfying the predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Variable const*>		getVariablesByPredicate(Predicate<Variable>	predicate,
+																							void*				userData)						const;
+
+			/**
 			*	@brief Execute the given visitor on all file level variables.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -283,6 +376,19 @@ namespace rfk
 																						  EFunctionFlags	flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
+			*	@brief Retrieve all file level functions satisfying the provided predicate.
+			*	
+			*	@param predicate	Predicate defining a valid function.
+			*	@param userData		User data forwarded to the predicate calls.
+			* 
+			*	@return All file level functions satisfying the predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Function const*>		getFunctionsByPredicate(Predicate<Function>	predicate,
+																							void*				userData)						const;
+
+			/**
 			*	@brief Execute the given visitor on all file level functions.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -303,7 +409,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried method if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Method const*					getMethodById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Method const*				getMethodById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a static method by id.
@@ -354,13 +460,13 @@ namespace rfk
 			* 
 			*	@return The database singleton.
 			*/
-			REFUREKU_API static DatabaseAPI& getInstance() noexcept;
+			REFUREKU_API static Database& getInstance() noexcept;
 
 		friend internal::DefaultEntityRegistererImpl;
 		friend internal::ArchetypeRegistererImpl;
 		friend internal::NamespaceFragmentRegistererImpl;
 		friend internal::ClassTemplateInstantiationRegistererImpl;
-		friend REFUREKU_API DatabaseAPI const& getDatabaseAPI() noexcept;
+		friend REFUREKU_API Database const& getDatabase() noexcept;
 	};
 
 	/**
@@ -368,5 +474,5 @@ namespace rfk
 	* 
 	*	@return A reference to the database of this program.
 	*/
-	REFUREKU_API DatabaseAPI const& getDatabaseAPI() noexcept;
+	REFUREKU_API Database const& getDatabase() noexcept;
 }

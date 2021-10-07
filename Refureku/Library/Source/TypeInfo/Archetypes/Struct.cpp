@@ -399,11 +399,8 @@ Method const* Struct::getMethodByPredicate(Predicate<Method> predicate, void* us
 	if (predicate != nullptr)
 	{
 		StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-		Method const*		result		= EntityUtility::getEntityByPredicate(structImpl->getMethods(),
-																			  [predicate, userData](Method const& method)
-																			  {
-																				  return predicate(method, userData);
-																			  });
+		Method const*		result		= EntityUtility::getEntityByPredicate(structImpl->getMethods(), predicate, userData);
+
 		if (result != nullptr)
 		{
 			return result;
@@ -432,11 +429,7 @@ Vector<Method const*> Struct::getMethodsByPredicate(Predicate<Method> predicate,
 		StructImpl const*		structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
 		Vector<Method const*>	result(2);
 
-		result.push_back(EntityUtility::getEntitiesByPredicate(structImpl->getMethods(),
-						 [predicate, userData](Method const& method)
-						 {
-							 return predicate(method, userData);
-						 }));
+		result.push_back(EntityUtility::getEntitiesByPredicate(structImpl->getMethods(), predicate, userData));
 
 		if (shouldInspectInherited)
 		{
@@ -554,11 +547,8 @@ StaticMethod const* Struct::getStaticMethodByPredicate(Predicate<StaticMethod> p
 	if (predicate != nullptr)
 	{
 		StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-		StaticMethod const*	result		= EntityUtility::getEntityByPredicate(structImpl->getStaticMethods(),
-																			  [predicate, userData](StaticMethod const& staticMethod)
-																			  {
-																				  return predicate(staticMethod, userData);
-																			  });
+		StaticMethod const*	result		= EntityUtility::getEntityByPredicate(structImpl->getStaticMethods(), predicate, userData);
+
 		if (result != nullptr)
 		{
 			return result;
@@ -587,11 +577,7 @@ Vector<StaticMethod const*> Struct::getStaticMethodsByPredicate(Predicate<Static
 		StructImpl const*			structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
 		Vector<StaticMethod const*>	result(2);
 
-		result.push_back(EntityUtility::getEntitiesByPredicate(structImpl->getStaticMethods(),
-						 [predicate, userData](StaticMethod const& staticMethod)
-						 {
-							 return predicate(staticMethod, userData);
-						 }));
+		result.push_back(EntityUtility::getEntitiesByPredicate(structImpl->getStaticMethods(), predicate, userData));
 
 		if (shouldInspectInherited)
 		{

@@ -12,6 +12,7 @@
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 #include "Refureku/Containers/Vector.h"
 #include "Refureku/Misc/Visitor.h"
+#include "Refureku/Misc/Predicate.h"
 
 namespace rfk
 {
@@ -55,6 +56,12 @@ namespace rfk
 			template <typename ContainerType, typename Predicate>
 			RFK_NODISCARD static auto								getEntityByPredicate(ContainerType const&	container,
 																						 Predicate				predicate)			-> typename std::remove_pointer_t<typename ContainerType::value_type> const*;
+			
+			template <typename EntityType, typename ContainerType>
+			RFK_NODISCARD static EntityType const*					getEntityByPredicate(ContainerType const&	container,
+																						 Predicate<EntityType>	predicate,
+																						 void*					userData);
+
 
 			/**
 			*	@brief Get a list of all entities satisfying the given predicate.
@@ -69,6 +76,11 @@ namespace rfk
 			template <typename ContainerType, typename Predicate>
 			RFK_NODISCARD static auto								getEntitiesByPredicate(ContainerType const&		container,
 																						   Predicate				predicate)		-> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>;
+
+			template <typename EntityType, typename ContainerType>
+			RFK_NODISCARD static Vector<EntityType const*>			getEntitiesByPredicate(ContainerType const&		container,
+																						   Predicate<EntityType>	predicate,
+																						   void*					userData);
 
 			/**
 			*	@brief Retrieve an entity with the given name.

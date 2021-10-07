@@ -13,7 +13,7 @@
 #include <memory>	//std::shared_ptr
 #include <cassert>
 
-#include "Refureku/TypeInfo/DatabaseAPI.h"
+#include "Refureku/TypeInfo/Database.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
@@ -29,7 +29,7 @@
 
 namespace rfk
 {
-	class DatabaseAPI::DatabaseImpl final
+	class Database::DatabaseImpl final
 	{
 		public:
 			using EntitiesById					= std::unordered_set<Entity const*, EntityPtrIdHash, EntityPtrIdEqual>;

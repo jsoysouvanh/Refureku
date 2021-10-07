@@ -24,6 +24,6 @@
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
-#include "Refureku/TypeInfo/DatabaseAPI.h"
+#include "Refureku/TypeInfo/Database.h"
 
 #include "Refureku/Properties/Property.h"

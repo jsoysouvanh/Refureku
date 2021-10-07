@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+void Database::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	assert(entity.getOuterEntity() == nullptr);
 
@@ -58,7 +58,7 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bo
 	}
 }
 
-void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEntities) noexcept
+void Database::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEntities) noexcept
 {
 	if (shouldUnregisterSubEntities)
 	{
@@ -151,7 +151,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 	}
 }
 
-void DatabaseAPI::DatabaseImpl::registerEntityId(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+void Database::DatabaseImpl::registerEntityId(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	_entitiesById.emplace(&entity);
 
@@ -194,7 +194,7 @@ void DatabaseAPI::DatabaseImpl::registerEntityId(Entity const& entity, bool shou
 	}
 }
 
-inline void DatabaseAPI::DatabaseImpl::registerSubEntities(Struct const& s) noexcept
+inline void Database::DatabaseImpl::registerSubEntities(Struct const& s) noexcept
 {
 	//Add nested archetypes
 	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
@@ -235,7 +235,7 @@ inline void DatabaseAPI::DatabaseImpl::registerSubEntities(Struct const& s) noex
 						  }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(Struct const& s) noexcept
+inline void Database::DatabaseImpl::unregisterSubEntities(Struct const& s) noexcept
 {
 	//Remove nested archetypes
 	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
@@ -276,7 +276,7 @@ inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(Struct const& s) no
 						  }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::registerSubEntities(Enum const& e) noexcept
+inline void Database::DatabaseImpl::registerSubEntities(Enum const& e) noexcept
 {
 	//Enum values
 	e.foreachEnumValue([](EnumValue const& enumValue, void* userData)
@@ -287,7 +287,7 @@ inline void DatabaseAPI::DatabaseImpl::registerSubEntities(Enum const& e) noexce
 					   }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(Enum const& e) noexcept
+inline void Database::DatabaseImpl::unregisterSubEntities(Enum const& e) noexcept
 {
 	//Enum values
 	e.foreachEnumValue([](EnumValue const& enumValue, void* userData)
@@ -298,7 +298,7 @@ inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(Enum const& e) noex
 					   }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr) noexcept
+inline void Database::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr) noexcept
 {
 	assert(npPtr.use_count() >= 2);
 
@@ -312,7 +312,7 @@ inline void DatabaseAPI::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<Na
 	}
 }
 
-inline std::shared_ptr<Namespace> DatabaseAPI::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id, bool isFileLevelNamespace) noexcept
+inline std::shared_ptr<Namespace> Database::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id, bool isFileLevelNamespace) noexcept
 {
 	auto it = _generatedNamespaces.find(id);
 
@@ -337,47 +337,47 @@ inline std::shared_ptr<Namespace> DatabaseAPI::DatabaseImpl::getOrCreateNamespac
 	}
 }
 
-inline DatabaseAPI::DatabaseImpl::EntitiesById const& DatabaseAPI::DatabaseImpl::getEntitiesById() const noexcept
+inline Database::DatabaseImpl::EntitiesById const& Database::DatabaseImpl::getEntitiesById() const noexcept
 {
 	return _entitiesById;
 }
 
-inline DatabaseAPI::DatabaseImpl::NamespacesByName const& DatabaseAPI::DatabaseImpl::getFileLevelNamespacesByName() const noexcept
+inline Database::DatabaseImpl::NamespacesByName const& Database::DatabaseImpl::getFileLevelNamespacesByName() const noexcept
 {
 	return _fileLevelNamespacesByName;
 }
 
-inline DatabaseAPI::DatabaseImpl::FundamentalArchetypesByName const& DatabaseAPI::DatabaseImpl::getFundamentalArchetypesByName() const noexcept
+inline Database::DatabaseImpl::FundamentalArchetypesByName const& Database::DatabaseImpl::getFundamentalArchetypesByName() const noexcept
 {
 	return _fundamentalArchetypes;
 }
 
-inline DatabaseAPI::DatabaseImpl::StructsByName const& DatabaseAPI::DatabaseImpl::getFileLevelStructsByName() const noexcept
+inline Database::DatabaseImpl::StructsByName const& Database::DatabaseImpl::getFileLevelStructsByName() const noexcept
 {
 	return _fileLevelStructsByName;
 }
 
-inline DatabaseAPI::DatabaseImpl::ClassesByName const& DatabaseAPI::DatabaseImpl::getFileLevelClassesByName() const	noexcept
+inline Database::DatabaseImpl::ClassesByName const& Database::DatabaseImpl::getFileLevelClassesByName() const	noexcept
 {
 	return _fileLevelClassesByName;
 }
 
-inline DatabaseAPI::DatabaseImpl::EnumsByName const& DatabaseAPI::DatabaseImpl::getFileLevelEnumsByName() const noexcept
+inline Database::DatabaseImpl::EnumsByName const& Database::DatabaseImpl::getFileLevelEnumsByName() const noexcept
 {
 	return _fileLevelEnumsByName;
 }
 
-inline DatabaseAPI::DatabaseImpl::VariablesByName const& DatabaseAPI::DatabaseImpl::getFileLevelVariablesByName() const noexcept
+inline Database::DatabaseImpl::VariablesByName const& Database::DatabaseImpl::getFileLevelVariablesByName() const noexcept
 {
 	return _fileLevelVariablesByName;
 }
 
-inline DatabaseAPI::DatabaseImpl::FunctionsByName const& DatabaseAPI::DatabaseImpl::getFileLevelFunctionsByName() const noexcept
+inline Database::DatabaseImpl::FunctionsByName const& Database::DatabaseImpl::getFileLevelFunctionsByName() const noexcept
 {
 	return _fileLevelFunctionsByName;
 }
 
-inline DatabaseAPI::DatabaseImpl::GenNamespaces const& DatabaseAPI::DatabaseImpl::getGeneratedNamespaces() const noexcept
+inline Database::DatabaseImpl::GenNamespaces const& Database::DatabaseImpl::getGeneratedNamespaces() const noexcept
 {
 	return _generatedNamespaces;
 }

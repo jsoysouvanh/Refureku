@@ -1206,7 +1206,7 @@ void enumManualReflection()
 
 void classManualReflection()
 {
-	rfk::Class const* vec3archetype = rfk::getDatabaseAPI().getClassByName("Vector3f");
+	rfk::Class const* vec3archetype = rfk::getDatabase().getClassByName("Vector3f");
 
 	TEST(vec3archetype != nullptr);
 	TEST(vec3archetype->getFieldByName("x") != nullptr);

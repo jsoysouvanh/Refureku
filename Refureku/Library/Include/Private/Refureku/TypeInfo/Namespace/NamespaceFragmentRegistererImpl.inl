@@ -9,7 +9,7 @@ inline internal::NamespaceFragmentRegistererImpl::NamespaceFragmentRegistererImp
 	_registeredFragment{namespaceFragment},
 	_namespaceInstance(nullptr)
 {
-	_namespaceInstance = DatabaseAPI::getInstance()._pimpl->getOrCreateNamespace(name, id, isFileLevelNamespace);
+	_namespaceInstance = Database::getInstance()._pimpl->getOrCreateNamespace(name, id, isFileLevelNamespace);
 
 	mergeFragmentToNamespace();
 }
@@ -20,7 +20,7 @@ inline internal::NamespaceFragmentRegistererImpl::~NamespaceFragmentRegistererIm
 	removeFragmentFromNamespace();
 
 	//Check if this fragment was the last one from the namespace
-	DatabaseAPI::getInstance()._pimpl->checkNamespaceRefCount(_namespaceInstance);
+	Database::getInstance()._pimpl->checkNamespaceRefCount(_namespaceInstance);
 }
 
 inline void internal::NamespaceFragmentRegistererImpl::mergeFragmentToNamespace() noexcept
@@ -68,7 +68,7 @@ inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(Enti
 			_namespaceInstance->addNamespace(static_cast<Namespace const&>(entity));
 
 			//Register the nested namespace but don't register sub entities
-			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
+			Database::getInstance()._pimpl->registerEntityId(entity, false);
 			break;
 
 		case EEntityKind::Struct:
@@ -79,21 +79,21 @@ inline void	internal::NamespaceFragmentRegistererImpl::addEntityToNamespace(Enti
 			_namespaceInstance->addArchetype(static_cast<Archetype const&>(entity));
 
 			//Register the archetype and its sub entities to the database.
-			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, true);
+			Database::getInstance()._pimpl->registerEntityId(entity, true);
 			break;
 
 		case EEntityKind::Variable:
 			_namespaceInstance->addVariable(static_cast<Variable const&>(entity));
 
 			//Register the variable to the database, a variable doesn't have sub entities so can write false right away
-			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
+			Database::getInstance()._pimpl->registerEntityId(entity, false);
 			break;
 
 		case EEntityKind::Function:
 			_namespaceInstance->addFunction(static_cast<Function const&>(entity));
 
 			//Register the function to the database, a function doesn't have sub entities so can write false right away
-			DatabaseAPI::getInstance()._pimpl->registerEntityId(entity, false);
+			Database::getInstance()._pimpl->registerEntityId(entity, false);
 			break;
 
 		case EEntityKind::EnumValue:
@@ -140,21 +140,21 @@ inline void internal::NamespaceFragmentRegistererImpl::removeEntityFromNamespace
 			_namespaceInstance->removeArchetype(static_cast<Archetype const&>(entity));
 
 			//Unregister archetypes and their sub entities from the database
-			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, true);
+			Database::getInstance()._pimpl->unregisterEntity(entity, true);
 			break;
 
 		case EEntityKind::Variable:
 			_namespaceInstance->removeVariable(static_cast<Variable const&>(entity));
 
 			//Unregister the variable from the database, a variable doesn't have sub entities so can write false right away
-			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, false);
+			Database::getInstance()._pimpl->unregisterEntity(entity, false);
 			break;
 
 		case EEntityKind::Function:
 			_namespaceInstance->removeFunction(static_cast<Function const&>(entity));
 
 			//Unregister the function from the database, a function doesn't have sub entities so can write false right away
-			DatabaseAPI::getInstance()._pimpl->unregisterEntity(entity, false);
+			Database::getInstance()._pimpl->unregisterEntity(entity, false);
 			break;
 
 		case EEntityKind::EnumValue:

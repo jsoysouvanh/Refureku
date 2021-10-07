@@ -5,17 +5,6 @@
 *	See the README.md file for full license details.
 */
 
-template <typename EntityType, typename ContainerType>
-bool EntityUtility::foreachEntity(ContainerType const& container, Visitor<EntityType> visitor, void* userData)
-{
-	if (visitor != nullptr)
-	{
-		return foreachEntity(container, [visitor, userData](EntityType const& entity) { return visitor(entity, userData); });
-	}
-
-	return false;
-}
-
 template <typename ContainerType, typename Visitor>
 bool EntityUtility::foreachEntity(ContainerType const& container, Visitor visitor)
 {
@@ -43,6 +32,12 @@ bool EntityUtility::foreachEntity(ContainerType const& container, Visitor visito
 	return true;
 }
 
+template <typename EntityType, typename ContainerType>
+bool EntityUtility::foreachEntity(ContainerType const& container, Visitor<EntityType> visitor, void* userData)
+{
+	return (visitor != nullptr) ? foreachEntity(container, [visitor, userData](EntityType const& entity) { return visitor(entity, userData); }) : false;
+}
+
 template <typename ContainerType, typename Predicate>
 auto EntityUtility::getEntityByPredicate(ContainerType const& container, Predicate predicate) -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
 {
@@ -68,6 +63,12 @@ auto EntityUtility::getEntityByPredicate(ContainerType const& container, Predica
 	}
 
 	return nullptr;
+}
+
+template <typename EntityType, typename ContainerType>
+EntityType const* EntityUtility::getEntityByPredicate(ContainerType const& container, Predicate<EntityType> predicate, void* userData)
+{
+	return (predicate != nullptr) ? getEntityByPredicate(container, [predicate, userData](EntityType const& entity) { return predicate(entity, userData); }) : nullptr;
 }
 
 template <typename ContainerType, typename Predicate>
@@ -98,6 +99,19 @@ auto EntityUtility::getEntitiesByPredicate(ContainerType const& container, Predi
 	}
 
 	return result;
+}
+
+template <typename EntityType, typename ContainerType>
+Vector<EntityType const*> EntityUtility::getEntitiesByPredicate(ContainerType const& container, Predicate<EntityType> predicate, void* userData)
+{
+	if (predicate != nullptr)
+	{
+		return getEntitiesByPredicate(container, [predicate, userData](EntityType const& entity) { return predicate(entity, userData); });
+	}
+	else
+	{
+		return Vector<EntityType const*>(0);
+	}
 }
 
 template <typename ContainerType>

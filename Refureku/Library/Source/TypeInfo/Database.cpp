@@ -1,346 +1,43 @@
 #include "Refureku/TypeInfo/Database.h"
 
-#include <iostream>
+#include <string>
 
+#include "Refureku/TypeInfo/DatabaseImpl.h"
+#include "Refureku/TypeInfo/Entity/EntityUtility.h"
 #include "Refureku/TypeInfo/Entity/EntityCast.h"
 #include "Refureku/Exceptions/BadNamespaceFormat.h"
-#include "Refureku/Misc/DisableWarningMacros.h"
 
 using namespace rfk;
 
-Database& Database::getInternal() noexcept
+Database::Database() noexcept:
+	_pimpl(new DatabaseImpl())
+{
+}
+
+Database::~Database() noexcept = default;
+
+Database& Database::getInstance() noexcept
 {
 	static Database database;
+	
 	return database;
 }
 
-void Database::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+Entity const* Database::getEntityById(std::size_t id) const noexcept
 {
-	assert(entity.getOuterEntity() == nullptr);
-
-	//Register by id
-	registerEntity(entity, shouldRegisterSubEntities);
-
-	//Register by name
-	switch (entity.getKind())
-	{
-		case EEntityKind::Namespace:
-			_fileLevelNamespacesByName.emplace(reinterpret_cast<Namespace const*>(&entity));
-			break;
-
-		case EEntityKind::Struct:
-			_fileLevelStructsByName.emplace(reinterpret_cast<Struct const*>(&entity));
-			break;
-
-		case EEntityKind::Class:
-			_fileLevelClassesByName.emplace(reinterpret_cast<Class const*>(&entity));
-			break;
-
-		case EEntityKind::Enum:
-			_fileLevelEnumsByName.emplace(reinterpret_cast<Enum const*>(&entity));
-			break;
-
-		case EEntityKind::Variable:
-			_fileLevelVariablesByName.emplace(reinterpret_cast<Variable const*>(&entity));
-			break;
-
-		case EEntityKind::Function:
-			_fileLevelFunctionsByName.emplace(reinterpret_cast<Function const*>(&entity));
-			break;
-
-		case EEntityKind::FundamentalArchetype:
-			_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetype const*>(&entity));
-			break;
-
-		case EEntityKind::EnumValue:
-			[[fallthrough]];
-		case EEntityKind::Field:
-			[[fallthrough]];
-		case EEntityKind::Method:
-			[[fallthrough]];
-		case EEntityKind::Undefined:
-			[[fallthrough]];
-		default:
-			//Should never reach this point
-			assert(false);
-			break;
-	}
+	return EntityUtility::getEntityPtrById(_pimpl->getEntitiesById(), id);
 }
 
-void Database::registerEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+Namespace const* Database::getNamespaceById(std::size_t id) const noexcept
 {
-	_entitiesById.emplace(&entity);
-
-	if (shouldRegisterSubEntities)
-	{
-		switch (entity.getKind())
-		{
-			case EEntityKind::Struct:
-				[[fallthrough]];
-			case EEntityKind::Class:
-				registerSubEntities(static_cast<Struct const&>(entity));
-				break;
-
-			case EEntityKind::Enum:
-				registerSubEntities(static_cast<Enum const&>(entity));
-				break;
-
-			case EEntityKind::Namespace:
-				[[fallthrough]];	//Namespace nested entities are manually registered by NamespaceFragmentRegisterers
-			case EEntityKind::FundamentalArchetype:
-				[[fallthrough]];
-			case EEntityKind::Variable:
-				[[fallthrough]];
-			case EEntityKind::Field:
-				[[fallthrough]];
-			case EEntityKind::Function:
-				[[fallthrough]];
-			case EEntityKind::Method:
-				[[fallthrough]];
-			case EEntityKind::EnumValue:
-				//No sub entity to register
-				break;
-
-			case EEntityKind::Undefined:
-				[[fallthrough]];
-			default:
-				assert(false);	//Should never register a bad kind
-				break;
-		}
-	}
+	return entityCast<Namespace>(getEntityById(id));
 }
 
-void Database::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEntities) noexcept
+Namespace const* Database::getNamespaceByName(char const* name) const
 {
-	if (shouldUnregisterSubEntities)
-	{
-		switch (entity.getKind())
-		{
-			case EEntityKind::Namespace:
-				assert(false); //This situation should never happen
-				break;
+	std::string namespaceName(name);
 
-			case EEntityKind::Struct:
-				[[fallthrough]];
-			case EEntityKind::Class:
-				unregisterSubEntities(static_cast<Struct const&>(entity));
-				break;
-
-			case EEntityKind::Enum:
-				unregisterSubEntities(static_cast<Enum const&>(entity));
-				break;
-
-			case EEntityKind::Variable:
-				[[fallthrough]];
-			case EEntityKind::Field:
-				[[fallthrough]];
-			case EEntityKind::Function:
-				[[fallthrough]];
-			case EEntityKind::Method:
-				[[fallthrough]];
-			case EEntityKind::EnumValue:
-				[[fallthrough]];
-			case EEntityKind::FundamentalArchetype:
-				//No sub entity to unregister
-				break;
-
-			case EEntityKind::Undefined:
-				[[fallthrough]];
-			default:
-				assert(false);	//Should never register a bad kind
-				break;
-		}
-	}
-
-	//Remove this entity from the list of registered entity ids
-	_entitiesById.erase(&entity);
-
-	if (entity.getOuterEntity() == nullptr)
-	{
-		switch (entity.getKind())
-		{
-			case EEntityKind::Namespace:
-				_fileLevelNamespacesByName.erase(reinterpret_cast<Namespace const*>(&entity));
-				break;
-
-			case EEntityKind::Struct:
-				_fileLevelStructsByName.erase(reinterpret_cast<Struct const*>(&entity));
-				break;
-
-			case EEntityKind::Class:
-				_fileLevelClassesByName.erase(reinterpret_cast<Class const*>(&entity));
-				break;
-
-			case EEntityKind::Enum:
-				_fileLevelEnumsByName.erase(reinterpret_cast<Enum const*>(&entity));
-				break;
-
-			case EEntityKind::Variable:
-				_fileLevelVariablesByName.erase(reinterpret_cast<Variable const*>(&entity));
-				break;
-
-			case EEntityKind::Function:
-				_fileLevelFunctionsByName.erase(reinterpret_cast<Function const*>(&entity));
-				break;
-
-			case EEntityKind::FundamentalArchetype:
-				_fundamentalArchetypes.erase(reinterpret_cast<FundamentalArchetype const*>(&entity));
-				break;
-
-			case EEntityKind::EnumValue:
-				[[fallthrough]];
-			case EEntityKind::Field:
-				[[fallthrough]];
-			case EEntityKind::Method:
-				[[fallthrough]];
-			case EEntityKind::Undefined:
-				[[fallthrough]];
-			default:
-				//Those entities can't be at file level.
-				assert(false);
-				break;
-		}
-	}
-}
-
-void Database::registerSubEntities(Struct const& s) noexcept
-{
-	//Add nested archetypes
-	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
-	{
-		reinterpret_cast<Database*>(userData)->registerEntity(archetype, true);
-
-		return true;
-	}, this);
-
-	//Add fields
-	s.foreachField([](Field const& field, void* userData)
-	{
-		reinterpret_cast<Database*>(userData)->registerEntity(field, false);
-				   
-		return true;
-	}, this);
-
-	s.foreachStaticField([](StaticField const& staticField, void* userData)
-	{
-		reinterpret_cast<Database*>(userData)->registerEntity(staticField, false);
-
-		return true;
-	}, this);
-
-	//Add methods
-	s.foreachMethod([](Method const& method, void* userData)
-	{
-		reinterpret_cast<Database*>(userData)->registerEntity(method, false);
-
-		return true;
-	}, this);
-
-	s.foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
-	{
-		reinterpret_cast<Database*>(userData)->registerEntity(staticMethod, false);
-
-		return true;
-	}, this);
-}
-
-void Database::unregisterSubEntities(Struct const& s) noexcept
-{
-	//Remove nested archetypes
-	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
-							 {
-								 reinterpret_cast<Database*>(userData)->unregisterEntity(archetype, true);
-
-								 return true;
-							 }, this);
-
-	//Remove fields
-	s.foreachField([](Field const& field, void* userData)
-				   {
-					   reinterpret_cast<Database*>(userData)->unregisterEntity(field, false);
-
-					   return true;
-				   }, this);
-
-	s.foreachStaticField([](StaticField const& staticField, void* userData)
-				   {
-					   reinterpret_cast<Database*>(userData)->unregisterEntity(staticField, false);
-
-					   return true;
-				   }, this);
-
-	//Remove methods
-	s.foreachMethod([](Method const& method, void* userData)
-					{
-						reinterpret_cast<Database*>(userData)->unregisterEntity(method, false);
-
-						return true;
-					}, this);
-
-	s.foreachStaticMethod([](StaticMethod const& staticMethod, void* userData)
-	{
-		reinterpret_cast<Database*>(userData)->unregisterEntity(staticMethod, false);
-
-		return true;
-	}, this);
-}
-
-void Database::registerSubEntities(Enum const& e) noexcept
-{
-	//Enum values
-	for (std::size_t i = 0; i < e.getEnumValuesCount(); i++)
-	{
-		registerEntity(e.getEnumValueAt(i), false);
-	}
-}
-
-void Database::unregisterSubEntities(Enum const& e) noexcept
-{
-	//Enum values
-	for (std::size_t i = 0; i < e.getEnumValuesCount(); i++)
-	{
-		unregisterEntity(e.getEnumValueAt(i), false);
-	}
-}
-
-void Database::checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr) noexcept
-{
-	assert(npPtr.use_count() >= 2);
-
-	// 2: first is this method parameter, the second is the ptr stored in _generatedNamespaces
-	if (npPtr.use_count() == 2)
-	{
-		//This shared pointer is used by database only so we can delete it
-		unregisterEntity(*npPtr, false);
-		
-		_generatedNamespaces.erase(std::find_if(_generatedNamespaces.cbegin(),
-												_generatedNamespaces.cend(),
-												[npPtr](std::shared_ptr<Namespace> const& n) { return npPtr == n; }));
-	}
-}
-
-std::shared_ptr<Namespace> Database::generateNamespace(char const* name, std::size_t id) noexcept
-{
-	return _generatedNamespaces.emplace_back(std::make_shared<Namespace>(name, id));
-}
-
-Entity const* Database::getEntity(std::size_t id) const noexcept
-{
-	Entity searching("", id);
-
-	Database::EntitiesById::const_iterator it = _entitiesById.find(&searching);
-
-	return (it != _entitiesById.cend()) ? *it : nullptr;
-}
-
-Namespace const* Database::getNamespace(std::size_t id) const noexcept
-{
-	return entityCast<Namespace>(getEntity(id));
-}
-
-Namespace const* Database::getNamespace(std::string namespaceName) const
-{
-	size_t index = namespaceName.find_first_of(':');
+	std::size_t index = namespaceName.find_first_of(':');
 
 	//Make sure namespaceName has a valid namespace syntax
 	if (index != std::string::npos && (index == namespaceName.size() - 1 || namespaceName[index + 1] != ':'))
@@ -348,17 +45,13 @@ Namespace const* Database::getNamespace(std::string namespaceName) const
 		throw BadNamespaceFormat("The provided namespace name is ill formed.");
 	}
 
-	Entity searchedNamespace(namespaceName.substr(0u, index), 0u);
-
-	Database::NamespacesByName::const_iterator it = _fileLevelNamespacesByName.find(reinterpret_cast<Namespace const*>(&searchedNamespace));
+	Namespace const* result = EntityUtility::getEntityByName(_pimpl->getFileLevelNamespacesByName(), namespaceName.substr(0u, index).data());
 
 	//Couldn't find first namespace part, abort search
-	if (it == _fileLevelNamespacesByName.cend())
+	if (result == nullptr)
 	{
 		return nullptr;
 	}
-
-	Namespace const* result = *it;
 
 	while (index != std::string::npos && result != nullptr)
 	{
@@ -372,32 +65,47 @@ Namespace const* Database::getNamespace(std::string namespaceName) const
 		namespaceName	= namespaceName.substr(index + 2u);
 		index			= namespaceName.find_first_of(':');
 
-		result = result->getNamespace(namespaceName.substr(0u, index));
+		result = result->getNamespaceByName(namespaceName.substr(0u, index).data());
 	}
 
 	return result;
 }
 
-Archetype const* Database::getArchetype(std::size_t id) const noexcept
+Namespace const* Database::getNamespaceByPredicate(Predicate<Namespace> predicate, void* userData) const
 {
-	return entityCast<Archetype>(getEntity(id));
+	return EntityUtility::getEntityByPredicate(_pimpl->getFileLevelNamespacesByName(), predicate, userData);
 }
 
-Archetype const* Database::getArchetype(std::string archetypeName) const noexcept
+Vector<Namespace const*> Database::getNamespacesByPredicate(Predicate<Namespace>	predicate, void* userData) const
 {
-	Archetype const* result = getClass(archetypeName);
-	
+	return EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelNamespacesByName(), predicate, userData);
+}
+
+bool Database::foreachFileLevelNamespace(Visitor<Namespace> visitor, void* userData) const
+{
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelNamespacesByName(), visitor, userData);
+}
+
+Archetype const* Database::getArchetypeById(std::size_t id) const noexcept
+{
+	return entityCast<Archetype>(getEntityById(id));
+}
+
+Archetype const* Database::getArchetypeByName(char const* name) const noexcept
+{
+	Archetype const* result = getClassByName(name);
+
 	if (result == nullptr)
 	{
-		result = getStruct(archetypeName);
+		result = getStructByName(name);
 
 		if (result == nullptr)
 		{
-			result = getEnum(archetypeName);
+			result = getEnumByName(name);
 
 			if (result == nullptr)
 			{
-				result = getFundamentalArchetype(std::move(archetypeName));
+				result = getFundamentalArchetypeByName(name);
 			}
 		}
 	}
@@ -405,156 +113,156 @@ Archetype const* Database::getArchetype(std::string archetypeName) const noexcep
 	return result;
 }
 
-Struct const* Database::getStruct(std::size_t id) const noexcept
+Vector<Archetype const*> Database::getArchetypesByPredicate(Predicate<Archetype> predicate, void* userData) const
 {
-	return entityCast<Struct>(getEntity(id));
+	Vector<Archetype const*> result = EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelEnumsByName(), predicate, userData);
+
+	result.push_back(EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelStructsByName(), predicate, userData));
+	result.push_back(EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelClassesByName(), predicate, userData));
+
+	return result;
 }
 
-Struct const* Database::getStruct(std::string structName) const noexcept
+Struct const* Database::getStructById(std::size_t id) const noexcept
 {
-	Entity searchedStruct(std::move(structName), 0u);
-
-	Database::StructsByName::const_iterator it = _fileLevelStructsByName.find(reinterpret_cast<Struct const*>(&searchedStruct));
-
-	return (it != _fileLevelStructsByName.cend()) ? *it : nullptr;
+	return entityCast<Struct>(getEntityById(id));
 }
 
-Class const* Database::getClass(std::size_t id) const noexcept
+Struct const* Database::getStructByName(char const* name) const noexcept
 {
-	return entityCast<Class>(getEntity(id));
+	return EntityUtility::getEntityByName(_pimpl->getFileLevelStructsByName(), name);
 }
 
-Class const* Database::getClass(std::string className) const noexcept
+Vector<Struct const*> Database::getStructsByPredicate(Predicate<Struct> predicate, void* userData) const
 {
-	Entity searchedClass(std::move(className), 0u);
-
-	Database::ClassesByName::const_iterator it = _fileLevelClassesByName.find(reinterpret_cast<Class const*>(&searchedClass));
-
-	return (it != _fileLevelClassesByName.cend()) ? *it : nullptr;
+	return EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelStructsByName(), predicate, userData);
 }
 
-Enum const* Database::getEnum(std::size_t id) const noexcept
+bool Database::foreachFileLevelStruct(Visitor<Struct> visitor, void* userData) const
 {
-	return entityCast<Enum>(getEntity(id));
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelStructsByName(), visitor, userData);
 }
 
-Enum const* Database::getEnum(std::string enumName) const noexcept
+Class const* Database::getClassById(std::size_t id) const noexcept
 {
-	Entity searchedEnum(std::move(enumName), 0u);
-
-	Database::EnumsByName::const_iterator it = _fileLevelEnumsByName.find(reinterpret_cast<Enum const*>(&searchedEnum));
-
-	return (it != _fileLevelEnumsByName.cend()) ? *it : nullptr;
+	return entityCast<Class>(getEntityById(id));
 }
 
-FundamentalArchetype const* Database::getFundamentalArchetype(std::size_t id) const noexcept
+Class const* Database::getClassByName(char const* name) const noexcept
 {
-	return entityCast<FundamentalArchetype>(getEntity(id));
+	return EntityUtility::getEntityByName(_pimpl->getFileLevelClassesByName(), name);
 }
 
-FundamentalArchetype const* Database::getFundamentalArchetype(std::string archetypeName) const noexcept
+Vector<Class const*> Database::getClassesByPredicate(Predicate<Class> predicate, void* userData) const
 {
-	Entity searchedFundamentalArchetype(std::move(archetypeName), 0u);
-
-	Database::FundamentalArchetypesByName::const_iterator it = _fundamentalArchetypes.find(reinterpret_cast<FundamentalArchetype const*>(&searchedFundamentalArchetype));
-
-	return (it != _fundamentalArchetypes.cend()) ? *it : nullptr;
+	return EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelClassesByName(), predicate, userData);
 }
 
-Variable const* Database::getVariable(std::size_t id) const noexcept
+bool Database::foreachFileLevelClass(Visitor<Class> visitor, void* userData) const
 {
-	return entityCast<Variable>(getEntity(id));
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelClassesByName(), visitor, userData);
 }
 
-Variable const* Database::getVariable(std::string variableName, EVarFlags flags) const noexcept
+Enum const* Database::getEnumById(std::size_t id) const noexcept
 {
-	Entity searchedVariable(std::move(variableName), 0u);
-
-	Database::VariablesByName::const_iterator it = _fileLevelVariablesByName.find(reinterpret_cast<Variable const*>(&searchedVariable));
-
-	return (it != _fileLevelVariablesByName.cend() && ((*it)->getFlags() & flags) == flags) ? *it : nullptr;
+	return entityCast<Enum>(getEntityById(id));
 }
 
-Function const* Database::getFunction(std::size_t id) const noexcept
+Enum const* Database::getEnumByName(char const* name) const noexcept
 {
-	return entityCast<Function>(getEntity(id));
+	return EntityUtility::getEntityByName(_pimpl->getFileLevelEnumsByName(), name);
 }
 
-Function const* Database::getFunction(std::string functionName, EFunctionFlags flags) const noexcept
+Vector<Enum const*> Database::getEnumsByPredicate(Predicate<Enum> predicate, void* userData) const
 {
-	Entity searchedFunction(std::move(functionName), 0u);
-
-	Database::FunctionsByName::const_iterator it = _fileLevelFunctionsByName.find(reinterpret_cast<Function const*>(&searchedFunction));
-
-	return (it != _fileLevelFunctionsByName.cend() && ((*it)->getFlags() & flags) == flags) ? *it : nullptr;
+	return EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelEnumsByName(), predicate, userData);
 }
 
-Method const* Database::getMethod(std::size_t id) const noexcept
+bool Database::foreachFileLevelEnum(Visitor<Enum> visitor, void* userData) const
 {
-	return entityCast<Method>(getEntity(id));
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelEnumsByName(), visitor, userData);
 }
 
-StaticMethod const* Database::getStaticMethod(std::size_t id) const noexcept
+FundamentalArchetype const* Database::getFundamentalArchetypeById(std::size_t id) const noexcept
 {
-	return entityCast<StaticMethod>(getEntity(id));
+	return entityCast<FundamentalArchetype>(getEntityById(id));
 }
 
-Field const* Database::getField(std::size_t id) const noexcept
+FundamentalArchetype const* Database::getFundamentalArchetypeByName(char const* name) const noexcept
 {
-	return entityCast<Field>(getEntity(id));
+	return EntityUtility::getEntityByName(_pimpl->getFundamentalArchetypesByName(), name);
 }
 
-StaticField const* Database::getStaticField(std::size_t id) const noexcept
+Variable const* Database::getVariableById(std::size_t id) const noexcept
 {
-	return entityCast<StaticField>(getEntity(id));
+	return entityCast<Variable>(getEntityById(id));
 }
 
-EnumValue const* Database::getEnumValue(std::size_t id) const noexcept
+Variable const* Database::getVariableByName(char const* name, EVarFlags flags) const noexcept
 {
-	return entityCast<EnumValue>(getEntity(id));
+	return EntityUtility::getEntityByNameAndPredicate(_pimpl->getFileLevelVariablesByName(),
+													  name,
+													  [flags](Variable const& var) { return (var.getFlags() & flags) == flags; });
 }
 
-Database::EntitiesById const& Database::getEntitiesById() const noexcept
+Vector<Variable const*> Database::getVariablesByPredicate(Predicate<Variable> predicate, void* userData) const
 {
-	return _entitiesById;
+	return EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelVariablesByName(), predicate, userData);
 }
 
-Database::NamespacesByName const& Database::getFileLevelNamespaces() const noexcept
+bool Database::foreachFileLevelVariable(Visitor<Variable> visitor, void* userData) const
 {
-	return _fileLevelNamespacesByName;
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelVariablesByName(), visitor, userData);
 }
 
-Database::FundamentalArchetypesByName const& Database::getFundamentalArchetypes() const noexcept
+Function const* Database::getFunctionById(std::size_t id) const noexcept
 {
-	return _fundamentalArchetypes;
+	return entityCast<Function>(getEntityById(id));
 }
 
-Database::StructsByName const& Database::getFileLevelStructs() const noexcept
+Function const* Database::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
-	return _fileLevelStructsByName;
+	return EntityUtility::getEntityByNameAndPredicate(_pimpl->getFileLevelFunctionsByName(),
+													  name,
+													  [flags](Function const& func) { return (func.getFlags() & flags) == flags; });
 }
 
-Database::ClassesByName const& Database::getFileLevelClasses() const noexcept
+Vector<Function const*> Database::getFunctionsByPredicate(Predicate<Function> predicate, void* userData) const
 {
-	return _fileLevelClassesByName;
+	return EntityUtility::getEntitiesByPredicate(_pimpl->getFileLevelFunctionsByName(), predicate, userData);
 }
 
-Database::EnumsByName const& Database::getFileLevelEnums() const noexcept
+bool Database::foreachFileLevelFunction(Visitor<Function> visitor, void* userData) const
 {
-	return _fileLevelEnumsByName;
+	return EntityUtility::foreachEntity(_pimpl->getFileLevelFunctionsByName(), visitor, userData);
 }
 
-Database::VariablesByName const& Database::getFileLevelVariables() const noexcept
+Method const* Database::getMethodById(std::size_t id) const noexcept
 {
-	return _fileLevelVariablesByName;
+	return entityCast<Method>(getEntityById(id));
 }
 
-Database::FunctionsByName const& Database::getFileLevelFunctions() const noexcept
+StaticMethod const* Database::getStaticMethodById(std::size_t id) const noexcept
 {
-	return _fileLevelFunctionsByName;
+	return entityCast<StaticMethod>(getEntityById(id));
+}
+
+Field const* Database::getFieldById(std::size_t id) const noexcept
+{
+	return entityCast<Field>(getEntityById(id));
+}
+
+StaticField const* Database::getStaticFieldById(std::size_t id) const noexcept
+{
+	return entityCast<StaticField>(getEntityById(id));
+}
+
+EnumValue const* Database::getEnumValueById(std::size_t id) const noexcept
+{
+	return entityCast<EnumValue>(getEntityById(id));
 }
 
 Database const& rfk::getDatabase() noexcept
 {
-	return Database::getInternal();
+	return Database::getInstance();
 }

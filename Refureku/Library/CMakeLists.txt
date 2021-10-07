@@ -15,7 +15,7 @@ add_library(${RefurekuLibraryTarget}
 
 					Source/TypeInfo/TypePart.cpp
 					Source/TypeInfo/Type.cpp
-					Source/TypeInfo/DatabaseAPI.cpp	#TODO: Rename
+					Source/TypeInfo/Database.cpp
 
 					Source/TypeInfo/Entity/Entity.cpp
 					Source/TypeInfo/Entity/EntityHash.cpp
