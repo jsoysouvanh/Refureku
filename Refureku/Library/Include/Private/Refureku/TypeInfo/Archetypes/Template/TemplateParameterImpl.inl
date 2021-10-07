@@ -5,18 +5,18 @@
 *	See the README.md file for full license details.
 */
 
-inline TemplateParameterAPI::TemplateParameterImpl::TemplateParameterImpl(char const* name, ETemplateParameterKind kind) noexcept:
+inline TemplateParameter::TemplateParameterImpl::TemplateParameterImpl(char const* name, ETemplateParameterKind kind) noexcept:
 	_name(name),
 	_kind{kind}
 {
 }
 
-inline std::string const& TemplateParameterAPI::TemplateParameterImpl::getName() const noexcept
+inline std::string const& TemplateParameter::TemplateParameterImpl::getName() const noexcept
 {
 	return _name;
 }
 
-inline ETemplateParameterKind TemplateParameterAPI::TemplateParameterImpl::getKind() const noexcept
+inline ETemplateParameterKind TemplateParameter::TemplateParameterImpl::getKind() const noexcept
 {
 	return _kind;
 }

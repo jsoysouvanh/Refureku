@@ -5,27 +5,27 @@
 *	See the README.md file for full license details.
 */
 
-inline ClassTemplateAPI::ClassTemplateImpl::ClassTemplateImpl(char const* name, std::size_t id, bool isClass) noexcept:
+inline ClassTemplate::ClassTemplateImpl::ClassTemplateImpl(char const* name, std::size_t id, bool isClass) noexcept:
 	StructImpl(name, id, 0u, isClass, EClassKind::Template)
 {
 }
 
-inline void ClassTemplateAPI::ClassTemplateImpl::addTemplateInstantiation(ClassTemplateInstantiationAPI const& instantiation) noexcept
+inline void ClassTemplate::ClassTemplateImpl::addTemplateInstantiation(ClassTemplateInstantiation const& instantiation) noexcept
 {
 	_templateInstantiations.push_back(&instantiation);
 }
 
-inline void ClassTemplateAPI::ClassTemplateImpl::addTemplateParameter(TemplateParameterAPI const& param) noexcept
+inline void ClassTemplate::ClassTemplateImpl::addTemplateParameter(TemplateParameter const& param) noexcept
 {
 	_templateParameters.push_back(&param);
 }
 
-inline std::vector<TemplateParameterAPI const*> const& ClassTemplateAPI::ClassTemplateImpl::getTemplateParameters() const noexcept
+inline std::vector<TemplateParameter const*> const& ClassTemplate::ClassTemplateImpl::getTemplateParameters() const noexcept
 {
 	return _templateParameters;
 }
 
-inline std::vector<ClassTemplateInstantiationAPI const*> const& ClassTemplateAPI::ClassTemplateImpl::getTemplateInstantiations() const noexcept
+inline std::vector<ClassTemplateInstantiation const*> const& ClassTemplate::ClassTemplateImpl::getTemplateInstantiations() const noexcept
 {
 	return _templateInstantiations;
 }

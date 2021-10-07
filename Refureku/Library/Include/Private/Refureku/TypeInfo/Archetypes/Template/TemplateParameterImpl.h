@@ -9,11 +9,11 @@
 
 #include <string>
 
-#include "Refureku/TypeInfo/Archetypes/Template/TemplateParameterAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Template/TemplateParameter.h"
 
 namespace rfk
 {
-	class TemplateParameterAPI::TemplateParameterImpl final
+	class TemplateParameter::TemplateParameterImpl final
 	{
 		private:
 			/** Name of the template parameter. */

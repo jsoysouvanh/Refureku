@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h"
-#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h"
+#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h"
 #include "Refureku/TypeInfo/DatabaseImpl.h"
 
 namespace rfk
@@ -17,10 +17,10 @@ namespace rfk
 	{
 		private:
 			/** Registered template instantiation. */
-			ClassTemplateInstantiationAPI const&	_registeredClassTemplateInstantiation;
+			ClassTemplateInstantiation const&	_registeredClassTemplateInstantiation;
 
 		public:
-			inline ClassTemplateInstantiationRegistererImpl(ClassTemplateInstantiationAPI const& instantiation)	noexcept;
+			inline ClassTemplateInstantiationRegistererImpl(ClassTemplateInstantiation const& instantiation)	noexcept;
 			inline ~ClassTemplateInstantiationRegistererImpl()													noexcept;
 	};
 

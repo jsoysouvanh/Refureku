@@ -12,9 +12,9 @@
 #include <Refureku/TypeInfo/Variables/StaticField.h>
 #include <Refureku/TypeInfo/Archetypes/Enum.h>
 #include <Refureku/TypeInfo/Archetypes/EnumValue.h>
-#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>
-#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h>
-#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h>
+#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h>
+#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h>
+#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>
 
 namespace rfk { class Variable; class Function; }
 

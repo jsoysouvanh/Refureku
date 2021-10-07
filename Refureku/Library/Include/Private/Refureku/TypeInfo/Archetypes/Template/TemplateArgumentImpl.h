@@ -7,29 +7,29 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/Template/TemplateArgumentAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Template/TemplateArgument.h"
 
 namespace rfk
 {
-	class TemplateArgumentAPI::TemplateArgumentImpl final
+	class TemplateArgument::TemplateArgumentImpl final
 	{
 		private:
 			/** Template parameter this argument is a value of. */
-			TemplateParameterAPI const&	_boundParameter;
+			TemplateParameter const&	_boundParameter;
 			
 			/** Archetype used for a template argument. */
 			//TODO: Change THIS
 			Archetype const*			_archetype = nullptr;
 
 		public:
-			inline TemplateArgumentImpl(TemplateParameterAPI const& boundParameter) noexcept;
+			inline TemplateArgumentImpl(TemplateParameter const& boundParameter) noexcept;
 
 			/**
 			*	@brief Getter for the field _boundParameter.
 			* 
 			*	@return _boundParameter.
 			*/
-			RFK_NODISCARD inline TemplateParameterAPI const& getBoundParameter()	const	noexcept;
+			RFK_NODISCARD inline TemplateParameter const& getBoundParameter()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/TemplateArgumentImpl.inl"

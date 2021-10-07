@@ -26,8 +26,8 @@ namespace rfk
 	class Method;
 	class Type;
 	class ICallable;
-	class ClassTemplateAPI;
-	class ClassTemplateInstantiationAPI;
+	class ClassTemplate;
+	class ClassTemplateInstantiation;
 	class Struct;
 	
 	/* In C++, a struct and a class contains exactly the same data. Alias for convenience. */
@@ -555,14 +555,14 @@ namespace rfk
 			* 
 			*	@return A rfk::ClassTemplate const* if the struct is a struct template, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateAPI const*				asTemplate()															const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplate const*				asTemplate()															const	noexcept;
 
 			/**
 			*	@brief Cast the struct to rfk::ClassTemplateInstantiation const* if it is a template instantiation.
 			* 
 			*	@return A rfk::ClassTemplateInstantiation const* if the struct is a template instantiation, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiationAPI const*	asTemplateInstantiation()												const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	asTemplateInstantiation()												const	noexcept;
 
 			/**
 			*	@brief Add a parent to this struct if the provided archetype is a valid struct/class.

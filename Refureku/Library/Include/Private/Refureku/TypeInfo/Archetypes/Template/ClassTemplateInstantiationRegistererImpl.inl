@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline internal::ClassTemplateInstantiationRegistererImpl::ClassTemplateInstantiationRegistererImpl(ClassTemplateInstantiationAPI const& instantiation) noexcept:
+inline internal::ClassTemplateInstantiationRegistererImpl::ClassTemplateInstantiationRegistererImpl(ClassTemplateInstantiation const& instantiation) noexcept:
 	_registeredClassTemplateInstantiation{instantiation}
 {
 	Database::getInstance()._pimpl->registerEntityId(instantiation, true);

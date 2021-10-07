@@ -12,26 +12,26 @@
 namespace rfk
 {
 	//Forward declarations
-	class ClassTemplateAPI;
-	class TemplateParameterAPI;
-	class TemplateArgumentAPI;
+	class ClassTemplate;
+	class TemplateParameter;
+	class TemplateArgument;
 
-	class ClassTemplateInstantiationAPI final : public Struct
+	class ClassTemplateInstantiation final : public Struct
 	{
 		public:
-			REFUREKU_API ClassTemplateInstantiationAPI(char const*			name,
+			REFUREKU_API ClassTemplateInstantiation(char const*			name,
 													   std::size_t			id,
 													   std::size_t			memorySize,
 													   bool					isClass,
 													   Archetype const&	classTemplate)	noexcept;
-			REFUREKU_API ~ClassTemplateInstantiationAPI()									noexcept;
+			REFUREKU_API ~ClassTemplateInstantiation()									noexcept;
 
 			/**
 			*	@brief Get the class template this instantiation is based on.
 			* 
 			*	@return The class template this instantiation is based on.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateAPI const&		getClassTemplate()									const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplate const&		getClassTemplate()									const	noexcept;
 
 			/**
 			*	@brief	Retrieve the template argument at the given index.
@@ -41,7 +41,7 @@ namespace rfk
 			* 
 			*	@return The template parameter at the given index.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateArgumentAPI const&	getTemplateArgument(std::size_t index)				const	noexcept;
+			RFK_NODISCARD REFUREKU_API TemplateArgument const&	getTemplateArgument(std::size_t index)				const	noexcept;
 
 			/**
 			*	@brief Get the total number of template arguments in this instantiation.
@@ -56,7 +56,7 @@ namespace rfk
 			*	@param parameter The template parameter bounded to this argument.
 			*	@param archetype The archetype of the template argument. //TODO: Change this to be able to store values as well
 			*/
-			REFUREKU_API void										addTemplateArgument(TemplateParameterAPI const&	parameter,
+			REFUREKU_API void										addTemplateArgument(TemplateParameter const&	parameter,
 																						Archetype const*			archetype)	noexcept;
 
 		private:

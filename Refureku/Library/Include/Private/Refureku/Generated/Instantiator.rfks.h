@@ -10,7 +10,7 @@
 #include <Refureku/TypeInfo/Namespace/Namespace.h>
 #include <Refureku/TypeInfo/Namespace/NamespaceFragment.h>
 #include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h>
-#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameterAPI.h>
+#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameter.h>
 
 rfk::EEntityKind Instantiator::getTargetEntityKind() const noexcept { return targetEntityKind; }
 static_assert(std::is_base_of_v<rfk::Property, Instantiator>, "[Refureku] Can't attach PropertySettings property to Instantiator as it doesn't inherit from rfk::Property.");

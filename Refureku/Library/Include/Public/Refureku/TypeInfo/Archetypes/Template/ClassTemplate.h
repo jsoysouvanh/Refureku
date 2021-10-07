@@ -12,16 +12,16 @@
 namespace rfk
 {
 	//Forward declarations
-	class TemplateParameterAPI;
-	class ClassTemplateInstantiationAPI;
+	class TemplateParameter;
+	class ClassTemplateInstantiation;
 
-	class ClassTemplateAPI final : public Struct
+	class ClassTemplate final : public Struct
 	{
 		public:
-			REFUREKU_API ClassTemplateAPI(char const*	name,
+			REFUREKU_API ClassTemplate(char const*	name,
 										  std::size_t	id,
 										  bool			isClass)	noexcept;
-			REFUREKU_API ~ClassTemplateAPI()						noexcept;
+			REFUREKU_API ~ClassTemplate()						noexcept;
 
 			/**
 			*	@brief	Retrieve the template parameter at the given index.
@@ -31,7 +31,7 @@ namespace rfk
 			* 
 			*	@return The template parameter at the given index.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateParameterAPI const&	getTemplateParameterAt(std::size_t index)				const	noexcept;
+			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getTemplateParameterAt(std::size_t index)				const	noexcept;
 
 			/**
 			*	@brief Get the number of template parameters for this class template.
@@ -65,12 +65,12 @@ namespace rfk
 			* 
 			*	//TODO
 			*/
-			REFUREKU_API void										addTemplateParameter(TemplateParameterAPI const& param)			noexcept;
+			REFUREKU_API void										addTemplateParameter(TemplateParameter const& param)			noexcept;
 
 		private:
 			//Forward declaration
 			class ClassTemplateImpl;
 
-		friend ClassTemplateInstantiationAPI;
+		friend ClassTemplateInstantiation;
 	};
 }

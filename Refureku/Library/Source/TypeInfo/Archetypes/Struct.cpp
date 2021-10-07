@@ -616,16 +616,16 @@ bool Struct::foreachStaticMethod(Visitor<StaticMethod> visitor, void* userData, 
 	return result;
 }
 
-ClassTemplateAPI const* Struct::asTemplate() const noexcept
+ClassTemplate const* Struct::asTemplate() const noexcept
 {
 	return (getClassKind() == EClassKind::Template) ?
-		reinterpret_cast<ClassTemplateAPI const*>(this) : nullptr;
+		reinterpret_cast<ClassTemplate const*>(this) : nullptr;
 }
 
-ClassTemplateInstantiationAPI const* Struct::asTemplateInstantiation() const noexcept
+ClassTemplateInstantiation const* Struct::asTemplateInstantiation() const noexcept
 {
 	return (getClassKind() == EClassKind::TemplateInstantiation) ?
-		reinterpret_cast<ClassTemplateInstantiationAPI const*>(this) : nullptr;
+		reinterpret_cast<ClassTemplateInstantiation const*>(this) : nullptr;
 }
 
 void Struct::addDirectParent(Archetype const* archetype, EAccessSpecifier inheritanceAccess) noexcept

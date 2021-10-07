@@ -13,23 +13,23 @@
 namespace rfk
 {
 	//Forward declaration
-	class TemplateParameterAPI;
+	class TemplateParameter;
 	class Archetype;	//TODO: Replace this by a template arg
 
-	class TemplateArgumentAPI final
+	class TemplateArgument final
 	{
 		public:
-			REFUREKU_API TemplateArgumentAPI(TemplateParameterAPI const& boundParameter)	noexcept;
-			TemplateArgumentAPI(TemplateArgumentAPI const&)									= delete;
-			TemplateArgumentAPI(TemplateArgumentAPI&&)										= delete;
-			REFUREKU_API ~TemplateArgumentAPI()												noexcept;
+			REFUREKU_API TemplateArgument(TemplateParameter const& boundParameter)	noexcept;
+			TemplateArgument(TemplateArgument const&)									= delete;
+			TemplateArgument(TemplateArgument&&)										= delete;
+			REFUREKU_API ~TemplateArgument()												noexcept;
 
 			/**
 			*	@brief Getter for the field _boundParameter.
 			* 
 			*	@return _boundParameter.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateParameterAPI const&	getBoundParameter()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getBoundParameter()	const	noexcept;
 
 			/**
 			*	@brief Getter for the field _archetype.

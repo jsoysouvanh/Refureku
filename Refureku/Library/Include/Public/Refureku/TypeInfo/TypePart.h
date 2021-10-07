@@ -18,9 +18,9 @@ namespace rfk
 		public:
 			using AdditionalDataType = uint32;
 
-			REFUREKU_INTERNAL TypePart()										noexcept;
+			REFUREKU_INTERNAL TypePart()									noexcept;
 			REFUREKU_INTERNAL TypePart(ETypePartDescriptor	descriptor,
-										  AdditionalDataType	additionalData)	noexcept;
+									   AdditionalDataType	additionalData)	noexcept;
 
 			/**
 			*	@brief	Add a flag to the descriptor field.

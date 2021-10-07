@@ -309,9 +309,9 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Variables/StaticField.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Enum.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/EnumValue.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateAPI.h>" + env.getSeparator() +							//TODO: Only when there is a template class
-					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h>" + env.getSeparator() +				//TODO: Only when there is a template class
-					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegistererAPI.h>" + env.getSeparator() +		//TODO: Only when there is a non-nested template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h>" + env.getSeparator() +							//TODO: Only when there is a template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h>" + env.getSeparator() +				//TODO: Only when there is a template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>" + env.getSeparator() +		//TODO: Only when there is a non-nested template class
 					env.getSeparator();
 
 	//Forward declarations
@@ -330,7 +330,7 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +							//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Namespace/NamespaceFragment.h>" + env.getSeparator() +				//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h>" + env.getSeparator() +	//TODO: Only if there is a namespace
-					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameterAPI.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
+					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
 					 env.getSeparator();
 }
 
@@ -830,9 +830,9 @@ void ReflectionCodeGenModule::declareAndDefineClassRegistererVariable(kodgen::St
 
 void ReflectionCodeGenModule::declareAndDefineClassTemplateStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += "public: static rfk::ClassTemplateInstantiationAPI const& staticGetArchetype() noexcept {" + env.getSeparator();
+	inout_result += "public: static rfk::ClassTemplateInstantiation const& staticGetArchetype() noexcept {" + env.getSeparator();
 	inout_result += "static bool initialized = false;" + env.getSeparator();
-	inout_result += "static rfk::ClassTemplateInstantiationAPI type(\"" + structClass.type.getName(false, true) + "\"," +
+	inout_result += "static rfk::ClassTemplateInstantiation type(\"" + structClass.type.getName(false, true) + "\"," +
 		computeClassTemplateEntityId(structClass, structClass) + ", " +
 		"sizeof(" + structClass.type.getName() + "), " + 
 		std::to_string(structClass.isClass()) + ", "
@@ -863,7 +863,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateGetArchetypeMethodIfI
 {
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
 	{
-		inout_result += "virtual rfk::ClassTemplateInstantiationAPI const& getArchetype() const noexcept override { return staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
+		inout_result += "virtual rfk::ClassTemplateInstantiation const& getArchetype() const noexcept override { return staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -873,7 +873,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: static inline rfk::ClassTemplateInstantiationRegistererAPI _rfk_registerer = staticGetArchetype(); rfk::ForceGenerateSymbol<&_rfk_registerer> _rfk_forceRegister() = delete;" + env.getSeparator() + env.getSeparator();
+		inout_result += "private: static inline rfk::ClassTemplateInstantiationRegisterer _rfk_registerer = staticGetArchetype(); rfk::ForceGenerateSymbol<&_rfk_registerer> _rfk_forceRegister() = delete;" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -892,7 +892,7 @@ void ReflectionCodeGenModule::defineClassTemplateGetArchetypeTemplateSpecializat
 
 	inout_result += "template <> " + env.getExportSymbolMacro() + " rfk::Archetype const* rfk::getArchetype<" + structClass.type.getName() + ">() noexcept {" + env.getSeparator();
 	inout_result += "static bool initialized = false;" + env.getSeparator();
-	inout_result += "static rfk::ClassTemplateAPI type(\"" + structClass.type.getName(false, true) + "\", " +
+	inout_result += "static rfk::ClassTemplate type(\"" + structClass.type.getName(false, true) + "\", " +
 		std::to_string(_stringHasher(structClass.id)) + "u, " +
 		std::to_string(structClass.isClass()) + 
 		");" + env.getSeparator();
@@ -922,7 +922,7 @@ void ReflectionCodeGenModule::fillClassTemplateParameters(kodgen::StructClassInf
 		if (true) //Type template parameter
 		{
 			inout_result += "{ " + env.getSeparator();
-			inout_result += "static rfk::TemplateParameterAPI parameter(\"" + type.getName() + "\", rfk::ETemplateParameterKind::TypeTemplateParameter);" + env.getSeparator();
+			inout_result += "static rfk::TemplateParameter parameter(\"" + type.getName() + "\", rfk::ETemplateParameterKind::TypeTemplateParameter);" + env.getSeparator();
 			inout_result += "type.addTemplateParameter(parameter);" + env.getSeparator();
 			inout_result += "}" + env.getSeparator();
 		}

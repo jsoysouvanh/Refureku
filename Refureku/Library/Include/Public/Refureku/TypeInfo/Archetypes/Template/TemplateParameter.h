@@ -13,12 +13,12 @@
 
 namespace rfk
 {
-	class TemplateParameterAPI final
+	class TemplateParameter final
 	{
 		public:
-			REFUREKU_API TemplateParameterAPI(char const*				name,
+			REFUREKU_API TemplateParameter(char const*				name,
 											  ETemplateParameterKind	kind)	noexcept;
-			REFUREKU_API ~TemplateParameterAPI()								noexcept;
+			REFUREKU_API ~TemplateParameter()								noexcept;
 
 		private:
 			//Forward declaration

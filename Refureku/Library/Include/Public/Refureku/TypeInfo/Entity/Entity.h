@@ -22,7 +22,7 @@ namespace rfk
 	class Property;
 	class EntityUtility;
 
-	class Entity //TODO: Rename in Entity
+	class Entity
 	{
 		public:
 			Entity(Entity const&)	= delete;
@@ -58,8 +58,8 @@ namespace rfk
 			*	
 			*	@return The first property matching the provided archetype in this entity, nullptr if none is found.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getProperty(Struct const& archetype,
-																			bool			 isChildClassValid = true)		const	noexcept;
+			RFK_NODISCARD REFUREKU_API Property const*			getProperty(Struct const&	archetype,
+																			bool			isChildClassValid = true)		const	noexcept;
 
 			/**
 			*	@brief Retrieve a property matching with a predicate.
@@ -96,7 +96,7 @@ namespace rfk
 			*	@return A collection of all properties matching the provided archetype in this entity.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getProperties(Struct const&	archetype,
-																			  bool				isChildClassValid = true)	const	noexcept;
+																			  bool			isChildClassValid = true)		const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with a predicate in this entity.
@@ -105,6 +105,8 @@ namespace rfk
 			*	@param userData		Optional data forwarded to the predicate.
 			*	
 			*	@return A collection of all properties fulfilling the provided predicate contained in this entity.
+			*
+			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getPropertiesByPredicate(Predicate<Property>	predicate,
 																						 void*					userData)	const;
@@ -131,30 +133,34 @@ namespace rfk
 																				void*				userData)				const;
 
 			/**
-			*	@brief Getter for the field _name.
+			*	@brief Get the name of the entity.
 			* 
-			*	@return _name.
+			*	@return The name of the entity.
 			*/
 			RFK_NODISCARD REFUREKU_API char const*				getName()													const	noexcept;
 
 			/**
-			*	@brief Getter for the field _id.
+			*	@brief Get the program-unique id of the entity.
 			* 
-			*	@return _id.
+			*	@return The program-unique id of the entity.
 			*/
 			RFK_NODISCARD REFUREKU_API std::size_t				getId()														const	noexcept;
 
 			/**
-			*	@brief Getter for the field _kind.
+			*	@brief	Get the kind of the entity.
+			*			Knowing the kind allows to safely cast to child classes.
+			*			Check the EEntityKind documentation for more information.
 			* 
-			*	@return _kind.
+			*	@return The kind of the entity.
 			*/
 			RFK_NODISCARD REFUREKU_API EEntityKind				getKind()													const	noexcept;
 
 			/**
-			*	@brief Getter for the field _outerEntity.
+			*	@brief	Get the outer entity of the entity.
+			*			It basically corresponds to the entity this entity was declared in from a source-code point of view.
+			*			A nullptr outer entity means the entity was declared at file level.
 			* 
-			*	@return _outerEntity.
+			*	@return The outer entity of the entity.
 			*/
 			RFK_NODISCARD REFUREKU_API Entity const*			getOuterEntity()											const	noexcept;
 
@@ -173,7 +179,7 @@ namespace rfk
 			*	
 			*	@param from The entity this entity should inherit the properties from.
 			*/
-			REFUREKU_API void									inheritProperties(Entity const& from)							noexcept;
+			REFUREKU_API void									inheritProperties(Entity const& from)								noexcept;
 
 			/**
 			*	@brief Inherit all properties from another entity.
@@ -187,7 +193,7 @@ namespace rfk
 			* 
 			*	@param outerEntity The outer entity to set.
 			*/
-			REFUREKU_API void									setOuterEntity(Entity const* outerEntity)						noexcept;
+			REFUREKU_API void									setOuterEntity(Entity const* outerEntity)							noexcept;
 
 			/**
 			*	@brief	Set the number of properties for this entity.
@@ -199,8 +205,8 @@ namespace rfk
 			REFUREKU_API void									setPropertiesCapacity(std::size_t capacity)							noexcept;
 
 
-			Entity&						operator=(Entity const&)			= delete;
-			Entity&						operator=(Entity&&)				= delete;
+			Entity&							operator=(Entity const&)		= delete;
+			Entity&							operator=(Entity&&)				= delete;
 
 			RFK_NODISCARD REFUREKU_API bool	operator==(Entity const& other)	const	 noexcept;
 			RFK_NODISCARD REFUREKU_API bool	operator!=(Entity const& other)	const	 noexcept;
@@ -209,9 +215,9 @@ namespace rfk
 			//Forward declaration
 			class EntityImpl;
 
-			REFUREKU_INTERNAL Entity(Entity&&)				noexcept;
+			REFUREKU_INTERNAL Entity(Entity&&)						noexcept;
 			REFUREKU_INTERNAL Entity(EntityImpl* implementation)	noexcept;
-			REFUREKU_INTERNAL ~Entity()							noexcept;
+			REFUREKU_INTERNAL ~Entity()								noexcept;
 
 			/**
 			*	@brief Get the _pimpl internal pointer.

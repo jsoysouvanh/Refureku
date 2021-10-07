@@ -102,7 +102,7 @@ namespace rfk
 			* 
 			*	@return This type's archetype.
 			*/
-			REFUREKU_API Archetype const*	getArchetype()						const	noexcept;
+			REFUREKU_API Archetype const*		getArchetype()						const	noexcept;
 
 			/**
 			*	@brief Set this type's archetype.
@@ -124,8 +124,8 @@ namespace rfk
 			REFUREKU_API void					optimizeMemory()							noexcept;
 
 
-			REFUREKU_API bool operator==(Type const&)		const	noexcept;
-			REFUREKU_API bool operator!=(Type const&)		const	noexcept;
+			REFUREKU_API bool operator==(Type const&)	const	noexcept;
+			REFUREKU_API bool operator!=(Type const&)	const	noexcept;
 
 		protected:
 			//Forward declaration
@@ -145,7 +145,7 @@ namespace rfk
 			*	@param out_type The Type object to fill.
 			*/
 			template <typename T>
-			static void		fillType(Type& out_type)	noexcept;
+			static void	fillType(Type& out_type)	noexcept;
 	};
 
 	/**
@@ -154,7 +154,6 @@ namespace rfk
 	* 
 	*	@return The computed type.
 	*/
-	//TODO: Replace this by getType
 	template <typename T>
 	Type const& getType() noexcept;
 
@@ -167,14 +166,14 @@ namespace rfk
 	template REFUREKU_API Type const& getType<std::nullptr_t>()		noexcept;
 	template REFUREKU_API Type const& getType<bool>()				noexcept;
 	template REFUREKU_API Type const& getType<char>()				noexcept;
-	template REFUREKU_API Type const& getType<signed char>()			noexcept;
+	template REFUREKU_API Type const& getType<signed char>()		noexcept;
 	template REFUREKU_API Type const& getType<unsigned char>()		noexcept;
-	template REFUREKU_API Type const& getType<wchar_t>()				noexcept;
+	template REFUREKU_API Type const& getType<wchar_t>()			noexcept;
 	template REFUREKU_API Type const& getType<char16_t>()			noexcept;
 	template REFUREKU_API Type const& getType<char32_t>()			noexcept;
 	template REFUREKU_API Type const& getType<short>()				noexcept;
 	template REFUREKU_API Type const& getType<unsigned short>()		noexcept;
-	template REFUREKU_API Type const& getType<int>()					noexcept;
+	template REFUREKU_API Type const& getType<int>()				noexcept;
 	template REFUREKU_API Type const& getType<unsigned int>()		noexcept;
 	template REFUREKU_API Type const& getType<long>()				noexcept;
 	template REFUREKU_API Type const& getType<unsigned long>()		noexcept;
@@ -182,5 +181,5 @@ namespace rfk
 	template REFUREKU_API Type const& getType<unsigned long long>()	noexcept;
 	template REFUREKU_API Type const& getType<float>()				noexcept;
 	template REFUREKU_API Type const& getType<double>()				noexcept;
-	template REFUREKU_API Type const& getType<long double>()			noexcept;
+	template REFUREKU_API Type const& getType<long double>()		noexcept;
 }

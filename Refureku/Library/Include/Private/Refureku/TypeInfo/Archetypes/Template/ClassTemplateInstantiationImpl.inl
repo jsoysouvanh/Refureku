@@ -5,24 +5,24 @@
 *	See the README.md file for full license details.
 */
 
-inline ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::ClassTemplateInstantiationImpl(char const* name, std::size_t id, std::size_t memorySize,
-																									 bool isClass, Archetype const& classTemplate, ClassTemplateInstantiationAPI const&	backRef) noexcept:
+inline ClassTemplateInstantiation::ClassTemplateInstantiationImpl::ClassTemplateInstantiationImpl(char const* name, std::size_t id, std::size_t memorySize,
+																									 bool isClass, Archetype const& classTemplate, ClassTemplateInstantiation const&	backRef) noexcept:
 	StructImpl(name, id, memorySize, isClass, EClassKind::TemplateInstantiation),
-	_classTemplate{static_cast<ClassTemplateAPI const&>(classTemplate)}
+	_classTemplate{static_cast<ClassTemplate const&>(classTemplate)}
 {
 	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
 	assert(classTemplate.getKind() == rfk::EEntityKind::Class || classTemplate.getKind() == rfk::EEntityKind::Struct);
 	assert(static_cast<Class const&>(classTemplate).getClassKind() == EClassKind::Template);
 
-	reinterpret_cast<ClassTemplateAPI::ClassTemplateImpl*>(const_cast<ClassTemplateAPI&>(_classTemplate).getPimpl())->addTemplateInstantiation(backRef);
+	reinterpret_cast<ClassTemplate::ClassTemplateImpl*>(const_cast<ClassTemplate&>(_classTemplate).getPimpl())->addTemplateInstantiation(backRef);
 }
 
-inline ClassTemplateAPI const& ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::getClassTemplate() const noexcept
+inline ClassTemplate const& ClassTemplateInstantiation::ClassTemplateInstantiationImpl::getClassTemplate() const noexcept
 {
 	return _classTemplate;
 }
 
-inline std::vector<TemplateArgumentAPI> const& ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::getTemplateArguments() const noexcept
+inline std::vector<TemplateArgument> const& ClassTemplateInstantiation::ClassTemplateInstantiationImpl::getTemplateArguments() const noexcept
 {
 	return _templateArguments;
 }

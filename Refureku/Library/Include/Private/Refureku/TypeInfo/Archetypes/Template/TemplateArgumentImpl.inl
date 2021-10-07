@@ -5,12 +5,12 @@
 *	See the README.md file for full license details.
 */
 
-inline TemplateArgumentAPI::TemplateArgumentImpl::TemplateArgumentImpl(TemplateParameterAPI const& boundParameter) noexcept:
+inline TemplateArgument::TemplateArgumentImpl::TemplateArgumentImpl(TemplateParameter const& boundParameter) noexcept:
 	_boundParameter{boundParameter}
 {
 }
 
-inline TemplateParameterAPI const& TemplateArgumentAPI::TemplateArgumentImpl::getBoundParameter() const noexcept
+inline TemplateParameter const& TemplateArgument::TemplateArgumentImpl::getBoundParameter() const noexcept
 {
 	return _boundParameter;
 }

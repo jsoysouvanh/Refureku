@@ -13,20 +13,20 @@
 namespace rfk
 {
 	//Forward declarations
-	class ClassTemplateInstantiationAPI;
+	class ClassTemplateInstantiation;
 
 	namespace internal
 	{
 		class ClassTemplateInstantiationRegistererImpl;
 	}
 
-	class ClassTemplateInstantiationRegistererAPI final
+	class ClassTemplateInstantiationRegisterer final
 	{
 		public:
-			REFUREKU_API ClassTemplateInstantiationRegistererAPI(ClassTemplateInstantiationAPI const& instantiation)	noexcept;
-			ClassTemplateInstantiationRegistererAPI(ClassTemplateInstantiationRegistererAPI const&)						= delete;
-			ClassTemplateInstantiationRegistererAPI(ClassTemplateInstantiationRegistererAPI&&)							= delete;
-			REFUREKU_API ~ClassTemplateInstantiationRegistererAPI()														noexcept;
+			REFUREKU_API ClassTemplateInstantiationRegisterer(ClassTemplateInstantiation const& instantiation)	noexcept;
+			ClassTemplateInstantiationRegisterer(ClassTemplateInstantiationRegisterer const&)						= delete;
+			ClassTemplateInstantiationRegisterer(ClassTemplateInstantiationRegisterer&&)							= delete;
+			REFUREKU_API ~ClassTemplateInstantiationRegisterer()														noexcept;
 
 		private:
 			/** Pointer to the concrete implementation. */

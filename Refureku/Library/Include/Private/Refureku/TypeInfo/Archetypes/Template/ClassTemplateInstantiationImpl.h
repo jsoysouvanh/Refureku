@@ -10,21 +10,21 @@
 #include <cassert>
 #include <vector>
 
-#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h"
 #include "Refureku/TypeInfo/Archetypes/StructImpl.h"
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateImpl.h"
-#include "Refureku/TypeInfo/Archetypes/Template/TemplateArgumentAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Template/TemplateArgument.h"
 
 namespace rfk
 {
-	class ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl final : public Struct::StructImpl
+	class ClassTemplateInstantiation::ClassTemplateInstantiationImpl final : public Struct::StructImpl
 	{
 		private:
 			/** Class template this instance comes from. */
-			ClassTemplateAPI const&				_classTemplate;
+			ClassTemplate const&				_classTemplate;
 
 			/** List of all template arguments of this class template instance. */
-			std::vector<TemplateArgumentAPI>	_templateArguments;
+			std::vector<TemplateArgument>	_templateArguments;
 
 		public:
 			inline ClassTemplateInstantiationImpl(char const*							name,
@@ -32,21 +32,21 @@ namespace rfk
 												  std::size_t							memorySize,
 												  bool									isClass,
 												  Archetype const&					classTemplate,
-												  ClassTemplateInstantiationAPI const&	backRef)			noexcept;
+												  ClassTemplateInstantiation const&	backRef)			noexcept;
 
 			/**
 			*	@brief Getter for the field _classTemplate.
 			* 
 			*	@return _classTemplate.
 			*/
-			RFK_NODISCARD inline ClassTemplateAPI const&					getClassTemplate()		const	noexcept;
+			RFK_NODISCARD inline ClassTemplate const&					getClassTemplate()		const	noexcept;
 
 			/**
 			*	@brief Getter for the field _templateArguments.
 			* 
 			*	@return _templateArguments.
 			*/
-			RFK_NODISCARD inline std::vector<TemplateArgumentAPI> const&	getTemplateArguments()	const	noexcept;
+			RFK_NODISCARD inline std::vector<TemplateArgument> const&	getTemplateArguments()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationImpl.inl"
