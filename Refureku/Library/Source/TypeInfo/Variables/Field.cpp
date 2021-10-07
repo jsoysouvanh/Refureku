@@ -5,7 +5,7 @@
 using namespace rfk;
 
 Field::Field(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
-				   StructAPI const* owner, std::size_t memoryOffset, Entity const* outerEntity) noexcept:
+				   Struct const* owner, std::size_t memoryOffset, Entity const* outerEntity) noexcept:
 	FieldBase(new FieldImpl(name, id, type, flags, owner, memoryOffset, outerEntity))
 {
 }

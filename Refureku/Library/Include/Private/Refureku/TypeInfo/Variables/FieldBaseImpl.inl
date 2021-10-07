@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-inline FieldBase::FieldBaseImpl::FieldBaseImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags, StructAPI const* owner, Entity const* outerEntity) noexcept:
+inline FieldBase::FieldBaseImpl::FieldBaseImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags, Struct const* owner, Entity const* outerEntity) noexcept:
 	VariableBaseImpl(name, id, EEntityKind::Field, type, outerEntity),
 	_flags{flags},
 	_owner{owner}
@@ -17,7 +17,7 @@ inline EFieldFlags FieldBase::FieldBaseImpl::getFlags() const noexcept
 	return _flags;
 }
 
-inline StructAPI const* FieldBase::FieldBaseImpl::getOwner() const noexcept
+inline Struct const* FieldBase::FieldBaseImpl::getOwner() const noexcept
 {
 	return _owner;
 }

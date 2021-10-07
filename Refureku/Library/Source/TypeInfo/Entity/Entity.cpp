@@ -1,7 +1,7 @@
 #include "Refureku/TypeInfo/Entity/Entity.h"
 
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 
 using namespace rfk;
 
@@ -29,7 +29,7 @@ Property const* Entity::getPropertyAt(std::size_t propertyIndex) const noexcept
 	return _pimpl->getProperties()[propertyIndex];
 }
 
-Property const* Entity::getProperty(StructAPI const& archetype, bool isChildClassValid) const noexcept
+Property const* Entity::getProperty(Struct const& archetype, bool isChildClassValid) const noexcept
 {
 	//Iterate over all props to find a matching property
 	if (isChildClassValid)
@@ -71,7 +71,7 @@ Property const* Entity::getPropertyByPredicate(Predicate<Property> predicate, vo
 	return nullptr;
 }
 
-Vector<Property const*> Entity::getProperties(StructAPI const& archetype, bool isChildClassValid) const noexcept
+Vector<Property const*> Entity::getProperties(Struct const& archetype, bool isChildClassValid) const noexcept
 {
 	Vector<Property const*> result;
 

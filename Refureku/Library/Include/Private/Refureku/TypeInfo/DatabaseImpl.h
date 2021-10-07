@@ -16,7 +16,7 @@
 #include "Refureku/TypeInfo/DatabaseAPI.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 #include "Refureku/TypeInfo/Variables/Variable.h"
@@ -34,8 +34,8 @@ namespace rfk
 		public:
 			using EntitiesById					= std::unordered_set<Entity const*, EntityPtrIdHash, EntityPtrIdEqual>;
 			using NamespacesByName				= std::unordered_set<Namespace const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using StructsByName					= std::unordered_set<StructAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using ClassesByName					= std::unordered_set<ClassAPI const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using StructsByName					= std::unordered_set<Struct const*, EntityPtrNameHash, EntityPtrNameEqual>;
+			using ClassesByName					= std::unordered_set<Class const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using EnumsByName					= std::unordered_set<Enum const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using VariablesByName				= std::unordered_set<Variable const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FunctionsByName				= std::unordered_multiset<Function const*, EntityPtrNameHash, EntityPtrNameEqual>;
@@ -75,14 +75,14 @@ namespace rfk
 			*	
 			*	@param s The parent struct.
 			*/
-			inline void		registerSubEntities(StructAPI const& s)		noexcept;
+			inline void		registerSubEntities(Struct const& s)		noexcept;
 
 			/**
 			*	@brief Remove all nested entities from the _entitiesById map.
 			*	
 			*	@param s The parent struct.
 			*/
-			inline void		unregisterSubEntities(StructAPI const& s)	noexcept;
+			inline void		unregisterSubEntities(Struct const& s)	noexcept;
 
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.

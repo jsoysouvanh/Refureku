@@ -867,11 +867,11 @@ void functions()
 void inheritance()
 {
 	//rfk::Class const& pppClass = ParentParentParentClass::staticGetArchetype(); //Not reflected type, so can't call staticGetArchetype();
-	rfk::ClassAPI const& ppc	= namespace2::ParentParentClass::staticGetArchetype();
-	rfk::ClassAPI const& pc		= namespace3::ParentClass::staticGetArchetype();
-	rfk::ClassAPI const& pc2	= namespace3::ParentClass2::staticGetArchetype();
-	rfk::ClassAPI const& ec		= namespace3::ExampleClass::staticGetArchetype();
-	rfk::ClassAPI const& oc		= namespace3::OtherClass::staticGetArchetype();
+	rfk::Class const& ppc	= namespace2::ParentParentClass::staticGetArchetype();
+	rfk::Class const& pc		= namespace3::ParentClass::staticGetArchetype();
+	rfk::Class const& pc2	= namespace3::ParentClass2::staticGetArchetype();
+	rfk::Class const& ec		= namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& oc		= namespace3::OtherClass::staticGetArchetype();
 
 	//IsBaseOf
 	TEST(ppc.isBaseOf(ppc));
@@ -938,9 +938,9 @@ void inheritance()
 
 void instantiation()
 {
-	rfk::ClassAPI const& pc		= namespace3::ParentClass::staticGetArchetype();
-	rfk::ClassAPI const& pc2	= namespace3::ParentClass2::staticGetArchetype();
-	rfk::ClassAPI const& ec		= namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& pc		= namespace3::ParentClass::staticGetArchetype();
+	rfk::Class const& pc2	= namespace3::ParentClass2::staticGetArchetype();
+	rfk::Class const& ec		= namespace3::ExampleClass::staticGetArchetype();
 
 	namespace3::ParentClass*	pcI		= pc.makeInstance<namespace3::ParentClass>();
 	namespace3::ParentClass2*	pc2I	= pc2.makeInstance<namespace3::ParentClass2>();
@@ -969,7 +969,7 @@ void parseAllNested()
 
 void properties()
 {
-	rfk::ClassAPI const& ec = namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& ec = namespace3::ExampleClass::staticGetArchetype();
 
 	//TEST(ec.getStaticMethod("customInstantiator")->getProperty<Instantiator>() != nullptr);
 
@@ -1146,13 +1146,13 @@ void entityCast()
 	TEST(rfk::entityCast<rfk::EnumValue>(rfk::getDatabase().getEntity(e->getEnumValue(1)->getId())) != nullptr);
 
 	//Struct
-	rfk::StructAPI const& s = ExampleStruct::staticGetArchetype();
+	rfk::Struct const& s = ExampleStruct::staticGetArchetype();
 
 	TEST(rfk::entityCast<rfk::Archetype>(rfk::getDatabase().getEntity(s.getId())) != nullptr);
 	TEST(rfk::entityCast<rfk::Struct>(rfk::getDatabase().getEntity(s.getId())) != nullptr);
 
 	//Class
-	rfk::ClassAPI const& c = namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& c = namespace3::ExampleClass::staticGetArchetype();
 
 	TEST(rfk::entityCast<rfk::Archetype>(rfk::getDatabase().getEntity(c.getId())) != nullptr);
 	TEST(rfk::entityCast<rfk::Struct>(rfk::getDatabase().getEntity(c.getId())) != nullptr);
@@ -1206,7 +1206,7 @@ void enumManualReflection()
 
 void classManualReflection()
 {
-	rfk::ClassAPI const* vec3archetype = rfk::getDatabaseAPI().getClassByName("Vector3f");
+	rfk::Class const* vec3archetype = rfk::getDatabaseAPI().getClassByName("Vector3f");
 
 	TEST(vec3archetype != nullptr);
 	TEST(vec3archetype->getFieldByName("x") != nullptr);
@@ -1221,14 +1221,14 @@ void classManualReflection()
 	TEST(approximatelyEqual(vec3archetype->getFieldByName("y")->get<float>(&vec), 42.0f));
 	TEST(approximatelyEqual(vec3archetype->getFieldByName("z")->get<float>(&vec), 0.0f));
 
-	rfk::ClassAPI const& exampleClassArchetype = namespace3::ExampleClass::staticGetArchetype();
+	rfk::Class const& exampleClassArchetype = namespace3::ExampleClass::staticGetArchetype();
 	TEST(exampleClassArchetype.getFieldByName("vec3")->getType().getArchetype() == vec3archetype);
 	TEST(exampleClassArchetype.getFieldByName("vec3ptr")->getType().getArchetype() == vec3archetype);
 }
 
 void structDirectChildren()
 {
-	rfk::ClassAPI const& ppClass = namespace2::ParentParentClass::staticGetArchetype();
+	rfk::Class const& ppClass = namespace2::ParentParentClass::staticGetArchetype();
 
 	TEST(ppClass.getDirectSubclasses().size() == 1u);
 }

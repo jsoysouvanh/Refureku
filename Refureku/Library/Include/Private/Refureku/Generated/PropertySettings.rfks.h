@@ -16,9 +16,9 @@ rfk::EEntityKind PropertySettings::getTargetEntityKind() const noexcept { return
 static_assert(std::is_base_of_v<rfk::Property, PropertySettings>, "[Refureku] Can't attach PropertySettings property to PropertySettings as it doesn't inherit from rfk::Property.");
 namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_2708994343965683583u = PropertySettings::staticGetArchetype(); }
 
-rfk::ClassAPI const& PropertySettings::staticGetArchetype() noexcept {
+rfk::Class const& PropertySettings::staticGetArchetype() noexcept {
 static bool initialized = false;
-static rfk::ClassAPI type("PropertySettings", 2708994343965683583u, sizeof(PropertySettings), 1);
+static rfk::Class type("PropertySettings", 2708994343965683583u, sizeof(PropertySettings), 1);
 if (!initialized) {
 initialized = true;
 type.setDefaultInstantiator(&rfk::internal::defaultInstantiator<PropertySettings>);
@@ -30,7 +30,7 @@ PropertySettings::_rfk_registerChildClass<PropertySettings>(type);
 }
 return type; }
 
-rfk::ClassAPI const& PropertySettings::getArchetype() const noexcept { return PropertySettings::staticGetArchetype(); }
+rfk::Class const& PropertySettings::getArchetype() const noexcept { return PropertySettings::staticGetArchetype(); }
 
 template <> rfk::Archetype const* rfk::getArchetype<PropertySettings>() noexcept { return &PropertySettings::staticGetArchetype(); }
 

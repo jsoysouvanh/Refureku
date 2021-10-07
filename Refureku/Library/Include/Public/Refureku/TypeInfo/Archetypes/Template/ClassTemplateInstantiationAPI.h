@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 
 namespace rfk
 {
@@ -16,7 +16,7 @@ namespace rfk
 	class TemplateParameterAPI;
 	class TemplateArgumentAPI;
 
-	class ClassTemplateInstantiationAPI final : public StructAPI
+	class ClassTemplateInstantiationAPI final : public Struct
 	{
 		public:
 			REFUREKU_API ClassTemplateInstantiationAPI(char const*			name,

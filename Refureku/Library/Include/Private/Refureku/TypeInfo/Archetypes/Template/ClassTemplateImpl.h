@@ -16,7 +16,7 @@
 
 namespace rfk
 {
-	class ClassTemplateAPI::ClassTemplateImpl final : public StructAPI::StructImpl
+	class ClassTemplateAPI::ClassTemplateImpl final : public Struct::StructImpl
 	{
 		private:
 			/** List of all template parameters of this class template. */

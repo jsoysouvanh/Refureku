@@ -42,7 +42,7 @@ EFieldFlags FieldBase::getFlags() const noexcept
 	return reinterpret_cast<FieldBaseImpl const*>(getPimpl())->getFlags();
 }
 
-StructAPI const* FieldBase::getOwner() const noexcept
+Struct const* FieldBase::getOwner() const noexcept
 {
 	return reinterpret_cast<FieldBaseImpl const*>(getPimpl())->getOwner();
 }

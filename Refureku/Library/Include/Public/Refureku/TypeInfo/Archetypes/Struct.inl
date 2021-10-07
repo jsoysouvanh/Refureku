@@ -6,7 +6,7 @@
 */
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType* StructAPI::makeInstance(ArgTypes&&... args) const
+ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 {
 	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>);
 
@@ -32,6 +32,20 @@ ReturnType* StructAPI::makeInstance(ArgTypes&&... args) const
 
 		return nullptr;
 	}
+}
+
+template <typename MethodSignature>
+Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
+{
+	for (Method const* method : getMethodsByName(name, minFlags, shouldInspectInherited))
+	{
+		if (internal::MethodHelper<MethodSignature>::hasSamePrototype(*method))
+		{
+			return method;
+		}
+	}
+
+	return nullptr;
 }
 
 template <typename T>

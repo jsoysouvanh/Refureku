@@ -30,7 +30,7 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Archetypes/FundamentalArchetype.cpp
 					Source/TypeInfo/Archetypes/Enum.cpp
 					Source/TypeInfo/Archetypes/EnumValue.cpp
-					Source/TypeInfo/Archetypes/StructAPI.cpp	#TODO: Rename
+					Source/TypeInfo/Archetypes/Struct.cpp
 					Source/TypeInfo/Archetypes/ParentStruct.cpp
 					Source/TypeInfo/Archetypes/ArchetypeRegisterer.cpp
 					Source/TypeInfo/Archetypes/GetArchetype.cpp

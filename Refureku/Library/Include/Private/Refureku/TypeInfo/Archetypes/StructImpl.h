@@ -10,7 +10,7 @@
 #include <unordered_set>
 #include <cassert>
 
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/ParentStruct.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
@@ -22,11 +22,11 @@
 
 namespace rfk
 {
-	class StructAPI::StructImpl : public Archetype::ArchetypeImpl
+	class Struct::StructImpl : public Archetype::ArchetypeImpl
 	{
 		public:
 			using ParentStructs			= std::vector<ParentStruct>;
-			using Subclasses			= std::unordered_set<StructAPI const*>;
+			using Subclasses			= std::unordered_set<Struct const*>;
 			using NestedArchetypes		= std::unordered_set<Archetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using Fields				= std::unordered_multiset<Field, EntityNameHash, EntityNameEqual>;
 			using StaticFields			= std::unordered_multiset<StaticField, EntityNameHash, EntityNameEqual>;
@@ -128,7 +128,7 @@ namespace rfk
 			*	@param archetype			Archetype of the parent struct/class.
 			*	@param inheritanceAccess	The inheritance access for the provided parent.
 			*/
-			inline void										addDirectParent(StructAPI const& archetype,
+			inline void										addDirectParent(Struct const& archetype,
 																		EAccessSpecifier inheritanceAccess)				noexcept;
 
 			/**
@@ -136,7 +136,7 @@ namespace rfk
 			* 
 			*	@param subclass The subclass to add.
 			*/
-			inline void										addSubclass(StructAPI const& subclass)						noexcept;
+			inline void										addSubclass(Struct const& subclass)						noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.
@@ -149,7 +149,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline Archetype*				addNestedArchetype(Archetype const*	nestedArchetype,
 																			   EAccessSpecifier		accessSpecifier,
-																			   StructAPI const*		outerEntity)		noexcept;
+																			   Struct const*		outerEntity)		noexcept;
 
 			/**
 			*	@brief Add a field to the struct.
@@ -169,9 +169,9 @@ namespace rfk
 																	 std::size_t		id,
 																	 Type const&		type,
 																	 EFieldFlags		flags,
-																	 StructAPI const*	owner,
+																	 Struct const*	owner,
 																	 std::size_t		memoryOffset,
-																	 StructAPI const*	outerEntity)					noexcept;
+																	 Struct const*	outerEntity)					noexcept;
 
 			/**
 			*	@brief Add a static field to the struct.
@@ -191,16 +191,16 @@ namespace rfk
 																		   std::size_t		id,
 																		   Type const&	type,
 																		   EFieldFlags		flags,
-																		   StructAPI const*	owner,
+																		   Struct const*	owner,
 																		   void*			fieldPtr,
-																		   StructAPI const*	outerEntity)				noexcept;
+																		   Struct const*	outerEntity)				noexcept;
 			RFK_NODISCARD inline StaticField*			addStaticField(char const*		name,
 																		   std::size_t		id,
 																		   Type const&	type,
 																		   EFieldFlags		flags,
-																		   StructAPI const*	owner,
+																		   Struct const*	owner,
 																		   void const*		fieldPtr,
-																		   StructAPI const*	outerEntity)				noexcept;
+																		   Struct const*	outerEntity)				noexcept;
 
 			/**
 			*	@brief Add a method to the struct.
@@ -219,7 +219,7 @@ namespace rfk
 																	  Type const&	returnType,
 																	  ICallable*		internalMethod,
 																	  EMethodFlags		flags,
-																	  StructAPI const*	outerEntity)					noexcept;
+																	  Struct const*	outerEntity)					noexcept;
 
 			/**
 			*	@brief Add a static method to the struct.
@@ -238,7 +238,7 @@ namespace rfk
 																			Type const&		returnType,
 																			ICallable*			internalMethod,
 																			EMethodFlags		flags,
-																			StructAPI const*	outerEntity)			noexcept;
+																			Struct const*	outerEntity)			noexcept;
 
 			/**
 			*	@brief Setup the default instantiator to use when Struct::makeInstance is called without parameters.

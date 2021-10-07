@@ -5,7 +5,7 @@
 using namespace rfk;
 
 ClassTemplateAPI::ClassTemplateAPI(char const* name, std::size_t id, bool isClass) noexcept:
-	StructAPI(new ClassTemplateImpl(name, id, isClass))
+	Struct(new ClassTemplateImpl(name, id, isClass))
 {
 }
 

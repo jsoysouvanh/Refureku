@@ -5,14 +5,14 @@
 *	See the README.md file for full license details.
 */
 
-inline StructAPI::StructImpl::StructImpl(char const* name, std::size_t	id, std::size_t memorySize, bool isClass, EClassKind classKind) noexcept:
+inline Struct::StructImpl::StructImpl(char const* name, std::size_t	id, std::size_t memorySize, bool isClass, EClassKind classKind) noexcept:
 	ArchetypeImpl(name, id, isClass ? EEntityKind::Class : EEntityKind::Struct, memorySize, nullptr),
 	_defaultInstantiator{nullptr},
 	_classKind{classKind}
 {
 }
 
-inline void StructAPI::StructImpl::addDirectParent(StructAPI const& archetype, EAccessSpecifier inheritanceAccess) noexcept
+inline void Struct::StructImpl::addDirectParent(Struct const& archetype, EAccessSpecifier inheritanceAccess) noexcept
 {
 	_directParents.emplace_back(archetype, inheritanceAccess);
 
@@ -20,13 +20,13 @@ inline void StructAPI::StructImpl::addDirectParent(StructAPI const& archetype, E
 	inheritProperties(*archetype.getPimpl());
 }
 
-inline void StructAPI::StructImpl::addSubclass(StructAPI const& subclass) noexcept
+inline void Struct::StructImpl::addSubclass(Struct const& subclass) noexcept
 {
 	_subclasses.insert(&subclass);
 }
 
-inline Archetype* StructAPI::StructImpl::addNestedArchetype(Archetype const* nestedArchetype,
-															   EAccessSpecifier accessSpecifier, StructAPI const* outerEntity) noexcept
+inline Archetype* Struct::StructImpl::addNestedArchetype(Archetype const* nestedArchetype,
+															   EAccessSpecifier accessSpecifier, Struct const* outerEntity) noexcept
 {
 	//The hash is based on the archetype name which is immutable, so it's safe to const_cast to update other members.
 	Archetype* result = const_cast<Archetype*>(*_nestedArchetypes.emplace(nestedArchetype).first);
@@ -37,8 +37,8 @@ inline Archetype* StructAPI::StructImpl::addNestedArchetype(Archetype const* nes
 	return result;
 }
 
-inline Field* StructAPI::StructImpl::addField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
-												 StructAPI const* owner, std::size_t memoryOffset, StructAPI const* outerEntity) noexcept
+inline Field* Struct::StructImpl::addField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
+												 Struct const* owner, std::size_t memoryOffset, Struct const* outerEntity) noexcept
 {
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
 
@@ -46,8 +46,8 @@ inline Field* StructAPI::StructImpl::addField(char const* name, std::size_t id, 
 	return const_cast<Field*>(&*_fields.emplace(name, id, type, flags, owner, memoryOffset, outerEntity));
 }
 
-inline StaticField* StructAPI::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
-															 StructAPI const* owner, void* fieldPtr, StructAPI const* outerEntity) noexcept
+inline StaticField* Struct::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
+															 Struct const* owner, void* fieldPtr, Struct const* outerEntity) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
@@ -55,8 +55,8 @@ inline StaticField* StructAPI::StructImpl::addStaticField(char const* name, std:
 	return const_cast<StaticField*>(&*_staticFields.emplace(name, id, type, flags, owner, fieldPtr, outerEntity));
 }
 
-inline StaticField* StructAPI::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
-															 StructAPI const* owner, void const* fieldPtr, StructAPI const* outerEntity) noexcept
+inline StaticField* Struct::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
+															 Struct const* owner, void const* fieldPtr, Struct const* outerEntity) noexcept
 {
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
@@ -64,8 +64,8 @@ inline StaticField* StructAPI::StructImpl::addStaticField(char const* name, std:
 	return const_cast<StaticField*>(&*_staticFields.emplace(name, id, type, flags, owner, fieldPtr, outerEntity));
 }
 
-inline Method* StructAPI::StructImpl::addMethod(char const* name, std::size_t id, Type const& returnType,
-												   ICallable* internalMethod, EMethodFlags flags, StructAPI const*	outerEntity) noexcept
+inline Method* Struct::StructImpl::addMethod(char const* name, std::size_t id, Type const& returnType,
+												   ICallable* internalMethod, EMethodFlags flags, Struct const*	outerEntity) noexcept
 {
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
 
@@ -73,8 +73,8 @@ inline Method* StructAPI::StructImpl::addMethod(char const* name, std::size_t id
 	return const_cast<Method*>(&*_methods.emplace(name, id, returnType, internalMethod, flags, outerEntity));
 }
 
-inline StaticMethod* StructAPI::StructImpl::addStaticMethod(char const* name, std::size_t id, Type const& returnType,
-															   ICallable* internalMethod, EMethodFlags flags, StructAPI const* outerEntity) noexcept
+inline StaticMethod* Struct::StructImpl::addStaticMethod(char const* name, std::size_t id, Type const& returnType,
+															   ICallable* internalMethod, EMethodFlags flags, Struct const* outerEntity) noexcept
 {
 	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
 
@@ -82,12 +82,12 @@ inline StaticMethod* StructAPI::StructImpl::addStaticMethod(char const* name, st
 	return const_cast<StaticMethod*>(&*_staticMethods.emplace(name, id, returnType, internalMethod, flags, outerEntity));
 }
 
-inline void StructAPI::StructImpl::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
+inline void Struct::StructImpl::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
 {
 	_defaultInstantiator = defaultInstantiator;
 }
 
-inline void StructAPI::StructImpl::addInstantiator(StaticMethod const* instantiator) noexcept
+inline void Struct::StructImpl::addInstantiator(StaticMethod const* instantiator) noexcept
 {
 	//Make sure the instantiator is valid
 	assert(instantiator != nullptr);
@@ -104,37 +104,37 @@ inline void StructAPI::StructImpl::addInstantiator(StaticMethod const* instantia
 	}
 }
 
-inline void StructAPI::StructImpl::setDirectParentsCapacity(std::size_t capacity) noexcept
+inline void Struct::StructImpl::setDirectParentsCapacity(std::size_t capacity) noexcept
 {
 	_directParents.reserve(capacity);
 }
 
-inline void StructAPI::StructImpl::setNestedArchetypesCapacity(std::size_t capacity) noexcept
+inline void Struct::StructImpl::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 {
 	_nestedArchetypes.rehash(capacity);
 }
 
-inline void StructAPI::StructImpl::setFieldsCapacity(std::size_t capacity) noexcept
+inline void Struct::StructImpl::setFieldsCapacity(std::size_t capacity) noexcept
 {
 	_fields.reserve(capacity);
 }
 
-inline void StructAPI::StructImpl::setStaticFieldsCapacity(std::size_t capacity) noexcept
+inline void Struct::StructImpl::setStaticFieldsCapacity(std::size_t capacity) noexcept
 {
 	_staticFields.reserve(capacity);
 }
 
-inline void StructAPI::StructImpl::setMethodsCapacity(std::size_t capacity) noexcept
+inline void Struct::StructImpl::setMethodsCapacity(std::size_t capacity) noexcept
 {
 	_methods.reserve(capacity);
 }
 
-inline void StructAPI::StructImpl::setStaticMethodsCapacity(std::size_t capacity) noexcept
+inline void Struct::StructImpl::setStaticMethodsCapacity(std::size_t capacity) noexcept
 {
 	_staticMethods.reserve(capacity);
 }
 
-inline Archetype const* StructAPI::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
+inline Archetype const* Struct::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
 {
 	return EntityUtility::getEntityByNameAndPredicate(_nestedArchetypes, name,
 													  [access](Archetype const& archetype)
@@ -143,52 +143,52 @@ inline Archetype const* StructAPI::StructImpl::getNestedArchetype(char const* na
 													  });
 }
 
-inline StructAPI::StructImpl::ParentStructs const& StructAPI::StructImpl::getDirectParents() const noexcept
+inline Struct::StructImpl::ParentStructs const& Struct::StructImpl::getDirectParents() const noexcept
 {
 	return _directParents;
 }
 
-inline StructAPI::StructImpl::Subclasses const& StructAPI::StructImpl::getSubclasses() const noexcept
+inline Struct::StructImpl::Subclasses const& Struct::StructImpl::getSubclasses() const noexcept
 {
 	return _subclasses;
 }
 
-inline StructAPI::StructImpl::NestedArchetypes const& StructAPI::StructImpl::getNestedArchetypes() const noexcept
+inline Struct::StructImpl::NestedArchetypes const& Struct::StructImpl::getNestedArchetypes() const noexcept
 {
 	return _nestedArchetypes;
 }
 
-inline StructAPI::StructImpl::Fields const& StructAPI::StructImpl::getFields() const noexcept
+inline Struct::StructImpl::Fields const& Struct::StructImpl::getFields() const noexcept
 {
 	return _fields;
 }
 
-inline StructAPI::StructImpl::StaticFields const& StructAPI::StructImpl::getStaticFields() const noexcept
+inline Struct::StructImpl::StaticFields const& Struct::StructImpl::getStaticFields() const noexcept
 {
 	return _staticFields;
 }
 
-inline StructAPI::StructImpl::Methods const& StructAPI::StructImpl::getMethods() const noexcept
+inline Struct::StructImpl::Methods const& Struct::StructImpl::getMethods() const noexcept
 {
 	return _methods;
 }
 
-inline StructAPI::StructImpl::StaticMethods const& StructAPI::StructImpl::getStaticMethods() const noexcept
+inline Struct::StructImpl::StaticMethods const& Struct::StructImpl::getStaticMethods() const noexcept
 {
 	return _staticMethods;
 }
 
-inline StructAPI::StructImpl::CustomInstantiators const& StructAPI::StructImpl::getCustomInstantiators() const noexcept
+inline Struct::StructImpl::CustomInstantiators const& Struct::StructImpl::getCustomInstantiators() const noexcept
 {
 	return _customInstantiators;
 }
 
-inline StructAPI::StructImpl::CustomInstantiator StructAPI::StructImpl::getDefaultInstantiator() const noexcept
+inline Struct::StructImpl::CustomInstantiator Struct::StructImpl::getDefaultInstantiator() const noexcept
 {
 	return _defaultInstantiator;
 }
 
-inline EClassKind StructAPI::StructImpl::getClassKind() const noexcept
+inline EClassKind Struct::StructImpl::getClassKind() const noexcept
 {
 	return _classKind;
 }

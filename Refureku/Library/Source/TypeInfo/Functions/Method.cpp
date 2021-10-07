@@ -24,7 +24,7 @@ void Method::inheritBaseMethodProperties() noexcept
 	//Make sure outerEntity is set and is a class or a struct
 	assert(getOuterEntity() != nullptr && (getOuterEntity()->getKind() == EEntityKind::Struct || getOuterEntity()->getKind() == EEntityKind::Class));
 
-	//StructAPI const* ownerStruct = reinterpret_cast<Struct const*>(getOuterEntity());
+	//Struct const* ownerStruct = reinterpret_cast<Struct const*>(getOuterEntity());
 
 	////Check inherited properties if this method is an override
 	//std::size_t directParentsCount = ownerStruct->getDirectParentsCount();

@@ -18,7 +18,7 @@
 
 namespace rfk
 {
-	class StructAPI;
+	class Struct;
 	class Property;
 	class EntityUtility;
 
@@ -58,7 +58,7 @@ namespace rfk
 			*	
 			*	@return The first property matching the provided archetype in this entity, nullptr if none is found.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getProperty(StructAPI const& archetype,
+			RFK_NODISCARD REFUREKU_API Property const*			getProperty(Struct const& archetype,
 																			bool			 isChildClassValid = true)		const	noexcept;
 
 			/**
@@ -95,7 +95,7 @@ namespace rfk
 			*	
 			*	@return A collection of all properties matching the provided archetype in this entity.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getProperties(StructAPI const&	archetype,
+			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getProperties(Struct const&	archetype,
 																			  bool				isChildClassValid = true)	const	noexcept;
 
 			/**

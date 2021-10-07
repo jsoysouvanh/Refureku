@@ -13,12 +13,12 @@
 namespace rfk
 {
 	//Forward declaration
-	class StructAPI;
+	class Struct;
 
 	class ParentStruct
 	{
 		public:
-			ParentStruct(StructAPI const&	archetype,
+			ParentStruct(Struct const&	archetype,
 						 EAccessSpecifier	inheritanceAccessSpecifier)	noexcept;
 			ParentStruct(ParentStruct const&)							= delete;
 			ParentStruct(ParentStruct&&)								noexcept;
@@ -29,7 +29,7 @@ namespace rfk
 			* 
 			*	@return The archetype of the parent struct.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const&	getArchetype()					const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const&	getArchetype()					const	noexcept;
 
 			/**
 			*	@brief Get the inheritance access specifier used when inheriting this struct.
@@ -40,7 +40,7 @@ namespace rfk
 
 		private:
 			/** Archetype of the parent struct. */
-			StructAPI const&	_archetype;
+			Struct const&	_archetype;
 
 			/** Inheritance access specifier. */
 			EAccessSpecifier	_inheritanceAccessSpecifier;

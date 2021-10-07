@@ -10,23 +10,23 @@
 #include "Refureku/TypeInfo/Entity/Entity.h"
 #include "Refureku/TypeInfo/Variables/EVarFlags.h"
 #include "Refureku/TypeInfo/Functions/EFunctionFlags.h"
-#include "Refureku/TypeInfo/Functions/FunctionHelper.h"
 
 namespace rfk
 {
 	//Forward declarations
-	class StructAPI;
-	using ClassAPI = StructAPI;
+	class Struct;
+	using Class = Struct;
 	class Enum;
 	class Variable;
+	class Function;
 	class Archetype;
 
 	class Namespace final : public Entity
 	{
 		public:
 			REFUREKU_INTERNAL Namespace(char const*	name,
-										   std::size_t	id)		noexcept;
-			Namespace(Namespace&&)						= delete;
+										   std::size_t	id)	noexcept;
+			Namespace(Namespace&&)							= delete;
 			REFUREKU_INTERNAL ~Namespace()					noexcept;
 
 			/**
@@ -85,7 +85,7 @@ namespace rfk
 			*
 			*	@return The found struct if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const*				getStructByName(char const* name)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const*				getStructByName(char const* name)									const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested struct satisfying the provided predicate.
@@ -97,7 +97,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const*				getStructByPredicate(Predicate<StructAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Struct const*				getStructByPredicate(Predicate<Struct>	predicate,
 																						 void*					userData)				const;
 
 			/**
@@ -110,7 +110,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<StructAPI const*>		getStructsByPredicate(Predicate<StructAPI> predicate,
+			RFK_NODISCARD REFUREKU_API Vector<Struct const*>		getStructsByPredicate(Predicate<Struct> predicate,
 																						  void*					userData)				const;
 
 			/**
@@ -120,7 +120,7 @@ namespace rfk
 			*
 			*	@return The found class if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassAPI const*				getClassByName(char const* name)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API Class const*				getClassByName(char const* name)									const	noexcept;
 
 			/**
 			*	@brief Retrieve the first nested class satisfying the provided predicate.
@@ -132,7 +132,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassAPI const*				getClassByPredicate(Predicate<ClassAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Class const*				getClassByPredicate(Predicate<Class>	predicate,
 																						void*				userData)					const;
 
 			/**
@@ -145,7 +145,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<ClassAPI const*>		getClassesByPredicate(Predicate<ClassAPI>	predicate,
+			RFK_NODISCARD REFUREKU_API Vector<Class const*>		getClassesByPredicate(Predicate<Class>	predicate,
 																						  void*					userData)				const;
 
 			/**
@@ -248,22 +248,6 @@ namespace rfk
 			*/
 			REFUREKU_API bool										foreachVariable(Visitor<Variable>	visitor,
 																					void*					userData)					const;
-
-			/**
-			*	@brief Retrieve a function with a specific prototype from this namespace.
-			*
-			*	@tparam FunctionSignature	Signature of the function to look for.
-			*								The signature must be formatted like <ReturnType(ArgType1, ArgType2, ...) const>
-			*
-			*	@param functionName	The name of the function.
-			*	@param flags		Flags describing the queried function.
-			*						The result function will have at least the provided flags.
-			*
-			*	@return The function matching with the provided prototype, name and flags if it exists, else nullptr.
-			*/
-			template <typename FunctionSignature>
-			RFK_NODISCARD Function const*						getFunctionByName(char const*	 name,
-																					  EFunctionFlags flags = EFunctionFlags::Default)	const	noexcept;
 
 			/**
 			*	@brief Retrieve a function with a given name from this namespace.

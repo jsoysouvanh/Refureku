@@ -337,13 +337,13 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "friend rfk::CodeGenerationHelpers;" + env.getSeparator();
-	inout_result += "friend implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::StructAPI&)>; " + env.getSeparator() + env.getSeparator();
+	inout_result += "friend implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "public: " + env.getExportSymbolMacro() + " static ";
-	inout_result += (structClass.isClass()) ? "rfk::ClassAPI" : "rfk::StructAPI";
+	inout_result += (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
 	inout_result += " const& staticGetArchetype() noexcept;" + env.getSeparator() + env.getSeparator();
 }
 
@@ -352,14 +352,14 @@ void ReflectionCodeGenModule::declareGetArchetypeMethodIfInheritFromObject(kodge
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
 	{
 		inout_result += "public: " + env.getExportSymbolMacro() + " virtual ";
-		inout_result += (structClass.isClass()) ? "rfk::ClassAPI" : "rfk::StructAPI";
+		inout_result += (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
 		inout_result += " const& getArchetype() const noexcept override;" + env.getSeparator() + env.getSeparator();
 	}
 }
 
 void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	std::string returnType = (structClass.isClass()) ? "rfk::ClassAPI" : "rfk::StructAPI";
+	std::string returnType = (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
 
 	inout_result += returnType + " const& " + structClass.type.getCanonicalName() + "::staticGetArchetype() noexcept {" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator() +
@@ -674,7 +674,7 @@ void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen
 {
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
 	{
-		std::string returnType = (structClass.isClass()) ? "rfk::ClassAPI" : "rfk::StructAPI";
+		std::string returnType = (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
 
 		inout_result += std::move(returnType) + " const& " + structClass.type.getCanonicalName() + "::getArchetype() const noexcept { return " + structClass.name + "::staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
@@ -702,7 +702,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 {
 	bool isGeneratingHiddenCode = _isGeneratingHiddenCode;
 
-	inout_result += "private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::StructAPI& childClass) noexcept {" + env.getSeparator();
+	inout_result += "private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
 
 	//Propagate the child class registration to parent classes too
 	for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
@@ -710,10 +710,10 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 		inout_result += "rfk::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass);" + env.getSeparator();
 	}
 
-	inout_result += "rfk::StructAPI const& thisClass = staticGetArchetype();" + env.getSeparator();
+	inout_result += "rfk::Struct const& thisClass = staticGetArchetype();" + env.getSeparator();
 
 	//Register the child to the subclasses list
-	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::StructAPI&>(thisClass).addSubclass(childClass);" + env.getSeparator();
+	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::Struct&>(thisClass).addSubclass(childClass);" + env.getSeparator();
 
 	//Make the child class inherit from the parents class fields
 	if (!structClass.fields.empty())

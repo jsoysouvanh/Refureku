@@ -1,7 +1,7 @@
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 
 #include "Refureku/TypeInfo/Namespace/NamespaceImpl.h"
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
@@ -41,27 +41,27 @@ bool Namespace::foreachNamespace(Visitor<Namespace> visitor, void* userData) con
 	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(), visitor, userData);
 }
 
-StructAPI const* Namespace::getStructByName(char const* name) const noexcept
+Struct const* Namespace::getStructByName(char const* name) const noexcept
 {
-	return reinterpret_cast<StructAPI const*>(
+	return reinterpret_cast<Struct const*>(
 		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Struct; }));
 }
 
-StructAPI const* Namespace::getStructByPredicate(Predicate<StructAPI> predicate, void* userData) const
+Struct const* Namespace::getStructByPredicate(Predicate<Struct> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		reinterpret_cast<StructAPI const*>(
+		reinterpret_cast<Struct const*>(
 			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
 												[predicate, userData](Archetype const& archetype)
 												{
 													return archetype.getKind() == EEntityKind::Struct &&
-															predicate(static_cast<StructAPI const&>(archetype), userData);
+															predicate(static_cast<Struct const&>(archetype), userData);
 												})) : nullptr;
 }
 
-Vector<StructAPI const*> Namespace::getStructsByPredicate(Predicate<StructAPI> predicate, void* userData) const
+Vector<Struct const*> Namespace::getStructsByPredicate(Predicate<Struct> predicate, void* userData) const
 {
 	if (predicate != nullptr)
 	{
@@ -69,36 +69,36 @@ Vector<StructAPI const*> Namespace::getStructsByPredicate(Predicate<StructAPI> p
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Struct &&
-															 predicate(static_cast<StructAPI const&>(archetype), userData);
+															 predicate(static_cast<Struct const&>(archetype), userData);
 													 });
 	}
 	else
 	{
-		return Vector<StructAPI const*>(0);
+		return Vector<Struct const*>(0);
 	}
 }
 
-ClassAPI const* Namespace::getClassByName(char const* name) const noexcept
+Class const* Namespace::getClassByName(char const* name) const noexcept
 {
-	return reinterpret_cast<ClassAPI const*>(
+	return reinterpret_cast<Class const*>(
 		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Class; }));
 }
 
-ClassAPI const* Namespace::getClassByPredicate(Predicate<ClassAPI> predicate, void* userData) const
+Class const* Namespace::getClassByPredicate(Predicate<Class> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		reinterpret_cast<StructAPI const*>(
+		reinterpret_cast<Struct const*>(
 			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
 			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Class &&
-					predicate(static_cast<ClassAPI const&>(archetype), userData);
+					predicate(static_cast<Class const&>(archetype), userData);
 			})) : nullptr;
 }
 
-Vector<ClassAPI const*> Namespace::getClassesByPredicate(Predicate<ClassAPI> predicate, void* userData) const
+Vector<Class const*> Namespace::getClassesByPredicate(Predicate<Class> predicate, void* userData) const
 {
 	if (predicate != nullptr)
 	{
@@ -106,12 +106,12 @@ Vector<ClassAPI const*> Namespace::getClassesByPredicate(Predicate<ClassAPI> pre
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Class &&
-															 predicate(static_cast<ClassAPI const&>(archetype), userData);
+															 predicate(static_cast<Class const&>(archetype), userData);
 													 });
 	}
 	else
 	{
-		return Vector<ClassAPI const*>(0);
+		return Vector<Class const*>(0);
 	}
 }
 

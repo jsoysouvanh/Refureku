@@ -19,8 +19,8 @@ namespace rfk
 	class Entity;
 	class Namespace;
 	class Archetype;
-	class StructAPI;
-	using ClassAPI = StructAPI;
+	class Struct;
+	using Class = Struct;
 	class Enum;
 	class FundamentalArchetype;
 	class Variable;
@@ -119,7 +119,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const*					getStructById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const*					getStructById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level struct by name.
@@ -128,7 +128,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried struct if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const*					getStructByName(char const* name)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const*					getStructByName(char const* name)										const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all file level structs.
@@ -141,7 +141,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelStruct(Visitor<StructAPI>	visitor,
+			REFUREKU_API bool											foreachFileLevelStruct(Visitor<Struct>	visitor,
 																							   void*				userData)					const;
 
 			/**
@@ -151,7 +151,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried class if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassAPI const*					getClassById(std::size_t id)											const	noexcept;
+			RFK_NODISCARD REFUREKU_API Class const*					getClassById(std::size_t id)											const	noexcept;
 
 			/**
 			*	@brief Retrieve a file level class by name.
@@ -160,7 +160,7 @@ namespace rfk
 			*
 			*	@return A constant pointer to the queried class if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassAPI const*					getClassByName(char const* name)										const	noexcept;
+			RFK_NODISCARD REFUREKU_API Class const*					getClassByName(char const* name)										const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all file level classes.
@@ -173,7 +173,7 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool											foreachFileLevelClass(Visitor<ClassAPI>	visitor,
+			REFUREKU_API bool											foreachFileLevelClass(Visitor<Class>	visitor,
 																							  void*				userData)						const;
 
 			/**

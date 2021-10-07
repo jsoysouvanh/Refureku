@@ -10,31 +10,37 @@ bool EntityUtility::foreachEntity(ContainerType const& container, Visitor<Entity
 {
 	if (visitor != nullptr)
 	{
-		if constexpr (std::is_pointer_v<typename ContainerType::value_type>)
-		{
-			for (auto entity : container)
-			{
-				if (!visitor(*entity, userData))
-				{
-					return false;
-				}
-			}
-		}
-		else
-		{
-			for (EntityType const& entity : container)
-			{
-				if (!visitor(entity, userData))
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
+		return foreachEntity(container, [visitor, userData](EntityType const& entity) { return visitor(entity, userData); });
 	}
 
 	return false;
+}
+
+template <typename ContainerType, typename Visitor>
+bool EntityUtility::foreachEntity(ContainerType const& container, Visitor visitor)
+{
+	if constexpr (std::is_pointer_v<typename ContainerType::value_type>)
+	{
+		for (auto entity : container)
+		{
+			if (!visitor(*entity))
+			{
+				return false;
+			}
+		}
+	}
+	else
+	{
+		for (auto const& entity : container)
+		{
+			if (!visitor(entity))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 template <typename ContainerType, typename Predicate>

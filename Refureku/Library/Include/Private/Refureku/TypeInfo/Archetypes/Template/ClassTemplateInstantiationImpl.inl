@@ -12,7 +12,7 @@ inline ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl::ClassTempl
 {
 	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
 	assert(classTemplate.getKind() == rfk::EEntityKind::Class || classTemplate.getKind() == rfk::EEntityKind::Struct);
-	assert(static_cast<ClassAPI const&>(classTemplate).getClassKind() == EClassKind::Template);
+	assert(static_cast<Class const&>(classTemplate).getClassKind() == EClassKind::Template);
 
 	reinterpret_cast<ClassTemplateAPI::ClassTemplateImpl*>(const_cast<ClassTemplateAPI&>(_classTemplate).getPimpl())->addTemplateInstantiation(backRef);
 }

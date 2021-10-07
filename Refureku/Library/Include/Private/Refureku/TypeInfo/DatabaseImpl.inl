@@ -20,11 +20,11 @@ void DatabaseAPI::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bo
 			break;
 
 		case EEntityKind::Struct:
-			_fileLevelStructsByName.emplace(reinterpret_cast<StructAPI const*>(&entity));
+			_fileLevelStructsByName.emplace(reinterpret_cast<Struct const*>(&entity));
 			break;
 
 		case EEntityKind::Class:
-			_fileLevelClassesByName.emplace(reinterpret_cast<ClassAPI const*>(&entity));
+			_fileLevelClassesByName.emplace(reinterpret_cast<Class const*>(&entity));
 			break;
 
 		case EEntityKind::Enum:
@@ -71,7 +71,7 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 			case EEntityKind::Struct:
 				[[fallthrough]];
 			case EEntityKind::Class:
-				unregisterSubEntities(static_cast<StructAPI const&>(entity));
+				unregisterSubEntities(static_cast<Struct const&>(entity));
 				break;
 
 			case EEntityKind::Enum:
@@ -112,11 +112,11 @@ void DatabaseAPI::DatabaseImpl::unregisterEntity(Entity const& entity, bool shou
 				break;
 
 			case EEntityKind::Struct:
-				_fileLevelStructsByName.erase(reinterpret_cast<StructAPI const*>(&entity));
+				_fileLevelStructsByName.erase(reinterpret_cast<Struct const*>(&entity));
 				break;
 
 			case EEntityKind::Class:
-				_fileLevelClassesByName.erase(reinterpret_cast<ClassAPI const*>(&entity));
+				_fileLevelClassesByName.erase(reinterpret_cast<Class const*>(&entity));
 				break;
 
 			case EEntityKind::Enum:
@@ -162,7 +162,7 @@ void DatabaseAPI::DatabaseImpl::registerEntityId(Entity const& entity, bool shou
 			case EEntityKind::Struct:
 				[[fallthrough]];
 			case EEntityKind::Class:
-				registerSubEntities(static_cast<StructAPI const&>(entity));
+				registerSubEntities(static_cast<Struct const&>(entity));
 				break;
 
 			case EEntityKind::Enum:
@@ -194,7 +194,7 @@ void DatabaseAPI::DatabaseImpl::registerEntityId(Entity const& entity, bool shou
 	}
 }
 
-inline void DatabaseAPI::DatabaseImpl::registerSubEntities(StructAPI const& s) noexcept
+inline void DatabaseAPI::DatabaseImpl::registerSubEntities(Struct const& s) noexcept
 {
 	//Add nested archetypes
 	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
@@ -235,7 +235,7 @@ inline void DatabaseAPI::DatabaseImpl::registerSubEntities(StructAPI const& s) n
 						  }, this);
 }
 
-inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(StructAPI const& s) noexcept
+inline void DatabaseAPI::DatabaseImpl::unregisterSubEntities(Struct const& s) noexcept
 {
 	//Remove nested archetypes
 	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)

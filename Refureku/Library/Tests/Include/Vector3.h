@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h" //To specialize rfk::getArchetype
 
 namespace some_namespace

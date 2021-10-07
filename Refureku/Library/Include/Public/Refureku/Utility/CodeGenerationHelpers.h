@@ -13,7 +13,7 @@
 
 #include "Refureku/Utility/TypeTraitsMacros.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 
 RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass)
 
@@ -42,7 +42,7 @@ namespace rfk
 			*			the templated method "_registerChildClass" and the child class is reflected.
 			*/
 			template <typename ParentClass, typename ChildClass>
-			static constexpr void	registerChildClass(rfk::StructAPI& childClass)	noexcept;
+			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;
 	};
 
 	template <auto>

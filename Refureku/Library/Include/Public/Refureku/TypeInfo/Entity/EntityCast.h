@@ -14,7 +14,7 @@ namespace rfk
 	//Forward declarations
 	class Archetype;
 	class FundamentalArchetype;
-	class StructAPI;
+	class Struct;
 	class Enum;
 	class EnumValue;
 	class Namespace;
@@ -51,7 +51,7 @@ namespace rfk
 	*	Make sure to check if the result's kind is EEntityKind::Class.
 	*/
 	template <>
-	REFUREKU_API StructAPI const*				entityCast<StructAPI>(Entity const* entity)					noexcept;
+	REFUREKU_API Struct const*				entityCast<Struct>(Entity const* entity)					noexcept;
 
 	template <>
 	REFUREKU_API FieldBase const*			entityCast<FieldBase>(Entity const* entity)				noexcept;

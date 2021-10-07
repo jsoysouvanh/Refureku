@@ -103,32 +103,32 @@ Archetype const* DatabaseAPI::getArchetypeByName(char const* name) const noexcep
 	return result;
 }
 
-StructAPI const* DatabaseAPI::getStructById(std::size_t id) const noexcept
+Struct const* DatabaseAPI::getStructById(std::size_t id) const noexcept
 {
-	return entityCast<StructAPI>(getEntityById(id));
+	return entityCast<Struct>(getEntityById(id));
 }
 
-StructAPI const* DatabaseAPI::getStructByName(char const* name) const noexcept
+Struct const* DatabaseAPI::getStructByName(char const* name) const noexcept
 {
 	return EntityUtility::getEntityByName(_pimpl->getFileLevelStructsByName(), name);
 }
 
-bool DatabaseAPI::foreachFileLevelStruct(Visitor<StructAPI> visitor, void* userData) const
+bool DatabaseAPI::foreachFileLevelStruct(Visitor<Struct> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelStructsByName(), visitor, userData);
 }
 
-ClassAPI const* DatabaseAPI::getClassById(std::size_t id) const noexcept
+Class const* DatabaseAPI::getClassById(std::size_t id) const noexcept
 {
-	return entityCast<ClassAPI>(getEntityById(id));
+	return entityCast<Class>(getEntityById(id));
 }
 
-ClassAPI const* DatabaseAPI::getClassByName(char const* name) const noexcept
+Class const* DatabaseAPI::getClassByName(char const* name) const noexcept
 {
 	return EntityUtility::getEntityByName(_pimpl->getFileLevelClassesByName(), name);
 }
 
-bool DatabaseAPI::foreachFileLevelClass(Visitor<ClassAPI> visitor, void* userData) const
+bool DatabaseAPI::foreachFileLevelClass(Visitor<Class> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(_pimpl->getFileLevelClassesByName(), visitor, userData);
 }

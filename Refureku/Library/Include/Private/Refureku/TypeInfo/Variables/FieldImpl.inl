@@ -6,7 +6,7 @@
 */
 
 inline Field::FieldImpl::FieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
-									  StructAPI const* owner, std::size_t memoryOffset, Entity const* outerEntity) noexcept:
+									  Struct const* owner, std::size_t memoryOffset, Entity const* outerEntity) noexcept:
 	FieldBaseImpl(name, id, type, flags, owner, outerEntity),
 	_memoryOffset{memoryOffset}
 {

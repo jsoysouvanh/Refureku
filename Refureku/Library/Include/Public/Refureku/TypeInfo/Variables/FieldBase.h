@@ -14,7 +14,7 @@
 namespace rfk
 {
 	//Forward declaration
-	class StructAPI;
+	class Struct;
 
 	class FieldBase : public VariableBase
 	{
@@ -53,7 +53,7 @@ namespace rfk
 			* 
 			*	@return The struct owning this field.
 			*/
-			RFK_NODISCARD REFUREKU_API StructAPI const*	getOwner()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API Struct const*	getOwner()	const	noexcept;
 
 		protected:
 			//Forward declaration

@@ -17,7 +17,7 @@
 
 namespace rfk
 {
-	class ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl final : public StructAPI::StructImpl
+	class ClassTemplateInstantiationAPI::ClassTemplateInstantiationImpl final : public Struct::StructImpl
 	{
 		private:
 			/** Class template this instance comes from. */

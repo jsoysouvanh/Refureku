@@ -21,7 +21,7 @@
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/DatabaseAPI.h"

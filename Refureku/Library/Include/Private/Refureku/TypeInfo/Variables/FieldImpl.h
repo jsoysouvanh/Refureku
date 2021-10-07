@@ -23,7 +23,7 @@ namespace rfk
 							 std::size_t		id,
 							 Type const&		type,
 							 EFieldFlags		flags,
-							 StructAPI const*	owner,
+							 Struct const*	owner,
 							 std::size_t		memoryOffset,
 							 Entity const*	outerEntity = nullptr)	noexcept;
 

@@ -16,9 +16,9 @@ rfk::EEntityKind ParseAllNested::getTargetEntityKind() const noexcept { return t
 static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");
 namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_17636175816175907530u = ParseAllNested::staticGetArchetype(); }
 
-rfk::ClassAPI const& ParseAllNested::staticGetArchetype() noexcept {
+rfk::Class const& ParseAllNested::staticGetArchetype() noexcept {
 static bool initialized = false;
-static rfk::ClassAPI type("ParseAllNested", 17636175816175907530u, sizeof(ParseAllNested), 1);
+static rfk::Class type("ParseAllNested", 17636175816175907530u, sizeof(ParseAllNested), 1);
 if (!initialized) {
 initialized = true;
 type.setDefaultInstantiator(&rfk::internal::defaultInstantiator<ParseAllNested>);
@@ -30,7 +30,7 @@ ParseAllNested::_rfk_registerChildClass<ParseAllNested>(type);
 }
 return type; }
 
-rfk::ClassAPI const& ParseAllNested::getArchetype() const noexcept { return ParseAllNested::staticGetArchetype(); }
+rfk::Class const& ParseAllNested::getArchetype() const noexcept { return ParseAllNested::staticGetArchetype(); }
 
 template <> rfk::Archetype const* rfk::getArchetype<ParseAllNested>() noexcept { return &ParseAllNested::staticGetArchetype(); }
 

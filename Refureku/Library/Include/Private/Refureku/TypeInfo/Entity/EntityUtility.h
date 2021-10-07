@@ -38,6 +38,10 @@ namespace rfk
 																				  Visitor<EntityType>	visitor,
 																				  void*					userData);
 
+			template <typename ContainerType, typename Visitor>
+			RFK_NODISCARD static bool								foreachEntity(ContainerType const&	container,
+																				  Visitor				visitor);
+
 			/**
 			*	@brief Get an entity from a container entities.
 			*	

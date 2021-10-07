@@ -1,10 +1,10 @@
 #include "Refureku/TypeInfo/Archetypes/ParentStruct.h"
 
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 
 using namespace rfk;
 
-ParentStruct::ParentStruct(StructAPI const& archetype, EAccessSpecifier inheritanceAccessSpecifier) noexcept:
+ParentStruct::ParentStruct(Struct const& archetype, EAccessSpecifier inheritanceAccessSpecifier) noexcept:
 	_archetype{archetype},
 	_inheritanceAccessSpecifier{inheritanceAccessSpecifier}
 {
@@ -14,7 +14,7 @@ ParentStruct::ParentStruct(ParentStruct&&) noexcept = default;
 
 ParentStruct::~ParentStruct() noexcept = default;
 
-StructAPI const& ParentStruct::getArchetype() const noexcept
+Struct const& ParentStruct::getArchetype() const noexcept
 {
 	return _archetype;
 }

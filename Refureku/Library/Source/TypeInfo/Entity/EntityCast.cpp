@@ -7,7 +7,7 @@
 #include "Refureku/TypeInfo/Functions/Function.h"
 #include "Refureku/TypeInfo/Functions/Method.h"
 #include "Refureku/TypeInfo/Functions/StaticMethod.h"
-#include "Refureku/TypeInfo/Archetypes/StructAPI.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 #include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
@@ -32,13 +32,13 @@ FundamentalArchetype const* rfk::entityCast<FundamentalArchetype>(Entity const* 
 }
 
 template <>
-StructAPI const* rfk::entityCast<StructAPI>(Entity const* entity) noexcept
+Struct const* rfk::entityCast<Struct>(Entity const* entity) noexcept
 {
 	if (entity != nullptr)
 	{
 		EEntityKind kind = entity->getKind();
 
-		return (kind == EEntityKind::Struct || kind == EEntityKind::Class) ? reinterpret_cast<StructAPI const*>(entity) : nullptr;
+		return (kind == EEntityKind::Struct || kind == EEntityKind::Class) ? reinterpret_cast<Struct const*>(entity) : nullptr;
 	}
 	else
 	{

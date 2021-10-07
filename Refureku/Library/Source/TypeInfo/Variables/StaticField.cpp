@@ -5,13 +5,13 @@
 using namespace rfk;
 
 StaticField::StaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
-							   StructAPI const* owner, void* ptr, Entity const* outerEntity) noexcept:
+							   Struct const* owner, void* ptr, Entity const* outerEntity) noexcept:
 	FieldBase(new StaticFieldImpl(name, id, type, flags, owner, ptr, outerEntity))
 {
 }
 
 StaticField::StaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
-							   StructAPI const* owner, void const* constPtr, Entity const* outerEntity) noexcept:
+							   Struct const* owner, void const* constPtr, Entity const* outerEntity) noexcept:
 	FieldBase(new StaticFieldImpl(name, id, type, flags, owner, constPtr, outerEntity))
 {
 }

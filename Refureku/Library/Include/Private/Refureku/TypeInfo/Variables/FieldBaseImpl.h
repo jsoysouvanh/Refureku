@@ -19,14 +19,14 @@ namespace rfk
 			EFieldFlags			_flags	= EFieldFlags::Default;
 
 			/** Struct owning this field. */
-			StructAPI const*	_owner	= nullptr;
+			Struct const*	_owner	= nullptr;
 
 		public:
 			inline FieldBaseImpl(char const*		name,
 								 std::size_t		id,
 								 Type const&		type,
 								 EFieldFlags		flags,
-								 StructAPI const*	owner,
+								 Struct const*	owner,
 								 Entity const*	outerEntity = nullptr)	noexcept;
 
 			/**
@@ -41,7 +41,7 @@ namespace rfk
 			* 
 			*	@return _owner.
 			*/
-			inline StructAPI const*	getOwner()	const	noexcept;
+			inline Struct const*	getOwner()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/FieldBaseImpl.inl"

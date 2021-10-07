@@ -5,16 +5,3 @@
 *	See the README.md file for full license details.
 */
 
-template <typename FunctionSignature>
-Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
-{
-	for (Function const* function : getFunctionsByName(name, flags))
-	{
-		if (internal::FunctionHelper<FunctionSignature>::hasSamePrototype(*function))
-		{
-			return function;
-		}
-	}
-
-	return nullptr;
-}
