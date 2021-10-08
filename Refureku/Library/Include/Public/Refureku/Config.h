@@ -40,9 +40,9 @@
 	#if defined(REFUREKU_EXPORT)
 
 		#if defined(__GNUC__)
-			#define REFUREKU_API						__attribute__((dllexport))
+			#define REFUREKU_API			__attribute__((dllexport))
 		#else
-			#define REFUREKU_API						__declspec(dllexport)
+			#define REFUREKU_API			__declspec(dllexport)
 		#endif
 
 		#define REFUREKU_TEMPLATE_API_DEF 	REFUREKU_API

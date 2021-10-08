@@ -14,8 +14,22 @@ namespace rfk
 	*/
 	enum class ETemplateParameterKind
 	{
+		/**
+		*	The template parameter is a non-type template parameter, like:
+		*	template <int Value> or template <auto Value>
+		*/
 		NonTypeTemplateParameter,
+
+		/**
+		*	The template parameter is a type template parameter, like:
+		*	template <typename T>
+		*/
 		TypeTemplateParameter,
+
+		/**
+		*	The template parameter is a template template parameter, like:
+		*	template <template <typename> typename T>
+		*/
 		TemplateTemplateParameter
 	};
 }

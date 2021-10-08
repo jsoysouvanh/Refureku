@@ -311,7 +311,7 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Archetypes/EnumValue.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h>" + env.getSeparator() +							//TODO: Only when there is a template class
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h>" + env.getSeparator() +				//TODO: Only when there is a template class
-					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>" + env.getSeparator() +		//TODO: Only when there is a non-nested template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>" + env.getSeparator() +	//TODO: Only when there is a non-nested template class
 					env.getSeparator();
 
 	//Forward declarations
@@ -327,10 +327,12 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Functions/Function.h>" + env.getSeparator() +						//TODO: Only if there is a function
 					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +							//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +						//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Namespace/NamespaceFragment.h>" + env.getSeparator() +				//TODO: Only if there is a namespace
 					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h>" + env.getSeparator() +	//TODO: Only if there is a namespace
-					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
+					"#include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
+					"#include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
+					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
 					 env.getSeparator();
 }
 
@@ -534,7 +536,7 @@ void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& st
 	{
 		inout_result += generatedEntityVarName + "setDirectParentsCapacity(" + std::to_string(structClass.parents.size()) + ");" + env.getSeparator();
 
-		for (kodgen::StructClassInfo::ParentInfo parent : structClass.parents)
+		for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
 		{
 			if (parent.type.isTemplateType())
 			{
@@ -879,10 +881,12 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 
 void ReflectionCodeGenModule::fillClassTemplateArguments(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	for (std::size_t i = 0; i < structClass.type.getTemplateTypenames().size(); i++)
+	for (std::size_t i = 0; i < structClass.type.getTemplateParameters().size(); i++)
 	{
+		//TODO: this doesn't support auto
+
 		inout_result += "type.addTemplateArgument(type.getClassTemplate().getTemplateParameterAt(" + std::to_string(i) + "),"
-			"rfk::getArchetype<" + structClass.type.getTemplateTypenames()[i].getName() + ">());" + env.getSeparator();
+			"rfk::getArchetype<" + structClass.type.getTemplateParameters()[i].type->getName() + ">());" + env.getSeparator();
 	}
 }
 
@@ -905,7 +909,7 @@ void ReflectionCodeGenModule::defineClassTemplateGetArchetypeTemplateSpecializat
 
 	//Class template has no fields / methods until it is instantiated (no memory address).
 	fillClassParents(structClass, env, "type.", inout_result);
-	fillClassTemplateParameters(structClass, env, inout_result);
+	fillClassTemplateParameters(structClass, "type.", env, inout_result);
 
 	//End init if
 	inout_result += "}";
@@ -913,27 +917,44 @@ void ReflectionCodeGenModule::defineClassTemplateGetArchetypeTemplateSpecializat
 	inout_result += "return &type; }" + env.getSeparator() + env.getSeparator();
 }
 
-void ReflectionCodeGenModule::fillClassTemplateParameters(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::addTemplateParameter(kodgen::TemplateParamInfo const& templateParam, std::string generatedVarName, std::string const& objVarName,
+												   std::string addFuncName, kodgen::MacroCodeGenEnv& env, std::string& inout_result, int recursionLevel) const noexcept
 {
-	for (kodgen::TypeInfo type : structClass.type.getTemplateTypenames()) //TODO: Replace simple TypeInfo by a more complete TemplateParameter struct
-	{
-		//TODO: Handle different template parameter types differently
+	inout_result += "{ " + env.getSeparator();
 
-		if (true) //Type template parameter
-		{
-			inout_result += "{ " + env.getSeparator();
-			inout_result += "static rfk::TemplateParameter parameter(\"" + type.getName() + "\", rfk::ETemplateParameterKind::TypeTemplateParameter);" + env.getSeparator();
-			inout_result += "type.addTemplateParameter(parameter);" + env.getSeparator();
-			inout_result += "}" + env.getSeparator();
-		}
-		else if (true)	//Template template parameter
-		{
-			//TODO
-		}
-		else //Non-type template parameter
-		{
-			//TODO
-		}
+	switch (templateParam.kind)
+	{
+		case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:
+			//TODO: this does not support auto
+			inout_result += "static rfk::NonTypeTemplateParameter " + generatedVarName + "(\"" + templateParam.name + "\", rfk::getArchetype<" + templateParam.type->getName() + ">());" + env.getSeparator();
+			break;
+
+		case kodgen::ETemplateParameterKind::TypeTemplateParameter:
+			inout_result += "static rfk::TypeTemplateParameter " + generatedVarName + "(\"" + templateParam.name + "\");" + env.getSeparator();
+			break;
+
+		case kodgen::ETemplateParameterKind::TemplateTemplateParameter:
+			inout_result += "static rfk::TemplateTemplateParameter " + generatedVarName + "(\"" + templateParam.name + "\");" + env.getSeparator();
+			for (kodgen::TemplateParamInfo const& param : templateParam.type->getTemplateParameters())
+			{
+				addTemplateParameter(param, generatedVarName + std::to_string(recursionLevel), generatedVarName + ".", "addTemplateParameter", env, inout_result, recursionLevel + 1);
+			}
+			break;
+
+		default:
+			//Should never reach this point
+			assert(false);
+	}
+
+	inout_result += objVarName + std::move(addFuncName) + "(" + std::move(generatedVarName) + ");" + env.getSeparator();
+	inout_result += "}" + env.getSeparator();
+}
+
+void ReflectionCodeGenModule::fillClassTemplateParameters(kodgen::StructClassInfo const& structClass, std::string classTemplateVarName, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+{
+	for (kodgen::TemplateParamInfo const& templateParam : structClass.type.getTemplateParameters())
+	{
+		addTemplateParameter(templateParam, "templateParameter", std::move(classTemplateVarName), "addTemplateParameter", env, inout_result);
 	}
 }
 

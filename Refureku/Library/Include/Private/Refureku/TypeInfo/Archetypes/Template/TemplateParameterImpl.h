@@ -13,7 +13,7 @@
 
 namespace rfk
 {
-	class TemplateParameter::TemplateParameterImpl final
+	class TemplateParameter::TemplateParameterImpl
 	{
 		private:
 			/** Name of the template parameter. */

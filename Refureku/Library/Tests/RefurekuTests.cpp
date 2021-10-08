@@ -16,7 +16,6 @@
 #include "ClassTemplates/SingleTypeTemplateClassTemplate.h"
 #include "ClassTemplates/MultipleTypeTemplateClassTemplate.h"
 
-
 #define TEST(...) if (!(__VA_ARGS__)) { std::cerr << "Test failed (" << __LINE__ << "): " << #__VA_ARGS__ << std::endl; exit(EXIT_FAILURE); }
 
 bool approximatelyEqual(float value1, float value2, float epsilon = FLT_EPSILON)
@@ -1363,6 +1362,29 @@ void newTests()
 	types();
 	fieldsAPI();
 	functionAndMethods();
+}
+
+void printTemplateParameter(rfk::TemplateParameter const& param)
+{
+	switch (param.getKind())
+	{
+		case rfk::ETemplateParameterKind::TypeTemplateParameter:
+			std::cout << param.getName() << std::endl;
+			break;
+
+		case rfk::ETemplateParameterKind::NonTypeTemplateParameter:
+			std::cout << static_cast<rfk::NonTypeTemplateParameter const&>(param).getArchetype()->getName() << " " << param.getName() << std::endl;
+			break;
+
+		case rfk::ETemplateParameterKind::TemplateTemplateParameter:
+			std::cout << "Template Template " << param.getName() << std::endl;
+			static_cast<rfk::TemplateTemplateParameter const&>(param).foreachTemplateParameter([](rfk::TemplateParameter const& p, void* userData)
+																							   {
+																								   printTemplateParameter(p);
+
+																								   return true;
+																							   }, nullptr);
+	}
 }
 
 int main()

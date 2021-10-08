@@ -416,9 +416,29 @@ namespace rfk
 																	  std::string&						inout_result)						noexcept;
 
 		/**
+		*	@brief Generate code to create and add a template parameter to the provided object.
+		* 
+		*	@param templateParam	Template parameter to create/add.
+		*	@param generatedVarName	Name of the variable generated for the template parameter.
+		*	@param objVarName		Name of the generated variable to add the template parameter to.
+		*	@param addFuncName		Name of the function to use to add the parameter to the object.
+		*	@param env				Code generation environment.
+		*	@param inout_result		String to append the generated code.
+		*	@param recursionLevel	Number of times this function has been recursively called.
+		*/
+		void	addTemplateParameter(kodgen::TemplateParamInfo const&	templateParam,
+									 std::string						generatedVarName,
+									 std::string const&					objVarName,
+									 std::string						addFuncName,
+									 kodgen::MacroCodeGenEnv&			env,
+									 std::string&						inout_result,
+									 int								recursionLevel = 0)											const	noexcept;
+
+		/**
 		*	TODO
 		*/
 		void	fillClassTemplateParameters(kodgen::StructClassInfo const&	structClass,
+											std::string						classTemplateVarName,
 											kodgen::MacroCodeGenEnv&		env,
 											std::string&					inout_result)											const	noexcept;
 

@@ -60,14 +60,12 @@ Archetype const* getArchetype() noexcept
 	return nullptr;
 }
 
+#if !defined(_MSC_VER) || defined(__clang__)
+
 template <template <template <typename...> typename...> typename T>
 Archetype const* getArchetype() noexcept
 {
 	return nullptr;
 }
 
-template <template <typename, auto> typename T>
-Archetype const* getArchetype() noexcept
-{
-	return nullptr;
-}
+#endif
