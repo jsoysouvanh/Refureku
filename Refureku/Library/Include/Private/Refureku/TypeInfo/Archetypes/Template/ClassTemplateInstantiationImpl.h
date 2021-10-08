@@ -21,16 +21,16 @@ namespace rfk
 	{
 		private:
 			/** Class template this instance comes from. */
-			ClassTemplate const&				_classTemplate;
+			ClassTemplate const&					_classTemplate;
 
 			/** List of all template arguments of this class template instance. */
-			std::vector<TemplateArgument>	_templateArguments;
+			std::vector<TemplateArgument const*>	_templateArguments;
 
 		public:
-			inline ClassTemplateInstantiationImpl(char const*							name,
-												  std::size_t							id,
-												  std::size_t							memorySize,
-												  bool									isClass,
+			inline ClassTemplateInstantiationImpl(char const*						name,
+												  std::size_t						id,
+												  std::size_t						memorySize,
+												  bool								isClass,
 												  Archetype const&					classTemplate,
 												  ClassTemplateInstantiation const&	backRef)			noexcept;
 
@@ -39,14 +39,14 @@ namespace rfk
 			* 
 			*	@return _classTemplate.
 			*/
-			RFK_NODISCARD inline ClassTemplate const&					getClassTemplate()		const	noexcept;
+			RFK_NODISCARD inline ClassTemplate const&							getClassTemplate()		const	noexcept;
 
 			/**
 			*	@brief Getter for the field _templateArguments.
 			* 
 			*	@return _templateArguments.
 			*/
-			RFK_NODISCARD inline std::vector<TemplateArgument> const&	getTemplateArguments()	const	noexcept;
+			RFK_NODISCARD inline std::vector<TemplateArgument const*> const&	getTemplateArguments()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationImpl.inl"

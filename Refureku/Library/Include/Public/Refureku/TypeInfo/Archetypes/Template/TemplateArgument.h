@@ -14,15 +14,12 @@ namespace rfk
 {
 	//Forward declaration
 	class TemplateParameter;
-	class Archetype;	//TODO: Replace this by a template arg
 
-	class TemplateArgument final
+	class TemplateArgument
 	{
 		public:
-			REFUREKU_API TemplateArgument(TemplateParameter const& boundParameter)	noexcept;
-			TemplateArgument(TemplateArgument const&)								= delete;
-			TemplateArgument(TemplateArgument&&)									= delete;
-			REFUREKU_API ~TemplateArgument()										noexcept;
+			TemplateArgument(TemplateArgument const&)	= delete;
+			TemplateArgument(TemplateArgument&&)		= delete;
 
 			/**
 			*	@brief Getter for the field _boundParameter.
@@ -31,17 +28,20 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getBoundParameter()	const	noexcept;
 
-			/**
-			*	@brief Getter for the field _archetype.
-			* 
-			*	@return _archetype.
-			*/
-			//TODO: This will change to a different return type to support non-type template and template template type arguments
-			RFK_NODISCARD REFUREKU_API Archetype const*			getArchetype()		const	noexcept;
-
-		private:
+		protected:
 			//Forward declaration
 			class TemplateArgumentImpl;
+
+			REFUREKU_INTERNAL TemplateArgument(TemplateArgumentImpl* implementation)	noexcept;
+			REFUREKU_INTERNAL ~TemplateArgument()										noexcept;
+
+			/**
+			*	@brief Get the _pimpl internal pointer.
+			* 
+			*	@return The _pimpl internal pointer.
+			*/
+			RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl*		getPimpl()			noexcept;
+			RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl const*	getPimpl()	const	noexcept;
 
 			/** Pointer to the concrete TemplateParameter implementation. */
 			Pimpl<TemplateArgumentImpl>	_pimpl;

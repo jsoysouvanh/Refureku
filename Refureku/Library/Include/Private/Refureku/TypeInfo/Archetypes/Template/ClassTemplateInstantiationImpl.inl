@@ -22,7 +22,7 @@ inline ClassTemplate const& ClassTemplateInstantiation::ClassTemplateInstantiati
 	return _classTemplate;
 }
 
-inline std::vector<TemplateArgument> const& ClassTemplateInstantiation::ClassTemplateInstantiationImpl::getTemplateArguments() const noexcept
+inline std::vector<TemplateArgument const*> const& ClassTemplateInstantiation::ClassTemplateInstantiationImpl::getTemplateArguments() const noexcept
 {
 	return _templateArguments;
 }

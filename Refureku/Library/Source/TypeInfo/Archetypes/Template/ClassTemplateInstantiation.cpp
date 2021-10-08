@@ -19,7 +19,7 @@ ClassTemplate const& ClassTemplateInstantiation::getClassTemplate() const noexce
 
 TemplateArgument const& ClassTemplateInstantiation::getTemplateArgument(std::size_t index) const noexcept
 {
-	return reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments()[index];
+	return *reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments()[index];
 }
 
 std::size_t ClassTemplateInstantiation::getTemplateArgumentsCount() const noexcept

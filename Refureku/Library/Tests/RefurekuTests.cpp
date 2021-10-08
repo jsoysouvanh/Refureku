@@ -1378,7 +1378,7 @@ void printTemplateParameter(rfk::TemplateParameter const& param)
 
 		case rfk::ETemplateParameterKind::TemplateTemplateParameter:
 			std::cout << "Template Template " << param.getName() << std::endl;
-			static_cast<rfk::TemplateTemplateParameter const&>(param).foreachTemplateParameter([](rfk::TemplateParameter const& p, void* userData)
+			static_cast<rfk::TemplateTemplateParameter const&>(param).foreachTemplateParameter([](rfk::TemplateParameter const& p, void* /*userData*/)
 																							   {
 																								   printTemplateParameter(p);
 

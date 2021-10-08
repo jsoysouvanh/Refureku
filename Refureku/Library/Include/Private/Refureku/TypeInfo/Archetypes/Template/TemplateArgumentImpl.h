@@ -11,16 +11,12 @@
 
 namespace rfk
 {
-	class TemplateArgument::TemplateArgumentImpl final
+	class TemplateArgument::TemplateArgumentImpl
 	{
 		private:
 			/** Template parameter this argument is a value of. */
 			TemplateParameter const&	_boundParameter;
 			
-			/** Archetype used for a template argument. */
-			//TODO: Change THIS
-			Archetype const*			_archetype = nullptr;
-
 		public:
 			inline TemplateArgumentImpl(TemplateParameter const& boundParameter) noexcept;
 
