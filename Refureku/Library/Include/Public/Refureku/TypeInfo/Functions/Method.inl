@@ -39,7 +39,6 @@ ReturnType Method::checkedInvoke(CallerType& caller, ArgTypes&&... args) const
 {
 	checkReturnType<ReturnType>();
 	checkParameterTypes<ArgTypes...>();
-	//TODO: Add caller type check?
 
 	return invoke<ReturnType, CallerType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
 }
@@ -49,7 +48,6 @@ ReturnType Method::checkedInvoke(CallerType const& caller, ArgTypes&&... args) c
 {
 	checkReturnType<ReturnType>();
 	checkParameterTypes<ArgTypes...>();
-	//TODO: Add caller type check?
 
 	return invoke<ReturnType, CallerType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
 }

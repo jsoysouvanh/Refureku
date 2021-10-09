@@ -15,13 +15,16 @@
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>
+#include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h>
+#include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h>
+#include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h>
 
 namespace rfk { class Variable; class Function; }
 
 
 #define ParseAllNested_GENERATED	\
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct;\
-REFUREKU_API virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
+ virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 RFK_UNPACK_IF_NOT_PARSING(friend rfk::CodeGenerationHelpers;\
 friend implements_template1__rfk_registerChildClass<ParseAllNested, void, void(rfk::Struct&)>; \
 \
@@ -32,14 +35,14 @@ if constexpr (!std::is_same_v<ChildClass, ParseAllNested>) const_cast<rfk::Struc
 }\
 \
 \
-public: REFUREKU_API static rfk::Class const& staticGetArchetype() noexcept;\
+public:  static rfk::Class const& staticGetArchetype() noexcept;\
 \
-public: REFUREKU_API virtual rfk::Class const& getArchetype() const noexcept override;\
+public:  virtual rfk::Class const& getArchetype() const noexcept override;\
 \
 )\
 
 
 #define File_ParseAllNested_GENERATED	\
-template <> REFUREKU_API rfk::Archetype const* rfk::getArchetype<ParseAllNested>() noexcept;\
+template <>  rfk::Archetype const* rfk::getArchetype<ParseAllNested>() noexcept;\
 
 

@@ -918,9 +918,6 @@ void ReflectionCodeGenModule::fillClassTemplateArguments(kodgen::StructClassInfo
 		}
 
 		inout_result += "" + generatedEntityVarName + "addTemplateArgument(" + argVarName + ");" + env.getSeparator();
-
-		//inout_result += "type.addTemplateArgument(type.getClassTemplate().getTemplateParameterAt(" + std::to_string(i) + "),"
-		//	"rfk::getArchetype<" + structClass.type.getTemplateParameters()[i].type->getName() + ">());" + env.getSeparator();
 	}
 }
 

@@ -158,14 +158,12 @@ T const& Vector<T, Allocator>::back() const noexcept
 template <typename T, typename Allocator>
 T* Vector<T, Allocator>::data() noexcept
 {
-	//TODO: if using small vector, return _staticStorage instead
 	return _data;
 }
 
 template <typename T, typename Allocator>
 T const* Vector<T, Allocator>::data() const noexcept
 {
-	//TODO: if using small vector, return _staticStorage instead
 	return _data;
 }
 

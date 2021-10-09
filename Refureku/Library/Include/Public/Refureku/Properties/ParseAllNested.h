@@ -17,11 +17,8 @@
 *	@brief	Property used to automatically tag all directly nested entities as reflected.
 *			This property can only be attached to namespaces, structs and classes.
 */
-class RFKClass(PropertySettings(rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct)) ParseAllNested : public rfk::Property
+class REFUREKU_API RFKClass(PropertySettings(rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct)) ParseAllNested : public rfk::Property
 {
-	public:
-		REFUREKU_API virtual ~ParseAllNested() noexcept;
-
 	ParseAllNested_GENERATED
 };
 

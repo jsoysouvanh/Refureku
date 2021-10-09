@@ -248,7 +248,7 @@ void types()
 	TEST(!intType.isConst());
 	TEST(!intType.isLValueReference());
 	TEST(intType.isValue());
-	//TEST(intType.getArchetype() == rfk::getArchetype<int>());	//TODO: Uncomment later
+	TEST(intType.getArchetype() == rfk::getArchetype<int>());
 	TEST(intType.getTypePartsCount() == 1u);
 
 	rfk::Type const& floatConstPtrType = rfk::getType<float const*>();
@@ -260,7 +260,7 @@ void types()
 	TEST(!floatConstPtrType.isConst());
 	TEST(!floatConstPtrType.isLValueReference());
 	TEST(!floatConstPtrType.isValue());
-	//TEST(floatConstPtrType.getArchetype() == rfk::getArchetype<float>());	//TODO: Uncomment later
+	TEST(floatConstPtrType.getArchetype() == rfk::getArchetype<float>());
 	TEST(floatConstPtrType.getTypePartsCount() == 2u);
 	TEST(floatConstPtrType.getTypePartAt(1).isValue());
 	TEST(floatConstPtrType.getTypePartAt(1).isConst());

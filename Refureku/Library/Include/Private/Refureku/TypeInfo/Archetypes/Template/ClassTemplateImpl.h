@@ -33,14 +33,14 @@ namespace rfk
 			/**
 			*	@brief Add an template instantiation to _instantiations.
 			* 
-			*	//TODO
+			*	@param instantiation Template instantiation to add to _templateInstantiations.
 			*/
 			inline void																addTemplateInstantiation(ClassTemplateInstantiation const& instantiation)	noexcept;
 
 			/**
 			*	@brief Append a template parameter to _templateParameters.
 			* 
-			*	//TODO
+			*	@param param Template parameter to add to _templateParameters.
 			*/
 			inline void																addTemplateParameter(TemplateParameter const& param)							noexcept;
 

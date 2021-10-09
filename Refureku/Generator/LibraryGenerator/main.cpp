@@ -38,13 +38,12 @@ bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::Pa
 	codeGenMgrSettings.addIgnoredDirectory(outputDirectory);
 
 	result &= codeGenUnitSettings.setOutputDirectory(outputDirectory);
-	codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
-	codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
+	//codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
+	//codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
 
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 	parsingSettings.shouldParseAllEntities = false;
 	parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Public");
-	parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Private"); //TODO: Delete this once public API is fully implemented
 	result &= parsingSettings.setCompilerExeName("msvc");
 
 	parsingSettings.propertyParsingSettings.namespaceMacroName	= "RFKNamespace";

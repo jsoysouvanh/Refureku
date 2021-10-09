@@ -15,7 +15,7 @@
 /**
 *	@brief Property used to define basic settings of a property. Can't be used on structs or classes not inheriting from rfk::Property.
 */
-class RFKClass(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : public rfk::Property
+class REFUREKU_API RFKClass(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : public rfk::Property
 {
 	public:
 		/**
@@ -23,10 +23,9 @@ class RFKClass(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Cla
 		*	@param allowMultiple_		Is this property allowed to be attached multiple times to the same entity?
 		*	@param shouldInherit_		Should this property be inherited by children when used on structs/classes or virtual methods.
 		*/
-		REFUREKU_API PropertySettings(rfk::EEntityKind	targetEntityKind_,
-									  bool				allowMultiple_ = false,
-									  bool				shouldInherit_ = true)	noexcept;
-		REFUREKU_API virtual ~PropertySettings()								noexcept;
+		PropertySettings(rfk::EEntityKind	targetEntityKind_,
+						 bool				allowMultiple_ = false,
+						 bool				shouldInherit_ = true)	noexcept;
 
 	PropertySettings_GENERATED
 };
