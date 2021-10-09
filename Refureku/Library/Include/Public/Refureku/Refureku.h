@@ -31,5 +31,7 @@
 #include "Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateParameter.h"
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h"
 #include "Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h"
+#include "Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h"
+#include "Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h"
 
 #include "Refureku/Properties/Property.h"
