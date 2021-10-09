@@ -12,6 +12,7 @@
 #include <vector>
 #include <memory>	//std::shared_ptr
 #include <cassert>
+#include <iostream>
 
 #include "Refureku/TypeInfo/Database.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"

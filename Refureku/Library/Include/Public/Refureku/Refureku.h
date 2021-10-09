@@ -21,6 +21,7 @@
 #include "Refureku/TypeInfo/Functions/StaticMethod.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
+#include "Refureku/TypeInfo/Archetypes/FundamentalArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"

@@ -188,6 +188,17 @@ namespace rfk
 		static std::string			computeClassTemplateEntityId(kodgen::StructClassInfo const& class_,
 																 kodgen::EntityInfo const&		entity)					noexcept;
 
+		/**
+		*	@brief	Compute the id of a class nested entity.
+		*			The returned string will be evaluated to an id in the generated code.
+		* 
+		*	@param className	Name of the class.
+		*	@param entity		The class nested entity.
+		* 
+		*	@return The code that will be evaluated to an id in the generated code.
+		*/
+		static std::string			computeClassNestedEntityId(std::string					className,
+															   kodgen::EntityInfo const&	entity)						noexcept;
 
 		/**
 		*	@brief	All code generated from this point will be hidden to the parser.

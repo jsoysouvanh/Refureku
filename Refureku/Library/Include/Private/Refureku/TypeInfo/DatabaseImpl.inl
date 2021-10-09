@@ -153,7 +153,18 @@ void Database::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldU
 
 void Database::DatabaseImpl::registerEntityId(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
-	_entitiesById.emplace(&entity);
+	auto result = _entitiesById.emplace(&entity);
+
+	//std::cout << "Register: (" << entity.getId() << ", " << entity.getName() << ")" << std::endl;
+
+	//Emit a warning if 2 entities with the same ID are registered.
+	if (!result.second)
+	{
+		Entity const* foundEntity = *_entitiesById.find(&entity);
+
+		std::cout << "[Refureku] WARNING: Double registration detected: (" << entity.getId() << ", " << entity.getName() <<
+			") collides with entity: (" << foundEntity->getId() << ", " << foundEntity->getName() << ")" << std::endl;
+	}
 
 	if (shouldRegisterSubEntities)
 	{
@@ -210,14 +221,14 @@ inline void Database::DatabaseImpl::registerSubEntities(Struct const& s) noexcep
 					   reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(field, false);
 
 					   return true;
-				   }, this);
+				   }, this, true);
 
 	s.foreachStaticField([](StaticField const& staticField, void* userData)
 						 {
 							 reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(staticField, false);
 
 							 return true;
-						 }, this);
+						 }, this, true);
 
 	//Add methods
 	s.foreachMethod([](Method const& method, void* userData)
@@ -251,14 +262,14 @@ inline void Database::DatabaseImpl::unregisterSubEntities(Struct const& s) noexc
 					   reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(field, false);
 
 					   return true;
-				   }, this);
+				   }, this, true);
 
 	s.foreachStaticField([](StaticField const& staticField, void* userData)
 						 {
 							 reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(staticField, false);
 
 							 return true;
-						 }, this);
+						 }, this, true);
 
 	//Remove methods
 	s.foreachMethod([](Method const& method, void* userData)

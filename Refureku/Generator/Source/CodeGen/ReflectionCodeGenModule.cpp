@@ -430,7 +430,12 @@ bool ReflectionCodeGenModule::isPublicClass(kodgen::StructClassInfo const& class
 
 std::string ReflectionCodeGenModule::computeClassTemplateEntityId(kodgen::StructClassInfo const& class_, kodgen::EntityInfo const& entity) noexcept
 {
-	return "std::hash<std::string>()(std::string(\"" + entity.id + "\") + rfk::generated::getTypename<" + class_.type.getName() + ">())";
+	return computeClassNestedEntityId(class_.type.getName(), entity);
+}
+
+std::string ReflectionCodeGenModule::computeClassNestedEntityId(std::string className, kodgen::EntityInfo const& entity) noexcept
+{
+	return "std::hash<std::string>()(std::string(\"" + entity.id + "\") + rfk::generated::getTypename<" + std::move(className) + ">())";
 }
 
 void ReflectionCodeGenModule::beginHiddenGeneratedCode(kodgen::MacroCodeGenEnv& /*env*/, std::string& inout_result) noexcept
@@ -745,8 +750,10 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 		{
 			if (field.isStatic)
 			{
+				
+
 				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
-					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
+					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : computeClassNestedEntityId("ChildClass", field)) + ", " +
 					"rfk::getType<" + field.type.getName() + ">(), "
 					"static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 					"&" + structClass.name + "::" + field.name + ", "
@@ -757,7 +764,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			else
 			{
 				inout_result += "field = childClass.addField(\"" + field.name + "\", " +
-					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : std::to_string(_stringHasher(field.id)) + "u") + ", " +
+					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : computeClassNestedEntityId("ChildClass", field)) + ", " +
 					"rfk::getType<" + field.type.getName() + ">(), "
 					"static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 					"offsetof(ChildClass, " + field.name + "), "

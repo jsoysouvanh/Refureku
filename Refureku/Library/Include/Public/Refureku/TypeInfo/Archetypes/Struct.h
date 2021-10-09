@@ -49,12 +49,12 @@ namespace rfk
 			*			If one or more arguments are provided, the matching user-specified custom instantiator will be used.
 			*			**WARNING**: Memory is not auto-managed and must be freed manually by the user.
 			*
-			*	@return an instance of this struct if a suitable constructor (no params only) / custom instantator was found,
+			*	@return An instance of this struct if a suitable constructor (no params only) / custom instantator was found,
 			*			else nullptr.
 			* 
 			*	@exception Any exception potentially thrown by the used instantiator.
 			*/
-			template <typename ReturnType = void, typename... ArgTypes>
+			template <typename ReturnType, typename... ArgTypes>
 			ReturnType*														makeInstance(ArgTypes&&... args)													const;
 
 			/**

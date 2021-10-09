@@ -8,6 +8,7 @@
 template <typename ReturnType, typename... ArgTypes>
 ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 {
+	static_assert(!std::is_void_v<ReturnType>, "Returning void* is forbidden since deleting a void* pointer is undefined.");
 	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>);
 
 	if constexpr (sizeof...(args) == 0u)
