@@ -312,6 +312,9 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h>" + env.getSeparator() +							//TODO: Only when there is a template class
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h>" + env.getSeparator() +				//TODO: Only when there is a template class
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>" + env.getSeparator() +	//TODO: Only when there is a non-nested template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h>" + env.getSeparator() +
 					env.getSeparator();
 
 	//Forward declarations
@@ -848,7 +851,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateStaticGetArchetypeMet
 	//Set the default instantiator BEFORE filling the class methods since methods can overwrite the custom instantiator
 	inout_result += "type.setDefaultInstantiator(&rfk::internal::defaultInstantiator<" + structClass.type.getName() + ">);" + env.getSeparator();
 
-	fillClassTemplateArguments(structClass, env, inout_result);
+	fillClassTemplateArguments(structClass, "type.", env, inout_result);
 	fillEntityProperties(structClass, env, "type.", inout_result);
 	fillClassParents(structClass, env, "type.", inout_result);
 	fillClassFields(structClass, env, "type", inout_result);
@@ -879,14 +882,45 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	}
 }
 
-void ReflectionCodeGenModule::fillClassTemplateArguments(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
+void ReflectionCodeGenModule::fillClassTemplateArguments(kodgen::StructClassInfo const& structClass, std::string generatedEntityVarName, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	for (std::size_t i = 0; i < structClass.type.getTemplateParameters().size(); i++)
-	{
-		//TODO: this doesn't support auto
+	std::vector<kodgen::TemplateParamInfo> const& templateParameters = structClass.type.getTemplateParameters();
+	std::string boundParameterIndex;
+	std::string argVarName;
 
-		inout_result += "type.addTemplateArgument(type.getClassTemplate().getTemplateParameterAt(" + std::to_string(i) + "),"
-			"rfk::getArchetype<" + structClass.type.getTemplateParameters()[i].type->getName() + ">());" + env.getSeparator();
+	for (std::size_t i = 0; i < templateParameters.size(); i++)
+	{
+		boundParameterIndex = std::to_string(i);
+		argVarName = "arg" + boundParameterIndex;
+
+		//TODO: this doesn't support auto
+		switch (templateParameters[i].kind)
+		{
+			case kodgen::ETemplateParameterKind::TypeTemplateParameter:
+				inout_result += "static rfk::TypeTemplateArgument " + argVarName + "(" + generatedEntityVarName + "getClassTemplate().getTemplateParameterAt(" + boundParameterIndex + "), "
+					"rfk::getArchetype<" + templateParameters[i].name + ">());" + env.getSeparator();
+				break;
+
+			case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:
+				inout_result += "static constexpr auto const " + argVarName + "Value = " + templateParameters[i].name + ";" + env.getSeparator();
+				inout_result += "static rfk::NonTypeTemplateArgument " + argVarName + "(" + generatedEntityVarName + "getClassTemplate().getTemplateParameterAt(" + boundParameterIndex + "), "
+					"&" + argVarName + "Value);" + env.getSeparator();
+				break;
+
+			case kodgen::ETemplateParameterKind::TemplateTemplateParameter:
+				inout_result += "static rfk::TemplateTemplateArgument " + argVarName + "(" + generatedEntityVarName + "getClassTemplate().getTemplateParameterAt(" + boundParameterIndex + "), "
+					"reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<" + templateParameters[i].name + ">())->asTemplate());" + env.getSeparator();
+				break;
+
+			default:
+				assert(false);
+				break;
+		}
+
+		inout_result += "" + generatedEntityVarName + "addTemplateArgument(" + argVarName + ");" + env.getSeparator();
+
+		//inout_result += "type.addTemplateArgument(type.getClassTemplate().getTemplateParameterAt(" + std::to_string(i) + "),"
+		//	"rfk::getArchetype<" + structClass.type.getTemplateParameters()[i].type->getName() + ">());" + env.getSeparator();
 	}
 }
 

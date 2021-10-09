@@ -26,7 +26,17 @@ namespace rfk
 			* 
 			*	@return _boundParameter.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getBoundParameter()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getBoundParameter()		const	noexcept;
+
+			/**
+			*	@brief Check whether 2 TemplateArgument instances are equal or not.
+			* 
+			*	@param other The TemplateArgument to compare to.
+			* 
+			*	@return true if the 2 template arguments hold the same value, else false.
+			*/
+			RFK_NODISCARD REFUREKU_API bool	operator==(TemplateArgument const& other)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool	operator!=(TemplateArgument const& other)	const	noexcept;
 
 		protected:
 			//Forward declaration

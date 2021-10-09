@@ -13,7 +13,6 @@ namespace rfk
 {
 	//Forward declarations
 	class ClassTemplate;
-	class TemplateParameter;
 	class TemplateArgument;
 
 	class ClassTemplateInstantiation final : public Struct
@@ -31,7 +30,7 @@ namespace rfk
 			* 
 			*	@return The class template this instantiation is based on.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplate const&		getClassTemplate()									const	noexcept;
+			RFK_NODISCARD REFUREKU_API ClassTemplate const&		getClassTemplate()											const	noexcept;
 
 			/**
 			*	@brief	Retrieve the template argument at the given index.
@@ -41,23 +40,35 @@ namespace rfk
 			* 
 			*	@return The template parameter at the given index.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateArgument const&	getTemplateArgument(std::size_t index)				const	noexcept;
+			RFK_NODISCARD REFUREKU_API TemplateArgument const&	getTemplateArgumentAt(std::size_t index)					const	noexcept;
 
 			/**
 			*	@brief Get the total number of template arguments in this instantiation.
 			* 
 			*	@return The total number of template arguments in this instantiation..
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t				getTemplateArgumentsCount()							const	noexcept;
+			RFK_NODISCARD REFUREKU_API std::size_t				getTemplateArgumentsCount()									const	noexcept;
+
+			/**
+			*	@brief Execute the given visitor on all template arguments of this class.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool									foreachTemplateArgument(Visitor<TemplateArgument> visitor,
+																						void*					  userData)	const	noexcept;
 
 			/**
 			*	@brief Add a template argument to this instantiation
 			* 
-			*	@param parameter The template parameter bounded to this argument.
-			*	@param archetype The archetype of the template argument. //TODO: Change this to be able to store values as well
+			*	@param argument The template argument to add.
 			*/
-			REFUREKU_API void									addTemplateArgument(TemplateParameter const&	parameter,
-																					Archetype const*			archetype)	noexcept;
+			REFUREKU_API void									addTemplateArgument(TemplateArgument const& argument)				noexcept;
 
 		private:
 			//Forward declaration

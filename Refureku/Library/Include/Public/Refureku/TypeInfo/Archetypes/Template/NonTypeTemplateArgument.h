@@ -37,6 +37,17 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API void const* getValuePtr()	const	noexcept;
 
+			/**
+			*	@brief Check whether 2 NonTypeTemplateArgument instances are equal or not.
+			* 
+			*	@param other The NonTypeTemplateArgument to compare to.
+			* 
+			*	@return true if the 2 type template arguments have the same archetype, and values.
+			*			Returns false if the bound parameter archetype is nullptr, since the equality can't be guaranteed.
+			*/
+			RFK_NODISCARD REFUREKU_API bool	operator==(NonTypeTemplateArgument const& other)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool	operator!=(NonTypeTemplateArgument const& other)	const	noexcept;
+
 		protected:
 			//Forward declaration
 			class NonTypeTemplateArgumentImpl;

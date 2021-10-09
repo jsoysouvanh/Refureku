@@ -405,6 +405,7 @@ namespace rfk
 		*	TODO
 		*/
 		void	fillClassTemplateArguments(kodgen::StructClassInfo const&	structClass,
+										   std::string						generatedEntityVarName,
 										   kodgen::MacroCodeGenEnv&			env,
 										   std::string&						inout_result)											const	noexcept;
 

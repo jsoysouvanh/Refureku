@@ -28,6 +28,17 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API Archetype const* getArchetype() const noexcept;
 
+			/**
+			*	@brief Check whether 2 TypeTemplateArgument instances are equal or not.
+			* 
+			*	@param other The TypeTemplateArgument to compare to.
+			* 
+			*	@return true if the 2 type template arguments have the same archetype, else false.
+			*			Returns false if the archetype is nullptr, since the equality can't be guaranteed.
+			*/
+			RFK_NODISCARD REFUREKU_API bool	operator==(TypeTemplateArgument const& other)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool	operator!=(TypeTemplateArgument const& other)	const	noexcept;
+
 		protected:
 			//Forward declaration
 			class TypeTemplateArgumentImpl;

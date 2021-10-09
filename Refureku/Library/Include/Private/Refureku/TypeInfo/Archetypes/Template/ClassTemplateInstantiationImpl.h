@@ -12,8 +12,7 @@
 
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h"
 #include "Refureku/TypeInfo/Archetypes/StructImpl.h"
-#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateImpl.h"
-#include "Refureku/TypeInfo/Archetypes/Template/TemplateArgument.h"
+#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h"
 
 namespace rfk
 {
@@ -35,18 +34,25 @@ namespace rfk
 												  ClassTemplateInstantiation const&	backRef)			noexcept;
 
 			/**
+			*	@brief Add an argument to the list of template arguments.
+			* 
+			*	@param arg The template argument to add to this instantiation.
+			*/
+			inline void															addTemplateArgument(TemplateArgument const& arg)	noexcept;
+
+			/**
 			*	@brief Getter for the field _classTemplate.
 			* 
 			*	@return _classTemplate.
 			*/
-			RFK_NODISCARD inline ClassTemplate const&							getClassTemplate()		const	noexcept;
+			RFK_NODISCARD inline ClassTemplate const&							getClassTemplate()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _templateArguments.
 			* 
 			*	@return _templateArguments.
 			*/
-			RFK_NODISCARD inline std::vector<TemplateArgument const*> const&	getTemplateArguments()	const	noexcept;
+			RFK_NODISCARD inline std::vector<TemplateArgument const*> const&	getTemplateArguments()						const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationImpl.inl"

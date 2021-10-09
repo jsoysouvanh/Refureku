@@ -1,6 +1,7 @@
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h"
 
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationImpl.h"
+#include "Refureku/TypeInfo/Entity/EntityUtility.h"
 
 using namespace rfk;
 
@@ -17,9 +18,16 @@ ClassTemplate const& ClassTemplateInstantiation::getClassTemplate() const noexce
 	return reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getClassTemplate();
 }
 
-TemplateArgument const& ClassTemplateInstantiation::getTemplateArgument(std::size_t index) const noexcept
+TemplateArgument const& ClassTemplateInstantiation::getTemplateArgumentAt(std::size_t index) const noexcept
 {
 	return *reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments()[index];
+}
+
+bool ClassTemplateInstantiation::foreachTemplateArgument(Visitor<TemplateArgument> visitor, void* userData) const noexcept
+{
+	return EntityUtility::foreachEntity(reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments(),
+										visitor,
+										userData);
 }
 
 std::size_t ClassTemplateInstantiation::getTemplateArgumentsCount() const noexcept
@@ -27,7 +35,7 @@ std::size_t ClassTemplateInstantiation::getTemplateArgumentsCount() const noexce
 	return reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments().size();
 }
 
-void ClassTemplateInstantiation::addTemplateArgument(TemplateParameter const& /*parameter*/, Archetype const* /*archetype*/) noexcept
+void ClassTemplateInstantiation::addTemplateArgument(TemplateArgument const& argument) noexcept
 {
-	//TODO
+	reinterpret_cast<ClassTemplateInstantiationImpl*>(getPimpl())->addTemplateArgument(argument);
 }

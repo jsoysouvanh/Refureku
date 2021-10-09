@@ -11,7 +11,17 @@ TemplateTemplateArgument::TemplateTemplateArgument(TemplateParameter const& boun
 
 TemplateTemplateArgument::~TemplateTemplateArgument() noexcept = default;
 
-ClassTemplate const* TemplateTemplateArgument::getValue() const noexcept
+ClassTemplate const* TemplateTemplateArgument::getClassTemplate() const noexcept
 {
 	return reinterpret_cast<TemplateTemplateArgumentImpl const*>(getPimpl())->getValue();
+}
+
+bool TemplateTemplateArgument::operator==(TemplateTemplateArgument const& other) const noexcept
+{
+	return getClassTemplate() != nullptr && getClassTemplate() == other.getClassTemplate();
+}
+
+bool TemplateTemplateArgument::operator!=(TemplateTemplateArgument const& other) const noexcept
+{
+	return !(*this == other);
 }

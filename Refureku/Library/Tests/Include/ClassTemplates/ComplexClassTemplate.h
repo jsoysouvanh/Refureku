@@ -18,10 +18,10 @@ namespace rfk
 #endif
 }
 
-template <typename T, typename U, typename V>
+template <typename T, typename U>
 class RFKClass() TypeTemplateClass
 {
-	TypeTemplateClass_T_U_V_GENERATED
+	TypeTemplateClass_T_U_GENERATED
 };
 
 template <int Value, char Char, ETemplateTestEnum EnumValue>
@@ -38,6 +38,6 @@ class RFKClass() NonTypeTemplateClass
 
 File_ComplexClassTemplate_GENERATED
 
-template class RFKClass() TypeTemplateClass<int, float, double>;
+template class RFKClass() TypeTemplateClass<int, float>;
 template class RFKClass() NonTypeTemplateClass<4, 'a', ETemplateTestEnum::Value1>;
 //template class RFKClass() TemplateTemplateClass<TypeTemplateClass, TypeTemplateClass>;
