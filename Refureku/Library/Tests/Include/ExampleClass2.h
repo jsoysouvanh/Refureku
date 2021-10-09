@@ -4,6 +4,8 @@
 
 #include "Generated/ExampleClass2.rfkh.h"
 
+struct ExampleStruct;
+
 namespace namespace3 RFKNamespace(ParseAllNested)
 {
 	class RFKClass(ParseAllNested) AnotherClassInNamespace3
