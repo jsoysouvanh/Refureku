@@ -1,9 +1,7 @@
 # Refureku
 
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FRefureku.svg)](https://github.com/jsoysouvanh/Refureku/releases/latest)
-[![Linux](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_linux.yml/badge.svg?branch=master)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_linux.yml)
-[![Windows](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_windows.yml/badge.svg?branch=master)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_windows.yml)
-[![MacOS](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_macos.yml/badge.svg?branch=master)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_macos.yml)
+[![Build & Tests](https://github.com/jsoysouvanh/Refureku/actions/workflows/build_and_tests.yml/badge.svg?branch=master)](https://github.com/jsoysouvanh/Refureku/actions/workflows/build_and_tests.yml)
 
 
 **Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) for more documentation and use examples!**

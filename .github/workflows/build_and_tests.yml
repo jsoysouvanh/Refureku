@@ -1,0 +1,121 @@
+name: Build & Tests
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - CI-setup
+      - rework
+  workflow_dispatch:
+
+jobs:
+  build_windows_msvc:
+    name: Windows | MSVC
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Generate Project
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Visual Studio 16 2019" -A x64
+
+      - name: Build Refureku
+        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+
+      - name: Run Tests
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+
+  build_linux_gcc_clang:
+    name: Linux | Clang/GCC
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+        compiler: [clang++-7, clang++-8, clang++-9, clang++-10, clang++-11, g++-8, g++-9, g++-10, g++-11]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Install suitable compiler
+        run: sudo apt-get install ${{ matrix.compiler }}
+
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
+
+      - name: Install Valgrind
+        run: sudo apt-get install valgrind
+
+      - name: Substitute Compiler Name
+        uses: bluwy/substitute-string-action@v1
+        id: replace_compiler
+        with:
+          _input-text: ${{ matrix.compiler }}
+          clang++: 'clang'
+          g++: 'gcc'
+
+      - name: Setup Compiler
+        run: |
+          echo "CC=${{ steps.replace_compiler.outputs.result }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.compiler }}" >> $GITHUB_ENV
+
+      - name: Generate Project
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
+
+      - name: Build Refureku
+        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+
+      - name: Run Tests
+        run: |
+          cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -T memcheck -V
+          cat ./Testing/Temporary/MemoryChecker.*.log
+  
+  build_macos:
+    name: MacOS | Clang
+    runs-on: macos-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
+
+      - name: Generate Project
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
+
+      - name: Build Refureku
+        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+
+      - name: Run Tests
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
