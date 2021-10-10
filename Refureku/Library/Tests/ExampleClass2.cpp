@@ -1,1 +1,1 @@
-#include "ExampleClass2.h"
+#include "Generated/ExampleClass2.rfks.h"

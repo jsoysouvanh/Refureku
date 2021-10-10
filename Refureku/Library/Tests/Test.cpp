@@ -1,2 +1,1 @@
-#include "Test.h"
-
+#include "Generated/Test.rfks.h"

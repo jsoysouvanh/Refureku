@@ -1,10 +1,11 @@
 #pragma once
 
-#include <Refureku/Refureku.h>
 #include "ThirdPartyEnum.h"
+
+#include <Refureku/TypeInfo/Archetypes/Enum.h>
 
 namespace rfk
 {
 	template <>
-	rfk::Enum const* getEnum<ThirdPartyEnum>() noexcept;
+	rfk::Enum const* getEnumAPI<ThirdPartyEnum>() noexcept;
 }

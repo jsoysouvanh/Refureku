@@ -1,22 +1,26 @@
 #include "ThirdPartyEnumReflectionCode.h"
 
+#include <string_view>
+
+#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>
+#include <Refureku/TypeInfo/Type.h>
+
 //Register the enum to the database
-rfk::ArchetypeRegisterer NonReflectedEnumRegisterer = rfk::getEnum<ThirdPartyEnum>();
+rfk::ArchetypeRegisterer NonReflectedEnumRegisterer = *rfk::getEnumAPI<ThirdPartyEnum>();
 
 template <>
-rfk::Enum const* rfk::getEnum<ThirdPartyEnum>() noexcept
+rfk::Enum const* rfk::getEnumAPI<ThirdPartyEnum>() noexcept
 {
 	static bool			initialized = false;
-	static rfk::Enum	type("ThirdPartyEnum", std::hash<std::string>()("ThirdPartyEnum"), sizeof(ThirdPartyEnum), rfk::Type::getType<uint16_t>());
+	static rfk::Enum	type("ThirdPartyEnum", std::hash<std::string_view>()("ThirdPartyEnum"), rfk::getArchetype<uint16_t>());
 
 	if (!initialized)
 	{
 		initialized = true;
 
-		type.values.reserve(2);
-
-		type.addEnumValue("Value1", std::hash<std::string>()("ThirdPartyEnum@Value1"), 0u);
-		type.addEnumValue("Value2", std::hash<std::string>()("ThirdPartyEnum@Value2"), 2u);
+		type.setEnumValuesCapacity(2);
+		type.addEnumValue("Value1", std::hash<std::string_view>()("ThirdPartyEnum@Value1"), 0u);
+		type.addEnumValue("Value2", std::hash<std::string_view>()("ThirdPartyEnum@Value2"), 2u);
 	}
 
 	return &type;

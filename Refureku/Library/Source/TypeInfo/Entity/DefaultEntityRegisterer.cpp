@@ -1,21 +1,12 @@
 #include "Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h"
 
-#include "Refureku/TypeInfo/Database.h"
+#include "Refureku/TypeInfo/Entity/DefaultEntityRegistererImpl.h"
 
 using namespace rfk;
 
-DefaultEntityRegisterer::DefaultEntityRegisterer(Entity const* entity) noexcept:
-	_registeredEntity{entity}
+DefaultEntityRegisterer::DefaultEntityRegisterer(Entity const& entity) noexcept:
+	_pimpl(new internal::DefaultEntityRegistererImpl(entity))
 {
-	//Entities which are not at file level should not be registered
-	assert(_registeredEntity->outerEntity == nullptr);
-
-	//Register to database
-	Database::registerFileLevelEntity(*entity, false);
 }
 
-DefaultEntityRegisterer::~DefaultEntityRegisterer()noexcept
-{
-	//Unregister from database
-	Database::unregisterEntity(*_registeredEntity, false);
-}
+DefaultEntityRegisterer::~DefaultEntityRegisterer() noexcept = default;

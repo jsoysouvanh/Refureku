@@ -4,7 +4,7 @@
 
 #include <Refureku/Object.h>
 
-#include "Generated/CustomString.rfk.h"
+#include "Generated/CustomString.rfkh.h"
 
 class RFKClass() String : protected std::string, public rfk::Object
 {
@@ -18,4 +18,4 @@ class RFKClass() String : protected std::string, public rfk::Object
 	String_GENERATED
 };
 
-File_GENERATED
+File_CustomString_GENERATED

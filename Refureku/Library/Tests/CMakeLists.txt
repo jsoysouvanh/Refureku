@@ -11,8 +11,19 @@ add_executable(${RefurekuTestsTarget}
 					ExampleClass.cpp
 					ExampleClass2.cpp
 					CustomString.cpp
+					CustomProperties.cpp
 					ThirdPartyEnumReflectionCode.cpp
 					Test.cpp
+					Vector3.cpp
+					AB.cpp
+					GeneratedCodeInCpp.cpp
+
+					ClassTemplates/TestClassAB.cpp
+					ClassTemplates/SingleTypeTemplateClassTemplate.cpp
+					ClassTemplates/MultipleTypeTemplateClassTemplate.cpp
+					ClassTemplates/ComplexClassTemplate.cpp
+
+					ReworkTest.cpp
 
 					RefurekuTests.cpp
 				)
@@ -20,13 +31,18 @@ add_executable(${RefurekuTestsTarget}
 # Link to RefurekuLibrary
 target_link_libraries(${RefurekuTestsTarget} PRIVATE ${RefurekuLibraryTarget})
 
+if (MSVC)
+else()
+	target_compile_options(${RefurekuTestsTarget} PRIVATE -fno-rtti)
+endif()
+
 # Create the command to run RefurekuGenerator
 set(RefurekuGeneratorExeName RefurekuGenerator)
 set(RunTestGeneratorTarget RunRefurekuTestGenerator)
 
 add_custom_target(${RunTestGeneratorTarget}
 					WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-					COMMAND ${RefurekuGeneratorExeName})
+					COMMAND ${RefurekuGeneratorExeName} ${PROJECT_SOURCE_DIR}/RefurekuTestsSettings.toml)
 
 # Run the RefurekuGenerator BEFORE building the project to refresh generated files
 add_dependencies(${RefurekuTestsTarget} ${RunTestGeneratorTarget})

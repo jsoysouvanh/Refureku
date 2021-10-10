@@ -2,18 +2,19 @@
 
 #include "ExampleClass.h"
 
-#include "Generated/ExampleClass2.rfk.h"
+#include "Generated/ExampleClass2.rfkh.h"
+
+struct ExampleStruct;
 
 namespace namespace3 RFKNamespace(ParseAllNested)
 {
 	class RFKClass(ParseAllNested) AnotherClassInNamespace3
 	{
-
-		AnotherClassInNamespace3_GENERATED
+		namespace3_AnotherClassInNamespace3_GENERATED
 	};
 
 	RFKFunction()
-	inline void functionInsideNamespace(int i) { i; } 
+	inline void functionInsideNamespace(int i [[maybe_unused]]) {}
 
 	RFKFunction()
 	int function1(int i) { return i; }
@@ -26,7 +27,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 }
 
 RFKFunction() 
-static void functionInsideGlobalScope(float j) { j; } 
+static void functionInsideGlobalScope(float j [[maybe_unused]]) {}
 
 RFKFunction()
 int function1(int i) { return i; }
@@ -63,4 +64,4 @@ namespace ExampleNamespace RFKNamespace()
 	void functionInsideNamespace() { }
 }
 
-File_GENERATED
+File_ExampleClass2_GENERATED

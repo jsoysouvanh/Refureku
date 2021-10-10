@@ -1,7 +1,8 @@
 # Refureku
 
 [![Latest Release](https://badge.fury.io/gh/jsoysouvanh%2FRefureku.svg)](https://github.com/jsoysouvanh/Refureku/releases/latest)
-[![Build Status](https://travis-ci.com/jsoysouvanh/Refureku.svg?branch=master)](https://travis-ci.com/jsoysouvanh/Refureku)
+[![Linux](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_linux.yml/badge.svg)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_linux.yml)
+[![Windows](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_windows.yml/badge.svg)](https://github.com/jsoysouvanh/Refureku/actions/workflows/run_tests_windows.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/ba0bf8ff67cf47c498409aef31b88700)](https://www.codacy.com/manual/jsoysouvanh/Refureku?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsoysouvanh/Refureku&amp;utm_campaign=Badge_Grade)
 
 **Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) for more documentation and use examples!**
@@ -184,9 +185,9 @@ If you compile your program in debug mode, your compiler might complain about li
 
 ## Cross-platform compatibility
 This library has been tested and is stable on the following configurations:
-- Windows Server version 1809 | MSVC 19.16.27041.0
-- Linux 18.04 | Clang 7.0.0, Clang 8.0.0, Clang 9.0.0, Clang 10.0.1
-- Linux 18.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.1.0
+- Microsoft Windows Server 2019 | MSVC 19.28.29912.0
+- Linux 20.04 | Clang 7.0.1, Clang 8.0.1, Clang 9.0.1, Clang 10.0.0
+- Linux 20.04 | GCC 8.4.0, GCC 9.3.0, GCC 10.2.0
 
 ## Planned features
 

@@ -1,20 +1,14 @@
-[FileGenerationSettings]
-# Generated files will use this extension
-generatedFilesExtension = ".rfk.h"
-
+[CodeGenManagerSettings]
 # List of supported extensions
 supportedExtensions = [".h", ".hpp"]
 
-# Generated files will be located here
-outputDirectory = '''Path/To/Output/Dir'''
-
 # Files contained in the directories of this list will be parsed
-toParseDirectories = [
+toProcessDirectories = [
 #	'''Path/To/Directory/To/Parse'''
 ]
 
 # Files to parse which are not included in any directory of toParseDirectories
-toParseFiles = []
+toProcessFiles = []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories = [
@@ -26,13 +20,12 @@ ignoredDirectories = [
 ignoredFiles = []
 
 
-[FileParsingSettings]
-# Abort parsing on first encountered error
-shouldAbortParsingOnFirstError = true
+[CodeGenUnitSettings]
+# Generated files will be located here
+outputDirectory = '''Path/To/Output/Dir'''
 
-# Should all entities be parsed whether they are tagged with the macro or not
-shouldParseAllEntities = false
 
+[ParsingSettings]
 # Include directories of the project
 projectIncludeDirectories = [
 #	'''Path/To/RefurekuLibrary/Include''',
@@ -42,11 +35,25 @@ projectIncludeDirectories = [
 # Must be one of "msvc", "clang++", "g++"
 compilerExeName = "clang++"
 
-[FileParsingSettings.Properties]
-namespaceMacroName = "RFKNamespace"
-classmacroName = "RFKClass"
-structMacroName = "RFKStruct"
-fieldMacroName = "RFKField"
-methodMacroName = "RFKMethod"
-enumMacroName = "RFKEnum"
-enumValueMacroName = "RFKEnumVal"
+# Abort parsing on first encountered error
+shouldAbortParsingOnFirstError = true
+
+# Should all entities be parsed whether they are tagged with the macro or not
+shouldParseAllEntities = false
+
+shouldLogDiagnostic = false
+
+propertySeparator = ","
+subPropertySeparator = ","
+subPropertyStartEncloser = "("
+subPropertyEndEncloser = ")"
+
+namespaceMacroName = "Namespace"
+classMacroName = "Class"
+structMacroName = "Struct"
+variableMacroName = "Variable"
+fieldMacroName = "Field"
+functionMacroName = "Function"
+methodMacroName = "Method"
+enumMacroName = "Enum"
+enumValueMacroName = "EnumValue"

@@ -1,15 +1,27 @@
 #pragma once
 
-#include <Refureku/TypeInfo/Properties/PropertySettings.h>
+#include <Refureku/Properties/PropertySettings.h>
 
-constexpr rfk::EEntityKind all = (rfk::EEntityKind)~0;
+#include "Generated/Test.rfkh.h"
 
-#include "Generated/Test.rfk.h"
+constexpr rfk::EEntityKind all = (rfk::EEntityKind)~0; 
 
 struct RFKStruct(PropertySettings(all))
 	TestProperty : public rfk::Property
 {
 	TestProperty_GENERATED
+};
+
+struct RFKStruct(PropertySettings(all, false, false))
+    TestProperty2 : public rfk::Property
+{
+    TestProperty2_GENERATED 
+};
+
+struct RFKStruct(PropertySettings(all))
+    TestProperty3 : public rfk::Property
+{
+    TestProperty3_GENERATED
 };
 
 struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Variable))
@@ -26,4 +38,4 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Va
     Slider_GENERATED
 };
 
-File_GENERATED
+File_Test_GENERATED

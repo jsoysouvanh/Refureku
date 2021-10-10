@@ -1,9 +1,13 @@
 #pragma once
 
+#include <iostream>
+
 #include <Refureku/NativeProperties.h>
 #include <Refureku/Object.h>
 
-#include "Generated/ExampleClass.rfk.h"
+#include "Vector3.h"
+
+#include "Generated/ExampleClass.rfkh.h"
 
 namespace namespace1
 {
@@ -11,10 +15,12 @@ namespace namespace1
 	class ParentParentParentClass 
 	{
 		private:
-			double pppDouble = 0.21;
+			double pppDouble;
 
 		public:
-			ParentParentParentClass() noexcept {} 
+			ParentParentParentClass() noexcept:
+				pppDouble{0.21}
+			{}
 	};
 }
 
@@ -29,18 +35,18 @@ namespace namespace2 RFKNamespace()
 		public:
 			ParentParentClass() noexcept {} 
 
-		ParentParentClass_GENERATED
+		namespace2_ParentParentClass_GENERATED
 	};
 }
 
+//Forward declaration
+class D;
+
 namespace namespace3 RFKNamespace(ParseAllNested)
 {
-	//Forward declaration
-	//class AnotherClassInNamespace3;
-
 	class RFKClass() OtherClass : public rfk::Object
 	{
-		OtherClass_GENERATED
+		namespace3_OtherClass_GENERATED
 	};
 
 	class RFKClass() ParentClass : public namespace2::ParentParentClass
@@ -60,7 +66,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			ParentClass(ParentClass const&)	= default;
 			ParentClass(ParentClass&& o)	= default;
 
-		ParentClass_GENERATED
+		namespace3_ParentClass_GENERATED
 	};
 	
 	std::ostream& operator<<(std::ostream& stream, ParentClass const& object) noexcept;
@@ -74,7 +80,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 		public:
 			ParentClass2() noexcept { }
 
-		ParentClass2_GENERATED
+		namespace3_ParentClass2_GENERATED
 	};
 
 	class RFKClass() ExampleClass : public ParentClass, public ParentClass2
@@ -86,7 +92,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 					RFKField()
 					int i = 0;
 
-				NestedExampleClass_GENERATED 
+				namespace3_ExampleClass_NestedExampleClass_GENERATED
 			};
 		
 		protected:
@@ -96,7 +102,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 					RFKMethod()
 					void foo() { }
 
-				NestedExampleStruct_GENERATED
+				namespace3_ExampleClass_NestedExampleStruct_GENERATED
 			};
 
 		public:
@@ -138,16 +144,22 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			RFKField()
 			int const*		c[2][3];
 
+			RFKField()
+			Vector3f		vec3;
+
+			RFKField()
+			Vector3f const*	vec3ptr				= nullptr;
+
 			RFKMethod()
 			unsigned long long	method4(void* ptr);
 
 			RFKMethod()
 			virtual int	method1() const noexcept override final;
 
-			RFKMethod(CustomInstantiator)
+			RFKMethod(Instantiator)
 			static ExampleClass* customInstantiator(int, float) noexcept { return new ExampleClass(); }
 
-			RFKMethod(CustomInstantiator)
+			RFKMethod(Instantiator)
 			static ExampleClass* replaceDefaultInstantiator() noexcept
 			{
 				ExampleClass* result = new ExampleClass();
@@ -198,15 +210,15 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			RFKMethod()
 			void	methodWithClassParam(ParentClass pc) {}
 
-			//RFKMethod()
-			//void	methodWithForwardDeclaredParam(AnotherClassInNamespace3*) {}
+			RFKMethod()
+			void	methodWithForwardDeclaredParam(D*);
 
-		ExampleClass_GENERATED
+		namespace3_ExampleClass_GENERATED
 	};
 
 	class RFKClass() ExampleClass2
 	{
-		RFKMethod(CustomInstantiator)
+		RFKMethod(Instantiator)
 		static ExampleClass2* customInstantiator(int i) noexcept { return new ExampleClass2(i); }
 
 		ExampleClass2() = delete;
@@ -218,7 +230,7 @@ namespace namespace3 RFKNamespace(ParseAllNested)
 			RFKField()
 			int i = 0;
 
-		ExampleClass2_GENERATED
+		namespace3_ExampleClass2_GENERATED
 	};
 
 	enum class RFKEnum() ExampleEnum : uint8_t
@@ -248,12 +260,12 @@ namespace parse_all_nested_namespace RFKNamespace(ParseAllNested)
 {
 	class NestedClass1
 	{
-		NestedClass1_GENERATED
+		parse_all_nested_namespace_NestedClass1_GENERATED
 	};
 
 	struct NestedStruct1
 	{
-		NestedStruct1_GENERATED
+		parse_all_nested_namespace_NestedStruct1_GENERATED
 	};
 
 	enum class NestedEnum1
@@ -281,4 +293,4 @@ class RFKClass(ParseAllNested) ABC
 	ABC_GENERATED
 };
 
-File_GENERATED 
+File_ExampleClass_GENERATED

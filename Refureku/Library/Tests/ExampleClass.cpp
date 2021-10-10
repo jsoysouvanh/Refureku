@@ -1,7 +1,9 @@
-#include "ExampleClass.h"
-
 #include <iostream>
 #include <cstdint>
+
+#include "AB.h"
+
+#include "Generated/ExampleClass.rfks.h"
 
 using namespace namespace1;
 using namespace namespace2;
@@ -74,6 +76,11 @@ int ExampleClass::staticMethod3(char const* param)
 int ExampleClass::staticMethod3(int p1, int p2) noexcept
 {
 	return p1 + p2;
+}
+
+void ExampleClass::methodWithForwardDeclaredParam(D*)
+{
+	std::cout << "ExampleClass::methodWithForwardDeclaredParam()" << std::endl;
 }
 
 std::ostream& namespace3::operator<<(std::ostream& stream, ParentClass const& object) noexcept

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <utility>	//std::move
+#include <string>
 
-#include <Refureku/TypeInfo/Properties/PropertySettings.h>
+#include <Refureku/Properties/PropertySettings.h>
 
-#include "Generated/CustomProperties.rfk.h"
+#include "Generated/CustomProperties.rfkh.h"
 
 struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Class, false, true)) CustomProperty : public rfk::Property
 {
@@ -22,7 +23,7 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Field | rfk::EEntityKind::Cl
 
 struct RFKStruct(PropertySettings(rfk::EEntityKind::Class, true, false)) CustomProperty2 : public CustomProperty
 {
-	CustomProperty2_GENERATED 
+	CustomProperty2_GENERATED
 };
 
 struct RFKStruct(PropertySettings(rfk::EEntityKind::Method | rfk::EEntityKind::Function)) Tooltip : public rfk::Property 
@@ -36,4 +37,4 @@ struct RFKStruct(PropertySettings(rfk::EEntityKind::Method | rfk::EEntityKind::F
 	Tooltip_GENERATED
 };
 
-File_GENERATED
+File_CustomProperties_GENERATED
