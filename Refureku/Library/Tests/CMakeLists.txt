@@ -41,8 +41,8 @@ set(RefurekuGeneratorExeName RefurekuGenerator)
 set(RunTestGeneratorTarget RunRefurekuTestGenerator)
 
 add_custom_target(${RunTestGeneratorTarget}
-					WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-					COMMAND ${RefurekuGeneratorExeName} ${PROJECT_SOURCE_DIR}/RefurekuTestsSettings.toml)
+					WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+					COMMAND "${RefurekuGeneratorExeName}" "${PROJECT_SOURCE_DIR}/RefurekuTestsSettings.toml")
 
 # Run the RefurekuGenerator BEFORE building the project to refresh generated files
 add_dependencies(${RefurekuTestsTarget} ${RunTestGeneratorTarget})

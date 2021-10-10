@@ -1,8 +1,6 @@
 #include <utility>	//std::forward
 
-#include <Kodgen/Misc/Filesystem.h>
 #include <Kodgen/Misc/DefaultLogger.h>
-#include <Kodgen/Parsing/FileParser.h>
 #include <Kodgen/CodeGen/Macro/MacroCodeGenUnit.h>
 
 #include "RefurekuGenerator/Parsing/FileParser.h"
@@ -128,7 +126,7 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	codeGenUnit.setSettings(codeGenUnitSettings);
 	
 	rfk::ReflectionCodeGenModule reflectionCodeGenModule;	
-	codeGenUnit.addModule(reflectionCodeGenModule);		
+	codeGenUnit.addModule(reflectionCodeGenModule);
 
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
