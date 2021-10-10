@@ -1,5 +1,7 @@
 #include "Refureku/TypeInfo/Entity/Entity.h"
 
+#include <cstring>	//std::strcmp
+
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 
@@ -58,6 +60,14 @@ Property const* Entity::getProperty(Struct const& archetype, bool isChildClassVa
 	return nullptr;
 }
 
+Property const* Entity::getPropertyByName(char const* name) const noexcept
+{
+	return getPropertyByPredicate([](Property const& prop, void* userData)
+								  {
+									  return std::strcmp(prop.getArchetype().getName(), *reinterpret_cast<char const**>(userData)) == 0; 
+								  }, &name);
+}
+
 Property const* Entity::getPropertyByPredicate(Predicate<Property> predicate, void* userData) const
 {
 	for (Property const* prop : _pimpl->getProperties())
@@ -100,6 +110,14 @@ Vector<Property const*> Entity::getProperties(Struct const& archetype, bool isCh
 	}
 
 	return result;
+}
+
+Vector<Property const*> Entity::getPropertiesByName(char const* name) const noexcept
+{
+	return getPropertiesByPredicate([](Property const& prop, void* userData)
+									{
+										return std::strcmp(prop.getArchetype().getName(), *reinterpret_cast<char const**>(userData)) == 0; 
+									}, &name);
 }
 
 Vector<Property const*> Entity::getPropertiesByPredicate(Predicate<Property> predicate, void* userData) const

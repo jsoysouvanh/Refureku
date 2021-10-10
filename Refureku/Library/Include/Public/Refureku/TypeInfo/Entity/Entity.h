@@ -62,6 +62,15 @@ namespace rfk
 																			bool			isChildClassValid = true)		const	noexcept;
 
 			/**
+			*	@brief Retrieve the first property named with the provided name.
+			* 
+			*	@param name Name of the property to retrieve.
+			* 
+			*	@return The first property named with the provided name if any, else nullptr.
+			*/
+			RFK_NODISCARD REFUREKU_API Property const*			getPropertyByName(char const* name)							const	noexcept;
+
+			/**
 			*	@brief Retrieve a property matching with a predicate.
 			*	
 			*	@param predicate	Predicate returning true for any matching property.
@@ -97,6 +106,15 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getProperties(Struct const&	archetype,
 																			  bool			isChildClassValid = true)		const	noexcept;
+
+			/**
+			*	@brief Retrieve all properties named with the provided name.
+			* 
+			*	@param name Name of the properties to retrieve.
+			* 
+			*	@return A collection of all properties named with the provided name.
+			*/
+			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getPropertiesByName(char const* name)						const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with a predicate in this entity.

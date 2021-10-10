@@ -71,11 +71,16 @@ namespace rfk
 		template <typename T>
 		static constexpr auto const& getRawTypename() noexcept
 		{
+__RFK_DISABLE_WARNING_PUSH
+__RFK_DISABLE_WARNING_LANGUAGE_EXTENSION_TOKEN
+
 #ifdef _MSC_VER
 			return __FUNCSIG__;
 #else
 			return __PRETTY_FUNCTION__;
 #endif
+
+__RFK_DISABLE_WARNING_POP
 		}
 
 		/**

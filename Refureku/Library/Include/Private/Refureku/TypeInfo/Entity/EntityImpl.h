@@ -33,7 +33,7 @@ namespace rfk
 			*	The outer entity is the entity in which this entity has been declared.
 			*	If this entity is declared at file level, outerEntity will be nullptr.
 			*/
-			Entity const*				_outerEntity;
+			Entity const*					_outerEntity;
 
 			/** Kind of this entity. */
 			EEntityKind						_kind;
@@ -109,7 +109,7 @@ namespace rfk
 			* 
 			*	@param outerEntity The outer entity to set.
 			*/
-			inline void									setOuterEntity(Entity const* outerEntity)			noexcept;
+			inline void									setOuterEntity(Entity const* outerEntity)				noexcept;
 
 			/**
 			*	@brief	Set the number of properties for this entity.
