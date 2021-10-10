@@ -326,7 +326,7 @@ Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, b
 	StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
 	Method const*		result		= nullptr;
 
-	bool foundMethod = EntityUtility::foreachEntityNamed(structImpl->getMethods(),
+	bool foundMethod = !EntityUtility::foreachEntityNamed(structImpl->getMethods(),
 									  name,
 									  [&result, minFlags](Method const& method)
 									  {

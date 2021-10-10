@@ -39,7 +39,7 @@ Archetype const* getArchetype() noexcept
 		}
 		else if constexpr (std::is_enum_v<RawType>)
 		{
-			return getEnumAPI<RawType>();
+			return getEnum<RawType>();
 		}
 		else
 		{

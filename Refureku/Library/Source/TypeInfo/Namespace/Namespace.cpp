@@ -26,7 +26,7 @@ Namespace const* Namespace::getNamespaceByPredicate(Predicate<Namespace> predica
 		nullptr;
 }
 
-Vector<Namespace const*>	Namespace::getNamespacesByPredicate(Predicate<Namespace> predicate, void* userData) const
+Vector<Namespace const*> Namespace::getNamespacesByPredicate(Predicate<Namespace> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
 		EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(),

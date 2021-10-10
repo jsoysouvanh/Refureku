@@ -7,5 +7,5 @@
 namespace rfk
 {
 	template <>
-	rfk::Enum const* getEnumAPI<ThirdPartyEnum>() noexcept;
+	rfk::Enum const* getEnum<ThirdPartyEnum>() noexcept;
 }

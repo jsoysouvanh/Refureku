@@ -6,7 +6,7 @@
 */
 
 template <typename T, typename>
-rfk::Enum const* getEnumAPI() noexcept
+rfk::Enum const* getEnum() noexcept
 {
 	return nullptr;
 }

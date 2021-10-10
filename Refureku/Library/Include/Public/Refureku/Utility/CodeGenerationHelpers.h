@@ -50,7 +50,7 @@ namespace rfk
 	{
 	};
 
-	namespace generated
+	namespace internal
 	{
 		struct RawTypenameFormat
 		{
@@ -92,17 +92,17 @@ __RFK_DISABLE_WARNING_POP
 		*/
 		static constexpr bool getCompilerRawTypenameFormat(RawTypenameFormat* out_format) noexcept
 		{
-			constexpr auto const& rawTypename = rfk::generated::getRawTypename<int>();
+			constexpr auto const& rawTypename = getRawTypename<char>();
 
-			for (std::size_t i = 0;; i++)
+			for (std::size_t i = 0u;; i++)
 			{
 				//Detect the "int" chars in the raw type name
-				if (rawTypename[i] == 'i' && rawTypename[i+1] == 'n' && rawTypename[i+2] == 't')
+				if (rawTypename[i] == 'c' && rawTypename[i+1] == 'h' && rawTypename[i+2] == 'a' && rawTypename[i+3] == 'r')
 				{
 					if (out_format != nullptr)
 					{
 						out_format->leadingCharsCount = i;
-						out_format->trailingCharsCount = sizeof(rawTypename) - i - 3 - 1; // 3 to consume the "int" part, 1 for the string null terminator.
+						out_format->trailingCharsCount = sizeof(rawTypename) - i - 4 - 1; // 4 to consume the "char" part, 1 for the string null terminator.
 					}
 
 					return true;

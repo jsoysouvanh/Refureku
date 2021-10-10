@@ -6,10 +6,10 @@
 #include <Refureku/TypeInfo/Type.h>
 
 //Register the enum to the database
-rfk::ArchetypeRegisterer NonReflectedEnumRegisterer = *rfk::getEnumAPI<ThirdPartyEnum>();
+rfk::ArchetypeRegisterer NonReflectedEnumRegisterer = *rfk::getEnum<ThirdPartyEnum>();
 
 template <>
-rfk::Enum const* rfk::getEnumAPI<ThirdPartyEnum>() noexcept
+rfk::Enum const* rfk::getEnum<ThirdPartyEnum>() noexcept
 {
 	static bool			initialized = false;
 	static rfk::Enum	type("ThirdPartyEnum", std::hash<std::string_view>()("ThirdPartyEnum"), rfk::getArchetype<uint16_t>());
