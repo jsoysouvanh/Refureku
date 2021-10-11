@@ -1,0 +1,38 @@
+name: Documentation
+
+on:
+  push:
+    tags:
+    - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  docs-gen:
+    name: Doxygen
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      - name: "Clone Doxygen Awesome CSS"
+        uses: actions/checkout@v2
+        with:
+          repository: jothepro/doxygen-awesome-css
+          ref: v1.6.0
+          path: "doxygen-awesome-css"
+
+      - name: Compute version
+        id: version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      
+      - name: "Run Doxygen"
+        uses: mattnotmitt/doxygen-action@v1.1.0
+
+      - name: "Deploy Documentation"
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
+          allow_empty_commit: true
+          full_commit_message: "Deploy ${{ steps.version.outputs.VERSION }} Documentation"
