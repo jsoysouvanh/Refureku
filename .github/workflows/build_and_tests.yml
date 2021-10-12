@@ -130,8 +130,7 @@ jobs:
           mkdir RefurekuBinaries/Linux/Lib
           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Linux/Bin/
           mv Build/Release/Bin/libRefureku.so RefurekuBinaries/Linux/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so RefurekuBinaries/Linux/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/
+          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/libclang.so
           mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenRelease.a
           mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibRelease.a
 
@@ -240,24 +239,24 @@ jobs:
       - name: Build Linux Binaries Archive
         run: |
           cp -R RefurekuBinaries/Include RefurekuBinaries/Linux
-          cp RefurekuBinaries/* RefurekuBinaries/Linux
-          tar -czvf rfk_test_linux.tar.gz RefurekuBinaries/Linux/*
+          cp RefurekuBinaries/* RefurekuBinaries/Linux 2>/dev/null || :
+          tar -czvf rfk_test_linux.tar.gz --directory RefurekuBinaries/Linux .
 
       - name: Build Windows Binaries Archive
         run: |
           cp -R RefurekuBinaries/Include RefurekuBinaries/Windows
-          cp RefurekuBinaries/* RefurekuBinaries/Windows
-          zip -r rfk_test_windows.zip RefurekuBinaries/Windows/*
+          cp RefurekuBinaries/* RefurekuBinaries/Windows 2>/dev/null || :
+          (cd RefurekuBinaries/Windows && zip -r - .) > rfk_test_windows.zip
 
       - name: Build MacOS Binaries Archive
         run: |
           cp -R RefurekuBinaries/Include RefurekuBinaries/Mac
-          cp RefurekuBinaries/* RefurekuBinaries/Mac
-          tar -czvf rfk_test_macos.tar.gz RefurekuBinaries/Mac/*
+          cp RefurekuBinaries/* RefurekuBinaries/Mac 2>/dev/null || :
+          tar -czvf rfk_test_macos.tar.gz --directory RefurekuBinaries/Mac .
 
       - name: Publish Release Draft
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+#        if: startsWith(github.ref, 'refs/tags/')
         with:
           draft: true
           files: |
