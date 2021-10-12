@@ -35,7 +35,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Archive (Release)
-        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Windows/
@@ -52,15 +52,15 @@ jobs:
           mv Build/Release/Lib/Release/Kodgen.lib RefurekuBinaries/Windows/Lib/KodgenRelease.lib
           mv Build/Release/Lib/Release/RefurekuGeneratorLib.lib RefurekuBinaries/Windows/Lib/RefurekuGeneratorLibRelease.lib
 
-      - name: Setup Binaries Archive (Debug) # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
-        if: matrix.build_config == 'Debug'
+      - name: Setup Binaries Archive (Debug)
+        if: matrix.build_config == 'Debug' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir -p RefurekuBinaries/Windows/Lib
           mv Build/Debug/Lib/Debug/Kodgen.lib RefurekuBinaries/Windows/Lib/KodgenDebug.lib
           mv Build/Debug/Lib/Debug/RefurekuGeneratorLib.lib RefurekuBinaries/Windows/Lib/RefurekuGeneratorLibDebug.lib
 
       - name: Update Binaries Artifact
-#        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')  #Push tag or manual trigger on master branch
+        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -122,7 +122,7 @@ jobs:
           cat ./Testing/Temporary/MemoryChecker.*.log
   
       - name: Setup Binaries Archive (Release)
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Linux/
@@ -139,15 +139,15 @@ jobs:
           mv LICENSE.md RefurekuBinaries/
           mv README.md RefurekuBinaries/
 
-      - name: Setup Binaries Archive (Debug) # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Debug'
+      - name: Setup Binaries Archive (Debug)
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Debug' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir -p RefurekuBinaries/Linux/Lib
           mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenDebug.a
           mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibDebug.a
 
       - name: Update Binaries Artifact
-#        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')  #Push tag or manual trigger on master branch
+        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -187,7 +187,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Archive (Release)
-        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
+        if: matrix.build_config == 'Release'  && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Mac/
@@ -199,15 +199,15 @@ jobs:
           mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenRelease.a
           mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibRelease.a
 
-      - name: Setup Binaries Archive (Debug) # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
-        if: matrix.build_config == 'Debug'
+      - name: Setup Binaries Archive (Debug)
+        if: matrix.build_config == 'Debug' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir -p RefurekuBinaries/Mac/Lib
           mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenDebug.a
           mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibDebug.a
 
       - name: Update Binaries Artifact
-#        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')  #Push tag or manual trigger on master branch
+        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -215,11 +215,11 @@ jobs:
           retention-days: 7
 
 
-  deploy_binaries:
+  deploy_release_binaries:
     name: Deploy Binaries
     runs-on: ubuntu-latest
     needs: [build_windows_msvc, build_linux_gcc_clang, build_macos]
-#    if: startsWith(github.event.ref, 'refs/tags/v')
+    if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
       - name: Install zip
@@ -235,28 +235,26 @@ jobs:
           name: RefurekuBinaries
           path: ./RefurekuBinaries
 
-      #tar -czvf rfk_${{steps.version.outputs.VERSION}}_linux.tar.gz Linux
       - name: Build Linux Binaries Archive
         run: |
           cp -R RefurekuBinaries/Include RefurekuBinaries/Linux
           cp RefurekuBinaries/* RefurekuBinaries/Linux 2>/dev/null || :
-          tar -czvf rfk_test_linux.tar.gz --directory RefurekuBinaries/Linux .
+          tar -czvf rfk_${{steps.version.outputs.VERSION}}_linux.tar.gz --directory RefurekuBinaries/Linux .
 
       - name: Build Windows Binaries Archive
         run: |
           cp -R RefurekuBinaries/Include RefurekuBinaries/Windows
           cp RefurekuBinaries/* RefurekuBinaries/Windows 2>/dev/null || :
-          (cd RefurekuBinaries/Windows && zip -r - .) > rfk_test_windows.zip
+          (cd RefurekuBinaries/Windows && zip -r - .) > rfk_${{steps.version.outputs.VERSION}}_windows.zip
 
       - name: Build MacOS Binaries Archive
         run: |
           cp -R RefurekuBinaries/Include RefurekuBinaries/Mac
           cp RefurekuBinaries/* RefurekuBinaries/Mac 2>/dev/null || :
-          tar -czvf rfk_test_macos.tar.gz --directory RefurekuBinaries/Mac .
+          tar -czvf rfk_${{steps.version.outputs.VERSION}}_macos.tar.gz --directory RefurekuBinaries/Mac .
 
       - name: Publish Release Draft
         uses: softprops/action-gh-release@v1
-#        if: startsWith(github.ref, 'refs/tags/')
         with:
           draft: true
           files: |
