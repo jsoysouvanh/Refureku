@@ -83,77 +83,77 @@ jobs:
         with:
           submodules: 'recursive'
 
-#       - name: Install suitable compiler
-#         run: sudo apt-get install ${{ matrix.compiler }}
+      - name: Install suitable compiler
+        run: sudo apt-get install ${{ matrix.compiler }}
 
-#       - name: Install ninja
-#         uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
 
-#       - name: Install CMake
-#         uses: jwlawson/actions-setup-cmake@v1.8
-#         with:
-#           cmake-version: '3.15.0'
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
 
-#       - name: Install Valgrind
-#         run: sudo apt-get install valgrind
+      - name: Install Valgrind
+        run: sudo apt-get install valgrind
 
-#       - name: Substitute Compiler Name
-#         uses: bluwy/substitute-string-action@v1
-#         id: replace_compiler
-#         with:
-#           _input-text: ${{ matrix.compiler }}
-#           clang++: 'clang'
-#           g++: 'gcc'
+      - name: Substitute Compiler Name
+        uses: bluwy/substitute-string-action@v1
+        id: replace_compiler
+        with:
+          _input-text: ${{ matrix.compiler }}
+          clang++: 'clang'
+          g++: 'gcc'
 
-#       - name: Setup Compiler
-#         run: |
-#           echo "CC=${{ steps.replace_compiler.outputs.result }}" >> $GITHUB_ENV
-#           echo "CXX=${{ matrix.compiler }}" >> $GITHUB_ENV
+      - name: Setup Compiler
+        run: |
+          echo "CC=${{ steps.replace_compiler.outputs.result }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.compiler }}" >> $GITHUB_ENV
 
-#       - name: Generate Project
-#         run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
+      - name: Generate Project
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
 
-#       - name: Build Refureku
-#         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+      - name: Build Refureku
+        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
 
-#       - name: Run Tests
-#         run: |
-#           cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -T memcheck -V
-#           cat ./Testing/Temporary/MemoryChecker.*.log
+      - name: Run Tests
+        run: |
+          cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -T memcheck -V
+          cat ./Testing/Temporary/MemoryChecker.*.log
   
-#       - name: Setup Binaries Archive (Release)
-#         if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
-#         run: |
-#           mkdir RefurekuBinaries
-#           mkdir RefurekuBinaries/Linux/
-#           mkdir RefurekuBinaries/Linux/Bin
-#           mkdir RefurekuBinaries/Linux/Lib
-#           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Linux/Bin/
-#           mv Build/Release/Bin/libRefureku.so RefurekuBinaries/Linux/Bin/
-#           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so RefurekuBinaries/Linux/Bin/
-#           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/
-#           mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenRelease.a
-#           mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibRelease.a
+      - name: Setup Binaries Archive (Release)
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
+        run: |
+          mkdir RefurekuBinaries
+          mkdir RefurekuBinaries/Linux/
+          mkdir RefurekuBinaries/Linux/Bin
+          mkdir RefurekuBinaries/Linux/Lib
+          mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Linux/Bin/
+          mv Build/Release/Bin/libRefureku.so RefurekuBinaries/Linux/Bin/
+          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so RefurekuBinaries/Linux/Bin/
+          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/
+          mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenRelease.a
+          mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibRelease.a
 
-#           mv Refureku/Library/Include/Public RefurekuBinaries/Include
-#           mv Build/Release/Bin/RefurekuSettings.toml RefurekuBinaries/
-#           mv LICENSE.md RefurekuBinaries/
-#           mv README.md RefurekuBinaries/
+          mv Refureku/Library/Include/Public RefurekuBinaries/Include
+          mv Build/Release/Bin/RefurekuSettings.toml RefurekuBinaries/
+          mv LICENSE.md RefurekuBinaries/
+          mv README.md RefurekuBinaries/
 
-#       - name: Setup Binaries Archive (Debug) # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
-#         if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Debug'
-#         run: |
-#           mkdir -p RefurekuBinaries/Linux/Lib
-#           mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenDebug.a
-#           mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibDebug.a
+      - name: Setup Binaries Archive (Debug) # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Debug'
+        run: |
+          mkdir -p RefurekuBinaries/Linux/Lib
+          mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenDebug.a
+          mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibDebug.a
 
-#       - name: Update Binaries Artifact
-# #        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')  #Push tag or manual trigger on master branch
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: RefurekuBinaries
-#           path: ./RefurekuBinaries
-#           retention-days: 7
+      - name: Update Binaries Artifact
+#        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')  #Push tag or manual trigger on master branch
+        uses: actions/upload-artifact@v2
+        with:
+          name: RefurekuBinaries
+          path: ./RefurekuBinaries
+          retention-days: 7
 
   build_macos:
     name: MacOS | Clang
@@ -170,60 +170,65 @@ jobs:
         with:
           submodules: 'recursive'
 
-#       - name: Install ninja
-#         uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
 
-#       - name: Install CMake
-#         uses: jwlawson/actions-setup-cmake@v1.8
-#         with:
-#           cmake-version: '3.15.0'
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
 
-#       - name: Generate Project
-#         run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
+      - name: Generate Project
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DGEN_PROPERTY_RTTI=1 -G "Ninja"
 
-#       - name: Build Refureku
-#         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+      - name: Build Refureku
+        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
 
-#       - name: Run Tests
-#         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+      - name: Run Tests
+        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
-#       - name: Setup Binaries Archive (Release)
-#         if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
-#         run: |
-#           mkdir RefurekuBinaries
-#           mkdir RefurekuBinaries/Mac/
-#           mkdir RefurekuBinaries/Mac/Bin
-#           mkdir RefurekuBinaries/Mac/Lib
-#           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Mac/Bin/
-#           mv Build/Release/Bin/libRefureku.dylib RefurekuBinaries/Mac/Bin/
-#           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
-#           mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenRelease.a
-#           mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibRelease.a
+      - name: Setup Binaries Archive (Release)
+        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
+        run: |
+          mkdir RefurekuBinaries
+          mkdir RefurekuBinaries/Mac/
+          mkdir RefurekuBinaries/Mac/Bin
+          mkdir RefurekuBinaries/Mac/Lib
+          mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Mac/Bin/
+          mv Build/Release/Bin/libRefureku.dylib RefurekuBinaries/Mac/Bin/
+          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
+          mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenRelease.a
+          mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibRelease.a
 
-#       - name: Setup Binaries Archive (Debug) # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
-#         if: matrix.build_config == 'Debug'
-#         run: |
-#           mkdir -p RefurekuBinaries/Mac/Lib
-#           mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenDebug.a
-#           mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibDebug.a
+      - name: Setup Binaries Archive (Debug) # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))  #Push tag or manual trigger on master branch
+        if: matrix.build_config == 'Debug'
+        run: |
+          mkdir -p RefurekuBinaries/Mac/Lib
+          mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenDebug.a
+          mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibDebug.a
 
-#       - name: Update Binaries Artifact
-# #        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')  #Push tag or manual trigger on master branch
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: RefurekuBinaries
-#           path: ./RefurekuBinaries
-#           retention-days: 7
+      - name: Update Binaries Artifact
+#        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')  #Push tag or manual trigger on master branch
+        uses: actions/upload-artifact@v2
+        with:
+          name: RefurekuBinaries
+          path: ./RefurekuBinaries
+          retention-days: 7
 
 
   deploy_binaries:
-    name: Deploy binaries
+    name: Deploy Binaries
     runs-on: ubuntu-latest
     needs: [build_windows_msvc, build_linux_gcc_clang, build_macos]
+#    if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
-      - name: Install tree      #TODO: Remove this
-        run: brew install tree
+      - name: Install zip
+        run: sudo apt-get install zip
+
+      - name: Compute version
+        id: version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       - name: Fetch Binaries Artifacts
         uses: actions/download-artifact@v2
@@ -231,6 +236,31 @@ jobs:
           name: RefurekuBinaries
           path: ./RefurekuBinaries
 
-      - name: Deploy binaries
-#      if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')
-        run: tree -f RefurekuBinaries
+      #tar -czvf rfk_${{steps.version.outputs.VERSION}}_linux.tar.gz Linux
+      - name: Build Linux Binaries Archive
+        run: |
+          cp -R RefurekuBinaries/Include RefurekuBinaries/Linux
+          cp RefurekuBinaries/* RefurekuBinaries/Linux
+          tar -czvf rfk_test_linux.tar.gz RefurekuBinaries/Linux/*
+
+      - name: Build Windows Binaries Archive
+        run: |
+          cp -R RefurekuBinaries/Include RefurekuBinaries/Windows
+          cp RefurekuBinaries/* RefurekuBinaries/Windows
+          zip -r rfk_test_windows.zip RefurekuBinaries/Windows/*
+
+      - name: Build MacOS Binaries Archive
+        run: |
+          cp -R RefurekuBinaries/Include RefurekuBinaries/Mac
+          cp RefurekuBinaries/* RefurekuBinaries/Mac
+          tar -czvf rfk_test_macos.tar.gz RefurekuBinaries/Mac/*
+
+      - name: Publish Release Draft
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          draft: true
+          files: |
+            rfk_test_linux.tar.gz
+            rfk_test_windows.zip
+            rfk_test_macos.tar.gz
