@@ -34,8 +34,8 @@ jobs:
       - name: Run Tests
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
-      - name: Setup Binaries Archive (Release)
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+      - name: Setup Binaries Artifact
+        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Windows/
@@ -47,20 +47,10 @@ jobs:
           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dll RefurekuBinaries/Windows/Bin/
           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Bin/vswhere.exe RefurekuBinaries/Windows/Bin/
 
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Static/clang.lib RefurekuBinaries/Windows/Lib/
           mv Build/Release/Lib/Release/Refureku.lib RefurekuBinaries/Windows/Lib/
-          mv Build/Release/Lib/Release/Kodgen.lib RefurekuBinaries/Windows/Lib/KodgenRelease.lib
-          mv Build/Release/Lib/Release/RefurekuGeneratorLib.lib RefurekuBinaries/Windows/Lib/RefurekuGeneratorLibRelease.lib
 
-      - name: Setup Binaries Archive (Debug)
-        if: matrix.build_config == 'Debug' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
-        run: |
-          mkdir -p RefurekuBinaries/Windows/Lib
-          mv Build/Debug/Lib/Debug/Kodgen.lib RefurekuBinaries/Windows/Lib/KodgenDebug.lib
-          mv Build/Debug/Lib/Debug/RefurekuGeneratorLib.lib RefurekuBinaries/Windows/Lib/RefurekuGeneratorLibDebug.lib
-
-      - name: Update Binaries Artifact
-        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')
+      - name: Upload Binaries Artifact
+        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -121,33 +111,23 @@ jobs:
           cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -T memcheck -V
           cat ./Testing/Temporary/MemoryChecker.*.log
   
-      - name: Setup Binaries Archive (Release)
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+      - name: Setup Binaries Artifact
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Linux/
           mkdir RefurekuBinaries/Linux/Bin
-          mkdir RefurekuBinaries/Linux/Lib
+          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/libclang.so
           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Linux/Bin/
           mv Build/Release/Bin/libRefureku.so RefurekuBinaries/Linux/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/libclang.so
-          mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenRelease.a
-          mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibRelease.a
 
           mv Refureku/Library/Include/Public RefurekuBinaries/Include
           mv Build/Release/Bin/RefurekuSettings.toml RefurekuBinaries/
           mv LICENSE.md RefurekuBinaries/
           mv README.md RefurekuBinaries/
 
-      - name: Setup Binaries Archive (Debug)
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Debug' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
-        run: |
-          mkdir -p RefurekuBinaries/Linux/Lib
-          mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Linux/Lib/libKodgenDebug.a
-          mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Linux/Lib/libRefurekuGeneratorLibDebug.a
-
-      - name: Update Binaries Artifact
-        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')
+      - name: Upload Binaries Artifact
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -186,28 +166,18 @@ jobs:
       - name: Run Tests
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
-      - name: Setup Binaries Archive (Release)
-        if: matrix.build_config == 'Release'  && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+      - name: Setup Binaries Artifact
+        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Mac/
           mkdir RefurekuBinaries/Mac/Bin
-          mkdir RefurekuBinaries/Mac/Lib
           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Mac/Bin/
           mv Build/Release/Bin/libRefureku.dylib RefurekuBinaries/Mac/Bin/
           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
-          mv Build/Release/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenRelease.a
-          mv Build/Release/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibRelease.a
 
-      - name: Setup Binaries Archive (Debug)
-        if: matrix.build_config == 'Debug' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
-        run: |
-          mkdir -p RefurekuBinaries/Mac/Lib
-          mv Build/Debug/Lib/libKodgen.a RefurekuBinaries/Mac/Lib/libKodgenDebug.a
-          mv Build/Debug/Lib/libRefurekuGeneratorLib.a RefurekuBinaries/Mac/Lib/libRefurekuGeneratorLibDebug.a
-
-      - name: Update Binaries Artifact
-        if: startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch')
+      - name: Upload Binaries Artifact
+        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -219,7 +189,7 @@ jobs:
     name: Deploy Binaries
     runs-on: ubuntu-latest
     needs: [build_windows_msvc, build_linux_gcc_clang, build_macos]
-    if: startsWith(github.event.ref, 'refs/tags/v')
+    # if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
       - name: Install zip
@@ -258,6 +228,6 @@ jobs:
         with:
           draft: true
           files: |
-            rfk_test_linux.tar.gz
-            rfk_test_windows.zip
-            rfk_test_macos.tar.gz
+            rfk_${{steps.version.outputs.VERSION}}_linux.tar.gz
+            rfk_${{steps.version.outputs.VERSION}}_windows.zip
+            rfk_${{steps.version.outputs.VERSION}}_macos.tar.gz
