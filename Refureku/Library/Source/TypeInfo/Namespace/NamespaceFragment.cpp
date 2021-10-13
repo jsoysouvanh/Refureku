@@ -14,15 +14,15 @@ NamespaceFragment::~NamespaceFragment() noexcept = default;
 
 bool NamespaceFragment::foreachNestedEntity(Visitor<Entity> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceFragmentImpl const*>(getPimpl())->getNestedEntities(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getNestedEntities(), visitor, userData);
 }
 
 void NamespaceFragment::addNestedEntity(Entity const* nestedEntity) noexcept
 {
-	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->addNestedEntity(nestedEntity);
+	getPimpl()->addNestedEntity(nestedEntity);
 }
 
 void NamespaceFragment::setNestedEntitiesCapacity(std::size_t capacity) noexcept
 {
-	reinterpret_cast<NamespaceFragmentImpl*>(getPimpl())->setNestedEntitiesCapacity(capacity);
+	getPimpl()->setNestedEntitiesCapacity(capacity);
 }

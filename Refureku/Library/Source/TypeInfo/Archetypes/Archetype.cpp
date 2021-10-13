@@ -15,15 +15,15 @@ Archetype::~Archetype() noexcept = default;
 
 EAccessSpecifier Archetype::getAccessSpecifier() const noexcept
 {
-	return reinterpret_cast<ArchetypeImpl const*>(getPimpl())->getAccessSpecifier();
+	return getPimpl()->getAccessSpecifier();
 }
 
 void Archetype::setAccessSpecifier(EAccessSpecifier accessSpecifier) noexcept
 {
-	reinterpret_cast<ArchetypeImpl*>(getPimpl())->setAccessSpecifier(accessSpecifier);
+	getPimpl()->setAccessSpecifier(accessSpecifier);
 }
 
 std::size_t Archetype::getMemorySize() const noexcept
 {
-	return reinterpret_cast<ArchetypeImpl const*>(getPimpl())->getMemorySize();
+	return getPimpl()->getMemorySize();
 }

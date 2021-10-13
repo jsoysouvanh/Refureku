@@ -115,6 +115,8 @@ namespace rfk
 		protected:
 			//Forward declaration
 			class FieldImpl;
+
+			GEN_GET_PIMPL(FieldImpl, Entity::getPimpl())
 	};
 
 	#include "Refureku/TypeInfo/Variables/Field.inl"

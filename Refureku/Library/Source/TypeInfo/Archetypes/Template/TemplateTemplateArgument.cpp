@@ -13,7 +13,7 @@ TemplateTemplateArgument::~TemplateTemplateArgument() noexcept = default;
 
 ClassTemplate const* TemplateTemplateArgument::getClassTemplate() const noexcept
 {
-	return reinterpret_cast<TemplateTemplateArgumentImpl const*>(getPimpl())->getValue();
+	return getPimpl()->getValue();
 }
 
 bool TemplateTemplateArgument::operator==(TemplateTemplateArgument const& other) const noexcept

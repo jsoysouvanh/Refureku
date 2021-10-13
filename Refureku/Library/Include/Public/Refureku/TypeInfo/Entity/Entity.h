@@ -11,6 +11,7 @@
 
 #include "Refureku/Config.h"
 #include "Refureku/Misc/Pimpl.h"
+#include "Refureku/Misc/GetPimplMacro.h"
 #include "Refureku/TypeInfo/Entity/EEntityKind.h"
 #include "Refureku/Containers/Vector.h"
 #include "Refureku/Misc/Visitor.h"
@@ -237,13 +238,7 @@ namespace rfk
 			REFUREKU_INTERNAL Entity(EntityImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ~Entity()								noexcept;
 
-			/**
-			*	@brief Get the _pimpl internal pointer.
-			* 
-			*	@return The _pimpl internal pointer.
-			*/
-			RFK_NODISCARD REFUREKU_INTERNAL EntityImpl*			getPimpl()			noexcept;
-			RFK_NODISCARD REFUREKU_INTERNAL EntityImpl const*	getPimpl()	const	noexcept;
+			GEN_GET_PIMPL(EntityImpl, _pimpl.get())
 
 		private:
 			/** Concrete implementation of the Entity class. */

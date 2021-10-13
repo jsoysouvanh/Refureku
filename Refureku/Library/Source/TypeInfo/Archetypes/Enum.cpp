@@ -16,17 +16,17 @@ Enum::~Enum() noexcept = default;
 
 EnumValue* Enum::addEnumValue(char const* name, std::size_t id, int64 value) noexcept
 {
-	return &reinterpret_cast<EnumImpl*>(getPimpl())->addEnumValue(name, id, value, this);
+	return &getPimpl()->addEnumValue(name, id, value, this);
 }
 
 void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
 {
-	reinterpret_cast<EnumImpl*>(getPimpl())->setEnumValuesCapacity(capacity);
+	getPimpl()->setEnumValuesCapacity(capacity);
 }
 
 EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
 {
-	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
+	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
 	{
 		if (std::strcmp(enumValue.getName(), name) == 0)
 		{
@@ -39,7 +39,7 @@ EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
 
 EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 {
-	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
+	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
 	{
 		if (enumValue.getValue() == value)
 		{
@@ -52,7 +52,7 @@ EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 
 EnumValue const* Enum::getEnumValueByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
+	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
 	{
 		if (predicate(enumValue, userData))
 		{
@@ -67,7 +67,7 @@ Vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 {
 	Vector<EnumValue const*> result;
 
-	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
+	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
 	{
 		if (enumValue.getValue() == value)
 		{
@@ -82,7 +82,7 @@ Vector<EnumValue const*> Enum::getEnumValuesByPredicate(Predicate<EnumValue> pre
 {
 	Vector<EnumValue const*> result;
 
-	for (EnumValue const& enumValue : reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues())
+	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
 	{
 		if (predicate(enumValue, userData))
 		{
@@ -95,20 +95,20 @@ Vector<EnumValue const*> Enum::getEnumValuesByPredicate(Predicate<EnumValue> pre
 
 EnumValue const& Enum::getEnumValueAt(std::size_t valueIndex)	const noexcept
 {
-	return reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues()[valueIndex];
+	return getPimpl()->getEnumValues()[valueIndex];
 }
 
 std::size_t Enum::getEnumValuesCount() const noexcept
 {
-	return reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues().size();
+	return getPimpl()->getEnumValues().size();
 }
 
 Archetype const& Enum::getUnderlyingArchetype() const noexcept
 {
-	return reinterpret_cast<EnumImpl const*>(getPimpl())->getUnderlyingArchetype();
+	return getPimpl()->getUnderlyingArchetype();
 }
 
 bool Enum::foreachEnumValue(Predicate<EnumValue> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<EnumImpl const*>(getPimpl())->getEnumValues(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getEnumValues(), visitor, userData);
 }

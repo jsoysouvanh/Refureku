@@ -20,7 +20,7 @@ FunctionBase::~FunctionBase() noexcept = default;
 
 FunctionParameter& FunctionBase::addParameter(char const* name, std::size_t id, Type const& type) noexcept
 {
-	return reinterpret_cast<FunctionBaseImpl*>(getPimpl())->addParameter(name, id, type, this);
+	return getPimpl()->addParameter(name, id, type, this);
 }
 
 bool FunctionBase::hasSamePrototype(FunctionBase const& other) const noexcept
@@ -51,27 +51,27 @@ bool FunctionBase::hasSamePrototype(FunctionBase const& other) const noexcept
 
 Type const& FunctionBase::getReturnType() const noexcept
 {
-	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getReturnType();
+	return getPimpl()->getReturnType();
 }
 
 FunctionParameter const& FunctionBase::getParameterAt(std::size_t index) const noexcept
 {
-	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getParameters()[index];
+	return getPimpl()->getParameters()[index];
 }
 
 std::size_t FunctionBase::getParametersCount() const noexcept
 {
-	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getParameters().size();
+	return getPimpl()->getParameters().size();
 }
 
 void FunctionBase::setParametersCapacity(std::size_t capacity) noexcept
 {
-	return reinterpret_cast<FunctionBaseImpl*>(getPimpl())->setParametersCapacity(capacity);
+	return getPimpl()->setParametersCapacity(capacity);
 }
 
 ICallable* FunctionBase::getInternalFunction() const noexcept
 {
-	return reinterpret_cast<FunctionBaseImpl const*>(getPimpl())->getInternalFunction();
+	return getPimpl()->getInternalFunction();
 }
 
 void FunctionBase::throwArgCountMismatchException(std::size_t received) const

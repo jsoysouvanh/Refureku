@@ -139,6 +139,8 @@ namespace rfk
 		protected:
 			//Forward declaration
 			class EnumImpl;
+
+			GEN_GET_PIMPL(EnumImpl, Entity::getPimpl())
 	};
 
 	/** Base implementation of getEnum, specialized for each reflected enum */

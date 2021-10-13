@@ -14,20 +14,20 @@ TemplateTemplateParameter::~TemplateTemplateParameter() noexcept = default;
 
 std::size_t TemplateTemplateParameter::getTemplateParametersCount() const noexcept
 {
-	return reinterpret_cast<TemplateTemplateParameterImpl const*>(getPimpl())->getTemplateParameters().size();
+	return getPimpl()->getTemplateParameters().size();
 }
 
 TemplateParameter const* TemplateTemplateParameter::getTemplateParameterAt(std::size_t index) const noexcept
 {
-	return reinterpret_cast<TemplateTemplateParameterImpl const*>(getPimpl())->getTemplateParameters()[index];
+	return getPimpl()->getTemplateParameters()[index];
 }
 
 bool TemplateTemplateParameter::foreachTemplateParameter(Visitor<TemplateParameter> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<TemplateTemplateParameterImpl const*>(getPimpl())->getTemplateParameters(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getTemplateParameters(), visitor, userData);
 }
 
 void TemplateTemplateParameter::addTemplateParameter(TemplateParameter const& param) noexcept
 {
-	reinterpret_cast<TemplateTemplateParameterImpl*>(getPimpl())->addTemplateParameter(param);
+	getPimpl()->addTemplateParameter(param);
 }

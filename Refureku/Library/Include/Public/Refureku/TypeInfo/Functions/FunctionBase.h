@@ -104,6 +104,8 @@ namespace rfk
 			REFUREKU_INTERNAL FunctionBase(FunctionBase&&)						noexcept;
 			REFUREKU_INTERNAL ~FunctionBase()									noexcept;
 
+			GEN_GET_PIMPL(FunctionBaseImpl, Entity::getPimpl())
+
 			/**
 			*	@brief Check that the provided argument count is the same as this function's.
 			*

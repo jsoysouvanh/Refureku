@@ -11,16 +11,6 @@ TemplateParameter::TemplateParameter(TemplateParameterImpl* implementation) noex
 
 TemplateParameter::~TemplateParameter() noexcept = default;
 
-TemplateParameter::TemplateParameterImpl* TemplateParameter::getPimpl() noexcept
-{
-	return _pimpl.get();
-}
-
-TemplateParameter::TemplateParameterImpl const* TemplateParameter::getPimpl() const noexcept
-{
-	return _pimpl.get();
-}
-
 char const* TemplateParameter::getName() const noexcept
 {
 	return _pimpl->getName().data();

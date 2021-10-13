@@ -18,7 +18,7 @@ VariableBase::~VariableBase() noexcept = default;
 
 Type const& VariableBase::getType() const noexcept
 {
-	return reinterpret_cast<VariableBaseImpl const*>(getPimpl())->getType();
+	return getPimpl()->getType();
 }
 
 void VariableBase::set(void* target, void const* source, std::size_t dataSize) const

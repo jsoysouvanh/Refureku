@@ -27,10 +27,10 @@ void StaticField::set(void const* valuePtr, std::size_t valueSize) const
 
 void* StaticField::getPtr() const noexcept
 {
-	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getPtr();
+	return getPimpl()->getPtr();
 }
 
 void const* StaticField::getConstPtr() const noexcept
 {
-	return reinterpret_cast<StaticFieldImpl const*>(getPimpl())->getConstPtr();
+	return getPimpl()->getConstPtr();
 }

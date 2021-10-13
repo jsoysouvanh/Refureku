@@ -27,5 +27,5 @@ bool Function::isStatic() const noexcept
 
 EFunctionFlags Function::getFlags() const noexcept
 {
-	return reinterpret_cast<FunctionImpl const*>(getPimpl())->getFlags();
+	return getPimpl()->getFlags();
 }

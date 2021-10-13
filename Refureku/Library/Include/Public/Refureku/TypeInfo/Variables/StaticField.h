@@ -98,6 +98,8 @@ namespace rfk
 		protected:
 			//Forward declaration
 			class StaticFieldImpl;
+
+			GEN_GET_PIMPL(StaticFieldImpl, Entity::getPimpl())
 	};
 
 	#include "Refureku/TypeInfo/Variables/StaticField.inl"

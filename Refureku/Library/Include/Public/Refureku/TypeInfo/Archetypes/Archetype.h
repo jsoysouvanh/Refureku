@@ -44,5 +44,7 @@ namespace rfk
 
 			REFUREKU_INTERNAL Archetype(ArchetypeImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ~Archetype()								noexcept;
+
+			GEN_GET_PIMPL(ArchetypeImpl, Entity::getPimpl())
 	};
 }

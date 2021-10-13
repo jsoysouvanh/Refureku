@@ -54,5 +54,7 @@ namespace rfk
 		private:
 			//Forward declaration
 			class NamespaceFragmentImpl;
+
+			GEN_GET_PIMPL(NamespaceFragmentImpl, Entity::getPimpl())
 	};
 }

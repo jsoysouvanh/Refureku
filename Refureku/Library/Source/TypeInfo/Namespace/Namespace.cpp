@@ -16,20 +16,20 @@ Namespace::~Namespace() noexcept = default;
 
 Namespace const* Namespace::getNamespaceByName(char const* name) const noexcept
 {
-	return EntityUtility::getEntityByName(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(), name);
+	return EntityUtility::getEntityByName(getPimpl()->getNamespaces(), name);
 }
 
 Namespace const* Namespace::getNamespaceByPredicate(Predicate<Namespace> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(), [predicate, userData](Namespace const& n){ return predicate(n, userData); }) :
+		EntityUtility::getEntityByPredicate(getPimpl()->getNamespaces(), [predicate, userData](Namespace const& n){ return predicate(n, userData); }) :
 		nullptr;
 }
 
 Vector<Namespace const*> Namespace::getNamespacesByPredicate(Predicate<Namespace> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(),
+		EntityUtility::getEntitiesByPredicate(getPimpl()->getNamespaces(),
 											  [predicate, userData](Namespace const& n)
 											  {
 												  return predicate(n, userData);
@@ -38,13 +38,13 @@ Vector<Namespace const*> Namespace::getNamespacesByPredicate(Predicate<Namespace
 
 bool Namespace::foreachNamespace(Visitor<Namespace> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getNamespaces(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getNamespaces(), visitor, userData);
 }
 
 Struct const* Namespace::getStructByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Struct const*>(
-		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Struct; }));
 }
@@ -53,7 +53,7 @@ Struct const* Namespace::getStructByPredicate(Predicate<Struct> predicate, void*
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Struct const*>(
-			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+			EntityUtility::getEntityByPredicate(getPimpl()->getArchetypes(),
 												[predicate, userData](Archetype const& archetype)
 												{
 													return archetype.getKind() == EEntityKind::Struct &&
@@ -65,7 +65,7 @@ Vector<Struct const*> Namespace::getStructsByPredicate(Predicate<Struct> predica
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Struct &&
@@ -81,7 +81,7 @@ Vector<Struct const*> Namespace::getStructsByPredicate(Predicate<Struct> predica
 Class const* Namespace::getClassByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Class const*>(
-		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Class; }));
 }
@@ -90,7 +90,7 @@ Class const* Namespace::getClassByPredicate(Predicate<Class> predicate, void* us
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Struct const*>(
-			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+			EntityUtility::getEntityByPredicate(getPimpl()->getArchetypes(),
 			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Class &&
@@ -102,7 +102,7 @@ Vector<Class const*> Namespace::getClassesByPredicate(Predicate<Class> predicate
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Class &&
@@ -118,7 +118,7 @@ Vector<Class const*> Namespace::getClassesByPredicate(Predicate<Class> predicate
 Enum const* Namespace::getEnumByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Enum const*>(
-		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Enum; }));
 }
@@ -127,7 +127,7 @@ Enum const* Namespace::getEnumByPredicate(Predicate<Enum> predicate, void* userD
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Enum const*>(
-			EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+			EntityUtility::getEntityByPredicate(getPimpl()->getArchetypes(),
 			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Enum &&
@@ -139,7 +139,7 @@ Vector<Enum const*> Namespace::getEnumsByPredicate(Predicate<Enum> predicate, vo
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Enum &&
@@ -154,13 +154,13 @@ Vector<Enum const*> Namespace::getEnumsByPredicate(Predicate<Enum> predicate, vo
 
 bool Namespace::foreachArchetype(Visitor<Archetype> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getArchetypes(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getArchetypes(), visitor, userData);
 }
 
 Variable const* Namespace::getVariableByName(char const* name, EVarFlags flags) const noexcept
 {
 	return reinterpret_cast<Variable const*>(
-		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(),
+		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getVariables(),
 													name,
 													[flags](Variable const& var) { return (var.getFlags() & flags) == flags; }));
 }
@@ -168,7 +168,7 @@ Variable const* Namespace::getVariableByName(char const* name, EVarFlags flags) 
 Variable const* Namespace::getVariableByPredicate(Predicate<Variable> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(),
+		EntityUtility::getEntityByPredicate(getPimpl()->getVariables(),
 		[predicate, userData](Variable const& variable)
 		{
 			return predicate(variable, userData);
@@ -178,7 +178,7 @@ Variable const* Namespace::getVariableByPredicate(Predicate<Variable> predicate,
 Vector<Variable const*> Namespace::getVariablesByPredicate(Predicate<Variable> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(),
+		EntityUtility::getEntitiesByPredicate(getPimpl()->getVariables(),
 											  [predicate, userData](Variable const& variable)
 											  {
 												  return predicate(variable, userData);
@@ -187,13 +187,13 @@ Vector<Variable const*> Namespace::getVariablesByPredicate(Predicate<Variable> p
 
 bool Namespace::foreachVariable(Visitor<Variable> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getVariables(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getVariables(), visitor, userData);
 }
 
 Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
 	return reinterpret_cast<Function const*>(
-		EntityUtility::getEntityByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
+		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getFunctions(),
 													name,
 													[flags](Function const& func)
 													{
@@ -203,7 +203,7 @@ Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags fl
 
 Vector<Function const*> Namespace::getFunctionsByName(char const* name, EFunctionFlags flags) const noexcept
 {
-	return EntityUtility::getEntitiesByNameAndPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
+	return EntityUtility::getEntitiesByNameAndPredicate(getPimpl()->getFunctions(),
 														name,
 														[flags](Function const& func)
 														{
@@ -214,7 +214,7 @@ Vector<Function const*> Namespace::getFunctionsByName(char const* name, EFunctio
 Function const* Namespace::getFunctionByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
+		EntityUtility::getEntityByPredicate(getPimpl()->getFunctions(),
 											[predicate, userData](Function const& function)
 											{
 												return predicate(function, userData);
@@ -224,7 +224,7 @@ Function const* Namespace::getFunctionByPredicate(Predicate<Function> predicate,
 Vector<Function const*> Namespace::getFunctionsByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntitiesByPredicate(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(),
+		EntityUtility::getEntitiesByPredicate(getPimpl()->getFunctions(),
 											  [predicate, userData](Function const& function)
 											  {
 												  return predicate(function, userData);
@@ -233,45 +233,45 @@ Vector<Function const*> Namespace::getFunctionsByPredicate(Predicate<Function> p
 
 bool Namespace::foreachFunction(Visitor<Function> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<NamespaceImpl const*>(getPimpl())->getFunctions(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getFunctions(), visitor, userData);
 }
 
 void Namespace::addNamespace(Namespace const& nestedNamespace) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->addNamespace(nestedNamespace);
+	getPimpl()->addNamespace(nestedNamespace);
 }
 
 void Namespace::addArchetype(Archetype const& archetype) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->addArchetype(archetype);
+	getPimpl()->addArchetype(archetype);
 }
 
 void Namespace::addVariable(Variable const& variable) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->addVariable(variable);
+	getPimpl()->addVariable(variable);
 }
 
 void Namespace::addFunction(Function const& function) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->addFunction(function);
+	getPimpl()->addFunction(function);
 }
 
 void Namespace::removeNamespace(Namespace const& nestedNamespace) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeNamespace(nestedNamespace);
+	getPimpl()->removeNamespace(nestedNamespace);
 }
 
 void Namespace::removeArchetype(Archetype const& archetype) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeArchetype(archetype);
+	getPimpl()->removeArchetype(archetype);
 }
 
 void Namespace::removeVariable(Variable const& variable) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeVariable(variable);
+	getPimpl()->removeVariable(variable);
 }
 
 void Namespace::removeFunction(Function const& function) noexcept
 {
-	reinterpret_cast<NamespaceImpl*>(getPimpl())->removeFunction(function);
+	getPimpl()->removeFunction(function);
 }

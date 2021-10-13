@@ -12,7 +12,7 @@
 
 namespace rfk
 {
-	class FunctionParameter : public Entity
+	class FunctionParameter final : public Entity
 	{
 		public:
 			REFUREKU_INTERNAL FunctionParameter(char const*		name,
@@ -30,8 +30,10 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API Type const& getType()	const	noexcept;
 
-		protected:
+		private:
 			//Forward declaration
 			class FunctionParameterImpl;
+
+			GEN_GET_PIMPL(FunctionParameterImpl, Entity::getPimpl())
 	};
 }

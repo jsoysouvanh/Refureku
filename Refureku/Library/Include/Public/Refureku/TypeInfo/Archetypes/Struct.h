@@ -762,6 +762,8 @@ namespace rfk
 									 EClassKind		classKind)		noexcept;
 			REFUREKU_INTERNAL Struct(StructImpl* implementation)	noexcept;
 
+			GEN_GET_PIMPL(StructImpl, Entity::getPimpl())
+
 		private:
 			/**
 			*	@brief Invoke the default instantiator.

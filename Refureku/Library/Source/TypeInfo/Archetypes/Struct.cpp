@@ -30,10 +30,10 @@ rfk::Vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 {
 	rfk::Vector<Struct const*> result;
 
-	for (Struct const* subclass : reinterpret_cast<StructImpl const*>(getPimpl())->getSubclasses())
+	for (Struct const* subclass : getPimpl()->getSubclasses())
 	{
 		//Search this struct in subclasses's parents
-		for (ParentStruct const& subclassParent : reinterpret_cast<StructImpl const*>(subclass->getPimpl())->getDirectParents())
+		for (ParentStruct const& subclassParent : getPimpl()->getDirectParents())
 		{
 			if (&subclassParent.getArchetype() == this)
 			{
@@ -53,34 +53,34 @@ bool Struct::isSubclassOf(Struct const& archetype) const noexcept
 
 bool Struct::isBaseOf(Struct const& archetype) const noexcept
 {
-	auto const& subclasses = reinterpret_cast<StructImpl const*>(getPimpl())->getSubclasses();
+	auto const& subclasses = getPimpl()->getSubclasses();
 
 	return &archetype == this || subclasses.find(&archetype) != subclasses.cend();
 }
 
 EClassKind Struct::getClassKind() const noexcept
 {
-	return reinterpret_cast<StructImpl const*>(getPimpl())->getClassKind();
+	return getPimpl()->getClassKind();
 }
 
 ParentStruct const& Struct::getDirectParentAt(std::size_t index) const noexcept
 {
-	return reinterpret_cast<StructImpl const*>(getPimpl())->getDirectParents()[index];
+	return getPimpl()->getDirectParents()[index];
 }
 
 std::size_t Struct::getDirectParentsCount() const noexcept
 {
-	return reinterpret_cast<StructImpl const*>(getPimpl())->getDirectParents().size();
+	return getPimpl()->getDirectParents().size();
 }
 
 bool Struct::foreachDirectParent(Visitor<ParentStruct> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getDirectParents(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getDirectParents(), visitor, userData);
 }
 
 Struct const* Struct::getNestedStructByName(char const* name, EAccessSpecifier access) const noexcept
 {
-	Archetype const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+	Archetype const* foundArchetype = getPimpl()->getNestedArchetype(name, access);
 
 	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Struct) ?
 				reinterpret_cast<Struct const*>(foundArchetype) :
@@ -91,7 +91,7 @@ Struct const* Struct::getNestedStructByPredicate(Predicate<Struct> predicate, vo
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Struct const*>(
-			EntityUtility::getEntityByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(),
+			EntityUtility::getEntityByPredicate(getPimpl()->getNestedArchetypes(),
 												   [predicate, userData](Archetype const& archetype)
 												   {
 													   return archetype.getKind() == EEntityKind::Struct && predicate(static_cast<Struct const&>(archetype), userData);
@@ -102,7 +102,7 @@ Vector<Struct const*> Struct::getNestedStructsByPredicate(Predicate<Struct> pred
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getNestedArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Struct && predicate(static_cast<Struct const&>(archetype), userData);
@@ -116,7 +116,7 @@ Vector<Struct const*> Struct::getNestedStructsByPredicate(Predicate<Struct> pred
 
 Class const* Struct::getNestedClassByName(char const* name, EAccessSpecifier access) const noexcept
 {
-	Archetype const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+	Archetype const* foundArchetype = getPimpl()->getNestedArchetype(name, access);
 
 	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Class) ?
 				reinterpret_cast<Class const*>(foundArchetype) :
@@ -127,7 +127,7 @@ Class const* Struct::getNestedClassByPredicate(Predicate<Class> predicate, void*
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Class const*>(
-			EntityUtility::getEntityByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(),
+			EntityUtility::getEntityByPredicate(getPimpl()->getNestedArchetypes(),
 			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Class && predicate(static_cast<Class const&>(archetype), userData);
@@ -138,7 +138,7 @@ Vector<Class const*> Struct::getNestedClassesByPredicate(Predicate<Class> predic
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getNestedArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Class && predicate(static_cast<Class const&>(archetype), userData);
@@ -152,7 +152,7 @@ Vector<Class const*> Struct::getNestedClassesByPredicate(Predicate<Class> predic
 
 Enum const* Struct::getNestedEnumByName(char const* name, EAccessSpecifier access) const noexcept
 {
-	Archetype const* foundArchetype = reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetype(name, access);
+	Archetype const* foundArchetype = getPimpl()->getNestedArchetype(name, access);
 
 	return (foundArchetype != nullptr && foundArchetype->getKind() == EEntityKind::Enum) ?
 				reinterpret_cast<Enum const*>(foundArchetype) :
@@ -163,7 +163,7 @@ Enum const* Struct::getNestedEnumByPredicate(Predicate<Enum> predicate, void* us
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Enum const*>(
-			EntityUtility::getEntityByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(),
+			EntityUtility::getEntityByPredicate(getPimpl()->getNestedArchetypes(),
 			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Enum && predicate(static_cast<Enum const&>(archetype), userData);
@@ -174,7 +174,7 @@ Vector<Enum const*> Struct::getNestedEnumsByPredicate(Predicate<Enum> predicate,
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getNestedArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Enum && predicate(static_cast<Enum const&>(archetype), userData);
@@ -188,14 +188,14 @@ Vector<Enum const*> Struct::getNestedEnumsByPredicate(Predicate<Enum> predicate,
 
 bool Struct::foreachNestedArchetype(Visitor<Archetype> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getNestedArchetypes(), visitor, userData);
+	return EntityUtility::foreachEntity(getPimpl()->getNestedArchetypes(), visitor, userData);
 }
 
 Field const* Struct::getFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	Field const* result = nullptr;
 
-	EntityUtility::foreachEntityNamed(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(),
+	EntityUtility::foreachEntityNamed(getPimpl()->getFields(),
 									  name,
 									  [this, &result, minFlags, shouldInspectInherited](Field const& field)
 									  {
@@ -222,7 +222,7 @@ Field const* Struct::getFieldByName(char const* name, EFieldFlags minFlags, bool
 Field const* Struct::getFieldByPredicate(Predicate<Field> predicate, void* userData, bool shouldInspectInherited) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(),
+		EntityUtility::getEntityByPredicate(getPimpl()->getFields(),
 		[this, predicate, userData, shouldInspectInherited](Field const& field)
 		{
 			return	field.getKind() == EEntityKind::Field &&
@@ -235,7 +235,7 @@ Vector<Field const*> Struct::getFieldsByPredicate(Predicate<Field> predicate, vo
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getFields(),
 													 [this, predicate, userData, shouldInspectInherited](Field const& field)
 													 {
 														 return	field.getKind() == EEntityKind::Field &&
@@ -251,7 +251,7 @@ Vector<Field const*> Struct::getFieldsByPredicate(Predicate<Field> predicate, vo
 
 bool Struct::foreachField(Visitor<Field> visitor, void* userData, bool shouldInspectInherited) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getFields(),
+	return EntityUtility::foreachEntity(getPimpl()->getFields(),
 										[this, visitor, userData, shouldInspectInherited](Field const& field)
 										{
 											return (shouldInspectInherited || field.getOuterEntity() == this) ? visitor(field, userData) : true;
@@ -262,7 +262,7 @@ StaticField const* Struct::getStaticFieldByName(char const* name, EFieldFlags mi
 {
 	StaticField const* result = nullptr;
 
-	EntityUtility::foreachEntityNamed(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(),
+	EntityUtility::foreachEntityNamed(getPimpl()->getStaticFields(),
 									  name,
 									  [this, &result, minFlags, shouldInspectInherited](StaticField const& staticField)
 									  {
@@ -289,7 +289,7 @@ StaticField const* Struct::getStaticFieldByName(char const* name, EFieldFlags mi
 StaticField const* Struct::getStaticFieldByPredicate(Predicate<StaticField> predicate, void* userData, bool shouldInspectInherited) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(),
+		EntityUtility::getEntityByPredicate(getPimpl()->getStaticFields(),
 											[this, predicate, userData, shouldInspectInherited](StaticField const& staticField)
 											{
 												return (shouldInspectInherited || staticField.getOuterEntity() == this) && predicate(staticField, userData);
@@ -300,7 +300,7 @@ Vector<StaticField const*> Struct::getStaticFieldsByPredicate(Predicate<StaticFi
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(),
+		return EntityUtility::getEntitiesByPredicate(getPimpl()->getStaticFields(),
 													 [this, predicate, userData, shouldInspectInherited](StaticField const& staticField)
 													 {
 														 return (shouldInspectInherited || staticField.getOuterEntity() == this) && predicate(staticField, userData);
@@ -314,7 +314,7 @@ Vector<StaticField const*> Struct::getStaticFieldsByPredicate(Predicate<StaticFi
 
 bool Struct::foreachStaticField(Visitor<StaticField> visitor, void* userData, bool shouldInspectInherited) const
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<StructImpl const*>(getPimpl())->getStaticFields(),
+	return EntityUtility::foreachEntity(getPimpl()->getStaticFields(),
 										[this, visitor, userData, shouldInspectInherited](StaticField const& staticField)
 										{
 											return (shouldInspectInherited || staticField.getOuterEntity() == this) ? visitor(staticField, userData) : true;
@@ -323,10 +323,9 @@ bool Struct::foreachStaticField(Visitor<StaticField> visitor, void* userData, bo
 
 Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-	Method const*		result		= nullptr;
+	Method const* result = nullptr;
 
-	bool foundMethod = !EntityUtility::foreachEntityNamed(structImpl->getMethods(),
+	bool foundMethod = !EntityUtility::foreachEntityNamed(getPimpl()->getMethods(),
 									  name,
 									  [&result, minFlags](Method const& method)
 									  {
@@ -349,7 +348,7 @@ Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, b
 		//If we reach this point, couldn't find a valid method
 		if (shouldInspectInherited)
 		{
-			for (ParentStruct const& parent : structImpl->getDirectParents())
+			for (ParentStruct const& parent : getPimpl()->getDirectParents())
 			{
 				result = parent.getArchetype().getMethodByName(name, minFlags, true);
 
@@ -367,10 +366,9 @@ Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, b
 Vector<Method const*> Struct::getMethodsByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	//Users using this method likely are waiting for at least 2 results, so default capacity to 2.
-	Vector<Method const*>	result(2);
-	StructImpl const*		structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
+	Vector<Method const*> result(2);
 
-	EntityUtility::foreachEntityNamed(structImpl->getMethods(),
+	EntityUtility::foreachEntityNamed(getPimpl()->getMethods(),
 									 name,
 									 [&result, minFlags](Method const& method)
 									 {
@@ -385,7 +383,7 @@ Vector<Method const*> Struct::getMethodsByName(char const* name, EMethodFlags mi
 
 	if (shouldInspectInherited)
 	{
-		for (ParentStruct const& parent : structImpl->getDirectParents())
+		for (ParentStruct const& parent : getPimpl()->getDirectParents())
 		{
 			result.push_back(parent.getArchetype().getMethodsByName(name, minFlags, true));
 		}
@@ -398,8 +396,7 @@ Method const* Struct::getMethodByPredicate(Predicate<Method> predicate, void* us
 {
 	if (predicate != nullptr)
 	{
-		StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-		Method const*		result		= EntityUtility::getEntityByPredicate(structImpl->getMethods(), predicate, userData);
+		Method const* result = EntityUtility::getEntityByPredicate(getPimpl()->getMethods(), predicate, userData);
 
 		if (result != nullptr)
 		{
@@ -407,7 +404,7 @@ Method const* Struct::getMethodByPredicate(Predicate<Method> predicate, void* us
 		}
 		else if (shouldInspectInherited)
 		{
-			for (ParentStruct const& parent : structImpl->getDirectParents())
+			for (ParentStruct const& parent : getPimpl()->getDirectParents())
 			{
 				result = parent.getArchetype().getMethodByPredicate(predicate, userData, true);
 
@@ -426,14 +423,13 @@ Vector<Method const*> Struct::getMethodsByPredicate(Predicate<Method> predicate,
 {
 	if (predicate != nullptr)
 	{
-		StructImpl const*		structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
-		Vector<Method const*>	result(2);
+		Vector<Method const*> result(2);
 
-		result.push_back(EntityUtility::getEntitiesByPredicate(structImpl->getMethods(), predicate, userData));
+		result.push_back(EntityUtility::getEntitiesByPredicate(getPimpl()->getMethods(), predicate, userData));
 
 		if (shouldInspectInherited)
 		{
-			for (ParentStruct const& parent : structImpl->getDirectParents())
+			for (ParentStruct const& parent : getPimpl()->getDirectParents())
 			{
 				result.push_back(parent.getArchetype().getMethodsByPredicate(predicate, userData, true));
 			}
@@ -449,14 +445,13 @@ Vector<Method const*> Struct::getMethodsByPredicate(Predicate<Method> predicate,
 
 bool Struct::foreachMethod(Visitor<Method> visitor, void* userData, bool shouldInspectInherited) const
 {
-	StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-	bool				result		= EntityUtility::foreachEntity(structImpl->getMethods(), visitor, userData);
+	bool result = EntityUtility::foreachEntity(getPimpl()->getMethods(), visitor, userData);
 
 	//Iterate on parent methods if necessary
 	if (shouldInspectInherited)
 	{
 		std::size_t i = 0u;
-		auto const&	directParents = structImpl->getDirectParents();
+		auto const&	directParents = getPimpl()->getDirectParents();
 
 		while (result && i < directParents.size())
 		{
@@ -470,10 +465,9 @@ bool Struct::foreachMethod(Visitor<Method> visitor, void* userData, bool shouldI
 
 StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-	StaticMethod const*	result		= nullptr;
+	StaticMethod const*	result = nullptr;
 
-	bool foundMethod = !EntityUtility::foreachEntityNamed(structImpl->getStaticMethods(),
+	bool foundMethod = !EntityUtility::foreachEntityNamed(getPimpl()->getStaticMethods(),
 														 name,
 														 [&result, minFlags](StaticMethod const& staticMethod)
 														 {
@@ -496,7 +490,7 @@ StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags
 		//If we reach this point, couldn't find a valid static method
 		if (shouldInspectInherited)
 		{
-			for (ParentStruct const& parent : structImpl->getDirectParents())
+			for (ParentStruct const& parent : getPimpl()->getDirectParents())
 			{
 				result = parent.getArchetype().getStaticMethodByName(name, minFlags, true);
 
@@ -515,9 +509,8 @@ Vector<StaticMethod const*> Struct::getStaticMethodsByName(char const* name, EMe
 {
 	//Users using this method likely are waiting for at least 2 results, so default capacity to 2.
 	Vector<StaticMethod const*>	result(2);
-	StructImpl const*				structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
 
-	EntityUtility::foreachEntityNamed(structImpl->getStaticMethods(),
+	EntityUtility::foreachEntityNamed(getPimpl()->getStaticMethods(),
 								   	 name,
 								   	 [&result, minFlags](StaticMethod const& staticMethod)
 								   	 {
@@ -533,7 +526,7 @@ Vector<StaticMethod const*> Struct::getStaticMethodsByName(char const* name, EMe
 	//If we reach this point, couldn't find a valid method
 	if (shouldInspectInherited)
 	{
-		for (ParentStruct const& parent : structImpl->getDirectParents())
+		for (ParentStruct const& parent : getPimpl()->getDirectParents())
 		{
 			result.push_back(parent.getArchetype().getStaticMethodsByName(name, minFlags, true));
 		}
@@ -546,8 +539,7 @@ StaticMethod const* Struct::getStaticMethodByPredicate(Predicate<StaticMethod> p
 {
 	if (predicate != nullptr)
 	{
-		StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-		StaticMethod const*	result		= EntityUtility::getEntityByPredicate(structImpl->getStaticMethods(), predicate, userData);
+		StaticMethod const*	result = EntityUtility::getEntityByPredicate(getPimpl()->getStaticMethods(), predicate, userData);
 
 		if (result != nullptr)
 		{
@@ -555,7 +547,7 @@ StaticMethod const* Struct::getStaticMethodByPredicate(Predicate<StaticMethod> p
 		}
 		else if (shouldInspectInherited)
 		{
-			for (ParentStruct const& parent : structImpl->getDirectParents())
+			for (ParentStruct const& parent : getPimpl()->getDirectParents())
 			{
 				result = parent.getArchetype().getStaticMethodByPredicate(predicate, userData, true);
 
@@ -574,14 +566,13 @@ Vector<StaticMethod const*> Struct::getStaticMethodsByPredicate(Predicate<Static
 {
 	if (predicate != nullptr)
 	{
-		StructImpl const*			structImpl = reinterpret_cast<StructImpl const*>(getPimpl());
-		Vector<StaticMethod const*>	result(2);
+		Vector<StaticMethod const*> result(2);
 
-		result.push_back(EntityUtility::getEntitiesByPredicate(structImpl->getStaticMethods(), predicate, userData));
+		result.push_back(EntityUtility::getEntitiesByPredicate(getPimpl()->getStaticMethods(), predicate, userData));
 
 		if (shouldInspectInherited)
 		{
-			for (ParentStruct const& parent : structImpl->getDirectParents())
+			for (ParentStruct const& parent : getPimpl()->getDirectParents())
 			{
 				result.push_back(parent.getArchetype().getStaticMethodsByPredicate(predicate, userData, true));
 			}
@@ -597,14 +588,13 @@ Vector<StaticMethod const*> Struct::getStaticMethodsByPredicate(Predicate<Static
 
 bool Struct::foreachStaticMethod(Visitor<StaticMethod> visitor, void* userData, bool shouldInspectInherited) const
 {
-	StructImpl const*	structImpl	= reinterpret_cast<StructImpl const*>(getPimpl());
-	bool				result		= EntityUtility::foreachEntity(structImpl->getStaticMethods(), visitor, userData);
+	bool result = EntityUtility::foreachEntity(getPimpl()->getStaticMethods(), visitor, userData);
 
 	//Iterate on parent static methods if necessary
 	if (shouldInspectInherited)
 	{
 		std::size_t i = 0u;
-		auto const&	directParents = structImpl->getDirectParents();
+		auto const&	directParents = getPimpl()->getDirectParents();
 
 		while (result && i < directParents.size())
 		{
@@ -634,93 +624,93 @@ void Struct::addDirectParent(Archetype const* archetype, EAccessSpecifier inheri
 	{
 		assert(archetype->getKind() == EEntityKind::Struct || archetype->getKind() == EEntityKind::Class);
 
-		reinterpret_cast<StructImpl*>(getPimpl())->addDirectParent(*reinterpret_cast<Struct const*>(archetype), inheritanceAccess);
+		getPimpl()->addDirectParent(*reinterpret_cast<Struct const*>(archetype), inheritanceAccess);
 	}
 }
 
 void Struct::setDirectParentsCapacity(std::size_t capacity) noexcept
 {
-	reinterpret_cast<StructImpl*>(getPimpl())->setDirectParentsCapacity(capacity);
+	getPimpl()->setDirectParentsCapacity(capacity);
 }
 
 void Struct::addSubclass(Struct const& subclass) noexcept
 {
-	reinterpret_cast<StructImpl*>(getPimpl())->addSubclass(subclass);
+	getPimpl()->addSubclass(subclass);
 }
 
 Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->addNestedArchetype(nestedArchetype, accessSpecifier, this);
+	return getPimpl()->addNestedArchetype(nestedArchetype, accessSpecifier, this);
 }
 
 void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 {
-	reinterpret_cast<StructImpl*>(getPimpl())->setNestedArchetypesCapacity(capacity);
+	getPimpl()->setNestedArchetypesCapacity(capacity);
 }
 
 Field* Struct::addField(char const* name, std::size_t id, Type const& type,
 							  EFieldFlags flags, std::size_t memoryOffset, Struct const* outerEntity) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->addField(name, id, type, flags, this, memoryOffset, outerEntity);
+	return getPimpl()->addField(name, id, type, flags, this, memoryOffset, outerEntity);
 }
 
 void Struct::setFieldsCapacity(std::size_t capacity) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->setFieldsCapacity(capacity);
+	return getPimpl()->setFieldsCapacity(capacity);
 }
 
 StaticField* Struct::addStaticField(char const* name, std::size_t id, Type const& type,
 										  EFieldFlags flags, void* fieldPtr, Struct const* outerEntity) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
+	return getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
 }
 
 StaticField* Struct::addStaticField(char const* name, std::size_t id, Type const& type,
 										  EFieldFlags flags, void const* fieldPtr, Struct const* outerEntity) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
+	return getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
 }
 
 void Struct::setStaticFieldsCapacity(std::size_t capacity) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->setStaticFieldsCapacity(capacity);
+	return getPimpl()->setStaticFieldsCapacity(capacity);
 }
 
 Method* Struct::addMethod(char const* name, std::size_t id,
 								Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->addMethod(name, id, returnType, internalMethod, flags, this);
+	return getPimpl()->addMethod(name, id, returnType, internalMethod, flags, this);
 }
 
 void Struct::setMethodsCapacity(std::size_t capacity) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->setMethodsCapacity(capacity);
+	return getPimpl()->setMethodsCapacity(capacity);
 }
 
 StaticMethod* Struct::addStaticMethod(char const* name, std::size_t id,
 											Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->addStaticMethod(name, id, returnType, internalMethod, flags, this);
+	return getPimpl()->addStaticMethod(name, id, returnType, internalMethod, flags, this);
 }
 
 void Struct::setStaticMethodsCapacity(std::size_t capacity) noexcept
 {
-	return reinterpret_cast<StructImpl*>(getPimpl())->setStaticMethodsCapacity(capacity);
+	return getPimpl()->setStaticMethodsCapacity(capacity);
 }
 
 void Struct::setDefaultInstantiator(void* (*instantiator)()) noexcept
 {
-	reinterpret_cast<StructImpl*>(getPimpl())->setDefaultInstantiator(instantiator);
+	getPimpl()->setDefaultInstantiator(instantiator);
 }
 
 void Struct::addInstantiator(StaticMethod const* instantiator) noexcept
 {
-	reinterpret_cast<StructImpl*>(getPimpl())->addInstantiator(instantiator);
+	getPimpl()->addInstantiator(instantiator);
 }
 
 void* Struct::makeInstanceFromDefaultInstantiator() const
 {
-	void* (*defaultInstantiator)() = reinterpret_cast<StructImpl const*>(getPimpl())->getDefaultInstantiator();
+	void* (*defaultInstantiator)() = getPimpl()->getDefaultInstantiator();
 
 	assert(defaultInstantiator != nullptr);
 
@@ -729,10 +719,10 @@ void* Struct::makeInstanceFromDefaultInstantiator() const
 
 std::size_t Struct::getInstantiatorsCount() const noexcept
 {
-	return reinterpret_cast<StructImpl const*>(getPimpl())->getCustomInstantiators().size();
+	return getPimpl()->getCustomInstantiators().size();
 }
 
 StaticMethod const* Struct::getInstantiatorAt(std::size_t index) const noexcept
 {
-	return reinterpret_cast<StructImpl const*>(getPimpl())->getCustomInstantiators()[index];
+	return getPimpl()->getCustomInstantiators()[index];
 }

@@ -13,7 +13,7 @@ TypeTemplateArgument::~TypeTemplateArgument() noexcept = default;
 
 Archetype const* TypeTemplateArgument::getArchetype() const noexcept
 {
-	return reinterpret_cast<TypeTemplateArgumentImpl const*>(getPimpl())->getArchetype();
+	return getPimpl()->getArchetype();
 }
 
 bool TypeTemplateArgument::operator==(TypeTemplateArgument const& other) const noexcept

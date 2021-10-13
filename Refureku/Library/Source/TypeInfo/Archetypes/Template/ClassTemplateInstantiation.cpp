@@ -15,27 +15,27 @@ ClassTemplateInstantiation::~ClassTemplateInstantiation() noexcept = default;
 
 ClassTemplate const& ClassTemplateInstantiation::getClassTemplate() const noexcept
 {
-	return reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getClassTemplate();
+	return getPimpl()->getClassTemplate();
 }
 
 TemplateArgument const& ClassTemplateInstantiation::getTemplateArgumentAt(std::size_t index) const noexcept
 {
-	return *reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments()[index];
+	return *getPimpl()->getTemplateArguments()[index];
 }
 
 bool ClassTemplateInstantiation::foreachTemplateArgument(Visitor<TemplateArgument> visitor, void* userData) const noexcept
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments(),
+	return EntityUtility::foreachEntity(getPimpl()->getTemplateArguments(),
 										visitor,
 										userData);
 }
 
 std::size_t ClassTemplateInstantiation::getTemplateArgumentsCount() const noexcept
 {
-	return reinterpret_cast<ClassTemplateInstantiationImpl const*>(getPimpl())->getTemplateArguments().size();
+	return getPimpl()->getTemplateArguments().size();
 }
 
 void ClassTemplateInstantiation::addTemplateArgument(TemplateArgument const& argument) noexcept
 {
-	reinterpret_cast<ClassTemplateInstantiationImpl*>(getPimpl())->addTemplateArgument(argument);
+	getPimpl()->addTemplateArgument(argument);
 }

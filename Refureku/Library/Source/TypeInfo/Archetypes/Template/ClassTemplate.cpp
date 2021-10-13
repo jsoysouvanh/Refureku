@@ -15,22 +15,22 @@ ClassTemplate::~ClassTemplate() noexcept = default;
 
 TemplateParameter const& ClassTemplate::getTemplateParameterAt(std::size_t index) const noexcept
 {
-	return *reinterpret_cast<ClassTemplateImpl const*>(getPimpl())->getTemplateParameters()[index];
+	return *getPimpl()->getTemplateParameters()[index];
 }
 
 std::size_t ClassTemplate::getTemplateParametersCount() const noexcept
 {
-	return reinterpret_cast<ClassTemplateImpl const*>(getPimpl())->getTemplateParameters().size();
+	return getPimpl()->getTemplateParameters().size();
 }
 
 std::size_t ClassTemplate::getTemplateInstantiationsCount() const noexcept
 {
-	return reinterpret_cast<ClassTemplateImpl const*>(getPimpl())->getTemplateInstantiations().size();
+	return getPimpl()->getTemplateInstantiations().size();
 }
 
 ClassTemplateInstantiation const* ClassTemplate::getTemplateInstantiation(TemplateArgument const** firstArg, std::size_t argsCount) const noexcept
 {
-	for (ClassTemplateInstantiation const* instantiation : reinterpret_cast<ClassTemplateImpl const*>(getPimpl())->getTemplateInstantiations())
+	for (ClassTemplateInstantiation const* instantiation : getPimpl()->getTemplateInstantiations())
 	{
 		for (std::size_t i = 0u; i < argsCount; i++)
 		{
@@ -51,17 +51,17 @@ ClassTemplateInstantiation const* ClassTemplate::getTemplateInstantiation(Templa
 
 bool ClassTemplate::foreachTemplateInstantiation(Visitor<ClassTemplateInstantiation> visitor, void* userData) const noexcept
 {
-	return EntityUtility::foreachEntity(reinterpret_cast<ClassTemplateImpl const*>(getPimpl())->getTemplateInstantiations(),
+	return EntityUtility::foreachEntity(getPimpl()->getTemplateInstantiations(),
 										visitor,
 										userData);
 }
 
 void ClassTemplate::addTemplateParameter(TemplateParameter const& param) noexcept
 {
-	reinterpret_cast<ClassTemplateImpl*>(getPimpl())->addTemplateParameter(param);
+	getPimpl()->addTemplateParameter(param);
 }
 
 void ClassTemplate::registerTemplateInstantiation(ClassTemplateInstantiation const& inst) noexcept
 {
-	reinterpret_cast<ClassTemplateImpl*>(getPimpl())->addTemplateInstantiation(inst);
+	getPimpl()->addTemplateInstantiation(inst);
 }

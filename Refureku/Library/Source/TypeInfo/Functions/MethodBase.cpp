@@ -54,7 +54,7 @@ bool MethodBase::isConst() const noexcept
 
 EMethodFlags MethodBase::getFlags() const noexcept
 {
-	return reinterpret_cast<MethodBaseImpl const*>(getPimpl())->getFlags();
+	return getPimpl()->getFlags();
 }
 
 EAccessSpecifier MethodBase::getAccess() const noexcept

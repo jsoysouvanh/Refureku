@@ -34,6 +34,8 @@ namespace rfk
 			REFUREKU_INTERNAL VariableBase(VariableBase&&)						noexcept;
 			REFUREKU_INTERNAL ~VariableBase()									noexcept;
 
+			GEN_GET_PIMPL(VariableBaseImpl, Entity::getPimpl())
+
 			/**
 			*	@brief Get the data stored in the provided ptr.
 			*		   This method in not safe if you provide a wrong DataType.

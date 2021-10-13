@@ -43,5 +43,7 @@ namespace rfk
 		protected:
 			//Forward declaration
 			class TemplateTemplateArgumentImpl;
+
+			GEN_GET_PIMPL(TemplateTemplateArgumentImpl, TemplateArgument::getPimpl())
 	};
 }

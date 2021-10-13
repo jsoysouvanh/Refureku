@@ -15,5 +15,5 @@ FunctionParameter::~FunctionParameter() noexcept = default;
 
 Type const& FunctionParameter::getType() const noexcept
 {
-	return reinterpret_cast<FunctionParameterImpl const*>(getPimpl())->getType();
+	return getPimpl()->getType();
 }

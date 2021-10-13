@@ -93,6 +93,8 @@ namespace rfk
 			//Forward declaration
 			class FunctionImpl;
 
+			GEN_GET_PIMPL(FunctionImpl, Entity::getPimpl())
+
 			/**
 			*	@brief Call the underlying function with the forwarded args.
 			* 

@@ -16,16 +16,6 @@ Entity::Entity(Entity&&) noexcept = default;
 
 Entity::~Entity() noexcept = default;
 
-Entity::EntityImpl* Entity::getPimpl() noexcept
-{
-	return _pimpl.get();
-}
-
-Entity::EntityImpl const* Entity::getPimpl() const noexcept
-{
-	return _pimpl.get();
-}
-
 Property const* Entity::getPropertyAt(std::size_t propertyIndex) const noexcept
 {
 	return _pimpl->getProperties()[propertyIndex];

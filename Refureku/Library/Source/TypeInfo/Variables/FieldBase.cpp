@@ -19,7 +19,7 @@ FieldBase::~FieldBase() noexcept = default;
 
 EAccessSpecifier FieldBase::getAccess() const noexcept
 {
-	EFieldFlags flags = reinterpret_cast<FieldBaseImpl const*>(getPimpl())->getFlags();
+	EFieldFlags flags = getPimpl()->getFlags();
 
 	return	(static_cast<EFieldFlagsUnderlyingType>(flags & EFieldFlags::Public) != static_cast<EFieldFlagsUnderlyingType>(0)) ? EAccessSpecifier::Public :
 			(static_cast<EFieldFlagsUnderlyingType>(flags & EFieldFlags::Protected) != static_cast<EFieldFlagsUnderlyingType>(0)) ? EAccessSpecifier::Protected :
@@ -39,10 +39,10 @@ bool FieldBase::isMutable() const noexcept
 
 EFieldFlags FieldBase::getFlags() const noexcept
 {
-	return reinterpret_cast<FieldBaseImpl const*>(getPimpl())->getFlags();
+	return getPimpl()->getFlags();
 }
 
 Struct const* FieldBase::getOwner() const noexcept
 {
-	return reinterpret_cast<FieldBaseImpl const*>(getPimpl())->getOwner();
+	return getPimpl()->getOwner();
 }

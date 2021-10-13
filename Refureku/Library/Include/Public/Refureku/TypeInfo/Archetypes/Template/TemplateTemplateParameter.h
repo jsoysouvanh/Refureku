@@ -59,5 +59,7 @@ namespace rfk
 		private:
 			//Forward declaration
 			class TemplateTemplateParameterImpl;
+
+			GEN_GET_PIMPL(TemplateTemplateParameterImpl, TemplateParameter::getPimpl())
 	};
 }

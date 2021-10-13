@@ -32,15 +32,15 @@ void Variable::set(void const* valuePtr, std::size_t valueSize) const
 
 EVarFlags Variable::getFlags() const noexcept
 {
-	return reinterpret_cast<VariableImpl const*>(getPimpl())->getFlags();
+	return getPimpl()->getFlags();
 }
 
 void* Variable::getPtr() const noexcept
 {
-	return reinterpret_cast<VariableImpl const*>(getPimpl())->getPtr();
+	return getPimpl()->getPtr();
 }
 
 void const* Variable::getConstPtr() const noexcept
 {
-	return reinterpret_cast<VariableImpl const*>(getPimpl())->getConstPtr();
+	return getPimpl()->getConstPtr();
 }

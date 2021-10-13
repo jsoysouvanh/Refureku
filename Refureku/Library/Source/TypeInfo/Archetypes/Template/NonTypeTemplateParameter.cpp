@@ -13,5 +13,5 @@ NonTypeTemplateParameter::~NonTypeTemplateParameter() noexcept = default;
 
 Archetype const* NonTypeTemplateParameter::getArchetype() const noexcept
 {
-	return reinterpret_cast<NonTypeTemplateParameterImpl const*>(getPimpl())->getArchetype();
+	return getPimpl()->getArchetype();
 }

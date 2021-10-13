@@ -21,10 +21,10 @@ void Field::set(void* instance, void const* valuePtr, std::size_t valueSize) con
 
 void* Field::getPtr(void* instance) const noexcept
 {
-	return reinterpret_cast<uint8_t*>(instance) + reinterpret_cast<FieldImpl const*>(getPimpl())->getMemoryOffset();
+	return reinterpret_cast<uint8_t*>(instance) + getPimpl()->getMemoryOffset();
 }
 
 void const* Field::getConstPtr(void const* instance) const noexcept
 {
-	return reinterpret_cast<uint8_t const*>(instance) + reinterpret_cast<FieldImpl const*>(getPimpl())->getMemoryOffset();
+	return reinterpret_cast<uint8_t const*>(instance) + getPimpl()->getMemoryOffset();
 }

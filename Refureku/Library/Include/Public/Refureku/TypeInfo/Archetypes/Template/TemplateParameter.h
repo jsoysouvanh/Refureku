@@ -9,6 +9,7 @@
 
 #include "Refureku/Config.h"
 #include "Refureku/Misc/Pimpl.h"
+#include "Refureku/Misc/GetPimplMacro.h"
 #include "Refureku/TypeInfo/Archetypes/Template/ETemplateParameterKind.h"
 
 namespace rfk
@@ -43,13 +44,7 @@ namespace rfk
 			REFUREKU_INTERNAL TemplateParameter(TemplateParameterImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ~TemplateParameter()										noexcept;
 
-			/**
-			*	@brief Get the _pimpl internal pointer.
-			* 
-			*	@return The _pimpl internal pointer.
-			*/
-			RFK_NODISCARD REFUREKU_INTERNAL TemplateParameterImpl*			getPimpl()			noexcept;
-			RFK_NODISCARD REFUREKU_INTERNAL TemplateParameterImpl const*	getPimpl()	const	noexcept;
+			GEN_GET_PIMPL(TemplateParameterImpl, _pimpl.get())
 
 		private:
 			/** Pointer to the TemplateParameter concrete implementation. */

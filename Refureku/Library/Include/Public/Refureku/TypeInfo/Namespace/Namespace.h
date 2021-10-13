@@ -386,6 +386,8 @@ namespace rfk
 		private:
 			//Forward declaration
 			class NamespaceImpl;
+
+			GEN_GET_PIMPL(NamespaceImpl, Entity::getPimpl())
 	};
 
 	#include "Refureku/TypeInfo/Namespace/Namespace.inl"

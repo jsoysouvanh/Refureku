@@ -17,7 +17,7 @@ NonTypeTemplateArgument::~NonTypeTemplateArgument() noexcept = default;
 
 void const* NonTypeTemplateArgument::getValuePtr() const noexcept
 {
-	return reinterpret_cast<NonTypeTemplateArgumentImpl const*>(getPimpl())->getValuePtr();
+	return getPimpl()->getValuePtr();
 }
 
 bool NonTypeTemplateArgument::operator==(NonTypeTemplateArgument const& other) const noexcept

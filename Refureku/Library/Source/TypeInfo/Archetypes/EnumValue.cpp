@@ -18,5 +18,5 @@ EnumValue::~EnumValue() noexcept = default;
 
 int64 EnumValue::getValue() const noexcept
 {
-	return reinterpret_cast<EnumValueImpl const*>(getPimpl())->getValue();
+	return getPimpl()->getValue();
 }
