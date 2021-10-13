@@ -10,7 +10,7 @@
 #include <cstddef>		//std::size_t
 #include <type_traits>	//std::is_const_v, std::is_volatile_v, std::is_array_v, ...
 
-#include "Refureku/Utility/Pimpl.h"
+#include "Refureku/Misc/Pimpl.h"
 #include "Refureku/TypeInfo/TypePart.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 

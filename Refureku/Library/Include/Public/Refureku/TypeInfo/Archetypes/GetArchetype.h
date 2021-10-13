@@ -11,7 +11,7 @@
 
 #include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"	//rfk::getEnum
-#include "Refureku/Utility/TypeTraitsMacros.h"
+#include "Refureku/Misc/TypeTraitsMacros.h"
 
 namespace rfk
 {

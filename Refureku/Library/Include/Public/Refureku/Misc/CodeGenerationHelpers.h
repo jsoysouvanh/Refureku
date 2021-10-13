@@ -11,7 +11,7 @@
 #include <cstddef>
 #include <type_traits>
 
-#include "Refureku/Utility/TypeTraitsMacros.h"
+#include "Refureku/Misc/TypeTraitsMacros.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 
@@ -161,5 +161,5 @@ __RFK_DISABLE_WARNING_POP
 		}
 	}
 
-	#include "Refureku/Utility/CodeGenerationHelpers.inl"
+	#include "Refureku/Misc/CodeGenerationHelpers.inl"
 }

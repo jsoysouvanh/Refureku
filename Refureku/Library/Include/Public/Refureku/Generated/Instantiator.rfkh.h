@@ -4,7 +4,7 @@
 
 #include <Refureku/TypeInfo/Entity/EEntityKind.h>
 #include <string>
-#include <Refureku/Utility/CodeGenerationHelpers.h>
+#include <Refureku/Misc/CodeGenerationHelpers.h>
 #include <Refureku/Misc/DisableWarningMacros.h>
 #include <Refureku/TypeInfo/Functions/Method.h>
 #include <Refureku/TypeInfo/Functions/StaticMethod.h>

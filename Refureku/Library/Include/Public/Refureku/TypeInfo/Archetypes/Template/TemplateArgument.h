@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Refureku/Config.h"
-#include "Refureku/Utility/Pimpl.h"
+#include "Refureku/Misc/Pimpl.h"
 
 namespace rfk
 {

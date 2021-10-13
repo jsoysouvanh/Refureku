@@ -301,7 +301,7 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "#include <string>" + env.getSeparator() +
-					"#include <Refureku/Utility/CodeGenerationHelpers.h>" + env.getSeparator() +
+					"#include <Refureku/Misc/CodeGenerationHelpers.h>" + env.getSeparator() +
 					"#include <Refureku/Misc/DisableWarningMacros.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Functions/Method.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Functions/StaticMethod.h>" + env.getSeparator() +

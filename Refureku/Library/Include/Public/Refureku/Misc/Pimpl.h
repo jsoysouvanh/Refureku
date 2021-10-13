@@ -85,5 +85,5 @@ namespace rfk
 			T const&	operator*()				const	noexcept;
 	};
 
-	#include "Refureku/Utility/Pimpl.inl"
+	#include "Refureku/Misc/Pimpl.inl"
 }
