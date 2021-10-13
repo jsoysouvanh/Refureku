@@ -1387,10 +1387,10 @@ void printTemplateParameter(rfk::TemplateParameter const& param)
 	}
 }
 
-int main()
-{
-	oldTests();
-	newTests();
-
-	return EXIT_SUCCESS;
-}
+//int main()
+//{
+//	oldTests();
+//	newTests();
+//
+//	return EXIT_SUCCESS;
+//}

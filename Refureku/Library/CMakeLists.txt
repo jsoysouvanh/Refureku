@@ -90,4 +90,8 @@ target_include_directories(${RefurekuLibraryTarget}
 							PUBLIC	Include/Public
 							PRIVATE Include/Private)
 
+#Force use the shared version for google tests
+set(gtest_force_shared_crt ON)
+add_subdirectory(ThirdParty/GoogleTests)
+
 add_subdirectory(Tests)
