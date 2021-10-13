@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/github/license/jsoysouvanh/Refureku)](https://github.com/jsoysouvanh/Refureku/blob/master/LICENSE.md)
 [![Latest Release](https://img.shields.io/github/v/tag/jsoysouvanh/refureku?label=release)](https://github.com/jsoysouvanh/Refureku/releases/latest)
 [![Build & Tests](https://github.com/jsoysouvanh/Refureku/actions/workflows/build_and_tests.yml/badge.svg?branch=master)](https://github.com/jsoysouvanh/Refureku/actions/workflows/build_and_tests.yml)
+[![codecov](https://codecov.io/gh/jsoysouvanh/Refureku/branch/master/graph/badge.svg?token=IG2AFIJI0M)](https://codecov.io/gh/jsoysouvanh/Refureku)
 
 </div>
 
