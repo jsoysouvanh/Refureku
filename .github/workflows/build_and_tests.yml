@@ -123,8 +123,10 @@ jobs:
 
           mv Refureku/Library/Include/Public RefurekuBinaries/Include
           mv Build/Release/Bin/RefurekuSettings.toml RefurekuBinaries/
-          mv LICENSE.md RefurekuBinaries/
           mv README.md RefurekuBinaries/
+          
+          mv LICENSE.md RefurekuBinaries/
+          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
 
       - name: Upload Binaries Artifact
         if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
