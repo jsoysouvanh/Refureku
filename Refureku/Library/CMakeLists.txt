@@ -90,8 +90,7 @@ target_include_directories(${RefurekuLibraryTarget}
 							PUBLIC	Include/Public
 							PRIVATE Include/Private)
 
-#Force use the shared version for google tests
-set(gtest_force_shared_crt ON)
+#Force GTest to link with shared CRT since Refureku links with shared CRT
+set(gtest_force_shared_crt ON CACHE BOOL "GTest use shared CRT (MD[d])" FORCE)
 add_subdirectory(ThirdParty/GoogleTests)
-
 add_subdirectory(Tests)
