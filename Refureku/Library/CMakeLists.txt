@@ -69,15 +69,20 @@ if (MSVC)
 	string(REGEX REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
 
 	# Use rtti on Property file if specified
-	if (GEN_PROPERTY_RTTI)
+	if (RFK_GEN_PROPERTY_RTTI)
 		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS /GR)
 	endif()
 
 else()	# Clang or GCC
 	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fno-rtti -fvisibility-ms-compat -fvisibility-inlines-hidden)
 
+	if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND RFK_GEN_CODECOV_REPORT)
+		target_compile_options(${RefurekuLibraryTarget} PUBLIC --coverage)
+		target_link_options(${RefurekuLibraryTarget} PUBLIC --coverage)
+	endif()
+
 	# Use rtti on Property file if specified
-	if (GEN_PROPERTY_RTTI)
+	if (RFK_GEN_PROPERTY_RTTI)
 		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS -frtti)
 	endif()
 

@@ -1,0 +1,63 @@
+name: Code Coverage
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - CI-setup
+
+jobs:
+  gen_cov_report:
+    name: Gen Code Cov Report
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Debug, Release]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Install suitable compiler
+        run: sudo apt-get install g++-10
+
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.15.0'
+
+      - name: Install lcov
+        run: sudo apt-get install lcov
+      
+      - name: Setup Compiler
+        run: |
+          echo "CC=gcc-10" >> $GITHUB_ENV
+          echo "CXX=g++-10" >> $GITHUB_ENV
+
+      - name: Generate Project
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DRFK_GEN_PROPERTY_RTTI=1 -DRFK_GEN_CODECOV_REPORT=1 -G "Ninja"
+
+      - name: Build Refureku
+        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --target RefurekuTests --verbose
+
+      - name: Run Tests
+        run: cd Build/${{ matrix.build_config }} && ctest -R RefurekuTests -C ${{ matrix.build_config }} -V
+
+      - name: Generate coverage report
+        run: lcov --directory Build/${{ matrix.build_config }} --capture --output-file coverage.info
+        
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.info
+          fail_ci_if_error: true
+          verbose: true
