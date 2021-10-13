@@ -35,7 +35,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Windows/
@@ -50,7 +50,7 @@ jobs:
           mv Build/Release/Lib/Release/Refureku.lib RefurekuBinaries/Windows/Lib/
 
       - name: Upload Binaries Artifact
-        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -112,7 +112,7 @@ jobs:
           cat ./Testing/Temporary/MemoryChecker.*.log
   
       - name: Setup Binaries Artifact
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Linux/
@@ -129,7 +129,7 @@ jobs:
           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
 
       - name: Upload Binaries Artifact
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -169,7 +169,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Mac/
@@ -179,7 +179,7 @@ jobs:
           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
 
       - name: Upload Binaries Artifact
-        if: matrix.build_config == 'Release' # && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -191,7 +191,7 @@ jobs:
     name: Deploy Binaries
     runs-on: ubuntu-latest
     needs: [build_windows_msvc, build_linux_gcc_clang, build_macos]
-    # if: startsWith(github.event.ref, 'refs/tags/v')
+    if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
       - name: Install zip
@@ -200,6 +200,13 @@ jobs:
       - name: Compute version
         id: version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        
+      - name: Setup Env
+        id: env_vars
+        run: |
+          echo ::set-output name=LINUX_ARCHIVE_PATH::rfk_${{steps.version.outputs.VERSION}}_linux.tar.gz
+          echo ::set-output name=WIN_ARCHIVE_PATH::rfk_${{steps.version.outputs.VERSION}}_windows.zip
+          echo ::set-output name=MAC_ARCHIVE_PATH::rfk_${{steps.version.outputs.VERSION}}_macos.tar.gz
 
       - name: Fetch Binaries Artifacts
         uses: actions/download-artifact@v2
@@ -209,27 +216,27 @@ jobs:
 
       - name: Build Linux Binaries Archive
         run: |
-          cp -R RefurekuBinaries/Include RefurekuBinaries/Linux
+          cp -R RefurekuBinaries/Include RefurekuBinaries/Licenses RefurekuBinaries/Linux
           cp RefurekuBinaries/* RefurekuBinaries/Linux 2>/dev/null || :
-          tar -czvf rfk_${{steps.version.outputs.VERSION}}_linux.tar.gz --directory RefurekuBinaries/Linux .
+          tar -czvf ${{steps.env_vars.outputs.LINUX_ARCHIVE_PATH}} --directory RefurekuBinaries/Linux .
 
       - name: Build Windows Binaries Archive
         run: |
-          cp -R RefurekuBinaries/Include RefurekuBinaries/Windows
+          cp -R RefurekuBinaries/Include RefurekuBinaries/Licenses RefurekuBinaries/Windows
           cp RefurekuBinaries/* RefurekuBinaries/Windows 2>/dev/null || :
-          (cd RefurekuBinaries/Windows && zip -r - .) > rfk_${{steps.version.outputs.VERSION}}_windows.zip
+          (cd RefurekuBinaries/Windows && zip -r - .) > ${{steps.env_vars.outputs.WIN_ARCHIVE_PATH}}
 
       - name: Build MacOS Binaries Archive
         run: |
-          cp -R RefurekuBinaries/Include RefurekuBinaries/Mac
+          cp -R RefurekuBinaries/Include RefurekuBinaries/Licenses RefurekuBinaries/Mac
           cp RefurekuBinaries/* RefurekuBinaries/Mac 2>/dev/null || :
-          tar -czvf rfk_${{steps.version.outputs.VERSION}}_macos.tar.gz --directory RefurekuBinaries/Mac .
+          tar -czvf ${{steps.env_vars.outputs.MAC_ARCHIVE_PATH}} --directory RefurekuBinaries/Mac .
 
       - name: Publish Release Draft
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           files: |
-            rfk_${{steps.version.outputs.VERSION}}_linux.tar.gz
-            rfk_${{steps.version.outputs.VERSION}}_windows.zip
-            rfk_${{steps.version.outputs.VERSION}}_macos.tar.gz
+            ${{steps.env_vars.outputs.LINUX_ARCHIVE_PATH}}
+            ${{steps.env_vars.outputs.WIN_ARCHIVE_PATH}}
+            ${{steps.env_vars.outputs.MAC_ARCHIVE_PATH}}
