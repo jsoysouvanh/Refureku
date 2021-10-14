@@ -27,6 +27,17 @@ class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedProper
 	UniqueInheritedProperty_GENERATED
 };
 
+class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedPropertyChild : public UniqueInheritedProperty
+{
+	public:
+		inline UniqueInheritedPropertyChild(int value_):
+			UniqueInheritedProperty(value_)
+		{
+		}
+
+	UniqueInheritedPropertyChild_GENERATED
+};
+
 class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedProperty : public rfk::Property
 {
 	public:
@@ -38,6 +49,17 @@ class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedPrope
 		}
 
 	MultipleInheritedProperty_GENERATED
+};
+
+class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedPropertyChild : public MultipleInheritedProperty
+{
+	public:
+		inline MultipleInheritedPropertyChild(int value_):
+			MultipleInheritedProperty(value_)
+		{
+		}
+
+	MultipleInheritedPropertyChild_GENERATED
 };
 
 class CLASS(PropertySettings(allEntityKinds, false, false)) UniqueNonInheritedProperty : public rfk::Property

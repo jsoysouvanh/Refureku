@@ -8,25 +8,27 @@
 #pragma once
 
 #include <cstddef>	//std::size_t
+#include <type_traits>
 
 #include "Refureku/Config.h"
 #include "Refureku/Misc/Pimpl.h"
 #include "Refureku/Misc/GetPimplMacro.h"
 #include "Refureku/TypeInfo/Entity/EEntityKind.h"
-#include "Refureku/Containers/Vector.h"
+#include "Refureku/Properties/Property.h"
 #include "Refureku/Misc/Visitor.h"
 #include "Refureku/Misc/Predicate.h"
+#include "Refureku/Containers/Vector.h"
 
 namespace rfk
 {
+	//Forward declarations
 	class Struct;
-	class Property;
 	class EntityUtility;
 
 	class Entity
 	{
 		public:
-			Entity(Entity const&)	= delete;
+			Entity(Entity const&) = delete;
 
 			/**
 			*	@brief	Retrieve the property at the given index.
@@ -48,7 +50,7 @@ namespace rfk
 			*	
 			*	@return The first found property of type PropertyType if any, else nullptr.
 			*/
-			template <typename PropertyType>
+			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType> && !std::is_same_v<PropertyType, Property>>>
 			RFK_NODISCARD PropertyType const*					getProperty(bool isChildClassValid = true)					const	noexcept;
 
 			/**
@@ -94,7 +96,7 @@ namespace rfk
 			*	
 			*	@return A collection of all properties matching the provided property type in this entity.
 			*/
-			template <typename PropertyType>
+			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType> && !std::is_same_v<PropertyType, Property>>>
 			RFK_NODISCARD Vector<PropertyType const*>			getProperties(bool isChildClassValid = true)				const	noexcept;
 
 			/**
