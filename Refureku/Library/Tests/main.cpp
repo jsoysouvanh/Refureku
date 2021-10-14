@@ -3,6 +3,7 @@
 #include "EntityTests.cpp"
 #include "ArchetypeTests.cpp"
 #include "EnumTests.cpp"
+#include "EnumValueTests.cpp"
 
 int main(int argc, char** argv)
 {
