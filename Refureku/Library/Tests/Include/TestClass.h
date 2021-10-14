@@ -11,7 +11,11 @@
 
 #include "Generated/TestClass.rfkh.h"
 
-class CLASS(UniqueInheritedProperty(1), MultipleInheritedPropertyChild(2), MultipleInheritedProperty(4)) TestClass
+class CLASS(UniqueInheritedProperty(1),
+			MultipleInheritedPropertyChild(2),
+			MultipleInheritedProperty(4),
+			UniqueNonInheritedProperty(100),
+			MultipleNonInheritedProperty(101)) TestClass
 {
 	private:
 		FIELD()

@@ -14,13 +14,24 @@
 //Every entity kind except Undefined
 static constexpr rfk::EEntityKind const allEntityKinds = static_cast<rfk::EEntityKind>(~0 & ~static_cast<int>(rfk::EEntityKind::Undefined));
 
-class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedProperty : public rfk::Property
+class CLASS(PropertySettings(allEntityKinds)) BaseTestProperty : public rfk::Property
 {
 	public:
 		int value;
 
-		inline UniqueInheritedProperty(int value_):
+		inline BaseTestProperty(int value_):
 			value{ value_ }
+		{
+		}
+
+	BaseTestProperty_GENERATED
+};
+
+class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedProperty : public BaseTestProperty
+{
+	public:
+		inline UniqueInheritedProperty(int value_):
+			BaseTestProperty(value_)
 		{
 		}
 
@@ -38,13 +49,11 @@ class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedProper
 	UniqueInheritedPropertyChild_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedProperty : public rfk::Property
+class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedProperty : public BaseTestProperty
 {
 	public:
-		int value;
-
 		inline MultipleInheritedProperty(int value_):
-			value{ value_ }
+			BaseTestProperty(value_)
 		{
 		}
 
@@ -62,26 +71,22 @@ class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedPrope
 	MultipleInheritedPropertyChild_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, false, false)) UniqueNonInheritedProperty : public rfk::Property
+class CLASS(PropertySettings(allEntityKinds, false, false)) UniqueNonInheritedProperty : public BaseTestProperty
 {
 	public:
-		int value;
-
 		inline UniqueNonInheritedProperty(int value_):
-			value{ value_ }
+			BaseTestProperty(value_)
 		{
 		}
 
 	UniqueNonInheritedProperty_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, true, false)) MultipleNonInheritedProperty : public rfk::Property
+class CLASS(PropertySettings(allEntityKinds, true, false)) MultipleNonInheritedProperty : public BaseTestProperty
 {
 	public:
-		int value;
-
 		inline MultipleNonInheritedProperty(int value_):
-			value{ value_ }
+			BaseTestProperty(value_)
 		{
 		}
 

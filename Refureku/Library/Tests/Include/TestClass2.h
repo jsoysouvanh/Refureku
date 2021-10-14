@@ -11,9 +11,15 @@
 
 #include "Generated/TestClass2.rfkh.h"
 
-class CLASS(UniqueInheritedPropertyChild(1), MultipleInheritedPropertyChild(2)) TestClass2 : public TestClass
+class CLASS(UniqueInheritedPropertyChild(1), MultipleInheritedPropertyChild(3)) TestClass2 : public TestClass
 {
 	TestClass2_GENERATED
+};
+
+
+class CLASS(MultipleInheritedPropertyChild(5), UniqueInheritedProperty(6)) TestClass3 : public TestClass
+{
+	TestClass3_GENERATED
 };
 
 File_TestClass2_GENERATED
