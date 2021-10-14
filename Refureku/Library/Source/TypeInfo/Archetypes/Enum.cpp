@@ -26,71 +26,36 @@ void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
 
 EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
 {
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (std::strcmp(enumValue.getName(), name) == 0)
-		{
-			return &enumValue;
-		}
-	}
-
-	return nullptr;
+	return EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), [name](EnumValue const& ev)
+											   {
+												   return std::strcmp(ev.getName(), name) == 0;
+											   });
 }
 
 EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 {
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (enumValue.getValue() == value)
-		{
-			return &enumValue;
-		}
-	}
-
-	return nullptr;
+	return EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
+											   {
+												   return ev.getValue() == value;
+											   });
 }
 
 EnumValue const* Enum::getEnumValueByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (predicate(enumValue, userData))
-		{
-			return &enumValue;
-		}
-	}
-
-	return nullptr;
+	return EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), predicate, userData);
 }
 
 Vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 {
-	Vector<EnumValue const*> result;
-
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (enumValue.getValue() == value)
-		{
-			result.push_back(&enumValue);
-		}
-	}
-
-	return result;
+	return EntityUtility::getEntitiesByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
+												 {
+													 return ev.getValue() == value;
+												 });
 }
 
 Vector<EnumValue const*> Enum::getEnumValuesByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	Vector<EnumValue const*> result;
-
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (predicate(enumValue, userData))
-		{
-			result.push_back(&enumValue);
-		}
-	}
-
-	return result;
+	return EntityUtility::getEntitiesByPredicate(getPimpl()->getEnumValues(), predicate, userData);
 }
 
 EnumValue const& Enum::getEnumValueAt(std::size_t valueIndex)	const noexcept

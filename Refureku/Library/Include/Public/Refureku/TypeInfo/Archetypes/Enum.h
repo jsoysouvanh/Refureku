@@ -42,7 +42,7 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API EnumValue const*			getEnumValue(int64 value)										const	noexcept;
 
 			/**
-			*	@brief Retrieve from this enum an enum value matching with a given predicate.
+			*	@brief Retrieve from this enum the first enum value matching with a given predicate.
 			*
 			*	@param predicate	Predicate returning true for any matching enum value.
 			*	@param userData		Optional data forwarded to the predicate.
@@ -94,9 +94,9 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API std::size_t				getEnumValuesCount()											const	noexcept;
 
 			/**
-			*	@brief Getter for the field _underlyingArchetype.
+			*	@brief Get the type this enum is based on.
 			* 
-			*	@return _underlyingArchetype.
+			*	@return The type this enum is based on.
 			*/
 			RFK_NODISCARD REFUREKU_API Archetype const&			getUnderlyingArchetype()										const	noexcept;
 

@@ -2,6 +2,7 @@
 
 #include "EntityTests.cpp"
 #include "ArchetypeTests.cpp"
+#include "EnumTests.cpp"
 
 int main(int argc, char** argv)
 {

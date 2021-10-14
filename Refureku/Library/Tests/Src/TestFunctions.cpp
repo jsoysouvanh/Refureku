@@ -39,5 +39,5 @@ int func_overloaded()
 
 int func_overloaded(int i)
 {
-	return 1;
+	return i;
 }

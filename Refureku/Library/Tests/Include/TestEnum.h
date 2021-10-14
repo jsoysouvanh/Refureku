@@ -7,20 +7,24 @@
 
 #pragma once
 
+#include "TestProperties.h"
+
 #include "Generated/TestEnum.rfkh.h"
 
 enum ENUM() TestEnum
 {
-	TestEnumValue1,
+	TestEnumValue1 ENUMVALUE(BaseTestProperty(0)),
 	TestEnumValue2,
 	TestEnumValue3
 };
 
-enum class ENUM() TestEnumClass
+enum class ENUM() TestEnumClass : char
 {
-	Value1,
-	Value2,
-	Value3
+	Value1 = 1 << 0,
+	Value2 = 1 << 1,
+	Value3 = 1 << 2,
+	Value3Alias = Value3,
+	Value123 = Value1 | Value2 | Value3
 };
 
 File_TestEnum_GENERATED
