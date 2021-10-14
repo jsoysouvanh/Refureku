@@ -440,12 +440,12 @@ TEST(Rfk_Entity_foreachProperty, WithoutBreak)
 {
 	int count = 0;
 
-	TestClass::staticGetArchetype().foreachProperty([](rfk::Property const& prop, void* data)
+	EXPECT_TRUE(TestClass::staticGetArchetype().foreachProperty([](rfk::Property const& prop, void* data)
 													{
 														(*reinterpret_cast<int*>(data))++;
 
 														return true;
-													}, &count);
+													}, &count));
 
 	EXPECT_EQ(count, 5u);
 }
@@ -454,7 +454,7 @@ TEST(Rfk_Entity_foreachProperty, WithBreak)
 {
 	int count = 0;
 
-	TestClass::staticGetArchetype().foreachProperty([](rfk::Property const& prop, void* data)
+	EXPECT_FALSE(TestClass::staticGetArchetype().foreachProperty([](rfk::Property const& prop, void* data)
 													{
 														int& counter = *reinterpret_cast<int*>(data);
 
@@ -462,7 +462,12 @@ TEST(Rfk_Entity_foreachProperty, WithBreak)
 
 														//Continue looping until the counter reaches 3
 														return counter != 3;
-													}, &count);
+													}, &count));
 
 	EXPECT_EQ(count, 3u);
+}
+
+TEST(Rfk_Entity_foreachProperty, NullptrVisitor)
+{
+	EXPECT_FALSE(TestClass::staticGetArchetype().foreachProperty(nullptr, nullptr));
 }

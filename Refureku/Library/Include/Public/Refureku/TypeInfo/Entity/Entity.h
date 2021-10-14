@@ -196,20 +196,6 @@ namespace rfk
 			REFUREKU_API bool									addProperty(Property const* property)								noexcept;
 
 			/**
-			*	@brief Inherit from another entity inheritable properties.
-			*	
-			*	@param from The entity this entity should inherit the properties from.
-			*/
-			REFUREKU_API void									inheritProperties(Entity const& from)								noexcept;
-
-			/**
-			*	@brief Inherit all properties from another entity.
-			* 
-			*	@param from The entity this entity should inherit the properties from.
-			*/
-			REFUREKU_API void									inheritAllProperties(Entity const& from)							noexcept;
-
-			/**
 			*	@brief Setter for the field _outerEntity.
 			* 
 			*	@param outerEntity The outer entity to set.

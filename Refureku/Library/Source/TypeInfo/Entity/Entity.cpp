@@ -153,16 +153,6 @@ bool Entity::addProperty(Property const* property) noexcept
 	return _pimpl->addProperty(property);
 }
 
-void Entity::inheritProperties(Entity const& from) noexcept
-{
-	_pimpl->inheritProperties(*from._pimpl);
-}
-
-void Entity::inheritAllProperties(Entity const& from) noexcept
-{
-	_pimpl->inheritAllProperties(*from._pimpl);
-}
-
 char const* Entity::getName() const noexcept
 {
 	return _pimpl->getName().data();
