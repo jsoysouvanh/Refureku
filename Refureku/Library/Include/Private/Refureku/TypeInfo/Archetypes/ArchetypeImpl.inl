@@ -7,6 +7,7 @@
 
 inline Archetype::ArchetypeImpl::ArchetypeImpl(char const* name, std::size_t id, EEntityKind kind, std::size_t memorySize, Entity const* outerEntity) noexcept:
 	Entity::EntityImpl(name, id, kind, outerEntity),
+	_accessSpecifier{EAccessSpecifier::Undefined},
 	_memorySize{memorySize}
 {
 }

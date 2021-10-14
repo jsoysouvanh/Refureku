@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "EntityTests.cpp"
+#include "ArchetypeTests.cpp"
 
 int main(int argc, char** argv)
 {

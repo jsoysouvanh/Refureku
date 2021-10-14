@@ -13,6 +13,16 @@
 
 class CLASS(UniqueInheritedPropertyChild(1), MultipleInheritedPropertyChild(3)) TestClass2 : public TestClass
 {
+	private:
+		enum class ENUM() PrivateNestedEnum
+		{
+		};
+
+	protected:
+		enum class ENUM() ProtectedNestedEnum
+		{
+		};
+
 	TestClass2_GENERATED
 };
 

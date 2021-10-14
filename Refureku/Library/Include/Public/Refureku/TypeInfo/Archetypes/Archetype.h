@@ -18,25 +18,26 @@ namespace rfk
 			Archetype(Archetype&&) = delete;
 
 			/**
-			*	@brief Getter for the field _accessSpecifier.
+			*	@brief	Get the access specifier of the archetype if it is nested in a struct or class.
+			*			If the archetype is not nested in a struct or class, EAccessSpecifier::Undefined is returned.
 			* 
-			*	@return _accessSpecifier.
+			*	@return The access specifier of the archetype.
 			*/
 			RFK_NODISCARD REFUREKU_API EAccessSpecifier	getAccessSpecifier()			const	noexcept;
 
 			/**
-			*	@brief Getter for the field _memorySize.
+			*	@brief Get the memory size of an instance of the archetype, as the operator sizeof(type) would do.
 			* 
-			*	@return _memorySize.
+			*	@return The memory size of an instance of the archetype.
 			*/
 			RFK_NODISCARD REFUREKU_API std::size_t		getMemorySize()					const	noexcept;
 
 			/**
-			*	@brief Setter for the field _accessSpecifier.
+			*	@brief Set the access specifier of the archetype in its outer struct/class.
 			* 
-			*	@param The access specifier to set.
+			*	@param _ The new access specifier of this archetype.
 			*/
-			REFUREKU_API void							setAccessSpecifier(EAccessSpecifier)	noexcept;
+			REFUREKU_API void							setAccessSpecifier(EAccessSpecifier _)	noexcept;
 
 		protected:
 			//Forward declaration

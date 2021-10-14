@@ -18,6 +18,11 @@ class CLASS(UniqueInheritedProperty(1),
 			MultipleNonInheritedProperty(101)) TestClass
 {
 	private:
+		struct STRUCT() NestedStruct
+		{
+			TestClass_NestedStruct_GENERATED
+		};
+
 		FIELD()
 		int			_intField;
 
@@ -28,11 +33,6 @@ class CLASS(UniqueInheritedProperty(1),
 		class CLASS() NestedClass
 		{
 			TestClass_NestedClass_GENERATED
-		};
-
-		struct STRUCT() NestedStruct
-		{
-			TestClass_NestedStruct_GENERATED
 		};
 
 	public:
