@@ -1,9 +1,6 @@
 #include <gtest/gtest.h>
 
-TEST(TestTest, DumbTest)
-{
-	EXPECT_EQ(1, 1);
-}
+#include "EntityTests.cpp"
 
 int main(int argc, char** argv)
 {

@@ -8,23 +8,16 @@ project(RefurekuTests)
 
 set(RefurekuTestsTarget RefurekuTests)
 add_executable(${RefurekuTestsTarget}
-					ExampleClass.cpp
-					ExampleClass2.cpp
-					CustomString.cpp
-					CustomProperties.cpp
-					ThirdPartyEnumReflectionCode.cpp
-					Test.cpp
-					Vector3.cpp
-					AB.cpp
-					GeneratedCodeInCpp.cpp
-
-					ClassTemplates/TestClassAB.cpp
-					ClassTemplates/SingleTypeTemplateClassTemplate.cpp
-					ClassTemplates/MultipleTypeTemplateClassTemplate.cpp
-					ClassTemplates/ComplexClassTemplate.cpp
-					ReworkTest.cpp
-
-					RefurekuTests.cpp
+					Src/TestClass.cpp
+					Src/TestFunctions.cpp
+					Src/TestVariables.cpp
+					Src/TestNamespace.cpp
+					Src/TestEnum.cpp
+					Src/TestProperties.cpp
+					Src/SingleTypeTemplateClassTemplate.cpp
+					Src/MultipleTypeTemplateClassTemplate.cpp
+					Src/ComplexClassTemplate.cpp
+					
 					main.cpp)
 
 # Link to RefurekuLibrary

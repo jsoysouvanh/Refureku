@@ -2,7 +2,7 @@
 
 #include "Generated/ComplexClassTemplate.rfkh.h"
 
-enum class RFKEnum() ETemplateTestEnum
+enum class ENUM() ETemplateTestEnum
 {
 	Value1
 };
@@ -19,13 +19,13 @@ namespace rfk
 }
 
 template <typename T, typename U>
-class RFKClass() TypeTemplateClass
+class CLASS() TypeTemplateClass
 {
 	TypeTemplateClass_T_U_GENERATED
 };
 
 template <int Value, char Char, ETemplateTestEnum EnumValue>
-class RFKClass() NonTypeTemplateClass
+class CLASS() NonTypeTemplateClass
 {
 	NonTypeTemplateClass_Value_Char_EnumValue_GENERATED
 };
@@ -38,6 +38,6 @@ class RFKClass() NonTypeTemplateClass
 
 File_ComplexClassTemplate_GENERATED
 
-template class RFKClass() TypeTemplateClass<int, float>;
-template class RFKClass() NonTypeTemplateClass<4, 'a', ETemplateTestEnum::Value1>;
+template class CLASS() TypeTemplateClass<int, float>;
+template class CLASS() NonTypeTemplateClass<4, 'a', ETemplateTestEnum::Value1>;
 //template class RFKClass() TemplateTemplateClass<TypeTemplateClass, TypeTemplateClass>;

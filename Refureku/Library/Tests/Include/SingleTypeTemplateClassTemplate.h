@@ -3,17 +3,15 @@
 #include <Refureku/Properties/ParseAllNested.h>
 #include <Refureku/Object.h>
 
-#include "ClassTemplates/TestClassAB.h"
-
 #include "Generated/SingleTypeTemplateClassTemplate.rfkh.h"
 
 template <typename T>
-class RFKClass(ParseAllNested) SingleTypeTemplateClassTemplate : public rfk::Object
+class CLASS(ParseAllNested) SingleTypeTemplateClassTemplate : public rfk::Object
 {
-	RFKField()
+	FIELD()
 	T testField;
 
-	RFKMethod()
+	METHOD()
 	T testMethod(T const& param) { return param; }
 
 	SingleTypeTemplateClassTemplate_T_GENERATED
@@ -21,4 +19,4 @@ class RFKClass(ParseAllNested) SingleTypeTemplateClassTemplate : public rfk::Obj
 
 File_SingleTypeTemplateClassTemplate_GENERATED
 
-template class RFKClass() SingleTypeTemplateClassTemplate<TestClassA>;
+template class CLASS() SingleTypeTemplateClassTemplate<int>;

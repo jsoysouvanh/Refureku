@@ -5,27 +5,27 @@
 #include "Generated/MultipleTypeTemplateClassTemplate.rfkh.h"
 
 template <typename T, typename U, typename V>
-class RFKClass() MultipleTypeTemplateClassTemplate : public rfk::Object
+class CLASS() MultipleTypeTemplateClassTemplate : public rfk::Object
 {
 	private:
-		RFKField()
+		FIELD()
 		T fieldT = T();
 
 	protected:
-		RFKField()
+		FIELD()
 		U fieldU = U();
 
 	public:
-		RFKMethod()
+		METHOD()
 		T returnT(T const& t) { return t; }
 
-		RFKMethod()
+		METHOD()
 		T returnT(T const& t1, T const& t2) { return t1 + t2; }
 
-		RFKMethod()
+		METHOD()
 		U returnU(U const& u) { return u; }
 
-		RFKMethod()
+		METHOD()
 		V returnV(V const& v) { return v; }
 		
 	MultipleTypeTemplateClassTemplate_T_U_V_GENERATED
@@ -33,7 +33,7 @@ class RFKClass() MultipleTypeTemplateClassTemplate : public rfk::Object
 
 File_MultipleTypeTemplateClassTemplate_GENERATED
 
-RFKVariable()
+VARIABLE()
 extern MultipleTypeTemplateClassTemplate<int, float, double> multipleTypeTemplateClassTemplateImplicitInstantiation;
 
-template class RFKClass() MultipleTypeTemplateClassTemplate<int, int, int>;
+template class CLASS() MultipleTypeTemplateClassTemplate<int, int, int>;
