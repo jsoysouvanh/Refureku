@@ -22,6 +22,11 @@ namespace test_namespace NAMESPACE()
 		test_namespace_TestNamespaceNestedStruct_GENERATED
 	};
 
+	class CLASS() TestNamespaceNestedClass
+	{
+		test_namespace_TestNamespaceNestedClass_GENERATED
+	};
+
 	enum class ENUM() TestNamespaceNestedEnum
 	{
 		Value1,

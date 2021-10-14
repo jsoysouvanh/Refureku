@@ -24,9 +24,19 @@ class CLASS(UniqueInheritedProperty(1), MultipleInheritedProperty(2), MultipleIn
 		class CLASS() NestedClass
 		{
 			TestClass_NestedClass_GENERATED
-		}; 
+		};
+
+		struct STRUCT() NestedStruct
+		{
+			TestClass_NestedStruct_GENERATED
+		};
 
 	public:
+		enum class ENUM() NestedEnum
+		{
+			Value1
+		};
+
 		METHOD()
 		int			getIntField() const	noexcept;
 
