@@ -337,7 +337,7 @@ TEST(Rfk_Entity_getPropertyByName, Entity_getPropertyByName)
 
 TEST(Rfk_Entity_getPropertyByPredicate, WithoutUserData)
 {
-	EXPECT_EQ(TestClass::staticGetArchetype().getPropertyByPredicate([](rfk::Property const& prop, void* userData)
+	EXPECT_EQ(TestClass::staticGetArchetype().getPropertyByPredicate([](rfk::Property const& prop, void* /*userData*/)
 			  {
 				  return MultipleInheritedProperty::staticGetArchetype().isBaseOf(prop.getArchetype()) &&
 					  static_cast<MultipleInheritedProperty const&>(prop).value == 2;
@@ -470,4 +470,22 @@ TEST(Rfk_Entity_foreachProperty, WithBreak)
 TEST(Rfk_Entity_foreachProperty, NullptrVisitor)
 {
 	EXPECT_FALSE(TestClass::staticGetArchetype().foreachProperty(nullptr, nullptr));
+}
+
+//=========================================================
+//================== Entity::operator == ==================
+//=========================================================
+
+TEST(Rfk_Entity_eqOperator, eqOperator)
+{
+	EXPECT_EQ(TestClass::staticGetArchetype(), TestClass::staticGetArchetype());
+}
+
+//=========================================================
+//================== Entity::operator != ==================
+//=========================================================
+
+TEST(Rfk_Entity_neqOperator, neqOperator)
+{
+	EXPECT_NE(TestClass::staticGetArchetype(), TestClass2::staticGetArchetype());
 }
