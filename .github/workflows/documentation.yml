@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: "Checkout repository"
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: "Clone Doxygen Awesome CSS"
+      - name: Clone Doxygen Awesome CSS
         uses: actions/checkout@v2
         with:
           repository: jothepro/doxygen-awesome-css
@@ -26,10 +26,18 @@ jobs:
         id: version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       
-      - name: "Run Doxygen"
+      - name: Update Refureku Version in Doxyfile
+        if: startsWith(github.event.ref, 'refs/tags/v')
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "PROJECT_NUMBER += v[0-9]+.[0-9]+.[0-9]+"
+          replace: "PROJECT_NUMBER = ${{ steps.version.outputs.VERSION }}"
+          include: "./Doxyfile"
+
+      - name: Run Doxygen
         uses: mattnotmitt/doxygen-action@v1.1.0
 
-      - name: "Deploy Documentation"
+      - name: Deploy Documentation
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
