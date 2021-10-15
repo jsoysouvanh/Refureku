@@ -6,3 +6,8 @@ int test_namespace::func_nested_return_noParam()
 {
 	return 0;
 }
+
+int test_namespace::func_nested_overload(int)
+{
+	return 1;
+}

@@ -41,6 +41,11 @@ bool Namespace::foreachNamespace(Visitor<Namespace> visitor, void* userData) con
 	return EntityUtility::foreachEntity(getPimpl()->getNamespaces(), visitor, userData);
 }
 
+std::size_t Namespace::getNamespacesCount() const noexcept
+{
+	return getPimpl()->getNamespaces().size();
+}
+
 Struct const* Namespace::getStructByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Struct const*>(
@@ -76,6 +81,18 @@ Vector<Struct const*> Namespace::getStructsByPredicate(Predicate<Struct> predica
 	{
 		return Vector<Struct const*>(0);
 	}
+}
+
+bool Namespace::foreachStruct(Visitor<Struct> visitor, void* userData) const
+{
+	return (visitor != nullptr) ? 
+		EntityUtility::foreachEntity(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
+																	{
+																		return (archetype.getKind() == EEntityKind::Struct) ?
+																			visitor(static_cast<Struct const&>(archetype), userData) :
+																			true;
+																	}) :
+			false;
 }
 
 Class const* Namespace::getClassByName(char const* name) const noexcept
@@ -115,6 +132,18 @@ Vector<Class const*> Namespace::getClassesByPredicate(Predicate<Class> predicate
 	}
 }
 
+bool Namespace::foreachClass(Visitor<Class> visitor, void* userData) const
+{
+	return (visitor != nullptr) ? 
+		EntityUtility::foreachEntity(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
+									 {
+										 return (archetype.getKind() == EEntityKind::Class) ?
+											 visitor(static_cast<Class const&>(archetype), userData) :
+											 true;
+									 }) :
+		false;
+}
+
 Enum const* Namespace::getEnumByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Enum const*>(
@@ -152,9 +181,26 @@ Vector<Enum const*> Namespace::getEnumsByPredicate(Predicate<Enum> predicate, vo
 	}
 }
 
+bool Namespace::foreachEnum(Visitor<Enum> visitor, void* userData) const
+{
+	return (visitor != nullptr) ? 
+		EntityUtility::foreachEntity(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
+									 {
+										 return (archetype.getKind() == EEntityKind::Enum) ?
+											 visitor(static_cast<Enum const&>(archetype), userData) :
+											 true;
+									 }) :
+		false;
+}
+
 bool Namespace::foreachArchetype(Visitor<Archetype> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(getPimpl()->getArchetypes(), visitor, userData);
+}
+
+std::size_t Namespace::getArchetypesCount() const noexcept
+{
+	return getPimpl()->getArchetypes().size();
 }
 
 Variable const* Namespace::getVariableByName(char const* name, EVarFlags flags) const noexcept
@@ -188,6 +234,11 @@ Vector<Variable const*> Namespace::getVariablesByPredicate(Predicate<Variable> p
 bool Namespace::foreachVariable(Visitor<Variable> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(getPimpl()->getVariables(), visitor, userData);
+}
+
+std::size_t Namespace::getVariablesCount() const noexcept
+{
+	return getPimpl()->getVariables().size();
 }
 
 Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
@@ -234,6 +285,11 @@ Vector<Function const*> Namespace::getFunctionsByPredicate(Predicate<Function> p
 bool Namespace::foreachFunction(Visitor<Function> visitor, void* userData) const
 {
 	return EntityUtility::foreachEntity(getPimpl()->getFunctions(), visitor, userData);
+}
+
+std::size_t Namespace::getFunctionsCount() const noexcept
+{
+	return getPimpl()->getFunctions().size();
 }
 
 void Namespace::addNamespace(Namespace const& nestedNamespace) noexcept

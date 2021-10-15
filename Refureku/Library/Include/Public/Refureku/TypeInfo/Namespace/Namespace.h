@@ -80,6 +80,13 @@ namespace rfk
 																					 void*				userData)						const;
 
 			/**
+			*	@brief Get the number of namespaces nested in this namespace.
+			* 
+			*	@return The number of namespaces nested in this namespace.
+			*/
+			REFUREKU_API std::size_t								getNamespacesCount()												const	noexcept;
+
+			/**
 			*	@brief Retrieve a struct from this namespace.
 			*	
 			*	@param name Name of the struct to look for.
@@ -113,6 +120,20 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API Vector<Struct const*>		getStructsByPredicate(Predicate<Struct> predicate,
 																						  void*				userData)					const;
+
+			/**
+			*	@brief Execute the given visitor on all nested structs.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool										foreachStruct(Visitor<Struct>	visitor,
+																				  void*				userData)							const;
 
 			/**
 			*	@brief Retrieve a class from this namespace.
@@ -150,6 +171,20 @@ namespace rfk
 																						  void*				userData)					const;
 
 			/**
+			*	@brief Execute the given visitor on all nested classes.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool										foreachClass(Visitor<Class>	visitor,
+																				  void*			userData)								const;
+
+			/**
 			*	@brief Retrieve an enum from this namespace.
 			*
 			*	@param name	Name of the enum to look for.
@@ -185,6 +220,20 @@ namespace rfk
 																						void*			userData)						const;
 
 			/**
+			*	@brief Execute the given visitor on all nested enums.
+			* 
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool										foreachEnum(Visitor<Enum>	visitor,
+																				 void*			userData)								const;
+
+			/**
 			*	@brief Execute the given visitor on all nested archetypes.
 			* 
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -197,6 +246,13 @@ namespace rfk
 			*/
 			REFUREKU_API bool										foreachArchetype(Visitor<Archetype>	visitor,
 																					 void*				userData)						const;
+
+			/**
+			*	@brief Get the number of archetypes nested in this namespace.
+			* 
+			*	@return The number of archetypes nested in this namespace.
+			*/
+			REFUREKU_API std::size_t								getArchetypesCount()												const	noexcept;
 
 			/**
 			*	@brief Retrieve a variable from this namespace.
@@ -249,6 +305,13 @@ namespace rfk
 			*/
 			REFUREKU_API bool										foreachVariable(Visitor<Variable>	visitor,
 																					void*				userData)						const;
+
+			/**
+			*	@brief Get the number of variables nested in this namespace.
+			* 
+			*	@return The number of variables nested in this namespace.
+			*/
+			REFUREKU_API std::size_t								getVariablesCount()													const	noexcept;
 
 			/**
 			*	@brief Retrieve a function with a given name and signature from this namespace.
@@ -326,6 +389,13 @@ namespace rfk
 			*/
 			REFUREKU_API bool										foreachFunction(Visitor<Function>	visitor,
 																					void*				userData)						const;
+
+			/**
+			*	@brief Get the number of functions nested in this namespace.
+			* 
+			*	@return The number of functions nested in this namespace.
+			*/
+			REFUREKU_API std::size_t								getFunctionsCount()													const	noexcept;
 
 			/**
 			*	@brief Add a nested namespace to this namespace.

@@ -14,6 +14,12 @@ namespace test_namespace NAMESPACE()
 	FUNCTION()
 	int func_nested_return_noParam();
 
+	FUNCTION()
+	inline int func_nested_overload() { return 0; };
+
+	FUNCTION()
+	static int func_nested_overload(int);
+
 	VARIABLE()
 	extern int var_nested_extern;
 
@@ -22,9 +28,24 @@ namespace test_namespace NAMESPACE()
 		test_namespace_TestNamespaceNestedStruct_GENERATED
 	};
 
+	struct STRUCT() TestNamespaceNestedStruct2
+	{
+		test_namespace_TestNamespaceNestedStruct2_GENERATED
+	};
+
 	class CLASS() TestNamespaceNestedClass
 	{
 		test_namespace_TestNamespaceNestedClass_GENERATED
+	};
+
+	class CLASS() TestNamespaceNestedClass2
+	{
+		test_namespace_TestNamespaceNestedClass2_GENERATED
+	};
+
+	class CLASS() TestNamespaceNestedClass3
+	{
+		test_namespace_TestNamespaceNestedClass3_GENERATED
 	};
 
 	enum class ENUM() TestNamespaceNestedEnum
@@ -34,6 +55,11 @@ namespace test_namespace NAMESPACE()
 	};
 
 	namespace nested_namespace NAMESPACE()
+	{
+
+	}
+
+	namespace nested_namespace2 NAMESPACE()
 	{
 
 	}

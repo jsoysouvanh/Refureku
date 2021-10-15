@@ -38,29 +38,41 @@ ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 template <typename MethodSignature>
 Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	for (Method const* method : getMethodsByName(name, minFlags, shouldInspectInherited))
+	struct Data
 	{
-		if (internal::MethodHelper<MethodSignature>::hasSamePrototype(*method))
-		{
-			return method;
-		}
-	}
+		char const*		name;
+		EMethodFlags	flags;
+	} data{ name, minFlags };
 
-	return nullptr;
+	return (name != nullptr) ? getMethodByPredicate([](Method const& method, void* data)
+													  {
+														  MethodBase const&	methodBase = *reinterpret_cast<MethodBase const*>(&method);
+														  Data const&		userData = *reinterpret_cast<Data*>(data);
+
+														  return (userData.flags & methodBase.getFlags()) == userData.flags &&
+																	methodBase.hasSameName(userData.name) &&
+																	internal::MethodHelper<MethodSignature>::hasSamePrototype(methodBase);
+													  }, &data, shouldInspectInherited) : nullptr;
 }
 
 template <typename StaticMethodSignature>
 StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	for (StaticMethod const* staticMethod : getStaticMethodsByName(name, minFlags, shouldInspectInherited))
+	struct Data
 	{
-		if (internal::MethodHelper<StaticMethodSignature>::hasSamePrototype(*staticMethod))
-		{
-			return staticMethod;
-		}
-	}
+		char const*		name;
+		EMethodFlags	flags;
+	} data{ name, minFlags };
 
-	return nullptr;
+	return (name != nullptr) ? getStaticMethodByPredicate([](StaticMethod const& method, void* data)
+													{
+														MethodBase const&	methodBase = *reinterpret_cast<MethodBase const*>(&method);
+														Data const&			userData = *reinterpret_cast<Data*>(data);
+
+														return (userData.flags & methodBase.getFlags()) == userData.flags &&
+																methodBase.hasSameName(userData.name) &&
+																internal::MethodHelper<StaticMethodSignature>::hasSamePrototype(methodBase);
+													}, &data, shouldInspectInherited) : nullptr;
 }
 
 template <typename T>

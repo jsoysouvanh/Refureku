@@ -161,6 +161,14 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API char const*				getName()													const	noexcept;
 
 			/**
+			*	@brief Check that this entity has the same name as the provided string.
+			* 
+			*	@return true if this entity has the same name as the provided string.
+			*			If the provided name is nullptr, return false.
+			*/
+			RFK_NODISCARD REFUREKU_API bool						hasSameName(char const*	name)								const	noexcept;
+
+			/**
 			*	@brief Get the program-unique id of the entity.
 			* 
 			*	@return The program-unique id of the entity.

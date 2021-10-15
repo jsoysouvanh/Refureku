@@ -158,6 +158,11 @@ char const* Entity::getName() const noexcept
 	return _pimpl->getName().data();
 }
 
+bool Entity::hasSameName(char const* name) const noexcept
+{
+	return name != nullptr && std::strcmp(getName(), name) == 0;
+}
+
 std::size_t Entity::getId() const noexcept
 {
 	return _pimpl->getId();

@@ -7,7 +7,8 @@
 #include "TypeTests.cpp"
 #include "FunctionTests.cpp"
 #include "VariableTests.cpp"
-
+#include "StructTests.cpp"
+#include "NamespaceTests.cpp"
 
 int main(int argc, char** argv)
 {
