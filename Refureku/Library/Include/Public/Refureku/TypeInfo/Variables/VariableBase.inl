@@ -12,19 +12,13 @@ ValueType VariableBase::get(void* ptr) const
 
 	if constexpr (std::is_rvalue_reference_v<ValueType>)
 	{
-		if (getType().isConst())
-		{
-			throwConstViolationException("VariableBase::get can't be called with an rvalue ValueType on const variables.");
-		}
+		assert(!getType().isConst());
 
 		return std::move(*reinterpret_cast<std::remove_reference_t<ValueType>*>(ptr));
 	}
 	else if constexpr (std::is_lvalue_reference_v<ValueType>)
 	{
-		if (getType().isConst())
-		{
-			throwConstViolationException("VariableBase::get can't be called with an non-const lvalue reference ValueType on const variables.");
-		}
+		assert(!getType().isConst());
 
 		return *reinterpret_cast<std::remove_reference_t<ValueType>*>(ptr);
 	}
@@ -56,10 +50,7 @@ ValueType VariableBase::get(void const* ptr) const
 template <typename ValueType>
 void VariableBase::set(void* ptr, ValueType&& value) const
 {
-	if (getType().isConst())
-	{
-		throwConstViolationException("VariableBase::set can't be called on const variables.");
-	}
+	assert(!getType().isConst());
 
 	if constexpr (std::is_rvalue_reference_v<ValueType&&>)
 	{
@@ -67,7 +58,7 @@ void VariableBase::set(void* ptr, ValueType&& value) const
 	}
 	else if constexpr (std::is_lvalue_reference_v<ValueType&&>)
 	{
-		*reinterpret_cast<std::remove_reference_t<ValueType&&>*>(ptr) = value;
+		*reinterpret_cast<std::remove_const_t<std::remove_reference_t<ValueType&&>>*>(ptr) = value;
 	}
 	else
 	{

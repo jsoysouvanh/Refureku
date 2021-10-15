@@ -100,8 +100,10 @@ namespace rfk
 			*	@param instance Instance we get the field from.
 			*
 			*	@return Pointer to this field in the provided instance.
+			* 
+			*	@exception ConstViolation if the field is actually const.
 			*/
-			RFK_NODISCARD REFUREKU_API void*		getPtr(void* instance)				const	noexcept;
+			RFK_NODISCARD REFUREKU_API void*		getPtr(void* instance)				const;
 
 			/**
 			*	@brief Get a const pointer to this field in the provided instance.

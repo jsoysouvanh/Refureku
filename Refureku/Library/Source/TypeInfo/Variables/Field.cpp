@@ -19,8 +19,13 @@ void Field::set(void* instance, void const* valuePtr, std::size_t valueSize) con
 	FieldBase::set(getPtr(instance), valuePtr, valueSize);
 }
 
-void* Field::getPtr(void* instance) const noexcept
+void* Field::getPtr(void* instance) const
 {
+	if (getType().isConst())
+	{
+		throwConstViolationException("Can't get a non-const ptr from a const field.");
+	}
+
 	return reinterpret_cast<uint8_t*>(instance) + getPimpl()->getMemoryOffset();
 }
 

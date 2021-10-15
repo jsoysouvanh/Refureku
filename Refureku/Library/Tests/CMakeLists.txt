@@ -12,6 +12,7 @@ add_executable(${RefurekuTestsTarget}
 					Src/TestClass.cpp
 					Src/TestClass2.cpp
 					Src/ForwardDeclaredClass.cpp
+					Src/ConstructionTrackedClass.cpp
 					Src/TestFunctions.cpp
 					Src/TestVariables.cpp
 					Src/TestNamespace.cpp

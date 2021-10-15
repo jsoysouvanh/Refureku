@@ -105,6 +105,70 @@ TEST(Rfk_Variable_getTemplate, GetTestClassByConstLVRef)
 //=================== Variable::set<> ======================
 //=========================================================
 
+TEST(Rfk_Variable_setTemplate, SetNonConstClassByConstLVRef)
+{
+	ConstructionTrackedClass const c;
+
+	rfk::getDatabase().getVariableByName("var_global_extern_constructionTracked")->set(c);
+
+	EXPECT_TRUE(var_global_extern_constructionTracked.getCopyConstructed());
+}
+
+TEST(Rfk_Variable_setTemplate, SetNonConstClassByNonConstLVRef)
+{
+	ConstructionTrackedClass c;
+
+	rfk::getDatabase().getVariableByName("var_global_extern_constructionTracked")->set(c);
+
+	EXPECT_TRUE(var_global_extern_constructionTracked.getCopyConstructed());
+}
+
+TEST(Rfk_Variable_setTemplate, SetNonConstClassByRValue)
+{
+	rfk::getDatabase().getVariableByName("var_global_extern_constructionTracked")->set(ConstructionTrackedClass());
+
+	EXPECT_TRUE(var_global_extern_constructionTracked.getMoveConstructed());
+}
+
+TEST(Rfk_Variable_setTemplate, SetConstClassByConstLVRef)
+{
+	ConstructionTrackedClass const c;
+
+	EXPECT_THROW(rfk::getDatabase().getVariableByName("var_global_extern_const_constructionTracked")->set(c), rfk::ConstViolation);
+}
+
+TEST(Rfk_Variable_setTemplate, SetConstClassByNonConstLVRef)
+{
+	ConstructionTrackedClass c;
+
+	EXPECT_THROW(rfk::getDatabase().getVariableByName("var_global_extern_const_constructionTracked")->set(c), rfk::ConstViolation);
+}
+
+TEST(Rfk_Variable_setTemplate, SetConstClassByRValue)
+{
+	EXPECT_THROW(rfk::getDatabase().getVariableByName("var_global_extern_const_constructionTracked")->set(ConstructionTrackedClass()), rfk::ConstViolation);
+}
+
 //=========================================================
-//================== Variable::set =======================
+//=================== Variable::set =======================
 //=========================================================
+
+TEST(Rfk_Variable_set, SetNonConstInt)
+{
+	int newValue = 2;
+
+	EXPECT_NE(rfk::getDatabase().getVariableByName("var_global_static")->get<int>(), newValue);
+
+	rfk::getDatabase().getVariableByName("var_global_static")->set(&newValue, sizeof(int));
+
+	EXPECT_EQ(rfk::getDatabase().getVariableByName("var_global_static")->get<int>(), newValue);
+}
+
+TEST(Rfk_Variable_set, SetConstInt)
+{
+	int newValue = 2;
+
+	EXPECT_NE(rfk::getDatabase().getVariableByName("var_global_extern_const")->get<int>(), newValue);
+
+	EXPECT_THROW(rfk::getDatabase().getVariableByName("var_global_extern_const")->set(&newValue, sizeof(int)), rfk::ConstViolation);
+}
