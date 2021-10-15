@@ -56,7 +56,7 @@ template <typename T>
 Type const& getType() noexcept
 {
 	static Type	result;
-	static bool		initialized = false;
+	static bool	initialized = false;
 
 	if (!initialized)
 	{

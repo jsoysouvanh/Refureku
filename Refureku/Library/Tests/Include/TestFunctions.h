@@ -8,11 +8,17 @@
 #pragma once
 
 #include "TestClass.h"
+#include "NonReflectedClass.h"
 
 #include "Generated/TestFunctions.rfkh.h"
 
+class ForwardDeclaredClass;
+
 FUNCTION()
 TestClass& func_return_noParam();
+
+FUNCTION()
+static void func_static_noParam();
 
 FUNCTION()
 void func_noParam();
@@ -34,5 +40,20 @@ int func_overloaded();
 
 FUNCTION()
 int func_overloaded(int i);
+
+FUNCTION()
+void func_noParam_throwLogicError();
+
+FUNCTION()
+inline void func_inline_noParam(){}
+
+FUNCTION()
+NonReflectedClass func_returnNonReflected_noParam();
+
+FUNCTION()
+void func_twoParamsNonReflected(NonReflectedClass& param, int value);
+
+FUNCTION()
+ForwardDeclaredClass& func_return_oneParam_forwardDeclared(ForwardDeclaredClass& param);
 
 File_TestFunctions_GENERATED

@@ -174,7 +174,7 @@ TEST(Rfk_Enum_foreachEnumValue, fullLoop)
 {
 	int counter = 0;
 
-	EXPECT_TRUE(rfk::getEnum<TestEnum>()->foreachEnumValue([](rfk::EnumValue const& ev, void* data)
+	EXPECT_TRUE(rfk::getEnum<TestEnum>()->foreachEnumValue([](rfk::EnumValue const& /*ev*/, void* data)
 				{
 					(*reinterpret_cast<int*>(data))++;
 
@@ -192,7 +192,7 @@ TEST(Rfk_Enum_foreachEnumValue, breakLoop)
 		int maxItCount = 2;
 	} data;
 
-	EXPECT_FALSE(rfk::getEnum<TestEnumClass>()->foreachEnumValue([](rfk::EnumValue const& ev, void* data)
+	EXPECT_FALSE(rfk::getEnum<TestEnumClass>()->foreachEnumValue([](rfk::EnumValue const& /*ev*/, void* data)
 				{
 					Data* castData = reinterpret_cast<Data*>(data);
 

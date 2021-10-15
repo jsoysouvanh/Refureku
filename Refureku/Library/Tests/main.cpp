@@ -4,6 +4,7 @@
 #include "ArchetypeTests.cpp"
 #include "EnumTests.cpp"
 #include "EnumValueTests.cpp"
+#include "FunctionTests.cpp"
 
 int main(int argc, char** argv)
 {
