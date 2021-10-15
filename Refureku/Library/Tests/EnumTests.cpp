@@ -13,6 +13,11 @@
 //============== Enum::getEnumValueByName =================
 //=========================================================
 
+TEST(Rfk_Enum_getEnumValueByName, NullptrName)
+{
+	EXPECT_EQ(rfk::getEnum<TestEnum>()->getEnumValueByName(nullptr), nullptr);
+}
+
 TEST(Rfk_Enum_getEnumValueByName, ExistantValue)
 {
 	EXPECT_NE(rfk::getEnum<TestEnum>()->getEnumValueByName("TestEnumValue1"), nullptr);

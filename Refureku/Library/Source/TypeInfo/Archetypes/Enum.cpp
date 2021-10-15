@@ -16,7 +16,7 @@ Enum::~Enum() noexcept = default;
 
 EnumValue* Enum::addEnumValue(char const* name, std::size_t id, int64 value) noexcept
 {
-	return &getPimpl()->addEnumValue(name, id, value, this);
+	return (name != nullptr) ? &getPimpl()->addEnumValue(name, id, value, this) : nullptr;
 }
 
 void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
@@ -26,10 +26,10 @@ void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
 
 EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
 {
-	return EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), [name](EnumValue const& ev)
+	return (name != nullptr) ? EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), [name](EnumValue const& ev)
 											   {
 												   return std::strcmp(ev.getName(), name) == 0;
-											   });
+											   }) : nullptr;
 }
 
 EnumValue const* Enum::getEnumValue(int64 value) const noexcept

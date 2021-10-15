@@ -117,6 +117,11 @@ Vector<EntityType const*> EntityUtility::getEntitiesByPredicate(ContainerType co
 template <typename ContainerType>
 auto EntityUtility::getEntityByName(ContainerType const& container, char const* name) noexcept -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
 {
+	if (name == nullptr)
+	{
+		return nullptr;
+	}
+
 	Entity::EntityImpl	searchedImpl(name, 0u);
 	Entity				searchedEntity(&searchedImpl);
 
@@ -155,8 +160,15 @@ auto EntityUtility::getEntityByNameAndPredicate(ContainerType const& container, 
 template <typename ContainerType, typename Predicate>
 auto EntityUtility::getEntitiesByNameAndPredicate(ContainerType const& container, char const* name, Predicate predicate) -> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>
 {
+	using ResultVector = Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>;
+
+	if (name == nullptr)
+	{
+		return ResultVector();
+	}
+
 	//When calling this method, we expect to have at least 2 results, so preallocate memory to avoid reallocations.
-	Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*> result(2);
+	ResultVector result(2);
 
 	Entity::EntityImpl	searchedImpl(name, 0u);
 	Entity				searchedEntity(&searchedImpl);
@@ -202,6 +214,11 @@ auto EntityUtility::getEntitiesByNameAndPredicate(ContainerType const& container
 template <typename ContainerType, typename Visitor>
 bool EntityUtility::foreachEntityNamed(ContainerType const& container, char const* name, Visitor visitor)
 {
+	if (name == nullptr)
+	{
+		return false;
+	}
+
 	Entity::EntityImpl	searchedImpl(name, 0u);
 	Entity				searchedEntity(&searchedImpl);
 

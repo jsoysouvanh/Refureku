@@ -8,6 +8,7 @@
 #include "FunctionTests.cpp"
 #include "VariableTests.cpp"
 
+
 int main(int argc, char** argv)
 {
 	::testing::InitGoogleTest(&argc, argv);
