@@ -507,12 +507,12 @@ TEST(Rfk_Namespace_getEnumByPredicate, ThrowingPredicate)
 //============= Namespace::getEnumsByPredicate ============
 //=========================================================
 
-TEST(Rfk_Namespace_getEnumesByPredicate, NullptrPredicate)
+TEST(Rfk_Namespace_getEnumsByPredicate, NullptrPredicate)
 {
 	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getEnumsByPredicate(nullptr, nullptr).size(), 0u);
 }
 
-TEST(Rfk_Namespace_getEnumesByPredicate, FindingPredicate)
+TEST(Rfk_Namespace_getEnumsByPredicate, FindingPredicate)
 {
 	char firstLetter = 'T';
 
@@ -522,7 +522,7 @@ TEST(Rfk_Namespace_getEnumesByPredicate, FindingPredicate)
 			  }, &firstLetter).size(), 1u);
 }
 
-TEST(Rfk_Namespace_getEnumesByPredicate, NotFindingPredicate)
+TEST(Rfk_Namespace_getEnumsByPredicate, NotFindingPredicate)
 {
 	char firstLetter = 't';
 
@@ -532,7 +532,7 @@ TEST(Rfk_Namespace_getEnumesByPredicate, NotFindingPredicate)
 			  }, &firstLetter).size(), 0u);
 }
 
-TEST(Rfk_Namespace_getEnumesByPredicate, ThrowingPredicate)
+TEST(Rfk_Namespace_getEnumsByPredicate, ThrowingPredicate)
 {
 	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->getEnumsByPredicate([](rfk::Enum const&, void*)
 				 {
@@ -822,134 +822,177 @@ TEST(Rfk_Namespace_getFunctionByNameTemplate, NullptrName)
 
 TEST(Rfk_Namespace_getFunctionByNameTemplate, UnvalidPrototypeValidNameDefaultFlags)
 {
-	//EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>(""), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int(float)>("func_nested_overload"), nullptr);
 }
 
-////=========================================================
-////=========== Namespace::getFunctionByPredicate ===========
-////=========================================================
-//
-//TEST(Rfk_Namespace_getFunctionByPredicate, NullptrPredicate)
-//{
-//	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate(nullptr, nullptr), nullptr);
-//}
-//
-//TEST(Rfk_Namespace_getFunctionByPredicate, FindingPredicate)
-//{
-//	char firstLetter = 'v';
-//
-//	EXPECT_NE(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate([](rfk::Function const& enum_, void* data)
-//			  {
-//				  return enum_.getName()[0] == *reinterpret_cast<char*>(data);
-//			  }, &firstLetter), nullptr);
-//}
-//
-//TEST(Rfk_Namespace_getFunctionByPredicate, NotFindingPredicate)
-//{
-//	char firstLetter = 'T';
-//
-//	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate([](rfk::Function const& enum_, void* data)
-//			  {
-//				  return enum_.getName()[0] == *reinterpret_cast<char*>(data);
-//			  }, &firstLetter), nullptr);
-//}
-//
-//TEST(Rfk_Namespace_getFunctionByPredicate, ThrowingPredicate)
-//{
-//	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate([](rfk::Function const&, void*)
-//				 {
-//					 throw std::logic_error("Something wrong happened!");
-//
-//					 return true;
-//				 }, nullptr), std::logic_error);
-//}
-//
-////=========================================================
-////=========== Namespace::getFunctionsByPredicate ==========
-////=========================================================
-//
-//TEST(Rfk_Namespace_getFunctionsByPredicate, NullptrPredicate)
-//{
-//	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate(nullptr, nullptr).size(), 0u);
-//}
-//
-//TEST(Rfk_Namespace_getFunctionsByPredicate, FindingPredicate)
-//{
-//	char firstLetter = 'v';
-//
-//	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate([](rfk::Function const& func, void* data)
-//			  {
-//				  return func.getName()[0] == *reinterpret_cast<char*>(data);
-//			  }, &firstLetter).size(), 1u);
-//}
-//
-//TEST(Rfk_Namespace_getFunctionsByPredicate, NotFindingPredicate)
-//{
-//	char firstLetter = 'V';
-//
-//	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate([](rfk::Function const& func, void* data)
-//			  {
-//				  return func.getName()[0] == *reinterpret_cast<char*>(data);
-//			  }, &firstLetter).size(), 0u);
-//}
-//
-//TEST(Rfk_Namespace_getFunctionsByPredicate, ThrowingPredicate)
-//{
-//	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate([](rfk::Function const&, void*)
-//				 {
-//					 throw std::logic_error("Something wrong happened!");
-//
-//					 return true;
-//				 }, nullptr), std::logic_error);
-//}
-//
-////=========================================================
-////============== Namespace::foreachFunction ===============
-////=========================================================
-//
-//TEST(Rfk_Namespace_foreachFunction, NullptrVisitor)
-//{
-//	EXPECT_FALSE(rfk::getDatabase().getNamespaceByName("test_namespace")->foreachFunction(nullptr, nullptr));
-//}
-//
-//TEST(Rfk_Namespace_foreachFunction, BreakingVisitor)
-//{
-//	int counter = 0;
-//
-//	EXPECT_FALSE(rfk::getDatabase().getNamespaceByName("test_namespace")->foreachFunction([](rfk::Function const&, void* data)
-//				 {
-//					 int& counter = *reinterpret_cast<int*>(data);
-//					 counter++;
-//
-//					 return false;
-//				 }, &counter));
-//
-//	EXPECT_EQ(counter, 1);
-//}
-//
-//TEST(Rfk_Namespace_foreachFunction, NonBreakingVisitor)
-//{
-//	rfk::Namespace const* np = rfk::getDatabase().getNamespaceByName("test_namespace");
-//	int counter = 0;
-//
-//
-//	EXPECT_TRUE(np->foreachFunction([](rfk::Function const&, void* data)
-//				{
-//					int& counter = *reinterpret_cast<int*>(data);
-//					counter++;
-//
-//					return true;
-//				}, &counter));
-//
-//	EXPECT_EQ(counter, np->getFunctionsCount());
-//}
-//
-//TEST(Rfk_Namespace_foreachFunction, ThrowingVisitor)
-//{
-//	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->foreachFunction([](rfk::Function const&, void*)
-//				 {
-//					 throw std::logic_error("Something wrong happened here!");
-//
-//					 return true;
-//				 }, nullptr), std::logic_error);
-//}
+TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeValidNameDefaultFlags)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int(int)>("func_nested_overload")->invoke<int>(1), 1);
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>("func_nested_overload")->invoke<int>(), 0);
+}
+
+TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeUnvalidNameDefaultFlags)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int(int)>("invalid_func"), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>("invalid_func"), nullptr);
+}
+
+TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeValidNameUnvalidFlags)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int(int)>("func_nested_overload", rfk::EFunctionFlags::Inline), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>("func_nested_overload", rfk::EFunctionFlags::Static), nullptr);
+}
+
+//=========================================================
+//============ Namespace::getFunctionsByName ==============
+//=========================================================
+
+TEST(Rfk_Namespace_getFunctionsByName, NullptrName)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName(nullptr).size(), 0u);
+}
+
+TEST(Rfk_Namespace_getFunctionsByName, ValidNameDefaultFlagsMultipleResults)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_overload").size(), 2u);
+}
+
+TEST(Rfk_Namespace_getFunctionsByName, ValidNameDefaultFlagsSingleResult)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_return_noParam").size(), 1u);
+}
+
+TEST(Rfk_Namespace_getFunctionsByName, ValidNameSpecificFlagsSingleResult)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_overload", rfk::EFunctionFlags::Inline).size(), 1u);
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_overload", rfk::EFunctionFlags::Static).size(), 1u);
+}
+
+//=========================================================
+//=========== Namespace::getFunctionByPredicate ===========
+//=========================================================
+
+TEST(Rfk_Namespace_getFunctionByPredicate, NullptrPredicate)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate(nullptr, nullptr), nullptr);
+}
+
+TEST(Rfk_Namespace_getFunctionByPredicate, FindingPredicate)
+{
+	char firstLetter = 'f';
+
+	EXPECT_NE(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate([](rfk::Function const& func, void* data)
+			  {
+				  return func.getName()[0] == *reinterpret_cast<char*>(data);
+			  }, &firstLetter), nullptr);
+}
+
+TEST(Rfk_Namespace_getFunctionByPredicate, NotFindingPredicate)
+{
+	char firstLetter = 'F';
+
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate([](rfk::Function const& func, void* data)
+			  {
+				  return func.getName()[0] == *reinterpret_cast<char*>(data);
+			  }, &firstLetter), nullptr);
+}
+
+TEST(Rfk_Namespace_getFunctionByPredicate, ThrowingPredicate)
+{
+	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByPredicate([](rfk::Function const&, void*)
+				 {
+					 throw std::logic_error("Something wrong happened!");
+
+					 return true;
+				 }, nullptr), std::logic_error);
+}
+
+//=========================================================
+//=========== Namespace::getFunctionsByPredicate ==========
+//=========================================================
+
+TEST(Rfk_Namespace_getFunctionsByPredicate, NullptrPredicate)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate(nullptr, nullptr).size(), 0u);
+}
+
+TEST(Rfk_Namespace_getFunctionsByPredicate, FindingPredicate)
+{
+	char firstLetter = 'f';
+
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate([](rfk::Function const& func, void* data)
+			  {
+				  return func.getName()[0] == *reinterpret_cast<char*>(data);
+			  }, &firstLetter).size(), 3u);
+}
+
+TEST(Rfk_Namespace_getFunctionsByPredicate, NotFindingPredicate)
+{
+	char firstLetter = 'F';
+
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate([](rfk::Function const& func, void* data)
+			  {
+				  return func.getName()[0] == *reinterpret_cast<char*>(data);
+			  }, &firstLetter).size(), 0u);
+}
+
+TEST(Rfk_Namespace_getFunctionsByPredicate, ThrowingPredicate)
+{
+	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByPredicate([](rfk::Function const&, void*)
+				 {
+					 throw std::logic_error("Something wrong happened!");
+
+					 return true;
+				 }, nullptr), std::logic_error);
+}
+
+//=========================================================
+//============== Namespace::foreachFunction ===============
+//=========================================================
+
+TEST(Rfk_Namespace_foreachFunction, NullptrVisitor)
+{
+	EXPECT_FALSE(rfk::getDatabase().getNamespaceByName("test_namespace")->foreachFunction(nullptr, nullptr));
+}
+
+TEST(Rfk_Namespace_foreachFunction, BreakingVisitor)
+{
+	int counter = 0;
+
+	EXPECT_FALSE(rfk::getDatabase().getNamespaceByName("test_namespace")->foreachFunction([](rfk::Function const&, void* data)
+				 {
+					 int& counter = *reinterpret_cast<int*>(data);
+					 counter++;
+
+					 return false;
+				 }, &counter));
+
+	EXPECT_EQ(counter, 1);
+}
+
+TEST(Rfk_Namespace_foreachFunction, NonBreakingVisitor)
+{
+	rfk::Namespace const* np = rfk::getDatabase().getNamespaceByName("test_namespace");
+	int counter = 0;
+
+
+	EXPECT_TRUE(np->foreachFunction([](rfk::Function const&, void* data)
+				{
+					int& counter = *reinterpret_cast<int*>(data);
+					counter++;
+
+					return true;
+				}, &counter));
+
+	EXPECT_EQ(counter, np->getFunctionsCount());
+}
+
+TEST(Rfk_Namespace_foreachFunction, ThrowingVisitor)
+{
+	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->foreachFunction([](rfk::Function const&, void*)
+				 {
+					 throw std::logic_error("Something wrong happened here!");
+
+					 return true;
+				 }, nullptr), std::logic_error);
+}
