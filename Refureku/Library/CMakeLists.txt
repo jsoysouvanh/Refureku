@@ -93,7 +93,7 @@ target_compile_features(${RefurekuLibraryTarget} PUBLIC cxx_std_17)
 
 target_include_directories(${RefurekuLibraryTarget}
 							PUBLIC	Include/Public
-							PRIVATE Include/Private)
+							PRIVATE Include/Internal)
 
 #Force GTest to link with shared CRT since Refureku links with shared CRT
 set(gtest_force_shared_crt ON CACHE BOOL "GTest use shared CRT (MD[d])" FORCE)

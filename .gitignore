@@ -9,7 +9,7 @@ enc_temp_folder/
 out/
 
 #Exception for the library generated folder
-!Refureku/Library/Include/Private/Refureku/Generated
+!Refureku/Library/Include/Internal/Refureku/Generated
 !Refureku/Library/Include/Public/Refureku/Generated
 
 #Settings
