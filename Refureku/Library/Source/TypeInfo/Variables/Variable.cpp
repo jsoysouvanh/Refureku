@@ -1,6 +1,7 @@
 #include "Refureku/TypeInfo/Variables/Variable.h"
 
 #include "Refureku/TypeInfo/Variables/VariableImpl.h"
+#include "Refureku/Exceptions/ConstViolation.h"
 
 using namespace rfk;
 
@@ -35,8 +36,13 @@ EVarFlags Variable::getFlags() const noexcept
 	return getPimpl()->getFlags();
 }
 
-void* Variable::getPtr() const noexcept
+void* Variable::getPtr() const
 {
+	if (getType().isConst())
+	{
+		throwConstViolationException("Can't get a non-const ptr from a const variable.");
+	}
+
 	return getPimpl()->getPtr();
 }
 

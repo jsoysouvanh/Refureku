@@ -40,3 +40,4 @@
 #include "Refureku/Exceptions/ReturnTypeMismatch.h"
 #include "Refureku/Exceptions/ArgCountMismatch.h"
 #include "Refureku/Exceptions/ArgTypeMismatch.h"
+#include "Refureku/Exceptions/ConstViolation.h"

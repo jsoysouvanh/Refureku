@@ -8,6 +8,8 @@
 template <typename ValueType>
 ValueType VariableBase::get(void* ptr) const
 {
+	static_assert(!std::is_const_v<std::remove_reference_t<ValueType>>, "VariableBase::get with const lvalue ref should be handled by the VariableBase::get(void const*) overload.");
+
 	if constexpr (std::is_rvalue_reference_v<ValueType>)
 	{
 		if (getType().isConst())
@@ -21,17 +23,33 @@ ValueType VariableBase::get(void* ptr) const
 	{
 		if (getType().isConst())
 		{
-			if constexpr (!std::is_const_v<std::remove_reference_t<ValueType>>)
-			{
-				throwConstViolationException("VariableBase::get can't be called with an non-const reference ValueType on const variables.");
-			}
+			throwConstViolationException("VariableBase::get can't be called with an non-const lvalue reference ValueType on const variables.");
 		}
 
 		return *reinterpret_cast<std::remove_reference_t<ValueType>*>(ptr);
 	}
 	else	//By value
 	{
-		return ValueType(*reinterpret_cast<ValueType*>(ptr));
+		return get<ValueType>(reinterpret_cast<void const*>(ptr));
+	}
+}
+
+template <typename ValueType>
+ValueType VariableBase::get(void const* ptr) const
+{
+	static_assert(!std::is_rvalue_reference_v<ValueType>, "Can't call VariableBase::get(void const*) with rvalue type.");
+
+	if constexpr (std::is_lvalue_reference_v<ValueType>)
+	{
+		static_assert(std::is_const_v<std::remove_reference_t<ValueType>>, "Can't call VariableBase::get(void const*) with non-const lvalue type.");
+
+		return *reinterpret_cast<std::remove_reference_t<ValueType>*>(ptr);
+	}
+	else
+	{
+		static_assert(VariableBase::is_value_v<ValueType>);	//At this point, should be a value type
+
+		return ValueType(*reinterpret_cast<ValueType const*>(ptr));
 	}
 }
 

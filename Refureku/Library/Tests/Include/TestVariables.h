@@ -14,4 +14,10 @@
 VARIABLE()
 extern TestClass var_global_extern;
 
+VARIABLE()
+static int var_global_static;
+
+VARIABLE()
+extern int const var_global_extern_const;
+
 File_TestVariables_GENERATED

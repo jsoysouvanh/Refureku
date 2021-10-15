@@ -5,6 +5,7 @@
 #include "EnumTests.cpp"
 #include "EnumValueTests.cpp"
 #include "FunctionTests.cpp"
+#include "VariableTests.cpp"
 
 int main(int argc, char** argv)
 {

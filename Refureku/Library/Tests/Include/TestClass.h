@@ -47,6 +47,9 @@ class CLASS(UniqueInheritedProperty(1),
 		METHOD()
 		static int	getIntStaticField()	noexcept;
 
+		bool operator==(TestClass const& other) const noexcept { return _intField == other._intField; }
+		bool operator!=(TestClass const& other) const noexcept { return !(*this == other); }
+
 	TestClass_GENERATED
 };
 

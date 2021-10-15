@@ -3,7 +3,6 @@
 #include <Refureku/Refureku.h>
 
 #include "TestFunctions.h"
-#include "TestNamespace.h"
 #include "ForwardDeclaredClass.h"
 
 //=========================================================
