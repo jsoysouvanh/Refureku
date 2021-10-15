@@ -4,6 +4,7 @@
 #include "ArchetypeTests.cpp"
 #include "EnumTests.cpp"
 #include "EnumValueTests.cpp"
+#include "TypeTests.cpp"
 #include "FunctionTests.cpp"
 #include "VariableTests.cpp"
 
