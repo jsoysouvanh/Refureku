@@ -14,12 +14,12 @@ Field::Field(Field&&) noexcept = default;
 
 Field::~Field() noexcept = default;
 
-void Field::set(void* instance, void const* valuePtr, std::size_t valueSize) const
+void Field::setInternal(void* instance, void const* valuePtr, std::size_t valueSize) const
 {
-	FieldBase::set(getPtr(instance), valuePtr, valueSize);
+	FieldBase::set(getPtrInternal(instance), valuePtr, valueSize);
 }
 
-void* Field::getPtr(void* instance) const
+void* Field::getPtrInternal(void* instance) const
 {
 	if (getType().isConst())
 	{
@@ -29,7 +29,7 @@ void* Field::getPtr(void* instance) const
 	return reinterpret_cast<uint8_t*>(instance) + getPimpl()->getMemoryOffset();
 }
 
-void const* Field::getConstPtr(void const* instance) const noexcept
+void const* Field::getConstPtrInternal(void const* instance) const noexcept
 {
 	return reinterpret_cast<uint8_t const*>(instance) + getPimpl()->getMemoryOffset();
 }

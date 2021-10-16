@@ -10,11 +10,11 @@
 class NonReflectedClass
 {
 	public:
-		int i;
+		int i = 0;
 };
 
 class NonReflectedClass2
 {
 	public:
-		int i;
+		int i = 0;
 };

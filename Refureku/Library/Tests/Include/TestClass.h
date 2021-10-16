@@ -24,7 +24,7 @@ class CLASS(UniqueInheritedProperty(1),
 		};
 
 		FIELD()
-		int			_intField;
+		int			_intField	= 0;
 
 		FIELD()
 		static int	_intStaticField;
