@@ -12,6 +12,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "FunctionBaseTests.cpp"
 #include "FunctionTests.cpp"
 #include "VariableTests.cpp"
+#include "StaticFieldTests.cpp"
 #include "StructTests.cpp"
 #include "NamespaceTests.cpp"
 #include "PropertyInheritanceTests.cpp"

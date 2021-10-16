@@ -25,8 +25,13 @@ void StaticField::set(void const* valuePtr, std::size_t valueSize) const
 	VariableBase::set(getPtr(), valuePtr, valueSize);
 }
 
-void* StaticField::getPtr() const noexcept
+void* StaticField::getPtr() const
 {
+	if (getType().isConst())
+	{
+		throwConstViolationException("Can't get a non-const ptr from a const variable.");
+	}
+
 	return getPimpl()->getPtr();
 }
 

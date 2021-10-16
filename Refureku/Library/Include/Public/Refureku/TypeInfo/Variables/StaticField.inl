@@ -8,7 +8,14 @@
 template <typename ValueType>
 ValueType StaticField::get() const
 {
-	return VariableBase::get<ValueType>(getPtr());
+	if constexpr (VariableBase::is_value_v<ValueType> || std::is_const_v<std::remove_reference_t<ValueType>>)
+	{
+		return VariableBase::get<ValueType>(getConstPtr());
+	}
+	else
+	{
+		return VariableBase::get<ValueType>(getPtr());
+	}
 }
 
 template <typename ValueType>

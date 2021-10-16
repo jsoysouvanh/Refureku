@@ -86,7 +86,7 @@ namespace rfk
 			* 
 			*	@return A pointer to this static field.
 			*/
-			RFK_NODISCARD REFUREKU_API	void*		getPtr()					const	noexcept;
+			RFK_NODISCARD REFUREKU_API	void*		getPtr()					const;
 
 			/**
 			*	@brief	Get a const pointer to this static field.

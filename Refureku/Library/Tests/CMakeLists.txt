@@ -22,6 +22,7 @@ add_executable(${RefurekuTestsTarget}
 					Src/SingleTypeTemplateClassTemplate.cpp
 					Src/MultipleTypeTemplateClassTemplate.cpp
 					Src/ComplexClassTemplate.cpp
+					Src/TestStaticFields.cpp
 					
 					main.cpp)
 
