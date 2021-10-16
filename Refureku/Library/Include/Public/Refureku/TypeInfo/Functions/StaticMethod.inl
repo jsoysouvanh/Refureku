@@ -6,7 +6,7 @@
 */
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType StaticMethod::internalInvoke(ArgTypes&&... args) const noexcept
+ReturnType StaticMethod::internalInvoke(ArgTypes&&... args) const
 {
 	return reinterpret_cast<NonMemberFunction<ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(std::forward<ArgTypes>(args)...);
 }

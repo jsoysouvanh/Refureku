@@ -11,6 +11,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "TypeTests.cpp"
 #include "FunctionBaseTests.cpp"
 #include "FunctionTests.cpp"
+#include "StaticMethodTests.cpp"
 #include "FieldBaseTests.cpp"
 #include "VariableTests.cpp"
 #include "StaticFieldTests.cpp"

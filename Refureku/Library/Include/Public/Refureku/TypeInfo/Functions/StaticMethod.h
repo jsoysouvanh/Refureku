@@ -83,7 +83,7 @@ namespace rfk
 			*	@return The result of the underlying static method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(ArgTypes&&... args) const noexcept;
+			ReturnType	internalInvoke(ArgTypes&&... args) const;
 	};
 
 	#include "Refureku/TypeInfo/Functions/StaticMethod.inl"
