@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <type_traits>	//std::enable_if_v, std::is_const_v
+
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
 
@@ -42,7 +44,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the underlying function.
 			*	@exception ConstViolation if the caller is const but the method is non-const.
 			*/
-			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
+			template <typename ReturnType = void, typename CallerType, typename... ArgTypes, typename = std::enable_if_t<!std::is_const_v<CallerType>>>
 			ReturnType			invoke(CallerType& caller, ArgTypes&&... args)				const;
 			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
 			ReturnType			invoke(CallerType const& caller, ArgTypes&&... args)		const;
@@ -70,7 +72,7 @@ namespace rfk
 			*	@exception	ReturnTypeMismatch if ReturnType is not strictly the same as this function return type.
 			*	@exception	Any exception potentially thrown from the underlying function.
 			*/
-			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
+			template <typename ReturnType = void, typename CallerType, typename... ArgTypes, typename = std::enable_if_t<!std::is_const_v<CallerType>>>
 			ReturnType			checkedInvoke(CallerType& caller, ArgTypes&&... args)		const;
 			template <typename ReturnType = void, typename CallerType, typename... ArgTypes>
 			ReturnType			checkedInvoke(CallerType const& caller, ArgTypes&&... args)	const;

@@ -81,7 +81,8 @@ TEST(Rfk_Method_checkedInvoke, ThrowArgCountMismatch)
 	TestMethodClass instance;
 
 	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1, 2), rfk::ArgCountMismatch);	//2 instead of 1
-	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke<void>(instance, 1), rfk::ArgCountMismatch);		//1 instead of 0
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance, 1), rfk::ArgCountMismatch);		//1 instead of 0
+	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance));
 }
 
 TEST(Rfk_Method_checkedInvoke, ThrowArgTypeMismatch)
