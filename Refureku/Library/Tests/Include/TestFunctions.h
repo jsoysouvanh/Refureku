@@ -33,7 +33,7 @@ FUNCTION()
 void func_singleParam(int i);
 
 FUNCTION()
-void func_MultipleParams(int i, int j);
+void func_MultipleParams(int, int);
 
 FUNCTION()
 int func_overloaded();

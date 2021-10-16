@@ -36,7 +36,7 @@ void Method::inheritBaseMethodProperties() noexcept
 			Method const* parentMethod;
 		} data{ *this, nullptr };
 
-		if (ownerStruct->foreachDirectParent([](rfk::ParentStruct const& parent, void* userData)
+		if (!ownerStruct->foreachDirectParent([](rfk::ParentStruct const& parent, void* userData)
 			{
 				Data& data = *reinterpret_cast<Data*>(userData);
 

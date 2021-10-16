@@ -9,6 +9,41 @@
 //=========== FunctionBase::hasSameParameters =============
 //=========================================================
 
+TEST(Rfk_FunctionBase_hasSameParameters, DifferentParamCount)
+{
+	EXPECT_FALSE((rfk::getDatabase().getFunctionByName("func_return_singleParam")->hasSameParameters<>()));
+	EXPECT_FALSE((rfk::getDatabase().getFunctionByName("func_return_singleParam")->hasSameParameters<int, int>()));
+	EXPECT_FALSE((rfk::getDatabase().getFunctionByName("func_return_MultipleParams")->hasSameParameters<int>()));
+	EXPECT_FALSE((rfk::getDatabase().getFunctionByName("func_return_MultipleParams")->hasSameParameters<int, int, int>()));
+}
+
+TEST(Rfk_FunctionBase_hasSameParameters, SameParamCountDifferentTypes)
+{
+	EXPECT_FALSE((rfk::getDatabase().getFunctionByName("func_return_singleParam")->hasSameParameters<float>()));
+	EXPECT_FALSE((rfk::getDatabase().getFunctionByName("func_return_MultipleParams")->hasSameParameters<float, float>()));
+}
+
+TEST(Rfk_FunctionBase_hasSameParameters, SameParameters)
+{
+	EXPECT_TRUE((rfk::getDatabase().getFunctionByName("func_return_singleParam")->hasSameParameters<int>()));
+	EXPECT_TRUE((rfk::getDatabase().getFunctionByName("func_return_MultipleParams")->hasSameParameters<int, int>()));
+}
+
+TEST(Rfk_FunctionBase_hasSameParameters, NoParameters)
+{
+	EXPECT_TRUE((rfk::getDatabase().getFunctionByName("func_noParam")->hasSameParameters<>()));
+}
+
+TEST(Rfk_FunctionBase_hasSameParameters, SameParametersWithUnreflectedTypes)
+{
+	EXPECT_TRUE((rfk::getDatabase().getFunctionByName("func_twoParamsNonReflected")->hasSameParameters<NonReflectedClass&, int>()));
+}
+
+TEST(Rfk_FunctionBase_hasSameParameters, SameParametersWithForwardDeclaredTypes)
+{
+	EXPECT_TRUE((rfk::getDatabase().getFunctionByName("func_return_oneParam_forwardDeclared")->hasSameParameters<ForwardDeclaredClass&>()));
+}
+
 //=========================================================
 //=========== FunctionBase::hasSameSignature ==============
 //=========================================================
@@ -121,14 +156,75 @@ TEST(Rfk_FunctionBase_hasSamePrototypeTemplate, SamePrototypeWithForwardDeclared
 //============= FunctionBase::getReturnType ===============
 //=========================================================
 
-//=========================================================
-//============ FunctionBase::getParameterAt ===============
-//=========================================================
+TEST(Rfk_FunctionBase_getReturnType, Void)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_noParam")->getReturnType() == rfk::getType<void>());
+}
+
+TEST(Rfk_FunctionBase_getReturnType, FundamentalType)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_return_singleParam")->getReturnType() == rfk::getType<int>());
+}
+
+TEST(Rfk_FunctionBase_getReturnType, NonReflectedType)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_returnNonReflected_noParam")->getReturnType() == rfk::getType<NonReflectedClass>());
+}
+
+TEST(Rfk_FunctionBase_getReturnType, ForwardDeclaredType)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_return_oneParam_forwardDeclared")->getReturnType() == rfk::getType<ForwardDeclaredClass&>());
+}
 
 //=========================================================
 //========== FunctionBase::getParametersCount =============
 //=========================================================
 
+TEST(Rfk_FunctionBase_getParametersCount, NoParam)
+{
+	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_noParam")->getParametersCount(), 0u);
+}
+
+TEST(Rfk_FunctionBase_getParametersCount, OneParam)
+{
+	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_return_singleParam")->getParametersCount(), 1u);
+}
+
+TEST(Rfk_FunctionBase_getParametersCount, TwoParams)
+{
+	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_return_MultipleParams")->getParametersCount(), 2u);
+}
+
+//=========================================================
+//============ FunctionBase::getParameterAt ===============
+//=========================================================
+
+TEST(Rfk_FunctionBase_getParameterAt, CheckParamType)
+{
+	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_return_singleParam")->getParameterAt(0).getType(), rfk::getType<int>());
+	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_twoParamsNonReflected")->getParameterAt(0).getType(), rfk::getType<NonReflectedClass&>());
+	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_twoParamsNonReflected")->getParameterAt(1).getType(), rfk::getType<int>());
+}
+
+TEST(Rfk_FunctionBase_getParameterAt, CheckParamName)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_return_singleParam")->getParameterAt(0).hasSameName("i"));
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_twoParamsNonReflected")->getParameterAt(0).hasSameName("param"));
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_twoParamsNonReflected")->getParameterAt(1).hasSameName("value"));
+}
+
+TEST(Rfk_FunctionBase_getParameterAt, CheckAnonymousParamName)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_MultipleParams")->getParameterAt(0).hasSameName(""));
+	EXPECT_TRUE(rfk::getDatabase().getFunctionByName("func_MultipleParams")->getParameterAt(1).hasSameName(""));
+}
+
 //=========================================================
 //========== FunctionBase::getInternalFunction ============
 //=========================================================
+
+TEST(Rfk_FunctionBase_getInternalFunction, _)
+{
+	//No meant to be used by end user... but well it is possible
+	EXPECT_NE(rfk::getDatabase().getFunctionByName("func_MultipleParams")->getInternalFunction(), nullptr);
+}

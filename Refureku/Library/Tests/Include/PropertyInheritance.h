@@ -7,73 +7,52 @@
 
 #pragma once
 
+#include "TestProperties.h"
+
 #include "Generated/PropertyInheritance.rfkh.h"
 
-class CLASS() PropertyInheritanceTestClass
+class CLASS(UniqueInheritedProperty(0),
+			MultipleInheritedProperty(0),
+			UniqueNonInheritedProperty(0),
+			MultipleNonInheritedProperty(0)) PropertyInheritanceTestClass
 {
-	private:
-		METHOD()
-		virtual void privateMethodPropertyInheritance(){}
-
-		METHOD()
-		virtual void privateMethodPropertyInheritance2(){}
-
-	protected:
-		METHOD()
-		virtual void protectedMethodPropertyInheritance(){}
-
-		METHOD()
-		virtual void protectedMethodPropertyInheritance2(){}
-		
 	public:
-		METHOD()
-		virtual void publicMethodPropertyInheritance(){}
+		METHOD(UniqueInheritedProperty(0),
+			   MultipleInheritedProperty(0),
+			   UniqueNonInheritedProperty(0),
+			   MultipleNonInheritedProperty(0))
+		virtual void methodPropertyInheritance(){}
 
-		METHOD()
-		virtual void publicMethodPropertyInheritance2(){}
+		METHOD(UniqueInheritedProperty(0),
+			   MultipleInheritedProperty(0),
+			   UniqueNonInheritedProperty(0),
+			   MultipleNonInheritedProperty(0))
+		virtual void methodPropertyInheritanceOverride(){}
 
 	PropertyInheritanceTestClass_GENERATED
 };
 
 class CLASS() PropertyInheritanceTestClassChild1 : public PropertyInheritanceTestClass
 {
-	private:
-		METHOD()
-		virtual void privateMethodPropertyInheritance() override {}
-
-	protected:
-		METHOD()
-		virtual void protectedMethodPropertyInheritance() override {}
-
 	public:
 		METHOD()
-		virtual void publicMethodPropertyInheritance() override {}
+		virtual void methodPropertyInheritance() override {}
 
 	PropertyInheritanceTestClassChild1_GENERATED
 };
 
-class CLASS() PropertyInheritanceTestClassChild2 : public PropertyInheritanceTestClassChild1
+class CLASS(UniqueInheritedProperty(2),
+			MultipleInheritedProperty(2)) PropertyInheritanceTestClassChild2 : public PropertyInheritanceTestClassChild1
 {
-	private:
-		METHOD()
-		virtual void privateMethodPropertyInheritance() override {}
-
-		METHOD()
-		virtual void privateMethodPropertyInheritance2() override {}
-
-	protected:
-		METHOD()
-		virtual void protectedMethodPropertyInheritance() override {}
-
-		METHOD()
-		virtual void protectedMethodPropertyInheritance2() override {}
-
 	public:
 		METHOD()
-		virtual void publicMethodPropertyInheritance() override {}
+		virtual void methodPropertyInheritance() override {}
 
-		METHOD()
-		virtual void publicMethodPropertyInheritance2() override {}
+		METHOD(UniqueInheritedProperty(2),
+			   MultipleInheritedProperty(2),
+			   UniqueNonInheritedProperty(2),
+			   MultipleNonInheritedProperty(2))
+		virtual void methodPropertyInheritanceOverride() override {}
 
 	PropertyInheritanceTestClassChild2_GENERATED
 };
