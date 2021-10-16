@@ -6,25 +6,25 @@
 */
 
 template <typename ReturnType, typename... ArgTypes>
-bool MethodHelper<ReturnType(ArgTypes...)>::hasSamePrototype(MethodBase const& method) noexcept
+bool MethodHelper<ReturnType(ArgTypes...)>::hasSameSignature(MethodBase const& method) noexcept
 {
-	return !method.isConst() && method.hasSamePrototype<ReturnType, ArgTypes...>();
+	return !method.isConst() && method.hasSameSignature<ReturnType, ArgTypes...>();
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool MethodHelper<ReturnType(ArgTypes...) noexcept>::hasSamePrototype(MethodBase const& method) noexcept
+bool MethodHelper<ReturnType(ArgTypes...) noexcept>::hasSameSignature(MethodBase const& method) noexcept
 {
-	return !method.isConst() && method.hasSamePrototype<ReturnType, ArgTypes...>();
+	return !method.isConst() && method.hasSameSignature<ReturnType, ArgTypes...>();
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool MethodHelper<ReturnType(ArgTypes...) const>::hasSamePrototype(MethodBase const& method) noexcept
+bool MethodHelper<ReturnType(ArgTypes...) const>::hasSameSignature(MethodBase const& method) noexcept
 {
-	return method.isConst() && method.hasSamePrototype<ReturnType, ArgTypes...>();
+	return method.isConst() && method.hasSameSignature<ReturnType, ArgTypes...>();
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool MethodHelper<ReturnType(ArgTypes...) const noexcept>::hasSamePrototype(MethodBase const& method) noexcept
+bool MethodHelper<ReturnType(ArgTypes...) const noexcept>::hasSameSignature(MethodBase const& method) noexcept
 {
-	return method.isConst() && method.hasSamePrototype<ReturnType, ArgTypes...>();
+	return method.isConst() && method.hasSameSignature<ReturnType, ArgTypes...>();
 }

@@ -20,7 +20,7 @@ namespace rfk::internal
 	class FunctionHelper<ReturnType(ArgTypes...)>
 	{
 		public:
-			static bool hasSamePrototype(Function const& function) noexcept;
+			static bool hasSameSignature(Function const& function) noexcept;
 	};
 
 	/** Overload for noexcept functions. */
@@ -28,7 +28,7 @@ namespace rfk::internal
 	class FunctionHelper<ReturnType(ArgTypes...) noexcept>
 	{
 		public:
-			static bool hasSamePrototype(Function const& function) noexcept;
+			static bool hasSameSignature(Function const& function) noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionHelper.inl"

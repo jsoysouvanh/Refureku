@@ -17,6 +17,9 @@ namespace rfk
 	{
 		public:
 			/**
+			*	@brief	Check whether 2 functions have the same signature.
+			*			Non reflected types are compared equal, so NonReflectedType1 and NonReflectedType2 are considered equal since their archetype is the same.
+			* 
 			*	@tparam		ReturnType	Return type to compare with.
 			*	@tparam...	ArgTypes	Argument types to compare with.
 			*
@@ -24,16 +27,17 @@ namespace rfk
 			*			parameter types as ArgTypes, else false.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			RFK_NODISCARD bool										hasSamePrototype()							const	noexcept;
+			RFK_NODISCARD bool										hasSameSignature()							const	noexcept;
 
 			/**
-			*	@brief Check that another function has the same prototype as this function.
+			*	@brief	Check that another function has the same prototype as this function.
+			*			Non reflected types are compared equal, so NonReflectedType1 and NonReflectedType2 are considered equal since their archetype is the same.
 			*	
 			*	@param other Function to compare the prototype with.
 			* 
 			*	@return true if the provided function has the same prototype as this function, else false.
 			*/
-			RFK_NODISCARD REFUREKU_API bool							hasSamePrototype(FunctionBase const& other)	const	noexcept;
+			RFK_NODISCARD REFUREKU_API bool							hasSameSignature(FunctionBase const& other)	const	noexcept;
 
 			/**
 			*	@tparam... ArgTypes Argument types to compare with.

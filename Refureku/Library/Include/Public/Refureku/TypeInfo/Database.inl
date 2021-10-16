@@ -10,7 +10,7 @@ Function const* Database::getFunctionByName(char const* name, EFunctionFlags fla
 {
 	for (Function const* function : getFunctionsByName(name, flags))
 	{
-		if (internal::FunctionHelper<FunctionSignature>::hasSamePrototype(*function))
+		if (internal::FunctionHelper<FunctionSignature>::hasSameSignature(*function))
 		{
 			return function;
 		}

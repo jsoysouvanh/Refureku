@@ -6,13 +6,13 @@
 */
 
 template <typename ReturnType, typename... ArgTypes>
-bool FunctionHelper<ReturnType(ArgTypes...)>::hasSamePrototype(Function const& function) noexcept
+bool FunctionHelper<ReturnType(ArgTypes...)>::hasSameSignature(Function const& function) noexcept
 {
-	return function.hasSamePrototype<ReturnType, ArgTypes...>();
+	return function.hasSameSignature<ReturnType, ArgTypes...>();
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool FunctionHelper<ReturnType(ArgTypes...) noexcept>::hasSamePrototype(Function const& function) noexcept
+bool FunctionHelper<ReturnType(ArgTypes...) noexcept>::hasSameSignature(Function const& function) noexcept
 {
-	return function.hasSamePrototype<ReturnType, ArgTypes...>();
+	return function.hasSameSignature<ReturnType, ArgTypes...>();
 }

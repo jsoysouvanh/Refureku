@@ -51,7 +51,7 @@ Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, b
 
 														  return (userData.flags & methodBase.getFlags()) == userData.flags &&
 																	methodBase.hasSameName(userData.name) &&
-																	internal::MethodHelper<MethodSignature>::hasSamePrototype(methodBase);
+																	internal::MethodHelper<MethodSignature>::hasSameSignature(methodBase);
 													  }, &data, shouldInspectInherited) : nullptr;
 }
 
@@ -71,7 +71,7 @@ StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags
 
 														return (userData.flags & methodBase.getFlags()) == userData.flags &&
 																methodBase.hasSameName(userData.name) &&
-																internal::MethodHelper<StaticMethodSignature>::hasSamePrototype(methodBase);
+																internal::MethodHelper<StaticMethodSignature>::hasSameSignature(methodBase);
 													}, &data, shouldInspectInherited) : nullptr;
 }
 

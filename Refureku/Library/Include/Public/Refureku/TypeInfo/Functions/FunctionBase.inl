@@ -49,7 +49,7 @@ bool FunctionBase::hasSameParameters() const noexcept
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool FunctionBase::hasSamePrototype() const noexcept
+bool FunctionBase::hasSameSignature() const noexcept
 {
 	if constexpr (sizeof...(ArgTypes) == 0u)
 	{

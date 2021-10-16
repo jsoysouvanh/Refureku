@@ -23,7 +23,7 @@ FunctionParameter& FunctionBase::addParameter(char const* name, std::size_t id, 
 	return getPimpl()->addParameter(name, id, type, this);
 }
 
-bool FunctionBase::hasSamePrototype(FunctionBase const& other) const noexcept
+bool FunctionBase::hasSameSignature(FunctionBase const& other) const noexcept
 {
 	//Compare return type
 	if (getReturnType() != other.getReturnType())

@@ -21,6 +21,6 @@ Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags fl
 
 														  return (userData.flags & func.getFlags()) == userData.flags &&
 															  func.hasSameName(userData.name) &&
-															  internal::FunctionHelper<FunctionSignature>::hasSamePrototype(func);
+															  internal::FunctionHelper<FunctionSignature>::hasSameSignature(func);
 													  }, &data) : nullptr;
 }
