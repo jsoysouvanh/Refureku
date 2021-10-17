@@ -234,7 +234,7 @@ namespace rfk
 			REFUREKU_INTERNAL Entity(EntityImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ~Entity()								noexcept;
 
-			GEN_GET_PIMPL(EntityImpl, _pimpl.get())
+			RFK_GEN_GET_PIMPL(EntityImpl, _pimpl.get())
 
 		private:
 			/** Concrete implementation of the Entity class. */

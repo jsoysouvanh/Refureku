@@ -74,6 +74,6 @@ namespace rfk
 			//Forward declaration
 			class ClassTemplateInstantiationImpl;
 
-			GEN_GET_PIMPL(ClassTemplateInstantiationImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(ClassTemplateInstantiationImpl, Entity::getPimpl())
 	};
 }

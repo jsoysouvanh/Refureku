@@ -15,6 +15,6 @@
 
 #else
 
-#define GEN_GET_PIMPL(type, source)
+#define RFK_GEN_GET_PIMPL(type, source)
 
 #endif

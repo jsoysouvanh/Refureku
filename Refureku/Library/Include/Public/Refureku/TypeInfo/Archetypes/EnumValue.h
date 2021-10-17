@@ -46,7 +46,7 @@ namespace rfk
 			//Forward declaration
 			class EnumValueImpl;
 
-			GEN_GET_PIMPL(EnumValueImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(EnumValueImpl, Entity::getPimpl())
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<EnumValue const*>);

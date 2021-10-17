@@ -119,7 +119,7 @@ namespace rfk
 			//Forward declaration
 			class FieldImpl;
 
-			GEN_GET_PIMPL(FieldImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(FieldImpl, Entity::getPimpl())
 
 		private:
 			template <typename ValueType>

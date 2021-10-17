@@ -98,6 +98,6 @@ namespace rfk
 			REFUREKU_INTERNAL MethodBase(MethodBase&&)						noexcept;
 			REFUREKU_INTERNAL ~MethodBase()									noexcept;
 
-			GEN_GET_PIMPL(MethodBaseImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(MethodBaseImpl, Entity::getPimpl())
 	};
 }

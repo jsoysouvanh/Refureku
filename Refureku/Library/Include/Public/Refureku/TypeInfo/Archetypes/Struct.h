@@ -95,7 +95,7 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API ParentStruct const&					getDirectParentAt(std::size_t index)												const	noexcept;
 
 			/**
-			*	@brief Get the number of direct parents this struct is inheriting from.
+			*	@brief Get the number of reflected direct parents this struct is inheriting from.
 			* 
 			*	@return The number of direct parents this struct is inheriting from.
 			*/
@@ -762,7 +762,7 @@ namespace rfk
 									 EClassKind		classKind)		noexcept;
 			REFUREKU_INTERNAL Struct(StructImpl* implementation)	noexcept;
 
-			GEN_GET_PIMPL(StructImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(StructImpl, Entity::getPimpl())
 
 		private:
 			/**

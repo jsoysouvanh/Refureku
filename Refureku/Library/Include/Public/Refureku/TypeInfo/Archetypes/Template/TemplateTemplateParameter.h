@@ -60,6 +60,6 @@ namespace rfk
 			//Forward declaration
 			class TemplateTemplateParameterImpl;
 
-			GEN_GET_PIMPL(TemplateTemplateParameterImpl, TemplateParameter::getPimpl())
+			RFK_GEN_GET_PIMPL(TemplateTemplateParameterImpl, TemplateParameter::getPimpl())
 	};
 }

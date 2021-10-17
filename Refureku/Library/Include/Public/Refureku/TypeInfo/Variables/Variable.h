@@ -105,7 +105,7 @@ namespace rfk
 			//Forward declaration
 			class VariableImpl;
 
-			GEN_GET_PIMPL(VariableImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(VariableImpl, Entity::getPimpl())
 	};
 
 	#include "Refureku/TypeInfo/Variables/Variable.inl"

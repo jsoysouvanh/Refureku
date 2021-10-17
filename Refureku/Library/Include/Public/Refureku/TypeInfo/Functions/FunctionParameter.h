@@ -34,6 +34,6 @@ namespace rfk
 			//Forward declaration
 			class FunctionParameterImpl;
 
-			GEN_GET_PIMPL(FunctionParameterImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(FunctionParameterImpl, Entity::getPimpl())
 	};
 }

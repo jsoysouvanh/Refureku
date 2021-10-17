@@ -32,6 +32,6 @@ namespace rfk
 			//Forward declaration
 			class NonTypeTemplateParameterImpl;
 
-			GEN_GET_PIMPL(NonTypeTemplateParameterImpl, TemplateParameter::getPimpl())
+			RFK_GEN_GET_PIMPL(NonTypeTemplateParameterImpl, TemplateParameter::getPimpl())
 	};
 }

@@ -52,7 +52,7 @@ namespace rfk
 			//Forward declaration
 			class NonTypeTemplateArgumentImpl;
 
-			GEN_GET_PIMPL(NonTypeTemplateArgumentImpl, TemplateArgument::getPimpl())
+			RFK_GEN_GET_PIMPL(NonTypeTemplateArgumentImpl, TemplateArgument::getPimpl())
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.inl"

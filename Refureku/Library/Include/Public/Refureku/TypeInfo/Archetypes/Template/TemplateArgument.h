@@ -46,7 +46,7 @@ namespace rfk
 			REFUREKU_INTERNAL TemplateArgument(TemplateArgumentImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ~TemplateArgument()										noexcept;
 
-			GEN_GET_PIMPL(TemplateArgumentImpl, _pimpl.get())
+			RFK_GEN_GET_PIMPL(TemplateArgumentImpl, _pimpl.get())
 
 		private:
 			/** Pointer to the concrete TemplateParameter implementation. */

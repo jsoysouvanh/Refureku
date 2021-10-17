@@ -9,7 +9,7 @@
 
 #include "Refureku/Config.h"
 
-#define GEN_GET_PIMPL(type, source) \
+#define RFK_GEN_GET_PIMPL(type, source) \
     RFK_NODISCARD inline type* getPimpl() noexcept { return reinterpret_cast<type*>(source); } \
     RFK_NODISCARD inline type const* getPimpl() const noexcept { return reinterpret_cast<type const*>(source); }
 

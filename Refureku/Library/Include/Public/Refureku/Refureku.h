@@ -25,6 +25,7 @@
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/TypeInfo/Archetypes/ParentStruct.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h"
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h"

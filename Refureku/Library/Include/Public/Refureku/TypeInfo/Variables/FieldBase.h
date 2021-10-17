@@ -63,6 +63,6 @@ namespace rfk
 			REFUREKU_INTERNAL FieldBase(FieldBase&&)					noexcept;
 			REFUREKU_INTERNAL ~FieldBase()								noexcept;
 
-			GEN_GET_PIMPL(FieldBaseImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(FieldBaseImpl, Entity::getPimpl())
 	};
 }

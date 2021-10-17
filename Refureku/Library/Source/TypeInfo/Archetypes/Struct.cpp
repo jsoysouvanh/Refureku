@@ -33,7 +33,7 @@ rfk::Vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 	for (Struct const* subclass : getPimpl()->getSubclasses())
 	{
 		//Search this struct in subclasses's parents
-		for (ParentStruct const& subclassParent : getPimpl()->getDirectParents())
+		for (ParentStruct const& subclassParent : subclass->getPimpl()->getDirectParents())
 		{
 			if (&subclassParent.getArchetype() == this)
 			{

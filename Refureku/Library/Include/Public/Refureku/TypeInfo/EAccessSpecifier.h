@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Refureku/Misc/FundamentalTypes.h"
+#include "Refureku/Misc/EnumMacros.h"
 
 namespace rfk
 {

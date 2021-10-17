@@ -101,7 +101,7 @@ namespace rfk
 			//Forward declaration
 			class ClassTemplateImpl;
 
-			GEN_GET_PIMPL(ClassTemplateImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(ClassTemplateImpl, Entity::getPimpl())
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplate.inl"

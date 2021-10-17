@@ -27,6 +27,7 @@ add_executable(${RefurekuTestsTarget}
 					Src/TestFieldBase.cpp
 					Src/TestStaticMethods.cpp
 					Src/TestMethods.cpp
+					Src/BaseObject.cpp
 					
 					main.cpp)
 
