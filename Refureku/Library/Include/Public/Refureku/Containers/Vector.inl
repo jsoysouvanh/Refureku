@@ -117,7 +117,7 @@ void Vector<T, Allocator>::reallocateIfNecessary(std::size_t minCapacity)
 template <typename T, typename Allocator>
 std::size_t	Vector<T, Allocator>::computeNewCapacity(std::size_t minCapacity) const noexcept
 {
-	//TODO: Should maybe handle the case when _capacity * _growthFactor > std::size_t max value
+	//TODO: Should handle the case when _capacity * _growthFactor > std::size_t max value
 	std::size_t newCapacity = static_cast<std::size_t>(_capacity * _growthFactor);
 
 	return (newCapacity > minCapacity) ? newCapacity : minCapacity;

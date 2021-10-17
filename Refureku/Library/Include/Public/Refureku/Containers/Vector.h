@@ -194,7 +194,7 @@ namespace rfk
 			void		push_back(T&& value);
 
 			/**
-			*	@brief	Add all elements from a vector at the end of this vector.
+			*	@brief Add all elements from a vector at the end of this vector.
 			* 
 			*	@param other The vector which elements must be copied.
 			*/

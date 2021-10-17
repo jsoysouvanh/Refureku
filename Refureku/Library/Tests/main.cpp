@@ -4,6 +4,7 @@
 __RFK_DISABLE_WARNING_PUSH
 __RFK_DISABLE_WARNING_UNUSED_RESULT
 
+#include "VectorTests.cpp"
 #include "EntityTests.cpp"
 #include "ArchetypeTests.cpp"
 #include "EnumTests.cpp"
@@ -23,7 +24,6 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "PropertyInheritanceTests.cpp"
 #include "EntityCastTests.cpp"
 
-//TODO: Vector
 //TODO: Database
 
 __RFK_DISABLE_WARNING_POP
