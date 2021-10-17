@@ -191,6 +191,11 @@ bool Struct::foreachNestedArchetype(Visitor<Archetype> visitor, void* userData) 
 	return Algorithm::foreach(getPimpl()->getNestedArchetypes(), visitor, userData);
 }
 
+std::size_t Struct::getNestedArchetypesCount() const noexcept
+{
+	return getPimpl()->getNestedArchetypes().size();
+}
+
 Field const* Struct::getFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
 {
 	Field const* result = nullptr;
@@ -251,11 +256,16 @@ Vector<Field const*> Struct::getFieldsByPredicate(Predicate<Field> predicate, vo
 
 bool Struct::foreachField(Visitor<Field> visitor, void* userData, bool shouldInspectInherited) const
 {
-	return Algorithm::foreach(getPimpl()->getFields(),
+	return (visitor != nullptr) ? Algorithm::foreach(getPimpl()->getFields(),
 										[this, visitor, userData, shouldInspectInherited](Field const& field)
 										{
 											return (shouldInspectInherited || field.getOuterEntity() == this) ? visitor(field, userData) : true;
-										});
+										}) : false;
+}
+
+std::size_t Struct::getFieldsCount() const noexcept
+{
+	return getPimpl()->getFields().size();
 }
 
 StaticField const* Struct::getStaticFieldByName(char const* name, EFieldFlags minFlags, bool shouldInspectInherited) const noexcept
@@ -314,11 +324,16 @@ Vector<StaticField const*> Struct::getStaticFieldsByPredicate(Predicate<StaticFi
 
 bool Struct::foreachStaticField(Visitor<StaticField> visitor, void* userData, bool shouldInspectInherited) const
 {
-	return Algorithm::foreach(getPimpl()->getStaticFields(),
+	return (visitor != nullptr) ? Algorithm::foreach(getPimpl()->getStaticFields(),
 										[this, visitor, userData, shouldInspectInherited](StaticField const& staticField)
 										{
 											return (shouldInspectInherited || staticField.getOuterEntity() == this) ? visitor(staticField, userData) : true;
-										});
+										}) : false;
+}
+
+std::size_t Struct::getStaticFieldsCount() const noexcept
+{
+	return getPimpl()->getStaticFields().size();
 }
 
 Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
@@ -448,7 +463,7 @@ bool Struct::foreachMethod(Visitor<Method> visitor, void* userData, bool shouldI
 	bool result = Algorithm::foreach(getPimpl()->getMethods(), visitor, userData);
 
 	//Iterate on parent methods if necessary
-	if (shouldInspectInherited)
+	if (result && shouldInspectInherited)
 	{
 		std::size_t i = 0u;
 		auto const&	directParents = getPimpl()->getDirectParents();
@@ -461,6 +476,11 @@ bool Struct::foreachMethod(Visitor<Method> visitor, void* userData, bool shouldI
 	}
 
 	return result;
+}
+
+std::size_t Struct::getMethodsCount() const noexcept
+{
+	return getPimpl()->getMethods().size();
 }
 
 StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
@@ -591,7 +611,7 @@ bool Struct::foreachStaticMethod(Visitor<StaticMethod> visitor, void* userData, 
 	bool result = Algorithm::foreach(getPimpl()->getStaticMethods(), visitor, userData);
 
 	//Iterate on parent static methods if necessary
-	if (shouldInspectInherited)
+	if (result && shouldInspectInherited)
 	{
 		std::size_t i = 0u;
 		auto const&	directParents = getPimpl()->getDirectParents();
@@ -606,16 +626,9 @@ bool Struct::foreachStaticMethod(Visitor<StaticMethod> visitor, void* userData, 
 	return result;
 }
 
-ClassTemplate const* Struct::asTemplate() const noexcept
+std::size_t Struct::getStaticMethodsCount() const noexcept
 {
-	return (getClassKind() == EClassKind::Template) ?
-		reinterpret_cast<ClassTemplate const*>(this) : nullptr;
-}
-
-ClassTemplateInstantiation const* Struct::asTemplateInstantiation() const noexcept
-{
-	return (getClassKind() == EClassKind::TemplateInstantiation) ?
-		reinterpret_cast<ClassTemplateInstantiation const*>(this) : nullptr;
+	return getPimpl()->getStaticMethods().size();
 }
 
 void Struct::addDirectParent(Archetype const* archetype, EAccessSpecifier inheritanceAccess) noexcept

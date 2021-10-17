@@ -44,6 +44,9 @@ class CLASS() BaseObject : public rfk::Object
 class CLASS() ObjectDerived1 : public BaseObject
 {
 	private:
+		FIELD()
+		int j;
+
 		METHOD(Instantiator)
 		static ObjectDerived1* customInstantiator() noexcept
 		{

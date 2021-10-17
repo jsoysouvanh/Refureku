@@ -15,6 +15,8 @@ namespace rfk
 	class Archetype;
 	class FundamentalArchetype;
 	class Struct;
+	class ClassTemplate;
+	class ClassTemplateInstantiation;
 	class Enum;
 	class EnumValue;
 	class Namespace;
@@ -35,54 +37,68 @@ namespace rfk
 	*	@return The casted entity if the provided type matched the concrete entity type, else nullptr.
 	*/
 	template <typename T>
-	T const*									entityCast(Entity const* entity)						noexcept;
+	RFK_NODISCARD T const*											entityCast(Entity const* entity)								noexcept;
 
 	/**
 	*	rfk::entityCast<> specialization for all Entity types.
 	*/
 	template <>
-	REFUREKU_API Archetype const*				entityCast<Archetype>(Entity const* entity)				noexcept;
+	RFK_NODISCARD REFUREKU_API Archetype const*						entityCast<Archetype>(Entity const* entity)						noexcept;
 
 	template <>
-	REFUREKU_API FundamentalArchetype const*	entityCast<FundamentalArchetype>(Entity const* entity)	noexcept;
+	RFK_NODISCARD REFUREKU_API FundamentalArchetype const*			entityCast<FundamentalArchetype>(Entity const* entity)			noexcept;
 
 	/**
-	*	This entity cast specialization doesn't work to check if an entity is a class (it will return a non-nullptr pointer when it is a struct as well).
-	*	Make sure to check if the result's kind is EEntityKind::Class.
+	*	This entity cast specialization doesn't differentiate structs and classes since they have the same static type.
+	*	Make sure to check if the result's kind is EEntityKind::Struct or EEntityKind::Class.
 	*/
 	template <>
-	REFUREKU_API Struct const*					entityCast<Struct>(Entity const* entity)				noexcept;
+	RFK_NODISCARD REFUREKU_API Struct const*						entityCast<Struct>(Entity const* entity)						noexcept;
+
+	/**
+	*	This entity cast specialization doesn't differentiate structs and classes since they have the same static type.
+	*	Make sure to check if the result's kind is EEntityKind::Struct or EEntityKind::Class.
+	*/
+	template <>
+	RFK_NODISCARD REFUREKU_API ClassTemplate const*					entityCast<ClassTemplate>(Entity const* entity)					noexcept;
+
+	/**
+	*	This entity cast specialization doesn't differentiate structs and classes since they have the same static type.
+	*	Make sure to check if the result's kind is EEntityKind::Struct or EEntityKind::Class.
+	*/
+	template <>
+	RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	entityCast<ClassTemplateInstantiation>(Entity const* entity)	noexcept;
 
 	template <>
-	REFUREKU_API FieldBase const*				entityCast<FieldBase>(Entity const* entity)				noexcept;
+	RFK_NODISCARD REFUREKU_API FieldBase const*						entityCast<FieldBase>(Entity const* entity)						noexcept;
+
+	template <>	
+	RFK_NODISCARD REFUREKU_API Field const*							entityCast<Field>(Entity const* entity)							noexcept;
 
 	template <>
-	REFUREKU_API Field const*					entityCast<Field>(Entity const* entity)					noexcept;
+	RFK_NODISCARD REFUREKU_API StaticField const*					entityCast<StaticField>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API StaticField const*				entityCast<StaticField>(Entity const* entity)			noexcept;
+	RFK_NODISCARD REFUREKU_API MethodBase const*					entityCast<MethodBase>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API MethodBase const*				entityCast<MethodBase>(Entity const* entity)			noexcept;
+	RFK_NODISCARD REFUREKU_API Method const*						entityCast<Method>(Entity const* entity)						noexcept;
 
 	template <>
-	REFUREKU_API Method const*					entityCast<Method>(Entity const* entity)				noexcept;
+	RFK_NODISCARD REFUREKU_API StaticMethod const*					entityCast<StaticMethod>(Entity const* entity)					noexcept;
 
 	template <>
-	REFUREKU_API StaticMethod const*			entityCast<StaticMethod>(Entity const* entity)			noexcept;
+	RFK_NODISCARD REFUREKU_API Enum const*							entityCast<Enum>(Entity const* entity)							noexcept;
 
 	template <>
-	REFUREKU_API Enum const*					entityCast<Enum>(Entity const* entity)					noexcept;
+	RFK_NODISCARD REFUREKU_API EnumValue const*						entityCast<EnumValue>(Entity const* entity)						noexcept;
 
 	template <>
-	REFUREKU_API EnumValue const*				entityCast<EnumValue>(Entity const* entity)				noexcept;
+	RFK_NODISCARD REFUREKU_API Namespace const*						entityCast<Namespace>(Entity const* entity)						noexcept;
 
 	template <>
-	REFUREKU_API Namespace const*				entityCast<Namespace>(Entity const* entity)				noexcept;
+	RFK_NODISCARD REFUREKU_API Variable const*						entityCast<Variable>(Entity const* entity)						noexcept;
 
 	template <>
-	REFUREKU_API Variable const*				entityCast<Variable>(Entity const* entity)				noexcept;
-
-	template <>
-	REFUREKU_API Function const*				entityCast<Function>(Entity const* entity)				noexcept;
+	RFK_NODISCARD REFUREKU_API Function const*						entityCast<Function>(Entity const* entity)						noexcept;
 }

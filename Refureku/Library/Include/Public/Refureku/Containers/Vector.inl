@@ -268,6 +268,7 @@ void Vector<T, Allocator>::push_back(Vector const& other)
 		reallocateIfNecessary(size() + other.size());
 
 		copyElements(other.cbegin(), end(), other.size());
+		_size += other.size();
 	}
 }
 
@@ -279,6 +280,7 @@ void Vector<T, Allocator>::push_back(Vector&& other)
 		reallocateIfNecessary(size() + other.size());
 
 		moveElements(other.begin(), end(), other.size());
+		_size += other.size();
 	}
 }
 

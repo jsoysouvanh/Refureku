@@ -84,7 +84,7 @@ TEST(Rfk_Enum_getEnumValueByPredicate, NoMatchingValueFound)
 
 TEST(Rfk_Enum_getEnumValueByPredicate, ThrowingPredicate)
 {
-	auto predicate = [](rfk::EnumValue const& ev, void*) -> bool
+	auto predicate = [](rfk::EnumValue const&, void*) -> bool
 	{
 		throw std::logic_error("Something wrong happened here!");
 	};
@@ -140,7 +140,7 @@ TEST(Rfk_Enum_getEnumValuesByPredicate, NoMatchingValuesFound)
 
 TEST(Rfk_Enum_getEnumValuesByPredicate, ThrowingPredicate)
 {
-	auto predicate = [](rfk::EnumValue const& ev, void*) -> bool
+	auto predicate = [](rfk::EnumValue const&, void*) -> bool
 	{
 		throw std::logic_error("Something wrong happened here!");
 	};
@@ -233,7 +233,7 @@ TEST(Rfk_Enum_foreachEnumValue, BreakingLoop)
 
 TEST(Rfk_Enum_foreachEnumValue, ThrowingVisitor)
 {
-	auto visitor = [](rfk::EnumValue const& /*ev*/, void* data) -> bool
+	auto visitor = [](rfk::EnumValue const&, void*) -> bool
 	{
 		throw std::logic_error("Something wrong happened here!");
 	};

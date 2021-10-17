@@ -47,6 +47,26 @@ Struct const* rfk::entityCast<Struct>(Entity const* entity) noexcept
 }
 
 template <>
+ClassTemplate const* rfk::entityCast<ClassTemplate>(Entity const* entity) noexcept
+{
+	Struct const* result = rfk::entityCast<Struct>(entity);
+
+	return (result != nullptr && result->getClassKind() ==  EClassKind::Template) ?
+		reinterpret_cast<ClassTemplate const*>(result) :
+		nullptr;
+}
+
+template <>
+ClassTemplateInstantiation const* rfk::entityCast<ClassTemplateInstantiation>(Entity const* entity) noexcept
+{
+	Struct const* result = rfk::entityCast<Struct>(entity);
+
+	return (result != nullptr && result->getClassKind() ==  EClassKind::TemplateInstantiation) ?
+		reinterpret_cast<ClassTemplateInstantiation const*>(result) :
+		nullptr;
+}
+
+template <>
 FieldBase const* rfk::entityCast<FieldBase>(Entity const* entity) noexcept
 {
 	return internal::entityCast<FieldBase, EEntityKind::Field>(entity);

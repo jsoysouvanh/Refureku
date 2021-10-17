@@ -235,6 +235,13 @@ namespace rfk
 																								   void*				userData)								const;
 
 			/**
+			*	@brief Get the number of archetypes nested in this struct.
+			* 
+			*	@return The number of archetypes nested in this struct.
+			*/
+			REFUREKU_API std::size_t										getNestedArchetypesCount()															const	noexcept;
+
+			/**
 			*	@param name						Name of the field to retrieve.
 			*	@param minFlags					Requirements the queried field should fulfill.
 			*										Keep in mind that the returned field should contain all of the specified flags,
@@ -298,6 +305,13 @@ namespace rfk
 			REFUREKU_API bool												foreachField(Visitor<Field>	visitor,
 																						 void*			userData,
 																						 bool			shouldInspectInherited = false)							const;
+
+			/**
+			*	@brief Get the number of fields (including inherited ones) in this struct.
+			* 
+			*	@return The number of fields in this struct.
+			*/
+			REFUREKU_API std::size_t										getFieldsCount()																	const	noexcept;
 
 			/**
 			*	@param name						Name of the static field to retrieve.
@@ -364,6 +378,13 @@ namespace rfk
 			REFUREKU_API bool												foreachStaticField(Visitor<StaticField>	visitor,
 																							   void*				userData,
 																							   bool					shouldInspectInherited	= false)			const;
+
+			/**
+			*	@brief Get the number of static fields (including inherited ones) in this struct.
+			* 
+			*	@return The number of static fields in this struct.
+			*/
+			REFUREKU_API std::size_t										getStaticFieldsCount()																const	noexcept;
 
 			/**
 			*	@brief	Get a method by name and signature. This template overload using signature comes handy when wanting to disambiguate
@@ -463,6 +484,13 @@ namespace rfk
 																						  bool				shouldInspectInherited = false)						const;
 
 			/**
+			*	@brief Get the number of methods (excluding inherited ones) in this struct.
+			* 
+			*	@return The number of methods in this struct.
+			*/
+			REFUREKU_API std::size_t										getMethodsCount()																	const	noexcept;
+
+			/**
 			*	@param name						Name of the static method to retrieve.
 			*	@param minFlags					Requirements the queried static method should fulfill.
 			*										Keep in mind that the returned static method should contain all of the specified flags,
@@ -560,25 +588,18 @@ namespace rfk
 																								bool					shouldInspectInherited = false)			const;
 
 			/**
+			*	@brief Get the number of static methods (excluding inherited ones) in this struct.
+			* 
+			*	@return The number of static methods in this struct.
+			*/
+			REFUREKU_API std::size_t										getStaticMethodsCount()																const	noexcept;
+
+			/**
 			*	@brief Get the class kind of this instance.
 			* 
 			*	@return The class kind of this instance.
 			*/
 			RFK_NODISCARD REFUREKU_API EClassKind							getClassKind()																		const	noexcept;
-
-			/**
-			*	@brief Cast the struct to rfk::ClassTemplate const* if it is a template.
-			* 
-			*	@return A rfk::ClassTemplate const* if the struct is a struct template, else nullptr.
-			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplate const*					asTemplate()																		const	noexcept;
-
-			/**
-			*	@brief Cast the struct to rfk::ClassTemplateInstantiation const* if it is a template instantiation.
-			* 
-			*	@return A rfk::ClassTemplateInstantiation const* if the struct is a template instantiation, else nullptr.
-			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const*	asTemplateInstantiation()															const	noexcept;
 
 			/**
 			*	@brief Add a parent to this struct if the provided archetype is a valid struct/class.
