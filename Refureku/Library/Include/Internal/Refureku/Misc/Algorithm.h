@@ -16,16 +16,16 @@
 
 namespace rfk
 {
-	class EntityUtility
+	class Algorithm
 	{
 		public:
-			EntityUtility()		= delete;
-			~EntityUtility()	= delete;
+			Algorithm()		= delete;
+			~Algorithm()	= delete;
 
 			/**
-			*	@brief Execute the given visitor on all entities of the container.
+			*	@brief Execute the given visitor on all items of the container.
 			*
-			*	@param container Container containing all the entities the visitor should run on.
+			*	@param container Container containing all the items the visitor should run on.
 			*	@param visitor	 Visitor function to call. Return false to abort the foreach loop.
 			*	@param userData	 Optional user data forwarded to the visitor.
 			* 
@@ -34,59 +34,61 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			template <typename EntityType, typename ContainerType>
-			RFK_NODISCARD static bool								foreachEntity(ContainerType const&	container,
-																				  Visitor<EntityType>	visitor,
-																				  void*					userData);
+			template <typename ItemType, typename ContainerType>
+			RFK_NODISCARD static bool								foreach(ContainerType const&	container,
+																			Visitor<ItemType>		visitor,
+																			void*					userData);
 
 			template <typename ContainerType, typename Visitor>
-			RFK_NODISCARD static bool								foreachEntity(ContainerType const&	container,
-																				  Visitor				visitor);
+			RFK_NODISCARD static bool								foreach(ContainerType const&	container,
+																			Visitor					visitor);
 
 			/**
-			*	@brief Get an entity from a container entities.
+			*	@brief Get an item in a container from a predicate.
 			*	
-			*	@param container Container containing entities (can by ptr or value).
-			*	@param predicate Predicate defining valid entities.
+			*	@param container Container containing items (can by ptr or value).
+			*	@param predicate Predicate defining valid item.
 			* 
-			*	@return A pointer to the first entity matching the given predicate if any, else nullptr.
+			*	@return A pointer to the first item matching the given predicate if any, else nullptr.
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			template <typename ContainerType, typename Predicate>
-			RFK_NODISCARD static auto								getEntityByPredicate(ContainerType const&	container,
-																						 Predicate				predicate)			-> typename std::remove_pointer_t<typename ContainerType::value_type> const*;
+			RFK_NODISCARD static auto								getItemByPredicate(ContainerType const&	container,
+																					   Predicate			predicate)			-> typename std::remove_pointer_t<typename ContainerType::value_type> const*;
 			
-			template <typename EntityType, typename ContainerType>
-			RFK_NODISCARD static EntityType const*					getEntityByPredicate(ContainerType const&	container,
-																						 Predicate<EntityType>	predicate,
-																						 void*					userData);
+			template <typename ItemType, typename ContainerType>
+			RFK_NODISCARD static ItemType const*					getItemByPredicate(ContainerType const&	container,
+																					   Predicate<ItemType>	predicate,
+																					   void*				userData);
 
 
 			/**
-			*	@brief Get a list of all entities satisfying the given predicate.
+			*	@brief Get a list of all items satisfying the given predicate.
 			* 
-			*	@param container Container containing entities (can by ptr or value).
-			*	@param predicate Predicate defining valid entities.
+			*	@param container Container containing items (can by ptr or value).
+			*	@param predicate Predicate defining valid items.
 			* 
-			*	@return A list of all entities satisfying the given predicate.
+			*	@return A list of all items satisfying the given predicate.
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
 			template <typename ContainerType, typename Predicate>
-			RFK_NODISCARD static auto								getEntitiesByPredicate(ContainerType const&		container,
-																						   Predicate				predicate)		-> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>;
+			RFK_NODISCARD static auto								getItemsByPredicate(ContainerType const&	container,
+																						Predicate				predicate)		-> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>;
 
-			template <typename EntityType, typename ContainerType>
-			RFK_NODISCARD static Vector<EntityType const*>			getEntitiesByPredicate(ContainerType const&		container,
-																						   Predicate<EntityType>	predicate,
-																						   void*					userData);
+			template <typename ItemType, typename ContainerType>
+			RFK_NODISCARD static Vector<ItemType const*>			getItemsByPredicate(ContainerType const&	container,
+																						Predicate<ItemType>		predicate,
+																						void*					userData);
 
 			/**
 			*	@brief Retrieve an entity with the given name.
 			* 
 			*	@param container	Unordered_set like container that contains entity (or subclass) and implements the "find" method.
 			*	@param name			Name of the entity to look for.
+			* 
+			*	@return The entity that has the given name from the container if any, else nullptr.
 			*/
 			template <typename ContainerType>
 			RFK_NODISCARD static auto								getEntityByName(ContainerType const&	container,
@@ -147,5 +149,5 @@ namespace rfk
 																					 std::size_t			id)							noexcept;
 	};
 
-	#include "Refureku/TypeInfo/Entity/EntityUtility.inl"
+	#include "Refureku/Misc/Algorithm.inl"
 }

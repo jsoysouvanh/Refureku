@@ -4,6 +4,7 @@
 
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
 
@@ -54,21 +55,13 @@ Property const* Entity::getPropertyByName(char const* name) const noexcept
 {
 	return getPropertyByPredicate([](Property const& prop, void* userData)
 								  {
-									  return std::strcmp(prop.getArchetype().getName(), *reinterpret_cast<char const**>(userData)) == 0; 
+									  return prop.getArchetype().hasSameName(*reinterpret_cast<char const**>(userData)); 
 								  }, &name);
 }
 
 Property const* Entity::getPropertyByPredicate(Predicate<Property> predicate, void* userData) const
 {
-	for (Property const* prop : _pimpl->getProperties())
-	{
-		if (predicate(*prop, userData))
-		{
-			return prop;
-		}
-	}
-	
-	return nullptr;
+	return Algorithm::getItemByPredicate(_pimpl->getProperties(), predicate, userData);
 }
 
 Vector<Property const*> Entity::getProperties(Struct const& archetype, bool isChildClassValid) const noexcept
@@ -106,23 +99,13 @@ Vector<Property const*> Entity::getPropertiesByName(char const* name) const noex
 {
 	return getPropertiesByPredicate([](Property const& prop, void* userData)
 									{
-										return std::strcmp(prop.getArchetype().getName(), *reinterpret_cast<char const**>(userData)) == 0; 
+										return prop.getArchetype().hasSameName(*reinterpret_cast<char const**>(userData)); 
 									}, &name);
 }
 
 Vector<Property const*> Entity::getPropertiesByPredicate(Predicate<Property> predicate, void* userData) const
 {
-	Vector<Property const*> result;
-
-	for (Property const* prop : _pimpl->getProperties())
-	{
-		if (predicate(*prop, userData))
-		{
-			result.push_back(prop);
-		}
-	}
-
-	return result;
+	return Algorithm::getItemsByPredicate(_pimpl->getProperties(), predicate, userData);
 }
 
 std::size_t Entity::getPropertiesCount() const noexcept
@@ -132,20 +115,7 @@ std::size_t Entity::getPropertiesCount() const noexcept
 
 bool Entity::foreachProperty(Visitor<Property> visitor, void* userData) const
 {
-	if (visitor != nullptr)
-	{
-		for (Property const* property : _pimpl->getProperties())
-		{
-			if (!visitor(*property, userData))
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	return false;
+	return Algorithm::foreach(_pimpl->getProperties(), visitor, userData);
 }
 
 bool Entity::addProperty(Property const* property) noexcept

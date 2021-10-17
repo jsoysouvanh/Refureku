@@ -23,7 +23,7 @@ namespace rfk
 {
 	//Forward declarations
 	class Struct;
-	class EntityUtility;
+	class Algorithm;
 
 	class Entity
 	{
@@ -240,7 +240,7 @@ namespace rfk
 			/** Concrete implementation of the Entity class. */
 			Pimpl<EntityImpl> _pimpl;
 
-		friend EntityUtility;
+		friend Algorithm;
 	};
 
 	#include "Refureku/TypeInfo/Entity/Entity.inl"

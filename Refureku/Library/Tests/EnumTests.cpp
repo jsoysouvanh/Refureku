@@ -1,3 +1,5 @@
+#include <stdexcept>	//std::logic_error
+
 #include <gtest/gtest.h>
 #include <Refureku/Refureku.h>
 
@@ -80,6 +82,16 @@ TEST(Rfk_Enum_getEnumValueByPredicate, NoMatchingValueFound)
 	EXPECT_EQ(result, nullptr);
 }
 
+TEST(Rfk_Enum_getEnumValueByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::EnumValue const& ev, void*) -> bool
+	{
+		throw std::logic_error("Something wrong happened here!");
+	};
+
+	EXPECT_THROW(rfk::getEnum<TestEnum>()->getEnumValueByPredicate(predicate, nullptr), std::logic_error);
+}
+
 //=========================================================
 //================= Enum::getEnumValues ===================
 //=========================================================
@@ -124,6 +136,16 @@ TEST(Rfk_Enum_getEnumValuesByPredicate, NoMatchingValuesFound)
 				  return ev.getName()[0] == 'B';
 			  }
 		, nullptr).size(), 0u);
+}
+
+TEST(Rfk_Enum_getEnumValuesByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::EnumValue const& ev, void*) -> bool
+	{
+		throw std::logic_error("Something wrong happened here!");
+	};
+
+	EXPECT_THROW(rfk::getEnum<TestEnum>()->getEnumValuesByPredicate(predicate, nullptr), std::logic_error);
 }
 
 //=========================================================
@@ -175,7 +197,7 @@ TEST(Rfk_Enum_getUnderlyingArchetype, ExplicitUnderlyingArchetype)
 //================ Enum::foreachEnumValue =================
 //=========================================================
 
-TEST(Rfk_Enum_foreachEnumValue, fullLoop)
+TEST(Rfk_Enum_foreachEnumValue, CompleteLoop)
 {
 	int counter = 0;
 
@@ -189,7 +211,7 @@ TEST(Rfk_Enum_foreachEnumValue, fullLoop)
 	EXPECT_EQ(counter, rfk::getEnum<TestEnum>()->getEnumValuesCount());
 }
 
-TEST(Rfk_Enum_foreachEnumValue, breakLoop)
+TEST(Rfk_Enum_foreachEnumValue, BreakingLoop)
 {
 	struct Data
 	{
@@ -207,4 +229,14 @@ TEST(Rfk_Enum_foreachEnumValue, breakLoop)
 				}, &data));
 
 	EXPECT_EQ(data.curItCount, data.maxItCount);
+}
+
+TEST(Rfk_Enum_foreachEnumValue, ThrowingVisitor)
+{
+	auto visitor = [](rfk::EnumValue const& /*ev*/, void* data) -> bool
+	{
+		throw std::logic_error("Something wrong happened here!");
+	};
+
+	EXPECT_THROW(rfk::getEnum<TestEnumClass>()->foreachEnumValue(visitor, nullptr), std::logic_error);
 }

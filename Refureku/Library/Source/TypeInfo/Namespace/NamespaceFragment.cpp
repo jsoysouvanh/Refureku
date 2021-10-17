@@ -1,7 +1,7 @@
 #include "Refureku/TypeInfo/Namespace/NamespaceFragment.h"
 
 #include "Refureku/TypeInfo/Namespace/NamespaceFragmentImpl.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
 
@@ -14,7 +14,7 @@ NamespaceFragment::~NamespaceFragment() noexcept = default;
 
 bool NamespaceFragment::foreachNestedEntity(Visitor<Entity> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getNestedEntities(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getNestedEntities(), visitor, userData);
 }
 
 void NamespaceFragment::addNestedEntity(Entity const* nestedEntity) noexcept

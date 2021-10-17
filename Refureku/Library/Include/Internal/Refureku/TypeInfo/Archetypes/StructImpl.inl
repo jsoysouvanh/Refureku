@@ -136,7 +136,7 @@ inline void Struct::StructImpl::setStaticMethodsCapacity(std::size_t capacity) n
 
 inline Archetype const* Struct::StructImpl::getNestedArchetype(char const* name, EAccessSpecifier access) const noexcept
 {
-	return EntityUtility::getEntityByNameAndPredicate(_nestedArchetypes, name,
+	return Algorithm::getEntityByNameAndPredicate(_nestedArchetypes, name,
 													  [access](Archetype const& archetype)
 													  {
 														  return access == EAccessSpecifier::Undefined || access == archetype.getAccessSpecifier();

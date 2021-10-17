@@ -1,4 +1,5 @@
 #include <string_view>
+#include <stdexcept>	//std::logic-error
 
 #include <gtest/gtest.h>
 #include <Refureku/Refureku.h>
@@ -358,6 +359,21 @@ TEST(Rfk_Entity_getPropertyByPredicate, WithUserData)
 		TestClass::staticGetArchetype().getPropertyAt(2));
 }
 
+TEST(Rfk_Entity_getPropertyByPredicate, NullptrPredicate)
+{
+	EXPECT_EQ(TestClass::staticGetArchetype().getPropertyByPredicate(nullptr, nullptr), nullptr);
+}
+
+TEST(Rfk_Entity_getPropertyByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::Property const&, void*) -> bool
+	{
+		throw std::logic_error("Something wrong happened here!");
+	};
+
+	EXPECT_THROW(TestClass::staticGetArchetype().getPropertyByPredicate(predicate, nullptr), std::logic_error);
+}
+
 //=========================================================
 //================= Entity::getProperties =================
 //=========================================================
@@ -413,7 +429,7 @@ TEST(Rfk_Entity_getPropertiesByName, Entity_getPropertiesByName)
 //=========== Entity::getPropertiesByPredicate ============
 //=========================================================
 
-TEST(Rfk_Entity_getPropertiesByPredicate, Entity_getPropertiesByPredicate)
+TEST(Rfk_Entity_getPropertiesByPredicate, ValidPredicate)
 {
 	int targetModulo = 2;
 
@@ -432,11 +448,26 @@ TEST(Rfk_Entity_getPropertiesByPredicate, Entity_getPropertiesByPredicate)
 				  , 2u);
 }
 
+TEST(Rfk_Entity_getPropertiesByPredicate, NullptrPredicate)
+{
+	EXPECT_EQ(TestClass::staticGetArchetype().getPropertiesByPredicate(nullptr, nullptr).size(), 0u);
+}
+
+TEST(Rfk_Entity_getPropertiesByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::Property const&, void*) -> bool
+	{
+		throw std::logic_error("Something wrong happened here!");
+	};
+
+	EXPECT_THROW(TestClass::staticGetArchetype().getPropertiesByPredicate(predicate, nullptr), std::logic_error);
+}
+
 //=========================================================
 //================ Entity::foreachProperty ================
 //=========================================================
 
-TEST(Rfk_Entity_foreachProperty, WithoutBreak)
+TEST(Rfk_Entity_foreachProperty, CompleteLoop)
 {
 	int count = 0;
 
@@ -450,7 +481,7 @@ TEST(Rfk_Entity_foreachProperty, WithoutBreak)
 	EXPECT_EQ(count, 5u);
 }
 
-TEST(Rfk_Entity_foreachProperty, WithBreak)
+TEST(Rfk_Entity_foreachProperty, BreakingLoop)
 {
 	int count = 0;
 
@@ -470,6 +501,16 @@ TEST(Rfk_Entity_foreachProperty, WithBreak)
 TEST(Rfk_Entity_foreachProperty, NullptrVisitor)
 {
 	EXPECT_FALSE(TestClass::staticGetArchetype().foreachProperty(nullptr, nullptr));
+}
+
+TEST(Rfk_Entity_foreachProperty, ThrowingVisitor)
+{
+	auto visitor = [](rfk::Property const&, void*) -> bool
+	{
+		throw std::logic_error("Something wrong happened!");
+	};
+
+	EXPECT_THROW(TestClass::staticGetArchetype().foreachProperty(visitor, nullptr), std::logic_error);
 }
 
 //=========================================================

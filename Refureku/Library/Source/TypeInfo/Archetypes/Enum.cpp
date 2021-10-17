@@ -3,7 +3,7 @@
 #include <cstring> //std::strcmp
 
 #include "Refureku/TypeInfo/Archetypes/EnumImpl.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
 
@@ -26,7 +26,7 @@ void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
 
 EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
 {
-	return (name != nullptr) ? EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), [name](EnumValue const& ev)
+	return (name != nullptr) ? Algorithm::getItemByPredicate(getPimpl()->getEnumValues(), [name](EnumValue const& ev)
 											   {
 												   return std::strcmp(ev.getName(), name) == 0;
 											   }) : nullptr;
@@ -34,7 +34,7 @@ EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
 
 EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 {
-	return EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
+	return Algorithm::getItemByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
 											   {
 												   return ev.getValue() == value;
 											   });
@@ -42,12 +42,12 @@ EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 
 EnumValue const* Enum::getEnumValueByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	return EntityUtility::getEntityByPredicate(getPimpl()->getEnumValues(), predicate, userData);
+	return Algorithm::getItemByPredicate(getPimpl()->getEnumValues(), predicate, userData);
 }
 
 Vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 {
-	return EntityUtility::getEntitiesByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
+	return Algorithm::getItemsByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
 												 {
 													 return ev.getValue() == value;
 												 });
@@ -55,7 +55,7 @@ Vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 
 Vector<EnumValue const*> Enum::getEnumValuesByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	return EntityUtility::getEntitiesByPredicate(getPimpl()->getEnumValues(), predicate, userData);
+	return Algorithm::getItemsByPredicate(getPimpl()->getEnumValues(), predicate, userData);
 }
 
 EnumValue const& Enum::getEnumValueAt(std::size_t valueIndex)	const noexcept
@@ -75,5 +75,5 @@ Archetype const& Enum::getUnderlyingArchetype() const noexcept
 
 bool Enum::foreachEnumValue(Predicate<EnumValue> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getEnumValues(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getEnumValues(), visitor, userData);
 }

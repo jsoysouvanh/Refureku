@@ -18,7 +18,7 @@
 #include "Refureku/TypeInfo/Variables/StaticField.h"
 #include "Refureku/TypeInfo/Functions/Method.h"
 #include "Refureku/TypeInfo/Functions/NonMemberFunction.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 namespace rfk
 {

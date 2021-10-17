@@ -1,7 +1,7 @@
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h"
 
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationImpl.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
 
@@ -25,7 +25,7 @@ TemplateArgument const& ClassTemplateInstantiation::getTemplateArgumentAt(std::s
 
 bool ClassTemplateInstantiation::foreachTemplateArgument(Visitor<TemplateArgument> visitor, void* userData) const noexcept
 {
-	return EntityUtility::foreachEntity(getPimpl()->getTemplateArguments(),
+	return Algorithm::foreach(getPimpl()->getTemplateArguments(),
 										visitor,
 										userData);
 }

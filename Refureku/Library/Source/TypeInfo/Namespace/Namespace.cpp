@@ -3,7 +3,7 @@
 #include "Refureku/TypeInfo/Namespace/NamespaceImpl.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
 
@@ -16,20 +16,20 @@ Namespace::~Namespace() noexcept = default;
 
 Namespace const* Namespace::getNamespaceByName(char const* name) const noexcept
 {
-	return EntityUtility::getEntityByName(getPimpl()->getNamespaces(), name);
+	return Algorithm::getEntityByName(getPimpl()->getNamespaces(), name);
 }
 
 Namespace const* Namespace::getNamespaceByPredicate(Predicate<Namespace> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(getPimpl()->getNamespaces(), [predicate, userData](Namespace const& n){ return predicate(n, userData); }) :
+		Algorithm::getItemByPredicate(getPimpl()->getNamespaces(), [predicate, userData](Namespace const& n){ return predicate(n, userData); }) :
 		nullptr;
 }
 
 Vector<Namespace const*> Namespace::getNamespacesByPredicate(Predicate<Namespace> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntitiesByPredicate(getPimpl()->getNamespaces(),
+		Algorithm::getItemsByPredicate(getPimpl()->getNamespaces(),
 											  [predicate, userData](Namespace const& n)
 											  {
 												  return predicate(n, userData);
@@ -38,7 +38,7 @@ Vector<Namespace const*> Namespace::getNamespacesByPredicate(Predicate<Namespace
 
 bool Namespace::foreachNamespace(Visitor<Namespace> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getNamespaces(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getNamespaces(), visitor, userData);
 }
 
 std::size_t Namespace::getNamespacesCount() const noexcept
@@ -49,7 +49,7 @@ std::size_t Namespace::getNamespacesCount() const noexcept
 Struct const* Namespace::getStructByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Struct const*>(
-		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
+		Algorithm::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Struct; }));
 }
@@ -58,7 +58,7 @@ Struct const* Namespace::getStructByPredicate(Predicate<Struct> predicate, void*
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Struct const*>(
-			EntityUtility::getEntityByPredicate(getPimpl()->getArchetypes(),
+			Algorithm::getItemByPredicate(getPimpl()->getArchetypes(),
 												[predicate, userData](Archetype const& archetype)
 												{
 													return archetype.getKind() == EEntityKind::Struct &&
@@ -70,7 +70,7 @@ Vector<Struct const*> Namespace::getStructsByPredicate(Predicate<Struct> predica
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(getPimpl()->getArchetypes(),
+		return Algorithm::getItemsByPredicate(getPimpl()->getArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Struct &&
@@ -86,7 +86,7 @@ Vector<Struct const*> Namespace::getStructsByPredicate(Predicate<Struct> predica
 bool Namespace::foreachStruct(Visitor<Struct> visitor, void* userData) const
 {
 	return (visitor != nullptr) ? 
-		EntityUtility::foreachEntity(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
+		Algorithm::foreach(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
 																	{
 																		return (archetype.getKind() == EEntityKind::Struct) ?
 																			visitor(static_cast<Struct const&>(archetype), userData) :
@@ -98,7 +98,7 @@ bool Namespace::foreachStruct(Visitor<Struct> visitor, void* userData) const
 Class const* Namespace::getClassByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Class const*>(
-		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
+		Algorithm::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Class; }));
 }
@@ -107,7 +107,7 @@ Class const* Namespace::getClassByPredicate(Predicate<Class> predicate, void* us
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Struct const*>(
-			EntityUtility::getEntityByPredicate(getPimpl()->getArchetypes(),
+			Algorithm::getItemByPredicate(getPimpl()->getArchetypes(),
 			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Class &&
@@ -119,7 +119,7 @@ Vector<Class const*> Namespace::getClassesByPredicate(Predicate<Class> predicate
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(getPimpl()->getArchetypes(),
+		return Algorithm::getItemsByPredicate(getPimpl()->getArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Class &&
@@ -135,7 +135,7 @@ Vector<Class const*> Namespace::getClassesByPredicate(Predicate<Class> predicate
 bool Namespace::foreachClass(Visitor<Class> visitor, void* userData) const
 {
 	return (visitor != nullptr) ? 
-		EntityUtility::foreachEntity(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
+		Algorithm::foreach(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
 									 {
 										 return (archetype.getKind() == EEntityKind::Class) ?
 											 visitor(static_cast<Class const&>(archetype), userData) :
@@ -147,7 +147,7 @@ bool Namespace::foreachClass(Visitor<Class> visitor, void* userData) const
 Enum const* Namespace::getEnumByName(char const* name) const noexcept
 {
 	return reinterpret_cast<Enum const*>(
-		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
+		Algorithm::getEntityByNameAndPredicate(getPimpl()->getArchetypes(),
 													name,
 													[](Archetype const& arch) { return arch.getKind() == EEntityKind::Enum; }));
 }
@@ -156,7 +156,7 @@ Enum const* Namespace::getEnumByPredicate(Predicate<Enum> predicate, void* userD
 {
 	return (predicate != nullptr) ?
 		reinterpret_cast<Enum const*>(
-			EntityUtility::getEntityByPredicate(getPimpl()->getArchetypes(),
+			Algorithm::getItemByPredicate(getPimpl()->getArchetypes(),
 			[predicate, userData](Archetype const& archetype)
 			{
 				return archetype.getKind() == EEntityKind::Enum &&
@@ -168,7 +168,7 @@ Vector<Enum const*> Namespace::getEnumsByPredicate(Predicate<Enum> predicate, vo
 {
 	if (predicate != nullptr)
 	{
-		return EntityUtility::getEntitiesByPredicate(getPimpl()->getArchetypes(),
+		return Algorithm::getItemsByPredicate(getPimpl()->getArchetypes(),
 													 [predicate, userData](Archetype const& archetype)
 													 {
 														 return archetype.getKind() == EEntityKind::Enum &&
@@ -184,7 +184,7 @@ Vector<Enum const*> Namespace::getEnumsByPredicate(Predicate<Enum> predicate, vo
 bool Namespace::foreachEnum(Visitor<Enum> visitor, void* userData) const
 {
 	return (visitor != nullptr) ? 
-		EntityUtility::foreachEntity(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
+		Algorithm::foreach(getPimpl()->getArchetypes(), [visitor, userData](Archetype const& archetype)
 									 {
 										 return (archetype.getKind() == EEntityKind::Enum) ?
 											 visitor(static_cast<Enum const&>(archetype), userData) :
@@ -195,7 +195,7 @@ bool Namespace::foreachEnum(Visitor<Enum> visitor, void* userData) const
 
 bool Namespace::foreachArchetype(Visitor<Archetype> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getArchetypes(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getArchetypes(), visitor, userData);
 }
 
 std::size_t Namespace::getArchetypesCount() const noexcept
@@ -206,7 +206,7 @@ std::size_t Namespace::getArchetypesCount() const noexcept
 Variable const* Namespace::getVariableByName(char const* name, EVarFlags flags) const noexcept
 {
 	return reinterpret_cast<Variable const*>(
-		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getVariables(),
+		Algorithm::getEntityByNameAndPredicate(getPimpl()->getVariables(),
 													name,
 													[flags](Variable const& var) { return (var.getFlags() & flags) == flags; }));
 }
@@ -214,7 +214,7 @@ Variable const* Namespace::getVariableByName(char const* name, EVarFlags flags) 
 Variable const* Namespace::getVariableByPredicate(Predicate<Variable> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(getPimpl()->getVariables(),
+		Algorithm::getItemByPredicate(getPimpl()->getVariables(),
 		[predicate, userData](Variable const& variable)
 		{
 			return predicate(variable, userData);
@@ -224,7 +224,7 @@ Variable const* Namespace::getVariableByPredicate(Predicate<Variable> predicate,
 Vector<Variable const*> Namespace::getVariablesByPredicate(Predicate<Variable> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntitiesByPredicate(getPimpl()->getVariables(),
+		Algorithm::getItemsByPredicate(getPimpl()->getVariables(),
 											  [predicate, userData](Variable const& variable)
 											  {
 												  return predicate(variable, userData);
@@ -233,7 +233,7 @@ Vector<Variable const*> Namespace::getVariablesByPredicate(Predicate<Variable> p
 
 bool Namespace::foreachVariable(Visitor<Variable> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getVariables(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getVariables(), visitor, userData);
 }
 
 std::size_t Namespace::getVariablesCount() const noexcept
@@ -244,7 +244,7 @@ std::size_t Namespace::getVariablesCount() const noexcept
 Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
 	return reinterpret_cast<Function const*>(
-		EntityUtility::getEntityByNameAndPredicate(getPimpl()->getFunctions(),
+		Algorithm::getEntityByNameAndPredicate(getPimpl()->getFunctions(),
 													name,
 													[flags](Function const& func)
 													{
@@ -254,7 +254,7 @@ Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags fl
 
 Vector<Function const*> Namespace::getFunctionsByName(char const* name, EFunctionFlags flags) const noexcept
 {
-	return EntityUtility::getEntitiesByNameAndPredicate(getPimpl()->getFunctions(),
+	return Algorithm::getEntitiesByNameAndPredicate(getPimpl()->getFunctions(),
 														name,
 														[flags](Function const& func)
 														{
@@ -265,7 +265,7 @@ Vector<Function const*> Namespace::getFunctionsByName(char const* name, EFunctio
 Function const* Namespace::getFunctionByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntityByPredicate(getPimpl()->getFunctions(),
+		Algorithm::getItemByPredicate(getPimpl()->getFunctions(),
 											[predicate, userData](Function const& function)
 											{
 												return predicate(function, userData);
@@ -275,7 +275,7 @@ Function const* Namespace::getFunctionByPredicate(Predicate<Function> predicate,
 Vector<Function const*> Namespace::getFunctionsByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return (predicate != nullptr) ?
-		EntityUtility::getEntitiesByPredicate(getPimpl()->getFunctions(),
+		Algorithm::getItemsByPredicate(getPimpl()->getFunctions(),
 											  [predicate, userData](Function const& function)
 											  {
 												  return predicate(function, userData);
@@ -284,7 +284,7 @@ Vector<Function const*> Namespace::getFunctionsByPredicate(Predicate<Function> p
 
 bool Namespace::foreachFunction(Visitor<Function> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getFunctions(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getFunctions(), visitor, userData);
 }
 
 std::size_t Namespace::getFunctionsCount() const noexcept

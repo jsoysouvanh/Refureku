@@ -6,7 +6,7 @@
 */
 
 template <typename ContainerType, typename Visitor>
-bool EntityUtility::foreachEntity(ContainerType const& container, Visitor visitor)
+bool Algorithm::foreach(ContainerType const& container, Visitor visitor)
 {
 	if constexpr (std::is_pointer_v<typename ContainerType::value_type>)
 	{
@@ -32,32 +32,32 @@ bool EntityUtility::foreachEntity(ContainerType const& container, Visitor visito
 	return true;
 }
 
-template <typename EntityType, typename ContainerType>
-bool EntityUtility::foreachEntity(ContainerType const& container, Visitor<EntityType> visitor, void* userData)
+template <typename ItemType, typename ContainerType>
+bool Algorithm::foreach(ContainerType const& container, Visitor<ItemType> visitor, void* userData)
 {
-	return (visitor != nullptr) ? foreachEntity(container, [visitor, userData](EntityType const& entity) { return visitor(entity, userData); }) : false;
+	return (visitor != nullptr) ? foreach(container, [visitor, userData](ItemType const& entity) { return visitor(entity, userData); }) : false;
 }
 
 template <typename ContainerType, typename Predicate>
-auto EntityUtility::getEntityByPredicate(ContainerType const& container, Predicate predicate) -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
+auto Algorithm::getItemByPredicate(ContainerType const& container, Predicate predicate) -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
 {
 	if constexpr (std::is_pointer_v<typename ContainerType::value_type>)
 	{
-		for (auto entity : container)
+		for (auto item : container)
 		{
-			if (predicate(*entity))
+			if (predicate(*item))
 			{
-				return entity;
+				return item;
 			}
 		}
 	}
 	else
 	{
-		for (auto const& entity : container)
+		for (auto const& item : container)
 		{
-			if (predicate(entity))
+			if (predicate(item))
 			{
-				return &entity;
+				return &item;
 			}
 		}
 	}
@@ -65,35 +65,35 @@ auto EntityUtility::getEntityByPredicate(ContainerType const& container, Predica
 	return nullptr;
 }
 
-template <typename EntityType, typename ContainerType>
-EntityType const* EntityUtility::getEntityByPredicate(ContainerType const& container, Predicate<EntityType> predicate, void* userData)
+template <typename ItemType, typename ContainerType>
+ItemType const* Algorithm::getItemByPredicate(ContainerType const& container, Predicate<ItemType> predicate, void* userData)
 {
-	return (predicate != nullptr) ? getEntityByPredicate(container, [predicate, userData](EntityType const& entity) { return predicate(entity, userData); }) : nullptr;
+	return (predicate != nullptr) ? getItemByPredicate(container, [predicate, userData](ItemType const& entity) { return predicate(entity, userData); }) : nullptr;
 }
 
 template <typename ContainerType, typename Predicate>
-auto EntityUtility::getEntitiesByPredicate(ContainerType const& container, Predicate predicate) -> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>
+auto Algorithm::getItemsByPredicate(ContainerType const& container, Predicate predicate) -> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>
 {
 	//When calling this method, we expect to have at least 2 results, so preallocate memory to avoid reallocations.
 	Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*> result(2);
 
 	if constexpr (std::is_pointer_v<typename ContainerType::value_type>)
 	{
-		for (auto entity : container)
+		for (auto item : container)
 		{
-			if (predicate(*entity))
+			if (predicate(*item))
 			{
-				result.push_back(entity);
+				result.push_back(item);
 			}
 		}
 	}
 	else
 	{
-		for (auto const& entity : container)
+		for (auto const& item : container)
 		{
-			if (predicate(entity))
+			if (predicate(item))
 			{
-				result.push_back(&entity);
+				result.push_back(&item);
 			}
 		}
 	}
@@ -101,21 +101,21 @@ auto EntityUtility::getEntitiesByPredicate(ContainerType const& container, Predi
 	return result;
 }
 
-template <typename EntityType, typename ContainerType>
-Vector<EntityType const*> EntityUtility::getEntitiesByPredicate(ContainerType const& container, Predicate<EntityType> predicate, void* userData)
+template <typename ItemType, typename ContainerType>
+Vector<ItemType const*> Algorithm::getItemsByPredicate(ContainerType const& container, Predicate<ItemType> predicate, void* userData)
 {
 	if (predicate != nullptr)
 	{
-		return getEntitiesByPredicate(container, [predicate, userData](EntityType const& entity) { return predicate(entity, userData); });
+		return getItemsByPredicate(container, [predicate, userData](ItemType const& entity) { return predicate(entity, userData); });
 	}
 	else
 	{
-		return Vector<EntityType const*>(0);
+		return Vector<ItemType const*>(0);
 	}
 }
 
 template <typename ContainerType>
-auto EntityUtility::getEntityByName(ContainerType const& container, char const* name) noexcept -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
+auto Algorithm::getEntityByName(ContainerType const& container, char const* name) noexcept -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
 {
 	if (name == nullptr)
 	{
@@ -150,15 +150,15 @@ auto EntityUtility::getEntityByName(ContainerType const& container, char const* 
 }
 
 template <typename ContainerType, typename Predicate>
-auto EntityUtility::getEntityByNameAndPredicate(ContainerType const& container, char const* name, Predicate predicate) -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
+auto Algorithm::getEntityByNameAndPredicate(ContainerType const& container, char const* name, Predicate predicate) -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
 {
-	auto result = EntityUtility::getEntityByName(container, name);
+	auto result = Algorithm::getEntityByName(container, name);
 
 	return (result != nullptr && predicate(*result)) ? result : nullptr;
 }
 
 template <typename ContainerType, typename Predicate>
-auto EntityUtility::getEntitiesByNameAndPredicate(ContainerType const& container, char const* name, Predicate predicate) -> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>
+auto Algorithm::getEntitiesByNameAndPredicate(ContainerType const& container, char const* name, Predicate predicate) -> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>
 {
 	using ResultVector = Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>;
 
@@ -212,7 +212,7 @@ auto EntityUtility::getEntitiesByNameAndPredicate(ContainerType const& container
 }
 
 template <typename ContainerType, typename Visitor>
-bool EntityUtility::foreachEntityNamed(ContainerType const& container, char const* name, Visitor visitor)
+bool Algorithm::foreachEntityNamed(ContainerType const& container, char const* name, Visitor visitor)
 {
 	if (name == nullptr)
 	{
@@ -241,7 +241,7 @@ bool EntityUtility::foreachEntityNamed(ContainerType const& container, char cons
 }
 
 template <typename ContainerType>
-typename ContainerType::value_type EntityUtility::getEntityPtrById(ContainerType const& container, std::size_t id) noexcept
+typename ContainerType::value_type Algorithm::getEntityPtrById(ContainerType const& container, std::size_t id) noexcept
 {
 	Entity::EntityImpl	searchedImpl("", id);
 	Entity				searchedEntity(&searchedImpl);

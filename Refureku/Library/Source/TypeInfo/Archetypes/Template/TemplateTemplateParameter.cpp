@@ -1,7 +1,7 @@
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h"
 
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameterImpl.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
 
@@ -24,7 +24,7 @@ TemplateParameter const* TemplateTemplateParameter::getTemplateParameterAt(std::
 
 bool TemplateTemplateParameter::foreachTemplateParameter(Visitor<TemplateParameter> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getTemplateParameters(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getTemplateParameters(), visitor, userData);
 }
 
 void TemplateTemplateParameter::addTemplateParameter(TemplateParameter const& param) noexcept

@@ -51,12 +51,12 @@ TEST(Rfk_Namespace_getNamespaceByPredicate, NotFindingPredicate)
 
 TEST(Rfk_Namespace_getNamespaceByPredicate, ThrowingPredicate)
 {
-	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->getNamespaceByPredicate([](rfk::Namespace const&, void*)
-			  {
-				  throw std::logic_error("Something wrong happened!");
+	auto predicate = [](rfk::Namespace const&, void*) -> bool
+	{
+		throw std::logic_error("Something wrong happened!");
+	};
 
-				  return true;
-			  }, nullptr), std::logic_error);
+	EXPECT_THROW(rfk::getDatabase().getNamespaceByName("test_namespace")->getNamespaceByPredicate(predicate, nullptr), std::logic_error);
 }
 
 //=========================================================

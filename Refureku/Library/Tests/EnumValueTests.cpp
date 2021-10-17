@@ -4,7 +4,7 @@
 #include "TestEnum.h"
 
 //=========================================================
-//================== Enum::getValue<> =====================
+//================ EnumValue::getValue<> ==================
 //=========================================================
 
 TEST(Rfk_EnumValue_getValueTemplate, getValueTemplate)
@@ -14,7 +14,7 @@ TEST(Rfk_EnumValue_getValueTemplate, getValueTemplate)
 }
 
 //=========================================================
-//=================== Enum::getValue ======================
+//================ EnumValue::getValue ====================
 //=========================================================
 
 TEST(Rfk_EnumValue_getValue, getValue)
