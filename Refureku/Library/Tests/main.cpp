@@ -11,6 +11,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "TypeTests.cpp"
 #include "FunctionBaseTests.cpp"
 #include "FunctionTests.cpp"
+#include "MethodBaseTests.cpp"
 #include "MethodTests.cpp"
 #include "StaticMethodTests.cpp"
 #include "FieldBaseTests.cpp"
@@ -21,6 +22,9 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "NamespaceTests.cpp"
 #include "PropertyInheritanceTests.cpp"
 #include "EntityCastTests.cpp"
+
+//TODO: Vector
+//TODO: Database
 
 __RFK_DISABLE_WARNING_POP
 

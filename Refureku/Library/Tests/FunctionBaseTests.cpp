@@ -85,7 +85,7 @@ TEST(Rfk_FunctionBase_hasSamePrototype, SameReturnTypeSameParams)
 
 	EXPECT_NE(func1, nullptr);
 	EXPECT_NE(func2, nullptr);
-	EXPECT_FALSE(func1->hasSameSignature(*func2));
+	EXPECT_TRUE(func1->hasSameSignature(*func2));
 }
 
 TEST(Rfk_FunctionBase_hasSamePrototype, ReturnVoidNoParams)

@@ -16,7 +16,8 @@ namespace rfk
 	{
 		public:
 			/**
-			*	@brief Check that another function has the same prototype as this function.
+			*	@brief	Check that another function has the same prototype as this function.
+			*			**WARNING:** Non reflected type archetypes are considered equal since their archetype is nullptr.
 			*	
 			*	@param other Function to compare the prototype with.
 			* 
@@ -32,9 +33,9 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API bool				isStatic()									const	noexcept;
 
 			/**
-			*	@brief Check if this method is inline.
+			*	@brief Check if this method is marked with the inline qualifier or defined in the header file.
 			* 
-			*	@return true if this method is declared as inline, else false.
+			*	@return true if this method is inline, else false.
 			*/
 			RFK_NODISCARD REFUREKU_API bool				isInline()									const	noexcept;
 
@@ -53,14 +54,16 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API bool				isPureVirtual()								const	noexcept;
 
 			/**
-			*	@brief Check if this method is override-qualified.
+			*	@brief	Check if this method is override-qualified.
+			*			**WARNING:** An overriding method not explicitly qualified with the override keyword will return false.
 			* 
 			*	@return true if this method is override-qualified, else false.
 			*/
 			RFK_NODISCARD REFUREKU_API bool				isOverride()								const	noexcept;
 
 			/**
-			*	@brief Check if this method is final-qualified.
+			*	@brief	Check if this method is final-qualified.
+			*			**WARNING:** An override method part of a final class will return false.
 			* 
 			*	@return true if this method is final-qualified, else false.
 			*/

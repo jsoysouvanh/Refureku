@@ -40,7 +40,7 @@ bool FunctionBase::hasSameSignature(FunctionBase const& other) const noexcept
 
 	for (std::size_t i = 0u; i < paramsCount; i++)
 	{
-		if (getParameterAt(i) != other.getParameterAt(i))
+		if (getParameterAt(i).getType() != other.getParameterAt(i).getType())
 		{
 			return false;
 		}
