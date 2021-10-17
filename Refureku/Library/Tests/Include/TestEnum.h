@@ -13,7 +13,7 @@
 
 enum ENUM() TestEnum
 {
-	TestEnumValue1 ENUMVALUE(BaseTestProperty(0)),
+	TestEnumValue1 ENUMVALUE(BaseTestProperty(0)) = 0,
 	TestEnumValue2,
 	TestEnumValue3
 };

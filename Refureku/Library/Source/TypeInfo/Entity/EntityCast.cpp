@@ -18,11 +18,17 @@ using namespace rfk;
 template <>
 Archetype const* rfk::entityCast<Archetype>(Entity const* entity) noexcept
 {
-	EEntityKind kind = entity->getKind();
+	if (entity != nullptr)
+	{
+		EEntityKind kind = entity->getKind();
 
-	return (entity != nullptr &&
-			(kind == EEntityKind::FundamentalArchetype || kind == EEntityKind::Struct || kind == EEntityKind::Class || kind == EEntityKind::Enum)) ?
-		reinterpret_cast<Archetype const*>(entity) : nullptr;
+		return (kind == EEntityKind::FundamentalArchetype || kind == EEntityKind::Struct || kind == EEntityKind::Class || kind == EEntityKind::Enum) ?
+			reinterpret_cast<Archetype const*>(entity) : nullptr;
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 template <>

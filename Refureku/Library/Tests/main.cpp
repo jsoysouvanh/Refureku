@@ -20,6 +20,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "StructTests.cpp"
 #include "NamespaceTests.cpp"
 #include "PropertyInheritanceTests.cpp"
+#include "EntityCastTests.cpp"
 
 __RFK_DISABLE_WARNING_POP
 
