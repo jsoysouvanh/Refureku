@@ -36,10 +36,10 @@ class Rfk_entityCast : public testing::Test
 			ev = rfk::getEnum<TestEnum>()->getEnumValue(0);
 			field = TestClass::staticGetArchetype().getFieldByName("_intField");
 			sf = TestClass::staticGetArchetype().getStaticFieldByName("_intStaticField");
-			v = rfk::getDatabase().getVariableByName("var_global_extern");
+			v = rfk::getDatabase().getFileLevelVariableByName("var_global_extern");
 			m = TestClass::staticGetArchetype().getMethodByName("getIntField");
 			sm = TestClass::staticGetArchetype().getStaticMethodByName("getIntStaticField");
-			func = rfk::getDatabase().getFunctionByName("func_return_noParam");
+			func = rfk::getDatabase().getFileLevelFunctionByName("func_return_noParam");
 			n = rfk::getDatabase().getNamespaceByName("test_namespace");
 		}
 };

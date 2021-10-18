@@ -4,6 +4,36 @@
 #include "TestMethodBase.h"
 
 //=========================================================
+//============= MethodBaseTests Code Coverage =============
+//=========================================================
+
+TEST(MethodBaseTests, CodeCoverage)
+{
+	TestMethodBaseClassChild tmbcc;
+
+	EXPECT_NO_THROW(tmbcc.inlineMethodInHeader());
+	EXPECT_NO_THROW(tmbcc.inlineMethodInSource());
+	EXPECT_NO_THROW(tmbcc.funcWithParams1(1, 2, 3));
+	EXPECT_NO_THROW(tmbcc.funcWithParams2(1, 2, 3));
+	EXPECT_NO_THROW(tmbcc.funcWithParams3(1, 2, 3));
+	EXPECT_NO_THROW(tmbcc.funcWithParams4(1, 2, 3));
+	EXPECT_NO_THROW(tmbcc.funcWithParams5(1, 2, 3));
+	
+	EXPECT_NO_THROW(tmbcc.virtualMethod());
+	EXPECT_NO_THROW(tmbcc.virtualMethod2());
+	EXPECT_NO_THROW(tmbcc.pureVirtualMethod());
+	EXPECT_NO_THROW(tmbcc.pureVirtualMethod2());
+
+	TestMethodBaseClassChild2 tmbcc2;
+	TestMethodBaseClassChild& tmbcc2Ref = tmbcc2;
+
+	EXPECT_NO_THROW(tmbcc2Ref.virtualMethod());
+	EXPECT_NO_THROW(tmbcc2Ref.virtualMethod2());
+	EXPECT_NO_THROW(tmbcc2Ref.pureVirtualMethod());
+	EXPECT_NO_THROW(tmbcc2Ref.pureVirtualMethod2());
+}
+
+//=========================================================
 //=============== MethodBase::getOuterEntity ==============
 //=========================================================
 

@@ -237,14 +237,19 @@ Variable const* Database::getVariableById(std::size_t id) const noexcept
 	return entityCast<Variable>(getEntityById(id));
 }
 
-Variable const* Database::getVariableByName(char const* name, EVarFlags flags) const noexcept
+Variable const* Database::getFileLevelVariableByName(char const* name, EVarFlags flags) const noexcept
 {
 	return Algorithm::getEntityByNameAndPredicate(_pimpl->getFileLevelVariablesByName(),
 													  name,
 													  [flags](Variable const& var) { return (var.getFlags() & flags) == flags; });
 }
 
-Vector<Variable const*> Database::getVariablesByPredicate(Predicate<Variable> predicate, void* userData) const
+Variable const* Database::getFileLevelVariableByPredicate(Predicate<Variable> predicate, void* userData) const
+{
+	return Algorithm::getItemByPredicate(_pimpl->getFileLevelVariablesByName(), predicate, userData);
+}
+
+Vector<Variable const*> Database::getFileLevelVariablesByPredicate(Predicate<Variable> predicate, void* userData) const
 {
 	return Algorithm::getItemsByPredicate(_pimpl->getFileLevelVariablesByName(), predicate, userData);
 }
@@ -264,21 +269,26 @@ Function const* Database::getFunctionById(std::size_t id) const noexcept
 	return entityCast<Function>(getEntityById(id));
 }
 
-Function const* Database::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
+Function const* Database::getFileLevelFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
 	return Algorithm::getEntityByNameAndPredicate(_pimpl->getFileLevelFunctionsByName(),
 													  name,
 													  [flags](Function const& func) { return (func.getFlags() & flags) == flags; });
 }
 
-Vector<Function const*> Database::getFunctionsByName(char const* name, EFunctionFlags flags) const noexcept
+Vector<Function const*> Database::getFileLevelFunctionsByName(char const* name, EFunctionFlags flags) const noexcept
 {
 	return Algorithm::getEntitiesByNameAndPredicate(_pimpl->getFileLevelFunctionsByName(),
 														name,
 														[flags](Function const& func) { return (func.getFlags() & flags) == flags; });
 }
 
-Vector<Function const*> Database::getFunctionsByPredicate(Predicate<Function> predicate, void* userData) const
+Function const* Database::getFileLevelFunctionByPredicate(Predicate<Function> predicate, void* userData) const
+{
+	return Algorithm::getItemByPredicate(_pimpl->getFileLevelFunctionsByName(), predicate, userData);
+}
+
+Vector<Function const*> Database::getFileLevelFunctionsByPredicate(Predicate<Function> predicate, void* userData) const
 {
 	return Algorithm::getItemsByPredicate(_pimpl->getFileLevelFunctionsByName(), predicate, userData);
 }

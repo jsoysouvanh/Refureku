@@ -48,14 +48,14 @@ TEST(Rfk_Entity_getName, Field)
 
 TEST(Rfk_Entity_getName, Variable)
 {
-	EXPECT_STREQ(rfk::getDatabase().getVariableByName("var_global_extern")->getName(), "var_global_extern");
+	EXPECT_STREQ(rfk::getDatabase().getFileLevelVariableByName("var_global_extern")->getName(), "var_global_extern");
 	EXPECT_STREQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getVariableByName("var_nested_extern")->getName(), "var_nested_extern");
 }
 
 TEST(Rfk_Entity_getName, Function)
 {
-	EXPECT_STREQ(rfk::getDatabase().getFunctionByName("func_return_noParam")->getName(), "func_return_noParam");	//Without parameters
-	EXPECT_STREQ(rfk::getDatabase().getFunctionByName("func_return_singleParam")->getName(), "func_return_singleParam"); //With parameters
+	EXPECT_STREQ(rfk::getDatabase().getFileLevelFunctionByName("func_return_noParam")->getName(), "func_return_noParam");	//Without parameters
+	EXPECT_STREQ(rfk::getDatabase().getFileLevelFunctionByName("func_return_singleParam")->getName(), "func_return_singleParam"); //With parameters
 	EXPECT_STREQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName("func_nested_return_noParam")->getName(), "func_nested_return_noParam"); //With parameters
 }
 
@@ -127,12 +127,12 @@ TEST(Rfk_Entity_getKind, Field)
 
 TEST(Rfk_Entity_getKind, Variable)
 {
-	EXPECT_EQ(rfk::getDatabase().getVariableByName("var_global_extern")->getKind(), rfk::EEntityKind::Variable);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByName("var_global_extern")->getKind(), rfk::EEntityKind::Variable);
 }
 
 TEST(Rfk_Entity_getKind, Function)
 {
-	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_return_noParam")->getKind(), rfk::EEntityKind::Function);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByName("func_return_noParam")->getKind(), rfk::EEntityKind::Function);
 }
 
 TEST(Rfk_Entity_getKind, Namespace)
@@ -207,13 +207,13 @@ TEST(Rfk_Entity_getOuterEntity, Field)
 
 TEST(Rfk_Entity_getOuterEntity, Variable)
 {
-	EXPECT_EQ(rfk::getDatabase().getVariableByName("var_global_extern")->getOuterEntity(), nullptr);	//global
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByName("var_global_extern")->getOuterEntity(), nullptr);	//global
 	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getVariableByName("var_nested_extern")->getOuterEntity(), rfk::getDatabase().getNamespaceByName("test_namespace"));	//nested
 }
 
 TEST(Rfk_Entity_getOuterEntity, Function)
 {
-	EXPECT_EQ(rfk::getDatabase().getFunctionByName("func_return_noParam")->getOuterEntity(), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByName("func_return_noParam")->getOuterEntity(), nullptr);
 	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName("func_nested_return_noParam")->getOuterEntity(), rfk::getDatabase().getNamespaceByName("test_namespace"));	//nested
 }
 

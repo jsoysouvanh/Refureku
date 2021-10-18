@@ -11,6 +11,23 @@
 #include "TestDatabase.h"
 
 //=========================================================
+//============== DatabaseTests Code Coverage ==============
+//=========================================================
+
+TEST(DatabaseTests, CodeCoverage)
+{
+	TestDabataseProperty tdbp;
+
+	EXPECT_NO_THROW(fileLevelFunc());
+
+	FileLevelClass flc;
+	EXPECT_NO_THROW(FileLevelClass::staticGetArchetype().getMethodByName("method")->invoke(flc));
+	EXPECT_NO_THROW(FileLevelClass::staticGetArchetype().getStaticMethodByName("staticMethod")->invoke());
+
+	EXPECT_NO_THROW(filelevel_namespace::namespaceFunc());
+}
+
+//=========================================================
 //=============== Database::getEntityById =================
 //=========================================================
 
@@ -96,7 +113,7 @@ TEST(Rfk_Database_getEntityById, NamespaceNestedNamespace)
 
 TEST(Rfk_Database_getEntityById, FileLevelVariable)
 {
-	EXPECT_NE(rfk::getDatabase().getEntityById(rfk::getDatabase().getVariableByName("fileLevelVar")->getId()), nullptr);
+	EXPECT_NE(rfk::getDatabase().getEntityById(rfk::getDatabase().getFileLevelVariableByName("fileLevelVar")->getId()), nullptr);
 }
 
 TEST(Rfk_Database_getEntityById, NamespaceNestedVariable)
@@ -106,7 +123,7 @@ TEST(Rfk_Database_getEntityById, NamespaceNestedVariable)
 
 TEST(Rfk_Database_getEntityById, FileLevelFunction)
 {
-	EXPECT_NE(rfk::getDatabase().getEntityById(rfk::getDatabase().getFunctionByName("fileLevelFunc")->getId()), nullptr);
+	EXPECT_NE(rfk::getDatabase().getEntityById(rfk::getDatabase().getFileLevelFunctionByName("fileLevelFunc")->getId()), nullptr);
 }
 
 TEST(Rfk_Database_getEntityById, NamespaceNestedFunction)
@@ -437,20 +454,20 @@ TEST(Rfk_Database_getStructById, NonStructEntityId)
 }
 
 //=========================================================
-//============= Database::getStructByName =================
+//========= Database::getFileLevelStructByName ============
 //=========================================================
 
-TEST(Rfk_Database_getStructByName, NonNestedStruct)
+TEST(Rfk_Database_getFileLevelStructByName, NonNestedStruct)
 {
 	EXPECT_NE(rfk::getDatabase().getFileLevelStructByName("FileLevelStruct"), nullptr);
 }
 
-TEST(Rfk_Database_getStructByName, NestedStruct)
+TEST(Rfk_Database_getFileLevelStructByName, NestedStruct)
 {
 	EXPECT_EQ(rfk::getDatabase().getFileLevelStructByName("ClassStruct"), nullptr);
 }
 
-TEST(Rfk_Database_getStructByName, NonStructEntity)
+TEST(Rfk_Database_getFileLevelStructByName, NonStructEntity)
 {
 	EXPECT_EQ(rfk::getDatabase().getFileLevelStructByName("TestDabataseProperty"), nullptr);
 	EXPECT_EQ(rfk::getDatabase().getFileLevelStructByName("filelevel_namespace"), nullptr);
@@ -966,3 +983,429 @@ TEST(Rfk_Database_getFundamentalArchetypeByName, NonFundamentalArchetypeName)
 //============== Database::getVariableById ================
 //=========================================================
 
+TEST(Rfk_Database_getVariableById, VariableId)
+{
+	EXPECT_NE(rfk::getDatabase().getVariableById(rfk::getDatabase().getFileLevelVariableByName("fileLevelVar")->getId()), nullptr);
+	EXPECT_NE(rfk::getDatabase().getVariableById(rfk::getDatabase().getNamespaceByName("filelevel_namespace")->getVariableByName("namespaceVar")->getId()), nullptr);
+}
+
+TEST(Rfk_Database_getVariableById, NonVariableEntityId)
+{
+	EXPECT_EQ(rfk::getDatabase().getVariableById(FileLevelClass::staticGetArchetype().getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getVariableById(rfk::getEnum<FileLevelEnum>()->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getVariableById(FileLevelClass::staticGetArchetype().getFieldByName("_field")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getVariableById(FileLevelClass::staticGetArchetype().getStaticFieldByName("_staticField")->getId()), nullptr);
+}
+
+//=========================================================
+//========= Database::getFileLevelVariableByName ==========
+//=========================================================
+
+TEST(Rfk_Database_getFileLevelVariableByName, NonNestedVariable)
+{
+	EXPECT_NE(rfk::getDatabase().getFileLevelVariableByName("fileLevelVar"), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelVariableByName, NestedVariable)
+{
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByName("namespaceVar"), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelVariableByName, NonVariableEntity)
+{
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByName("TestDabataseProperty"), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByName("filelevel_namespace"), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByName("FileLevelClass"), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByName("fileLevelFunc"), nullptr);
+}
+
+//=========================================================
+//======= Database::getFileLevelVariableByPredicate =======
+//=========================================================
+
+TEST(Rfk_Database_getFileLevelVariableByPredicate, NullptrPredicate)
+{
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByPredicate(nullptr, nullptr), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelVariableByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::Variable const&, void*) -> bool
+	{
+		throw std::logic_error("Error");
+	};
+
+	EXPECT_THROW(rfk::getDatabase().getFileLevelVariableByPredicate(predicate, nullptr), std::logic_error);
+}
+
+TEST(Rfk_Database_getFileLevelVariableByPredicate, FindingPredicate)
+{
+	char const* propName = "TestDabataseProperty";
+	auto predicate = [](rfk::Variable const& var, void* userData) -> bool
+	{
+		return var.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_NE(rfk::getDatabase().getFileLevelVariableByPredicate(predicate, &propName), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelVariableByPredicate, NonFindingPredicate)
+{
+	char const* propName = "NonExistantProperty";
+	auto predicate = [](rfk::Variable const& var, void* userData) -> bool
+	{
+		return var.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariableByPredicate(predicate, &propName), nullptr);
+}
+
+//=========================================================
+//====== Database::getFileLevelVariablesByPredicate =======
+//=========================================================
+
+TEST(Rfk_Database_getFileLevelVariablesByPredicate, NullptrPredicate)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFileLevelVariablesByPredicate(nullptr, nullptr).empty());
+}
+
+TEST(Rfk_Database_getFileLevelVariablesByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::Variable const&, void*) -> bool
+	{
+		throw std::logic_error("Error");
+	};
+
+	EXPECT_THROW(rfk::getDatabase().getFileLevelVariablesByPredicate(predicate, nullptr), std::logic_error);
+}
+
+TEST(Rfk_Database_getFileLevelVariablesByPredicate, FindingPredicate)
+{
+	char const* propName = "TestDabataseProperty";
+	auto predicate = [](rfk::Variable const& var, void* userData) -> bool
+	{
+		return var.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_EQ(rfk::getDatabase().getFileLevelVariablesByPredicate(predicate, &propName).size(), 2u);
+}
+
+TEST(Rfk_Database_getFileLevelVariablesByPredicate, NonFindingPredicate)
+{
+	char const* propName = "NonExistantProperty";
+	auto predicate = [](rfk::Variable const& var, void* userData) -> bool
+	{
+		return var.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_TRUE(rfk::getDatabase().getFileLevelVariablesByPredicate(predicate, &propName).empty());
+}
+
+//=========================================================
+// Database::foreachFileLevelVariable / getFileLevelVariablesCount
+//=========================================================
+
+TEST(Rfk_Database_foreachFileLevelVariable, NullptrVisitor)
+{
+	EXPECT_FALSE(rfk::getDatabase().foreachFileLevelVariable(nullptr, nullptr));
+}
+
+TEST(Rfk_Database_foreachFileLevelVariable, ThrowingVisitor)
+{
+	auto visitor = [](rfk::Variable const&, void*) -> bool
+	{
+		throw std::logic_error("Error");
+	};
+
+	EXPECT_THROW(rfk::getDatabase().foreachFileLevelVariable(visitor, nullptr), std::logic_error);
+}
+
+TEST(Rfk_Database_foreachFileLevelVariable, BreakingLoop)
+{
+	int counter = 0;
+	auto visitor = [](rfk::Variable const&, void* data)
+	{
+		int& counter = *reinterpret_cast<int*>(data);
+		counter++;
+
+		return false;
+	};
+
+	EXPECT_FALSE(rfk::getDatabase().foreachFileLevelVariable(visitor, &counter));
+	EXPECT_EQ(counter, 1u);
+}
+
+TEST(Rfk_Database_foreachFileLevelVariable_getFileLevelVariablesCount, CompleteLoop)
+{
+	int counter = 0;
+	auto visitor = [](rfk::Variable const&, void* data)
+	{
+		int& counter = *reinterpret_cast<int*>(data);
+		counter++;
+
+		return true;
+	};
+
+	EXPECT_TRUE(rfk::getDatabase().foreachFileLevelVariable(visitor, &counter));
+	EXPECT_EQ(counter, rfk::getDatabase().getFileLevelVariablesCount());
+}
+
+//=========================================================
+//============== Database::getFunctionById ================
+//=========================================================
+
+TEST(Rfk_Database_getFunctionById, FunctionId)
+{
+	EXPECT_NE(rfk::getDatabase().getFunctionById(rfk::getDatabase().getFileLevelFunctionByName("fileLevelFunc")->getId()), nullptr);
+	EXPECT_NE(rfk::getDatabase().getFunctionById(rfk::getDatabase().getNamespaceByName("filelevel_namespace")->getFunctionByName("namespaceFunc")->getId()), nullptr);
+}
+
+TEST(Rfk_Database_getFunctionById, NonFunctionEntityId)
+{
+	EXPECT_EQ(rfk::getDatabase().getFunctionById(FileLevelClass::staticGetArchetype().getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFunctionById(rfk::getEnum<FileLevelEnum>()->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFunctionById(FileLevelClass::staticGetArchetype().getMethodByName("method")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFunctionById(FileLevelClass::staticGetArchetype().getStaticMethodByName("staticMethod")->getId()), nullptr);
+}
+
+//=========================================================
+//========= Database::getFileLevelFunctionByName ==========
+//=========================================================
+
+TEST(Rfk_Database_getFileLevelFunctionByName, NonNestedFunction)
+{
+	EXPECT_NE(rfk::getDatabase().getFileLevelFunctionByName("fileLevelFunc"), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelFunctionByName, NestedFunction)
+{
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByName("namespaceFunc"), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelFunctionByName, NonFunctionEntity)
+{
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByName("TestDabataseProperty"), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByName("filelevel_namespace"), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByName("FileLevelClass"), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByName("fileLevelVar"), nullptr);
+}
+
+//=========================================================
+//======= Database::getFileLevelFunctionByPredicate =======
+//=========================================================
+
+TEST(Rfk_Database_getFileLevelFunctionByPredicate, NullptrPredicate)
+{
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByPredicate(nullptr, nullptr), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelFunctionByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::Function const&, void*) -> bool
+	{
+		throw std::logic_error("Error");
+	};
+
+	EXPECT_THROW(rfk::getDatabase().getFileLevelFunctionByPredicate(predicate, nullptr), std::logic_error);
+}
+
+TEST(Rfk_Database_getFileLevelFunctionByPredicate, FindingPredicate)
+{
+	char const* propName = "TestDabataseProperty";
+	auto predicate = [](rfk::Function const& func, void* userData) -> bool
+	{
+		return func.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_NE(rfk::getDatabase().getFileLevelFunctionByPredicate(predicate, &propName), nullptr);
+}
+
+TEST(Rfk_Database_getFileLevelFunctionByPredicate, NonFindingPredicate)
+{
+	char const* propName = "NonExistantProperty";
+	auto predicate = [](rfk::Function const& func, void* userData) -> bool
+	{
+		return func.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionByPredicate(predicate, &propName), nullptr);
+}
+
+//=========================================================
+//====== Database::getFileLevelFunctionsByPredicate =======
+//=========================================================
+
+TEST(Rfk_Database_getFileLevelFunctionsByPredicate, NullptrPredicate)
+{
+	EXPECT_TRUE(rfk::getDatabase().getFileLevelFunctionsByPredicate(nullptr, nullptr).empty());
+}
+
+TEST(Rfk_Database_getFileLevelFunctionsByPredicate, ThrowingPredicate)
+{
+	auto predicate = [](rfk::Function const&, void*) -> bool
+	{
+		throw std::logic_error("Error");
+	};
+
+	EXPECT_THROW(rfk::getDatabase().getFileLevelFunctionsByPredicate(predicate, nullptr), std::logic_error);
+}
+
+TEST(Rfk_Database_getFileLevelFunctionsByPredicate, FindingPredicate)
+{
+	char const* propName = "TestDabataseProperty";
+	auto predicate = [](rfk::Function const& func, void* userData) -> bool
+	{
+		return func.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_EQ(rfk::getDatabase().getFileLevelFunctionsByPredicate(predicate, &propName).size(), 2u);
+}
+
+TEST(Rfk_Database_getFileLevelFunctionsByPredicate, NonFindingPredicate)
+{
+	char const* propName = "NonExistantProperty";
+	auto predicate = [](rfk::Function const& func, void* userData) -> bool
+	{
+		return func.getPropertyByName(*reinterpret_cast<char const**>(userData)) != nullptr;
+	};
+
+	EXPECT_TRUE(rfk::getDatabase().getFileLevelFunctionsByPredicate(predicate, &propName).empty());
+}
+
+//=========================================================
+// Database::foreachFileLevelFunction / getFileLevelFunctionsCount
+//=========================================================
+
+TEST(Rfk_Database_foreachFileLevelFunction, NullptrVisitor)
+{
+	EXPECT_FALSE(rfk::getDatabase().foreachFileLevelFunction(nullptr, nullptr));
+}
+
+TEST(Rfk_Database_foreachFileLevelFunction, ThrowingVisitor)
+{
+	auto visitor = [](rfk::Function const&, void*) -> bool
+	{
+		throw std::logic_error("Error");
+	};
+
+	EXPECT_THROW(rfk::getDatabase().foreachFileLevelFunction(visitor, nullptr), std::logic_error);
+}
+
+TEST(Rfk_Database_foreachFileLevelFunction, BreakingLoop)
+{
+	int counter = 0;
+	auto visitor = [](rfk::Function const&, void* data)
+	{
+		int& counter = *reinterpret_cast<int*>(data);
+		counter++;
+
+		return false;
+	};
+
+	EXPECT_FALSE(rfk::getDatabase().foreachFileLevelFunction(visitor, &counter));
+	EXPECT_EQ(counter, 1u);
+}
+
+TEST(Rfk_Database_foreachFileLevelFunction_getFileLevelFunctionsCount, CompleteLoop)
+{
+	int counter = 0;
+	auto visitor = [](rfk::Function const&, void* data)
+	{
+		int& counter = *reinterpret_cast<int*>(data);
+		counter++;
+
+		return true;
+	};
+
+	EXPECT_TRUE(rfk::getDatabase().foreachFileLevelFunction(visitor, &counter));
+	EXPECT_EQ(counter, rfk::getDatabase().getFileLevelFunctionsCount());
+}
+
+//=========================================================
+//=============== Database::getMethodById =================
+//=========================================================
+
+TEST(Rfk_Database_getMethodById, MethodId)
+{
+	EXPECT_NE(rfk::getDatabase().getMethodById(FileLevelClass::staticGetArchetype().getMethodByName("method")->getId()), nullptr);
+}
+
+TEST(Rfk_Database_getMethodById, NonMethodEntityId)
+{
+	EXPECT_EQ(rfk::getDatabase().getMethodById(FileLevelClass::staticGetArchetype().getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getMethodById(rfk::getEnum<FileLevelEnum>()->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getMethodById(rfk::getDatabase().getNamespaceByName("filelevel_namespace")->getFunctionByName("namespaceFunc")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getMethodById(FileLevelClass::staticGetArchetype().getStaticMethodByName("staticMethod")->getId()), nullptr);
+}
+
+//=========================================================
+//============ Database::getStaticMethodById ==============
+//=========================================================
+
+TEST(Rfk_Database_getStaticMethodById, StaticMethodId)
+{
+	EXPECT_NE(rfk::getDatabase().getStaticMethodById(FileLevelClass::staticGetArchetype().getStaticMethodByName("staticMethod")->getId()), nullptr);
+}
+
+TEST(Rfk_Database_getStaticMethodById, NonStaticMethodEntityId)
+{
+	EXPECT_EQ(rfk::getDatabase().getStaticMethodById(FileLevelClass::staticGetArchetype().getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getStaticMethodById(rfk::getEnum<FileLevelEnum>()->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getStaticMethodById(rfk::getDatabase().getNamespaceByName("filelevel_namespace")->getFunctionByName("namespaceFunc")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getStaticMethodById(FileLevelClass::staticGetArchetype().getMethodByName("method")->getId()), nullptr);
+}
+
+//=========================================================
+//=============== Database::getFieldById ==================
+//=========================================================
+
+TEST(Rfk_Database_getFieldById, FieldId)
+{
+	EXPECT_NE(rfk::getDatabase().getFieldById(FileLevelClass::staticGetArchetype().getFieldByName("_field")->getId()), nullptr);
+}
+
+TEST(Rfk_Database_getFieldById, NonFieldEntityId)
+{
+	EXPECT_EQ(rfk::getDatabase().getFieldById(FileLevelClass::staticGetArchetype().getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFieldById(rfk::getEnum<FileLevelEnum>()->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFieldById(rfk::getDatabase().getNamespaceByName("filelevel_namespace")->getVariableByName("namespaceVar")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFieldById(FileLevelClass::staticGetArchetype().getStaticFieldByName("_staticField")->getId()), nullptr);
+}
+
+//=========================================================
+//============ Database::getStaticFieldById ===============
+//=========================================================
+
+TEST(Rfk_Database_getStaticFieldById, StaticFieldId)
+{
+	EXPECT_NE(rfk::getDatabase().getStaticFieldById(FileLevelClass::staticGetArchetype().getStaticFieldByName("_staticField")->getId()), nullptr);
+}
+
+TEST(Rfk_Database_getStaticFieldById, NonStaticFieldEntityId)
+{
+	EXPECT_EQ(rfk::getDatabase().getStaticFieldById(FileLevelClass::staticGetArchetype().getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getStaticFieldById(rfk::getEnum<FileLevelEnum>()->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getStaticFieldById(rfk::getDatabase().getNamespaceByName("filelevel_namespace")->getVariableByName("namespaceVar")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getStaticFieldById(FileLevelClass::staticGetArchetype().getFieldByName("_field")->getId()), nullptr);
+}
+
+//=========================================================
+//============= Database::getEnumValueById ================
+//=========================================================
+
+TEST(Rfk_Database_getEnumValueById, EnumValueId)
+{
+	EXPECT_NE(rfk::getDatabase().getEnumValueById(rfk::getEnum<FileLevelEnum>()->getEnumValueByName("Value1")->getId()), nullptr);
+}
+
+TEST(Rfk_Database_getEnumValueById, NonEnumValueEntityId)
+{
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(FileLevelClass::staticGetArchetype().getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(rfk::getEnum<FileLevelEnum>()->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(rfk::getDatabase().getFileLevelVariableByName("fileLevelVar")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(rfk::getDatabase().getFileLevelFunctionByName("fileLevelFunc")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(FileLevelClass::staticGetArchetype().getFieldByName("_field")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(FileLevelClass::staticGetArchetype().getStaticFieldByName("_staticField")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(FileLevelClass::staticGetArchetype().getMethodByName("method")->getId()), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getEnumValueById(FileLevelClass::staticGetArchetype().getStaticMethodByName("staticMethod")->getId()), nullptr);
+}

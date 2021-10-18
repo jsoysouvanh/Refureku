@@ -16,11 +16,23 @@ class CLASS(PropertySettings(allEntityKinds)) TestDabataseProperty : public rfk:
 	TestDabataseProperty_GENERATED
 };
 
+VARIABLE(TestDabataseProperty)
+inline int			fileLevelVar	= 2;
+
 VARIABLE()
-inline int fileLevelVar = 2;
+inline int const	fileLevelVar2	= 2;
+
+VARIABLE(TestDabataseProperty)
+inline int			fileLevelVar3	= 2;
+
+FUNCTION(TestDabataseProperty)
+inline void fileLevelFunc() {}
 
 FUNCTION()
-inline void fileLevelFunc() {}
+inline void fileLevelFunc2() {}
+
+FUNCTION(TestDabataseProperty)
+inline void fileLevelFunc3() {}
 
 class CLASS(TestDabataseProperty) FileLevelClass
 {

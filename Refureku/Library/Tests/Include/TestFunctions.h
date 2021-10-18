@@ -18,7 +18,7 @@ FUNCTION()
 TestClass& func_return_noParam();
 
 FUNCTION()
-static void func_static_noParam();
+static void func_static_noParam() {};
 
 FUNCTION()
 void func_noParam();

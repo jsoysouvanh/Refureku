@@ -11,10 +11,6 @@ TestClass& func_return_noParam()
 	return testClass;
 }
 
-void func_static_noParam()
-{
-}
-
 void func_noParam()
 {
 }

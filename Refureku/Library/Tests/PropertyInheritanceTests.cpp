@@ -7,7 +7,7 @@
 //============= Class property inheritance ================
 //=========================================================
 
-TEST(Rfk_Class_inheritProperties, ConstructClasses)
+TEST(PropertyInheritanceTests, CodeCoverage)
 {
 	//Just for code coverage
 	PropertyInheritanceTestClass		a;

@@ -60,9 +60,9 @@ TEST(Rfk_Vector_ctor, MoveDifferentElementTypeCtor)
 {
 	rfk::Vector<rfk::Function const*> vec1;
 
-	vec1.push_back(rfk::getDatabase().getFunctionByName("func_return_noParam"));
-	vec1.push_back(rfk::getDatabase().getFunctionByName("func_static_noParam"));
-	vec1.push_back(rfk::getDatabase().getFunctionByName("func_noParam"));
+	vec1.push_back(rfk::getDatabase().getFileLevelFunctionByName("func_return_noParam"));
+	vec1.push_back(rfk::getDatabase().getFileLevelFunctionByName("func_static_noParam"));
+	vec1.push_back(rfk::getDatabase().getFileLevelFunctionByName("func_noParam"));
 
 	rfk::Vector<rfk::Entity const*> vec2 = std::move(vec1);
 
