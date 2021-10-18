@@ -904,19 +904,17 @@ void ReflectionCodeGenModule::fillClassTemplateArguments(kodgen::StructClassInfo
 		switch (templateParameters[i].kind)
 		{
 			case kodgen::ETemplateParameterKind::TypeTemplateParameter:
-				inout_result += "static rfk::TypeTemplateArgument " + argVarName + "(" + generatedEntityVarName + "getClassTemplate().getTemplateParameterAt(" + boundParameterIndex + "), "
-					"rfk::getArchetype<" + templateParameters[i].name + ">());" + env.getSeparator();
+				inout_result += "static rfk::TypeTemplateArgument " + argVarName + "(rfk::getArchetype<" + templateParameters[i].name + ">());" + env.getSeparator();
 				break;
 
 			case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:
 				inout_result += "static constexpr auto const " + argVarName + "Value = " + templateParameters[i].name + ";" + env.getSeparator();
-				inout_result += "static rfk::NonTypeTemplateArgument " + argVarName + "(" + generatedEntityVarName + "getClassTemplate().getTemplateParameterAt(" + boundParameterIndex + "), "
-					"&" + argVarName + "Value);" + env.getSeparator();
+				inout_result += "static rfk::NonTypeTemplateArgument " + argVarName + "(rfk::getArchetype<decltype(" + templateParameters[i].name + ")>(), "
+																						"&" + argVarName + "Value);" + env.getSeparator();
 				break;
 
 			case kodgen::ETemplateParameterKind::TemplateTemplateParameter:
-				inout_result += "static rfk::TemplateTemplateArgument " + argVarName + "(" + generatedEntityVarName + "getClassTemplate().getTemplateParameterAt(" + boundParameterIndex + "), "
-					"reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<" + templateParameters[i].name + ">())->asTemplate());" + env.getSeparator();
+				inout_result += "static rfk::TemplateTemplateArgument " + argVarName + "(reinterpret_cast<rfk::ClassTemplate const*>(rfk::getArchetype<" + templateParameters[i].name + ">()));" + env.getSeparator();
 				break;
 
 			default:

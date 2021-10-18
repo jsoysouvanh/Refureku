@@ -6,8 +6,7 @@
 #include "TestStruct.h"
 #include "TestEnum.h"
 #include "TestNamespace.h"
-#include "SingleTypeTemplateClassTemplate.h"
-#include "MultipleTypeTemplateClassTemplate.h"
+#include "TypeTemplateClassTemplate.h"
 #include "TestDatabase.h"
 
 //=========================================================
@@ -24,6 +23,9 @@ TEST(DatabaseTests, CodeCoverage)
 	EXPECT_NO_THROW(FileLevelClass::staticGetArchetype().getMethodByName("method")->invoke(flc));
 	EXPECT_NO_THROW(FileLevelClass::staticGetArchetype().getStaticMethodByName("staticMethod")->invoke());
 
+	EXPECT_NO_THROW(fileLevelFunc());
+	EXPECT_NO_THROW(fileLevelFunc2());
+	EXPECT_NO_THROW(fileLevelFunc3());
 	EXPECT_NO_THROW(filelevel_namespace::namespaceFunc());
 }
 

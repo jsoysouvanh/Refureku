@@ -5,7 +5,7 @@
 #include "TestClass.h"
 #include "TestStruct.h"
 #include "TestEnum.h"
-#include "SingleTypeTemplateClassTemplate.h"
+#include "TypeTemplateClassTemplate.h"
 
 class Rfk_entityCast : public testing::Test
 {

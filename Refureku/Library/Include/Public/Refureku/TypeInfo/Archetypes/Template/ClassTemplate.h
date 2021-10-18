@@ -97,6 +97,13 @@ namespace rfk
 			*/
 			REFUREKU_API void									registerTemplateInstantiation(ClassTemplateInstantiation const& inst)				noexcept;
 
+			/**
+			*	@brief Unregister an instantiation of this class template.
+			* 
+			*	@param inst The instantiation to unregister.
+			*/
+			REFUREKU_API void									unregisterTemplateInstantiation(ClassTemplateInstantiation const& inst)				noexcept;
+
 		private:
 			//Forward declaration
 			class ClassTemplateImpl;

@@ -1,7 +1,6 @@
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateArgument.h"
 
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateArgumentImpl.h"
-#include "Refureku/TypeInfo/Archetypes/Template/TemplateParameter.h"
 #include "Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h"
 #include "Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h"
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h"
@@ -15,16 +14,16 @@ TemplateArgument::TemplateArgument(TemplateArgumentImpl* implementation) noexcep
 
 TemplateArgument::~TemplateArgument() noexcept = default;
 
-TemplateParameter const& TemplateArgument::getBoundParameter() const noexcept
+ETemplateParameterKind TemplateArgument::getKind() const noexcept
 {
-	return _pimpl->getBoundParameter();
+	return _pimpl->getKind();
 }
 
 bool TemplateArgument::operator==(TemplateArgument const& other) const noexcept
 {
-	if (_pimpl->getBoundParameter().getKind() == other._pimpl->getBoundParameter().getKind())
+	if (_pimpl->getKind() == other._pimpl->getKind())
 	{
-		switch (_pimpl->getBoundParameter().getKind())
+		switch (_pimpl->getKind())
 		{
 			case ETemplateParameterKind::TypeTemplateParameter:
 				return static_cast<TypeTemplateArgument const&>(*this) == static_cast<TypeTemplateArgument const&>(other);

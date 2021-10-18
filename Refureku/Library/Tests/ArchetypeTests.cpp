@@ -6,8 +6,7 @@
 #include "TestClass2.h"
 #include "TestEnum.h"
 #include "TestNamespace.h"
-#include "SingleTypeTemplateClassTemplate.h"
-#include "MultipleTypeTemplateClassTemplate.h"
+#include "TypeTemplateClassTemplate.h"
 
 //=========================================================
 //=========== Archetype::getAccessSpecifier ===============

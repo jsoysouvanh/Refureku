@@ -4,8 +4,8 @@
 
 using namespace rfk;
 
-TypeTemplateArgument::TypeTemplateArgument(TemplateParameter const&	boundParameter, Archetype const* archetype) noexcept:
-	TemplateArgument(new TypeTemplateArgumentImpl(boundParameter, archetype))
+TypeTemplateArgument::TypeTemplateArgument(Archetype const* archetype) noexcept:
+	TemplateArgument(new TypeTemplateArgumentImpl(archetype))
 {
 }
 
@@ -18,7 +18,7 @@ Archetype const* TypeTemplateArgument::getArchetype() const noexcept
 
 bool TypeTemplateArgument::operator==(TypeTemplateArgument const& other) const noexcept
 {
-	return getArchetype() != nullptr && getArchetype() == other.getArchetype();
+	return getPimpl()->getArchetype() != nullptr && getPimpl()->getArchetype() == other.getPimpl()->getArchetype();
 }
 
 bool TypeTemplateArgument::operator!=(TypeTemplateArgument const& other) const noexcept

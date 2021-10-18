@@ -17,9 +17,8 @@ namespace rfk
 	class TypeTemplateArgument : public TemplateArgument
 	{
 		public:
-			REFUREKU_API TypeTemplateArgument(TemplateParameter const&	boundParameter, 
-											  Archetype const*			archetype)	noexcept;
-			REFUREKU_API ~TypeTemplateArgument()									noexcept;
+			REFUREKU_API TypeTemplateArgument(Archetype const*	archetype)	noexcept;
+			REFUREKU_API ~TypeTemplateArgument()							noexcept;
 
 			/**
 			*	@brief Get the archetype of this argument. Can be nullptr if the type is not reflected.

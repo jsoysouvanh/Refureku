@@ -12,7 +12,12 @@ inline ClassTemplate::ClassTemplateImpl::ClassTemplateImpl(char const* name, std
 
 inline void ClassTemplate::ClassTemplateImpl::addTemplateInstantiation(ClassTemplateInstantiation const& instantiation) noexcept
 {
-	_templateInstantiations.push_back(&instantiation);
+	_templateInstantiations.insert(&instantiation);
+}
+
+inline void ClassTemplate::ClassTemplateImpl::removeTemplateInstantiation(ClassTemplateInstantiation const& instantiation) noexcept
+{
+	_templateInstantiations.erase(&instantiation);
 }
 
 inline void ClassTemplate::ClassTemplateImpl::addTemplateParameter(TemplateParameter const& param) noexcept
@@ -25,7 +30,7 @@ inline std::vector<TemplateParameter const*> const& ClassTemplate::ClassTemplate
 	return _templateParameters;
 }
 
-inline std::vector<ClassTemplateInstantiation const*> const& ClassTemplate::ClassTemplateImpl::getTemplateInstantiations() const noexcept
+inline std::unordered_set<ClassTemplateInstantiation const*> const& ClassTemplate::ClassTemplateImpl::getTemplateInstantiations() const noexcept
 {
 	return _templateInstantiations;
 }

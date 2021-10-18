@@ -19,8 +19,7 @@ add_executable(${RefurekuTestsTarget}
 					Src/TestNamespace.cpp
 					Src/TestEnum.cpp
 					Src/TestProperties.cpp
-					Src/SingleTypeTemplateClassTemplate.cpp
-					Src/MultipleTypeTemplateClassTemplate.cpp
+					Src/TypeTemplateClassTemplate.cpp
 					Src/ComplexClassTemplate.cpp
 					Src/TestStaticFields.cpp
 					Src/TestFields.cpp

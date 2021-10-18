@@ -8,6 +8,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_set>
 
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h"
 #include "Refureku/TypeInfo/Archetypes/StructImpl.h"
@@ -20,10 +21,10 @@ namespace rfk
 	{
 		private:
 			/** List of all template parameters of this class template. */
-			std::vector<TemplateParameter const*>			_templateParameters;
+			std::vector<TemplateParameter const*>					_templateParameters;
 			
 			/** All different instantiations of this class template in the program (with different template parameters). */
-			std::vector<ClassTemplateInstantiation const*>	_templateInstantiations;
+			std::unordered_set<ClassTemplateInstantiation const*>	_templateInstantiations;
 
 		public:
 			inline ClassTemplateImpl(char const*	name,
@@ -35,28 +36,35 @@ namespace rfk
 			* 
 			*	@param instantiation Template instantiation to add to _templateInstantiations.
 			*/
-			inline void																addTemplateInstantiation(ClassTemplateInstantiation const& instantiation)	noexcept;
+			inline void																			addTemplateInstantiation(ClassTemplateInstantiation const& instantiation)		noexcept;
+
+			/**
+			*	@brief Remove an template instantiation from _instantiations.
+			* 
+			*	@param instantiation Template instantiation to remove from _templateInstantiations.
+			*/
+			inline void																			removeTemplateInstantiation(ClassTemplateInstantiation const& instantiation)	noexcept;
 
 			/**
 			*	@brief Append a template parameter to _templateParameters.
 			* 
 			*	@param param Template parameter to add to _templateParameters.
 			*/
-			inline void																addTemplateParameter(TemplateParameter const& param)							noexcept;
+			inline void																			addTemplateParameter(TemplateParameter const& param)							noexcept;
 
 			/**
 			*	@brief Getter for the field _templateParameters.
 			* 
 			*	@return _templateParameters.
 			*/
-			RFK_NODISCARD inline std::vector<TemplateParameter const*> const&			getTemplateParameters()													const	noexcept;
+			RFK_NODISCARD inline std::vector<TemplateParameter const*> const&					getTemplateParameters()													const	noexcept;
 
 			/**
 			*	@brief Getter for the field _templateInstantiations.
 			* 
 			*	@return _templateInstantiations.
 			*/
-			RFK_NODISCARD inline std::vector<ClassTemplateInstantiation const*> const&	getTemplateInstantiations()												const	noexcept;
+			RFK_NODISCARD inline std::unordered_set<ClassTemplateInstantiation const*> const&	getTemplateInstantiations()												const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateImpl.inl"

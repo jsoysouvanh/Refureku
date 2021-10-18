@@ -5,8 +5,8 @@
 *	See the README.md file for full license details.
 */
 
-inline TemplateTemplateArgument::TemplateTemplateArgumentImpl::TemplateTemplateArgumentImpl(TemplateParameter const& boundParameter, ClassTemplate const* value) noexcept:
-	TemplateArgumentImpl(boundParameter),
+inline TemplateTemplateArgument::TemplateTemplateArgumentImpl::TemplateTemplateArgumentImpl(ClassTemplate const* value) noexcept:
+	TemplateArgumentImpl(ETemplateParameterKind::TemplateTemplateParameter),
 	_value{value}
 {
 }

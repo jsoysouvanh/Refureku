@@ -17,9 +17,8 @@ namespace rfk
 	class TemplateTemplateArgument : public TemplateArgument
 	{
 		public:
-			REFUREKU_API TemplateTemplateArgument(TemplateParameter const&	boundParameter,
-												  ClassTemplate const*		value)			noexcept;
-			REFUREKU_API ~TemplateTemplateArgument()										noexcept;
+			REFUREKU_API TemplateTemplateArgument(ClassTemplate const* value)	noexcept;
+			REFUREKU_API ~TemplateTemplateArgument()							noexcept;
 
 			/**
 			*	@brief	Get the class template provided as argument.

@@ -8,18 +8,31 @@
 #pragma once
 
 #include <Refureku/Object.h>
+#include <Refureku/Properties/ParseAllNested.h>
 
-#include "Generated/MultipleTypeTemplateClassTemplate.rfkh.h"
+#include "Generated/TypeTemplateClassTemplate.rfkh.h"
+
+template <typename T>
+class CLASS(ParseAllNested) SingleTypeTemplateClassTemplate : public rfk::Object
+{
+	FIELD()
+	T testField;
+
+	METHOD()
+	T testMethod(T const& param) { return param; }
+
+	SingleTypeTemplateClassTemplate_T_GENERATED
+};
 
 template <typename T, typename U, typename V>
 class CLASS() MultipleTypeTemplateClassTemplate : public rfk::Object
 {
 	private:
-		FIELD()
+	FIELD()
 		T fieldT = T();
 
 	protected:
-		FIELD()
+	FIELD()
 		U fieldU = U();
 
 	public:
@@ -34,13 +47,11 @@ class CLASS() MultipleTypeTemplateClassTemplate : public rfk::Object
 
 		METHOD()
 		V returnV(V const& v) { return v; }
-		
+
 	MultipleTypeTemplateClassTemplate_T_U_V_GENERATED
 };
 
-File_MultipleTypeTemplateClassTemplate_GENERATED
+File_TypeTemplateClassTemplate_GENERATED
 
-VARIABLE()
-extern MultipleTypeTemplateClassTemplate<int, float, double> multipleTypeTemplateClassTemplateImplicitInstantiation;
-
-template class CLASS() MultipleTypeTemplateClassTemplate<int, int, int>;
+template class CLASS() SingleTypeTemplateClassTemplate<int>;
+template class CLASS() MultipleTypeTemplateClassTemplate<int, float, double>;

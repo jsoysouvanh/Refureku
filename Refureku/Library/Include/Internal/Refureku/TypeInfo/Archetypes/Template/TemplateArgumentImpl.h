@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateArgument.h"
+#include "Refureku/TypeInfo/Archetypes/Template/ETemplateParameterKind.h"
 
 namespace rfk
 {
@@ -15,17 +16,17 @@ namespace rfk
 	{
 		private:
 			/** Template parameter this argument is a value of. */
-			TemplateParameter const&	_boundParameter;
+			ETemplateParameterKind	_templateKind;
 			
 		public:
-			inline TemplateArgumentImpl(TemplateParameter const& boundParameter) noexcept;
+			inline TemplateArgumentImpl(ETemplateParameterKind templateKind) noexcept;
 
 			/**
 			*	@brief Getter for the field _boundParameter.
 			* 
 			*	@return _boundParameter.
 			*/
-			RFK_NODISCARD inline TemplateParameter const& getBoundParameter()	const	noexcept;
+			RFK_NODISCARD inline ETemplateParameterKind getKind()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/TemplateArgumentImpl.inl"

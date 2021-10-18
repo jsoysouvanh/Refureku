@@ -5,12 +5,12 @@
 *	See the README.md file for full license details.
 */
 
-inline TemplateArgument::TemplateArgumentImpl::TemplateArgumentImpl(TemplateParameter const& boundParameter) noexcept:
-	_boundParameter{boundParameter}
+inline TemplateArgument::TemplateArgumentImpl::TemplateArgumentImpl(ETemplateParameterKind templateKind) noexcept:
+	_templateKind{templateKind}
 {
 }
 
-inline TemplateParameter const& TemplateArgument::TemplateArgumentImpl::getBoundParameter() const noexcept
+inline ETemplateParameterKind TemplateArgument::TemplateArgumentImpl::getKind() const noexcept
 {
-	return _boundParameter;
+	return _templateKind;
 }

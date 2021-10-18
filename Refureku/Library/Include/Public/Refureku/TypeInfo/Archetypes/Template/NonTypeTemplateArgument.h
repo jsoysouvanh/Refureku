@@ -8,15 +8,29 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateArgument.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 
 namespace rfk
 {
+	//Forward declaration
+	class Archetype;
+
 	class NonTypeTemplateArgument : public TemplateArgument
 	{
 		public:
-			REFUREKU_API NonTypeTemplateArgument(TemplateParameter const&	boundParameter, 
-												 void const*				valuePtr)		noexcept;
-			REFUREKU_API ~NonTypeTemplateArgument()											noexcept;
+			template <typename T>
+			NonTypeTemplateArgument(T const& value)									noexcept;
+
+			REFUREKU_API NonTypeTemplateArgument(Archetype const*	valueArchetype, 
+												 void const*		valuePtr)		noexcept;
+			REFUREKU_API ~NonTypeTemplateArgument()									noexcept;
+
+			/**
+			*	@brief Get the archetype of the argument.
+			* 
+			*	@return The archetype of the argument.
+			*/
+			RFK_NODISCARD REFUREKU_API Archetype const*	getArchetype()	const	noexcept;
 
 			/**
 			*	@brief	Get the value of the non-type template argument.
@@ -28,14 +42,14 @@ namespace rfk
 			*	@return The argument value.
 			*/
 			template <typename T>
-			RFK_NODISCARD T							getValue()		const	noexcept;
+			RFK_NODISCARD T	const&						getValue()		const	noexcept;
 
 			/**
 			*	@brief Get a pointer to the argument value.
 			* 
 			*	@return A pointer to the argument value.
 			*/
-			RFK_NODISCARD REFUREKU_API void const* getValuePtr()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API void const*		getValuePtr()	const	noexcept;
 
 			/**
 			*	@brief Check whether 2 NonTypeTemplateArgument instances are equal or not.

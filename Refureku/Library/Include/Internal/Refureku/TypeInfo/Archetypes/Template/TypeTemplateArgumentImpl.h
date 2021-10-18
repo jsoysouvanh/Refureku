@@ -19,9 +19,13 @@ namespace rfk
 			Archetype const* _archetype;
 
 		public:
-			inline TypeTemplateArgumentImpl(TemplateParameter const&	boundParameter,
-											Archetype const*			archetype)		noexcept;
+			inline TypeTemplateArgumentImpl(Archetype const* archetype) noexcept;
 
+			/**
+			*	@brief Getter for the field _archetype.
+			* 
+			*	@return _archetype.
+			*/
 			RFK_NODISCARD inline Archetype const* getArchetype() const noexcept;
 	};
 

@@ -6,7 +6,13 @@
 */
 
 template <typename T>
-T NonTypeTemplateArgument::getValue() const noexcept
+NonTypeTemplateArgument::NonTypeTemplateArgument(T const& value) noexcept:
+	NonTypeTemplateArgument(rfk::getArchetype<T>(), &value)
+{
+}
+
+template <typename T>
+T const& NonTypeTemplateArgument::getValue() const noexcept
 {
 	return *reinterpret_cast<T const*>(getValuePtr());
 }

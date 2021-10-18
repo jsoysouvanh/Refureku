@@ -8,10 +8,17 @@ using namespace rfk;
 ClassTemplateInstantiation::ClassTemplateInstantiation(char const* name, std::size_t id, std::size_t memorySize, bool isClass, Archetype const& classTemplate) noexcept:
 	Struct(new ClassTemplateInstantiationImpl(name, id, memorySize, isClass, classTemplate, *this))
 {
+	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
+	assert(classTemplate.getKind() == rfk::EEntityKind::Class || classTemplate.getKind() == rfk::EEntityKind::Struct);
+	assert(static_cast<Class const&>(classTemplate).getClassKind() == EClassKind::Template);
+
+	const_cast<ClassTemplate&>(getPimpl()->getClassTemplate()).registerTemplateInstantiation(*this);
 }
 
-ClassTemplateInstantiation::~ClassTemplateInstantiation() noexcept = default;
-
+ClassTemplateInstantiation::~ClassTemplateInstantiation() noexcept
+{
+	const_cast<ClassTemplate&>(getPimpl()->getClassTemplate()).unregisterTemplateInstantiation(*this);
+}
 
 ClassTemplate const& ClassTemplateInstantiation::getClassTemplate() const noexcept
 {

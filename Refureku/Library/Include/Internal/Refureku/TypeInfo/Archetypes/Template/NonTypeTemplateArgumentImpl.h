@@ -15,19 +15,29 @@ namespace rfk
 	class NonTypeTemplateArgument::NonTypeTemplateArgumentImpl : public TemplateArgument::TemplateArgumentImpl
 	{
 		private:
+			/** Archetype of the argument value. */
+			Archetype const*	_valueArchetype;
+			
 			/** Pointer to the argument value. */
-			void const* _valuePtr;
+			void const*			_valuePtr;
 
 		public:
-			inline NonTypeTemplateArgumentImpl(TemplateParameter const&	boundParameter,
-											   void const*				valuePtr)		noexcept;
+			inline NonTypeTemplateArgumentImpl(Archetype const*	valueArchetype,
+											   void const*		valuePtr)		noexcept;
+
+			/**
+			*	@brief Getter for the field _valueArchetype.
+			* 
+			*	@return _valueArchetype.
+			*/
+			RFK_NODISCARD inline Archetype const*	getArchetype()	const	noexcept;
 
 			/**
 			*	@brief Getter for the field _valuePtr.
 			* 
 			*	@return _valuePtr.
 			*/
-			RFK_NODISCARD inline void const* getValuePtr() const noexcept;
+			RFK_NODISCARD inline void const*		getValuePtr()	const	noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgumentImpl.inl"

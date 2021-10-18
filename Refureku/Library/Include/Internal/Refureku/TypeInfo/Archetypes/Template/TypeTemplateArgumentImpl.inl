@@ -5,8 +5,8 @@
 *	See the README.md file for full license details.
 */
 
-inline TypeTemplateArgument::TypeTemplateArgumentImpl::TypeTemplateArgumentImpl(TemplateParameter const& boundParameter, Archetype const* archetype) noexcept:
-	TemplateArgumentImpl(boundParameter),
+inline TypeTemplateArgument::TypeTemplateArgumentImpl::TypeTemplateArgumentImpl(Archetype const* archetype) noexcept:
+	TemplateArgumentImpl(ETemplateParameterKind::TypeTemplateParameter),
 	_archetype{archetype}
 {
 }

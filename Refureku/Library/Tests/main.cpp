@@ -20,6 +20,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "StaticFieldTests.cpp"
 #include "FieldTests.cpp"
 #include "StructTests.cpp"
+#include "ClassTemplateTests.cpp"
 #include "NamespaceTests.cpp"
 #include "PropertyInheritanceTests.cpp"
 #include "EntityCastTests.cpp"

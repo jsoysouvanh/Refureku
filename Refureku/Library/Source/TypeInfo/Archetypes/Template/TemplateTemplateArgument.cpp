@@ -4,8 +4,8 @@
 
 using namespace rfk;
 
-TemplateTemplateArgument::TemplateTemplateArgument(TemplateParameter const& boundParameter, ClassTemplate const* value) noexcept:
-	TemplateArgument(new TemplateTemplateArgumentImpl(boundParameter, value))
+TemplateTemplateArgument::TemplateTemplateArgument(ClassTemplate const* value) noexcept:
+	TemplateArgument(new TemplateTemplateArgumentImpl(value))
 {
 }
 

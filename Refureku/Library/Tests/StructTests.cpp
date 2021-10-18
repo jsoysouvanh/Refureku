@@ -6,7 +6,7 @@
 #include "TestClass.h"
 #include "TestClass2.h"
 #include "BaseObject.h"
-#include "SingleTypeTemplateClassTemplate.h"
+#include "TypeTemplateClassTemplate.h"
 
 //=========================================================
 //================ Struct::makeInstance ===================

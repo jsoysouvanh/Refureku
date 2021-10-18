@@ -19,8 +19,7 @@ namespace rfk
 			ClassTemplate const* _value;
 
 		public:
-			inline TemplateTemplateArgumentImpl(TemplateParameter const&	boundParameter,
-												ClassTemplate const*		value)			noexcept;
+			inline TemplateTemplateArgumentImpl(ClassTemplate const* value)	noexcept;
 
 			/**
 			*	@brief Getter for the field _value.

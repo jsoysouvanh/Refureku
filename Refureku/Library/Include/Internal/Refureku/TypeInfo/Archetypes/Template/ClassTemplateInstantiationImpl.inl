@@ -10,11 +10,6 @@ inline ClassTemplateInstantiation::ClassTemplateInstantiationImpl::ClassTemplate
 	StructImpl(name, id, memorySize, isClass, EClassKind::TemplateInstantiation),
 	_classTemplate{static_cast<ClassTemplate const&>(classTemplate)}
 {
-	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
-	assert(classTemplate.getKind() == rfk::EEntityKind::Class || classTemplate.getKind() == rfk::EEntityKind::Struct);
-	assert(static_cast<Class const&>(classTemplate).getClassKind() == EClassKind::Template);
-
-	const_cast<ClassTemplate&>(_classTemplate).registerTemplateInstantiation(backRef);
 }
 
 inline void ClassTemplateInstantiation::ClassTemplateInstantiationImpl::addTemplateArgument(TemplateArgument const& arg) noexcept

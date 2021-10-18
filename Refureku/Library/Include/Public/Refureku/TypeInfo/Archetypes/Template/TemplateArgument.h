@@ -13,8 +13,7 @@
 
 namespace rfk
 {
-	//Forward declaration
-	class TemplateParameter;
+	enum class ETemplateParameterKind;
 
 	class TemplateArgument
 	{
@@ -23,11 +22,11 @@ namespace rfk
 			TemplateArgument(TemplateArgument&&)		= delete;
 
 			/**
-			*	@brief Getter for the field _boundParameter.
+			*	@brief Get the kind of template parameter this argument is based on.
 			* 
-			*	@return _boundParameter.
+			*	@return The kind of template parameter this argument is based on.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getBoundParameter()		const	noexcept;
+			RFK_NODISCARD REFUREKU_API ETemplateParameterKind	getKind()	const	noexcept;
 
 			/**
 			*	@brief Check whether 2 TemplateArgument instances are equal or not.
