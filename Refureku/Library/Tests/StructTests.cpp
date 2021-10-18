@@ -14,12 +14,12 @@
 
 TEST(Rfk_Struct_makeInstance, NoDefaultConstructible)
 {
-	EXPECT_EQ(rfk::getDatabase().getClassByName("BaseObject")->makeInstance<BaseObject>(), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeInstance<BaseObject>(), nullptr);
 }
 
 TEST(Rfk_Struct_makeInstance, UseUserProvidedParamInstantiator)
 {
-	BaseObject* obj = rfk::getDatabase().getClassByName("BaseObject")->makeInstance<BaseObject>(2);
+	BaseObject* obj = rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeInstance<BaseObject>(2);
 
 	EXPECT_NE(obj, nullptr);
 
@@ -28,7 +28,7 @@ TEST(Rfk_Struct_makeInstance, UseUserProvidedParamInstantiator)
 
 TEST(Rfk_Struct_makeInstance, UseUserProvidedParamlessInstantiator)
 {
-	BaseObject* obj = rfk::getDatabase().getClassByName("ObjectDerived1")->makeInstance<BaseObject>();
+	BaseObject* obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived1")->makeInstance<BaseObject>();
 
 	EXPECT_NE(obj, nullptr);
 	EXPECT_EQ(obj->getI(), 1);
@@ -38,7 +38,7 @@ TEST(Rfk_Struct_makeInstance, UseUserProvidedParamlessInstantiator)
 
 TEST(Rfk_Struct_makeInstance, InstantiateChildClass)
 {
-	BaseObject* obj = rfk::getDatabase().getClassByName("ObjectDerived2")->makeInstance<BaseObject>();
+	BaseObject* obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived2")->makeInstance<BaseObject>();
 
 	EXPECT_EQ(obj->getI(), 2);
 

@@ -23,8 +23,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "NamespaceTests.cpp"
 #include "PropertyInheritanceTests.cpp"
 #include "EntityCastTests.cpp"
-
-//TODO: Database
+#include "DatabaseTests.cpp"
 
 __RFK_DISABLE_WARNING_POP
 

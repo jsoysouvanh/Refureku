@@ -42,3 +42,4 @@
 #include "Refureku/Exceptions/ArgCountMismatch.h"
 #include "Refureku/Exceptions/ArgTypeMismatch.h"
 #include "Refureku/Exceptions/ConstViolation.h"
+#include "Refureku/Exceptions/BadNamespaceFormat.h"

@@ -29,6 +29,7 @@ add_executable(${RefurekuTestsTarget}
 					Src/TestMethods.cpp
 					Src/BaseObject.cpp
 					Src/TestMethodBase.cpp
+					Src/TestDatabase.cpp
 					
 					main.cpp)
 
@@ -36,6 +37,7 @@ add_executable(${RefurekuTestsTarget}
 target_link_libraries(${RefurekuTestsTarget} PUBLIC ${RefurekuLibraryTarget} gtest)
 
 if (MSVC)
+	target_compile_options(${RefurekuTestsTarget} PRIVATE /bigobj)
 else()
 	target_compile_options(${RefurekuTestsTarget} PRIVATE -fno-rtti)
 endif()

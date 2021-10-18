@@ -40,7 +40,7 @@ Namespace const* Database::getNamespaceByName(char const* name) const
 	std::size_t index = namespaceName.find_first_of(':');
 
 	//Make sure namespaceName has a valid namespace syntax
-	if (index != std::string::npos && (index == namespaceName.size() - 1 || namespaceName[index + 1] != ':'))
+	if (index != std::string::npos && (index == 0 || index == namespaceName.size() - 1 || namespaceName[index + 1] != ':'))
 	{
 		throw BadNamespaceFormat("The provided namespace name is ill formed.");
 	}
@@ -71,12 +71,12 @@ Namespace const* Database::getNamespaceByName(char const* name) const
 	return result;
 }
 
-Namespace const* Database::getNamespaceByPredicate(Predicate<Namespace> predicate, void* userData) const
+Namespace const* Database::getFileLevelNamespaceByPredicate(Predicate<Namespace> predicate, void* userData) const
 {
 	return Algorithm::getItemByPredicate(_pimpl->getFileLevelNamespacesByName(), predicate, userData);
 }
 
-Vector<Namespace const*> Database::getNamespacesByPredicate(Predicate<Namespace>	predicate, void* userData) const
+Vector<Namespace const*> Database::getFileLevelNamespacesByPredicate(Predicate<Namespace>	predicate, void* userData) const
 {
 	return Algorithm::getItemsByPredicate(_pimpl->getFileLevelNamespacesByName(), predicate, userData);
 }
@@ -86,22 +86,27 @@ bool Database::foreachFileLevelNamespace(Visitor<Namespace> visitor, void* userD
 	return Algorithm::foreach(_pimpl->getFileLevelNamespacesByName(), visitor, userData);
 }
 
+std::size_t Database::getFileLevelNamespacesCount() const noexcept
+{
+	return _pimpl->getFileLevelNamespacesByName().size();
+}
+
 Archetype const* Database::getArchetypeById(std::size_t id) const noexcept
 {
 	return entityCast<Archetype>(getEntityById(id));
 }
 
-Archetype const* Database::getArchetypeByName(char const* name) const noexcept
+Archetype const* Database::getFileLevelArchetypeByName(char const* name) const noexcept
 {
-	Archetype const* result = getClassByName(name);
+	Archetype const* result = getFileLevelClassByName(name);
 
 	if (result == nullptr)
 	{
-		result = getStructByName(name);
+		result = getFileLevelStructByName(name);
 
 		if (result == nullptr)
 		{
-			result = getEnumByName(name);
+			result = getFileLevelEnumByName(name);
 
 			if (result == nullptr)
 			{
@@ -113,7 +118,7 @@ Archetype const* Database::getArchetypeByName(char const* name) const noexcept
 	return result;
 }
 
-Vector<Archetype const*> Database::getArchetypesByPredicate(Predicate<Archetype> predicate, void* userData) const
+Vector<Archetype const*> Database::getFileLevelArchetypesByPredicate(Predicate<Archetype> predicate, void* userData) const
 {
 	Vector<Archetype const*> result = Algorithm::getItemsByPredicate(_pimpl->getFileLevelEnumsByName(), predicate, userData);
 
@@ -125,15 +130,22 @@ Vector<Archetype const*> Database::getArchetypesByPredicate(Predicate<Archetype>
 
 Struct const* Database::getStructById(std::size_t id) const noexcept
 {
-	return entityCast<Struct>(getEntityById(id));
+	Struct const* result = entityCast<Struct>(getEntityById(id));
+
+	return (result != nullptr && result->getKind() == EEntityKind::Struct) ? result : nullptr;
 }
 
-Struct const* Database::getStructByName(char const* name) const noexcept
+Struct const* Database::getFileLevelStructByName(char const* name) const noexcept
 {
 	return Algorithm::getEntityByName(_pimpl->getFileLevelStructsByName(), name);
 }
 
-Vector<Struct const*> Database::getStructsByPredicate(Predicate<Struct> predicate, void* userData) const
+Struct const* Database::getFileLevelStructByPredicate(Predicate<Struct>	predicate, void* userData) const
+{
+	return Algorithm::getItemByPredicate(_pimpl->getFileLevelStructsByName(), predicate, userData);
+}
+
+Vector<Struct const*> Database::getFileLevelStructsByPredicate(Predicate<Struct> predicate, void* userData) const
 {
 	return Algorithm::getItemsByPredicate(_pimpl->getFileLevelStructsByName(), predicate, userData);
 }
@@ -143,17 +155,29 @@ bool Database::foreachFileLevelStruct(Visitor<Struct> visitor, void* userData) c
 	return Algorithm::foreach(_pimpl->getFileLevelStructsByName(), visitor, userData);
 }
 
-Class const* Database::getClassById(std::size_t id) const noexcept
+std::size_t Database::getFileLevelStructsCount() const noexcept
 {
-	return entityCast<Class>(getEntityById(id));
+	return _pimpl->getFileLevelStructsByName().size();
 }
 
-Class const* Database::getClassByName(char const* name) const noexcept
+Class const* Database::getClassById(std::size_t id) const noexcept
+{
+	Class const* result = entityCast<Class>(getEntityById(id));
+
+	return (result != nullptr && result->getKind() == EEntityKind::Class) ? result : nullptr;
+}
+
+Class const* Database::getFileLevelClassByName(char const* name) const noexcept
 {
 	return Algorithm::getEntityByName(_pimpl->getFileLevelClassesByName(), name);
 }
 
-Vector<Class const*> Database::getClassesByPredicate(Predicate<Class> predicate, void* userData) const
+Struct const* Database::getFileLevelClassByPredicate(Predicate<Struct>	predicate, void* userData) const
+{
+	return Algorithm::getItemByPredicate(_pimpl->getFileLevelClassesByName(), predicate, userData);
+}
+
+Vector<Class const*> Database::getFileLevelClassesByPredicate(Predicate<Class> predicate, void* userData) const
 {
 	return Algorithm::getItemsByPredicate(_pimpl->getFileLevelClassesByName(), predicate, userData);
 }
@@ -163,17 +187,27 @@ bool Database::foreachFileLevelClass(Visitor<Class> visitor, void* userData) con
 	return Algorithm::foreach(_pimpl->getFileLevelClassesByName(), visitor, userData);
 }
 
+std::size_t Database::getFileLevelClassesCount() const noexcept
+{
+	return _pimpl->getFileLevelClassesByName().size();
+}
+
 Enum const* Database::getEnumById(std::size_t id) const noexcept
 {
 	return entityCast<Enum>(getEntityById(id));
 }
 
-Enum const* Database::getEnumByName(char const* name) const noexcept
+Enum const* Database::getFileLevelEnumByName(char const* name) const noexcept
 {
 	return Algorithm::getEntityByName(_pimpl->getFileLevelEnumsByName(), name);
 }
 
-Vector<Enum const*> Database::getEnumsByPredicate(Predicate<Enum> predicate, void* userData) const
+Enum const* Database::getFileLevelEnumByPredicate(Predicate<Enum> predicate, void* userData) const
+{
+	return Algorithm::getItemByPredicate(_pimpl->getFileLevelEnumsByName(), predicate, userData);
+}
+
+Vector<Enum const*> Database::getFileLevelEnumsByPredicate(Predicate<Enum> predicate, void* userData) const
 {
 	return Algorithm::getItemsByPredicate(_pimpl->getFileLevelEnumsByName(), predicate, userData);
 }
@@ -181,6 +215,11 @@ Vector<Enum const*> Database::getEnumsByPredicate(Predicate<Enum> predicate, voi
 bool Database::foreachFileLevelEnum(Visitor<Enum> visitor, void* userData) const
 {
 	return Algorithm::foreach(_pimpl->getFileLevelEnumsByName(), visitor, userData);
+}
+
+std::size_t Database::getFileLevelEnumsCount() const noexcept
+{
+	return _pimpl->getFileLevelEnumsByName().size();
 }
 
 FundamentalArchetype const* Database::getFundamentalArchetypeById(std::size_t id) const noexcept
@@ -215,6 +254,11 @@ bool Database::foreachFileLevelVariable(Visitor<Variable> visitor, void* userDat
 	return Algorithm::foreach(_pimpl->getFileLevelVariablesByName(), visitor, userData);
 }
 
+std::size_t Database::getFileLevelVariablesCount() const noexcept
+{
+	return _pimpl->getFileLevelVariablesByName().size();
+}
+
 Function const* Database::getFunctionById(std::size_t id) const noexcept
 {
 	return entityCast<Function>(getEntityById(id));
@@ -242,6 +286,11 @@ Vector<Function const*> Database::getFunctionsByPredicate(Predicate<Function> pr
 bool Database::foreachFileLevelFunction(Visitor<Function> visitor, void* userData) const
 {
 	return Algorithm::foreach(_pimpl->getFileLevelFunctionsByName(), visitor, userData);
+}
+
+std::size_t Database::getFileLevelFunctionsCount() const noexcept
+{
+	return _pimpl->getFileLevelFunctionsByName().size();
 }
 
 Method const* Database::getMethodById(std::size_t id) const noexcept
