@@ -52,7 +52,7 @@ ClassTemplateInstantiation const* ClassTemplate::getTemplateInstantiation(Templa
 	return nullptr;
 }
 
-bool ClassTemplate::foreachTemplateInstantiation(Visitor<ClassTemplateInstantiation> visitor, void* userData) const noexcept
+bool ClassTemplate::foreachTemplateInstantiation(Visitor<ClassTemplateInstantiation> visitor, void* userData) const
 {
 	return Algorithm::foreach(getPimpl()->getTemplateInstantiations(), visitor, userData);
 }

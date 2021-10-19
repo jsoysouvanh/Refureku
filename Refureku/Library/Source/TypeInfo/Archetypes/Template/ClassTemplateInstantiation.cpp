@@ -6,7 +6,7 @@
 using namespace rfk;
 
 ClassTemplateInstantiation::ClassTemplateInstantiation(char const* name, std::size_t id, std::size_t memorySize, bool isClass, Archetype const& classTemplate) noexcept:
-	Struct(new ClassTemplateInstantiationImpl(name, id, memorySize, isClass, classTemplate, *this))
+	Struct(new ClassTemplateInstantiationImpl(name, id, memorySize, isClass, classTemplate))
 {
 	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
 	assert(classTemplate.getKind() == rfk::EEntityKind::Class || classTemplate.getKind() == rfk::EEntityKind::Struct);

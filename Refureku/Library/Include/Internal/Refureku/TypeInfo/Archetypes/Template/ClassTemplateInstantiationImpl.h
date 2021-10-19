@@ -26,12 +26,11 @@ namespace rfk
 			std::vector<TemplateArgument const*>	_templateArguments;
 
 		public:
-			inline ClassTemplateInstantiationImpl(char const*						name,
-												  std::size_t						id,
-												  std::size_t						memorySize,
-												  bool								isClass,
-												  Archetype const&					classTemplate,
-												  ClassTemplateInstantiation const&	backRef)			noexcept;
+			inline ClassTemplateInstantiationImpl(char const*		name,
+												  std::size_t		id,
+												  std::size_t		memorySize,
+												  bool				isClass,
+												  Archetype const&	classTemplate)	noexcept;
 
 			/**
 			*	@brief Add an argument to the list of template arguments.

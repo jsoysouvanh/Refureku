@@ -60,7 +60,7 @@ Archetype const* getArchetype() noexcept
 	return nullptr;
 }
 
-#if !defined(_MSC_VER) || defined(__clang__)
+#if RFK_TEMPLATE_TEMPLATE_SUPPORT
 
 template <template <template <typename...> typename...> typename T>
 Archetype const* getArchetype() noexcept

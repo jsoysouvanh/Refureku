@@ -26,8 +26,6 @@ namespace rfk
 	class Method;
 	class Type;
 	class ICallable;
-	class ClassTemplate;
-	class ClassTemplateInstantiation;
 	class Struct;
 	
 	/* In C++, a struct and a class contains exactly the same data. Alias for convenience. */

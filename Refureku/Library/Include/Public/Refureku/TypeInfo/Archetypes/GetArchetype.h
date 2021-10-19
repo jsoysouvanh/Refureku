@@ -44,7 +44,7 @@ namespace rfk
 	template <template <auto...> typename T>
 	Archetype const*				getArchetype()						noexcept;	//Variadic non-type template parameters
 
-#if !defined(_MSC_VER) || defined(__clang__)
+#if RFK_TEMPLATE_TEMPLATE_SUPPORT
 	template <template <template <typename...> typename...> typename T>
 	Archetype const*				getArchetype()						noexcept;	//Variadic template template type parameters
 #endif
