@@ -30,7 +30,8 @@ namespace rfk
 			* 
 			*	@return The archetype of the argument.
 			*/
-			RFK_NODISCARD REFUREKU_API Archetype const*	getArchetype()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API 
+				Archetype const*		getArchetype()	const	noexcept;
 
 			/**
 			*	@brief	Get the value of the non-type template argument.
@@ -42,14 +43,15 @@ namespace rfk
 			*	@return The argument value.
 			*/
 			template <typename T>
-			RFK_NODISCARD T	const&						getValue()		const	noexcept;
+			RFK_NODISCARD T	const&		getValue()		const	noexcept;
 
 			/**
 			*	@brief Get a pointer to the argument value.
 			* 
 			*	@return A pointer to the argument value.
 			*/
-			RFK_NODISCARD REFUREKU_API void const*		getValuePtr()	const	noexcept;
+			RFK_NODISCARD REFUREKU_API 
+				void const*				getValuePtr()	const	noexcept;
 
 			/**
 			*	@brief Check whether 2 NonTypeTemplateArgument instances are equal or not.

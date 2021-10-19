@@ -6,6 +6,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Function const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Function const*, rfk::Allocator<Function const*>>;
+
 using EFunctionFlagsUnderlyingType = std::underlying_type_t<EFunctionFlags>;
 
 Function::Function(char const* name, std::size_t id, Type const& returnType, ICallable* internalFunction, EFunctionFlags flags) noexcept:

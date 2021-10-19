@@ -141,5 +141,8 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API void const*	getConstPtrInternal(void const* instance)	const	noexcept;
 	};
 
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Field const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Field const*, rfk::Allocator<Field const*>>);
+
 	#include "Refureku/TypeInfo/Variables/Field.inl"
 }

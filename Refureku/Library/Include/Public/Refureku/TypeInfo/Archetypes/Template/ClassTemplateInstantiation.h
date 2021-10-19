@@ -61,7 +61,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool									foreachTemplateArgument(Visitor<TemplateArgument> visitor,
-																						void*					  userData)	const	noexcept;
+																						void*					  userData)	const;
 
 			/**
 			*	@brief Add a template argument to this instantiation

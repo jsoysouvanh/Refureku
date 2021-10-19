@@ -30,11 +30,9 @@ TemplateArgument const& ClassTemplateInstantiation::getTemplateArgumentAt(std::s
 	return *getPimpl()->getTemplateArguments()[index];
 }
 
-bool ClassTemplateInstantiation::foreachTemplateArgument(Visitor<TemplateArgument> visitor, void* userData) const noexcept
+bool ClassTemplateInstantiation::foreachTemplateArgument(Visitor<TemplateArgument> visitor, void* userData) const
 {
-	return Algorithm::foreach(getPimpl()->getTemplateArguments(),
-										visitor,
-										userData);
+	return Algorithm::foreach(getPimpl()->getTemplateArguments(), visitor, userData);
 }
 
 std::size_t ClassTemplateInstantiation::getTemplateArgumentsCount() const noexcept

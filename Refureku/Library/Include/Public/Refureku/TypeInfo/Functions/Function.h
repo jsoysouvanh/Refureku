@@ -109,5 +109,8 @@ namespace rfk
 			ReturnType	internalInvoke(ArgTypes&&... args)	const;
 	};
 
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Function const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Function const*, rfk::Allocator<Function const*>>);
+
 	#include "Refureku/TypeInfo/Functions/Function.inl"
 }

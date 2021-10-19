@@ -48,4 +48,7 @@ namespace rfk
 
 			RFK_GEN_GET_PIMPL(ArchetypeImpl, Entity::getPimpl())
 	};
+
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Archetype const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Archetype const*, rfk::Allocator<Archetype const*>>);
 }

@@ -108,5 +108,8 @@ namespace rfk
 			RFK_GEN_GET_PIMPL(VariableImpl, Entity::getPimpl())
 	};
 
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Variable const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Variable const*, rfk::Allocator<Variable const*>>);
+
 	#include "Refureku/TypeInfo/Variables/Variable.inl"
 }

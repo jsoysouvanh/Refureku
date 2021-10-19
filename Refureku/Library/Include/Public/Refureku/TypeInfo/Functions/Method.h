@@ -112,5 +112,8 @@ namespace rfk
 			RFK_NORETURN REFUREKU_API void	throwConstViolationException(char const* message)				const;
 	};
 
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Method const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Method const*, rfk::Allocator<Method const*>>);
+
 	#include "Refureku/TypeInfo/Functions/Method.inl"
 }

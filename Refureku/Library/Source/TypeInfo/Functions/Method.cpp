@@ -9,6 +9,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Method const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Method const*, rfk::Allocator<Method const*>>;
+
 Method::Method(char const* name, std::size_t id, Type const& returnType,
 					 ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
 	MethodBase(new MethodImpl(name, id, returnType, internalMethod, flags, outerEntity))

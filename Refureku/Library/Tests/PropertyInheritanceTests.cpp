@@ -146,3 +146,23 @@ TEST(Rfk_Method_inheritProperties, NonInheritedMulitplePropertyNotInherited)
 	EXPECT_EQ(PropertyInheritanceTestClassChild2::staticGetArchetype().getMethodByName("methodPropertyInheritance")
 			  ->getProperty<MultipleNonInheritedProperty>(), nullptr);
 }
+
+//=========================================================
+//========= Template class property inheritance ===========
+//=========================================================
+
+TEST(Rfk_ClassTemplate_inheritProperties, PropagePropertiesToClassInstantiations)
+{
+	rfk::ClassTemplate const* classTemplate = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate"));
+
+	EXPECT_NE(classTemplate, nullptr);
+
+	rfk::TypeTemplateArgument arg1(rfk::getArchetype<int>());
+	rfk::TemplateArgument const* templateArgs[] = { &arg1 };
+
+	rfk::ClassTemplateInstantiation const* inst = classTemplate->getTemplateInstantiation(templateArgs);
+
+	EXPECT_NE(inst, nullptr);
+
+	EXPECT_NE(inst->getProperty<ParseAllNested>(), nullptr);
+}

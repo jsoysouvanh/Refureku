@@ -7,6 +7,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Enum const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Enum const*, rfk::Allocator<Enum const*>>;
+
 Enum::Enum(char const* name, std::size_t id, Archetype const* underlyingArchetype, Entity const* outerEntity) noexcept:
 	Archetype(new EnumImpl(name, id, underlyingArchetype, outerEntity))
 {

@@ -4,6 +4,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<StaticField const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<StaticField const*, rfk::Allocator<StaticField const*>>;
+
 StaticField::StaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
 							   Struct const* owner, void* ptr, Entity const* outerEntity) noexcept:
 	FieldBase(new StaticFieldImpl(name, id, type, flags, owner, ptr, outerEntity))

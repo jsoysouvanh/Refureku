@@ -86,5 +86,8 @@ namespace rfk
 			ReturnType	internalInvoke(ArgTypes&&... args) const;
 	};
 
+	REFUREKU_TEMPLATE_API(rfk::Allocator<StaticMethod const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<StaticMethod const*, rfk::Allocator<StaticMethod const*>>);
+
 	#include "Refureku/TypeInfo/Functions/StaticMethod.inl"
 }

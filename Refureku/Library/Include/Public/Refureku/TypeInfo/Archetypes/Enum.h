@@ -145,7 +145,10 @@ namespace rfk
 
 	/** Base implementation of getEnum, specialized for each reflected enum */
 	template <typename T>
-	rfk::Enum const* getEnum() noexcept;
+	Enum const* getEnum() noexcept;
+
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Enum const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Enum const*, rfk::Allocator<Enum const*>>);
 
 	#include "Refureku/TypeInfo/Archetypes/Enum.inl"
 }

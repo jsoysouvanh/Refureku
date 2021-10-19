@@ -32,14 +32,16 @@ namespace rfk
 			* 
 			*	@return The template parameter at the given index.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getTemplateParameterAt(std::size_t index)									const	noexcept;
+			RFK_NODISCARD REFUREKU_API 
+				TemplateParameter const&			getTemplateParameterAt(std::size_t index)									const	noexcept;
 
 			/**
 			*	@brief Get the number of template parameters for this class template.
 			*
 			*	@return The number of template parameters for this class template.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t				getTemplateParametersCount()												const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				std::size_t							getTemplateParametersCount()												const	noexcept;
 
 			/**
 			*	@brief Get an existing template instantiation corresponding to the provided arguments.
@@ -49,7 +51,8 @@ namespace rfk
 			*	@return The found class template instantiation corresponding to the provided arguments if it exists, else nullptr.
 			*/
 			template <std::size_t ArgsCount>
-			RFK_NODISCARD ClassTemplateInstantiation const*		getTemplateInstantiation(TemplateArgument const* (&args)[ArgsCount])		const	noexcept;
+			RFK_NODISCARD 
+				ClassTemplateInstantiation const*	getTemplateInstantiation(TemplateArgument const* (&args)[ArgsCount])		const	noexcept;
 
 			/**
 			*	@brief	Get an existing template instantiation corresponding to the provided arguments.
@@ -59,15 +62,17 @@ namespace rfk
 			* 
 			*	@return The found class template instantiation corresponding to the provided arguments if it exists, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API ClassTemplateInstantiation const* getTemplateInstantiation(TemplateArgument const**	args,
-																								  std::size_t				argsCount)		const	noexcept;
+			RFK_NODISCARD REFUREKU_API 
+				ClassTemplateInstantiation const*	getTemplateInstantiation(TemplateArgument const**	args,
+																			 std::size_t				argsCount)				const	noexcept;
 
 			/**
 			*	@brief Get the number of instantiations (with different template parameters) of this class template within the program.
 			* 
 			*	@return The number of instantiations of this class template within the program.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t				getTemplateInstantiationsCount()											const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				std::size_t							getTemplateInstantiationsCount()											const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all template instantiations of this class.
@@ -80,29 +85,29 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool									foreachTemplateInstantiation(Visitor<ClassTemplateInstantiation> visitor,
-																							 void*								 userData)	const;
+			REFUREKU_API bool						foreachTemplateInstantiation(Visitor<ClassTemplateInstantiation> visitor,
+																				 void*								 userData)	const;
 
 			/**
 			*	@brief Append a template parameter to the list of template parameters.
 			* 
 			*	@param param Template parameter to add.
 			*/
-			REFUREKU_API void									addTemplateParameter(TemplateParameter const& param)								noexcept;
+			REFUREKU_API void						addTemplateParameter(TemplateParameter const& param)								noexcept;
 
 			/**
 			*	@brief Register an instantiation of this class template.
 			* 
 			*	@param inst The instantiation to register.
 			*/
-			REFUREKU_API void									registerTemplateInstantiation(ClassTemplateInstantiation const& inst)				noexcept;
+			REFUREKU_API void						registerTemplateInstantiation(ClassTemplateInstantiation const& inst)				noexcept;
 
 			/**
 			*	@brief Unregister an instantiation of this class template.
 			* 
 			*	@param inst The instantiation to unregister.
 			*/
-			REFUREKU_API void									unregisterTemplateInstantiation(ClassTemplateInstantiation const& inst)				noexcept;
+			REFUREKU_API void						unregisterTemplateInstantiation(ClassTemplateInstantiation const& inst)				noexcept;
 
 		private:
 			//Forward declaration

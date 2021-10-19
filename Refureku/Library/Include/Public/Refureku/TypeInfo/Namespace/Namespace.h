@@ -460,5 +460,8 @@ namespace rfk
 			RFK_GEN_GET_PIMPL(NamespaceImpl, Entity::getPimpl())
 	};
 
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Namespace const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Namespace const*, rfk::Allocator<Namespace const*>>);
+
 	#include "Refureku/TypeInfo/Namespace/Namespace.inl"
 }

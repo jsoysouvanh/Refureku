@@ -102,5 +102,8 @@ namespace rfk
 			RFK_GEN_GET_PIMPL(StaticFieldImpl, Entity::getPimpl())
 	};
 
+	REFUREKU_TEMPLATE_API(rfk::Allocator<StaticField const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<StaticField const*, rfk::Allocator<StaticField const*>>);
+
 	#include "Refureku/TypeInfo/Variables/StaticField.inl"
 }

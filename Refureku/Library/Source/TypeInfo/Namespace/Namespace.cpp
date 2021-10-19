@@ -7,6 +7,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Namespace const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Namespace const*, rfk::Allocator<Namespace const*>>;
+
 Namespace::Namespace(char const* name, std::size_t id) noexcept:
 	Entity(new NamespaceImpl(name, id))
 {
