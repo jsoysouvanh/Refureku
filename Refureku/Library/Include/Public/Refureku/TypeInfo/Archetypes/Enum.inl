@@ -5,7 +5,7 @@
 *	See the README.md file for full license details.
 */
 
-template <typename T, typename>
+template <typename T>
 rfk::Enum const* getEnum() noexcept
 {
 	return nullptr;

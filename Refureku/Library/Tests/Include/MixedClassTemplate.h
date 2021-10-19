@@ -15,7 +15,7 @@
 namespace rfk
 {
 	template <template <typename, std::size_t> typename>
-	rfk::Archetype const* getArchetype()
+	rfk::Archetype const* getArchetype() noexcept
 	{
 		return nullptr;
 	}
@@ -33,7 +33,7 @@ class CLASS() MixedClassTemplate
 namespace rfk
 {
 	template <template <typename, std::size_t, template <typename> typename> typename>
-	rfk::Archetype const* getArchetype()
+	rfk::Archetype const* getArchetype() noexcept
 	{
 		return nullptr;
 	}
