@@ -5,8 +5,6 @@ on:
     branches:
       - master
       - dev
-      - CI-setup
-      - rework
   workflow_dispatch:
 
 jobs:
@@ -35,7 +33,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Windows/
@@ -50,7 +48,7 @@ jobs:
           mv Build/Release/Lib/Release/Refureku.lib RefurekuBinaries/Windows/Lib/
 
       - name: Upload Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -112,7 +110,7 @@ jobs:
           cat ./Testing/Temporary/MemoryChecker.*.log
   
       - name: Setup Binaries Artifact
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Linux/
@@ -129,7 +127,7 @@ jobs:
           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
 
       - name: Upload Binaries Artifact
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -169,7 +167,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Mac/
@@ -179,7 +177,7 @@ jobs:
           mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
 
       - name: Upload Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
