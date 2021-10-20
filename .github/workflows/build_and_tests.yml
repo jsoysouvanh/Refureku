@@ -1,4 +1,4 @@
-name: Build & Tests
+name: Tests
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_windows_msvc:
+  windows_msvc:
     name: Windows | MSVC
     runs-on: windows-latest
 
@@ -57,7 +57,7 @@ jobs:
           path: ./RefurekuBinaries
           retention-days: 7
 
-  build_linux_gcc_clang:
+  linux_gcc_clang:
     name: Linux | Clang/GCC
     runs-on: ubuntu-latest
 
@@ -136,7 +136,7 @@ jobs:
           path: ./RefurekuBinaries
           retention-days: 7
 
-  build_macos:
+  macos:
     name: MacOS | Clang
     runs-on: macos-latest
 
@@ -190,7 +190,7 @@ jobs:
   deploy_release_binaries:
     name: Deploy Binaries
     runs-on: ubuntu-latest
-    needs: [build_windows_msvc, build_linux_gcc_clang, build_macos]
+    needs: [windows_msvc, linux_gcc_clang, macos]
     if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
