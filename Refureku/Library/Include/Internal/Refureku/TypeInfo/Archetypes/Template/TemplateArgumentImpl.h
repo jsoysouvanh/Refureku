@@ -19,7 +19,8 @@ namespace rfk
 			ETemplateParameterKind	_templateKind;
 			
 		public:
-			inline TemplateArgumentImpl(ETemplateParameterKind templateKind) noexcept;
+			inline	TemplateArgumentImpl(ETemplateParameterKind templateKind)	noexcept;
+			virtual ~TemplateArgumentImpl()										= default;
 
 			/**
 			*	@brief Getter for the field _boundParameter.

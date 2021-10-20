@@ -25,6 +25,7 @@ namespace rfk
 		public:
 			inline TemplateParameterImpl(char const*			name,
 										 ETemplateParameterKind	kind)	noexcept;
+			virtual ~TemplateParameterImpl()							= default;
 
 			/**
 			*	@brief Getter for the field _name.
