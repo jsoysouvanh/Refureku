@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <type_traits>	//std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
+#include <type_traits> //std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Refureku/TypeInfo/Functions/StaticMethod.h"	//makeInstance<> uses StaticMethod wrapper so must include
@@ -15,6 +15,7 @@
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
 #include "Refureku/TypeInfo/Functions/MethodHelper.h"
+#include "Refureku/Misc/SharedPtr.h"
 
 namespace rfk
 {
@@ -53,7 +54,8 @@ namespace rfk
 			*	@exception Any exception potentially thrown by the used instantiator.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			RFK_NODISCARD ReturnType*				makeInstance(ArgTypes&&... args)													const;
+			RFK_NODISCARD 
+				rfk::SharedPtr<ReturnType>			makeInstance(ArgTypes&&... args)													const;
 
 			/**
 			*	@brief	Compute the list of all direct reflected subclasses of this struct.
@@ -785,7 +787,7 @@ namespace rfk
 			*
 			*	@param instantiator Pointer to the instantiator method.
 			*/
-			REFUREKU_API void						setDefaultInstantiator(void* (*instantiator)())												noexcept;
+			REFUREKU_API void						setDefaultInstantiator(rfk::SharedPtr<void> (*instantiator)())								noexcept;
 
 			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
@@ -809,14 +811,14 @@ namespace rfk
 			RFK_GEN_GET_PIMPL(StructImpl, Entity::getPimpl())
 
 		private:
+			using Instantiator = rfk::SharedPtr<void> (*)();
+
 			/**
-			*	@brief Invoke the default instantiator.
+			*	@brief Get the internal default instantiator.
 			* 
-			*	@return The result of the default instantiator invocation.
-			* 
-			*	@exception Any exception potentially thrown from the default instantiator.
+			*	@return The default instantiator for this struct.
 			*/
-			RFK_NODISCARD REFUREKU_API void*				makeInstanceFromDefaultInstantiator()	const;
+			RFK_NODISCARD REFUREKU_API Instantiator			getDefaultInstantiator()				const;
 
 			/**
 			*	@brief Get the number of instantiators (excluding the default one).
@@ -846,7 +848,7 @@ namespace rfk
 		*	@exception Potential exception thrown by T constructor.
 		*/
 		template <typename T>
-		void* defaultInstantiator();
+		rfk::SharedPtr<void> defaultInstantiator();
 	}
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Struct const*>);

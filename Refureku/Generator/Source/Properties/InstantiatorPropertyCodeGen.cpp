@@ -20,11 +20,11 @@ bool InstantiatorPropertyCodeGen::generateClassFooterCodeForEntity(kodgen::Entit
 	if (parameters.empty())
 	{
 		//CustomIntantiator with no parameters
-		inout_result += "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + ")>, \"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "* .\");" + env.getSeparator();
+		inout_result += "static_assert(std::is_invocable_r_v<std::shared_ptr<" + className + ">, decltype(" + methodPtr + ")>, \"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "* .\");" + env.getSeparator();
 	}
 	else
 	{
-		inout_result += "static_assert(std::is_invocable_r_v<" + className + "*, decltype(" + methodPtr + "), " + std::move(parameters) + ">, \"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");" + env.getSeparator();
+		inout_result += "static_assert(std::is_invocable_r_v<std::shared_ptr<" + className + ">, decltype(" + methodPtr + "), " + std::move(parameters) + ">, \"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");" + env.getSeparator();
 	}
 
 	return true;

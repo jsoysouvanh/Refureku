@@ -82,7 +82,7 @@ inline StaticMethod* Struct::StructImpl::addStaticMethod(char const* name, std::
 	return const_cast<StaticMethod*>(&*_staticMethods.emplace(name, id, returnType, internalMethod, flags, outerEntity));
 }
 
-inline void Struct::StructImpl::setDefaultInstantiator(void* (*defaultInstantiator)()) noexcept
+inline void Struct::StructImpl::setDefaultInstantiator(rfk::SharedPtr<void> (*defaultInstantiator)()) noexcept
 {
 	_defaultInstantiator = defaultInstantiator;
 }
@@ -91,12 +91,11 @@ inline void Struct::StructImpl::addInstantiator(StaticMethod const* instantiator
 {
 	//Make sure the instantiator is valid
 	assert(instantiator != nullptr);
-	assert(instantiator->getReturnType().isPointer());
 
 	//If it is a parameterless custom instantiator, replace the default instantiator
 	if (instantiator->getParametersCount() == 0u)
 	{
-		setDefaultInstantiator(reinterpret_cast<rfk::NonMemberFunction<void* ()> const*>(instantiator->getInternalFunction())->getFunctionHandle());
+		setDefaultInstantiator(reinterpret_cast<rfk::NonMemberFunction<rfk::SharedPtr<void>()> const*>(instantiator->getInternalFunction())->getFunctionHandle());
 	}
 	else
 	{
@@ -178,12 +177,12 @@ inline Struct::StructImpl::StaticMethods const& Struct::StructImpl::getStaticMet
 	return _staticMethods;
 }
 
-inline Struct::StructImpl::CustomInstantiators const& Struct::StructImpl::getCustomInstantiators() const noexcept
+inline Struct::StructImpl::Instantiators const& Struct::StructImpl::getCustomInstantiators() const noexcept
 {
 	return _customInstantiators;
 }
 
-inline Struct::StructImpl::CustomInstantiator Struct::StructImpl::getDefaultInstantiator() const noexcept
+inline Struct::Instantiator Struct::StructImpl::getDefaultInstantiator() const noexcept
 {
 	return _defaultInstantiator;
 }

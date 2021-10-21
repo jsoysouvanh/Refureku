@@ -16,13 +16,12 @@ It is split in 2 parts:
 - The code generator is an executable, based on [Kodgen](https://github.com/jsoysouvanh/Kodgen). It handles the reflection code generation.
 - The actual dynamic library that is linked to the target program using reflection.
 
-
 **Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) to get started!**
 
 ## Features
 - Reflect namespaces, classes, (static) methods, (static) fields, variables, functions, enums and enum values
 - Support runtime loaded/unloaded dynamic library reflection
-- Support class template, as well as multiple inheritance
+- Support class template reflection, as well as multiple inheritance
 - Reflected entities can be retrieved by name, id or predicate
 - Read/write reflected fields/variables value
 - Call reflected functions/methods
@@ -34,7 +33,7 @@ It is split in 2 parts:
 
 # Examples
 
-### Reflect a class
+## Reflect a class
 
 ```cpp
 //TestClass.h
@@ -44,13 +43,13 @@ It is split in 2 parts:
 
 class CLASS() TestClass
 {
-	FIELD()
-	int _intField;
+    FIELD()
+    int _intField;
 
-	METHOD()
-	void testMethod();
+    METHOD()
+    void testMethod();
 
-	TestClass_GENERATED
+    TestClass_GENERATED
 };
 
 File_TestClass_GENERATED
@@ -61,7 +60,7 @@ File_TestClass_GENERATED
 #include "Generated/TestClass.rfks.h"
 ```
 
-### Get a class metadata
+## Get a class metadata
 
 ```cpp
 //From name
@@ -74,7 +73,7 @@ rfk::Class const& c2 = TestClass::staticGetArchetype();
 rfk::Class const* c3 = rfk::getArchetype<TestClass>(); //nullptr if not reflected
 ```
 
-### Get class metadata from base pointer
+## Get class metadata from base pointer
 
 This feature is only available to classes that publicly derive from rfk::Object (#include <Refureku/Object.h>).
 ```cpp
@@ -84,7 +83,7 @@ rfk::Object const* instancePtr = &instance;
 rfk::Struct const& archetype = instancePtr->getArchetype();
 ```
 
-### Manipulate fields
+## Manipulate fields
 
 ```cpp
 //Get field
@@ -99,7 +98,7 @@ int value = field->get<int>(instance);
 field->set(instance, 3);
 ```
 
-### Manipulate methods
+## Manipulate methods
 
 ```cpp
 //Get method
@@ -115,46 +114,59 @@ method->invoke(instance);
 int returnedValue = method->invoke<int>(instance, 1, 2, 3);
 ```
 
-### Instantiate a class
+## Instantiate a class
 
 ```cpp
 rfk::Class const* c = rfk::getDatabase().getFileLevelClassByName("TestClass");
 
-TestClass* instance = c->makeInstance<TestClass>(); //Instantiate from default ctor
+rfk::SharedPtr<TestClass> instance = c->makeInstance<TestClass>(); //Instantiate from default ctor
 
 //If TestClass has a base class, we can do
-BaseClass* instance2 = c->makeInstance<BaseClass>();
-
-//Memory must be managed manually, or by forwarding the pointer to a smart pointer
-delete instance;
-delete instance2;
+rfk::SharedPtr<BaseClass> instance2 = c->makeInstance<BaseClass>();
 ```
 
 It is also possible to instantiate a class with parameters, by providing a custom instantiator when declaring the class:
 ```cpp
+//TestClass2.h
+#pragma once
+
+#include <Refureku/Properties/Instantiator.h>
+
+#include "Generated/TestClass2.rfkh.h"
+
 class CLASS() TestClass2 : public BaseClass
 {
-	METHOD(Instantiator)
-	static TestClass2* customInstantiator(int i)
-	{
-		return new TestClass2();
-	}
+    METHOD(Instantiator)
+    static rfk::SharedPtr<TestClass2> customInstantiator(int i)
+    {
+        //Use this if there is no custom deleter
+        //return rfk::makeShared<TestClass2>();
 
-	TestClass2_GENERATED
+        //Use this if you want to provide a custom deleter
+        return rfk::SharedPtr<TestClass2>(new TestClass2(), [](TestClass2* ptr)
+                {
+                    delete ptr; //Simple delete for example simplicity
+                });
+    }
+
+    TestClass2_GENERATED
 };
+
+File_TestClass2_GENERATED
+```
+
+```cpp
+//TestClass2.cpp
+#include "Generated/TestClass2.rfks.h"
 ```
 
 ```cpp
 rfk::Class const* c2 = rfk::getDatabase().getFileLevelClassByName("TestClass2");
 
-BaseClass* instance3 = c2->makeInstance<BaseClass>(42); //Call customInstantiator
-
-delete instance3;
+rfk::SharedPtr<BaseClass> instance3 = c2->makeInstance<BaseClass>(42); //Call customInstantiator
 ```
 
-> **Note:** The base class used to delete the instance MUST have a virtual destructor.
-
-### Create custom properties
+## Create custom properties
 
 ```cpp
 //ExampleProperty.h
@@ -164,21 +176,23 @@ delete instance3;
 #include "Generated/ExampleProperty.rfkh.h"
 
 class CLASS(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class))
-	ExampleProperty : public rfk::Property
+    ExampleProperty : public rfk::Property
 {
-	public:
-		int someData;
+    public:
+        int someData;
 
-		ExampleProperty(int data):
-			someData{data}
-		{}
+        ExampleProperty(int data):
+            someData{data}
+        {}
 
-	ExampleProperty_GENERATED
+    ExampleProperty_GENERATED
 };
 
 File_ExampleProperty_GENERATED
+```
 
-//ExampleProperty.cpp
+```cpp
+//ExampleProperty.cpp, or any source file being part of your project
 #include "Generated/ExampleProperty.rfks.h"
 ```
 
@@ -192,16 +206,18 @@ Then, we can attach ExampleProperty to any reflected struct or class, as specifi
 
 class CLASS(ExampleProperty(42)) TestClass3
 {
-	TestClass3_GENERATED
+    TestClass3_GENERATED
 };
 
 File_TestClass3_GENERATED
+```
 
+```cpp
 //TestClass3.cpp
 #include "Generated/TestClass3.rfks.h"
 ```
 
-### Read entity properties
+## Read entity properties
 
 ```cpp
 rfk::Class const* c = rfk::getDatabase().getFileLevelClassByName("TestClass3");
@@ -213,36 +229,13 @@ rfk::Property const* prop = c->getPropertyByName("ExampleProperty");
 CustomProperty const* prop2 = c->getProperty<CustomProperty>();
 ```
 
-## Cross-platform compatibility
+# Cross-platform compatibility
 This library has been tested and is stable on the following configurations:
 - Microsoft Windows Server | MSVC 19.29.30133.0
 - Linux 20.04 | Clang 7.0.1, Clang 8.0.1, Clang 9.0.1, Clang 10.0.0, Clang 11.0.0
 - Linux 20.04 | GNU 8.4.0, GNU 9.3.0, GNU 10.3.0, GNU 11.1.0
 - Mac OS X 10.15.7 | AppleClang 12.0.0
 
-## Known issues
-- Issues when reflecting template template classes with MSVC because of [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
-- Template classes can't be reflected when nested in other entities
-
-## License
-MIT License
-
-Copyright (c) 2020-2021 Julien SOYSOUVANH
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+# Known issues
+- Issues when reflecting template template classes with MSVC, see [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
+- Class templates can't be reflected when nested in other entities

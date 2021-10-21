@@ -6,20 +6,24 @@
 */
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType* Struct::makeInstance(ArgTypes&&... args) const
+rfk::SharedPtr<ReturnType> Struct::makeInstance(ArgTypes&&... args) const
 {
-	static_assert(!std::is_void_v<ReturnType>, "Returning void* is forbidden since deleting a void* pointer is undefined.");
 	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>);
 
 	if constexpr (sizeof...(args) == 0u)
 	{
+		//TODO: merge default instantiator behaviour with normal instantiators
 		//No arguments, use default instantiator
-		return reinterpret_cast<ReturnType*>(makeInstanceFromDefaultInstantiator());
+		using InstantiatorPrototype = rfk::SharedPtr<ReturnType> (*)(ArgTypes&&...);
+		
+		return (*InstantiatorPrototype(getDefaultInstantiator()))();
 	}
 	else
 	{
 		StaticMethod const* instantiator;
 
+		//TODO: Order instantiators by arg counts, and abort the loop early if the number of args is greater than sizeof...(ArgTypes)
+		//TODO: Should add a foreachInstantiator to avoid multiple getInstantiatorAt calls
 		for (std::size_t i = 0u; i < getInstantiatorsCount(); i++)
 		{
 			instantiator = getInstantiatorAt(i);
@@ -27,7 +31,7 @@ ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 			if (instantiator->hasSameParameters<ArgTypes...>())
 			{
 				//Custom instantiators are guaranteed to return void*
-				return reinterpret_cast<ReturnType*>(instantiator->invoke<void*>(std::forward<ArgTypes>(args)...));
+				return instantiator->invoke<rfk::SharedPtr<ReturnType>>(std::forward<ArgTypes>(args)...);
 			}
 		}
 
@@ -76,11 +80,11 @@ StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags
 }
 
 template <typename T>
-void* internal::defaultInstantiator()
+rfk::SharedPtr<void> internal::defaultInstantiator()
 {
 	if constexpr (std::is_default_constructible_v<T>)
 	{
-		return new T();
+		return std::make_shared<T>();
 	}
 	else
 	{

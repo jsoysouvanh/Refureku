@@ -21,9 +21,13 @@ class CLASS() BaseObject : public rfk::Object
 		int _i;
 
 		METHOD(Instantiator)
-		static BaseObject* customInstantiator(int i) noexcept
+		static rfk::SharedPtr<BaseObject> customInstantiator(int i) noexcept
 		{
-			return new BaseObject(i);
+			return rfk::SharedPtr<BaseObject>(new BaseObject(i), [](BaseObject* ptr)
+											   {
+												   //Use some custom deleter...
+												   delete ptr;
+											   });
 		}
 
 	public:
@@ -48,9 +52,9 @@ class CLASS() ObjectDerived1 : public BaseObject
 		int j;
 
 		METHOD(Instantiator)
-		static ObjectDerived1* customInstantiator() noexcept
+		static rfk::SharedPtr<ObjectDerived1> customInstantiator() noexcept
 		{
-			return new ObjectDerived1(1);
+			return rfk::makeShared<ObjectDerived1>(1);
 		}
 
 	public:

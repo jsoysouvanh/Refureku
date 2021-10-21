@@ -19,30 +19,24 @@ TEST(Rfk_Struct_makeInstance, NoDefaultConstructible)
 
 TEST(Rfk_Struct_makeInstance, UseUserProvidedParamInstantiator)
 {
-	BaseObject* obj = rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeInstance<BaseObject>(2);
+	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeInstance<BaseObject>(2);
 
 	EXPECT_NE(obj, nullptr);
-
-	delete obj;
 }
 
 TEST(Rfk_Struct_makeInstance, UseUserProvidedParamlessInstantiator)
 {
-	BaseObject* obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived1")->makeInstance<BaseObject>();
+	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived1")->makeInstance<BaseObject>();
 
 	EXPECT_NE(obj, nullptr);
 	EXPECT_EQ(obj->getI(), 1);
-
-	delete obj;
 }
 
-TEST(Rfk_Struct_makeInstance, InstantiateChildClass)
+TEST(Rfk_Struct_makeInstance, UseDefaultInstantiator)
 {
-	BaseObject* obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived2")->makeInstance<BaseObject>();
+	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived2")->makeInstance<BaseObject>();
 
 	EXPECT_EQ(obj->getI(), 2);
-
-	delete obj;
 }
 
 //=========================================================
