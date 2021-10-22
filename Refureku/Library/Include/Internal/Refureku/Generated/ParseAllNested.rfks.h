@@ -23,12 +23,13 @@ static bool initialized = false;
 static rfk::Class type("ParseAllNested", 17636175816175907530u, sizeof(ParseAllNested), 1);
 if (!initialized) {
 initialized = true;
-type.setDefaultInstantiator(&rfk::internal::defaultInstantiator<ParseAllNested>);
 type.setPropertiesCapacity(1);
 static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Class");static PropertySettings property_17636175816175907530u_PropertySettings_0{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.addProperty(&property_17636175816175907530u_PropertySettings_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 ParseAllNested::_rfk_registerChildClass<ParseAllNested>(type);
+static rfk::StaticMethod defaultInstantiator("", 0u, rfk::getType<rfk::SharedPtr<ParseAllNested>>(),new rfk::NonMemberFunction<rfk::SharedPtr<ParseAllNested>()>(&rfk::CodeGenerationHelpers::defaultInstantiator<ParseAllNested>),rfk::EMethodFlags::Default, nullptr);
+type.addInstantiator(&defaultInstantiator);
 }
 return type; }
 

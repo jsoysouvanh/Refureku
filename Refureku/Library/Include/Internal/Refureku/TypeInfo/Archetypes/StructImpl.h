@@ -57,10 +57,7 @@ namespace rfk
 			StaticMethods		_staticMethods;
 
 			/** List of all custom instantiators for this archetype. */
-			Instantiators		_customInstantiators;
-
-			/** Pointer to the default method used to make an instance of this archetype. */
-			Instantiator		_defaultInstantiator;
+			Instantiators		_instantiators;
 
 			/** Kind of a rfk::Struct or rfk::Class instance. */
 			EClassKind			_classKind;
@@ -240,13 +237,6 @@ namespace rfk
 																		Struct const*	outerEntity)					noexcept;
 
 			/**
-			*	@brief Setup the default instantiator to use when Struct::makeInstance is called without parameters.
-			*
-			*	@param instantiator Pointer to the instantiator method.
-			*/
-			inline void									setDefaultInstantiator(rfk::SharedPtr<void> (*instantiator)())	noexcept;
-
-			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
 			*			If the provided static method takes no parameter, it will override the default instantiator.
 			*	
@@ -320,13 +310,6 @@ namespace rfk
 			*	@return _customInstantiators.
 			*/
 			RFK_NODISCARD inline Instantiators const&		getCustomInstantiators()							const	noexcept;
-
-			/**
-			*	@brief Getter for the field _defaultInstantiator.
-			* 
-			*	@return _defaultInstantiator.
-			*/
-			RFK_NODISCARD inline Instantiator				getDefaultInstantiator()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _classKind.

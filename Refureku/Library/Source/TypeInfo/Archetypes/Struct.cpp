@@ -711,19 +711,9 @@ void Struct::setStaticMethodsCapacity(std::size_t capacity) noexcept
 	return getPimpl()->setStaticMethodsCapacity(capacity);
 }
 
-void Struct::setDefaultInstantiator(rfk::SharedPtr<void> (*instantiator)()) noexcept
-{
-	getPimpl()->setDefaultInstantiator(instantiator);
-}
-
 void Struct::addInstantiator(StaticMethod const* instantiator) noexcept
 {
 	getPimpl()->addInstantiator(instantiator);
-}
-
-Struct::Instantiator Struct::getDefaultInstantiator() const
-{
-	return getPimpl()->getDefaultInstantiator();
 }
 
 std::size_t Struct::getInstantiatorsCount() const noexcept

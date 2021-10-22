@@ -33,8 +33,9 @@ namespace rfk
 			*	@param generatedMethodVarName	Name of the rfk::StaticMethod variable in the generated code (the variable must be a pointer).
 			*	@param inout_result				String to append the generated code.
 			*/
-			void	addInstantiatorToClass(std::string const&			generatedClassVarName,
-										   std::string const&			generatedMethodVarName,
-										   std::string&					inout_result)				const	noexcept;
+			void	addInstantiatorToClass(kodgen::Property const&	property,
+										   std::string const&		generatedClassVarName,
+										   std::string const&		generatedMethodVarName,
+										   std::string&				inout_result)				const	noexcept;
 	};
 }

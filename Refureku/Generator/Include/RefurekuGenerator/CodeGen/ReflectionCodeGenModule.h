@@ -292,7 +292,20 @@ namespace rfk
 		*/
 		void	defineStaticGetArchetypeMethod(kodgen::StructClassInfo const&	structClass,
 											   kodgen::MacroCodeGenEnv&		env,
-											   std::string&					inout_result)						noexcept;
+											   std::string&					inout_result)							noexcept;
+
+		/**
+		*	@brief Generate code for registering the default constructor of a struct or class.
+		* 
+		*	@param structClass				Target struct/class.
+		*	@param env						Code generation environment.
+		*	@param generatedClassVarName	Name of the variable holding the class metadata in the generated code.
+		*	@param inout_result				String to append the generated code.
+		*/
+		void	setClassDefaultInstantiator(kodgen::StructClassInfo const&	structClass,
+											kodgen::MacroCodeGenEnv&		env,
+											std::string const&				generatedClassVarName,
+											std::string&					inout_result)							noexcept;
 
 		/**
 		*	TODO

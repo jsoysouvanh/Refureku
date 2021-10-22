@@ -23,12 +23,13 @@ static bool initialized = false;
 static rfk::Class type("PropertySettings", 2708994343965683583u, sizeof(PropertySettings), 1);
 if (!initialized) {
 initialized = true;
-type.setDefaultInstantiator(&rfk::internal::defaultInstantiator<PropertySettings>);
 type.setPropertiesCapacity(1);
 static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Class");static PropertySettings property_2708994343965683583u_PropertySettings_0{rfk::EEntityKind::Struct | rfk::EEntityKind::Class};type.addProperty(&property_2708994343965683583u_PropertySettings_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 PropertySettings::_rfk_registerChildClass<PropertySettings>(type);
+static rfk::StaticMethod defaultInstantiator("", 0u, rfk::getType<rfk::SharedPtr<PropertySettings>>(),new rfk::NonMemberFunction<rfk::SharedPtr<PropertySettings>()>(&rfk::CodeGenerationHelpers::defaultInstantiator<PropertySettings>),rfk::EMethodFlags::Default, nullptr);
+type.addInstantiator(&defaultInstantiator);
 }
 return type; }
 

@@ -23,12 +23,13 @@ static bool initialized = false;
 static rfk::Class type("Instantiator", 16201336964262475043u, sizeof(Instantiator), 1);
 if (!initialized) {
 initialized = true;
-type.setDefaultInstantiator(&rfk::internal::defaultInstantiator<Instantiator>);
 type.setPropertiesCapacity(1);
 static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Class");static PropertySettings property_16201336964262475043u_PropertySettings_0{rfk::EEntityKind::Method};type.addProperty(&property_16201336964262475043u_PropertySettings_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 Instantiator::_rfk_registerChildClass<Instantiator>(type);
+static rfk::StaticMethod defaultInstantiator("", 0u, rfk::getType<rfk::SharedPtr<Instantiator>>(),new rfk::NonMemberFunction<rfk::SharedPtr<Instantiator>()>(&rfk::CodeGenerationHelpers::defaultInstantiator<Instantiator>),rfk::EMethodFlags::Default, nullptr);
+type.addInstantiator(&defaultInstantiator);
 }
 return type; }
 

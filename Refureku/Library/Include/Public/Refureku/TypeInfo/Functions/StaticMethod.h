@@ -15,14 +15,14 @@ namespace rfk
 	class StaticMethod final : public MethodBase
 	{
 		public:
-			REFUREKU_INTERNAL StaticMethod(char const*		name,
-											  std::size_t	id,
-											  Type const&	returnType,
-											  ICallable*	internalMethod,
-											  EMethodFlags	flags,
-											  Entity const*	outerEntity)	noexcept;
+			REFUREKU_API	  StaticMethod(char const*		name,
+										   std::size_t		id,
+										   Type const&		returnType,
+										   ICallable*		internalMethod,
+										   EMethodFlags		flags,
+										   Entity const*	outerEntity)	noexcept;
 			REFUREKU_INTERNAL StaticMethod(StaticMethod&&)					noexcept;
-			REFUREKU_INTERNAL ~StaticMethod()								noexcept;
+			REFUREKU_API	  ~StaticMethod()								noexcept;
 
 			/**
 			*	@brief	Call the function with the forwarded argument(s) if any, and return the result.

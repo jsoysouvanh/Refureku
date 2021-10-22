@@ -40,9 +40,33 @@ namespace rfk
 			/**
 			*	@brief	Register a child class to a parent class if the parent class implements
 			*			the templated method "_registerChildClass" and the child class is reflected.
+			* 
+			*	@param	childClass The child class to register.
 			*/
 			template <typename ParentClass, typename ChildClass>
 			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;
+
+			/**
+			*	@brief	Instantiate a class if it is default constructible.
+			*			This is the default method used to instantiate classes through Struct::makeInstance.
+			*			This method is not noexcept as the provided type T constructor is not guaranteed to be noexcept.
+			*	
+			*	@return A pointer to a newly allocated instance of the class if the class is default constructible, else nullptr.
+			* 
+			*	@exception Potential exception thrown by T constructor.
+			*/
+			template <typename T>
+			static rfk::SharedPtr<T> defaultInstantiator()
+			{
+				if constexpr (std::is_default_constructible_v<T>)
+				{
+					return rfk::makeShared<T>();
+				}
+				else
+				{
+					return nullptr;
+				}
+			}
 	};
 
 	template <auto>

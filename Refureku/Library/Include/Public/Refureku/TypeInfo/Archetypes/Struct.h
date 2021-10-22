@@ -783,13 +783,6 @@ namespace rfk
 			REFUREKU_API void						setStaticMethodsCapacity(std::size_t capacity)												noexcept;
 
 			/**
-			*	@brief Setup the default instantiator to use when Struct::makeInstance is called without parameters.
-			*
-			*	@param instantiator Pointer to the instantiator method.
-			*/
-			REFUREKU_API void						setDefaultInstantiator(rfk::SharedPtr<void> (*instantiator)())								noexcept;
-
-			/**
 			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
 			*			If the provided static method takes no parameter, it will override the default instantiator.
 			*	
@@ -811,15 +804,6 @@ namespace rfk
 			RFK_GEN_GET_PIMPL(StructImpl, Entity::getPimpl())
 
 		private:
-			using Instantiator = rfk::SharedPtr<void> (*)();
-
-			/**
-			*	@brief Get the internal default instantiator.
-			* 
-			*	@return The default instantiator for this struct.
-			*/
-			RFK_NODISCARD REFUREKU_API Instantiator			getDefaultInstantiator()				const;
-
 			/**
 			*	@brief Get the number of instantiators (excluding the default one).
 			* 
@@ -835,21 +819,6 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API StaticMethod const*	getInstantiatorAt(std::size_t index)	const	noexcept;
 	};
-
-	namespace internal
-	{
-		/**
-		*	@brief	Instantiate a class if it is default constructible.
-		*			This is the default method used to instantiate classes through Struct::makeInstance.
-		*			This method is not noexcept as the provided type T constructor is not guaranteed to be noexcept.
-		*	
-		*	@return A pointer to a newly allocated instance of the class if the class is default constructible, else nullptr.
-		* 
-		*	@exception Potential exception thrown by T constructor.
-		*/
-		template <typename T>
-		rfk::SharedPtr<void> defaultInstantiator();
-	}
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Struct const*>);
 	REFUREKU_TEMPLATE_API(rfk::Vector<Struct const*, rfk::Allocator<Struct const*>>);

@@ -7,7 +7,6 @@
 
 inline Struct::StructImpl::StructImpl(char const* name, std::size_t	id, std::size_t memorySize, bool isClass, EClassKind classKind) noexcept:
 	ArchetypeImpl(name, id, isClass ? EEntityKind::Class : EEntityKind::Struct, memorySize, nullptr),
-	_defaultInstantiator{nullptr},
 	_classKind{classKind}
 {
 }
@@ -82,24 +81,41 @@ inline StaticMethod* Struct::StructImpl::addStaticMethod(char const* name, std::
 	return const_cast<StaticMethod*>(&*_staticMethods.emplace(name, id, returnType, internalMethod, flags, outerEntity));
 }
 
-inline void Struct::StructImpl::setDefaultInstantiator(rfk::SharedPtr<void> (*defaultInstantiator)()) noexcept
-{
-	_defaultInstantiator = defaultInstantiator;
-}
-
 inline void Struct::StructImpl::addInstantiator(StaticMethod const* instantiator) noexcept
 {
 	//Make sure the instantiator is valid
 	assert(instantiator != nullptr);
 
-	//If it is a parameterless custom instantiator, replace the default instantiator
-	if (instantiator->getParametersCount() == 0u)
+	std::size_t parametersCount = instantiator->getParametersCount();
+
+	//If it is a parameterless instantiator, use it as the (unique) default instantiator
+	if (parametersCount == 0u)
 	{
-		setDefaultInstantiator(reinterpret_cast<rfk::NonMemberFunction<rfk::SharedPtr<void>()> const*>(instantiator->getInternalFunction())->getFunctionHandle());
+		if (!_instantiators.empty() && _instantiators[0]->getParametersCount() == 0u)
+		{
+			//There is already a default instantiator, so replace it
+			_instantiators[0] = instantiator;
+		}
+		else
+		{
+			//No default instantiator, add a new one
+			_instantiators.insert(_instantiators.cbegin(), instantiator);
+		}
 	}
 	else
 	{
-		_customInstantiators.push_back(instantiator);
+		//Insert instantiators by ascendent parameters count
+		for (auto it = _instantiators.cbegin(); it != _instantiators.cend(); it++)
+		{
+			if ((*it)->getParametersCount() >= parametersCount)
+			{
+				_instantiators.insert(it, instantiator);
+				return;
+			}
+		}
+
+		//Couldn't insert the instantiator in-between elements, so add it at the end
+		_instantiators.push_back(instantiator);
 	}
 }
 
@@ -179,12 +195,7 @@ inline Struct::StructImpl::StaticMethods const& Struct::StructImpl::getStaticMet
 
 inline Struct::StructImpl::Instantiators const& Struct::StructImpl::getCustomInstantiators() const noexcept
 {
-	return _customInstantiators;
-}
-
-inline Struct::Instantiator Struct::StructImpl::getDefaultInstantiator() const noexcept
-{
-	return _defaultInstantiator;
+	return _instantiators;
 }
 
 inline EClassKind Struct::StructImpl::getClassKind() const noexcept
