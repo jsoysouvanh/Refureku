@@ -24,6 +24,18 @@ TEST(Rfk_Struct_makeSharedInstance, UseUserProvidedParamInstantiator)
 	EXPECT_NE(obj, nullptr);
 }
 
+TEST(Rfk_Struct_makeSharedInstance, UseMissingInstantiator)
+{
+	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeSharedInstance<BaseObject>(3.14f);
+
+	EXPECT_FALSE(obj);
+}
+
+TEST(Rfk_Struct_makeSharedInstance, UseThrowingInstantiator)
+{
+	EXPECT_THROW(std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeSharedInstance<BaseObject>(1, 2), std::logic_error);
+}
+
 TEST(Rfk_Struct_makeSharedInstance, UseUserProvidedParamlessInstantiator)
 {
 	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived1")->makeSharedInstance<BaseObject>();

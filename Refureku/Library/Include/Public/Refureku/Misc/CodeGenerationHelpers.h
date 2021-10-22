@@ -55,8 +55,14 @@ namespace rfk::internal
 			* 
 			*	@exception Potential exception thrown by T constructor.
 			*/
+#if defined(__GNUC__) && !defined (__clang__) && __GNUC__ <= 9
+			//Handle pre GCC 9 internal compiler error when using type traits in noexcept
+			template <typename T>
+			RFK_NODISCARD static rfk::SharedPtr<T>	defaultSharedInstantiator();
+#else
 			template <typename T>
 			RFK_NODISCARD static rfk::SharedPtr<T>	defaultSharedInstantiator() noexcept(!std::is_default_constructible_v<T> || std::is_nothrow_constructible_v<T>);
+#endif
 	};
 
 	template <auto>

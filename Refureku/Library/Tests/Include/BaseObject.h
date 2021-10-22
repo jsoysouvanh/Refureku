@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <stdexcept>	//std::logic_error
+
 #include <Refureku/Object.h>
 #include <Refureku/Properties/Instantiator.h>
 
@@ -28,6 +30,12 @@ class CLASS() BaseObject : public rfk::Object
 												   //Use some custom deleter...
 												   delete ptr;
 											   });
+		}
+
+		METHOD(Instantiator)
+		RFK_NORETURN static rfk::SharedPtr<BaseObject> customInstantiator2Params(int, int)
+		{
+			throw std::logic_error("Error");
 		}
 
 	public:
