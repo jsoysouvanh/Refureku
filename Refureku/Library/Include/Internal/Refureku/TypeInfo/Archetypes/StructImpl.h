@@ -242,7 +242,7 @@ namespace rfk
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			inline void									addInstantiator(StaticMethod const* instantiator)				noexcept;
+			inline void									addInstantiator(StaticMethod const& instantiator)				noexcept;
 
 			/**
 			*	@brief Get a nested archetype by name / access specifier.
@@ -305,11 +305,11 @@ namespace rfk
 			RFK_NODISCARD inline StaticMethods const&		getStaticMethods()									const	noexcept;
 
 			/**
-			*	@brief Getter for the field _customInstantiators.
+			*	@brief Getter for the field _instantiators.
 			* 
-			*	@return _customInstantiators.
+			*	@return _instantiators.
 			*/
-			RFK_NODISCARD inline Instantiators const&		getCustomInstantiators()							const	noexcept;
+			RFK_NODISCARD inline Instantiators const&		getInstantiators()									const	noexcept;
 
 			/**
 			*	@brief Getter for the field _classKind.

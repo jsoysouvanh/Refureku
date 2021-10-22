@@ -20,7 +20,7 @@ constexpr void CodeGenerationHelpers::registerChildClass(rfk::Struct& childClass
 }
 
 template <typename T>
-rfk::SharedPtr<T> CodeGenerationHelpers::defaultSharedInstantiator()
+rfk::SharedPtr<T> CodeGenerationHelpers::defaultSharedInstantiator() noexcept(!std::is_default_constructible_v<T> || std::is_nothrow_constructible_v<T>)
 {
 	if constexpr (std::is_default_constructible_v<T>)
 	{

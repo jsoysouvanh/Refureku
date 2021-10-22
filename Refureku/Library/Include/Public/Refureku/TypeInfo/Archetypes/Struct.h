@@ -785,7 +785,7 @@ namespace rfk
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			REFUREKU_API void						addSharedInstantiator(StaticMethod const* instantiator)										noexcept;
+			REFUREKU_API void						addSharedInstantiator(StaticMethod const& instantiator)										noexcept;
 
 		protected:
 			//Forward declaration
@@ -802,19 +802,20 @@ namespace rfk
 
 		private:
 			/**
-			*	@brief Get the number of instantiators (excluding the default one).
+			*	@brief Execute the given visitor on all instantiators taking a given number of parameters in this struct.
 			* 
-			*	@return The number of instantiators.
-			*/
-			RFK_NODISCARD REFUREKU_API std::size_t			getInstantiatorsCount()					const	noexcept;
-
-			/**
-			*	@brief	Get the instantiator at the specified index.
-			*			If index is greater or equal to getInstantiatorsCount(), the behaviour is undefined.
+			*	@param argCount	Number of arguments the instantiator takes.
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
 			* 
-			*	@return The index'th registered instantiator.
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			RFK_NODISCARD REFUREKU_API StaticMethod const*	getInstantiatorAt(std::size_t index)	const	noexcept;
+			REFUREKU_API bool	foreachInstantiator(std::size_t				argCount,
+													Visitor<StaticMethod>	visitor,
+													void*					userData)	const;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Struct const*>);

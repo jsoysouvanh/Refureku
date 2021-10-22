@@ -8,24 +8,30 @@
 template <typename ReturnType, typename... ArgTypes>
 rfk::SharedPtr<ReturnType> Struct::makeSharedInstance(ArgTypes&&... args) const
 {
-	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>);
+	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>, "The return type of makeSharedInstance should not be a pointer or a reference.");
+	
+	StaticMethod const* result;
 
-	StaticMethod const* instantiator;
-
-	//TODO: Order instantiators by arg counts, and abort the loop early if the number of args is greater than sizeof...(ArgTypes)
-	//TODO: Should add a foreachInstantiator to avoid multiple getInstantiatorAt calls
-	for (std::size_t i = 0u; i < getInstantiatorsCount(); i++)
-	{
-		instantiator = getInstantiatorAt(i);
-
-		if (instantiator->hasSameParameters<ArgTypes...>())
+	if (!foreachInstantiator(sizeof...(args), [](StaticMethod const& instantiator, void* data)
 		{
-			//Custom instantiators are guaranteed to return void*
-			return instantiator->invoke<rfk::SharedPtr<ReturnType>>(std::forward<ArgTypes>(args)...);
-		}
-	}
+			//Find an instantiator with the same parameters
+			if (instantiator.hasSameParameters<ArgTypes...>())
+			{
+				*reinterpret_cast<StaticMethod const**>(data) = &instantiator;
+				return false;
+			}
 
-	return nullptr;
+			return true;
+		}, &result))
+	{
+		assert(result != nullptr);
+
+		return result->invoke<rfk::SharedPtr<ReturnType>>(std::forward<ArgTypes>(args)...);
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 template <typename MethodSignature>

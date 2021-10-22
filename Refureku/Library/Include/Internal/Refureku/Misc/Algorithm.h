@@ -35,12 +35,12 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			template <typename ItemType, typename ContainerType>
-			RFK_NODISCARD static bool								foreach(ContainerType const&	container,
+			static bool												foreach(ContainerType const&	container,
 																			Visitor<ItemType>		visitor,
 																			void*					userData);
 
 			template <typename ContainerType, typename Visitor>
-			RFK_NODISCARD static bool								foreach(ContainerType const&	container,
+			static bool												foreach(ContainerType const&	container,
 																			Visitor					visitor);
 
 			/**

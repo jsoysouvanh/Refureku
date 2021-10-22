@@ -35,5 +35,5 @@ bool InstantiatorPropertyCodeGen::generateClassFooterCodeForEntity(kodgen::Entit
 void InstantiatorPropertyCodeGen::addInstantiatorToClass(kodgen::Property const&, std::string const& generatedClassVariableName,
 														 std::string const& generatedMethodVarName, std::string& inout_result) const noexcept
 {
-	inout_result += generatedClassVariableName + "addSharedInstantiator(" + generatedMethodVarName + "); ";
+	inout_result += generatedClassVariableName + "addSharedInstantiator(*" + generatedMethodVarName + "); ";
 }

@@ -81,12 +81,9 @@ inline StaticMethod* Struct::StructImpl::addStaticMethod(char const* name, std::
 	return const_cast<StaticMethod*>(&*_staticMethods.emplace(name, id, returnType, internalMethod, flags, outerEntity));
 }
 
-inline void Struct::StructImpl::addInstantiator(StaticMethod const* instantiator) noexcept
+inline void Struct::StructImpl::addInstantiator(StaticMethod const& instantiator) noexcept
 {
-	//Make sure the instantiator is valid
-	assert(instantiator != nullptr);
-
-	std::size_t parametersCount = instantiator->getParametersCount();
+	std::size_t parametersCount = instantiator.getParametersCount();
 
 	//If it is a parameterless instantiator, use it as the (unique) default instantiator
 	if (parametersCount == 0u)
@@ -94,12 +91,12 @@ inline void Struct::StructImpl::addInstantiator(StaticMethod const* instantiator
 		if (!_instantiators.empty() && _instantiators[0]->getParametersCount() == 0u)
 		{
 			//There is already a default instantiator, so replace it
-			_instantiators[0] = instantiator;
+			_instantiators[0] = &instantiator;
 		}
 		else
 		{
 			//No default instantiator, add a new one
-			_instantiators.insert(_instantiators.cbegin(), instantiator);
+			_instantiators.insert(_instantiators.cbegin(), &instantiator);
 		}
 	}
 	else
@@ -109,13 +106,13 @@ inline void Struct::StructImpl::addInstantiator(StaticMethod const* instantiator
 		{
 			if ((*it)->getParametersCount() >= parametersCount)
 			{
-				_instantiators.insert(it, instantiator);
+				_instantiators.insert(it, &instantiator);
 				return;
 			}
 		}
 
 		//Couldn't insert the instantiator in-between elements, so add it at the end
-		_instantiators.push_back(instantiator);
+		_instantiators.push_back(&instantiator);
 	}
 }
 
@@ -193,7 +190,7 @@ inline Struct::StructImpl::StaticMethods const& Struct::StructImpl::getStaticMet
 	return _staticMethods;
 }
 
-inline Struct::StructImpl::Instantiators const& Struct::StructImpl::getCustomInstantiators() const noexcept
+inline Struct::StructImpl::Instantiators const& Struct::StructImpl::getInstantiators() const noexcept
 {
 	return _instantiators;
 }

@@ -341,7 +341,7 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "friend rfk::CodeGenerationHelpers;" + env.getSeparator();
+	inout_result += "friend rfk::internal::CodeGenerationHelpers;" + env.getSeparator();
 	inout_result += "friend implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator() + env.getSeparator();
 }
 
@@ -542,10 +542,10 @@ void ReflectionCodeGenModule::setClassDefaultInstantiator(kodgen::StructClassInf
 														  std::string const& generatedClassVarName, std::string& inout_result) noexcept
 {
 	inout_result += "static rfk::StaticMethod defaultSharedInstantiator(\"\", 0u, rfk::getType<rfk::SharedPtr<" + structClass.name +">>(),"
-		"new rfk::NonMemberFunction<rfk::SharedPtr<" + structClass.name + ">()>(&rfk::CodeGenerationHelpers::defaultSharedInstantiator<" + structClass.name + ">),"
+		"new rfk::NonMemberFunction<rfk::SharedPtr<" + structClass.name + ">()>(&rfk::internal::CodeGenerationHelpers::defaultSharedInstantiator<" + structClass.name + ">),"
 		"rfk::EMethodFlags::Default, nullptr);" + env.getSeparator();
 	
-	inout_result += generatedClassVarName + "addSharedInstantiator(&defaultSharedInstantiator);" + env.getSeparator();
+	inout_result += generatedClassVarName + "addSharedInstantiator(defaultSharedInstantiator);" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env,
@@ -728,7 +728,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 	//Propagate the child class registration to parent classes too
 	for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
 	{
-		inout_result += "rfk::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass);" + env.getSeparator();
+		inout_result += "rfk::internal::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass);" + env.getSeparator();
 	}
 
 	inout_result += "rfk::Struct const& thisClass = staticGetArchetype();" + env.getSeparator();
@@ -894,7 +894,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: static inline rfk::ClassTemplateInstantiationRegisterer _rfk_registerer = staticGetArchetype(); rfk::ForceGenerateSymbol<&_rfk_registerer> _rfk_forceRegister() = delete;" + env.getSeparator() + env.getSeparator();
+		inout_result += "private: static inline rfk::ClassTemplateInstantiationRegisterer _rfk_registerer = staticGetArchetype(); rfk::internal::ForceGenerateSymbol<&_rfk_registerer> _rfk_forceRegister() = delete;" + env.getSeparator() + env.getSeparator();
 	}
 }
 

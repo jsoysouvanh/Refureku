@@ -711,17 +711,39 @@ void Struct::setStaticMethodsCapacity(std::size_t capacity) noexcept
 	return getPimpl()->setStaticMethodsCapacity(capacity);
 }
 
-void Struct::addSharedInstantiator(StaticMethod const* instantiator) noexcept
+
+bool Struct::foreachInstantiator(std::size_t argCount, Visitor<StaticMethod> visitor, void* userData) const
+{
+	bool result = true;
+
+	Algorithm::foreach(getPimpl()->getInstantiators(), [&result, argCount, visitor, userData](StaticMethod const& instantiator)
+					   {
+							std::size_t instantiatorParamCounts = instantiator.getParametersCount();
+
+							//Instantiators are ordered by ascending param counts, so skip all
+							//instantiators having less than the required arg count
+							if (instantiatorParamCounts < argCount)
+							{
+								return true;
+							}
+							else if (instantiatorParamCounts == argCount)
+							{
+								//Run the visitor on each instantiator having the same arg count
+								result = visitor(instantiator, userData);
+								return result;
+							}
+							else //instantiatorParamCounts > argCount
+							{
+								//Abort the foreach loop once we reach elements that have a greater
+								//arg count
+								return false;
+							}
+					   });
+
+	return result;
+}
+
+void Struct::addSharedInstantiator(StaticMethod const& instantiator) noexcept
 {
 	getPimpl()->addInstantiator(instantiator);
-}
-
-std::size_t Struct::getInstantiatorsCount() const noexcept
-{
-	return getPimpl()->getCustomInstantiators().size();
-}
-
-StaticMethod const* Struct::getInstantiatorAt(std::size_t index) const noexcept
-{
-	return getPimpl()->getCustomInstantiators()[index];
 }
