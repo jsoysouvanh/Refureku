@@ -8,12 +8,13 @@
 #pragma once
 
 #include <array>
-#include <cstddef>
-#include <type_traits>
+#include <cstddef>	//std::size_t
 
+#include "Refureku/Config.h"
 #include "Refureku/Misc/TypeTraitsMacros.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/Misc/SharedPtr.h"
 
 RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass)
 
@@ -44,11 +45,11 @@ namespace rfk
 			*	@param	childClass The child class to register.
 			*/
 			template <typename ParentClass, typename ChildClass>
-			static constexpr void	registerChildClass(rfk::Struct& childClass)	noexcept;
+			static constexpr void					registerChildClass(rfk::Struct& childClass)	noexcept;
 
 			/**
 			*	@brief	Instantiate a class if it is default constructible.
-			*			This is the default method used to instantiate classes through Struct::makeInstance.
+			*			This is the default method used to instantiate classes through Struct::makeSharedInstance.
 			*			This method is not noexcept as the provided type T constructor is not guaranteed to be noexcept.
 			*	
 			*	@return A pointer to a newly allocated instance of the class if the class is default constructible, else nullptr.
@@ -56,17 +57,7 @@ namespace rfk
 			*	@exception Potential exception thrown by T constructor.
 			*/
 			template <typename T>
-			static rfk::SharedPtr<T> defaultInstantiator()
-			{
-				if constexpr (std::is_default_constructible_v<T>)
-				{
-					return rfk::makeShared<T>();
-				}
-				else
-				{
-					return nullptr;
-				}
-			}
+			RFK_NODISCARD static rfk::SharedPtr<T>	defaultSharedInstantiator();
 	};
 
 	template <auto>

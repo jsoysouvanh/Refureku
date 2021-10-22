@@ -18,3 +18,16 @@ constexpr void CodeGenerationHelpers::registerChildClass(rfk::Struct& childClass
 		ParentClass::template _rfk_registerChildClass<ChildClass>(childClass);
 	}
 }
+
+template <typename T>
+rfk::SharedPtr<T> CodeGenerationHelpers::defaultSharedInstantiator()
+{
+	if constexpr (std::is_default_constructible_v<T>)
+	{
+		return rfk::makeShared<T>();
+	}
+	else
+	{
+		return nullptr;
+	}
+}

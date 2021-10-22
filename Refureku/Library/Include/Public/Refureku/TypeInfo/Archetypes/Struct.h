@@ -42,20 +42,16 @@ namespace rfk
 			REFUREKU_API ~Struct()						noexcept;
 
 			/**
-			*	@brief	Make an instance of the class represented by this archetype.
-			*			If no argument is specified, the default constructor of the struct will be used.
-			*			In case the class isn't default constructible, the matching user-specified custom instantiator will be used.
-			*			If one or more arguments are provided, the matching user-specified custom instantiator will be used.
-			*			**WARNING**: Memory is not auto-managed and must be freed manually by the user.
+			*	@brief	Make an instance of the class represented by this archetype with the matching instantiator.
+			*			One can add new instantiators to any class by using the Instantiator method property.
 			*
-			*	@return An instance of this struct if a suitable constructor (no params only) / custom instantator was found,
-			*			else nullptr.
+			*	@return An instance of this struct if a suitable instantiator was found, else nullptr.
 			* 
 			*	@exception Any exception potentially thrown by the used instantiator.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
 			RFK_NODISCARD 
-				rfk::SharedPtr<ReturnType>			makeInstance(ArgTypes&&... args)													const;
+				rfk::SharedPtr<ReturnType>			makeSharedInstance(ArgTypes&&... args)												const;
 
 			/**
 			*	@brief	Compute the list of all direct reflected subclasses of this struct.
@@ -64,7 +60,7 @@ namespace rfk
 			* 
 			*	@return A list of all direct reflected subclasses of this struct.
 			*/
-			RFK_NODISCARD REFUREKU_API 
+			RFK_NODISCARD REFUREKU_API
 				Vector<Struct const*>				getDirectSubclasses()																const	noexcept;
 
 			/**
@@ -783,12 +779,13 @@ namespace rfk
 			REFUREKU_API void						setStaticMethodsCapacity(std::size_t capacity)												noexcept;
 
 			/**
-			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
-			*			If the provided static method takes no parameter, it will override the default instantiator.
+			*	@brief	Add a new way to instantiate this struct through the makeSharedInstance method.
+			*			The passed static method MUST return a rfk::SharedPtr<StructType>. Otherwise, the behaviour is undefined
+			*			when calling Struct::makeSharedInstance.
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			REFUREKU_API void						addInstantiator(StaticMethod const* instantiator)											noexcept;
+			REFUREKU_API void						addSharedInstantiator(StaticMethod const* instantiator)										noexcept;
 
 		protected:
 			//Forward declaration

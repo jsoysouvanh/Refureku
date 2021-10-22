@@ -28,8 +28,8 @@ static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != 
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 Instantiator::_rfk_registerChildClass<Instantiator>(type);
-static rfk::StaticMethod defaultInstantiator("", 0u, rfk::getType<rfk::SharedPtr<Instantiator>>(),new rfk::NonMemberFunction<rfk::SharedPtr<Instantiator>()>(&rfk::CodeGenerationHelpers::defaultInstantiator<Instantiator>),rfk::EMethodFlags::Default, nullptr);
-type.addInstantiator(&defaultInstantiator);
+static rfk::StaticMethod defaultSharedInstantiator("", 0u, rfk::getType<rfk::SharedPtr<Instantiator>>(),new rfk::NonMemberFunction<rfk::SharedPtr<Instantiator>()>(&rfk::CodeGenerationHelpers::defaultSharedInstantiator<Instantiator>),rfk::EMethodFlags::Default, nullptr);
+type.addSharedInstantiator(&defaultSharedInstantiator);
 }
 return type; }
 

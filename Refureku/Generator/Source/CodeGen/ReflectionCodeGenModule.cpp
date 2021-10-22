@@ -541,13 +541,11 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 void ReflectionCodeGenModule::setClassDefaultInstantiator(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env,
 														  std::string const& generatedClassVarName, std::string& inout_result) noexcept
 {
-	inout_result += "static rfk::StaticMethod defaultInstantiator(\"\", 0u, rfk::getType<rfk::SharedPtr<" + structClass.name +">>(),"
-		"new rfk::NonMemberFunction<rfk::SharedPtr<" + structClass.name + ">()>(&rfk::CodeGenerationHelpers::defaultInstantiator<" + structClass.name + ">),"
+	inout_result += "static rfk::StaticMethod defaultSharedInstantiator(\"\", 0u, rfk::getType<rfk::SharedPtr<" + structClass.name +">>(),"
+		"new rfk::NonMemberFunction<rfk::SharedPtr<" + structClass.name + ">()>(&rfk::CodeGenerationHelpers::defaultSharedInstantiator<" + structClass.name + ">),"
 		"rfk::EMethodFlags::Default, nullptr);" + env.getSeparator();
 	
-	inout_result += generatedClassVarName + "addInstantiator(&defaultInstantiator);" + env.getSeparator();
-
-	//inout_result += "type.setDefaultInstantiator(&rfk::internal::defaultInstantiator<" + structClass.name + ">);" + env.getSeparator();
+	inout_result += generatedClassVarName + "addSharedInstantiator(&defaultSharedInstantiator);" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env,
@@ -763,8 +761,6 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 		{
 			if (field.isStatic)
 			{
-				
-
 				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
 					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : computeClassNestedEntityId("ChildClass", field)) + ", " +
 					"rfk::getType<" + field.type.getName() + ">(), "

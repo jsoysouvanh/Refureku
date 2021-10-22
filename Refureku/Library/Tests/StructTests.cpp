@@ -9,32 +9,32 @@
 #include "TypeTemplateClassTemplate.h"
 
 //=========================================================
-//================ Struct::makeInstance ===================
+//============= Struct::makeSharedInstance ================
 //=========================================================
 
-TEST(Rfk_Struct_makeInstance, NoDefaultConstructible)
+TEST(Rfk_Struct_makeSharedInstance, NoDefaultConstructible)
 {
-	EXPECT_EQ(rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeInstance<BaseObject>(), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeSharedInstance<BaseObject>(), nullptr);
 }
 
-TEST(Rfk_Struct_makeInstance, UseUserProvidedParamInstantiator)
+TEST(Rfk_Struct_makeSharedInstance, UseUserProvidedParamInstantiator)
 {
-	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeInstance<BaseObject>(2);
+	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("BaseObject")->makeSharedInstance<BaseObject>(2);
 
 	EXPECT_NE(obj, nullptr);
 }
 
-TEST(Rfk_Struct_makeInstance, UseUserProvidedParamlessInstantiator)
+TEST(Rfk_Struct_makeSharedInstance, UseUserProvidedParamlessInstantiator)
 {
-	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived1")->makeInstance<BaseObject>();
+	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived1")->makeSharedInstance<BaseObject>();
 
 	EXPECT_NE(obj, nullptr);
 	EXPECT_EQ(obj->getI(), 1);
 }
 
-TEST(Rfk_Struct_makeInstance, UseDefaultInstantiator)
+TEST(Rfk_Struct_makeSharedInstance, UseDefaultInstantiator)
 {
-	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived2")->makeInstance<BaseObject>();
+	std::shared_ptr<BaseObject> obj = rfk::getDatabase().getFileLevelClassByName("ObjectDerived2")->makeSharedInstance<BaseObject>();
 
 	EXPECT_EQ(obj->getI(), 2);
 }

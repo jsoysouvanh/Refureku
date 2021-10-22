@@ -711,7 +711,7 @@ void Struct::setStaticMethodsCapacity(std::size_t capacity) noexcept
 	return getPimpl()->setStaticMethodsCapacity(capacity);
 }
 
-void Struct::addInstantiator(StaticMethod const* instantiator) noexcept
+void Struct::addSharedInstantiator(StaticMethod const* instantiator) noexcept
 {
 	getPimpl()->addInstantiator(instantiator);
 }

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <Refureku/Object.h>
-#include <Refureku/NativeProperties.h>
+#include <Refureku/Properties/Instantiator.h>
 
 #include "TestClass.h"
 

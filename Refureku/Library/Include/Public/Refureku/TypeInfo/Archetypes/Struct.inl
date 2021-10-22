@@ -6,7 +6,7 @@
 */
 
 template <typename ReturnType, typename... ArgTypes>
-rfk::SharedPtr<ReturnType> Struct::makeInstance(ArgTypes&&... args) const
+rfk::SharedPtr<ReturnType> Struct::makeSharedInstance(ArgTypes&&... args) const
 {
 	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>);
 
