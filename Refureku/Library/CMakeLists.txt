@@ -65,27 +65,26 @@ target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)
 
 # Setup compilation flags
 if (MSVC)
-	string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
-	string(REGEX REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
 
-	# Use rtti on Property file if specified
-	if (RFK_GEN_PROPERTY_RTTI)
-		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS /GR)
+	string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
+
+	if (RFK_DISABLE_RTTI)
+		string(REGEX REPLACE "/GR" "/GR-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")		# Replace the default flag /GR by /GR- to disable RTTI
 	endif()
 
 else()	# Clang or GCC
-	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fno-rtti -fvisibility-ms-compat -fvisibility-inlines-hidden)
+
+	target_compile_options(${RefurekuLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fvisibility-ms-compat -fvisibility-inlines-hidden)
+
+	if (RFK_DISABLE_RTTI)
+		target_compile_options(${RefurekuLibraryTarget} PRIVATE -fno-rtti)
+	endif()
 
 	if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND RFK_GEN_CODECOV_REPORT)
 		target_compile_options(${RefurekuLibraryTarget} PUBLIC --coverage)
 		target_link_options(${RefurekuLibraryTarget} PUBLIC --coverage)
 	endif()
-
-	# Use rtti on Property file if specified
-	if (RFK_GEN_PROPERTY_RTTI)
-		set_source_files_properties(Source/TypeInfo/Properties/Property.cpp PROPERTIES COMPILE_FLAGS -frtti)
-	endif()
-
+	
 endif()
 
 # Setup language requirements
