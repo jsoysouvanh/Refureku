@@ -12,8 +12,7 @@ toProcessFiles = []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories = [
-#	'''Path/To/Output/Dir''',
-#	'''Path/To/Directory/To/Ignore'''
+#	'''Path/To/Output/Dir'''
 ]
 
 # Files not to parse which are not included in any directory of ignoredDirectories

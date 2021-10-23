@@ -40,7 +40,6 @@ target_link_libraries(${RefurekuTestsTarget} PUBLIC ${RefurekuLibraryTarget} gte
 if (MSVC)
 	target_compile_options(${RefurekuTestsTarget} PRIVATE /bigobj)
 else()
-	target_compile_options(${RefurekuTestsTarget} PRIVATE -fno-rtti)
 endif()
 
 # Create the command to run RefurekuGenerator
