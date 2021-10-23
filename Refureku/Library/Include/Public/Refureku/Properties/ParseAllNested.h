@@ -13,13 +13,16 @@
 
 #include "Refureku/Generated/ParseAllNested.rfkh.h"
 
-/**
-*	@brief	Property used to automatically tag all directly nested entities as reflected.
-*			This property can only be attached to namespaces, structs and classes.
-*/
-class REFUREKU_API RFKClass(PropertySettings(rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct)) ParseAllNested : public rfk::Property
+namespace kodgen RFKNamespace()
 {
-	ParseAllNested_GENERATED
-};
+	/**
+	*	@brief	Property used to automatically reflect all directly nested entities.
+	*			This property can only be attached to namespaces, structs and classes.
+	*/
+	class REFUREKU_API RFKClass(rfk::PropertySettings(rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct)) ParseAllNested : public rfk::Property
+	{
+		kodgen_ParseAllNested_GENERATED
+	};
+}
 
 File_ParseAllNested_GENERATED

@@ -11,7 +11,7 @@
 
 #include "Generated/TestDatabase.rfkh.h"
 
-class CLASS(PropertySettings(allEntityKinds)) TestDabataseProperty : public rfk::Property
+class CLASS(rfk::PropertySettings(allEntityKinds)) TestDabataseProperty : public rfk::Property
 {
 	TestDabataseProperty_GENERATED
 };

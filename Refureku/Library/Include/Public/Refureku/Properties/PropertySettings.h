@@ -12,12 +12,14 @@
 
 #include "Refureku/Generated/PropertySettings.rfkh.h"
 
-/**
-*	@brief Property used to define basic settings of a property. Can't be used on structs or classes not inheriting from rfk::Property.
-*/
-class REFUREKU_API RFKClass(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : public rfk::Property
+namespace rfk RFKNamespace()
 {
-	public:
+	/**
+	*	@brief Property used to define basic settings of a property. Can't be used on structs or classes not inheriting from rfk::Property.
+	*/
+	class REFUREKU_API RFKClass(rfk::PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : public rfk::Property
+	{
+		public:
 		/**
 		*	@param targetEntityKind_	Kind of entities the property can be attached to. Use the | operator to specify multiple entity kinds.
 		*	@param allowMultiple_		Is this property allowed to be attached multiple times to the same entity?
@@ -27,7 +29,8 @@ class REFUREKU_API RFKClass(PropertySettings(rfk::EEntityKind::Struct | rfk::EEn
 						 bool				allowMultiple_ = false,
 						 bool				shouldInherit_ = true)	noexcept;
 
-	PropertySettings_GENERATED
-};
+		rfk_PropertySettings_GENERATED
+	};
+}
 
 File_PropertySettings_GENERATED

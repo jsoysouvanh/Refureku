@@ -164,5 +164,5 @@ TEST(Rfk_ClassTemplate_inheritProperties, PropagePropertiesToClassInstantiations
 
 	EXPECT_NE(inst, nullptr);
 
-	EXPECT_NE(inst->getProperty<ParseAllNested>(), nullptr);
+	EXPECT_NE(inst->getProperty<kodgen::ParseAllNested>(), nullptr);
 }

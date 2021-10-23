@@ -22,7 +22,7 @@
 namespace rfk { class Variable; class Function; }
 
 
-#define Instantiator_GENERATED	\
+#define rfk_Instantiator_GENERATED	\
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Method;\
  virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 RFK_UNPACK_IF_NOT_PARSING(friend rfk::internal::CodeGenerationHelpers;\
@@ -43,6 +43,6 @@ public:  virtual rfk::Class const& getArchetype() const noexcept override;\
 
 
 #define File_Instantiator_GENERATED	\
-template <>  rfk::Archetype const* rfk::getArchetype<Instantiator>() noexcept;\
+template <>  rfk::Archetype const* rfk::getArchetype<rfk::Instantiator>() noexcept;\
 
 

@@ -14,7 +14,7 @@
 //Every entity kind except Undefined
 static constexpr rfk::EEntityKind const allEntityKinds = static_cast<rfk::EEntityKind>(~0 & ~static_cast<int>(rfk::EEntityKind::Undefined));
 
-class CLASS(PropertySettings(allEntityKinds)) BaseTestProperty : public rfk::Property
+class CLASS(rfk::PropertySettings(allEntityKinds)) BaseTestProperty : public rfk::Property
 {
 	public:
 		int value;
@@ -27,7 +27,7 @@ class CLASS(PropertySettings(allEntityKinds)) BaseTestProperty : public rfk::Pro
 	BaseTestProperty_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedProperty : public BaseTestProperty
+class CLASS(rfk::PropertySettings(allEntityKinds, false, true)) UniqueInheritedProperty : public BaseTestProperty
 {
 	public:
 		inline UniqueInheritedProperty(int value_):
@@ -38,7 +38,7 @@ class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedProper
 	UniqueInheritedProperty_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedPropertyChild : public UniqueInheritedProperty
+class CLASS(rfk::PropertySettings(allEntityKinds, false, true)) UniqueInheritedPropertyChild : public UniqueInheritedProperty
 {
 	public:
 		inline UniqueInheritedPropertyChild(int value_):
@@ -49,7 +49,7 @@ class CLASS(PropertySettings(allEntityKinds, false, true)) UniqueInheritedProper
 	UniqueInheritedPropertyChild_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedProperty : public BaseTestProperty
+class CLASS(rfk::PropertySettings(allEntityKinds, true, true)) MultipleInheritedProperty : public BaseTestProperty
 {
 	public:
 		inline MultipleInheritedProperty(int value_):
@@ -60,7 +60,7 @@ class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedPrope
 	MultipleInheritedProperty_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedPropertyChild : public MultipleInheritedProperty
+class CLASS(rfk::PropertySettings(allEntityKinds, true, true)) MultipleInheritedPropertyChild : public MultipleInheritedProperty
 {
 	public:
 		inline MultipleInheritedPropertyChild(int value_):
@@ -71,7 +71,7 @@ class CLASS(PropertySettings(allEntityKinds, true, true)) MultipleInheritedPrope
 	MultipleInheritedPropertyChild_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, false, false)) UniqueNonInheritedProperty : public BaseTestProperty
+class CLASS(rfk::PropertySettings(allEntityKinds, false, false)) UniqueNonInheritedProperty : public BaseTestProperty
 {
 	public:
 		inline UniqueNonInheritedProperty(int value_):
@@ -82,7 +82,7 @@ class CLASS(PropertySettings(allEntityKinds, false, false)) UniqueNonInheritedPr
 	UniqueNonInheritedProperty_GENERATED
 };
 
-class CLASS(PropertySettings(allEntityKinds, true, false)) MultipleNonInheritedProperty : public BaseTestProperty
+class CLASS(rfk::PropertySettings(allEntityKinds, true, false)) MultipleNonInheritedProperty : public BaseTestProperty
 {
 	public:
 		inline MultipleNonInheritedProperty(int value_):

@@ -5,7 +5,7 @@
 using namespace rfk;
 
 InstantiatorPropertyCodeGen::InstantiatorPropertyCodeGen() noexcept:
-	kodgen::MacroPropertyCodeGen("Instantiator", kodgen::EEntityType::Method)
+	kodgen::MacroPropertyCodeGen("rfk::Instantiator", kodgen::EEntityType::Method)
 {
 }
 

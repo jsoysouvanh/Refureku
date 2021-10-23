@@ -13,12 +13,10 @@
 #include "Generated/TypeTemplateClassTemplate.rfkh.h"
 
 template <typename T>
-class CLASS(ParseAllNested) SingleTypeTemplateClassTemplate : public rfk::Object
+class CLASS(kodgen::ParseAllNested) SingleTypeTemplateClassTemplate : public rfk::Object
 {
-	FIELD()
-	T testField;
+	T testField = T();
 
-	METHOD()
 	T testMethod(T const& param) { return param; }
 
 	SingleTypeTemplateClassTemplate_T_GENERATED
@@ -28,11 +26,11 @@ template <typename T, typename U, typename V>
 class CLASS() MultipleTypeTemplateClassTemplate : public rfk::Object
 {
 	private:
-	FIELD()
+		FIELD()
 		T fieldT = T();
 
 	protected:
-	FIELD()
+		FIELD()
 		U fieldU = U();
 
 	public:

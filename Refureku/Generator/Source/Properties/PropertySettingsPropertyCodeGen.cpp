@@ -5,7 +5,7 @@
 using namespace rfk;
 
 PropertySettingsPropertyCodeGen::PropertySettingsPropertyCodeGen() noexcept:
-	kodgen::MacroPropertyCodeGen("PropertySettings", kodgen::EEntityType::Class | kodgen::EEntityType::Struct)
+	kodgen::MacroPropertyCodeGen("rfk::PropertySettings", kodgen::EEntityType::Class | kodgen::EEntityType::Struct)
 {
 }
 

@@ -277,7 +277,7 @@ TEST(Rfk_Entity_getPropertyNonTemplate, WithChildClasses)
 	EXPECT_NE(TestClass::staticGetArchetype().getProperty(MultipleInheritedProperty::staticGetArchetype(), true), nullptr);	//Catch child
 	EXPECT_STREQ(TestClass::staticGetArchetype().getProperty(MultipleInheritedProperty::staticGetArchetype(), true)->getArchetype().getName(), "MultipleInheritedPropertyChild");	//Catch child
 	EXPECT_EQ(reinterpret_cast<MultipleInheritedProperty const*>(TestClass::staticGetArchetype().getProperty(MultipleInheritedProperty::staticGetArchetype(), true))->value, 2);	//Catch child
-	EXPECT_EQ(TestClass::staticGetArchetype().getProperty(ParseAllNested::staticGetArchetype(), true), nullptr);				//Not found
+	EXPECT_EQ(TestClass::staticGetArchetype().getProperty(kodgen::ParseAllNested::staticGetArchetype(), true), nullptr);				//Not found
 }
 
 TEST(Rfk_Entity_getPropertyNonTemplate, WithoutChildClasses)
@@ -287,7 +287,7 @@ TEST(Rfk_Entity_getPropertyNonTemplate, WithoutChildClasses)
 	EXPECT_NE(TestClass::staticGetArchetype().getProperty(MultipleInheritedProperty::staticGetArchetype(), false), nullptr);	//Ignore child class
 	EXPECT_STREQ(TestClass::staticGetArchetype().getProperty(MultipleInheritedProperty::staticGetArchetype(), false)->getArchetype().getName(), "MultipleInheritedProperty");	//Ignore child class
 	EXPECT_EQ(reinterpret_cast<MultipleInheritedProperty const*>(TestClass::staticGetArchetype().getProperty(MultipleInheritedProperty::staticGetArchetype(), false))->value, 4);	//Ignore child class
-	EXPECT_EQ(TestClass::staticGetArchetype().getProperty(ParseAllNested::staticGetArchetype(), false), nullptr);				//Not found
+	EXPECT_EQ(TestClass::staticGetArchetype().getProperty(kodgen::ParseAllNested::staticGetArchetype(), false), nullptr);				//Not found
 }
 
 //=========================================================
@@ -301,7 +301,7 @@ TEST(Rfk_Entity_getPropertyTemplate, WithChildClasses)
 	EXPECT_NE(TestClass::staticGetArchetype().getProperty<MultipleInheritedProperty>(true), nullptr);	//Catch child
 	EXPECT_STREQ(TestClass::staticGetArchetype().getProperty<MultipleInheritedProperty>(true)->getArchetype().getName(), "MultipleInheritedPropertyChild");	//Catch child
 	EXPECT_EQ(TestClass::staticGetArchetype().getProperty<MultipleInheritedProperty>(true)->value, 2);	//Catch child
-	EXPECT_EQ(TestClass::staticGetArchetype().getProperty<ParseAllNested>(true), nullptr);				//Not found
+	EXPECT_EQ(TestClass::staticGetArchetype().getProperty<kodgen::ParseAllNested>(true), nullptr);			//Not found
 	EXPECT_NE(TestClass3::staticGetArchetype().getProperty<UniqueInheritedProperty>(), nullptr);
 	EXPECT_EQ(TestClass3::staticGetArchetype().getProperty<UniqueInheritedProperty>()->value, 6);	//TestClass3:UniqueInheritedProperty override parent's since it's a unique property
 }
@@ -313,7 +313,7 @@ TEST(Rfk_Entity_getPropertyTemplate, WithoutChildClasses)
 	EXPECT_NE(TestClass::staticGetArchetype().getProperty<MultipleInheritedProperty>(false), nullptr);	//Ignore child class
 	EXPECT_STREQ(TestClass::staticGetArchetype().getProperty<MultipleInheritedProperty>(false)->getArchetype().getName(), "MultipleInheritedProperty");	//Ignore child class
 	EXPECT_EQ(TestClass::staticGetArchetype().getProperty<MultipleInheritedProperty>(false)->value, 4);	//Ignore child class
-	EXPECT_EQ(TestClass::staticGetArchetype().getProperty<ParseAllNested>(false), nullptr);				//Not found
+	EXPECT_EQ(TestClass::staticGetArchetype().getProperty<kodgen::ParseAllNested>(false), nullptr);		//Not found
 }
 
 //=========================================================

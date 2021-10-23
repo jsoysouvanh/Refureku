@@ -22,7 +22,7 @@ class CLASS() BaseObject : public rfk::Object
 		FIELD()
 		int _i;
 
-		METHOD(Instantiator)
+		METHOD(rfk::Instantiator)
 		static rfk::SharedPtr<BaseObject> customInstantiator(int i) noexcept
 		{
 			return rfk::SharedPtr<BaseObject>(new BaseObject(i), [](BaseObject* ptr)
@@ -32,7 +32,7 @@ class CLASS() BaseObject : public rfk::Object
 											   });
 		}
 
-		METHOD(Instantiator)
+		METHOD(rfk::Instantiator)
 		RFK_NORETURN static rfk::SharedPtr<BaseObject> customInstantiator2Params(int, int)
 		{
 			throw std::logic_error("Error");
@@ -59,7 +59,7 @@ class CLASS() ObjectDerived1 : public BaseObject
 		FIELD()
 		int j;
 
-		METHOD(Instantiator)
+		METHOD(rfk::Instantiator)
 		static rfk::SharedPtr<ObjectDerived1> customInstantiator() noexcept
 		{
 			return rfk::makeShared<ObjectDerived1>(1);

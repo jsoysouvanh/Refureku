@@ -22,7 +22,7 @@
 namespace rfk { class Variable; class Function; }
 
 
-#define ParseAllNested_GENERATED	\
+#define kodgen_ParseAllNested_GENERATED	\
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct;\
  virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 RFK_UNPACK_IF_NOT_PARSING(friend rfk::internal::CodeGenerationHelpers;\
@@ -43,6 +43,6 @@ public:  virtual rfk::Class const& getArchetype() const noexcept override;\
 
 
 #define File_ParseAllNested_GENERATED	\
-template <>  rfk::Archetype const* rfk::getArchetype<ParseAllNested>() noexcept;\
+template <>  rfk::Archetype const* rfk::getArchetype<kodgen::ParseAllNested>() noexcept;\
 
 

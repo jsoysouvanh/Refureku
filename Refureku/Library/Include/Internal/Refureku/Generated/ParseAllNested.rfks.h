@@ -14,17 +14,27 @@
 #include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateParameter.h>
 #include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h>
 
-rfk::EEntityKind ParseAllNested::getTargetEntityKind() const noexcept { return targetEntityKind; }
-static_assert(std::is_base_of_v<rfk::Property, ParseAllNested>, "[Refureku] Can't attach PropertySettings property to ParseAllNested as it doesn't inherit from rfk::Property.");
-namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_17636175816175907530u = ParseAllNested::staticGetArchetype(); }
-
-rfk::Class const& ParseAllNested::staticGetArchetype() noexcept {
+rfk::EEntityKind kodgen::ParseAllNested::getTargetEntityKind() const noexcept { return targetEntityKind; }
+static_assert(std::is_base_of_v<rfk::Property, kodgen::ParseAllNested>, "[Refureku] Can't attach rfk::PropertySettings property to kodgen::ParseAllNested as it doesn't inherit from rfk::Property.");
+namespace rfk::generated { 
+ static rfk::NamespaceFragment const& getNamespaceFragment_5603044350098704190u_5959650475308226396() noexcept {
+static rfk::NamespaceFragment fragment("kodgen", 5603044350098704190u);
 static bool initialized = false;
-static rfk::Class type("ParseAllNested", 17636175816175907530u, sizeof(ParseAllNested), 1);
+if (!initialized) {
+initialized = true;
+fragment.setNestedEntitiesCapacity(1u);
+fragment.addNestedEntity(&kodgen::ParseAllNested::staticGetArchetype());
+}
+return fragment; }
+static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_5603044350098704190u_5959650475308226396 = rfk::NamespaceFragmentRegisterer("kodgen", 5603044350098704190u, rfk::generated::getNamespaceFragment_5603044350098704190u_5959650475308226396(), 1);
+ }
+rfk::Class const& kodgen::ParseAllNested::staticGetArchetype() noexcept {
+static bool initialized = false;
+static rfk::Class type("ParseAllNested", 1518429735798145968u, sizeof(ParseAllNested), 1);
 if (!initialized) {
 initialized = true;
 type.setPropertiesCapacity(1);
-static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Class");static PropertySettings property_17636175816175907530u_PropertySettings_0{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.addProperty(&property_17636175816175907530u_PropertySettings_0);
+static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_1518429735798145968u_0{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.addProperty(&property_1518429735798145968u_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 ParseAllNested::_rfk_registerChildClass<ParseAllNested>(type);
@@ -33,8 +43,8 @@ type.addSharedInstantiator(defaultSharedInstantiator);
 }
 return type; }
 
-rfk::Class const& ParseAllNested::getArchetype() const noexcept { return ParseAllNested::staticGetArchetype(); }
+rfk::Class const& kodgen::ParseAllNested::getArchetype() const noexcept { return ParseAllNested::staticGetArchetype(); }
 
-template <> rfk::Archetype const* rfk::getArchetype<ParseAllNested>() noexcept { return &ParseAllNested::staticGetArchetype(); }
+template <> rfk::Archetype const* rfk::getArchetype<kodgen::ParseAllNested>() noexcept { return &kodgen::ParseAllNested::staticGetArchetype(); }
 
 

@@ -14,17 +14,27 @@
 #include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateParameter.h>
 #include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h>
 
-rfk::EEntityKind Instantiator::getTargetEntityKind() const noexcept { return targetEntityKind; }
-static_assert(std::is_base_of_v<rfk::Property, Instantiator>, "[Refureku] Can't attach PropertySettings property to Instantiator as it doesn't inherit from rfk::Property.");
-namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_16201336964262475043u = Instantiator::staticGetArchetype(); }
-
-rfk::Class const& Instantiator::staticGetArchetype() noexcept {
+rfk::EEntityKind rfk::Instantiator::getTargetEntityKind() const noexcept { return targetEntityKind; }
+static_assert(std::is_base_of_v<rfk::Property, rfk::Instantiator>, "[Refureku] Can't attach rfk::PropertySettings property to rfk::Instantiator as it doesn't inherit from rfk::Property.");
+namespace rfk::generated { 
+ static rfk::NamespaceFragment const& getNamespaceFragment_6202377051882013391u_13909718342397644637() noexcept {
+static rfk::NamespaceFragment fragment("rfk", 6202377051882013391u);
 static bool initialized = false;
-static rfk::Class type("Instantiator", 16201336964262475043u, sizeof(Instantiator), 1);
+if (!initialized) {
+initialized = true;
+fragment.setNestedEntitiesCapacity(1u);
+fragment.addNestedEntity(&rfk::Instantiator::staticGetArchetype());
+}
+return fragment; }
+static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_6202377051882013391u_13909718342397644637 = rfk::NamespaceFragmentRegisterer("rfk", 6202377051882013391u, rfk::generated::getNamespaceFragment_6202377051882013391u_13909718342397644637(), 1);
+ }
+rfk::Class const& rfk::Instantiator::staticGetArchetype() noexcept {
+static bool initialized = false;
+static rfk::Class type("Instantiator", 11099498566387530766u, sizeof(Instantiator), 1);
 if (!initialized) {
 initialized = true;
 type.setPropertiesCapacity(1);
-static_assert((PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] PropertySettings can't be applied to a rfk::EEntityKind::Class");static PropertySettings property_16201336964262475043u_PropertySettings_0{rfk::EEntityKind::Method};type.addProperty(&property_16201336964262475043u_PropertySettings_0);
+static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_11099498566387530766u_0{rfk::EEntityKind::Method};type.addProperty(&property_11099498566387530766u_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 Instantiator::_rfk_registerChildClass<Instantiator>(type);
@@ -33,8 +43,8 @@ type.addSharedInstantiator(defaultSharedInstantiator);
 }
 return type; }
 
-rfk::Class const& Instantiator::getArchetype() const noexcept { return Instantiator::staticGetArchetype(); }
+rfk::Class const& rfk::Instantiator::getArchetype() const noexcept { return Instantiator::staticGetArchetype(); }
 
-template <> rfk::Archetype const* rfk::getArchetype<Instantiator>() noexcept { return &Instantiator::staticGetArchetype(); }
+template <> rfk::Archetype const* rfk::getArchetype<rfk::Instantiator>() noexcept { return &rfk::Instantiator::staticGetArchetype(); }
 
 

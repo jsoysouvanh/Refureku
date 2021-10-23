@@ -395,7 +395,7 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 
 std::string ReflectionCodeGenModule::computePropertyVariableName(kodgen::EntityInfo const& entity, kodgen::uint8 propertyIndex) noexcept
 {
-	return "property_" + getEntityId(entity) + "_" + entity.properties[propertyIndex].name + "_" + std::to_string(propertyIndex);
+	return "property_" + getEntityId(entity) + "_" + std::to_string(propertyIndex);
 }
 
 std::string ReflectionCodeGenModule::computeGetNestedEnumMethodName(kodgen::NestedEnumInfo const& nestedEnum) noexcept
