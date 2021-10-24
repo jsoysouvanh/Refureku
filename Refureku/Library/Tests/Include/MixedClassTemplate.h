@@ -19,6 +19,12 @@ namespace rfk
 	{
 		return nullptr;
 	}
+
+	template <template <typename, std::size_t, template <typename> typename> typename>
+	rfk::Archetype const* getArchetype() noexcept
+	{
+		return nullptr;
+	}
 }
 
 //Typical template signature for an std::array
@@ -27,17 +33,6 @@ class CLASS() MixedClassTemplate
 {
 	MixedClassTemplate_T_Size_GENERATED
 };
-
-
-//Mixed template params, so must declare base getArchetype
-namespace rfk
-{
-	template <template <typename, std::size_t, template <typename> typename> typename>
-	rfk::Archetype const* getArchetype() noexcept
-	{
-		return nullptr;
-	}
-}
 
 template <typename T, std::size_t Size, template <typename> typename U>
 class CLASS() MixedClassTemplate2
