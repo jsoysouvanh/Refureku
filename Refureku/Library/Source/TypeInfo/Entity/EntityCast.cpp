@@ -15,8 +15,7 @@
 
 using namespace rfk;
 
-template <>
-Archetype const* rfk::entityCast<Archetype>(Entity const* entity) noexcept
+Archetype const* rfk::archetypeCast(Entity const* entity) noexcept
 {
 	if (entity != nullptr)
 	{
@@ -31,20 +30,23 @@ Archetype const* rfk::entityCast<Archetype>(Entity const* entity) noexcept
 	}
 }
 
-template <>
-FundamentalArchetype const* rfk::entityCast<FundamentalArchetype>(Entity const* entity) noexcept
+FundamentalArchetype const* rfk::fundamentalArchetypeCast(Entity const* entity) noexcept
 {
 	return internal::entityCast<FundamentalArchetype, EEntityKind::FundamentalArchetype>(entity);
 }
 
-template <>
-Struct const* rfk::entityCast<Struct>(Entity const* entity) noexcept
+Struct const* rfk::structCast(Entity const* entity) noexcept
+{
+	return internal::entityCast<Struct, EEntityKind::Struct>(entity);
+}
+
+StructTemplate const* rfk::structTemplateCast(Entity const* entity) noexcept
 {
 	if (entity != nullptr)
 	{
-		EEntityKind kind = entity->getKind();
-
-		return (kind == EEntityKind::Struct || kind == EEntityKind::Class) ? reinterpret_cast<Struct const*>(entity) : nullptr;
+		return (entity->getKind() == EEntityKind::Struct && reinterpret_cast<Struct const*>(entity)->getClassKind() == EClassKind::Template) ?
+			reinterpret_cast<StructTemplate const*>(entity) :
+			nullptr;
 	}
 	else
 	{
@@ -52,88 +54,102 @@ Struct const* rfk::entityCast<Struct>(Entity const* entity) noexcept
 	}
 }
 
-template <>
-ClassTemplate const* rfk::entityCast<ClassTemplate>(Entity const* entity) noexcept
+StructTemplateInstantiation const* rfk::structTemplateInstantiationCast(Entity const* entity) noexcept
 {
-	Struct const* result = rfk::entityCast<Struct>(entity);
+	if (entity != nullptr)
+	{
+		return (entity->getKind() == EEntityKind::Struct && reinterpret_cast<Struct const*>(entity)->getClassKind() == EClassKind::TemplateInstantiation) ?
+			reinterpret_cast<StructTemplateInstantiation const*>(entity) :
+			nullptr;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
 
-	return (result != nullptr && result->getClassKind() ==  EClassKind::Template) ?
-		reinterpret_cast<ClassTemplate const*>(result) :
+Class const* rfk::classCast(Entity const* entity) noexcept
+{
+	return internal::entityCast<Class, EEntityKind::Class>(entity);
+}
+
+ClassTemplate const* rfk::classTemplateCast(Entity const* entity) noexcept
+{
+	if (entity != nullptr)
+	{
+		return (entity->getKind() == EEntityKind::Class && reinterpret_cast<Class const*>(entity)->getClassKind() == EClassKind::Template) ?
+			reinterpret_cast<ClassTemplate const*>(entity) :
+			nullptr;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+ClassTemplateInstantiation const* rfk::classTemplateInstantiationCast(Entity const* entity) noexcept
+{
+	if (entity != nullptr)
+	{
+		return (entity->getKind() == EEntityKind::Class && reinterpret_cast<Class const*>(entity)->getClassKind() == EClassKind::TemplateInstantiation) ?
+			reinterpret_cast<ClassTemplateInstantiation const*>(entity) :
+			nullptr;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+Field const* rfk::fieldCast(Entity const* entity) noexcept
+{
+	return (entity != nullptr && entity->getKind() == EEntityKind::Field && !reinterpret_cast<FieldBase const*>(entity)->isStatic()) ?
+		reinterpret_cast<Field const*>(entity) :
 		nullptr;
 }
 
-template <>
-ClassTemplateInstantiation const* rfk::entityCast<ClassTemplateInstantiation>(Entity const* entity) noexcept
+StaticField const* rfk::staticFieldCast(Entity const* entity) noexcept
 {
-	Struct const* result = rfk::entityCast<Struct>(entity);
-
-	return (result != nullptr && result->getClassKind() ==  EClassKind::TemplateInstantiation) ?
-		reinterpret_cast<ClassTemplateInstantiation const*>(result) :
+	return (entity != nullptr && entity->getKind() == EEntityKind::Field && reinterpret_cast<FieldBase const*>(entity)->isStatic()) ?
+		reinterpret_cast<StaticField const*>(entity) :
 		nullptr;
 }
 
-template <>
-FieldBase const* rfk::entityCast<FieldBase>(Entity const* entity) noexcept
+Method const* rfk::methodCast(Entity const* entity) noexcept
 {
-	return internal::entityCast<FieldBase, EEntityKind::Field>(entity);
+	return (entity != nullptr && entity->getKind() == EEntityKind::Method && !reinterpret_cast<MethodBase const*>(entity)->isStatic()) ?
+		reinterpret_cast<Method const*>(entity) :
+		nullptr;
 }
 
-template <>
-Field const* rfk::entityCast<Field>(Entity const* entity) noexcept
+StaticMethod const* rfk::staticMethodCast(Entity const* entity) noexcept
 {
-	return (entity != nullptr && entity->getKind() == EEntityKind::Field && !reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<Field const*>(entity) : nullptr;
+	return (entity != nullptr && entity->getKind() == EEntityKind::Method && reinterpret_cast<MethodBase const*>(entity)->isStatic()) ?
+		reinterpret_cast<StaticMethod const*>(entity) :
+		nullptr;
 }
 
-template <>
-StaticField const* rfk::entityCast<StaticField>(Entity const* entity) noexcept
-{
-	return (entity != nullptr && entity->getKind() == EEntityKind::Field && reinterpret_cast<FieldBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticField const*>(entity) : nullptr;
-}
-
-template <>
-MethodBase const* rfk::entityCast<MethodBase>(Entity const* entity) noexcept
-{
-	return internal::entityCast<MethodBase, EEntityKind::Method>(entity);
-}
-
-template <>
-Method const* rfk::entityCast<Method>(Entity const* entity) noexcept
-{
-	return (entity != nullptr && entity->getKind() == EEntityKind::Method && !reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<Method const*>(entity) : nullptr;
-}
-
-template <>
-StaticMethod const* rfk::entityCast<StaticMethod>(Entity const* entity) noexcept
-{
-	return (entity != nullptr && entity->getKind() == EEntityKind::Method && reinterpret_cast<MethodBase const*>(entity)->isStatic()) ? reinterpret_cast<StaticMethod const*>(entity) : nullptr;
-}
-
-template <>
-Enum const* rfk::entityCast<Enum>(Entity const* entity) noexcept
+Enum const* rfk::enumCast(Entity const* entity) noexcept
 {
 	return internal::entityCast<Enum, EEntityKind::Enum>(entity);
 }
 
-template <>
-EnumValue const* rfk::entityCast<EnumValue>(Entity const* entity) noexcept
+EnumValue const* rfk::enumValueCast(Entity const* entity) noexcept
 {
 	return internal::entityCast<EnumValue, EEntityKind::EnumValue>(entity);
 }
 
-template <>
-Namespace const* rfk::entityCast<Namespace>(Entity const* entity) noexcept
+Namespace const* rfk::namespaceCast(Entity const* entity) noexcept
 {
 	return internal::entityCast<Namespace, EEntityKind::Namespace>(entity);
 }
 
-template <>
-Variable const* rfk::entityCast<Variable>(Entity const* entity) noexcept
+Variable const* rfk::variableCast(Entity const* entity) noexcept
 {
 	return internal::entityCast<Variable, EEntityKind::Variable>(entity);
 }
 
-template <>
-Function const* rfk::entityCast<Function>(Entity const* entity) noexcept
+Function const* rfk::functionCast(Entity const* entity) noexcept
 {
 	return internal::entityCast<Function, EEntityKind::Function>(entity);
 }

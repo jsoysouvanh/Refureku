@@ -153,7 +153,7 @@ TEST(Rfk_Method_inheritProperties, NonInheritedMulitplePropertyNotInherited)
 
 TEST(Rfk_ClassTemplate_inheritProperties, PropagePropertiesToClassInstantiations)
 {
-	rfk::ClassTemplate const* classTemplate = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate"));
+	rfk::ClassTemplate const* classTemplate = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate"));
 
 	EXPECT_NE(classTemplate, nullptr);
 

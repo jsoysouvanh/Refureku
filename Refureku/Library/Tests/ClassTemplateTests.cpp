@@ -21,32 +21,32 @@ static rfk::ClassTemplate const* mixedTemplateClass2;
 
 TEST(Rfk_ClassTemplate, Init)
 {
-	singleTypeClass = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate"));
+	singleTypeClass = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate"));
 	EXPECT_NE(singleTypeClass, nullptr);
 
-	multTypeClass = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MultipleTypeTemplateClassTemplate"));
+	multTypeClass = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MultipleTypeTemplateClassTemplate"));
 	EXPECT_NE(multTypeClass, nullptr);
 
-	singleNonTypeClass = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleNonTypeTemplateClassTemplate"));
+	singleNonTypeClass = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("SingleNonTypeTemplateClassTemplate"));
 	EXPECT_NE(singleNonTypeClass, nullptr);
 
-	multNonTypeClass = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MultipleNonTypeTemplateClassTemplate"));
+	multNonTypeClass = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MultipleNonTypeTemplateClassTemplate"));
 	EXPECT_NE(multNonTypeClass, nullptr);
 
 #if RFK_TEMPLATE_TEMPLATE_SUPPORT
 
-	singleTemplateClass = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleTemplateTemplateClassTemplate"));
+	singleTemplateClass = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("SingleTemplateTemplateClassTemplate"));
 	EXPECT_NE(singleTemplateClass, nullptr);
 
-	multTemplateClass = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MultipleTemplateTemplateClassTemplate"));
+	multTemplateClass = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MultipleTemplateTemplateClassTemplate"));
 	EXPECT_NE(multTemplateClass, nullptr);
 
 #endif
 
-	mixedTemplateClass = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MixedClassTemplate"));
+	mixedTemplateClass = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MixedClassTemplate"));
 	EXPECT_NE(mixedTemplateClass, nullptr);
 
-	mixedTemplateClass2 = rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MixedClassTemplate2"));
+	mixedTemplateClass2 = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MixedClassTemplate2"));
 	EXPECT_NE(mixedTemplateClass2, nullptr);
 }
 
@@ -170,7 +170,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, NonExistingNonTypeTempl
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, ExistingTemplateTemplateInstantiation)
 {
-	rfk::TemplateTemplateArgument arg1(rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate")));
+	rfk::TemplateTemplateArgument arg1(rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate")));
 	rfk::TemplateArgument const* templateArgs[] = { &arg1 };
 
 	EXPECT_NE(singleTemplateClass->getTemplateInstantiation(templateArgs), nullptr);
@@ -178,7 +178,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, ExistingTemplateTemplat
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, NonExistingTemplateTemplateInstantiation)
 {
-	rfk::TemplateTemplateArgument arg1(rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MultTypeTemplateClassTemplate")));
+	rfk::TemplateTemplateArgument arg1(rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MultTypeTemplateClassTemplate")));
 	rfk::TemplateArgument const* templateArgs[] = { &arg1 };
 
 	EXPECT_EQ(singleTemplateClass->getTemplateInstantiation(templateArgs), nullptr);
@@ -260,8 +260,8 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiation, NonExistingNonTypeTemplateInsta
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiation, ExistingTemplateTemplateInstantiation)
 {
-	rfk::TemplateTemplateArgument arg1(rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MultipleTypeTemplateClassTemplate")));
-	rfk::TemplateTemplateArgument arg2(rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate")));
+	rfk::TemplateTemplateArgument arg1(rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MultipleTypeTemplateClassTemplate")));
+	rfk::TemplateTemplateArgument arg2(rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate")));
 
 	std::vector<rfk::TemplateArgument const*> templateArgs{ &arg1, &arg2 };
 
@@ -270,8 +270,8 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiation, ExistingTemplateTemplateInstant
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiation, NonExistingTemplateTemplateInstantiation)
 {
-	rfk::TemplateTemplateArgument arg1(rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate")));
-	rfk::TemplateTemplateArgument arg2(rfk::entityCast<rfk::ClassTemplate>(rfk::getDatabase().getFileLevelClassByName("MultipleTypeTemplateClassTemplate")));
+	rfk::TemplateTemplateArgument arg1(rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("SingleTypeTemplateClassTemplate")));
+	rfk::TemplateTemplateArgument arg2(rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("MultipleTypeTemplateClassTemplate")));
 
 	std::vector<rfk::TemplateArgument const*> templateArgs{ &arg1, &arg2 };
 

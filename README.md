@@ -11,7 +11,7 @@
 </div>
 
 # Overview
-Refureku is a powerful C++17 RTTI-free runtime reflection dynamic library.  
+Refureku is a powerful C++17 runtime reflection dynamic library.  
 It is split in 2 parts:
 - The code generator is an executable, based on [Kodgen](https://github.com/jsoysouvanh/Kodgen). It handles the reflection code generation.
 - The actual dynamic library that is linked to the target program using reflection.

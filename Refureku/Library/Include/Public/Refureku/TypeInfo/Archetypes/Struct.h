@@ -29,7 +29,7 @@ namespace rfk
 	class ICallable;
 	class Struct;
 	
-	/* In C++, a struct and a class contains exactly the same data. Alias for convenience. */
+	/* In C++, a struct and a class contain exactly the same data. Alias for convenience. */
 	using Class = Struct;
 
 	class Struct : public Archetype

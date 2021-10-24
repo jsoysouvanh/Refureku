@@ -14,6 +14,10 @@ namespace rfk
 	//Forward declarations
 	class ClassTemplate;
 	class TemplateArgument;
+	class ClassTemplateInstantiation;
+
+	/* A struct template instantiation and a class template instantiation contain exactly the same data. Alias for convenience. */
+	using StructTemplateInstantiation = ClassTemplateInstantiation;
 
 	class ClassTemplateInstantiation final : public Struct
 	{

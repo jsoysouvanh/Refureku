@@ -15,6 +15,10 @@ namespace rfk
 	class TemplateParameter;
 	class TemplateArgument;
 	class ClassTemplateInstantiation;
+	class ClassTemplate;
+
+	/* A struct template and a class template contain exactly the same data. Alias for convenience. */
+	using StructTemplate = ClassTemplate;
 
 	class ClassTemplate final : public Struct
 	{

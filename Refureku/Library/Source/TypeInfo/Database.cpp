@@ -30,7 +30,7 @@ Entity const* Database::getEntityById(std::size_t id) const noexcept
 
 Namespace const* Database::getNamespaceById(std::size_t id) const noexcept
 {
-	return entityCast<Namespace>(getEntityById(id));
+	return namespaceCast(getEntityById(id));
 }
 
 Namespace const* Database::getNamespaceByName(char const* name) const
@@ -93,7 +93,7 @@ std::size_t Database::getFileLevelNamespacesCount() const noexcept
 
 Archetype const* Database::getArchetypeById(std::size_t id) const noexcept
 {
-	return entityCast<Archetype>(getEntityById(id));
+	return archetypeCast(getEntityById(id));
 }
 
 Archetype const* Database::getFileLevelArchetypeByName(char const* name) const noexcept
@@ -130,7 +130,7 @@ Vector<Archetype const*> Database::getFileLevelArchetypesByPredicate(Predicate<A
 
 Struct const* Database::getStructById(std::size_t id) const noexcept
 {
-	Struct const* result = entityCast<Struct>(getEntityById(id));
+	Struct const* result = structCast(getEntityById(id));
 
 	return (result != nullptr && result->getKind() == EEntityKind::Struct) ? result : nullptr;
 }
@@ -162,9 +162,7 @@ std::size_t Database::getFileLevelStructsCount() const noexcept
 
 Class const* Database::getClassById(std::size_t id) const noexcept
 {
-	Class const* result = entityCast<Class>(getEntityById(id));
-
-	return (result != nullptr && result->getKind() == EEntityKind::Class) ? result : nullptr;
+	return classCast(getEntityById(id));
 }
 
 Class const* Database::getFileLevelClassByName(char const* name) const noexcept
@@ -194,7 +192,7 @@ std::size_t Database::getFileLevelClassesCount() const noexcept
 
 Enum const* Database::getEnumById(std::size_t id) const noexcept
 {
-	return entityCast<Enum>(getEntityById(id));
+	return enumCast(getEntityById(id));
 }
 
 Enum const* Database::getFileLevelEnumByName(char const* name) const noexcept
@@ -224,7 +222,7 @@ std::size_t Database::getFileLevelEnumsCount() const noexcept
 
 FundamentalArchetype const* Database::getFundamentalArchetypeById(std::size_t id) const noexcept
 {
-	return entityCast<FundamentalArchetype>(getEntityById(id));
+	return fundamentalArchetypeCast(getEntityById(id));
 }
 
 FundamentalArchetype const* Database::getFundamentalArchetypeByName(char const* name) const noexcept
@@ -234,7 +232,7 @@ FundamentalArchetype const* Database::getFundamentalArchetypeByName(char const* 
 
 Variable const* Database::getVariableById(std::size_t id) const noexcept
 {
-	return entityCast<Variable>(getEntityById(id));
+	return variableCast(getEntityById(id));
 }
 
 Variable const* Database::getFileLevelVariableByName(char const* name, EVarFlags flags) const noexcept
@@ -266,7 +264,7 @@ std::size_t Database::getFileLevelVariablesCount() const noexcept
 
 Function const* Database::getFunctionById(std::size_t id) const noexcept
 {
-	return entityCast<Function>(getEntityById(id));
+	return functionCast(getEntityById(id));
 }
 
 Function const* Database::getFileLevelFunctionByName(char const* name, EFunctionFlags flags) const noexcept
@@ -305,27 +303,27 @@ std::size_t Database::getFileLevelFunctionsCount() const noexcept
 
 Method const* Database::getMethodById(std::size_t id) const noexcept
 {
-	return entityCast<Method>(getEntityById(id));
+	return methodCast(getEntityById(id));
 }
 
 StaticMethod const* Database::getStaticMethodById(std::size_t id) const noexcept
 {
-	return entityCast<StaticMethod>(getEntityById(id));
+	return staticMethodCast(getEntityById(id));
 }
 
 Field const* Database::getFieldById(std::size_t id) const noexcept
 {
-	return entityCast<Field>(getEntityById(id));
+	return fieldCast(getEntityById(id));
 }
 
 StaticField const* Database::getStaticFieldById(std::size_t id) const noexcept
 {
-	return entityCast<StaticField>(getEntityById(id));
+	return staticFieldCast(getEntityById(id));
 }
 
 EnumValue const* Database::getEnumValueById(std::size_t id) const noexcept
 {
-	return entityCast<EnumValue>(getEntityById(id));
+	return enumValueCast(getEntityById(id));
 }
 
 Database const& rfk::getDatabase() noexcept

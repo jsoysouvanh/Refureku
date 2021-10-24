@@ -1464,7 +1464,7 @@ TEST(Rfk_Struct_getClassKind, StandardClass)
 
 TEST(Rfk_Struct_getClassKind, ClassTemplate)
 {
-	EXPECT_EQ(rfk::entityCast<rfk::ClassTemplate>(rfk::getArchetype<SingleTypeTemplateClassTemplate>())->getClassKind(), rfk::EClassKind::Template);
+	EXPECT_EQ(rfk::classTemplateCast(rfk::getArchetype<SingleTypeTemplateClassTemplate>())->getClassKind(), rfk::EClassKind::Template);
 }
 
 TEST(Rfk_Struct_getClassKind, ClassTemplateInstantiation)
