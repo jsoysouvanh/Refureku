@@ -38,7 +38,8 @@ namespace rfk
 			* 
 			*	@return The property at the given index.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getPropertyAt(std::size_t propertyIndex)					const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				Property const*				getPropertyAt(std::size_t propertyIndex)					const	noexcept;
 
 			/**
 			*	@brief	Retrieve a property of a given type from this entity.
@@ -51,7 +52,8 @@ namespace rfk
 			*	@return The first found property of type PropertyType if any, else nullptr.
 			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType> && !std::is_same_v<PropertyType, Property>>>
-			RFK_NODISCARD PropertyType const*					getProperty(bool isChildClassValid = true)					const	noexcept;
+			RFK_NODISCARD
+				PropertyType const*			getProperty(bool isChildClassValid = true)					const	noexcept;
 
 			/**
 			*	@brief Retrieve the first property matching with the provided archetype.
@@ -61,8 +63,9 @@ namespace rfk
 			*	
 			*	@return The first property matching the provided archetype in this entity, nullptr if none is found.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getProperty(Struct const&	archetype,
-																			bool			isChildClassValid = true)		const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				Property const*				getProperty(Struct const&	archetype,
+														bool			isChildClassValid = true)		const	noexcept;
 
 			/**
 			*	@brief Retrieve the first property named with the provided name.
@@ -71,7 +74,8 @@ namespace rfk
 			* 
 			*	@return The first property named with the provided name if any, else nullptr.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getPropertyByName(char const* name)							const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				Property const*				getPropertyByName(char const* name)							const	noexcept;
 
 			/**
 			*	@brief Retrieve a property matching with a predicate.
@@ -83,8 +87,9 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Property const*			getPropertyByPredicate(Predicate<Property>	predicate,
-																					   void*				userData)		const;
+			RFK_NODISCARD REFUREKU_API
+				Property const*				getPropertyByPredicate(Predicate<Property>	predicate,
+																   void*				userData)		const;
 
 			/**
 			*	@brief	Retrieve all properties matching with the provided archetype.
@@ -97,7 +102,8 @@ namespace rfk
 			*	@return A collection of all properties matching the provided property type in this entity.
 			*/
 			template <typename PropertyType, typename = std::enable_if_t<std::is_base_of_v<Property, PropertyType> && !std::is_same_v<PropertyType, Property>>>
-			RFK_NODISCARD Vector<PropertyType const*>			getProperties(bool isChildClassValid = true)				const	noexcept;
+			RFK_NODISCARD
+				Vector<PropertyType const*>	getProperties(bool isChildClassValid = true)				const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with the provided archetype.
@@ -107,8 +113,9 @@ namespace rfk
 			*	
 			*	@return A collection of all properties matching the provided archetype in this entity.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getProperties(Struct const&	archetype,
-																			  bool			isChildClassValid = true)		const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				Vector<Property const*>		getProperties(Struct const&	archetype,
+														  bool			isChildClassValid = true)		const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties named with the provided name.
@@ -117,7 +124,8 @@ namespace rfk
 			* 
 			*	@return A collection of all properties named with the provided name.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getPropertiesByName(char const* name)						const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				Vector<Property const*>		getPropertiesByName(char const* name)						const	noexcept;
 
 			/**
 			*	@brief Retrieve all properties matching with a predicate in this entity.
@@ -129,15 +137,17 @@ namespace rfk
 			*
 			*	@exception Any exception potentially thrown from the provided predicate.
 			*/
-			RFK_NODISCARD REFUREKU_API Vector<Property const*>	getPropertiesByPredicate(Predicate<Property>	predicate,
-																						 void*					userData)	const;
+			RFK_NODISCARD REFUREKU_API
+				Vector<Property const*>		getPropertiesByPredicate(Predicate<Property>	predicate,
+																	 void*					userData)	const;
 
 			/**
 			*	@brief Get the number of properties attached to this entity.
 			* 
 			*	@return The number of properties attached to this entity.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t				getPropertiesCount()										const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				std::size_t					getPropertiesCount()										const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all properties attached to this entity.
@@ -150,15 +160,16 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool									foreachProperty(Visitor<Property>	visitor,
-																				void*				userData)				const;
+			REFUREKU_API bool				foreachProperty(Visitor<Property>	visitor,
+															void*				userData)				const;
 
 			/**
 			*	@brief Get the name of the entity.
 			* 
 			*	@return The name of the entity.
 			*/
-			RFK_NODISCARD REFUREKU_API char const*				getName()													const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				char const*					getName()													const	noexcept;
 
 			/**
 			*	@brief Check that this entity has the same name as the provided string.
@@ -166,14 +177,16 @@ namespace rfk
 			*	@return true if this entity has the same name as the provided string.
 			*			If the provided name is nullptr, return false.
 			*/
-			RFK_NODISCARD REFUREKU_API bool						hasSameName(char const*	name)								const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				bool						hasSameName(char const*	name)								const	noexcept;
 
 			/**
 			*	@brief Get the program-unique id of the entity.
 			* 
 			*	@return The program-unique id of the entity.
 			*/
-			RFK_NODISCARD REFUREKU_API std::size_t				getId()														const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				std::size_t					getId()														const	noexcept;
 
 			/**
 			*	@brief	Get the kind of the entity.
@@ -182,7 +195,8 @@ namespace rfk
 			* 
 			*	@return The kind of the entity.
 			*/
-			RFK_NODISCARD REFUREKU_API EEntityKind				getKind()													const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				EEntityKind					getKind()													const	noexcept;
 
 			/**
 			*	@brief	Get the outer entity of the entity.
@@ -191,7 +205,8 @@ namespace rfk
 			* 
 			*	@return The outer entity of the entity.
 			*/
-			RFK_NODISCARD REFUREKU_API Entity const*			getOuterEntity()											const	noexcept;
+			RFK_NODISCARD REFUREKU_API
+				Entity const*				getOuterEntity()											const	noexcept;
 
 			/**
 			*	@brief Add a property to this entity.
@@ -201,14 +216,14 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
 			*/
-			REFUREKU_API bool									addProperty(Property const* property)								noexcept;
+			REFUREKU_API bool				addProperty(Property const* property)								noexcept;
 
 			/**
 			*	@brief Setter for the field _outerEntity.
 			* 
 			*	@param outerEntity The outer entity to set.
 			*/
-			REFUREKU_API void									setOuterEntity(Entity const* outerEntity)							noexcept;
+			REFUREKU_API void				setOuterEntity(Entity const* outerEntity)							noexcept;
 
 			/**
 			*	@brief	Set the number of properties for this entity.
@@ -217,7 +232,7 @@ namespace rfk
 			* 
 			*	@param capacity The number of properties of this entity.
 			*/
-			REFUREKU_API void									setPropertiesCapacity(std::size_t capacity)							noexcept;
+			REFUREKU_API void				setPropertiesCapacity(std::size_t capacity)							noexcept;
 
 
 			Entity&							operator=(Entity const&)		= delete;

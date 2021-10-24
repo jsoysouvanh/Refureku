@@ -7,7 +7,11 @@
 
 #pragma once
 
-#include "TestProperties.h"
+//Properties can be forward declared
+class UniqueInheritedProperty;
+class MultipleInheritedProperty;
+class UniqueNonInheritedProperty;
+class MultipleNonInheritedProperty;
 
 #include "Generated/PropertyInheritance.rfkh.h"
 
