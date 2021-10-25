@@ -18,7 +18,7 @@ class CLASS() SingleNonTypeTemplateClassTemplate
 		FIELD()
 		int intArray[Value];
 
-	SingleNonTypeTemplateClassTemplate_Value_GENERATED
+	SingleNonTypeTemplateClassTemplate_GENERATED
 };
 
 //On MSVC, we must define the base getArchetype method for this since the variadic version is not recognized correctly
@@ -38,7 +38,7 @@ namespace rfk
 template <TestEnumClass EnumClass, std::size_t Size>
 class CLASS() MultipleNonTypeTemplateClassTemplate
 {
-	MultipleNonTypeTemplateClassTemplate_EnumClass_Size_GENERATED
+	MultipleNonTypeTemplateClassTemplate_GENERATED
 };
 
 File_NonTypeTemplateClassTemplate_GENERATED

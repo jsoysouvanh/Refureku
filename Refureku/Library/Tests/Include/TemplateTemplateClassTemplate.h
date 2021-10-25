@@ -19,13 +19,13 @@
 template <template <typename A> typename T>
 class CLASS() SingleTemplateTemplateClassTemplate
 {
-	SingleTemplateTemplateClassTemplate_T_GENERATED
+	SingleTemplateTemplateClassTemplate_GENERATED
 };
 
 template <template <typename A, typename B, typename C> typename T, template <typename A> typename U>
 class CLASS() MultipleTemplateTemplateClassTemplate
 {
-	MultipleTemplateTemplateClassTemplate_T_U_GENERATED
+	MultipleTemplateTemplateClassTemplate_GENERATED
 };
 
 File_TemplateTemplateClassTemplate_GENERATED

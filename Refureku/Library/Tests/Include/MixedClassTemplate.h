@@ -31,13 +31,13 @@ namespace rfk
 template <typename T, std::size_t Size>
 class CLASS() MixedClassTemplate
 {
-	MixedClassTemplate_T_Size_GENERATED
+	MixedClassTemplate_GENERATED
 };
 
 template <typename T, std::size_t Size, template <typename> typename U>
 class CLASS() MixedClassTemplate2
 {
-	MixedClassTemplate2_T_Size_U_GENERATED
+	MixedClassTemplate2_GENERATED
 };
 
 File_MixedClassTemplate_GENERATED

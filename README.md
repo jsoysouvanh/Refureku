@@ -237,5 +237,5 @@ This library has been tested and is stable on the following configurations:
 - Mac OS X 10.15.7 | AppleClang 12.0.0
 
 # Known issues
-- Issues when reflecting template template classes with MSVC, see [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
-- Class templates can't be reflected when nested in other entities
+- _(MSVC only)_ Issues when reflecting class templates with only template template parameters, see [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
+- Compilation error when reflect protected/private nested class template

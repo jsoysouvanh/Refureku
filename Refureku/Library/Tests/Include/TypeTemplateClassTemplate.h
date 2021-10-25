@@ -19,7 +19,7 @@ class CLASS(kodgen::ParseAllNested) SingleTypeTemplateClassTemplate : public rfk
 
 	T testMethod(T const& param) { return param; }
 
-	SingleTypeTemplateClassTemplate_T_GENERATED
+	SingleTypeTemplateClassTemplate_GENERATED
 };
 
 template <typename T, typename U, typename V>
@@ -46,7 +46,7 @@ class CLASS() MultipleTypeTemplateClassTemplate : public rfk::Object
 		METHOD()
 		V returnV(V const& v) { return v; }
 
-	MultipleTypeTemplateClassTemplate_T_U_V_GENERATED
+	MultipleTypeTemplateClassTemplate_GENERATED
 };
 
 namespace TESTNP NAMESPACE()
@@ -54,7 +54,7 @@ namespace TESTNP NAMESPACE()
 	template <typename T>
 	class CLASS() ClassTemplateInNamespace
 	{
-		TESTNP_ClassTemplateInNamespace_T_GENERATED
+		TESTNP_ClassTemplateInNamespace_GENERATED
 	};
 }
 
