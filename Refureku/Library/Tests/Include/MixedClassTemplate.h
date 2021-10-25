@@ -41,6 +41,3 @@ class CLASS() MixedClassTemplate2
 };
 
 File_MixedClassTemplate_GENERATED
-
-template class CLASS() MixedClassTemplate<int, 1u>;
-template class CLASS() MixedClassTemplate2<float, 2u, SingleTypeTemplateClassTemplate>;

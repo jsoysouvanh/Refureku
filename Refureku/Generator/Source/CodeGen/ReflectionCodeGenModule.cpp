@@ -667,19 +667,23 @@ void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo 
 	//Reserve memory for the correct number of nested entities
 	inout_result += generatedEntityVarName + "setNestedArchetypesCapacity(" + std::to_string(nestedArchetypesCount) + ");";
 
+	auto addNestedStructClassLambda = [&inout_result, &generatedEntityVarName, &env](std::shared_ptr<kodgen::NestedStructClassInfo> const& structClass)
+	{
+		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(rfk::getArchetype<" + structClass->type.getCanonicalName() + ">(), "
+			"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(structClass->accessSpecifier)) + "));" + env.getSeparator();
+	};
+
 	//Add nested structs
 	inout_result += "rfk::Archetype* archetype = nullptr;" + env.getSeparator();
 	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStruct : structClass.nestedStructs)
 	{
-		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(&" + nestedStruct->name + "::staticGetArchetype(), "
-			"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedStruct->accessSpecifier)) + "));" + env.getSeparator();
+		addNestedStructClassLambda(nestedStruct);
 	}
 
 	//Add nested classes
 	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedClass : structClass.nestedClasses)
 	{
-		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(&" + nestedClass->name + "::staticGetArchetype(), "
-			"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedClass->accessSpecifier)) + "));" + env.getSeparator();
+		addNestedStructClassLambda(nestedClass);
 	}
 
 	//Add nested enums
@@ -1007,8 +1011,13 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererVariable(ko
 {
 	assert(structClass.type.isTemplateType());
 
-	inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer register_" + getEntityId(structClass) +
-		" = *rfk::getArchetype<" + structClass.type.getName(false, false, true) + ">(); }" + env.getSeparator() + env.getSeparator();
+	//Define the registrator only when there is no outer entity.
+	//If there is an outer entity, it will register its nested entities to the database itself.
+	if (structClass.outerEntity == nullptr)
+	{
+		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer register_" + getEntityId(structClass) +
+			" = *rfk::getArchetype<::" + structClass.type.getName(false, false, true) + ">(); }" + env.getSeparator() + env.getSeparator();
+	}
 }
 
 std::string ReflectionCodeGenModule::convertEntityTypeToEntityKind(kodgen::EEntityType entityType) noexcept
@@ -1384,13 +1393,13 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 		//Structs
 		for (kodgen::StructClassInfo const& nestedStruct : namespace_.structs)
 		{
-			inout_result += "fragment.addNestedEntity(&" + nestedStruct.type.getCanonicalName() + "::staticGetArchetype());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(rfk::getArchetype<" + nestedStruct.type.getCanonicalName() + ">());" + env.getSeparator();
 		}
 
 		//Classes
 		for (kodgen::StructClassInfo const& nestedClass : namespace_.classes)
 		{
-			inout_result += "fragment.addNestedEntity(&" + nestedClass.type.getCanonicalName() + "::staticGetArchetype());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(rfk::getArchetype<" + nestedClass.type.getCanonicalName() + ">());" + env.getSeparator();
 		}
 
 		//Enums

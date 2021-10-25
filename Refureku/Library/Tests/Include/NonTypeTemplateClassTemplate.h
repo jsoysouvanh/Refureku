@@ -42,6 +42,3 @@ class CLASS() MultipleNonTypeTemplateClassTemplate
 };
 
 File_NonTypeTemplateClassTemplate_GENERATED
-
-template class CLASS() SingleNonTypeTemplateClassTemplate<1u>;
-template class CLASS() MultipleNonTypeTemplateClassTemplate<TestEnumClass::Value1, 0u>;

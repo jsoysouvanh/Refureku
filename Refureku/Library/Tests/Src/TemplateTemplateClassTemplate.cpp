@@ -5,4 +5,7 @@
 
 #include "Generated/TemplateTemplateClassTemplate.rfks.h"
 
+template class SingleTemplateTemplateClassTemplate<SingleTypeTemplateClassTemplate>;
+template class MultipleTemplateTemplateClassTemplate<MultipleTypeTemplateClassTemplate, SingleTypeTemplateClassTemplate>;
+
 #endif

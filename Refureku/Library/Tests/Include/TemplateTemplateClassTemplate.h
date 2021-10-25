@@ -30,7 +30,4 @@ class CLASS() MultipleTemplateTemplateClassTemplate
 
 File_TemplateTemplateClassTemplate_GENERATED
 
-template class CLASS() SingleTemplateTemplateClassTemplate<SingleTypeTemplateClassTemplate>;
-template class CLASS() MultipleTemplateTemplateClassTemplate<MultipleTypeTemplateClassTemplate, SingleTypeTemplateClassTemplate>;
-
 #endif
