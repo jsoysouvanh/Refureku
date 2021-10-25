@@ -430,7 +430,7 @@ bool ReflectionCodeGenModule::isPublicClass(kodgen::StructClassInfo const& class
 
 std::string ReflectionCodeGenModule::computeClassTemplateEntityId(kodgen::StructClassInfo const& class_, kodgen::EntityInfo const& entity) noexcept
 {
-	return computeClassNestedEntityId(class_.type.getName(), entity);
+	return computeClassNestedEntityId(class_.getFullName(), entity);
 }
 
 std::string ReflectionCodeGenModule::computeClassNestedEntityId(std::string className, kodgen::EntityInfo const& entity) noexcept
@@ -859,7 +859,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateStaticGetArchetypeMet
 	inout_result += "static bool initialized = false;" + env.getSeparator();
 	inout_result += "static rfk::ClassTemplateInstantiation type(\"" + structClass.type.getName(false, true) + "\"," +
 		computeClassTemplateEntityId(structClass, structClass) + ", " +
-		"sizeof(" + structClass.type.getName() + "), " + 
+		"sizeof(" + structClass.getFullName() + "), " + 
 		std::to_string(structClass.isClass()) + ", "
 		"*rfk::getArchetype<::" + structClass.type.getName() + ">());" + env.getSeparator();
 
