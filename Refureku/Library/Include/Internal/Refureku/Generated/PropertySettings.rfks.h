@@ -23,10 +23,10 @@ static bool initialized = false;
 if (!initialized) {
 initialized = true;
 fragment.setNestedEntitiesCapacity(1u);
-fragment.addNestedEntity(&rfk::PropertySettings::staticGetArchetype());
+fragment.addNestedEntity(rfk::getArchetype<rfk::PropertySettings>());
 }
 return fragment; }
-static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_6202377051882013391u_15963945972659803745 = rfk::NamespaceFragmentRegisterer("rfk", 6202377051882013391u, rfk::generated::getNamespaceFragment_6202377051882013391u_15963945972659803745(), 1);
+static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_6202377051882013391u_15963945972659803745(rfk::generated::getNamespaceFragment_6202377051882013391u_15963945972659803745(), 1);
  }
 rfk::Class const& rfk::PropertySettings::staticGetArchetype() noexcept {
 static bool initialized = false;

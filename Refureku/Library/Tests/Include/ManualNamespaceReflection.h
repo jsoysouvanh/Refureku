@@ -7,19 +7,20 @@
 
 #pragma once
 
-#include <cstdint>	//uint8_t
-
-//Third party enum
-enum class EManualEnumReflection : uint8_t
+namespace third_party_namespace
 {
-	Value1 = 1 << 0,
-	Value2 = 1 << 1
-};
+	namespace nested_third_party_namespace
+	{
+		void thirdPartyFunc();
+	}
+
+	enum class ThirdPartyEnum {};
+}
 
 #include <Refureku/TypeInfo/Archetypes/Enum.h>
 
 namespace rfk
 {
 	template <>
-	rfk::Enum const* getEnum<EManualEnumReflection>() noexcept;
+	rfk::Enum const* getEnum<third_party_namespace::ThirdPartyEnum>() noexcept;
 }

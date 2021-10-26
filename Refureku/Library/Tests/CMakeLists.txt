@@ -35,6 +35,7 @@ add_executable(${RefurekuTestsTarget}
 					Src/ManualClassReflection.cpp
 					Src/ManualVariableReflection.cpp
 					Src/ManualFunctionReflection.cpp
+					Src/ManualNamespaceReflection.cpp
 
 					main.cpp)
 

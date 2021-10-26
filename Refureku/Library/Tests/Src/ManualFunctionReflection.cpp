@@ -5,7 +5,7 @@
 #include <Refureku/TypeInfo/Functions/Function.h>
 #include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>
 
-rfk::Function const& getFunction_manuallyReflectedFunction() noexcept
+static rfk::Function const& getFunction_manuallyReflectedFunction() noexcept
 {
 	static bool initialized = false;
 	static rfk::Function func("manuallyReflectedFunction",

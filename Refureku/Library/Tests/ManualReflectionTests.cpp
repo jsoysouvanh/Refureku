@@ -107,3 +107,34 @@ TEST(Rfk_ManualReflection, FunctionContent)
 
 	EXPECT_EQ(func->invoke<int>(21, 21.1f), 42);
 }
+
+//=========================================================
+//============== Namespace manual reflection ==============
+//=========================================================
+
+TEST(Rfk_ManualReflection, NamespaceDatabase)
+{
+	EXPECT_NE(rfk::getDatabase().getNamespaceByName("third_party_namespace"), nullptr);
+}
+
+TEST(Rfk_ManualReflection, NamespaceContent)
+{
+	rfk::Namespace const* np = rfk::getDatabase().getNamespaceByName("third_party_namespace");
+
+	EXPECT_STREQ(np->getName(), "third_party_namespace");
+	EXPECT_EQ(np->getOuterEntity(), nullptr);
+
+	rfk::Namespace const* nested_np = rfk::getDatabase().getNamespaceByName("third_party_namespace::nested_third_party_namespace");
+	EXPECT_NE(nested_np, nullptr);
+	EXPECT_EQ(nested_np->getOuterEntity(), np);
+
+	rfk::Function const* nestedFunc = nested_np->getFunctionByName("thirdPartyFunc");
+	EXPECT_NE(nestedFunc, nullptr);
+	EXPECT_NE(rfk::getDatabase().getFunctionById(nestedFunc->getId()), nullptr);
+	EXPECT_EQ(nestedFunc->getOuterEntity(), nested_np);
+
+	rfk::Enum const* nested_enum = np->getEnumByName("ThirdPartyEnum");
+	EXPECT_NE(nested_enum, nullptr);
+	EXPECT_NE(rfk::getDatabase().getEnumById(nested_enum->getId()), nullptr);
+	EXPECT_EQ(nested_enum->getOuterEntity(), np);
+}

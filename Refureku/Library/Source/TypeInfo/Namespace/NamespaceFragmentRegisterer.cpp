@@ -4,8 +4,8 @@
 
 using namespace rfk;
 
-NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(char const* name, std::size_t id, NamespaceFragment const& namespaceFragment, bool isFileLevelNamespace) noexcept:
-	_pimpl(new internal::NamespaceFragmentRegistererImpl(name, id, namespaceFragment, isFileLevelNamespace))
+NamespaceFragmentRegisterer::NamespaceFragmentRegisterer(NamespaceFragment const& namespaceFragment, bool isFileLevelNamespace) noexcept:
+	_pimpl(new internal::NamespaceFragmentRegistererImpl(namespaceFragment, isFileLevelNamespace))
 {
 }
 

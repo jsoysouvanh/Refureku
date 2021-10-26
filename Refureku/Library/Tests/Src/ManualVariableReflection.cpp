@@ -7,7 +7,7 @@
 
 int const manuallyReflectedVariable = 24;
 
-rfk::Variable const& getVariable_manuallyReflectedVariable() noexcept
+static rfk::Variable const& getVariable_manuallyReflectedVariable() noexcept
 {
 	static rfk::Variable var("manuallyReflectedVariable",
 							 std::hash<std::string_view>()("manuallyReflectedVariable"),

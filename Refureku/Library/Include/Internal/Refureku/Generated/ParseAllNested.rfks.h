@@ -23,10 +23,10 @@ static bool initialized = false;
 if (!initialized) {
 initialized = true;
 fragment.setNestedEntitiesCapacity(1u);
-fragment.addNestedEntity(&kodgen::ParseAllNested::staticGetArchetype());
+fragment.addNestedEntity(rfk::getArchetype<kodgen::ParseAllNested>());
 }
 return fragment; }
-static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_5603044350098704190u_5959650475308226396 = rfk::NamespaceFragmentRegisterer("kodgen", 5603044350098704190u, rfk::generated::getNamespaceFragment_5603044350098704190u_5959650475308226396(), 1);
+static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_5603044350098704190u_5959650475308226396(rfk::generated::getNamespaceFragment_5603044350098704190u_5959650475308226396(), 1);
  }
 rfk::Class const& kodgen::ParseAllNested::staticGetArchetype() noexcept {
 static bool initialized = false;

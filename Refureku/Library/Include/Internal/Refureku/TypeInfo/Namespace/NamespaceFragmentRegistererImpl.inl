@@ -2,14 +2,14 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
-inline internal::NamespaceFragmentRegistererImpl::NamespaceFragmentRegistererImpl(char const* name, std::size_t id, NamespaceFragment const& namespaceFragment, bool isFileLevelNamespace) noexcept:
+inline internal::NamespaceFragmentRegistererImpl::NamespaceFragmentRegistererImpl(NamespaceFragment const& namespaceFragment, bool isFileLevelNamespace) noexcept:
 	_registeredFragment{namespaceFragment},
 	_namespaceInstance(nullptr)
 {
-	_namespaceInstance = Database::getInstance()._pimpl->getOrCreateNamespace(name, id, isFileLevelNamespace);
+	_namespaceInstance = Database::getInstance()._pimpl->getOrCreateNamespace(namespaceFragment.getName(), namespaceFragment.getId(), isFileLevelNamespace);
 
 	mergeFragmentToNamespace();
 }
