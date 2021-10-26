@@ -18,7 +18,7 @@ class CLASS() ConstructionTrackedClass
 		bool	_moveConstructed	= false;
 
 	public:
-		ConstructionTrackedClass():
+		ConstructionTrackedClass() noexcept:
 			_defaultConstructed{true}
 		{
 		}
@@ -29,19 +29,19 @@ class CLASS() ConstructionTrackedClass
 		{
 		}
 
-		ConstructionTrackedClass(ConstructionTrackedClass const& other):
+		ConstructionTrackedClass(ConstructionTrackedClass const& other) noexcept:
 			_copyConstructed{true},
 			_value{other._value}
 		{
 		}
 
-		ConstructionTrackedClass(ConstructionTrackedClass&& other):
+		ConstructionTrackedClass(ConstructionTrackedClass&& other) noexcept:
 			_moveConstructed{true},
 			_value{std::move(other._value)}
 		{
 		}
 
-		ConstructionTrackedClass& operator=(ConstructionTrackedClass const& other)
+		ConstructionTrackedClass& operator=(ConstructionTrackedClass const& other) noexcept
 		{
 			_defaultConstructed = false;
 			_moveConstructed = false;
@@ -52,7 +52,7 @@ class CLASS() ConstructionTrackedClass
 			return *this;
 		}
 
-		ConstructionTrackedClass& operator=(ConstructionTrackedClass&& other)
+		ConstructionTrackedClass& operator=(ConstructionTrackedClass&& other) noexcept
 		{
 			_defaultConstructed = false;
 			_copyConstructed = false;

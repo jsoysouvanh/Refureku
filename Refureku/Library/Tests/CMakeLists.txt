@@ -31,7 +31,11 @@ add_executable(${RefurekuTestsTarget}
 					Src/BaseObject.cpp
 					Src/TestMethodBase.cpp
 					Src/TestDatabase.cpp
-					
+					Src/ManualEnumReflection.cpp
+					Src/ManualClassReflection.cpp
+					Src/ManualVariableReflection.cpp
+					Src/ManualFunctionReflection.cpp
+
 					main.cpp)
 
 # Link to RefurekuLibrary

@@ -25,6 +25,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "PropertyInheritanceTests.cpp"
 #include "EntityCastTests.cpp"
 #include "DatabaseTests.cpp"
+#include "ManualReflectionTests.cpp"
 
 __RFK_DISABLE_WARNING_POP
 

@@ -1239,12 +1239,14 @@ void ReflectionCodeGenModule::declareGetVariableFunction(kodgen::VariableInfo co
 
 void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	std::string fullName = variable.getFullName();
+
 	inout_result += "rfk::Variable const& rfk::generated::" + computeGetVariableFunctionName(variable) + "() noexcept {" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator() + 
 		"static rfk::Variable variable(\"" + variable.name + "\", " +
 		getEntityId(variable) + ", "
-		"rfk::getType<" + variable.type.getCanonicalName() + ">(), "
-		"const_cast<" + variable.type.getName(true) + "*>(&" + variable.getFullName() + "), "
+		"rfk::getType<decltype(" + fullName + ")>(), "
+		"&" + fullName + ", "
 		"static_cast<rfk::EVarFlags>(" + std::to_string(computeRefurekuVariableFlags(variable)) + ")"
 		");" + env.getSeparator();
 
