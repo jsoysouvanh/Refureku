@@ -49,7 +49,15 @@ TEST(Rfk_Archetype_getAccessSpecifier, NonNestedClassTemplate)
 	EXPECT_EQ(rfk::getArchetype<SingleTypeTemplateClassTemplate>()->getAccessSpecifier(), rfk::EAccessSpecifier::Undefined);
 }
 
-//TODO: Support for nested namespaces (not supported as of yet)
+TEST(Rfk_Archetype_getAccessSpecifier, NamespaceNestedClassTemplate)
+{
+	EXPECT_EQ(rfk::getArchetype<template_namespace::ClassTemplateInNamespace>()->getAccessSpecifier(), rfk::EAccessSpecifier::Undefined);
+}
+
+TEST(Rfk_Archetype_getAccessSpecifier, ClassNestedClassTemplate)
+{
+	EXPECT_EQ(rfk::getArchetype<ClassWithNestedClassTemplate::PublicClassTemplateInClass>()->getAccessSpecifier(), rfk::EAccessSpecifier::Public);
+}
 
 TEST(Rfk_Archetype_getAccessSpecifier, NonNestedClassTemplateInstantiation)
 {

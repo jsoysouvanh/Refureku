@@ -49,25 +49,39 @@ class CLASS() MultipleTypeTemplateClassTemplate : public rfk::Object
 	MultipleTypeTemplateClassTemplate_GENERATED
 };
 
-namespace TESTNP NAMESPACE()
+namespace template_namespace NAMESPACE()
 {
 	template <typename T>
 	class CLASS() ClassTemplateInNamespace
 	{
-		TESTNP_ClassTemplateInNamespace_GENERATED
+		template_namespace_ClassTemplateInNamespace_GENERATED
 	};
 }
 
-//class CLASS() TESTCLASS
-//{
-//	protected:
-//		template <typename T>
-//		class CLASS() ClassTemplateInCLASS
-//		{
-//			TESTCLASS_ClassTemplateInCLASS_T_GENERATED
-//		};
-//
-//	TESTCLASS_GENERATED
-//};
+class CLASS() ClassWithNestedClassTemplate
+{
+	private:
+		/*template <typename T>
+		class CLASS() PrivateClassTemplateInClass
+		{
+			ClassWithNestedClassTemplate_PrivateClassTemplateInClass_GENERATED
+		};*/
+
+	protected:
+		/*template <typename T>
+		class CLASS() ProtectedClassTemplateInClass
+		{
+			ClassWithNestedClassTemplate_ProtectedClassTemplateInClass_GENERATED
+		};*/
+		
+	public:
+		template <typename T>
+		class CLASS() PublicClassTemplateInClass
+		{
+			ClassWithNestedClassTemplate_PublicClassTemplateInClass_GENERATED
+		};
+
+	ClassWithNestedClassTemplate_GENERATED
+};
 
 File_TypeTemplateClassTemplate_GENERATED
