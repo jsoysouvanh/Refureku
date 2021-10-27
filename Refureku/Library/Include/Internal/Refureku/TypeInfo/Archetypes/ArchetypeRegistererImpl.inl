@@ -11,12 +11,12 @@ inline internal::ArchetypeRegistererImpl::ArchetypeRegistererImpl(Archetype cons
 	//Archetypes which are not at file level should not be registered
 	assert(archetype.getOuterEntity() == nullptr);
 
-	Database::getInstance()._pimpl->registerFileLevelEntity(archetype, true);
+	Database::getInstance()._pimpl->registerFileLevelEntityRecursive(archetype);
 }
 
 inline internal::ArchetypeRegistererImpl::~ArchetypeRegistererImpl() noexcept
 {
-	Database::getInstance()._pimpl->unregisterEntity(_registeredArchetype, true);
+	Database::getInstance()._pimpl->unregisterEntityRecursive(_registeredArchetype);
 }
 
 inline Archetype const& internal::ArchetypeRegistererImpl::getRegisteredArchetype() const noexcept

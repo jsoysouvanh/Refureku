@@ -12,13 +12,13 @@ inline internal::DefaultEntityRegistererImpl::DefaultEntityRegistererImpl(Entity
 	assert(entity.getOuterEntity() == nullptr);
 
 	//Register to database
-	Database::getInstance()._pimpl->registerFileLevelEntity(entity, false);
+	Database::getInstance()._pimpl->registerFileLevelEntityRecursive(_registeredEntity);
 }
 
 inline internal::DefaultEntityRegistererImpl::~DefaultEntityRegistererImpl() noexcept
 {
 	//Unregister from database
-	Database::getInstance()._pimpl->unregisterEntity(_registeredEntity, false);
+	Database::getInstance()._pimpl->unregisterEntityRecursive(_registeredEntity);
 }
 
 inline Entity const& internal::DefaultEntityRegistererImpl::getRegisteredEntity() const noexcept

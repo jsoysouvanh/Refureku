@@ -46,7 +46,7 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
 			*/
-			inline bool								addProperty(Property const* property)				noexcept;
+			inline bool								addProperty(Property const& property)				noexcept;
 
 			/**
 			*	@brief	Set the number of nested entities for this entity.

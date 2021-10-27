@@ -53,7 +53,7 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (for example, AllowMultiple is false and a property of the same kind is already in the entity).
 			*/
-			inline bool									addProperty(Property const* property)					noexcept;
+			inline bool									addProperty(Property const& property)					noexcept;
 
 			/**
 			*	@brief Inherit from another entity inheritable properties.

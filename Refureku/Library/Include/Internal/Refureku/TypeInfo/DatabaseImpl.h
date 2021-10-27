@@ -73,6 +73,20 @@ namespace rfk
 			GenNamespaces				_generatedNamespaces;
 
 			/**
+			*	@brief Register an entity to the database.
+			*	
+			*	@param entity The entity to register.
+			*/
+			inline void		registerEntityId(Entity const& entity)									noexcept;
+
+			/**
+			*	@brief Register all sub entities of an entity to the database.
+			*	
+			*	@param entity The entity which sub entities id must be registered. This entity id is not registered.
+			*/
+			inline void		registerSubEntitesId(Entity const& entity)								noexcept;
+
+			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
 			*	@param frag The namespace fragment.
@@ -119,53 +133,41 @@ namespace rfk
 			~DatabaseImpl()	= default;
 			
 			/**
-			*	@brief Register a file level entity to the database (add it to both _entitiesById & _fileLevelEntitiesByName).
+			*	@brief	Register a file level entity to the database (add it to both _entitiesById & _fileLevelEntitiesByName),
+			*			as well as all its sub entities.
 			*	
-			*	@param entity						The entity to register.
-			*	@param shouldRegisterSubEntities	Should sub entities be registered by id recursively?
+			*	@param entity The root entity to register.
 			*/
-			inline void											registerFileLevelEntity(Entity const&	entity,
-																						bool			shouldRegisterSubEntities)	noexcept;
+			inline void							registerFileLevelEntityRecursive(Entity const&	entity)					noexcept;
 
 			/**
-			*	@brief Register an entity to the database.
+			*	@brief Register an entity as well as its sub entities by id to the database.
 			*	
-			*	@param entity						The entity to register.
-			*	@param shouldRegisterSubEntities	Should sub entities be registered recursively?
+			*	@param entity The root entity to register.
 			*/
-			inline void											registerEntityId(Entity const&	entity,
-																				 bool			shouldRegisterSubEntities)			noexcept;
+			inline void							registerEntityIdRecursive(Entity const& entity)							noexcept;
 
 			/**
-			*	@brief Register an entity to the database.
+			*	@brief Unregister an entity from the database (from both _entitiesById & _fileLevelEntitiesByName if applicable).
 			*	
-			*	@param entity The entity to register.
+			*	@param entity The entity to unregister.
 			*/
-			inline void											registerEntityId(Entity const& entity)								noexcept;
+			inline void							unregisterEntity(Entity const& entity)									noexcept;
 
 			/**
-			*	@brief Register all sub entities of an entity to the database.
+			*	@brief	Unregister an entity as well as all its sub entities from the database
+			*			(from both _entitiesById & _fileLevelEntitiesByName if applicable).
 			*	
-			*	@param entity The entity which sub entities id must be registered. This entity id is not registered.
+			*	@param entity The root entity to unregister.
 			*/
-			inline void											registerSubEntitesId(Entity const& entity)							noexcept;
+			inline void							unregisterEntityRecursive(Entity const&	entity)							noexcept;
 
 			/**
-			*	@brief Unregister an entity from the database.
-			*	
-			*	@param entity						The entity to unregister.
-			*	@param shouldUnregisterSubEntities	Should sub entities be unregistered recursively?
-			*/
-			inline void											unregisterEntity(Entity const&	entity,
-																				 bool			shouldUnregisterSubEntities)		noexcept;
-
-			/**
-			*	@brief	Check that a namespace is still referenced by some namespace fragment.
-			*			If not, remove it from the database.
+			*	@brief	Remove a namespace from the database if it is not referenced by other namespace fragments.
 			*
 			*	@param npPtr Pointer to the namespace to check.
 			*/
-			inline void											checkNamespaceRefCount(std::shared_ptr<Namespace> const& npPtr)		noexcept;
+			inline void							releaseNamespaceIfUnreferenced(std::shared_ptr<Namespace> const& npPtr)	noexcept;
 
 			/**
 			*	@brief Get the namespace with the given name and id. If it doesn't exist yet, create and register it right away.
@@ -175,8 +177,9 @@ namespace rfk
 			* 
 			*	@return A shared_ptr to the retrieved namespace.
 			*/
-			RFK_NODISCARD inline std::shared_ptr<Namespace>		getOrCreateNamespace(char const*	name,
-																					 std::size_t	id)								noexcept;
+			RFK_NODISCARD inline 
+				std::shared_ptr<Namespace>		getOrCreateNamespace(char const*	name,
+																	 std::size_t	id)									noexcept;
 
 			/**
 			*	@brief Getters for each field.

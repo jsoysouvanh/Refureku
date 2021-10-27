@@ -75,7 +75,7 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const&
 void runForInternalDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
 							kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
 {
-	logger.log("Run for private directory.");
+	logger.log("Run for Internal directory.");
 	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, getLibraryDirectoryPath() / "Include" / "Internal" / "Refureku" / "Generated"))
 	{
 		//Parse
@@ -93,7 +93,7 @@ void runForInternalDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeG
 void runForPublicDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
 						   kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
 {
-	logger.log("Run for public directory.");
+	logger.log("Run for Public directory.");
 	
 	fs::path outputDirectory = getLibraryDirectoryPath() / "Include" / "Public" / "Refureku" / "Generated";
 	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, outputDirectory))

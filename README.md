@@ -239,3 +239,4 @@ This library has been tested and is stable on the following configurations:
 # Known issues
 - _(MSVC only)_ Issues when reflecting class templates with only template template parameters, see [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
 - Compilation error when reflect protected/private nested class template
+- If a reflected namespace is shared among different modules, this namespace properties are not removed when one of the modules is unloaded.

@@ -15,12 +15,12 @@ NamespaceFragment::~NamespaceFragment() noexcept
 {
 	//Check if this namespace fragment was the last fragment of the merged namespace
 	//If this is the case, the namespace will be completely removed from the database
-	Database::getInstance()._pimpl->checkNamespaceRefCount(getPimpl()->getMergedNamespace());
+	Database::getInstance()._pimpl->releaseNamespaceIfUnreferenced(getPimpl()->getMergedNamespace());
 }
 
-void NamespaceFragment::addNestedEntity(Entity const* nestedEntity) noexcept
+void NamespaceFragment::addNestedEntity(Entity const& nestedEntity) noexcept
 {
-	getPimpl()->addNestedEntity(*nestedEntity);
+	getPimpl()->addNestedEntity(nestedEntity);
 }
 
 void NamespaceFragment::setNestedEntitiesCapacity(std::size_t capacity) noexcept
@@ -28,7 +28,7 @@ void NamespaceFragment::setNestedEntitiesCapacity(std::size_t capacity) noexcept
 	getPimpl()->setNestedEntitiesCapacity(capacity);
 }
 
-bool NamespaceFragment::addProperty(Property const* property) noexcept
+bool NamespaceFragment::addProperty(Property const& property) noexcept
 {
 	return getPimpl()->addProperty(property);
 }

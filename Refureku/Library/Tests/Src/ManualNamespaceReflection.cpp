@@ -31,7 +31,7 @@ static rfk::NamespaceFragment const& getNamespaceFragment_nested_third_party_nam
 		initialized = true;
 
 		fragment.setNestedEntitiesCapacity(1u);
-		fragment.addNestedEntity(&getFunction_thirdPartyFunc());
+		fragment.addNestedEntity(getFunction_thirdPartyFunc());
 	}
 
 	return fragment;
@@ -58,8 +58,8 @@ static rfk::NamespaceFragment const& getNamespaceFragment_third_party_namespace(
 		initialized = true;
 
 		fragment.setNestedEntitiesCapacity(2u);
-		fragment.addNestedEntity(&getNamespaceFragment_nested_third_party_namespace());
-		fragment.addNestedEntity(rfk::getEnum<third_party_namespace::ThirdPartyEnum>());
+		fragment.addNestedEntity(getNamespaceFragment_nested_third_party_namespace());
+		fragment.addNestedEntity(*rfk::getEnum<third_party_namespace::ThirdPartyEnum>());
 	}
 
 	return fragment;

@@ -216,7 +216,7 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
 			*/
-			REFUREKU_API bool				addProperty(Property const* property)								noexcept;
+			REFUREKU_API bool				addProperty(Property const& property)								noexcept;
 
 			/**
 			*	@brief Setter for the field _outerEntity.

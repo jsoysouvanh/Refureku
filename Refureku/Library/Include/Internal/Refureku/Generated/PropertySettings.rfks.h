@@ -23,7 +23,7 @@ static bool initialized = false;
 if (!initialized) {
 initialized = true;
 fragment.setNestedEntitiesCapacity(1u);
-fragment.addNestedEntity(rfk::getArchetype<rfk::PropertySettings>());
+fragment.addNestedEntity(*rfk::getArchetype<rfk::PropertySettings>());
 }
 return fragment; }
 static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_6202377051882013391u_15963945972659803745(rfk::generated::getNamespaceFragment_6202377051882013391u_15963945972659803745());
@@ -34,7 +34,7 @@ static rfk::Class type("PropertySettings", 9343641787758265814u, sizeof(Property
 if (!initialized) {
 initialized = true;
 type.setPropertiesCapacity(1);
-static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_9343641787758265814u_0{rfk::EEntityKind::Struct | rfk::EEntityKind::Class};type.addProperty(&property_9343641787758265814u_0);
+static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_9343641787758265814u_0{rfk::EEntityKind::Struct | rfk::EEntityKind::Class};type.addProperty(property_9343641787758265814u_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 PropertySettings::_rfk_registerChildClass<PropertySettings>(type);

@@ -533,7 +533,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 
 			inout_result.push_back(';');
 
-			inout_result += generatedEntityVarName + "addProperty(&" + generatedPropertyVariableName + ");" + env.getSeparator();
+			inout_result += generatedEntityVarName + "addProperty(" + generatedPropertyVariableName + ");" + env.getSeparator();
 		}
 	}
 }
@@ -1389,37 +1389,37 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 		//Namespaces
 		for (kodgen::NamespaceInfo const& nestedNamespace : namespace_.namespaces)
 		{
-			inout_result += "fragment.addNestedEntity(&rfk::generated::" + computeGetNamespaceFragmentFunctionName(nestedNamespace, env.getFileParsingResult()->parsedFile) + "());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(rfk::generated::" + computeGetNamespaceFragmentFunctionName(nestedNamespace, env.getFileParsingResult()->parsedFile) + "());" + env.getSeparator();
 		}
 
 		//Structs
 		for (kodgen::StructClassInfo const& nestedStruct : namespace_.structs)
 		{
-			inout_result += "fragment.addNestedEntity(rfk::getArchetype<" + nestedStruct.type.getCanonicalName() + ">());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(*rfk::getArchetype<" + nestedStruct.type.getCanonicalName() + ">());" + env.getSeparator();
 		}
 
 		//Classes
 		for (kodgen::StructClassInfo const& nestedClass : namespace_.classes)
 		{
-			inout_result += "fragment.addNestedEntity(rfk::getArchetype<" + nestedClass.type.getCanonicalName() + ">());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(*rfk::getArchetype<" + nestedClass.type.getCanonicalName() + ">());" + env.getSeparator();
 		}
 
 		//Enums
 		for (kodgen::EnumInfo const& nestedEnum : namespace_.enums)
 		{
-			inout_result += "fragment.addNestedEntity(rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(*rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">());" + env.getSeparator();
 		}
 
 		//Variables
 		for (kodgen::VariableInfo const& variable : namespace_.variables)
 		{
-			inout_result += "fragment.addNestedEntity(&rfk::generated::" + computeGetVariableFunctionName(variable) + "());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(rfk::generated::" + computeGetVariableFunctionName(variable) + "());" + env.getSeparator();
 		}
 
 		//Functions
 		for (kodgen::FunctionInfo const& function : namespace_.functions)
 		{
-			inout_result += "fragment.addNestedEntity(&rfk::generated::" + computeGetFunctionFunctionName(function) + "());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(rfk::generated::" + computeGetFunctionFunctionName(function) + "());" + env.getSeparator();
 		}
 	}
 

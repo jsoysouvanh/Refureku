@@ -11,13 +11,13 @@ inline internal::NamespaceFragmentRegistererImpl::NamespaceFragmentRegistererImp
 	//Only register file level namespaces
 	assert(namespaceFragment.getOuterEntity() == nullptr);
 
-	Database::getInstance()._pimpl->registerFileLevelEntity(_registeredFragment, true);
+	Database::getInstance()._pimpl->registerFileLevelEntityRecursive(_registeredFragment);
 }
 
 inline internal::NamespaceFragmentRegistererImpl::~NamespaceFragmentRegistererImpl() noexcept
 {
 	//Unregister namespace fragment from database
-	Database::getInstance()._pimpl->unregisterEntity(_registeredFragment, true);
+	Database::getInstance()._pimpl->unregisterEntityRecursive(_registeredFragment);
 
 	/**
 	*	The registerer destructor is guaranteed to run before any of the nested entity destructor because

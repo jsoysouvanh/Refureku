@@ -23,7 +23,7 @@ static bool initialized = false;
 if (!initialized) {
 initialized = true;
 fragment.setNestedEntitiesCapacity(1u);
-fragment.addNestedEntity(rfk::getArchetype<kodgen::ParseAllNested>());
+fragment.addNestedEntity(*rfk::getArchetype<kodgen::ParseAllNested>());
 }
 return fragment; }
 static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_5603044350098704190u_5959650475308226396(rfk::generated::getNamespaceFragment_5603044350098704190u_5959650475308226396());
@@ -34,7 +34,7 @@ static rfk::Class type("ParseAllNested", 1518429735798145968u, sizeof(ParseAllNe
 if (!initialized) {
 initialized = true;
 type.setPropertiesCapacity(1);
-static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_1518429735798145968u_0{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.addProperty(&property_1518429735798145968u_0);
+static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_1518429735798145968u_0{rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct};type.addProperty(property_1518429735798145968u_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 ParseAllNested::_rfk_registerChildClass<ParseAllNested>(type);

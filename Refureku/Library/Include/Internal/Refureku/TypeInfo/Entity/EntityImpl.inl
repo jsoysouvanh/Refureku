@@ -14,22 +14,22 @@ inline Entity::EntityImpl::EntityImpl(char const* name, std::size_t id, EEntityK
 {
 }
 
-inline bool Entity::EntityImpl::addProperty(Property const* toAddProperty) noexcept
+inline bool Entity::EntityImpl::addProperty(Property const& toAddProperty) noexcept
 {
-	if (!toAddProperty->getAllowMultiple())
+	if (!toAddProperty.getAllowMultiple())
 	{
 		//Check if a property of the same type is already in this entity,
 		//in which case we abort the add
 		for (Property const* property : _properties)
 		{
-			if (&toAddProperty->getArchetype() == &property->getArchetype())
+			if (&toAddProperty.getArchetype() == &property->getArchetype())
 			{
 				return false;
 			}
 		}
 	}
 
-	_properties.push_back(toAddProperty);
+	_properties.push_back(&toAddProperty);
 
 	return true;
 }
@@ -40,7 +40,7 @@ inline void Entity::EntityImpl::inheritProperties(EntityImpl const& from) noexce
 	{
 		if (property->getShouldInherit())
 		{
-			addProperty(property);
+			addProperty(*property);
 		}
 	}
 }
@@ -49,7 +49,7 @@ inline void Entity::EntityImpl::inheritAllProperties(EntityImpl const& from) noe
 {
 	for (Property const* property : from._properties)
 	{
-		addProperty(property);
+		addProperty(*property);
 	}
 }
 

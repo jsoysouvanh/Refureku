@@ -23,7 +23,7 @@ static bool initialized = false;
 if (!initialized) {
 initialized = true;
 fragment.setNestedEntitiesCapacity(1u);
-fragment.addNestedEntity(rfk::getArchetype<rfk::Instantiator>());
+fragment.addNestedEntity(*rfk::getArchetype<rfk::Instantiator>());
 }
 return fragment; }
 static rfk::NamespaceFragmentRegisterer namespaceFragmentRegisterer_6202377051882013391u_13909718342397644637(rfk::generated::getNamespaceFragment_6202377051882013391u_13909718342397644637());
@@ -34,7 +34,7 @@ static rfk::Class type("Instantiator", 11099498566387530766u, sizeof(Instantiato
 if (!initialized) {
 initialized = true;
 type.setPropertiesCapacity(1);
-static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_11099498566387530766u_0{rfk::EEntityKind::Method};type.addProperty(&property_11099498566387530766u_0);
+static_assert((rfk::PropertySettings::targetEntityKind & rfk::EEntityKind::Class) != rfk::EEntityKind::Undefined, "[Refureku] rfk::PropertySettings can't be applied to a rfk::EEntityKind::Class");static rfk::PropertySettings property_11099498566387530766u_0{rfk::EEntityKind::Method};type.addProperty(property_11099498566387530766u_0);
 type.setDirectParentsCapacity(1);
 type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAccessSpecifier>(1));
 Instantiator::_rfk_registerChildClass<Instantiator>(type);

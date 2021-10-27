@@ -118,7 +118,7 @@ bool Entity::foreachProperty(Visitor<Property> visitor, void* userData) const
 	return Algorithm::foreach(_pimpl->getProperties(), visitor, userData);
 }
 
-bool Entity::addProperty(Property const* property) noexcept
+bool Entity::addProperty(Property const& property) noexcept
 {
 	return _pimpl->addProperty(property);
 }

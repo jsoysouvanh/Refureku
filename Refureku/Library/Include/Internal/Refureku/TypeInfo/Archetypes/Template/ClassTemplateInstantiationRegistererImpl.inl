@@ -8,10 +8,10 @@
 inline internal::ClassTemplateInstantiationRegistererImpl::ClassTemplateInstantiationRegistererImpl(ClassTemplateInstantiation const& instantiation) noexcept:
 	_registeredClassTemplateInstantiation{instantiation}
 {
-	Database::getInstance()._pimpl->registerEntityId(instantiation, true);
+	Database::getInstance()._pimpl->registerEntityIdRecursive(instantiation);
 }
 
 inline internal::ClassTemplateInstantiationRegistererImpl::~ClassTemplateInstantiationRegistererImpl() noexcept
 {
-	Database::getInstance()._pimpl->unregisterEntity(_registeredClassTemplateInstantiation, true);
+	Database::getInstance()._pimpl->unregisterEntityRecursive(_registeredClassTemplateInstantiation);
 }

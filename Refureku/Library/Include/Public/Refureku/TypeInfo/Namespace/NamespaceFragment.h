@@ -29,7 +29,7 @@ namespace rfk
 			*	
 			*	@param this.
 			*/
-			REFUREKU_API void						addNestedEntity(Entity const* nestedEntity)				noexcept;
+			REFUREKU_API void						addNestedEntity(Entity const& nestedEntity)				noexcept;
 
 			/**
 			*	@brief	Set the number of nested entities for this entity.
@@ -49,7 +49,7 @@ namespace rfk
 			*	@return	true if the property was added,
 			*			false if it failed to be added (allow multiple is false and the property is already in the entity for example).
 			*/
-			REFUREKU_API bool						addProperty(Property const* property)					noexcept;
+			REFUREKU_API bool						addProperty(Property const& property)					noexcept;
 
 			/**
 			*	@brief Get the namespace this fragment is merged to.

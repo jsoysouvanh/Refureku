@@ -58,12 +58,9 @@ inline void NamespaceFragment::NamespaceFragmentImpl::addNestedEntity(Entity con
 	}
 }
 
-inline bool	NamespaceFragment::NamespaceFragmentImpl::addProperty(Property const* property) noexcept
+inline bool	NamespaceFragment::NamespaceFragmentImpl::addProperty(Property const& property) noexcept
 {
-	if (_mergedNamespace->getProperty(property->getArchetype(), false) == nullptr)
-	{
-		_mergedNamespace->addProperty(property);
-	}
+	_mergedNamespace->addProperty(property);
 
 	return EntityImpl::addProperty(property);
 }
