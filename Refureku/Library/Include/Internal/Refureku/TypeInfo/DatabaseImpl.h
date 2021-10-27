@@ -17,6 +17,7 @@
 #include "Refureku/TypeInfo/Database.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
+#include "Refureku/TypeInfo/Namespace/NamespaceFragment.h"
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Refureku/TypeInfo/Archetypes/EnumValue.h"
@@ -74,30 +75,44 @@ namespace rfk
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
+			*	@param frag The namespace fragment.
+			*/
+			inline void		registerNamespaceFragmentSubEntities(NamespaceFragment const& frag)		noexcept;
+
+			/**
+			*	@brief Remove all nested entities from the _entitiesById map.
+			*	
+			*	@param frag The namespace fragment.
+			*/
+			inline void		unregisterNamespaceFragmentSubEntities(NamespaceFragment const& frag)	noexcept;
+
+			/**
+			*	@brief Add all nested entities to the _entitiesById map.
+			*	
 			*	@param s The parent struct.
 			*/
-			inline void		registerSubEntities(Struct const& s)		noexcept;
+			inline void		registerStructSubEntities(Struct const& s)								noexcept;
 
 			/**
 			*	@brief Remove all nested entities from the _entitiesById map.
 			*	
 			*	@param s The parent struct.
 			*/
-			inline void		unregisterSubEntities(Struct const& s)	noexcept;
+			inline void		unregisterStructSubEntities(Struct const& s)							noexcept;
 
 			/**
 			*	@brief Add all nested entities to the _entitiesById map.
 			*	
 			*	@param e The parent enum.
 			*/
-			inline void		registerSubEntities(Enum const& e)		noexcept;
+			inline void		registerEnumSubEntities(Enum const& e)									noexcept;
 
 			/**
 			*	@brief Remove all nested entities from the _entitiesById map.
 			*	
 			*	@param e The parent enum.
 			*/
-			inline void		unregisterSubEntities(Enum const& e)		noexcept;
+			inline void		unregisterEnumSubEntities(Enum const& e)								noexcept;
 
 		public:
 			DatabaseImpl()	= default;
@@ -110,7 +125,7 @@ namespace rfk
 			*	@param shouldRegisterSubEntities	Should sub entities be registered by id recursively?
 			*/
 			inline void											registerFileLevelEntity(Entity const&	entity,
-																						bool				shouldRegisterSubEntities)	noexcept;
+																						bool			shouldRegisterSubEntities)	noexcept;
 
 			/**
 			*	@brief Register an entity to the database.
@@ -119,7 +134,21 @@ namespace rfk
 			*	@param shouldRegisterSubEntities	Should sub entities be registered recursively?
 			*/
 			inline void											registerEntityId(Entity const&	entity,
-																				 bool				shouldRegisterSubEntities)			noexcept;
+																				 bool			shouldRegisterSubEntities)			noexcept;
+
+			/**
+			*	@brief Register an entity to the database.
+			*	
+			*	@param entity The entity to register.
+			*/
+			inline void											registerEntityId(Entity const& entity)								noexcept;
+
+			/**
+			*	@brief Register all sub entities of an entity to the database.
+			*	
+			*	@param entity The entity which sub entities id must be registered. This entity id is not registered.
+			*/
+			inline void											registerSubEntitesId(Entity const& entity)							noexcept;
 
 			/**
 			*	@brief Unregister an entity from the database.
@@ -128,7 +157,7 @@ namespace rfk
 			*	@param shouldUnregisterSubEntities	Should sub entities be unregistered recursively?
 			*/
 			inline void											unregisterEntity(Entity const&	entity,
-																				 bool				shouldUnregisterSubEntities)		noexcept;
+																				 bool			shouldUnregisterSubEntities)		noexcept;
 
 			/**
 			*	@brief	Check that a namespace is still referenced by some namespace fragment.
@@ -146,9 +175,8 @@ namespace rfk
 			* 
 			*	@return A shared_ptr to the retrieved namespace.
 			*/
-			RFK_NODISCARD inline std::shared_ptr<Namespace>	getOrCreateNamespace(char const*	name,
-																					 std::size_t	id,
-																					 bool			isFileLevelNamespace)				noexcept;
+			RFK_NODISCARD inline std::shared_ptr<Namespace>		getOrCreateNamespace(char const*	name,
+																					 std::size_t	id)								noexcept;
 
 			/**
 			*	@brief Getters for each field.

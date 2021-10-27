@@ -5,19 +5,18 @@
 *	See the LICENSE.md file for full license details.
 */
 
-void Database::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+inline void Database::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bool shouldRegisterSubEntities) noexcept
 {
 	assert(entity.getOuterEntity() == nullptr);
-
-	//Register by id
-	registerEntityId(entity, shouldRegisterSubEntities);
 
 	//Register by name
 	switch (entity.getKind())
 	{
-		case EEntityKind::Namespace:
-			_fileLevelNamespacesByName.emplace(reinterpret_cast<Namespace const*>(&entity));
-			break;
+		case EEntityKind::NamespaceFragment:
+			_fileLevelNamespacesByName.emplace(reinterpret_cast<Namespace const*>(&static_cast<NamespaceFragment const&>(entity).getMergedNamespace()));
+			
+			registerSubEntitesId(entity);
+			return;	
 
 		case EEntityKind::Struct:
 			_fileLevelStructsByName.emplace(reinterpret_cast<Struct const*>(&entity));
@@ -43,6 +42,9 @@ void Database::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bool 
 			_fundamentalArchetypes.emplace(reinterpret_cast<FundamentalArchetype const*>(&entity));
 			break;
 
+		case EEntityKind::Namespace:
+			//This situation should never happen since namespace registration is done through NamespaceFragment
+			[[fallthrough]];
 		case EEntityKind::EnumValue:
 			[[fallthrough]];
 		case EEntityKind::Field:
@@ -56,26 +58,32 @@ void Database::DatabaseImpl::registerFileLevelEntity(Entity const& entity, bool 
 			assert(false);
 			break;
 	}
+
+	//Register by id
+	registerEntityId(entity, shouldRegisterSubEntities);
 }
 
-void Database::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEntities) noexcept
+inline void Database::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldUnregisterSubEntities) noexcept
 {
 	if (shouldUnregisterSubEntities)
 	{
 		switch (entity.getKind())
 		{
-			case EEntityKind::Namespace:
-				assert(false); //This situation should never happen
-				break;
+			case EEntityKind::NamespaceFragment:
+				unregisterNamespaceFragmentSubEntities(static_cast<NamespaceFragment const&>(entity));
+				
+				//Namespace fragment is not registered by id, and is not a file level registered entity neither
+				//So we can exit the method call right away
+				return;	
 
 			case EEntityKind::Struct:
 				[[fallthrough]];
 			case EEntityKind::Class:
-				unregisterSubEntities(static_cast<Struct const&>(entity));
+				unregisterStructSubEntities(static_cast<Struct const&>(entity));
 				break;
 
 			case EEntityKind::Enum:
-				unregisterSubEntities(static_cast<Enum const&>(entity));
+				unregisterEnumSubEntities(static_cast<Enum const&>(entity));
 				break;
 
 			case EEntityKind::Variable:
@@ -92,6 +100,9 @@ void Database::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldU
 				//No sub entity to unregister
 				break;
 
+			case EEntityKind::Namespace:
+				//This situation should never happen since namespace unregistration is done through NamespaceFragment
+				[[fallthrough]];
 			case EEntityKind::Undefined:
 				[[fallthrough]];
 			default:
@@ -151,8 +162,11 @@ void Database::DatabaseImpl::unregisterEntity(Entity const& entity, bool shouldU
 	}
 }
 
-void Database::DatabaseImpl::registerEntityId(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+inline void Database::DatabaseImpl::registerEntityId(Entity const& entity) noexcept
 {
+	//Should never register namespace fragments
+	assert(entity.getKind() != EEntityKind::NamespaceFragment);
+
 	auto result = _entitiesById.emplace(&entity);
 
 	//std::cout << "Register: (" << entity.getId() << ", " << entity.getName() << ")" << std::endl;
@@ -165,47 +179,90 @@ void Database::DatabaseImpl::registerEntityId(Entity const& entity, bool shouldR
 		std::cout << "[Refureku] WARNING: Double registration detected: (" << entity.getId() << ", " << entity.getName() <<
 			") collides with entity: (" << foundEntity->getId() << ", " << foundEntity->getName() << ")" << std::endl;
 	}
+}
 
-	if (shouldRegisterSubEntities)
+inline void Database::DatabaseImpl::registerSubEntitesId(Entity const& entity) noexcept
+{
+	switch (entity.getKind())
 	{
-		switch (entity.getKind())
-		{
-			case EEntityKind::Struct:
-				[[fallthrough]];
-			case EEntityKind::Class:
-				registerSubEntities(static_cast<Struct const&>(entity));
-				break;
+		case EEntityKind::NamespaceFragment:
+			registerNamespaceFragmentSubEntities(static_cast<NamespaceFragment const&>(entity));
+			break;
 
-			case EEntityKind::Enum:
-				registerSubEntities(static_cast<Enum const&>(entity));
-				break;
+		case EEntityKind::Struct:
+			[[fallthrough]];
+		case EEntityKind::Class:
+			registerStructSubEntities(static_cast<Struct const&>(entity));
+			break;
 
-			case EEntityKind::Namespace:
-				[[fallthrough]];	//Namespace nested entities are manually registered by NamespaceFragmentRegisterers
-			case EEntityKind::FundamentalArchetype:
-				[[fallthrough]];
-			case EEntityKind::Variable:
-				[[fallthrough]];
-			case EEntityKind::Field:
-				[[fallthrough]];
-			case EEntityKind::Function:
-				[[fallthrough]];
-			case EEntityKind::Method:
-				[[fallthrough]];
-			case EEntityKind::EnumValue:
-				//No sub entity to register
-				break;
+		case EEntityKind::Enum:
+			registerEnumSubEntities(static_cast<Enum const&>(entity));
+			break;
 
-			case EEntityKind::Undefined:
-				[[fallthrough]];
-			default:
-				assert(false);	//Should never register a bad kind
-				break;
-		}
+		case EEntityKind::FundamentalArchetype:
+			[[fallthrough]];
+		case EEntityKind::Variable:
+			[[fallthrough]];
+		case EEntityKind::Field:
+			[[fallthrough]];
+		case EEntityKind::Function:
+			[[fallthrough]];
+		case EEntityKind::Method:
+			[[fallthrough]];
+		case EEntityKind::EnumValue:
+			//No sub entity to register
+			break;
+
+		case EEntityKind::Namespace:
+			[[fallthrough]];
+		case EEntityKind::Undefined:
+			[[fallthrough]];
+		default:
+			assert(false);	//Should never happen
+			break;
 	}
 }
 
-inline void Database::DatabaseImpl::registerSubEntities(Struct const& s) noexcept
+inline void Database::DatabaseImpl::registerEntityId(Entity const& entity, bool shouldRegisterSubEntities) noexcept
+{
+	registerEntityId(entity);
+
+	if (shouldRegisterSubEntities)
+	{
+		registerSubEntitesId(entity);
+	}
+}
+
+inline void Database::DatabaseImpl::registerNamespaceFragmentSubEntities(NamespaceFragment const& frag) noexcept
+{
+	frag.foreachNestedEntity([](Entity const& nestedEntity, void* userData)
+							 {
+								 switch (nestedEntity.getKind())
+								 {
+									 case EEntityKind::NamespaceFragment:
+										 reinterpret_cast<DatabaseImpl*>(userData)->registerSubEntitesId(nestedEntity);
+										 break;
+
+									 default:
+										 reinterpret_cast<DatabaseImpl*>(userData)->registerEntityId(nestedEntity, true);
+										 break;
+								 }
+								 
+								 return true;
+							 }, this);
+}
+
+inline void Database::DatabaseImpl::unregisterNamespaceFragmentSubEntities(NamespaceFragment const& frag) noexcept
+{
+	frag.foreachNestedEntity([](Entity const& nestedEntity, void* userData)
+							 {
+								 reinterpret_cast<DatabaseImpl*>(userData)->unregisterEntity(nestedEntity, true);
+
+								 return true;
+							 }, this);
+}
+
+inline void Database::DatabaseImpl::registerStructSubEntities(Struct const& s) noexcept
 {
 	//Add nested archetypes
 	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
@@ -246,7 +303,7 @@ inline void Database::DatabaseImpl::registerSubEntities(Struct const& s) noexcep
 						  }, this);
 }
 
-inline void Database::DatabaseImpl::unregisterSubEntities(Struct const& s) noexcept
+inline void Database::DatabaseImpl::unregisterStructSubEntities(Struct const& s) noexcept
 {
 	//Remove nested archetypes
 	s.foreachNestedArchetype([](Archetype const& archetype, void* userData)
@@ -287,7 +344,7 @@ inline void Database::DatabaseImpl::unregisterSubEntities(Struct const& s) noexc
 						  }, this);
 }
 
-inline void Database::DatabaseImpl::registerSubEntities(Enum const& e) noexcept
+inline void Database::DatabaseImpl::registerEnumSubEntities(Enum const& e) noexcept
 {
 	//Enum values
 	e.foreachEnumValue([](EnumValue const& enumValue, void* userData)
@@ -298,7 +355,7 @@ inline void Database::DatabaseImpl::registerSubEntities(Enum const& e) noexcept
 					   }, this);
 }
 
-inline void Database::DatabaseImpl::unregisterSubEntities(Enum const& e) noexcept
+inline void Database::DatabaseImpl::unregisterEnumSubEntities(Enum const& e) noexcept
 {
 	//Enum values
 	e.foreachEnumValue([](EnumValue const& enumValue, void* userData)
@@ -323,7 +380,7 @@ inline void Database::DatabaseImpl::checkNamespaceRefCount(std::shared_ptr<Names
 	}
 }
 
-inline std::shared_ptr<Namespace> Database::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id, bool isFileLevelNamespace) noexcept
+inline std::shared_ptr<Namespace> Database::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id) noexcept
 {
 	auto it = _generatedNamespaces.find(id);
 
@@ -338,13 +395,12 @@ inline std::shared_ptr<Namespace> Database::DatabaseImpl::getOrCreateNamespace(c
 
 		assert(generatedNamespaceIt.second);
 
-		//Register the namespace to file level namespaces
-		if (isFileLevelNamespace)
-		{
-			registerFileLevelEntity(*generatedNamespaceIt.first->second, false);
-		}
+		std::shared_ptr<Namespace> const& generatedNamespace = generatedNamespaceIt.first->second;
 
-		return generatedNamespaceIt.first->second;
+		//Register the namespace by ID
+		registerEntityId(*generatedNamespace.get(), false);
+
+		return generatedNamespace;
 	}
 }
 

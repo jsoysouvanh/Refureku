@@ -21,6 +21,7 @@ namespace rfk
 	//Forward declarations
 	class Entity;
 	class Namespace;
+	class NamespaceFragment;
 	class Archetype;
 	class Struct;
 	using Class = Struct;
@@ -634,6 +635,7 @@ namespace rfk
 		friend internal::DefaultEntityRegistererImpl;
 		friend internal::ArchetypeRegistererImpl;
 		friend internal::NamespaceFragmentRegistererImpl;
+		friend NamespaceFragment;
 		friend internal::ClassTemplateInstantiationRegistererImpl;
 		friend REFUREKU_API Database const& getDatabase() noexcept;
 	};

@@ -1389,7 +1389,7 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 		//Namespaces
 		for (kodgen::NamespaceInfo const& nestedNamespace : namespace_.namespaces)
 		{
-			inout_result += "fragment.addNestedEntity(rfk::generated::" + computeNamespaceFragmentRegistererName(nestedNamespace, env.getFileParsingResult()->parsedFile) + ".getNamespaceInstance());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(&rfk::generated::" + computeGetNamespaceFragmentFunctionName(nestedNamespace, env.getFileParsingResult()->parsedFile) + "());" + env.getSeparator();
 		}
 
 		//Structs
@@ -1431,10 +1431,10 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 
 void ReflectionCodeGenModule::declareAndDefineNamespaceFragmentRegistererVariable(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
+	assert(namespace_.outerEntity == nullptr);
+
 	inout_result += "static rfk::NamespaceFragmentRegisterer " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) +
-		"(rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "(), " +
-		std::to_string(namespace_.outerEntity == nullptr) +
-		");" + env.getSeparator();
+		"(rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "());" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentAndRegistererRecursive(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -1452,7 +1452,6 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentAndRegistererR
 			}
 
 			declareAndDefineGetNamespaceFragmentFunction(namespace_, env, inout_result);
-			declareAndDefineNamespaceFragmentRegistererVariable(namespace_, env, inout_result);
 		};
 
 		defineAndDeclareGetNamespaceFragmentAndRegistererLambdaInternal(namespace_, env, inout_result, defineAndDeclareGetNamespaceFragmentAndRegistererLambdaInternal);
@@ -1463,6 +1462,7 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentAndRegistererR
 	{
 		inout_result += "namespace rfk::generated { " + env.getSeparator();
 		defineAndDeclareGetNamespaceFragmentAndRegistererLambda(namespace_, env, inout_result);
+		declareAndDefineNamespaceFragmentRegistererVariable(namespace_, env, inout_result);
 		inout_result += " }" + env.getSeparator();
 	}
 }

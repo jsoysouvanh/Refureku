@@ -8,7 +8,6 @@
 #pragma once
 
 #include <cstddef>	//std::size_t
-#include <memory>	//std::shared_ptr
 #include <cassert>
 
 #include "Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h"
@@ -23,65 +22,11 @@ namespace rfk
 	{
 		private:
 			/** Fragment registered by this registerer. */
-			NamespaceFragment const&		_registeredFragment;
-
-			/** Namespace this fragment is bound to. */
-			std::shared_ptr<Namespace>	_namespaceInstance;
-
-			/**
-			*	@brief Add namespace fragment entities to the namespace held by this registerer.
-			*/
-			void	mergeFragmentToNamespace()						noexcept;
-
-			/**
-			*	@brief Append fragment properties to the namespace properties.
-			*/
-			void	mergeFragmentPropertiesToNamespaceProperties()	noexcept;
-
-			/**
-			*	@brief Remove namespace fragment entities from the namespace held by this registerer.
-			*/
-			void	removeFragmentFromNamespace()					noexcept;
+			NamespaceFragment const&	_registeredFragment;
 
 		public:
-			inline NamespaceFragmentRegistererImpl(NamespaceFragment const&	namespaceFragment,
-												   bool						isFileLevelNamespace)	noexcept;
-			inline ~NamespaceFragmentRegistererImpl();
-
-			/**
-			*	@brief Getter for the field _namespaceInstance.
-			* 
-			*	@return _namespaceInstance.
-			*/
-			RFK_NODISCARD Namespace const* getNamespaceInstance() const	noexcept;
-
-			//===============================================================================
-			//** Next methods are public but are only used internally by the implementation. **
-			//===============================================================================
-
-			/**
-			*	@brief	**INTERNAL USAGE ONLY**
-			*			Add a property to the linked namespace if the same property is not there yet.
-			* 
-			*	@param property Property to add.
-			*/
-			inline void addPropertyToNamespace(Property const& property)	const	noexcept;
-
-			/**
-			*	@brief	**INTERNAL USAGE ONLY**
-			*			Add a namespace fragment nested entity to the namespace it is linked to (+ register to the database).
-			* 
-			*	@param entity Entity to add/register.
-			*/
-			inline void	addEntityToNamespace(Entity const& entity)		const	noexcept;
-
-			/**
-			*	@brief	**INTERNAL USAGE ONLY**
-			*			Remove a namespace fragment nested entity from the namespace it is merged to (+ unregister from the database).
-			* 
-			*	@param entity	Entity to remove/unregister.
-			*/
-			inline void	removeEntityFromNamespace(Entity const& entity)	const	noexcept;
+			inline NamespaceFragmentRegistererImpl(NamespaceFragment const&	namespaceFragment)	noexcept;
+			inline ~NamespaceFragmentRegistererImpl()											noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Namespace/NamespaceFragmentRegistererImpl.inl"

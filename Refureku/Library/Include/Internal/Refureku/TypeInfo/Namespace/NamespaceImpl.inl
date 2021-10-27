@@ -50,6 +50,11 @@ inline void Namespace::NamespaceImpl::removeFunction(Function const& function) n
 	_functions.erase(&function);
 }
 
+inline void Namespace::NamespaceImpl::setOuterEntity(Entity& entity, Namespace const& ref) const noexcept
+{
+	entity.setOuterEntity(&ref);
+}
+
 inline Namespace::NamespaceImpl::NamespaceHashSet const& Namespace::NamespaceImpl::getNamespaces() const noexcept
 {
 	return _namespaces;

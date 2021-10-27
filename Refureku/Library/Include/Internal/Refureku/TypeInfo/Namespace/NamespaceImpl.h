@@ -98,6 +98,15 @@ namespace rfk
 			*	@param function The function to remove.
 			*/
 			inline void										removeFunction(Function const& function)					noexcept;
+			
+			/**
+			*	@brief Set the outer entity of the passed entity to the provided namespace backref.
+			* 
+			*	@param entity	Entity having its outer entity set.
+			*	@param ref		Backref to the Namespace.
+			*/
+			inline void										setOuterEntity(Entity&			entity,
+																		   Namespace const&	ref)				const	noexcept;
 
 			/**
 			*	@brief Getter for the field _namespaces.

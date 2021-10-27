@@ -297,21 +297,33 @@ std::size_t Namespace::getFunctionsCount() const noexcept
 
 void Namespace::addNamespace(Namespace const& nestedNamespace) noexcept
 {
+	//Don't tell anyone I actually wrote const_cast...
+	getPimpl()->setOuterEntity(const_cast<Namespace&>(nestedNamespace), *this);
+
 	getPimpl()->addNamespace(nestedNamespace);
 }
 
 void Namespace::addArchetype(Archetype const& archetype) noexcept
 {
+	//Don't tell anyone I actually wrote const_cast...
+	getPimpl()->setOuterEntity(const_cast<Archetype&>(archetype), *this);
+
 	getPimpl()->addArchetype(archetype);
 }
 
 void Namespace::addVariable(Variable const& variable) noexcept
 {
+	//Don't tell anyone I actually wrote const_cast...
+	getPimpl()->setOuterEntity(const_cast<Variable&>(variable), *this);
+
 	getPimpl()->addVariable(variable);
 }
 
 void Namespace::addFunction(Function const& function) noexcept
 {
+	//Don't tell anyone I actually wrote const_cast...
+	getPimpl()->setOuterEntity(const_cast<Function&>(function), *this);
+
 	getPimpl()->addFunction(function);
 }
 

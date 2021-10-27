@@ -41,7 +41,7 @@ namespace rfk
 
 		/**
 		*	The entity is a field, it can safely be cast to rfk::FieldBase type.
-		*	More specific info can be retrieved from the entity by checking rfk::FieldBase::flags.
+		*	More specific info can be retrieved from the entity by checking rfk::FieldBase::getFlags().
 		*/
 		Field					= 1 << 6,
 
@@ -50,12 +50,15 @@ namespace rfk
 
 		/**
 		*	The entity is a method, it can safely be cast to rfk::MethodBase type.
-		*	More specific info can be retrieved from the entity by checking rfk::MethodBase::flags.
+		*	More specific info can be retrieved from the entity by checking rfk::MethodBase::getFlags().
 		*/
 		Method					= 1 << 8,
 
 		/** The entity is an enum value, it can safely be cast to rfk::EnumValue. */
-		EnumValue				= 1 << 9
+		EnumValue				= 1 << 9,
+
+		/** The entity is a namespace fragment, is can safely be cast to rfk::NamespaceFragment. */
+		NamespaceFragment		= 1 << 10
 	};
 
 	RFK_GENERATE_ENUM_OPERATORS(EEntityKind)

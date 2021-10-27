@@ -37,9 +37,6 @@ static rfk::NamespaceFragment const& getNamespaceFragment_nested_third_party_nam
 	return fragment;
 }
 
-//Register to database
-rfk::NamespaceFragmentRegisterer nested_third_party_namespace_registerer(getNamespaceFragment_nested_third_party_namespace(), false);
-
 template <>
 rfk::Enum const* rfk::getEnum<third_party_namespace::ThirdPartyEnum>() noexcept
 {
@@ -61,11 +58,11 @@ static rfk::NamespaceFragment const& getNamespaceFragment_third_party_namespace(
 		initialized = true;
 
 		fragment.setNestedEntitiesCapacity(2u);
-		fragment.addNestedEntity(nested_third_party_namespace_registerer.getNamespaceInstance());
+		fragment.addNestedEntity(&getNamespaceFragment_nested_third_party_namespace());
 		fragment.addNestedEntity(rfk::getEnum<third_party_namespace::ThirdPartyEnum>());
 	}
 
 	return fragment;
 }
 
-rfk::NamespaceFragmentRegisterer third_party_namespace_registerer(getNamespaceFragment_third_party_namespace(), true);
+rfk::NamespaceFragmentRegisterer third_party_namespace_registerer(getNamespaceFragment_third_party_namespace());

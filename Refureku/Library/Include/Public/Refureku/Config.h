@@ -35,7 +35,6 @@
 //Attributes
 #define RFK_NODISCARD	[[nodiscard]]
 #define RFK_NORETURN	[[noreturn]]
-#define RFK_FALLTHROUGH	[[fallthrough]]
 
 //Dynamic library import/export
 #if defined(KODGEN_PARSING)
