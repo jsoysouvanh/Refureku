@@ -65,3 +65,5 @@ ForwardDeclaredClass& func_return_oneParam_forwardDeclared(ForwardDeclaredClass&
 {
 	return param;
 }
+
+void non_reflected_function() {}

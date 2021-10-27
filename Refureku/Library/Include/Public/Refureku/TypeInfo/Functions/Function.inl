@@ -25,3 +25,9 @@ ReturnType Function::checkedInvoke(ArgTypes&&... args) const
 
 	return invoke<ReturnType, ArgTypes...>(std::forward<ArgTypes>(args)...);
 }
+
+template <auto FuncPtr>
+Function const* getFunction() noexcept
+{
+	return nullptr;
+}

@@ -185,7 +185,14 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 			break;
 
 		case kodgen::EEntityType::Function:
-			declareGetFunctionFunction(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
+			if (static_cast<kodgen::FunctionInfo const&>(entity).isStatic)
+			{
+				defineGetFunctionFunction(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
+			}
+			else
+			{
+				declareGetFunctionFunction(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
+			}
 
 			result = kodgen::ETraversalBehaviour::Continue; //Go to next function
 			break;
@@ -274,7 +281,11 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			break;
 
 		case kodgen::EEntityType::Function:
-			defineGetFunctionFunction(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
+			if (!static_cast<kodgen::FunctionInfo const&>(entity).isStatic)
+			{
+				defineGetFunctionFunction(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
+			}
+
 			declareAndDefineFunctionRegistererVariable(static_cast<kodgen::FunctionInfo const&>(entity), env, inout_result);
 
 			result = kodgen::ETraversalBehaviour::Continue; //Go to next function
@@ -1292,14 +1303,14 @@ void ReflectionCodeGenModule::declareGetFunctionFunction(kodgen::FunctionInfo co
 {
 	beginHiddenGeneratedCode(env, inout_result);
 
-	inout_result += "namespace rfk::generated { rfk::Function const& " + computeGetFunctionFunctionName(function) + "() noexcept; }" + env.getSeparator();
+	inout_result += "template <> rfk::Function const* rfk::getFunction<static_cast<" + computeFunctionPtrType(function) + ">(&" + function.getFullName() + ")>() noexcept; ";
 
 	endHiddenGeneratedCode(env, inout_result);
 }
 
 void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
 {
-	inout_result += "rfk::Function const& rfk::generated::" + computeGetFunctionFunctionName(function) + "() noexcept {" + env.getSeparator() +
+	inout_result += "template <> rfk::Function const* rfk::getFunction<static_cast<" + computeFunctionPtrType(function) + ">(&" + function.getFullName() + ")>() noexcept {" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator() + 
 		"static rfk::Function function(\"" + function.name + "\", " +
 		getEntityId(function) + ", "
@@ -1330,7 +1341,7 @@ void ReflectionCodeGenModule::defineGetFunctionFunction(kodgen::FunctionInfo con
 	//End initialization if
 	inout_result += "}";
 
-	inout_result += "return function; }" + env.getSeparator();
+	inout_result += "return &function; }" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareAndDefineFunctionRegistererVariable(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -1338,7 +1349,7 @@ void ReflectionCodeGenModule::declareAndDefineFunctionRegistererVariable(kodgen:
 	if (function.outerEntity == nullptr)
 	{
 		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer" + getEntityId(function) +
-			" = rfk::generated::" + computeGetFunctionFunctionName(function) + "(); }" + env.getSeparator();
+			" = *rfk::getFunction<static_cast<" + computeFunctionPtrType(function) + ">(&" + function.getFullName() + ")>(); }" + env.getSeparator();
 	}
 }
 
@@ -1359,9 +1370,9 @@ kodgen::uint8 ReflectionCodeGenModule::computeRefurekuFunctionFlags(kodgen::Func
 	return result;
 }
 
-std::string ReflectionCodeGenModule::computeGetFunctionFunctionName(kodgen::FunctionInfo const& function) noexcept
+std::string ReflectionCodeGenModule::computeFunctionPtrType(kodgen::FunctionInfo const& function) noexcept
 {
-	return "getFunction" + getEntityId(function);
+	return function.returnType.getCanonicalName() + "(*)(" + function.getParameterTypes() + ")";
 }
 
 void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodgen::NamespaceInfo const& namespace_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -1419,7 +1430,7 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 		//Functions
 		for (kodgen::FunctionInfo const& function : namespace_.functions)
 		{
-			inout_result += "fragment.addNestedEntity(rfk::generated::" + computeGetFunctionFunctionName(function) + "());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(*rfk::getFunction<static_cast<" + computeFunctionPtrType(function) + ">(&" + function.getFullName() + ")>());" + env.getSeparator();
 		}
 	}
 

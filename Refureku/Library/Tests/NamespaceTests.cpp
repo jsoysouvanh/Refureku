@@ -832,6 +832,14 @@ TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeValidNameDefaultFlag
 	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>("func_nested_overload")->invoke<int>(), 0);
 }
 
+TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeValidNameValidFlags)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int(int)>
+			  ("func_nested_overload", rfk::EFunctionFlags::Static | rfk::EFunctionFlags::Inline)->invoke<int>(1), 1);
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>
+			  ("func_nested_overload", rfk::EFunctionFlags::Inline)->invoke<int>(), 0);
+}
+
 TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeUnvalidNameDefaultFlags)
 {
 	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int(int)>("invalid_func"), nullptr);
@@ -840,8 +848,8 @@ TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeUnvalidNameDefaultFl
 
 TEST(Rfk_Namespace_getFunctionByNameTemplate, ValidPrototypeValidNameUnvalidFlags)
 {
-	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int(int)>("func_nested_overload", rfk::EFunctionFlags::Inline), nullptr);
-	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>("func_nested_overload", rfk::EFunctionFlags::Static), nullptr);
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionByName<int()>
+			  ("func_nested_overload", rfk::EFunctionFlags::Static), nullptr);
 }
 
 //=========================================================
@@ -863,9 +871,13 @@ TEST(Rfk_Namespace_getFunctionsByName, ValidNameDefaultFlagsSingleResult)
 	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_return_noParam").size(), 1u);
 }
 
+TEST(Rfk_Namespace_getFunctionsByName, ValidNameSpecificFlagsMultipleResult)
+{
+	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_overload", rfk::EFunctionFlags::Inline).size(), 2u);
+}
+
 TEST(Rfk_Namespace_getFunctionsByName, ValidNameSpecificFlagsSingleResult)
 {
-	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_overload", rfk::EFunctionFlags::Inline).size(), 1u);
 	EXPECT_EQ(rfk::getDatabase().getNamespaceByName("test_namespace")->getFunctionsByName("func_nested_overload", rfk::EFunctionFlags::Static).size(), 1u);
 }
 

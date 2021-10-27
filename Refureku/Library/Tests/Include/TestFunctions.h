@@ -56,4 +56,8 @@ void func_twoParamsNonReflected(NonReflectedClass& param, int value);
 FUNCTION()
 ForwardDeclaredClass& func_return_oneParam_forwardDeclared(ForwardDeclaredClass& param);
 
+void non_reflected_function();
+
+template <> rfk::Function const* rfk::getFunction<&func_inline_noParam>() noexcept;
+
 File_TestFunctions_GENERATED

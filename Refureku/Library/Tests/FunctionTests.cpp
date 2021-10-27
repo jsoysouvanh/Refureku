@@ -32,6 +32,30 @@ TEST(FunctionTests, CodeCoverage)
 }
 
 //=========================================================
+//==================== rfk::getFunction ===================
+//=========================================================
+
+TEST(Rfk_getFunction, NonReflectedFunction)
+{
+	EXPECT_EQ(rfk::getFunction<&non_reflected_function>(), nullptr);
+}
+
+TEST(Rfk_getFunction, ExternFunction)
+{
+	EXPECT_NE(rfk::getFunction<&func_noParam_throwLogicError>(), nullptr);
+}
+
+TEST(Rfk_getFunction, StaticFunction)
+{
+	EXPECT_NE(rfk::getFunction<&func_static_noParam>(), nullptr);
+}
+
+TEST(Rfk_getFunction, InlineFunction)
+{
+	EXPECT_NE(rfk::getFunction<&func_inline_noParam>(), nullptr);
+}
+
+//=========================================================
 //================= Function::isInline ====================
 //=========================================================
 

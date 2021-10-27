@@ -109,13 +109,13 @@ namespace rfk
 		static kodgen::uint8		computeRefurekuFunctionFlags(kodgen::FunctionInfo const& function)					noexcept;
 
 		/**
-		*	@brief Compute the name of the getFunction function for the given function.
+		*	@brief Compute the static type of a function pointer.
 		* 
 		*	@param function The target function.
 		* 
-		*	@return The name of the getFunction function for the target function.
+		*	@return The static type of the function pointer in c++ code.
 		*/
-		static std::string			computeGetFunctionFunctionName(kodgen::FunctionInfo const& function)		noexcept;
+		static std::string			computeFunctionPtrType(kodgen::FunctionInfo const& function)						noexcept;
 
 		/**
 		*	@brief Compute the name of the getNamespaceFragment function for the given namespace.

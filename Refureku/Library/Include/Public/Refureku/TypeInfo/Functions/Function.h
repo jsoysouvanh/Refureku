@@ -109,6 +109,10 @@ namespace rfk
 			ReturnType	internalInvoke(ArgTypes&&... args)	const;
 	};
 
+	/** Base implementation of getFunction, specialized for each reflected function. */
+	template <auto FuncPtr>
+	Function const* getFunction() noexcept;
+
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Function const*>);
 	REFUREKU_TEMPLATE_API(rfk::Vector<Function const*, rfk::Allocator<Function const*>>);
 

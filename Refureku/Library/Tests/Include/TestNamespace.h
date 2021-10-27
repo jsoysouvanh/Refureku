@@ -18,7 +18,7 @@ namespace test_namespace NAMESPACE()
 	inline int func_nested_overload() { return 0; };
 
 	FUNCTION()
-	static int func_nested_overload(int);
+	static inline int func_nested_overload(int i) { return i; }
 
 	VARIABLE()
 	extern int var_nested_extern;
