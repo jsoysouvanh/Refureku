@@ -143,7 +143,7 @@ namespace rfk
 			RFK_GEN_GET_PIMPL(EnumImpl, Entity::getPimpl())
 	};
 
-	/** Base implementation of getEnum, specialized for each reflected enum */
+	/** Base implementation of getEnum, specialized for each reflected enum. */
 	template <typename T>
 	Enum const* getEnum() noexcept;
 

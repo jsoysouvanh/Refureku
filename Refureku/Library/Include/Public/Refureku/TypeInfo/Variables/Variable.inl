@@ -23,3 +23,9 @@ void Variable::set(ValueType&& value) const
 {
 	VariableBase::set(getPtr(), std::forward<ValueType>(value));
 }
+
+template <auto VarPtr>
+Variable const* getVariable() noexcept
+{
+	return nullptr;
+}

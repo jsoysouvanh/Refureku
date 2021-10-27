@@ -100,15 +100,6 @@ namespace rfk
 		static kodgen::uint8		computeRefurekuVariableFlags(kodgen::VariableInfo const& variable)					noexcept;
 
 		/**
-		*	@brief Compute the name of the getVariable function for the given variable.
-		* 
-		*	@param variable The target variable.
-		* 
-		*	@return The name of the getVariable function for the target variable.
-		*/
-		static std::string			computeGetVariableFunctionName(kodgen::VariableInfo const& variable)				noexcept;
-
-		/**
 		*	@brief Compute the rfk::EFunctionFlags value for the provided function.
 		*
 		*	@param function Function used to compute the rfk::EFunctionFlags value.

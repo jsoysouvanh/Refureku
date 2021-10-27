@@ -172,7 +172,14 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateHeaderFileFooterCod
 			break;
 
 		case kodgen::EEntityType::Variable:
-			declareGetVariableFunction(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
+			if (static_cast<kodgen::VariableInfo const&>(entity).isStatic)
+			{
+				defineGetVariableFunction(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
+			}
+			else
+			{
+				declareGetVariableFunction(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
+			}
 
 			result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
 			break;
@@ -256,7 +263,11 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 			break;
 
 		case kodgen::EEntityType::Variable:
-			defineGetVariableFunction(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
+			if (!static_cast<kodgen::VariableInfo const&>(entity).isStatic)
+			{
+				defineGetVariableFunction(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
+			}
+
 			declareAndDefineVariableRegistererVariable(static_cast<kodgen::VariableInfo const&>(entity), env, inout_result);
 
 			result = kodgen::ETraversalBehaviour::Continue; //Go to next variable
@@ -309,31 +320,25 @@ void ReflectionCodeGenModule::includeHeaderFileHeaders(kodgen::MacroCodeGenEnv& 
 					"#include <Refureku/TypeInfo/Variables/StaticField.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/Enum.h>" + env.getSeparator() +
 					"#include <Refureku/TypeInfo/Archetypes/EnumValue.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Variables/Variable.h>" + env.getSeparator() +											//TODO: Only if there is a variable
+					"#include <Refureku/TypeInfo/Functions/Function.h>" + env.getSeparator() +											//TODO: Only if there is a function
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h>" + env.getSeparator() +							//TODO: Only when there is a template class
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h>" + env.getSeparator() +				//TODO: Only when there is a template class
 					"#include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>" + env.getSeparator() +	//TODO: Only when there is a non-nested template class
-					"#include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h>" + env.getSeparator() +
+					"#include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h>" + env.getSeparator() +					//TODO: Only when there is a template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h>" + env.getSeparator() +					//TODO: Only when there is a template class
+					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h>" + env.getSeparator() +				//TODO: Only when there is a template class
 					env.getSeparator();
-
-	//Forward declarations
-	inout_result += "namespace rfk { "
-					"class Variable; "
-					"class Function;"
-					" }" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "#include <Refureku/TypeInfo/Variables/Variable.h>" + env.getSeparator() +						//TODO: Only if there is a variable
-					"#include <Refureku/TypeInfo/Functions/Function.h>" + env.getSeparator() +						//TODO: Only if there is a function
-					"#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() +
+	inout_result += "#include <Refureku/TypeInfo/Entity/DefaultEntityRegisterer.h>" + env.getSeparator() +					//TODO: Only if there is a variable or function
 					"#include <Refureku/TypeInfo/Archetypes/ArchetypeRegisterer.h>" + env.getSeparator() +
-					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +						//TODO: Only if there is a namespace
-					"#include <Refureku/TypeInfo/Namespace/NamespaceFragment.h>" + env.getSeparator() +				//TODO: Only if there is a namespace
-					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h>" + env.getSeparator() +	//TODO: Only if there is a namespace
-					"#include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
+					"#include <Refureku/TypeInfo/Namespace/Namespace.h>" + env.getSeparator() +								//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/NamespaceFragment.h>" + env.getSeparator() +						//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Namespace/NamespaceFragmentRegisterer.h>" + env.getSeparator() +			//TODO: Only if there is a namespace
+					"#include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateParameter.h>" + env.getSeparator() +		//TODO: Only if there is a template class in the parsed data
 					"#include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
 					"#include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h>" + env.getSeparator() +	//TODO: Only if there is a template class in the parsed data
 					 env.getSeparator();
@@ -1232,7 +1237,7 @@ void ReflectionCodeGenModule::declareGetVariableFunction(kodgen::VariableInfo co
 {
 	beginHiddenGeneratedCode(env, inout_result);
 
-	inout_result += "namespace rfk::generated { rfk::Variable const& " + computeGetVariableFunctionName(variable) + "() noexcept; }" + env.getSeparator();
+	inout_result += "template <> rfk::Variable const* rfk::getVariable<&" + variable.getFullName() + ">() noexcept; " + env.getSeparator();
 
 	endHiddenGeneratedCode(env, inout_result);
 }
@@ -1241,7 +1246,7 @@ void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo con
 {
 	std::string fullName = variable.getFullName();
 
-	inout_result += "rfk::Variable const& rfk::generated::" + computeGetVariableFunctionName(variable) + "() noexcept {" + env.getSeparator() +
+	inout_result += "template <> rfk::Variable const* rfk::getVariable<&" + variable.getFullName() + ">() noexcept {" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator() + 
 		"static rfk::Variable variable(\"" + variable.name + "\", " +
 		getEntityId(variable) + ", "
@@ -1259,7 +1264,7 @@ void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo con
 	//End initialization if
 	inout_result += "}";
 
-	inout_result += "return variable; }" + env.getSeparator();
+	inout_result += "return &variable; }" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareAndDefineVariableRegistererVariable(kodgen::VariableInfo const& variable, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -1267,7 +1272,7 @@ void ReflectionCodeGenModule::declareAndDefineVariableRegistererVariable(kodgen:
 	if (variable.outerEntity == nullptr)
 	{
 		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer_" + getEntityId(variable) +
-			" = rfk::generated::" + computeGetVariableFunctionName(variable) + "(); }" + env.getSeparator();
+			" = *rfk::getVariable<&" + variable.getFullName() + ">(); }" + env.getSeparator();
 	}
 }
 
@@ -1281,11 +1286,6 @@ kodgen::uint8 ReflectionCodeGenModule::computeRefurekuVariableFlags(kodgen::Vari
 	}
 
 	return result;
-}
-
-std::string ReflectionCodeGenModule::computeGetVariableFunctionName(kodgen::VariableInfo const& variable) noexcept
-{
-	return "getVariable" + getEntityId(variable);;
 }
 
 void ReflectionCodeGenModule::declareGetFunctionFunction(kodgen::FunctionInfo const& function, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
@@ -1413,7 +1413,7 @@ void ReflectionCodeGenModule::declareAndDefineGetNamespaceFragmentFunction(kodge
 		//Variables
 		for (kodgen::VariableInfo const& variable : namespace_.variables)
 		{
-			inout_result += "fragment.addNestedEntity(rfk::generated::" + computeGetVariableFunctionName(variable) + "());" + env.getSeparator();
+			inout_result += "fragment.addNestedEntity(*rfk::getVariable<&" + variable.getFullName() + ">()); " + env.getSeparator();
 		}
 
 		//Functions

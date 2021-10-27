@@ -5,7 +5,26 @@
 #include "ForwardDeclaredClass.h"
 
 //=========================================================
-//================= Function::isStatic ====================
+//================== rfk::getVariable =====================
+//=========================================================
+
+TEST(Rfk_getVariable, NonReflectedVariable)
+{
+	EXPECT_EQ(rfk::getVariable<&non_reflected_variable>(), nullptr);
+}
+
+TEST(Rfk_getVariable, ReflectedStaticVariable)
+{
+	EXPECT_NE(rfk::getVariable<&var_global_static>(), nullptr);
+}
+
+TEST(Rfk_getVariable, ReflectedExternVariable)
+{
+	EXPECT_NE(rfk::getVariable<&var_global_extern_constructionTracked>(), nullptr);
+}
+
+//=========================================================
+//================= Variable::isStatic ====================
 //=========================================================
 
 TEST(Rfk_Variable_isStatic, Static)

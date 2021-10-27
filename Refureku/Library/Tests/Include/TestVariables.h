@@ -27,4 +27,6 @@ extern ConstructionTrackedClass var_global_extern_constructionTracked;
 VARIABLE()
 extern ConstructionTrackedClass const var_global_extern_const_constructionTracked;
 
+extern int non_reflected_variable;
+
 File_TestVariables_GENERATED

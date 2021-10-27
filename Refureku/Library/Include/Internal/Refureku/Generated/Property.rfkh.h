@@ -12,14 +12,14 @@
 #include <Refureku/TypeInfo/Variables/StaticField.h>
 #include <Refureku/TypeInfo/Archetypes/Enum.h>
 #include <Refureku/TypeInfo/Archetypes/EnumValue.h>
+#include <Refureku/TypeInfo/Variables/Variable.h>
+#include <Refureku/TypeInfo/Functions/Function.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h>
 #include <Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationRegisterer.h>
 #include <Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h>
 #include <Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h>
 #include <Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h>
-
-namespace rfk { class Variable; class Function; }
 
 
 #define File_Property_GENERATED	\
