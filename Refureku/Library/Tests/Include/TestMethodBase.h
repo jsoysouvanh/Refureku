@@ -9,6 +9,10 @@
 
 #include "Generated/TestMethodBase.rfkh.h"
 
+__RFK_DISABLE_WARNING_PUSH
+__RFK_DISABLE_WARNING_MISSING_OVERRIDE
+__RFK_DISABLE_WARNING_UNDEFINED_INLINE
+
 class CLASS() TestMethodBaseClass
 {
 	private:
@@ -69,7 +73,7 @@ class CLASS() TestMethodBaseClassChild : public TestMethodBaseClass
 		/* virtual */ void pureVirtualMethod() noexcept override final { };
 
 		METHOD()
-		/* virtual */ void pureVirtualMethod2() noexcept { };
+		/* virtual */ void pureVirtualMethod2() noexcept /* override */ { };
 
 	TestMethodBaseClassChild_GENERATED
 };
@@ -84,9 +88,11 @@ class CLASS() TestMethodBaseClassChild2 final : public TestMethodBaseClassChild
 		/* virtual */ void virtualMethod2() noexcept /* override */ { TestMethodBaseClassChild::virtualMethod2(); }
 
 		METHOD()
-		/* virtual */ void pureVirtualMethod2() noexcept { TestMethodBaseClassChild::pureVirtualMethod2(); };
+		/* virtual */ void pureVirtualMethod2() noexcept /* override */ { TestMethodBaseClassChild::pureVirtualMethod2(); };
 
 	TestMethodBaseClassChild2_GENERATED
 };
+
+__RFK_DISABLE_WARNING_POP
 
 File_TestMethodBase_GENERATED

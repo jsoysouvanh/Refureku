@@ -141,7 +141,7 @@ namespace rfk
 			*	@param accessSpeficier	Access specifier of the nested archetype in the struct.
 			*	@param outerEntity		Struct the archetype was first declared in.
 			*/
-			RFK_NODISCARD inline void					addNestedArchetype(Archetype const*		nestedArchetype,
+			inline void									addNestedArchetype(Archetype const*		nestedArchetype,
 																		   EAccessSpecifier		accessSpecifier,
 																		   Struct const*		outerEntity)			noexcept;
 
