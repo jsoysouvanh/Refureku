@@ -42,8 +42,8 @@ jobs:
 
           mv Build/Release/Bin/Release/RefurekuGenerator.exe RefurekuBinaries/Windows/Bin/
           mv Build/Release/Bin/Release/Refureku.dll RefurekuBinaries/Windows/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dll RefurekuBinaries/Windows/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Bin/vswhere.exe RefurekuBinaries/Windows/Bin/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dll RefurekuBinaries/Windows/Bin/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Bin/vswhere.exe RefurekuBinaries/Windows/Bin/
 
           mv Build/Release/Lib/Release/Refureku.lib RefurekuBinaries/Windows/Lib/
 
@@ -115,7 +115,8 @@ jobs:
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Linux/
           mkdir RefurekuBinaries/Linux/Bin
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/libclang.so
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so RefurekuBinaries/Linux/Bin/libclang.so
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.12 RefurekuBinaries/Linux/Bin/libclang.so.12
           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Linux/Bin/
           mv Build/Release/Bin/libRefureku.so RefurekuBinaries/Linux/Bin/
 
@@ -124,7 +125,7 @@ jobs:
           mv README.md RefurekuBinaries/
           
           mv LICENSE.md RefurekuBinaries/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
 
       - name: Upload Binaries Artifact
         if: success()
@@ -174,7 +175,7 @@ jobs:
           mkdir RefurekuBinaries/Mac/Bin
           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Mac/Bin/
           mv Build/Release/Bin/libRefureku.dylib RefurekuBinaries/Mac/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
 
       - name: Upload Binaries Artifact
         if: success()

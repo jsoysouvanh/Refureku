@@ -652,10 +652,8 @@ namespace rfk
 			*	
 			*	@param nestedArchetype	Nested archetype.
 			*	@param accessSpeficier	Access specifier of the nested archetype in the struct.
-			*	
-			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			REFUREKU_API Archetype*					addNestedArchetype(Archetype const*	nestedArchetype,
+			REFUREKU_API void						addNestedArchetype(Archetype const*	nestedArchetype,
 																	   EAccessSpecifier	accessSpecifier)										noexcept;
 
 			/**
@@ -678,6 +676,7 @@ namespace rfk
 			*	
 			*	@return A pointer to the added field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			If any of the parameters is unvalid, no field is added and nullptr is returned.
 			*/
 			REFUREKU_API Field*						addField(char const*	name,
 															 std::size_t	id,
@@ -706,6 +705,7 @@ namespace rfk
 			*	
 			*	@return A pointer to the added static field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			If any of the parameters is unvalid, no static field is added and nullptr is returned.
 			*/
 			REFUREKU_API StaticField*				addStaticField(char const*		name,
 																   std::size_t		id,
@@ -738,6 +738,7 @@ namespace rfk
 			*	@param flags			Method flags.
 			*
 			*	@return A pointer to the added method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			If any of the parameters is unvalid, no method is added and nullptr is returned.
 			*/
 			REFUREKU_API Method*					addMethod(char const*	name,
 															  std::size_t	id,
@@ -763,6 +764,7 @@ namespace rfk
 			*	@param flags			Method flags.
 			*
 			*	@return A pointer to the added static method. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
+			*			If any of the parameters is unvalid, no static method is added and nullptr is returned.
 			*/
 			REFUREKU_API StaticMethod*				addStaticMethod(char const*		name,
 																	std::size_t		id,

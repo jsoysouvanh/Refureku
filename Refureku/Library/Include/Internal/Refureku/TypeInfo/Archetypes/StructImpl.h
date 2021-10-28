@@ -140,10 +140,8 @@ namespace rfk
 			*	@param nestedArchetype	Nested archetype.
 			*	@param accessSpeficier	Access specifier of the nested archetype in the struct.
 			*	@param outerEntity		Struct the archetype was first declared in.
-			*	
-			*	@param A pointer to the added archetype. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
 			*/
-			RFK_NODISCARD inline Archetype*				addNestedArchetype(Archetype const*		nestedArchetype,
+			RFK_NODISCARD inline void					addNestedArchetype(Archetype const*		nestedArchetype,
 																		   EAccessSpecifier		accessSpecifier,
 																		   Struct const*		outerEntity)			noexcept;
 
@@ -159,7 +157,6 @@ namespace rfk
 			*	@param outerEntity	Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
 			*	
 			*	@return A pointer to the added field. The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
-			*			The name of the field **MUST NOT** be changed to avoid breaking the hash value, thus the whole underlying container.
 			*/
 			RFK_NODISCARD inline Field*					addField(char const*	name,
 																 std::size_t	id,

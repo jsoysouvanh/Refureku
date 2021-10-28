@@ -651,9 +651,12 @@ void Struct::addSubclass(Struct const& subclass) noexcept
 	getPimpl()->addSubclass(subclass);
 }
 
-Archetype* Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
+void Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept
 {
-	return getPimpl()->addNestedArchetype(nestedArchetype, accessSpecifier, this);
+	if (nestedArchetype != nullptr)
+	{
+		getPimpl()->addNestedArchetype(nestedArchetype, accessSpecifier, this);
+	}
 }
 
 void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
@@ -664,7 +667,7 @@ void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 Field* Struct::addField(char const* name, std::size_t id, Type const& type,
 							  EFieldFlags flags, std::size_t memoryOffset, Struct const* outerEntity) noexcept
 {
-	return getPimpl()->addField(name, id, type, flags, this, memoryOffset, outerEntity);
+	return (name != nullptr) ? getPimpl()->addField(name, id, type, flags, this, memoryOffset, outerEntity) : nullptr;
 }
 
 void Struct::setFieldsCapacity(std::size_t capacity) noexcept
@@ -673,15 +676,15 @@ void Struct::setFieldsCapacity(std::size_t capacity) noexcept
 }
 
 StaticField* Struct::addStaticField(char const* name, std::size_t id, Type const& type,
-										  EFieldFlags flags, void* fieldPtr, Struct const* outerEntity) noexcept
+									EFieldFlags flags, void* fieldPtr, Struct const* outerEntity) noexcept
 {
-	return getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
+	return (name != nullptr) ? getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity) : nullptr;
 }
 
 StaticField* Struct::addStaticField(char const* name, std::size_t id, Type const& type,
-										  EFieldFlags flags, void const* fieldPtr, Struct const* outerEntity) noexcept
+									EFieldFlags flags, void const* fieldPtr, Struct const* outerEntity) noexcept
 {
-	return getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity);
+	return (name != nullptr) ? getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity) : nullptr;
 }
 
 void Struct::setStaticFieldsCapacity(std::size_t capacity) noexcept
@@ -689,10 +692,10 @@ void Struct::setStaticFieldsCapacity(std::size_t capacity) noexcept
 	return getPimpl()->setStaticFieldsCapacity(capacity);
 }
 
-Method* Struct::addMethod(char const* name, std::size_t id,
-								Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
+Method* Struct::addMethod(char const* name, std::size_t id, Type const& returnType,
+						  ICallable* internalMethod, EMethodFlags flags) noexcept
 {
-	return getPimpl()->addMethod(name, id, returnType, internalMethod, flags, this);
+	return (name != nullptr) ? getPimpl()->addMethod(name, id, returnType, internalMethod, flags, this) : nullptr;
 }
 
 void Struct::setMethodsCapacity(std::size_t capacity) noexcept
@@ -700,10 +703,10 @@ void Struct::setMethodsCapacity(std::size_t capacity) noexcept
 	return getPimpl()->setMethodsCapacity(capacity);
 }
 
-StaticMethod* Struct::addStaticMethod(char const* name, std::size_t id,
-											Type const& returnType, ICallable* internalMethod, EMethodFlags flags) noexcept
+StaticMethod* Struct::addStaticMethod(char const* name, std::size_t id, Type const& returnType,
+									  ICallable* internalMethod, EMethodFlags flags) noexcept
 {
-	return getPimpl()->addStaticMethod(name, id, returnType, internalMethod, flags, this);
+	return (name != nullptr) ? getPimpl()->addStaticMethod(name, id, returnType, internalMethod, flags, this) : nullptr;
 }
 
 void Struct::setStaticMethodsCapacity(std::size_t capacity) noexcept

@@ -24,21 +24,20 @@ inline void Struct::StructImpl::addSubclass(Struct const& subclass) noexcept
 	_subclasses.insert(&subclass);
 }
 
-inline Archetype* Struct::StructImpl::addNestedArchetype(Archetype const* nestedArchetype,
-															   EAccessSpecifier accessSpecifier, Struct const* outerEntity) noexcept
+inline void Struct::StructImpl::addNestedArchetype(Archetype const* nestedArchetype,
+												   EAccessSpecifier accessSpecifier, Struct const* outerEntity) noexcept
 {
 	//The hash is based on the archetype name which is immutable, so it's safe to const_cast to update other members.
 	Archetype* result = const_cast<Archetype*>(*_nestedArchetypes.emplace(nestedArchetype).first);
 
 	result->setAccessSpecifier(accessSpecifier);
 	result->setOuterEntity(outerEntity);
-
-	return result;
 }
 
 inline Field* Struct::StructImpl::addField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
-												 Struct const* owner, std::size_t memoryOffset, Struct const* outerEntity) noexcept
+										   Struct const* owner, std::size_t memoryOffset, Struct const* outerEntity) noexcept
 {
+	assert(name != nullptr);
 	assert((flags & EFieldFlags::Static) != EFieldFlags::Static);
 
 	//The hash is based on the field name which is immutable, so it's safe to const_cast to update other members.
@@ -46,8 +45,9 @@ inline Field* Struct::StructImpl::addField(char const* name, std::size_t id, Typ
 }
 
 inline StaticField* Struct::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
-															 Struct const* owner, void* fieldPtr, Struct const* outerEntity) noexcept
+													   Struct const* owner, void* fieldPtr, Struct const* outerEntity) noexcept
 {
+	assert(name != nullptr);
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
 	//The hash is based on the static field name which is immutable, so it's safe to const_cast to update other members.
@@ -55,8 +55,9 @@ inline StaticField* Struct::StructImpl::addStaticField(char const* name, std::si
 }
 
 inline StaticField* Struct::StructImpl::addStaticField(char const* name, std::size_t id, Type const& type, EFieldFlags flags, 
-															 Struct const* owner, void const* fieldPtr, Struct const* outerEntity) noexcept
+													   Struct const* owner, void const* fieldPtr, Struct const* outerEntity) noexcept
 {
+	assert(name != nullptr);
 	assert((flags & EFieldFlags::Static) == EFieldFlags::Static);
 
 	//The hash is based on the static field name which is immutable, so it's safe to const_cast to update other members.
@@ -64,8 +65,9 @@ inline StaticField* Struct::StructImpl::addStaticField(char const* name, std::si
 }
 
 inline Method* Struct::StructImpl::addMethod(char const* name, std::size_t id, Type const& returnType,
-												   ICallable* internalMethod, EMethodFlags flags, Struct const*	outerEntity) noexcept
+											 ICallable* internalMethod, EMethodFlags flags, Struct const*	outerEntity) noexcept
 {
+	assert(name != nullptr);
 	assert((flags & EMethodFlags::Static) != EMethodFlags::Static);
 
 	//The hash is based on the method name which is immutable, so it's safe to const_cast to update other members.
@@ -73,8 +75,9 @@ inline Method* Struct::StructImpl::addMethod(char const* name, std::size_t id, T
 }
 
 inline StaticMethod* Struct::StructImpl::addStaticMethod(char const* name, std::size_t id, Type const& returnType,
-															   ICallable* internalMethod, EMethodFlags flags, Struct const* outerEntity) noexcept
+														 ICallable* internalMethod, EMethodFlags flags, Struct const* outerEntity) noexcept
 {
+	assert(name != nullptr);
 	assert((flags & EMethodFlags::Static) == EMethodFlags::Static);
 
 	//The hash is based on the static method name which is immutable, so it's safe to const_cast to update other members.

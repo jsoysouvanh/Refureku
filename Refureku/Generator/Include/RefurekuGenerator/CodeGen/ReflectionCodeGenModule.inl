@@ -676,16 +676,15 @@ void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo 
 	}
 
 	//Reserve memory for the correct number of nested entities
-	inout_result += generatedEntityVarName + "setNestedArchetypesCapacity(" + std::to_string(nestedArchetypesCount) + ");";
+	inout_result += generatedEntityVarName + "setNestedArchetypesCapacity(" + std::to_string(nestedArchetypesCount) + ");" + env.getSeparator();
 
 	auto addNestedStructClassLambda = [&inout_result, &generatedEntityVarName, &env](std::shared_ptr<kodgen::NestedStructClassInfo> const& structClass)
 	{
-		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(rfk::getArchetype<" + structClass->type.getCanonicalName() + ">(), "
+		inout_result += generatedEntityVarName + "addNestedArchetype(rfk::getArchetype<" + structClass->type.getCanonicalName() + ">(), "
 			"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(structClass->accessSpecifier)) + "));" + env.getSeparator();
 	};
 
 	//Add nested structs
-	inout_result += "rfk::Archetype* archetype = nullptr;" + env.getSeparator();
 	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStruct : structClass.nestedStructs)
 	{
 		addNestedStructClassLambda(nestedStruct);
@@ -700,7 +699,7 @@ void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo 
 	//Add nested enums
 	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
 	{
-		inout_result += "archetype = " + generatedEntityVarName + "addNestedArchetype(" + 
+		inout_result += generatedEntityVarName + "addNestedArchetype(" + 
 			(isRegisteredNonPublicEnum(nestedEnum) ? computeGetNestedEnumMethodName(nestedEnum) : "rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">") + "(), "
 			"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));" + env.getSeparator();
 	}
