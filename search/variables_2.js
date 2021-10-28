@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['shouldinherit_0',['shouldInherit',['../classrfk_1_1_property.html#a75fcafb3dae2e59be71eb83ed1d9adaa',1,'rfk::Property']]]
+  ['targetentitykind_0',['targetEntityKind',['../classrfk_1_1_property.html#a7c1ad07905175f4565b60f95f20e2f7c',1,'rfk::Property']]]
 ];

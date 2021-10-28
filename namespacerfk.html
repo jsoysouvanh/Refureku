@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -164,9 +165,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_object.html">Object</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_out_of_range.html">OutOfRange</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_parent_struct.html">ParentStruct</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_pimpl.html">Pimpl</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_property.html">Property</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class to inherit from to define new properties.  <a href="classrfk_1_1_property.html#details">More...</a><br /></td></tr>
@@ -234,6 +235,14 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>int64</b> = int64_t<
 <tr class="memitem:a4c980dac02221ca3abbd01cb8f98c2de"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a> = bool(*)(T const  &amp;value, void *userData)</td></tr>
 <tr class="memdesc:a4c980dac02221ca3abbd01cb8f98c2de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Predicate defining if a value is valid or not.  <a href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">More...</a><br /></td></tr>
 <tr class="separator:a4c980dac02221ca3abbd01cb8f98c2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af30c6563f7c61df302e13dc424342fb0"><td class="memTemplParams" colspan="2"><a id="af30c6563f7c61df302e13dc424342fb0" name="af30c6563f7c61df302e13dc424342fb0"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af30c6563f7c61df302e13dc424342fb0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>SharedPtr</b> = std::shared_ptr&lt; T &gt;</td></tr>
+<tr class="separator:af30c6563f7c61df302e13dc424342fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a261a03c936ae86d734a119ffe0051784"><td class="memTemplParams" colspan="2"><a id="a261a03c936ae86d734a119ffe0051784" name="a261a03c936ae86d734a119ffe0051784"></a>
+template&lt;typename T , class Deleter  = std::default_delete&lt;T&gt;&gt; </td></tr>
+<tr class="memitem:a261a03c936ae86d734a119ffe0051784"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>UniquePtr</b> = std::unique_ptr&lt; T, Deleter &gt;</td></tr>
+<tr class="separator:a261a03c936ae86d734a119ffe0051784"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa71b489feb1ea31e5077d0807dc11535"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa71b489feb1ea31e5077d0807dc11535"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a> = bool(*)(T const  &amp;value, void *userData)</td></tr>
 <tr class="memdesc:aa71b489feb1ea31e5077d0807dc11535"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor function.  <a href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">More...</a><br /></td></tr>
@@ -241,6 +250,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>int64</b> = int64_t<
 <tr class="memitem:a85f8543dd8b486db7144b54531fb97fc"><td class="memItemLeft" align="right" valign="top"><a id="a85f8543dd8b486db7144b54531fb97fc" name="a85f8543dd8b486db7144b54531fb97fc"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Class</b> = <a class="el" href="classrfk_1_1_struct.html">Struct</a></td></tr>
 <tr class="separator:a85f8543dd8b486db7144b54531fb97fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eec07652b0eb19b87f2932b8c70f10b"><td class="memItemLeft" align="right" valign="top"><a id="a7eec07652b0eb19b87f2932b8c70f10b" name="a7eec07652b0eb19b87f2932b8c70f10b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>StructTemplate</b> = <a class="el" href="classrfk_1_1_class_template.html">ClassTemplate</a></td></tr>
+<tr class="separator:a7eec07652b0eb19b87f2932b8c70f10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33e48d4633ff952715208178efbcaf0f"><td class="memItemLeft" align="right" valign="top"><a id="a33e48d4633ff952715208178efbcaf0f" name="a33e48d4633ff952715208178efbcaf0f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>StructTemplateInstantiation</b> = <a class="el" href="classrfk_1_1_class_template_instantiation.html">ClassTemplateInstantiation</a></td></tr>
+<tr class="separator:a33e48d4633ff952715208178efbcaf0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -276,6 +291,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a86408593c34af77fdd90df932f8b5261">Function</a> = 1 &lt;&lt; 7
 , <a class="el" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a4c3880bb027f159e801041b1021e88e8">Method</a> = 1 &lt;&lt; 8
 , <a class="el" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a29785ae7827639b31b629cc7f9c150e0">EnumValue</a> = 1 &lt;&lt; 9
+, <a class="el" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5aa8cbc95a528a031b7946c8bc83d15c4e">NamespaceFragment</a> = 1 &lt;&lt; 10
 <br />
  }</td></tr>
 <tr class="separator:af958ab385009c79cc3a27e9b3183c5d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -332,15 +348,35 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:adf0be6cdc05908f493be55ef046bbd0c"><td class="memTemplParams" colspan="2"><a id="adf0be6cdc05908f493be55ef046bbd0c" name="adf0be6cdc05908f493be55ef046bbd0c"></a>
+template&lt;typename T , typename... Args&gt; </td></tr>
+<tr class="memitem:adf0be6cdc05908f493be55ef046bbd0c"><td class="memTemplItemLeft" align="right" valign="top">SharedPtr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>makeShared</b> (Args &amp;&amp;... args)</td></tr>
+<tr class="separator:adf0be6cdc05908f493be55ef046bbd0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4856dc5a3e22c704b9481d384a646d7"><td class="memTemplParams" colspan="2"><a id="ab4856dc5a3e22c704b9481d384a646d7" name="ab4856dc5a3e22c704b9481d384a646d7"></a>
+template&lt;typename T , typename... Args&gt; </td></tr>
+<tr class="memitem:ab4856dc5a3e22c704b9481d384a646d7"><td class="memTemplItemLeft" align="right" valign="top">UniquePtr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>makeUnique</b> (Args &amp;&amp;... args)</td></tr>
+<tr class="separator:ab4856dc5a3e22c704b9481d384a646d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca5c3fadd83f36e47cb4ece2a9988bf6"><td class="memItemLeft" align="right" valign="top"><a id="aca5c3fadd83f36e47cb4ece2a9988bf6" name="aca5c3fadd83f36e47cb4ece2a9988bf6"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_property.html">Property</a> const * &gt;)</td></tr>
 <tr class="separator:aca5c3fadd83f36e47cb4ece2a9988bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee2552f52369da9dcac865c90412af77"><td class="memItemLeft" align="right" valign="top"><a id="aee2552f52369da9dcac865c90412af77" name="aee2552f52369da9dcac865c90412af77"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_property.html">Property</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_property.html">Property</a> const * &gt; &gt;)</td></tr>
 <tr class="separator:aee2552f52369da9dcac865c90412af77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa78caccc498eae44c878ad293789b2d7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aa78caccc498eae44c878ad293789b2d7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrfk_1_1_enum.html">rfk::Enum</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#aa78caccc498eae44c878ad293789b2d7">getEnum</a> () noexcept</td></tr>
-<tr class="separator:aa78caccc498eae44c878ad293789b2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b2608eba60e51d8eb686a15fa7b597c"><td class="memItemLeft" align="right" valign="top"><a id="a7b2608eba60e51d8eb686a15fa7b597c" name="a7b2608eba60e51d8eb686a15fa7b597c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const * &gt;)</td></tr>
+<tr class="separator:a7b2608eba60e51d8eb686a15fa7b597c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e5cd0f3cc0f5d1f91efeb287d343faf"><td class="memItemLeft" align="right" valign="top"><a id="a4e5cd0f3cc0f5d1f91efeb287d343faf" name="a4e5cd0f3cc0f5d1f91efeb287d343faf"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:a4e5cd0f3cc0f5d1f91efeb287d343faf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a624dd80a1de440ab67ff8bc38abfd684"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a624dd80a1de440ab67ff8bc38abfd684"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a624dd80a1de440ab67ff8bc38abfd684">getEnum</a> () noexcept</td></tr>
+<tr class="separator:a624dd80a1de440ab67ff8bc38abfd684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa5bcab727167f3446cd511ed3fe4d65"><td class="memItemLeft" align="right" valign="top"><a id="afa5bcab727167f3446cd511ed3fe4d65" name="afa5bcab727167f3446cd511ed3fe4d65"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const * &gt;)</td></tr>
+<tr class="separator:afa5bcab727167f3446cd511ed3fe4d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e1b678688204d9e9d897004ef686cb"><td class="memItemLeft" align="right" valign="top"><a id="a76e1b678688204d9e9d897004ef686cb" name="a76e1b678688204d9e9d897004ef686cb"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:a76e1b678688204d9e9d897004ef686cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4c4f0efe5b13076dd8c852f4d70c975"><td class="memItemLeft" align="right" valign="top"><a id="af4c4f0efe5b13076dd8c852f4d70c975" name="af4c4f0efe5b13076dd8c852f4d70c975"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_enum_value.html">EnumValue</a> const * &gt;)</td></tr>
 <tr class="separator:af4c4f0efe5b13076dd8c852f4d70c975"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -439,64 +475,84 @@ template&lt;&gt; </td></tr>
 <tr class="memitem:ad9fae2697dfb170e07fa15b5bd39c6ee"><td class="memItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_database.html">Database</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#ad9fae2697dfb170e07fa15b5bd39c6ee">getDatabase</a> () noexcept</td></tr>
 <tr class="memdesc:ad9fae2697dfb170e07fa15b5bd39c6ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a reference to the database of this program.  <a href="namespacerfk.html#ad9fae2697dfb170e07fa15b5bd39c6ee">More...</a><br /></td></tr>
 <tr class="separator:ad9fae2697dfb170e07fa15b5bd39c6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb15a9e7d0436f898969aecf6be93360"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:acb15a9e7d0436f898969aecf6be93360"><td class="memTemplItemLeft" align="right" valign="top">T const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#acb15a9e7d0436f898969aecf6be93360">entityCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="memdesc:acb15a9e7d0436f898969aecf6be93360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast this entity to the specified concrete type if possible.  <a href="namespacerfk.html#acb15a9e7d0436f898969aecf6be93360">More...</a><br /></td></tr>
-<tr class="separator:acb15a9e7d0436f898969aecf6be93360"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03ea33e3f34e1160fb20eaea21d73c32"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:a03ea33e3f34e1160fb20eaea21d73c32"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a03ea33e3f34e1160fb20eaea21d73c32">entityCast&lt; Archetype &gt;</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a03ea33e3f34e1160fb20eaea21d73c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a404f58b70997e551b080f58f8c968466"><td class="memItemLeft" align="right" valign="top"><a id="a404f58b70997e551b080f58f8c968466" name="a404f58b70997e551b080f58f8c968466"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a404f58b70997e551b080f58f8c968466"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_fundamental_archetype.html">FundamentalArchetype</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; FundamentalArchetype &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a404f58b70997e551b080f58f8c968466"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa34ba9aac3d2168119f408a35231bae7"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:aa34ba9aac3d2168119f408a35231bae7"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#aa34ba9aac3d2168119f408a35231bae7">entityCast&lt; Struct &gt;</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:aa34ba9aac3d2168119f408a35231bae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e5b9729ac3a9c476e47df95295fed0f"><td class="memItemLeft" align="right" valign="top"><a id="a6e5b9729ac3a9c476e47df95295fed0f" name="a6e5b9729ac3a9c476e47df95295fed0f"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a6e5b9729ac3a9c476e47df95295fed0f"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_field_base.html">FieldBase</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; FieldBase &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a6e5b9729ac3a9c476e47df95295fed0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a728b427419caee9a325547cbf824a1"><td class="memItemLeft" align="right" valign="top"><a id="a0a728b427419caee9a325547cbf824a1" name="a0a728b427419caee9a325547cbf824a1"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a0a728b427419caee9a325547cbf824a1"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_field.html">Field</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; Field &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a0a728b427419caee9a325547cbf824a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a581b058a2989a289df6e5c21b6a713ad"><td class="memItemLeft" align="right" valign="top"><a id="a581b058a2989a289df6e5c21b6a713ad" name="a581b058a2989a289df6e5c21b6a713ad"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a581b058a2989a289df6e5c21b6a713ad"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_static_field.html">StaticField</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; StaticField &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a581b058a2989a289df6e5c21b6a713ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a367c044ead5233ed24f01b7ad120c225"><td class="memItemLeft" align="right" valign="top"><a id="a367c044ead5233ed24f01b7ad120c225" name="a367c044ead5233ed24f01b7ad120c225"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a367c044ead5233ed24f01b7ad120c225"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_method_base.html">MethodBase</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; MethodBase &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a367c044ead5233ed24f01b7ad120c225"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a8979cd7ed5c5c3a0e6036d7913e942"><td class="memItemLeft" align="right" valign="top"><a id="a6a8979cd7ed5c5c3a0e6036d7913e942" name="a6a8979cd7ed5c5c3a0e6036d7913e942"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a6a8979cd7ed5c5c3a0e6036d7913e942"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_method.html">Method</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; Method &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a6a8979cd7ed5c5c3a0e6036d7913e942"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeba51d2a8d5091e969faf2262912d39e"><td class="memItemLeft" align="right" valign="top"><a id="aeba51d2a8d5091e969faf2262912d39e" name="aeba51d2a8d5091e969faf2262912d39e"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:aeba51d2a8d5091e969faf2262912d39e"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_static_method.html">StaticMethod</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; StaticMethod &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:aeba51d2a8d5091e969faf2262912d39e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa460716a35a8633d2134d0e9e65e7e4a"><td class="memItemLeft" align="right" valign="top"><a id="aa460716a35a8633d2134d0e9e65e7e4a" name="aa460716a35a8633d2134d0e9e65e7e4a"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:aa460716a35a8633d2134d0e9e65e7e4a"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; Enum &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:aa460716a35a8633d2134d0e9e65e7e4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16cb79c2b085071b65fadf204517dd4e"><td class="memItemLeft" align="right" valign="top"><a id="a16cb79c2b085071b65fadf204517dd4e" name="a16cb79c2b085071b65fadf204517dd4e"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a16cb79c2b085071b65fadf204517dd4e"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_enum_value.html">EnumValue</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; EnumValue &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a16cb79c2b085071b65fadf204517dd4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c4179a363df476a1f2ac0f334aa891f"><td class="memItemLeft" align="right" valign="top"><a id="a6c4179a363df476a1f2ac0f334aa891f" name="a6c4179a363df476a1f2ac0f334aa891f"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a6c4179a363df476a1f2ac0f334aa891f"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; Namespace &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a6c4179a363df476a1f2ac0f334aa891f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37e1d06bee1d1cec0943b460f08d562b"><td class="memItemLeft" align="right" valign="top"><a id="a37e1d06bee1d1cec0943b460f08d562b" name="a37e1d06bee1d1cec0943b460f08d562b"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a37e1d06bee1d1cec0943b460f08d562b"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; Variable &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a37e1d06bee1d1cec0943b460f08d562b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63cd817eb5b62b650243658517061658"><td class="memItemLeft" align="right" valign="top"><a id="a63cd817eb5b62b650243658517061658" name="a63cd817eb5b62b650243658517061658"></a>
-template&lt;&gt; </td></tr>
-<tr class="memitem:a63cd817eb5b62b650243658517061658"><td class="memTemplItemLeft" align="right" valign="top">REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>entityCast&lt; Function &gt;</b> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
-<tr class="separator:a63cd817eb5b62b650243658517061658"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b75583f8bc8e2fb071b8d26046dd8d"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a71b75583f8bc8e2fb071b8d26046dd8d">archetypeCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a71b75583f8bc8e2fb071b8d26046dd8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_archetype.html">rfk::Archetype</a>.  <a href="namespacerfk.html#a71b75583f8bc8e2fb071b8d26046dd8d">More...</a><br /></td></tr>
+<tr class="separator:a71b75583f8bc8e2fb071b8d26046dd8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a325c243557b30c26e7a55281319cf24f"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_fundamental_archetype.html">FundamentalArchetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a325c243557b30c26e7a55281319cf24f">fundamentalArchetypeCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a325c243557b30c26e7a55281319cf24f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::FundamentalType.  <a href="namespacerfk.html#a325c243557b30c26e7a55281319cf24f">More...</a><br /></td></tr>
+<tr class="separator:a325c243557b30c26e7a55281319cf24f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4652df3118fde2acef4dff12e0d9e2d9"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a4652df3118fde2acef4dff12e0d9e2d9">structCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a4652df3118fde2acef4dff12e0d9e2d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_struct.html">rfk::Struct</a>.  <a href="namespacerfk.html#a4652df3118fde2acef4dff12e0d9e2d9">More...</a><br /></td></tr>
+<tr class="separator:a4652df3118fde2acef4dff12e0d9e2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f70b1161beb556fc98f28186966dd34"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template.html">StructTemplate</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a1f70b1161beb556fc98f28186966dd34">structTemplateCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a1f70b1161beb556fc98f28186966dd34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::StructTemplate.  <a href="namespacerfk.html#a1f70b1161beb556fc98f28186966dd34">More...</a><br /></td></tr>
+<tr class="separator:a1f70b1161beb556fc98f28186966dd34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cf14cdcd4b8f29182188107bddff34d"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template_instantiation.html">StructTemplateInstantiation</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a9cf14cdcd4b8f29182188107bddff34d">structTemplateInstantiationCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a9cf14cdcd4b8f29182188107bddff34d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::StructTemplateInstantiation.  <a href="namespacerfk.html#a9cf14cdcd4b8f29182188107bddff34d">More...</a><br /></td></tr>
+<tr class="separator:a9cf14cdcd4b8f29182188107bddff34d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c39f67865751b11434d2f80b4d224d1"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a6c39f67865751b11434d2f80b4d224d1">classCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a6c39f67865751b11434d2f80b4d224d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::Class.  <a href="namespacerfk.html#a6c39f67865751b11434d2f80b4d224d1">More...</a><br /></td></tr>
+<tr class="separator:a6c39f67865751b11434d2f80b4d224d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af70a323f83297e982063eeea120ee19c"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template.html">ClassTemplate</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#af70a323f83297e982063eeea120ee19c">classTemplateCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:af70a323f83297e982063eeea120ee19c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_class_template.html">rfk::ClassTemplate</a>.  <a href="namespacerfk.html#af70a323f83297e982063eeea120ee19c">More...</a><br /></td></tr>
+<tr class="separator:af70a323f83297e982063eeea120ee19c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac81880628222511696bf35c0b810d040"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template_instantiation.html">ClassTemplateInstantiation</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#ac81880628222511696bf35c0b810d040">classTemplateInstantiationCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:ac81880628222511696bf35c0b810d040"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_class_template_instantiation.html">rfk::ClassTemplateInstantiation</a>.  <a href="namespacerfk.html#ac81880628222511696bf35c0b810d040">More...</a><br /></td></tr>
+<tr class="separator:ac81880628222511696bf35c0b810d040"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4c3f270a5dac439ecaa99977b781405"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_field.html">Field</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#ae4c3f270a5dac439ecaa99977b781405">fieldCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:ae4c3f270a5dac439ecaa99977b781405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_field.html">rfk::Field</a>.  <a href="namespacerfk.html#ae4c3f270a5dac439ecaa99977b781405">More...</a><br /></td></tr>
+<tr class="separator:ae4c3f270a5dac439ecaa99977b781405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32387c73c68a5ff38d091f52825a7d29"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_static_field.html">StaticField</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a32387c73c68a5ff38d091f52825a7d29">staticFieldCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a32387c73c68a5ff38d091f52825a7d29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_static_field.html">rfk::StaticField</a>.  <a href="namespacerfk.html#a32387c73c68a5ff38d091f52825a7d29">More...</a><br /></td></tr>
+<tr class="separator:a32387c73c68a5ff38d091f52825a7d29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ac25605567265981b39863d6160b140"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_method.html">Method</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a1ac25605567265981b39863d6160b140">methodCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a1ac25605567265981b39863d6160b140"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_method.html">rfk::Method</a>.  <a href="namespacerfk.html#a1ac25605567265981b39863d6160b140">More...</a><br /></td></tr>
+<tr class="separator:a1ac25605567265981b39863d6160b140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa94c85fcb8ebcbbf4118e43fd47ae3ea"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_static_method.html">StaticMethod</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#aa94c85fcb8ebcbbf4118e43fd47ae3ea">staticMethodCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:aa94c85fcb8ebcbbf4118e43fd47ae3ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_static_method.html">rfk::StaticMethod</a>.  <a href="namespacerfk.html#aa94c85fcb8ebcbbf4118e43fd47ae3ea">More...</a><br /></td></tr>
+<tr class="separator:aa94c85fcb8ebcbbf4118e43fd47ae3ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8662292d9da4976068593c12142c76"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a6d8662292d9da4976068593c12142c76">enumCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a6d8662292d9da4976068593c12142c76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_enum.html">rfk::Enum</a>.  <a href="namespacerfk.html#a6d8662292d9da4976068593c12142c76">More...</a><br /></td></tr>
+<tr class="separator:a6d8662292d9da4976068593c12142c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57929a51e5575172e778bb72ae83b6dd"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum_value.html">EnumValue</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a57929a51e5575172e778bb72ae83b6dd">enumValueCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a57929a51e5575172e778bb72ae83b6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_enum_value.html">rfk::EnumValue</a>.  <a href="namespacerfk.html#a57929a51e5575172e778bb72ae83b6dd">More...</a><br /></td></tr>
+<tr class="separator:a57929a51e5575172e778bb72ae83b6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a884bafaaa6b48835aa13ec9f784ba0e8"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a884bafaaa6b48835aa13ec9f784ba0e8">namespaceCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a884bafaaa6b48835aa13ec9f784ba0e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_namespace.html">rfk::Namespace</a>.  <a href="namespacerfk.html#a884bafaaa6b48835aa13ec9f784ba0e8">More...</a><br /></td></tr>
+<tr class="separator:a884bafaaa6b48835aa13ec9f784ba0e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2137da623b3c180eee60598f36f9c35e"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a2137da623b3c180eee60598f36f9c35e">variableCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a2137da623b3c180eee60598f36f9c35e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_variable.html">rfk::Variable</a>.  <a href="namespacerfk.html#a2137da623b3c180eee60598f36f9c35e">More...</a><br /></td></tr>
+<tr class="separator:a2137da623b3c180eee60598f36f9c35e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c849540f740aed60465f430ead5f49"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a91c849540f740aed60465f430ead5f49">functionCast</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *entity) noexcept</td></tr>
+<tr class="memdesc:a91c849540f740aed60465f430ead5f49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_function.html">rfk::Function</a>.  <a href="namespacerfk.html#a91c849540f740aed60465f430ead5f49">More...</a><br /></td></tr>
+<tr class="separator:a91c849540f740aed60465f430ead5f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb97c9f8914b6b6bcc99c682e1843766"><td class="memTemplParams" colspan="2">template&lt;auto FuncPtr&gt; </td></tr>
+<tr class="memitem:aeb97c9f8914b6b6bcc99c682e1843766"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#aeb97c9f8914b6b6bcc99c682e1843766">getFunction</a> () noexcept</td></tr>
+<tr class="separator:aeb97c9f8914b6b6bcc99c682e1843766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a144bafa11fedaae94a3dfafbb774e431"><td class="memItemLeft" align="right" valign="top"><a id="a144bafa11fedaae94a3dfafbb774e431" name="a144bafa11fedaae94a3dfafbb774e431"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const * &gt;)</td></tr>
+<tr class="separator:a144bafa11fedaae94a3dfafbb774e431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3657ab12b4a14423d237c141c4588916"><td class="memItemLeft" align="right" valign="top"><a id="a3657ab12b4a14423d237c141c4588916" name="a3657ab12b4a14423d237c141c4588916"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:a3657ab12b4a14423d237c141c4588916"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0350190e9dcca0ee9ae238bef435ff9c"><td class="memItemLeft" align="right" valign="top"><a id="a0350190e9dcca0ee9ae238bef435ff9c" name="a0350190e9dcca0ee9ae238bef435ff9c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_method.html">Method</a> const * &gt;)</td></tr>
+<tr class="separator:a0350190e9dcca0ee9ae238bef435ff9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd5ac49f8888745671aedacc84b86354"><td class="memItemLeft" align="right" valign="top"><a id="afd5ac49f8888745671aedacc84b86354" name="afd5ac49f8888745671aedacc84b86354"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_method.html">Method</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_method.html">Method</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:afd5ac49f8888745671aedacc84b86354"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9447c5c988bf903d1afdf2e303ac29c6"><td class="memItemLeft" align="right" valign="top"><a id="a9447c5c988bf903d1afdf2e303ac29c6" name="a9447c5c988bf903d1afdf2e303ac29c6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_static_method.html">StaticMethod</a> const * &gt;)</td></tr>
+<tr class="separator:a9447c5c988bf903d1afdf2e303ac29c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa781f181c29a2f00da526a5e4e30b47e"><td class="memItemLeft" align="right" valign="top"><a id="aa781f181c29a2f00da526a5e4e30b47e" name="aa781f181c29a2f00da526a5e4e30b47e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_static_method.html">StaticMethod</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_static_method.html">StaticMethod</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:aa781f181c29a2f00da526a5e4e30b47e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada3db2240b1c1d16774afa6d0c951065"><td class="memItemLeft" align="right" valign="top"><a id="ada3db2240b1c1d16774afa6d0c951065" name="ada3db2240b1c1d16774afa6d0c951065"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const * &gt;)</td></tr>
+<tr class="separator:ada3db2240b1c1d16774afa6d0c951065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afea2a5896c1839b3384ea9f845b187dc"><td class="memItemLeft" align="right" valign="top"><a id="afea2a5896c1839b3384ea9f845b187dc" name="afea2a5896c1839b3384ea9f845b187dc"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:afea2a5896c1839b3384ea9f845b187dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fc57f119c94c0df09a856c14ead199d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3fc57f119c94c0df09a856c14ead199d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrfk_1_1_type.html">Type</a> const &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a3fc57f119c94c0df09a856c14ead199d">getType</a> () noexcept</td></tr>
 <tr class="memdesc:a3fc57f119c94c0df09a856c14ead199d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the <a class="el" href="classrfk_1_1_type.html">Type</a> object from a given type. Identical types will return the same <a class="el" href="classrfk_1_1_type.html">Type</a> object (the returned object will have the same address in memory).  <a href="namespacerfk.html#a3fc57f119c94c0df09a856c14ead199d">More...</a><br /></td></tr>
@@ -561,12 +617,33 @@ template REFUREKU_API <a class="el" href="classrfk_1_1_type.html">Type</a> const
 <tr class="memitem:a7b7403b1770851f59ade3e380f085600"><td class="memItemLeft" align="right" valign="top"><a id="a7b7403b1770851f59ade3e380f085600" name="a7b7403b1770851f59ade3e380f085600"></a>
 template REFUREKU_API <a class="el" href="classrfk_1_1_type.html">Type</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getType&lt; long double &gt;</b> () noexcept</td></tr>
 <tr class="separator:a7b7403b1770851f59ade3e380f085600"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af64c2d0a1663f6f3b295f6b4a436e19e"><td class="memItemLeft" align="right" valign="top"><a id="af64c2d0a1663f6f3b295f6b4a436e19e" name="af64c2d0a1663f6f3b295f6b4a436e19e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> const * &gt;)</td></tr>
+<tr class="separator:af64c2d0a1663f6f3b295f6b4a436e19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02ae5c360deb17f7b0f41eee8329cbe0"><td class="memItemLeft" align="right" valign="top"><a id="a02ae5c360deb17f7b0f41eee8329cbe0" name="a02ae5c360deb17f7b0f41eee8329cbe0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:a02ae5c360deb17f7b0f41eee8329cbe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63fb0f753dca098d580f5bd65ab23a26"><td class="memItemLeft" align="right" valign="top"><a id="a63fb0f753dca098d580f5bd65ab23a26" name="a63fb0f753dca098d580f5bd65ab23a26"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_static_field.html">StaticField</a> const * &gt;)</td></tr>
+<tr class="separator:a63fb0f753dca098d580f5bd65ab23a26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a168e6ef7feb31801ac06540eaf8aa044"><td class="memItemLeft" align="right" valign="top"><a id="a168e6ef7feb31801ac06540eaf8aa044" name="a168e6ef7feb31801ac06540eaf8aa044"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_static_field.html">StaticField</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_static_field.html">StaticField</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:a168e6ef7feb31801ac06540eaf8aa044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af55da8c89d51267742385f317f8074ee"><td class="memTemplParams" colspan="2">template&lt;auto VarPtr&gt; </td></tr>
+<tr class="memitem:af55da8c89d51267742385f317f8074ee"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#af55da8c89d51267742385f317f8074ee">getVariable</a> () noexcept</td></tr>
+<tr class="separator:af55da8c89d51267742385f317f8074ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4f85823d3da0b9859dcd3e44060c502"><td class="memItemLeft" align="right" valign="top"><a id="af4f85823d3da0b9859dcd3e44060c502" name="af4f85823d3da0b9859dcd3e44060c502"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> const * &gt;)</td></tr>
+<tr class="separator:af4f85823d3da0b9859dcd3e44060c502"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae80f1269ef201ec11bb24012ef970a47"><td class="memItemLeft" align="right" valign="top"><a id="ae80f1269ef201ec11bb24012ef970a47" name="ae80f1269ef201ec11bb24012ef970a47"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>REFUREKU_TEMPLATE_API</b> (<a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *, <a class="el" href="classrfk_1_1_allocator.html">rfk::Allocator</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> const * &gt; &gt;)</td></tr>
+<tr class="separator:ae80f1269ef201ec11bb24012ef970a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved</p>
-<p >This file is part of the Refureku library project which is released under the MIT License. See the README.md file for full license details.</p>
+<p >This file is part of the Refureku library project which is released under the MIT License. See the LICENSE.md file for full license details.</p>
 <p >Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved</p>
-<p >This file is part of the Refureku library project which is released under the MIT License. See the README.md file for full license details. </p>
+<p >This file is part of the Refureku library project which is released under the MIT License. See the LICENSE.md file for full license details. </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="a4c980dac02221ca3abbd01cb8f98c2de" name="a4c980dac02221ca3abbd01cb8f98c2de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4c980dac02221ca3abbd01cb8f98c2de">&#9670;&nbsp;</a></span>Predicate</h2>
@@ -685,13 +762,15 @@ template&lt;typename T &gt; </div>
 </td></tr>
 <tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5a47c14840d8e15331fa420b9b2f757cd9" name="af958ab385009c79cc3a27e9b3183c5d5a47c14840d8e15331fa420b9b2f757cd9"></a>Variable&#160;</td><td class="fielddoc"><p >This entity is a (non-member) variable, it can safely be cast to <a class="el" href="classrfk_1_1_variable.html">rfk::Variable</a>. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5a6f16a5f8ff5d75ab84c018adacdfcbb7" name="af958ab385009c79cc3a27e9b3183c5d5a6f16a5f8ff5d75ab84c018adacdfcbb7"></a>Field&#160;</td><td class="fielddoc"><p >The entity is a field, it can safely be cast to <a class="el" href="classrfk_1_1_field_base.html">rfk::FieldBase</a> type. More specific info can be retrieved from the entity by checking rfk::FieldBase::flags. </p>
+<tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5a6f16a5f8ff5d75ab84c018adacdfcbb7" name="af958ab385009c79cc3a27e9b3183c5d5a6f16a5f8ff5d75ab84c018adacdfcbb7"></a>Field&#160;</td><td class="fielddoc"><p >The entity is a field, it can safely be cast to <a class="el" href="classrfk_1_1_field_base.html">rfk::FieldBase</a> type. More specific info can be retrieved from the entity by checking <a class="el" href="classrfk_1_1_field_base.html#ab15985bd234a0d4214eec8707ca90ce4" title="Get the flags qualifying this field.">rfk::FieldBase::getFlags()</a>. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5a86408593c34af77fdd90df932f8b5261" name="af958ab385009c79cc3a27e9b3183c5d5a86408593c34af77fdd90df932f8b5261"></a>Function&#160;</td><td class="fielddoc"><p >This entity is a (non-member) function, is can safely be cast to <a class="el" href="classrfk_1_1_function.html">rfk::Function</a>. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5a4c3880bb027f159e801041b1021e88e8" name="af958ab385009c79cc3a27e9b3183c5d5a4c3880bb027f159e801041b1021e88e8"></a>Method&#160;</td><td class="fielddoc"><p >The entity is a method, it can safely be cast to <a class="el" href="classrfk_1_1_method_base.html">rfk::MethodBase</a> type. More specific info can be retrieved from the entity by checking rfk::MethodBase::flags. </p>
+<tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5a4c3880bb027f159e801041b1021e88e8" name="af958ab385009c79cc3a27e9b3183c5d5a4c3880bb027f159e801041b1021e88e8"></a>Method&#160;</td><td class="fielddoc"><p >The entity is a method, it can safely be cast to <a class="el" href="classrfk_1_1_method_base.html">rfk::MethodBase</a> type. More specific info can be retrieved from the entity by checking <a class="el" href="classrfk_1_1_method_base.html#af1aa5961b3b7ed3ca6f6e05dace23fe0" title="Get the flags qualifying this method.">rfk::MethodBase::getFlags()</a>. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5a29785ae7827639b31b629cc7f9c150e0" name="af958ab385009c79cc3a27e9b3183c5d5a29785ae7827639b31b629cc7f9c150e0"></a>EnumValue&#160;</td><td class="fielddoc"><p >The entity is an enum value, it can safely be cast to <a class="el" href="classrfk_1_1_enum_value.html">rfk::EnumValue</a>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af958ab385009c79cc3a27e9b3183c5d5aa8cbc95a528a031b7946c8bc83d15c4e" name="af958ab385009c79cc3a27e9b3183c5d5aa8cbc95a528a031b7946c8bc83d15c4e"></a>NamespaceFragment&#160;</td><td class="fielddoc"><p >The entity is a namespace fragment, is can safely be cast to <a class="el" href="classrfk_1_1_namespace_fragment.html">rfk::NamespaceFragment</a>. </p>
 </td></tr>
 </table>
 
@@ -892,19 +971,17 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="acb15a9e7d0436f898969aecf6be93360" name="acb15a9e7d0436f898969aecf6be93360"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb15a9e7d0436f898969aecf6be93360">&#9670;&nbsp;</a></span>entityCast()</h2>
+<a id="a71b75583f8bc8e2fb071b8d26046dd8d" name="a71b75583f8bc8e2fb071b8d26046dd8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b75583f8bc8e2fb071b8d26046dd8d">&#9670;&nbsp;</a></span>archetypeCast()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T const  * rfk::entityCast </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * rfk::archetypeCast </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
           <td class="paramname"><em>entity</em></td><td>)</td>
@@ -918,30 +995,28 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Try to cast this entity to the specified concrete type if possible. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">T</td><td>Concrete entity type to cast to.</td></tr>
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_archetype.html">rfk::Archetype</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The casted entity if the provided type matched the concrete entity type, else nullptr. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_archetype.html">rfk::Archetype</a> if entity is an archetype, else nullptr. </dd></dl>
 
 </div>
 </div>
-<a id="a03ea33e3f34e1160fb20eaea21d73c32" name="a03ea33e3f34e1160fb20eaea21d73c32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03ea33e3f34e1160fb20eaea21d73c32">&#9670;&nbsp;</a></span>entityCast&lt; Archetype &gt;()</h2>
+<a id="a6c39f67865751b11434d2f80b4d224d1" name="a6c39f67865751b11434d2f80b4d224d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c39f67865751b11434d2f80b4d224d1">&#9670;&nbsp;</a></span>classCast()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * <a class="el" href="namespacerfk.html#acb15a9e7d0436f898969aecf6be93360">rfk::entityCast</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> &gt; </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const  * rfk::classCast </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
           <td class="paramname"><em>entity</em></td><td>)</td>
@@ -954,23 +1029,29 @@ template&lt;&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p ><a class="el" href="namespacerfk.html#acb15a9e7d0436f898969aecf6be93360" title="Try to cast this entity to the specified concrete type if possible.">rfk::entityCast&lt;&gt;</a> specialization for all <a class="el" href="classrfk_1_1_entity.html">Entity</a> types. </p>
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::Class. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to rfk::Class if entity is a class, else nullptr. </dd></dl>
 
 </div>
 </div>
-<a id="aa34ba9aac3d2168119f408a35231bae7" name="aa34ba9aac3d2168119f408a35231bae7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa34ba9aac3d2168119f408a35231bae7">&#9670;&nbsp;</a></span>entityCast&lt; Struct &gt;()</h2>
+<a id="af70a323f83297e982063eeea120ee19c" name="af70a323f83297e982063eeea120ee19c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af70a323f83297e982063eeea120ee19c">&#9670;&nbsp;</a></span>classTemplateCast()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const  * <a class="el" href="namespacerfk.html#acb15a9e7d0436f898969aecf6be93360">rfk::entityCast</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt; </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template.html">ClassTemplate</a> const  * rfk::classTemplateCast </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
           <td class="paramname"><em>entity</em></td><td>)</td>
@@ -983,7 +1064,225 @@ template&lt;&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >This entity cast specialization doesn't work to check if an entity is a class (it will return a non-nullptr pointer when it is a struct as well). Make sure to check if the result's kind is <a class="el" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a9bd81329febf6efe22788e03ddeaf0af">EEntityKind::Class</a>. </p>
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_class_template.html">rfk::ClassTemplate</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_class_template.html">rfk::ClassTemplate</a> if entity is a class template, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="ac81880628222511696bf35c0b810d040" name="ac81880628222511696bf35c0b810d040"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac81880628222511696bf35c0b810d040">&#9670;&nbsp;</a></span>classTemplateInstantiationCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template_instantiation.html">ClassTemplateInstantiation</a> const  * rfk::classTemplateInstantiationCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_class_template_instantiation.html">rfk::ClassTemplateInstantiation</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_class_template_instantiation.html">rfk::ClassTemplateInstantiation</a> if entity is a class template instantiation, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a6d8662292d9da4976068593c12142c76" name="a6d8662292d9da4976068593c12142c76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d8662292d9da4976068593c12142c76">&#9670;&nbsp;</a></span>enumCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const  * rfk::enumCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_enum.html">rfk::Enum</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_enum.html">rfk::Enum</a> if entity is an enum or enum class, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a57929a51e5575172e778bb72ae83b6dd" name="a57929a51e5575172e778bb72ae83b6dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57929a51e5575172e778bb72ae83b6dd">&#9670;&nbsp;</a></span>enumValueCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum_value.html">EnumValue</a> const  * rfk::enumValueCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_enum_value.html">rfk::EnumValue</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_enum_value.html">rfk::EnumValue</a> if entity is an enum value, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="ae4c3f270a5dac439ecaa99977b781405" name="ae4c3f270a5dac439ecaa99977b781405"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4c3f270a5dac439ecaa99977b781405">&#9670;&nbsp;</a></span>fieldCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_field.html">Field</a> const  * rfk::fieldCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_field.html">rfk::Field</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_field.html">rfk::Field</a> if entity is a field, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a91c849540f740aed60465f430ead5f49" name="a91c849540f740aed60465f430ead5f49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91c849540f740aed60465f430ead5f49">&#9670;&nbsp;</a></span>functionCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::functionCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_function.html">rfk::Function</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_function.html">rfk::Function</a> if entity is a function, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a325c243557b30c26e7a55281319cf24f" name="a325c243557b30c26e7a55281319cf24f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a325c243557b30c26e7a55281319cf24f">&#9670;&nbsp;</a></span>fundamentalArchetypeCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_fundamental_archetype.html">FundamentalArchetype</a> const  * rfk::fundamentalArchetypeCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::FundamentalType. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to rfk::FundamentalType if entity is a fundamental archetype, else nullptr. </dd></dl>
 
 </div>
 </div>
@@ -1077,8 +1376,8 @@ template&lt;&gt; </div>
 
 </div>
 </div>
-<a id="aa78caccc498eae44c878ad293789b2d7" name="aa78caccc498eae44c878ad293789b2d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa78caccc498eae44c878ad293789b2d7">&#9670;&nbsp;</a></span>getEnum()</h2>
+<a id="a624dd80a1de440ab67ff8bc38abfd684" name="a624dd80a1de440ab67ff8bc38abfd684"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a624dd80a1de440ab67ff8bc38abfd684">&#9670;&nbsp;</a></span>getEnum()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1089,7 +1388,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classrfk_1_1_enum.html">rfk::Enum</a> const  * rfk::getEnum </td>
+          <td class="memname"><a class="el" href="classrfk_1_1_enum.html">Enum</a> const  * rfk::getEnum </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1101,7 +1400,35 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Base implementation of getEnum, specialized for each reflected enum </p>
+<p >Base implementation of getEnum, specialized for each reflected enum. </p>
+
+</div>
+</div>
+<a id="aeb97c9f8914b6b6bcc99c682e1843766" name="aeb97c9f8914b6b6bcc99c682e1843766"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb97c9f8914b6b6bcc99c682e1843766">&#9670;&nbsp;</a></span>getFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;auto FuncPtr&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::getFunction </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Base implementation of getFunction, specialized for each reflected function. </p>
 
 </div>
 </div>
@@ -1132,6 +1459,314 @@ template&lt;typename T &gt; </div>
 
 <p>Retrieve the <a class="el" href="classrfk_1_1_type.html">Type</a> object from a given type. Identical types will return the same <a class="el" href="classrfk_1_1_type.html">Type</a> object (the returned object will have the same address in memory). </p>
 <dl class="section return"><dt>Returns</dt><dd>The computed type. </dd></dl>
+
+</div>
+</div>
+<a id="af55da8c89d51267742385f317f8074ee" name="af55da8c89d51267742385f317f8074ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af55da8c89d51267742385f317f8074ee">&#9670;&nbsp;</a></span>getVariable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;auto VarPtr&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrfk_1_1_variable.html">Variable</a> const  * rfk::getVariable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Base implementation of getVariable, specialized for each reflected variable. </p>
+
+</div>
+</div>
+<a id="a1ac25605567265981b39863d6160b140" name="a1ac25605567265981b39863d6160b140"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ac25605567265981b39863d6160b140">&#9670;&nbsp;</a></span>methodCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_method.html">Method</a> const  * rfk::methodCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_method.html">rfk::Method</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_method.html">rfk::Method</a> if entity is a method, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a884bafaaa6b48835aa13ec9f784ba0e8" name="a884bafaaa6b48835aa13ec9f784ba0e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a884bafaaa6b48835aa13ec9f784ba0e8">&#9670;&nbsp;</a></span>namespaceCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const  * rfk::namespaceCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_namespace.html">rfk::Namespace</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_namespace.html">rfk::Namespace</a> if entity is a namespace, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a32387c73c68a5ff38d091f52825a7d29" name="a32387c73c68a5ff38d091f52825a7d29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32387c73c68a5ff38d091f52825a7d29">&#9670;&nbsp;</a></span>staticFieldCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_static_field.html">StaticField</a> const  * rfk::staticFieldCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_static_field.html">rfk::StaticField</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_static_field.html">rfk::StaticField</a> if entity is a static field, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="aa94c85fcb8ebcbbf4118e43fd47ae3ea" name="aa94c85fcb8ebcbbf4118e43fd47ae3ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa94c85fcb8ebcbbf4118e43fd47ae3ea">&#9670;&nbsp;</a></span>staticMethodCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_static_method.html">StaticMethod</a> const  * rfk::staticMethodCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_static_method.html">rfk::StaticMethod</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_static_method.html">rfk::StaticMethod</a> if entity is a static method, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a4652df3118fde2acef4dff12e0d9e2d9" name="a4652df3118fde2acef4dff12e0d9e2d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4652df3118fde2acef4dff12e0d9e2d9">&#9670;&nbsp;</a></span>structCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const  * rfk::structCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_struct.html">rfk::Struct</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_struct.html">rfk::Struct</a> if entity is a struct, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a1f70b1161beb556fc98f28186966dd34" name="a1f70b1161beb556fc98f28186966dd34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f70b1161beb556fc98f28186966dd34">&#9670;&nbsp;</a></span>structTemplateCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template.html">StructTemplate</a> const  * rfk::structTemplateCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::StructTemplate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to rfk::StructTemplate if entity is a struct template, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a9cf14cdcd4b8f29182188107bddff34d" name="a9cf14cdcd4b8f29182188107bddff34d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cf14cdcd4b8f29182188107bddff34d">&#9670;&nbsp;</a></span>structTemplateInstantiationCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template_instantiation.html">StructTemplateInstantiation</a> const  * rfk::structTemplateInstantiationCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to rfk::StructTemplateInstantiation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to rfk::StructTemplateInstantiation if entity is a struct template instantiation, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a2137da623b3c180eee60598f36f9c35e" name="a2137da623b3c180eee60598f36f9c35e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2137da623b3c180eee60598f36f9c35e">&#9670;&nbsp;</a></span>variableCast()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const  * rfk::variableCast </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Try to cast a <a class="el" href="classrfk_1_1_entity.html">rfk::Entity</a> to <a class="el" href="classrfk_1_1_variable.html">rfk::Variable</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity to cast.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A non-nullptr pointer to <a class="el" href="classrfk_1_1_variable.html">rfk::Variable</a> if entity is a variable, else nullptr. </dd></dl>
 
 </div>
 </div>

@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -231,7 +232,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The size of the array if <a class="el" href="classrfk_1_1_type.html#a677d6214e5001a4dd87825913c2999f3">isCArray()</a> is true, else 0. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The size of the array if <a class="el" href="classrfk_1_1_type.html#a677d6214e5001a4dd87825913c2999f3">isCArray()</a> is true, else 0. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>
@@ -320,7 +321,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>true if this type is a c-style array ([]), else false. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this type is a c-style array ([]), else false. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>
@@ -346,7 +347,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>true if this type is const qualified, else false. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this type is const qualified, else false. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>
@@ -372,7 +373,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>true if this type is a left value reference type (&amp;), else false. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this type is a left value reference type (&amp;), else false. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>
@@ -398,7 +399,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>true if this type is a pointer type (*), else false. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this type is a pointer type (*), else false. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>
@@ -424,7 +425,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>true if this type is a right value reference type (&amp;&amp;), else false. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this type is a right value reference type (&amp;&amp;), else false. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>
@@ -450,7 +451,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>true if this type is a value type (not a pointer, lvalue ref, rvalue ref, c-style array), else false. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this type is a value type (not a pointer, lvalue ref, rvalue ref, c-style array), else false. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>
@@ -476,7 +477,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>true if this type is volatile qualified, else false. The behaviour is undefined if type parts count is 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if this type is volatile qualified, else false. The behaviour is undefined if <a class="el" href="classrfk_1_1_type.html#ae43e432408c11a7231407b9289b1d80f" title="Get the number of type parts constituting this type.">getTypePartsCount()</a> returns 0. </dd></dl>
 
 </div>
 </div>

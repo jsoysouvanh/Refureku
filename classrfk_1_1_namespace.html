@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -121,6 +122,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a51c20cb2d1837d4eb79aafa9ba669306"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a51c20cb2d1837d4eb79aafa9ba669306">foreachNamespace</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a51c20cb2d1837d4eb79aafa9ba669306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all nested namespaces.  <a href="classrfk_1_1_namespace.html#a51c20cb2d1837d4eb79aafa9ba669306">More...</a><br /></td></tr>
 <tr class="separator:a51c20cb2d1837d4eb79aafa9ba669306"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4edfbedf2a523447aac5a388d98fbb0e"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a4edfbedf2a523447aac5a388d98fbb0e">getNamespacesCount</a> () const noexcept</td></tr>
+<tr class="memdesc:a4edfbedf2a523447aac5a388d98fbb0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of namespaces nested in this namespace.  <a href="classrfk_1_1_namespace.html#a4edfbedf2a523447aac5a388d98fbb0e">More...</a><br /></td></tr>
+<tr class="separator:a4edfbedf2a523447aac5a388d98fbb0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3f26e2a2b7fb2e184ab52b3e6a449cb"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#ac3f26e2a2b7fb2e184ab52b3e6a449cb">getStructByName</a> (char const *name) const noexcept</td></tr>
 <tr class="memdesc:ac3f26e2a2b7fb2e184ab52b3e6a449cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a struct from this namespace.  <a href="classrfk_1_1_namespace.html#ac3f26e2a2b7fb2e184ab52b3e6a449cb">More...</a><br /></td></tr>
 <tr class="separator:ac3f26e2a2b7fb2e184ab52b3e6a449cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,6 +134,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a4daad4f78f757bde511f98d7c5fb1e41"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a4daad4f78f757bde511f98d7c5fb1e41">getStructsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt; predicate, void *userData) const</td></tr>
 <tr class="memdesc:a4daad4f78f757bde511f98d7c5fb1e41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all nested structs satisfying the provided predicate.  <a href="classrfk_1_1_namespace.html#a4daad4f78f757bde511f98d7c5fb1e41">More...</a><br /></td></tr>
 <tr class="separator:a4daad4f78f757bde511f98d7c5fb1e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a193004402cb23f89a0b81f3d76b85bf2"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a193004402cb23f89a0b81f3d76b85bf2">foreachStruct</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt; visitor, void *userData) const</td></tr>
+<tr class="memdesc:a193004402cb23f89a0b81f3d76b85bf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all nested structs.  <a href="classrfk_1_1_namespace.html#a193004402cb23f89a0b81f3d76b85bf2">More...</a><br /></td></tr>
+<tr class="separator:a193004402cb23f89a0b81f3d76b85bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28544c1add5a106a4fe052a3709eb527"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a28544c1add5a106a4fe052a3709eb527">getClassByName</a> (char const *name) const noexcept</td></tr>
 <tr class="memdesc:a28544c1add5a106a4fe052a3709eb527"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a class from this namespace.  <a href="classrfk_1_1_namespace.html#a28544c1add5a106a4fe052a3709eb527">More...</a><br /></td></tr>
 <tr class="separator:a28544c1add5a106a4fe052a3709eb527"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,6 +146,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a10bcf2334314c62fc38fe94e16523279"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a10bcf2334314c62fc38fe94e16523279">getClassesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt; predicate, void *userData) const</td></tr>
 <tr class="memdesc:a10bcf2334314c62fc38fe94e16523279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all nested classes satisfying the provided predicate.  <a href="classrfk_1_1_namespace.html#a10bcf2334314c62fc38fe94e16523279">More...</a><br /></td></tr>
 <tr class="separator:a10bcf2334314c62fc38fe94e16523279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c88d0aa423838babaeb77d428b72d54"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a8c88d0aa423838babaeb77d428b72d54">foreachClass</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt; visitor, void *userData) const</td></tr>
+<tr class="memdesc:a8c88d0aa423838babaeb77d428b72d54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all nested classes.  <a href="classrfk_1_1_namespace.html#a8c88d0aa423838babaeb77d428b72d54">More...</a><br /></td></tr>
+<tr class="separator:a8c88d0aa423838babaeb77d428b72d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b185f2a904598bcaab6c656ee3eecee"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a3b185f2a904598bcaab6c656ee3eecee">getEnumByName</a> (char const *name) const noexcept</td></tr>
 <tr class="memdesc:a3b185f2a904598bcaab6c656ee3eecee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve an enum from this namespace.  <a href="classrfk_1_1_namespace.html#a3b185f2a904598bcaab6c656ee3eecee">More...</a><br /></td></tr>
 <tr class="separator:a3b185f2a904598bcaab6c656ee3eecee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,9 +158,15 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:adeb12ce1b23f22495edac63375a22b1e"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#adeb12ce1b23f22495edac63375a22b1e">getEnumsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt; predicate, void *userData) const</td></tr>
 <tr class="memdesc:adeb12ce1b23f22495edac63375a22b1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all nested enums satisfying the provided predicate.  <a href="classrfk_1_1_namespace.html#adeb12ce1b23f22495edac63375a22b1e">More...</a><br /></td></tr>
 <tr class="separator:adeb12ce1b23f22495edac63375a22b1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eb4d7de6454d35adbb6b198494f64e7"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a1eb4d7de6454d35adbb6b198494f64e7">foreachEnum</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt; visitor, void *userData) const</td></tr>
+<tr class="memdesc:a1eb4d7de6454d35adbb6b198494f64e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all nested enums.  <a href="classrfk_1_1_namespace.html#a1eb4d7de6454d35adbb6b198494f64e7">More...</a><br /></td></tr>
+<tr class="separator:a1eb4d7de6454d35adbb6b198494f64e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc9a393006b062a7c211462dc8a33a04"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#afc9a393006b062a7c211462dc8a33a04">foreachArchetype</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:afc9a393006b062a7c211462dc8a33a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all nested archetypes.  <a href="classrfk_1_1_namespace.html#afc9a393006b062a7c211462dc8a33a04">More...</a><br /></td></tr>
 <tr class="separator:afc9a393006b062a7c211462dc8a33a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f91610b6a4ab5bbb120a6040f850e63"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a8f91610b6a4ab5bbb120a6040f850e63">getArchetypesCount</a> () const noexcept</td></tr>
+<tr class="memdesc:a8f91610b6a4ab5bbb120a6040f850e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of archetypes nested in this namespace.  <a href="classrfk_1_1_namespace.html#a8f91610b6a4ab5bbb120a6040f850e63">More...</a><br /></td></tr>
+<tr class="separator:a8f91610b6a4ab5bbb120a6040f850e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c56256b9f69bdb58d7da9ca24f737a9"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a5c56256b9f69bdb58d7da9ca24f737a9">getVariableByName</a> (char const *name, <a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aec">EVarFlags</a> flags=<a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca7a1920d61156abc05a60135aefe8bc67">EVarFlags::Default</a>) const noexcept</td></tr>
 <tr class="memdesc:a5c56256b9f69bdb58d7da9ca24f737a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a variable from this namespace.  <a href="classrfk_1_1_namespace.html#a5c56256b9f69bdb58d7da9ca24f737a9">More...</a><br /></td></tr>
 <tr class="separator:a5c56256b9f69bdb58d7da9ca24f737a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,6 +179,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a3c2683209c694701bf3d22c885928838"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a3c2683209c694701bf3d22c885928838">foreachVariable</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a3c2683209c694701bf3d22c885928838"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all nested variables.  <a href="classrfk_1_1_namespace.html#a3c2683209c694701bf3d22c885928838">More...</a><br /></td></tr>
 <tr class="separator:a3c2683209c694701bf3d22c885928838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92928b2824b18912520f77fa08adf6bc"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a92928b2824b18912520f77fa08adf6bc">getVariablesCount</a> () const noexcept</td></tr>
+<tr class="memdesc:a92928b2824b18912520f77fa08adf6bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of variables nested in this namespace.  <a href="classrfk_1_1_namespace.html#a92928b2824b18912520f77fa08adf6bc">More...</a><br /></td></tr>
+<tr class="separator:a92928b2824b18912520f77fa08adf6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f7f9064fec9d3ec6bed72ede9bdea9d"><td class="memTemplParams" colspan="2">template&lt;typename FunctionSignature &gt; </td></tr>
 <tr class="memitem:a7f7f9064fec9d3ec6bed72ede9bdea9d"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a7f7f9064fec9d3ec6bed72ede9bdea9d">getFunctionByName</a> (char const *name, <a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee">EFunctionFlags</a> flags=<a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67">EFunctionFlags::Default</a>) const noexcept</td></tr>
 <tr class="memdesc:a7f7f9064fec9d3ec6bed72ede9bdea9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a function with a given name and signature from this namespace.  <a href="classrfk_1_1_namespace.html#a7f7f9064fec9d3ec6bed72ede9bdea9d">More...</a><br /></td></tr>
@@ -182,6 +201,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a60707db19f0e9fbc0af32b8404b5dca9"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#a60707db19f0e9fbc0af32b8404b5dca9">foreachFunction</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a60707db19f0e9fbc0af32b8404b5dca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all nested functions.  <a href="classrfk_1_1_namespace.html#a60707db19f0e9fbc0af32b8404b5dca9">More...</a><br /></td></tr>
 <tr class="separator:a60707db19f0e9fbc0af32b8404b5dca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0ad71e8d054effdbebd474b49d46293"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#ac0ad71e8d054effdbebd474b49d46293">getFunctionsCount</a> () const noexcept</td></tr>
+<tr class="memdesc:ac0ad71e8d054effdbebd474b49d46293"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of functions nested in this namespace.  <a href="classrfk_1_1_namespace.html#ac0ad71e8d054effdbebd474b49d46293">More...</a><br /></td></tr>
+<tr class="separator:ac0ad71e8d054effdbebd474b49d46293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab22fd2e96f640feade37ac967f2d5b18"><td class="memItemLeft" align="right" valign="top">REFUREKU_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace.html#ab22fd2e96f640feade37ac967f2d5b18">addNamespace</a> (<a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const &amp;nestedNamespace) noexcept</td></tr>
 <tr class="memdesc:ab22fd2e96f640feade37ac967f2d5b18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a nested namespace to this namespace.  <a href="classrfk_1_1_namespace.html#ab22fd2e96f640feade37ac967f2d5b18">More...</a><br /></td></tr>
 <tr class="separator:ab22fd2e96f640feade37ac967f2d5b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,10 +235,10 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a0b78b5d1f76408794f38bf0f8e7310b1 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_property.html">Property</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a0b78b5d1f76408794f38bf0f8e7310b1">getPropertyAt</a> (std::size_t propertyIndex) const noexcept</td></tr>
 <tr class="memdesc:a0b78b5d1f76408794f38bf0f8e7310b1 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the property at the given index. If propertyIndex is greater or equal to the properties count, the behaviour is undefined.  <a href="classrfk_1_1_entity.html#a0b78b5d1f76408794f38bf0f8e7310b1">More...</a><br /></td></tr>
 <tr class="separator:a0b78b5d1f76408794f38bf0f8e7310b1 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1de6d75fa931d3a19d0c2e4f69fb146 inherit pub_methods_classrfk_1_1_entity"><td class="memTemplParams" colspan="2">template&lt;typename PropertyType &gt; </td></tr>
-<tr class="memitem:aa1de6d75fa931d3a19d0c2e4f69fb146 inherit pub_methods_classrfk_1_1_entity"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD PropertyType const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#aa1de6d75fa931d3a19d0c2e4f69fb146">getProperty</a> (bool isChildClassValid=true) const noexcept</td></tr>
-<tr class="memdesc:aa1de6d75fa931d3a19d0c2e4f69fb146 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a property of a given type from this entity.  <a href="classrfk_1_1_entity.html#aa1de6d75fa931d3a19d0c2e4f69fb146">More...</a><br /></td></tr>
-<tr class="separator:aa1de6d75fa931d3a19d0c2e4f69fb146 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05d7085bf7604499b2240d527fced26e inherit pub_methods_classrfk_1_1_entity"><td class="memTemplParams" colspan="2">template&lt;typename PropertyType , typename  = std::enable_if_t&lt;std::is_base_of_v&lt;Property, PropertyType&gt; &amp;&amp; !std::is_same_v&lt;PropertyType, Property&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a05d7085bf7604499b2240d527fced26e inherit pub_methods_classrfk_1_1_entity"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD PropertyType const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a05d7085bf7604499b2240d527fced26e">getProperty</a> (bool isChildClassValid=true) const noexcept</td></tr>
+<tr class="memdesc:a05d7085bf7604499b2240d527fced26e inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a property of a given type from this entity.  <a href="classrfk_1_1_entity.html#a05d7085bf7604499b2240d527fced26e">More...</a><br /></td></tr>
+<tr class="separator:a05d7085bf7604499b2240d527fced26e inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181a40d213920fc16895795829cdb2cf inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_property.html">Property</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a181a40d213920fc16895795829cdb2cf">getProperty</a> (<a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;archetype, bool isChildClassValid=true) const noexcept</td></tr>
 <tr class="memdesc:a181a40d213920fc16895795829cdb2cf inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first property matching with the provided archetype.  <a href="classrfk_1_1_entity.html#a181a40d213920fc16895795829cdb2cf">More...</a><br /></td></tr>
 <tr class="separator:a181a40d213920fc16895795829cdb2cf inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,10 +248,10 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:ac55b766a0ff8bcbbd3fa5da08bf48414 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_property.html">Property</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#ac55b766a0ff8bcbbd3fa5da08bf48414">getPropertyByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_property.html">Property</a> &gt; predicate, void *userData) const</td></tr>
 <tr class="memdesc:ac55b766a0ff8bcbbd3fa5da08bf48414 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a property matching with a predicate.  <a href="classrfk_1_1_entity.html#ac55b766a0ff8bcbbd3fa5da08bf48414">More...</a><br /></td></tr>
 <tr class="separator:ac55b766a0ff8bcbbd3fa5da08bf48414 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a360fadd3b92a7b0fb6fba9fc061358e9 inherit pub_methods_classrfk_1_1_entity"><td class="memTemplParams" colspan="2">template&lt;typename PropertyType &gt; </td></tr>
-<tr class="memitem:a360fadd3b92a7b0fb6fba9fc061358e9 inherit pub_methods_classrfk_1_1_entity"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; PropertyType const * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a360fadd3b92a7b0fb6fba9fc061358e9">getProperties</a> (bool isChildClassValid=true) const noexcept</td></tr>
-<tr class="memdesc:a360fadd3b92a7b0fb6fba9fc061358e9 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all properties matching with the provided archetype. If PropertyType uses multiple inheritance, its first inherited type must be <a class="el" href="classrfk_1_1_property.html" title="Base class to inherit from to define new properties.">rfk::Property</a> or derived.  <a href="classrfk_1_1_entity.html#a360fadd3b92a7b0fb6fba9fc061358e9">More...</a><br /></td></tr>
-<tr class="separator:a360fadd3b92a7b0fb6fba9fc061358e9 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dd90b03c80098a53899794995e436b4 inherit pub_methods_classrfk_1_1_entity"><td class="memTemplParams" colspan="2">template&lt;typename PropertyType , typename  = std::enable_if_t&lt;std::is_base_of_v&lt;Property, PropertyType&gt; &amp;&amp; !std::is_same_v&lt;PropertyType, Property&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a7dd90b03c80098a53899794995e436b4 inherit pub_methods_classrfk_1_1_entity"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; PropertyType const * &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a7dd90b03c80098a53899794995e436b4">getProperties</a> (bool isChildClassValid=true) const noexcept</td></tr>
+<tr class="memdesc:a7dd90b03c80098a53899794995e436b4 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all properties matching with the provided archetype. If PropertyType uses multiple inheritance, its first inherited type must be <a class="el" href="classrfk_1_1_property.html" title="Base class to inherit from to define new properties.">rfk::Property</a> or derived.  <a href="classrfk_1_1_entity.html#a7dd90b03c80098a53899794995e436b4">More...</a><br /></td></tr>
+<tr class="separator:a7dd90b03c80098a53899794995e436b4 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6c329db7cd25c27f7f8840bfef57344 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_property.html">Property</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#aa6c329db7cd25c27f7f8840bfef57344">getProperties</a> (<a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;archetype, bool isChildClassValid=true) const noexcept</td></tr>
 <tr class="memdesc:aa6c329db7cd25c27f7f8840bfef57344 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all properties matching with the provided archetype.  <a href="classrfk_1_1_entity.html#aa6c329db7cd25c27f7f8840bfef57344">More...</a><br /></td></tr>
 <tr class="separator:aa6c329db7cd25c27f7f8840bfef57344 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,6 +270,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a349024a085b2807ade1f7dc12e47a15b inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API char const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a349024a085b2807ade1f7dc12e47a15b">getName</a> () const noexcept</td></tr>
 <tr class="memdesc:a349024a085b2807ade1f7dc12e47a15b inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the entity.  <a href="classrfk_1_1_entity.html#a349024a085b2807ade1f7dc12e47a15b">More...</a><br /></td></tr>
 <tr class="separator:a349024a085b2807ade1f7dc12e47a15b inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fca0dc8eed33bf14abb616fc99b9fcd inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a9fca0dc8eed33bf14abb616fc99b9fcd">hasSameName</a> (char const *name) const noexcept</td></tr>
+<tr class="memdesc:a9fca0dc8eed33bf14abb616fc99b9fcd inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that this entity has the same name as the provided string.  <a href="classrfk_1_1_entity.html#a9fca0dc8eed33bf14abb616fc99b9fcd">More...</a><br /></td></tr>
+<tr class="separator:a9fca0dc8eed33bf14abb616fc99b9fcd inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac88488c7a3f458b81dda29f5ba664e6c inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#ac88488c7a3f458b81dda29f5ba664e6c">getId</a> () const noexcept</td></tr>
 <tr class="memdesc:ac88488c7a3f458b81dda29f5ba664e6c inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the program-unique id of the entity.  <a href="classrfk_1_1_entity.html#ac88488c7a3f458b81dda29f5ba664e6c">More...</a><br /></td></tr>
 <tr class="separator:ac88488c7a3f458b81dda29f5ba664e6c inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,15 +282,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Namespac
 <tr class="memitem:a640f4b0c6a592184803c413258961511 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_entity.html">Entity</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a640f4b0c6a592184803c413258961511">getOuterEntity</a> () const noexcept</td></tr>
 <tr class="memdesc:a640f4b0c6a592184803c413258961511 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the outer entity of the entity. It basically corresponds to the entity this entity was declared in from a source-code point of view. A nullptr outer entity means the entity was declared at file level.  <a href="classrfk_1_1_entity.html#a640f4b0c6a592184803c413258961511">More...</a><br /></td></tr>
 <tr class="separator:a640f4b0c6a592184803c413258961511 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e96f230588202048f1a5bdcf4f56123 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a9e96f230588202048f1a5bdcf4f56123">addProperty</a> (<a class="el" href="classrfk_1_1_property.html">Property</a> const *property) noexcept</td></tr>
-<tr class="memdesc:a9e96f230588202048f1a5bdcf4f56123 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a property to this entity.  <a href="classrfk_1_1_entity.html#a9e96f230588202048f1a5bdcf4f56123">More...</a><br /></td></tr>
-<tr class="separator:a9e96f230588202048f1a5bdcf4f56123 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9fda648326761f33e7440c431a218be inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">REFUREKU_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#ac9fda648326761f33e7440c431a218be">inheritProperties</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const &amp;from) noexcept</td></tr>
-<tr class="memdesc:ac9fda648326761f33e7440c431a218be inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inherit from another entity inheritable properties.  <a href="classrfk_1_1_entity.html#ac9fda648326761f33e7440c431a218be">More...</a><br /></td></tr>
-<tr class="separator:ac9fda648326761f33e7440c431a218be inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a860d51c41dca8b535c798ad7a1afaba9 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">REFUREKU_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a860d51c41dca8b535c798ad7a1afaba9">inheritAllProperties</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const &amp;from) noexcept</td></tr>
-<tr class="memdesc:a860d51c41dca8b535c798ad7a1afaba9 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inherit all properties from another entity.  <a href="classrfk_1_1_entity.html#a860d51c41dca8b535c798ad7a1afaba9">More...</a><br /></td></tr>
-<tr class="separator:a860d51c41dca8b535c798ad7a1afaba9 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf4089b9c11fea52e987d5975f1d8455 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#abf4089b9c11fea52e987d5975f1d8455">addProperty</a> (<a class="el" href="classrfk_1_1_property.html">Property</a> const &amp;property) noexcept</td></tr>
+<tr class="memdesc:abf4089b9c11fea52e987d5975f1d8455 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a property to this entity.  <a href="classrfk_1_1_entity.html#abf4089b9c11fea52e987d5975f1d8455">More...</a><br /></td></tr>
+<tr class="separator:abf4089b9c11fea52e987d5975f1d8455 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1768c2e434411991a5badc9d38956d96 inherit pub_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">REFUREKU_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#a1768c2e434411991a5badc9d38956d96">setOuterEntity</a> (<a class="el" href="classrfk_1_1_entity.html">Entity</a> const *outerEntity) noexcept</td></tr>
 <tr class="memdesc:a1768c2e434411991a5badc9d38956d96 inherit pub_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for the field _outerEntity.  <a href="classrfk_1_1_entity.html#a1768c2e434411991a5badc9d38956d96">More...</a><br /></td></tr>
 <tr class="separator:a1768c2e434411991a5badc9d38956d96 inherit pub_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -294,12 +313,6 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Entity</
 <tr class="memitem:a4b757749f74869d1f5f7b8257cd40591 inherit pro_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top"><a id="a4b757749f74869d1f5f7b8257cd40591" name="a4b757749f74869d1f5f7b8257cd40591"></a>
 REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Entity</b> (EntityImpl *implementation) noexcept</td></tr>
 <tr class="separator:a4b757749f74869d1f5f7b8257cd40591 inherit pro_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb8b908cbdec4d306dcbd0b98196e379 inherit pro_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_INTERNAL EntityImpl *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_entity.html#adb8b908cbdec4d306dcbd0b98196e379">getPimpl</a> () noexcept</td></tr>
-<tr class="memdesc:adb8b908cbdec4d306dcbd0b98196e379 inherit pro_methods_classrfk_1_1_entity"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the _pimpl internal pointer.  <a href="classrfk_1_1_entity.html#adb8b908cbdec4d306dcbd0b98196e379">More...</a><br /></td></tr>
-<tr class="separator:adb8b908cbdec4d306dcbd0b98196e379 inherit pro_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af98c50a3ebba26c210c7313d75e6d668 inherit pro_methods_classrfk_1_1_entity"><td class="memItemLeft" align="right" valign="top"><a id="af98c50a3ebba26c210c7313d75e6d668" name="af98c50a3ebba26c210c7313d75e6d668"></a>
-RFK_NODISCARD REFUREKU_INTERNAL EntityImpl const *&#160;</td><td class="memItemRight" valign="bottom"><b>getPimpl</b> () const noexcept</td></tr>
-<tr class="separator:af98c50a3ebba26c210c7313d75e6d668 inherit pro_methods_classrfk_1_1_entity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a42d9efdd01a5d495a1e113983c5e33be" name="a42d9efdd01a5d495a1e113983c5e33be"></a>
@@ -482,6 +495,94 @@ RFK_NODISCARD REFUREKU_INTERNAL EntityImpl const *&#160;</td><td class="memItemR
 
 </div>
 </div>
+<a id="a8c88d0aa423838babaeb77d428b72d54" name="a8c88d0aa423838babaeb77d428b72d54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c88d0aa423838babaeb77d428b72d54">&#9670;&nbsp;</a></span>foreachClass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API bool rfk::Namespace::foreachClass </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt;&#160;</td>
+          <td class="paramname"><em>visitor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Execute the given visitor on all nested classes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visitor</td><td>Visitor function to call. Return false to abort the foreach loop. </td></tr>
+    <tr><td class="paramname">userData</td><td>Optional user data forwarded to the visitor.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The last visitor result before exiting the loop. If the visitor is nullptr, return false.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided visitor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1eb4d7de6454d35adbb6b198494f64e7" name="a1eb4d7de6454d35adbb6b198494f64e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eb4d7de6454d35adbb6b198494f64e7">&#9670;&nbsp;</a></span>foreachEnum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API bool rfk::Namespace::foreachEnum </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt;&#160;</td>
+          <td class="paramname"><em>visitor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Execute the given visitor on all nested enums. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visitor</td><td>Visitor function to call. Return false to abort the foreach loop. </td></tr>
+    <tr><td class="paramname">userData</td><td>Optional user data forwarded to the visitor.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The last visitor result before exiting the loop. If the visitor is nullptr, return false.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided visitor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a60707db19f0e9fbc0af32b8404b5dca9" name="a60707db19f0e9fbc0af32b8404b5dca9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a60707db19f0e9fbc0af32b8404b5dca9">&#9670;&nbsp;</a></span>foreachFunction()</h2>
 
@@ -570,6 +671,50 @@ RFK_NODISCARD REFUREKU_INTERNAL EntityImpl const *&#160;</td><td class="memItemR
 
 </div>
 </div>
+<a id="a193004402cb23f89a0b81f3d76b85bf2" name="a193004402cb23f89a0b81f3d76b85bf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a193004402cb23f89a0b81f3d76b85bf2">&#9670;&nbsp;</a></span>foreachStruct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API bool rfk::Namespace::foreachStruct </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt;&#160;</td>
+          <td class="paramname"><em>visitor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Execute the given visitor on all nested structs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visitor</td><td>Visitor function to call. Return false to abort the foreach loop. </td></tr>
+    <tr><td class="paramname">userData</td><td>Optional user data forwarded to the visitor.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The last visitor result before exiting the loop. If the visitor is nullptr, return false.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided visitor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a3c2683209c694701bf3d22c885928838" name="a3c2683209c694701bf3d22c885928838"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c2683209c694701bf3d22c885928838">&#9670;&nbsp;</a></span>foreachVariable()</h2>
 
@@ -611,6 +756,34 @@ RFK_NODISCARD REFUREKU_INTERNAL EntityImpl const *&#160;</td><td class="memItemR
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a8f91610b6a4ab5bbb120a6040f850e63" name="a8f91610b6a4ab5bbb120a6040f850e63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f91610b6a4ab5bbb120a6040f850e63">&#9670;&nbsp;</a></span>getArchetypesCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Namespace::getArchetypesCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of archetypes nested in this namespace. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of archetypes nested in this namespace. </dd></dl>
 
 </div>
 </div>
@@ -1088,6 +1261,34 @@ template&lt;typename FunctionSignature &gt; </div>
 
 </div>
 </div>
+<a id="ac0ad71e8d054effdbebd474b49d46293" name="ac0ad71e8d054effdbebd474b49d46293"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0ad71e8d054effdbebd474b49d46293">&#9670;&nbsp;</a></span>getFunctionsCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Namespace::getFunctionsCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of functions nested in this namespace. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of functions nested in this namespace. </dd></dl>
+
+</div>
+</div>
 <a id="ad0c61bb86fcfbc9a24cfcfc94b7863d8" name="ad0c61bb86fcfbc9a24cfcfc94b7863d8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad0c61bb86fcfbc9a24cfcfc94b7863d8">&#9670;&nbsp;</a></span>getNamespaceByName()</h2>
 
@@ -1208,6 +1409,34 @@ template&lt;typename FunctionSignature &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a4edfbedf2a523447aac5a388d98fbb0e" name="a4edfbedf2a523447aac5a388d98fbb0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4edfbedf2a523447aac5a388d98fbb0e">&#9670;&nbsp;</a></span>getNamespacesCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Namespace::getNamespacesCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of namespaces nested in this namespace. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of namespaces nested in this namespace. </dd></dl>
 
 </div>
 </div>
@@ -1465,6 +1694,34 @@ template&lt;typename FunctionSignature &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a92928b2824b18912520f77fa08adf6bc" name="a92928b2824b18912520f77fa08adf6bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92928b2824b18912520f77fa08adf6bc">&#9670;&nbsp;</a></span>getVariablesCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Namespace::getVariablesCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of variables nested in this namespace. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of variables nested in this namespace. </dd></dl>
 
 </div>
 </div>

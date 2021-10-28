@@ -1,10 +1,4 @@
 var searchData=
 [
-  ['registertemplateinstantiation_0',['registerTemplateInstantiation',['../classrfk_1_1_class_template.html#a86881bc6db6dec63fa599ab817ebefc7',1,'rfk::ClassTemplate']]],
-  ['removearchetype_1',['removeArchetype',['../classrfk_1_1_namespace.html#ae522b8eb008a97f960e20315eef0c38d',1,'rfk::Namespace']]],
-  ['removefunction_2',['removeFunction',['../classrfk_1_1_namespace.html#aca8a15d1439ccdc9b5a30b6110a95a00',1,'rfk::Namespace']]],
-  ['removenamespace_3',['removeNamespace',['../classrfk_1_1_namespace.html#a002a34b24d8b49728486c3420511a28b',1,'rfk::Namespace']]],
-  ['removevariable_4',['removeVariable',['../classrfk_1_1_namespace.html#af45fff134ecfe40e13bd0a97695c4f97',1,'rfk::Namespace']]],
-  ['reserve_5',['reserve',['../classrfk_1_1_vector.html#a012a65ac2cbbea54b133e8eaf85bd160',1,'rfk::Vector']]],
-  ['resize_6',['resize',['../classrfk_1_1_vector.html#a4023f871ae1eacfbb4da242bf762c739',1,'rfk::Vector']]]
+  ['push_5fback_0',['push_back',['../classrfk_1_1_vector.html#ac99efd9663e626c0da1bcf417d7b34dc',1,'rfk::Vector::push_back(T const &amp;value)'],['../classrfk_1_1_vector.html#ad8b87a6d04d6462a1c98f114850b0cc4',1,'rfk::Vector::push_back(T &amp;&amp;value)'],['../classrfk_1_1_vector.html#a0609ff77fc4d3c4e4620c75ecd5ccd36',1,'rfk::Vector::push_back(Vector const &amp;other)']]]
 ];

@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -88,7 +89,6 @@ $(document).ready(function(){initNavTree('classrfk_1_1_template_argument.html','
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classrfk_1_1_template_argument-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">rfk::TemplateArgument Class Reference</div></div>
 </div><!--header-->
@@ -113,9 +113,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9555caa0dbaa866e2714babdb8cae198"><td class="memItemLeft" align="right" valign="top"><a id="a9555caa0dbaa866e2714babdb8cae198" name="a9555caa0dbaa866e2714babdb8cae198"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TemplateArgument</b> (<a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> &amp;&amp;)=delete</td></tr>
 <tr class="separator:a9555caa0dbaa866e2714babdb8cae198"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68688d5a305ca825665e03d60f2599aa"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#a68688d5a305ca825665e03d60f2599aa">getBoundParameter</a> () const noexcept</td></tr>
-<tr class="memdesc:a68688d5a305ca825665e03d60f2599aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the field _boundParameter.  <a href="classrfk_1_1_template_argument.html#a68688d5a305ca825665e03d60f2599aa">More...</a><br /></td></tr>
-<tr class="separator:a68688d5a305ca825665e03d60f2599aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afffca726306ad503cfa718316ccfe87b"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436">ETemplateParameterKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#afffca726306ad503cfa718316ccfe87b">getKind</a> () const noexcept</td></tr>
+<tr class="memdesc:afffca726306ad503cfa718316ccfe87b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the kind of template parameter this argument is based on.  <a href="classrfk_1_1_template_argument.html#afffca726306ad503cfa718316ccfe87b">More...</a><br /></td></tr>
+<tr class="separator:afffca726306ad503cfa718316ccfe87b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab44a2e8ad607f36d7a286eba5b633fd5"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#ab44a2e8ad607f36d7a286eba5b633fd5">operator==</a> (<a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> const &amp;other) const noexcept</td></tr>
 <tr class="memdesc:ab44a2e8ad607f36d7a286eba5b633fd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether 2 <a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> instances are equal or not.  <a href="classrfk_1_1_template_argument.html#ab44a2e8ad607f36d7a286eba5b633fd5">More...</a><br /></td></tr>
 <tr class="separator:ab44a2e8ad607f36d7a286eba5b633fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,21 +128,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a6c4cbf826b97a72e0c8ef4058cdb9960"><td class="memItemLeft" align="right" valign="top"><a id="a6c4cbf826b97a72e0c8ef4058cdb9960" name="a6c4cbf826b97a72e0c8ef4058cdb9960"></a>
 REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>TemplateArgument</b> (TemplateArgumentImpl *implementation) noexcept</td></tr>
 <tr class="separator:a6c4cbf826b97a72e0c8ef4058cdb9960"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf065679dd8baa99f8d8c4c8a6c25098"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#aaf065679dd8baa99f8d8c4c8a6c25098">getPimpl</a> () noexcept</td></tr>
-<tr class="memdesc:aaf065679dd8baa99f8d8c4c8a6c25098"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the _pimpl internal pointer.  <a href="classrfk_1_1_template_argument.html#aaf065679dd8baa99f8d8c4c8a6c25098">More...</a><br /></td></tr>
-<tr class="separator:aaf065679dd8baa99f8d8c4c8a6c25098"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c723b788ff7009fe02468a72fa16028"><td class="memItemLeft" align="right" valign="top"><a id="a4c723b788ff7009fe02468a72fa16028" name="a4c723b788ff7009fe02468a72fa16028"></a>
-RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl const *&#160;</td><td class="memItemRight" valign="bottom"><b>getPimpl</b> () const noexcept</td></tr>
-<tr class="separator:a4c723b788ff7009fe02468a72fa16028"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:adb098e46bf2ddb5e25e4f2419de3e0dd"><td class="memItemLeft" align="right" valign="top">Pimpl&lt; TemplateArgumentImpl &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#adb098e46bf2ddb5e25e4f2419de3e0dd">_pimpl</a></td></tr>
-<tr class="separator:adb098e46bf2ddb5e25e4f2419de3e0dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a68688d5a305ca825665e03d60f2599aa" name="a68688d5a305ca825665e03d60f2599aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68688d5a305ca825665e03d60f2599aa">&#9670;&nbsp;</a></span>getBoundParameter()</h2>
+<a id="afffca726306ad503cfa718316ccfe87b" name="afffca726306ad503cfa718316ccfe87b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afffca726306ad503cfa718316ccfe87b">&#9670;&nbsp;</a></span>getKind()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,7 +140,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> const  &amp; rfk::TemplateArgument::getBoundParameter </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436">ETemplateParameterKind</a> rfk::TemplateArgument::getKind </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -164,36 +153,8 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Getter for the field _boundParameter. </p>
-<dl class="section return"><dt>Returns</dt><dd>_boundParameter. </dd></dl>
-
-</div>
-</div>
-<a id="aaf065679dd8baa99f8d8c4c8a6c25098" name="aaf065679dd8baa99f8d8c4c8a6c25098"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf065679dd8baa99f8d8c4c8a6c25098">&#9670;&nbsp;</a></span>getPimpl()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl * rfk::TemplateArgument::getPimpl </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the _pimpl internal pointer. </p>
-<dl class="section return"><dt>Returns</dt><dd>The _pimpl internal pointer. </dd></dl>
+<p>Get the kind of template parameter this argument is based on. </p>
+<dl class="section return"><dt>Returns</dt><dd>The kind of template parameter this argument is based on. </dd></dl>
 
 </div>
 </div>
@@ -229,30 +190,6 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the 2 template arguments hold the same value, else false. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="adb098e46bf2ddb5e25e4f2419de3e0dd" name="adb098e46bf2ddb5e25e4f2419de3e0dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb098e46bf2ddb5e25e4f2419de3e0dd">&#9670;&nbsp;</a></span>_pimpl</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Pimpl&lt;TemplateArgumentImpl&gt; rfk::TemplateArgument::_pimpl</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p >Pointer to the concrete <a class="el" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> implementation. </p>
 
 </div>
 </div>

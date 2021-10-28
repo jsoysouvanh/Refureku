@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -101,23 +102,23 @@ $(document).ready(function(){initNavTree('_type_template_argument_8h_source.html
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classrfk_1_1_type_template_argument.html">   17</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a> : <span class="keyword">public</span> <a class="code hl_class" href="classrfk_1_1_template_argument.html">TemplateArgument</a></div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    {</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            REFUREKU_API <a class="code hl_class" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a>(<a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> <span class="keyword">const</span>&amp;  boundParameter, </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                                              <a class="code hl_class" href="classrfk_1_1_archetype.html">Archetype</a> <span class="keyword">const</span>*          archetype)  <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            REFUREKU_API <a class="code hl_class" href="classrfk_1_1_type_template_argument.html">~TypeTemplateArgument</a>()                                    <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classrfk_1_1_type_template_argument.html#a40632233f6524736f7d68924a2fe6ed8">   29</a></span>            RFK_NODISCARD REFUREKU_API <a class="code hl_class" href="classrfk_1_1_archetype.html">Archetype</a> <span class="keyword">const</span>* <a class="code hl_function" href="classrfk_1_1_type_template_argument.html#a40632233f6524736f7d68924a2fe6ed8">getArchetype</a>() const noexcept;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classrfk_1_1_type_template_argument.html#a17c8f71b6247d6d54b9e60948913c92a">   39</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">bool</span> operator==(<a class="code hl_class" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a> const&amp; other)   const   noexcept;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">bool</span> operator!=(<a class="code hl_class" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a> const&amp; other)   const   noexcept;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        protected:</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="comment">//Forward declaration</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            class TypeTemplateArgumentImpl;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    };</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>}</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            REFUREKU_API <a class="code hl_class" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a>(<a class="code hl_class" href="classrfk_1_1_archetype.html">Archetype</a> <span class="keyword">const</span>*  archetype)  <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            REFUREKU_API <a class="code hl_class" href="classrfk_1_1_type_template_argument.html">~TypeTemplateArgument</a>()                            <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classrfk_1_1_type_template_argument.html#a40632233f6524736f7d68924a2fe6ed8">   28</a></span>            RFK_NODISCARD REFUREKU_API <a class="code hl_class" href="classrfk_1_1_archetype.html">Archetype</a> <span class="keyword">const</span>* <a class="code hl_function" href="classrfk_1_1_type_template_argument.html#a40632233f6524736f7d68924a2fe6ed8">getArchetype</a>() const noexcept;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classrfk_1_1_type_template_argument.html#a17c8f71b6247d6d54b9e60948913c92a">   38</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">bool</span> operator==(<a class="code hl_class" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a> const&amp; other)   const   noexcept;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">bool</span> operator!=(<a class="code hl_class" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a> const&amp; other)   const   noexcept;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        protected:</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="comment">//Forward declaration</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            class TypeTemplateArgumentImpl;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            RFK_GEN_GET_PIMPL(TypeTemplateArgumentImpl, <a class="code hl_class" href="classrfk_1_1_template_argument.html">TemplateArgument</a>::getPimpl())</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    };</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>}</div>
 <div class="ttc" id="aclassrfk_1_1_archetype_html"><div class="ttname"><a href="classrfk_1_1_archetype.html">rfk::Archetype</a></div><div class="ttdef"><b>Definition:</b> Archetype.h:16</div></div>
 <div class="ttc" id="aclassrfk_1_1_template_argument_html"><div class="ttname"><a href="classrfk_1_1_template_argument.html">rfk::TemplateArgument</a></div><div class="ttdef"><b>Definition:</b> TemplateArgument.h:19</div></div>
-<div class="ttc" id="aclassrfk_1_1_template_parameter_html"><div class="ttname"><a href="classrfk_1_1_template_parameter.html">rfk::TemplateParameter</a></div><div class="ttdef"><b>Definition:</b> TemplateParameter.h:17</div></div>
 <div class="ttc" id="aclassrfk_1_1_type_template_argument_html"><div class="ttname"><a href="classrfk_1_1_type_template_argument.html">rfk::TypeTemplateArgument</a></div><div class="ttdef"><b>Definition:</b> TypeTemplateArgument.h:18</div></div>
 <div class="ttc" id="aclassrfk_1_1_type_template_argument_html_a40632233f6524736f7d68924a2fe6ed8"><div class="ttname"><a href="classrfk_1_1_type_template_argument.html#a40632233f6524736f7d68924a2fe6ed8">rfk::TypeTemplateArgument::getArchetype</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API Archetype const * getArchetype() const noexcept</div><div class="ttdoc">Get the archetype of this argument. Can be nullptr if the type is not reflected.</div></div>
 <div class="ttc" id="anamespacerfk_html"><div class="ttname"><a href="namespacerfk.html">rfk</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:16</div></div>

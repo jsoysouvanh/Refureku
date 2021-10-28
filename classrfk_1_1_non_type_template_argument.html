@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -103,13 +104,20 @@ Inheritance diagram for rfk::NonTypeTemplateArgument:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa0f12cd5a920c82cf911e75106459f13"><td class="memItemLeft" align="right" valign="top"><a id="aa0f12cd5a920c82cf911e75106459f13" name="aa0f12cd5a920c82cf911e75106459f13"></a>
-REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>NonTypeTemplateArgument</b> (<a class="el" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> const &amp;boundParameter, void const *valuePtr) noexcept</td></tr>
-<tr class="separator:aa0f12cd5a920c82cf911e75106459f13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d2d50a909ef901faf543efa8f5fce55"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a6d2d50a909ef901faf543efa8f5fce55"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_non_type_template_argument.html#a6d2d50a909ef901faf543efa8f5fce55">getValue</a> () const noexcept</td></tr>
-<tr class="memdesc:a6d2d50a909ef901faf543efa8f5fce55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of the non-type template argument. If the provided type is not the original type of the non-type template argument, the behaviour is undefined.  <a href="classrfk_1_1_non_type_template_argument.html#a6d2d50a909ef901faf543efa8f5fce55">More...</a><br /></td></tr>
-<tr class="separator:a6d2d50a909ef901faf543efa8f5fce55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab456888d975a6e4cb54050f4e0a11324"><td class="memTemplParams" colspan="2"><a id="ab456888d975a6e4cb54050f4e0a11324" name="ab456888d975a6e4cb54050f4e0a11324"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab456888d975a6e4cb54050f4e0a11324"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>NonTypeTemplateArgument</b> (T const &amp;value) noexcept</td></tr>
+<tr class="separator:ab456888d975a6e4cb54050f4e0a11324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cb4a0a052ee854f957849411cd05e30"><td class="memItemLeft" align="right" valign="top"><a id="a4cb4a0a052ee854f957849411cd05e30" name="a4cb4a0a052ee854f957849411cd05e30"></a>
+REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>NonTypeTemplateArgument</b> (<a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *valueArchetype, void const *valuePtr) noexcept</td></tr>
+<tr class="separator:a4cb4a0a052ee854f957849411cd05e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26657425ce984ccd1ebc780c3f8858b9"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_non_type_template_argument.html#a26657425ce984ccd1ebc780c3f8858b9">getArchetype</a> () const noexcept</td></tr>
+<tr class="memdesc:a26657425ce984ccd1ebc780c3f8858b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the archetype of the argument.  <a href="classrfk_1_1_non_type_template_argument.html#a26657425ce984ccd1ebc780c3f8858b9">More...</a><br /></td></tr>
+<tr class="separator:a26657425ce984ccd1ebc780c3f8858b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeae66e578020de203bc777f23d055838"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aeae66e578020de203bc777f23d055838"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD T const &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_non_type_template_argument.html#aeae66e578020de203bc777f23d055838">getValue</a> () const noexcept</td></tr>
+<tr class="memdesc:aeae66e578020de203bc777f23d055838"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of the non-type template argument. If the provided type is not the original type of the non-type template argument, the behaviour is undefined.  <a href="classrfk_1_1_non_type_template_argument.html#aeae66e578020de203bc777f23d055838">More...</a><br /></td></tr>
+<tr class="separator:aeae66e578020de203bc777f23d055838"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eec9447782167312824d4ee992b93e7"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API void const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_non_type_template_argument.html#a5eec9447782167312824d4ee992b93e7">getValuePtr</a> () const noexcept</td></tr>
 <tr class="memdesc:a5eec9447782167312824d4ee992b93e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the argument value.  <a href="classrfk_1_1_non_type_template_argument.html#a5eec9447782167312824d4ee992b93e7">More...</a><br /></td></tr>
 <tr class="separator:a5eec9447782167312824d4ee992b93e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,9 +134,9 @@ RFK_NODISCARD REFUREKU_API bool&#160;</td><td class="memItemRight" valign="botto
 <tr class="memitem:a9555caa0dbaa866e2714babdb8cae198 inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top"><a id="a9555caa0dbaa866e2714babdb8cae198" name="a9555caa0dbaa866e2714babdb8cae198"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TemplateArgument</b> (<a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> &amp;&amp;)=delete</td></tr>
 <tr class="separator:a9555caa0dbaa866e2714babdb8cae198 inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68688d5a305ca825665e03d60f2599aa inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#a68688d5a305ca825665e03d60f2599aa">getBoundParameter</a> () const noexcept</td></tr>
-<tr class="memdesc:a68688d5a305ca825665e03d60f2599aa inherit pub_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the field _boundParameter.  <a href="classrfk_1_1_template_argument.html#a68688d5a305ca825665e03d60f2599aa">More...</a><br /></td></tr>
-<tr class="separator:a68688d5a305ca825665e03d60f2599aa inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afffca726306ad503cfa718316ccfe87b inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436">ETemplateParameterKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#afffca726306ad503cfa718316ccfe87b">getKind</a> () const noexcept</td></tr>
+<tr class="memdesc:afffca726306ad503cfa718316ccfe87b inherit pub_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the kind of template parameter this argument is based on.  <a href="classrfk_1_1_template_argument.html#afffca726306ad503cfa718316ccfe87b">More...</a><br /></td></tr>
+<tr class="separator:afffca726306ad503cfa718316ccfe87b inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab44a2e8ad607f36d7a286eba5b633fd5 inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#ab44a2e8ad607f36d7a286eba5b633fd5">operator==</a> (<a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> const &amp;other) const noexcept</td></tr>
 <tr class="memdesc:ab44a2e8ad607f36d7a286eba5b633fd5 inherit pub_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether 2 <a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> instances are equal or not.  <a href="classrfk_1_1_template_argument.html#ab44a2e8ad607f36d7a286eba5b633fd5">More...</a><br /></td></tr>
 <tr class="separator:ab44a2e8ad607f36d7a286eba5b633fd5 inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,19 +150,38 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a6c4cbf826b97a72e0c8ef4058cdb9960 inherit pro_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top"><a id="a6c4cbf826b97a72e0c8ef4058cdb9960" name="a6c4cbf826b97a72e0c8ef4058cdb9960"></a>
 REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>TemplateArgument</b> (TemplateArgumentImpl *implementation) noexcept</td></tr>
 <tr class="separator:a6c4cbf826b97a72e0c8ef4058cdb9960 inherit pro_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf065679dd8baa99f8d8c4c8a6c25098 inherit pro_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#aaf065679dd8baa99f8d8c4c8a6c25098">getPimpl</a> () noexcept</td></tr>
-<tr class="memdesc:aaf065679dd8baa99f8d8c4c8a6c25098 inherit pro_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the _pimpl internal pointer.  <a href="classrfk_1_1_template_argument.html#aaf065679dd8baa99f8d8c4c8a6c25098">More...</a><br /></td></tr>
-<tr class="separator:aaf065679dd8baa99f8d8c4c8a6c25098 inherit pro_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c723b788ff7009fe02468a72fa16028 inherit pro_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top"><a id="a4c723b788ff7009fe02468a72fa16028" name="a4c723b788ff7009fe02468a72fa16028"></a>
-RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl const *&#160;</td><td class="memItemRight" valign="bottom"><b>getPimpl</b> () const noexcept</td></tr>
-<tr class="separator:a4c723b788ff7009fe02468a72fa16028 inherit pro_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classrfk_1_1_template_argument"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrfk_1_1_template_argument')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrfk_1_1_template_argument.html">rfk::TemplateArgument</a></td></tr>
-<tr class="memitem:adb098e46bf2ddb5e25e4f2419de3e0dd inherit pro_attribs_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">Pimpl&lt; TemplateArgumentImpl &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#adb098e46bf2ddb5e25e4f2419de3e0dd">_pimpl</a></td></tr>
-<tr class="separator:adb098e46bf2ddb5e25e4f2419de3e0dd inherit pro_attribs_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6d2d50a909ef901faf543efa8f5fce55" name="a6d2d50a909ef901faf543efa8f5fce55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d2d50a909ef901faf543efa8f5fce55">&#9670;&nbsp;</a></span>getValue()</h2>
+<a id="a26657425ce984ccd1ebc780c3f8858b9" name="a26657425ce984ccd1ebc780c3f8858b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26657425ce984ccd1ebc780c3f8858b9">&#9670;&nbsp;</a></span>getArchetype()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * rfk::NonTypeTemplateArgument::getArchetype </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the archetype of the argument. </p>
+<dl class="section return"><dt>Returns</dt><dd>The archetype of the argument. </dd></dl>
+
+</div>
+</div>
+<a id="aeae66e578020de203bc777f23d055838" name="aeae66e578020de203bc777f23d055838"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeae66e578020de203bc777f23d055838">&#9670;&nbsp;</a></span>getValue()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -165,7 +192,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD T rfk::NonTypeTemplateArgument::getValue </td>
+          <td class="memname">RFK_NODISCARD T const  &amp; rfk::NonTypeTemplateArgument::getValue </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>

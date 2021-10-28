@@ -54,10 +54,8 @@ var hierarchy =
     [ "rfk::Object", "classrfk_1_1_object.html", [
       [ "rfk::Property", "classrfk_1_1_property.html", null ]
     ] ],
-    [ "std::out_of_range", null, [
-      [ "rfk::OutOfRange", "classrfk_1_1_out_of_range.html", null ]
-    ] ],
     [ "rfk::ParentStruct", "classrfk_1_1_parent_struct.html", null ],
+    [ "rfk::Pimpl< T >", "classrfk_1_1_pimpl.html", null ],
     [ "rfk::TemplateArgument", "classrfk_1_1_template_argument.html", [
       [ "rfk::NonTypeTemplateArgument", "classrfk_1_1_non_type_template_argument.html", null ],
       [ "rfk::TemplateTemplateArgument", "classrfk_1_1_template_template_argument.html", null ],

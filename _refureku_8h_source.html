@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -109,17 +110,24 @@ $(document).ready(function(){initNavTree('_refureku_8h_source.html',''); initRes
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Enum.h&quot;</span></div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/EnumValue.h&quot;</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Struct.h&quot;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/GetArchetype.h&quot;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h&quot;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h&quot;</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TypeTemplateParameter.h&quot;</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateParameter.h&quot;</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h&quot;</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h&quot;</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h&quot;</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h&quot;</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &quot;Refureku/Properties/Property.h&quot;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/ParentStruct.h&quot;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/GetArchetype.h&quot;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/ClassTemplate.h&quot;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h&quot;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TypeTemplateParameter.h&quot;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateParameter.h&quot;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TemplateTemplateParameter.h&quot;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h&quot;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/NonTypeTemplateArgument.h&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/TemplateTemplateArgument.h&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &quot;Refureku/NativeProperties.h&quot;</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#include &quot;Refureku/Exceptions/ReturnTypeMismatch.h&quot;</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &quot;Refureku/Exceptions/ArgCountMismatch.h&quot;</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#include &quot;Refureku/Exceptions/ArgTypeMismatch.h&quot;</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#include &quot;Refureku/Exceptions/ConstViolation.h&quot;</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#include &quot;Refureku/Exceptions/BadNamespaceFormat.h&quot;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

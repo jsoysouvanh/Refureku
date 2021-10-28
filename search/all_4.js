@@ -1,8 +1,19 @@
 var searchData=
 [
-  ['data_0',['data',['../classrfk_1_1_vector.html#ae28195367261dddabe6ac5de0ee5bbd9',1,'rfk::Vector']]],
-  ['database_1',['Database',['../classrfk_1_1_database.html',1,'rfk']]],
-  ['deallocate_2',['deallocate',['../classrfk_1_1_allocator.html#ac3dd0ae1ce5176c1e5d3fd06ce9d9c64',1,'rfk::Allocator']]],
-  ['default_3',['Default',['../namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67',1,'rfk::Default()'],['../namespacerfk.html#aede2763da2d837a7ee63b105269d5f6ea7a1920d61156abc05a60135aefe8bc67',1,'rfk::Default()'],['../namespacerfk.html#a4e4ebc12533da5542afa59de6d305a7aa7a1920d61156abc05a60135aefe8bc67',1,'rfk::Default()'],['../namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca7a1920d61156abc05a60135aefe8bc67',1,'rfk::Default()']]],
-  ['defaultentityregisterer_4',['DefaultEntityRegisterer',['../classrfk_1_1_default_entity_registerer.html',1,'rfk']]]
+  ['eclasskind_0',['EClassKind',['../namespacerfk.html#a4a556c1faf6ed33a1862ab7a976da06e',1,'rfk']]],
+  ['eentitykind_1',['EEntityKind',['../namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5',1,'rfk']]],
+  ['efieldflags_2',['EFieldFlags',['../namespacerfk.html#a4e4ebc12533da5542afa59de6d305a7a',1,'rfk']]],
+  ['efunctionflags_3',['EFunctionFlags',['../namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee',1,'rfk']]],
+  ['emethodflags_4',['EMethodFlags',['../namespacerfk.html#aede2763da2d837a7ee63b105269d5f6e',1,'rfk']]],
+  ['emplace_5fback_5',['emplace_back',['../classrfk_1_1_vector.html#ae9264ba6f56db8f66682bc207f1073ea',1,'rfk::Vector']]],
+  ['empty_6',['empty',['../classrfk_1_1_vector.html#aa063726c4f24b0a100c82a8573e81baf',1,'rfk::Vector']]],
+  ['end_7',['end',['../classrfk_1_1_vector.html#a0045fa518853a58f34a915e17ca4e6e6',1,'rfk::Vector']]],
+  ['entity_8',['Entity',['../classrfk_1_1_entity.html',1,'rfk']]],
+  ['enum_9',['Enum',['../namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5acf20423ed48998082c20099488a0917c',1,'rfk::Enum()'],['../classrfk_1_1_enum.html',1,'rfk::Enum']]],
+  ['enumcast_10',['enumCast',['../namespacerfk.html#a6d8662292d9da4976068593c12142c76',1,'rfk']]],
+  ['enumvalue_11',['EnumValue',['../namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a29785ae7827639b31b629cc7f9c150e0',1,'rfk::EnumValue()'],['../classrfk_1_1_enum_value.html',1,'rfk::EnumValue']]],
+  ['enumvaluecast_12',['enumValueCast',['../namespacerfk.html#a57929a51e5575172e778bb72ae83b6dd',1,'rfk']]],
+  ['etemplateparameterkind_13',['ETemplateParameterKind',['../namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436',1,'rfk']]],
+  ['etypepartdescriptor_14',['ETypePartDescriptor',['../namespacerfk.html#ad0623ac99f46f519038709b5428a6567',1,'rfk']]],
+  ['evarflags_15',['EVarFlags',['../namespacerfk.html#ad7021d9a638af321b6538f58856a0aec',1,'rfk']]]
 ];

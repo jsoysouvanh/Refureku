@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('_e_entity_kind_8h_source.html',''); in
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;Refureku/Config.h&quot;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;Refureku/Misc/FundamentalTypes.h&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;Refureku/Utility/EnumMacros.h&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;Refureku/Misc/EnumMacros.h&quot;</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerfk.html">rfk</a></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
@@ -119,19 +120,22 @@ $(document).ready(function(){initNavTree('_e_entity_kind_8h_source.html',''); in
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <a class="code hl_class" href="classrfk_1_1_method.html">Method</a>                  = 1 &lt;&lt; 8,</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_class" href="classrfk_1_1_enum_value.html">EnumValue</a>               = 1 &lt;&lt; 9</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    };</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    RFK_GENERATE_ENUM_OPERATORS(<a class="code hl_enumeration" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5">EEntityKind</a>)</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>}</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_class" href="classrfk_1_1_enum_value.html">EnumValue</a>               = 1 &lt;&lt; 9,</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <a class="code hl_class" href="classrfk_1_1_namespace_fragment.html">NamespaceFragment</a>       = 1 &lt;&lt; 10</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    };</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    RFK_GENERATE_ENUM_OPERATORS(<a class="code hl_enumeration" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5">EEntityKind</a>)</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>}</div>
 <div class="ttc" id="aclassrfk_1_1_enum_html"><div class="ttname"><a href="classrfk_1_1_enum.html">rfk::Enum</a></div><div class="ttdef"><b>Definition:</b> Enum.h:18</div></div>
 <div class="ttc" id="aclassrfk_1_1_enum_value_html"><div class="ttname"><a href="classrfk_1_1_enum_value.html">rfk::EnumValue</a></div><div class="ttdef"><b>Definition:</b> EnumValue.h:19</div></div>
 <div class="ttc" id="aclassrfk_1_1_field_html"><div class="ttname"><a href="classrfk_1_1_field.html">rfk::Field</a></div><div class="ttdef"><b>Definition:</b> Field.h:15</div></div>
 <div class="ttc" id="aclassrfk_1_1_function_html"><div class="ttname"><a href="classrfk_1_1_function.html">rfk::Function</a></div><div class="ttdef"><b>Definition:</b> Function.h:17</div></div>
 <div class="ttc" id="aclassrfk_1_1_fundamental_archetype_html"><div class="ttname"><a href="classrfk_1_1_fundamental_archetype.html">rfk::FundamentalArchetype</a></div><div class="ttdef"><b>Definition:</b> FundamentalArchetype.h:15</div></div>
-<div class="ttc" id="aclassrfk_1_1_method_html"><div class="ttname"><a href="classrfk_1_1_method.html">rfk::Method</a></div><div class="ttdef"><b>Definition:</b> Method.h:16</div></div>
+<div class="ttc" id="aclassrfk_1_1_method_html"><div class="ttname"><a href="classrfk_1_1_method.html">rfk::Method</a></div><div class="ttdef"><b>Definition:</b> Method.h:18</div></div>
+<div class="ttc" id="aclassrfk_1_1_namespace_fragment_html"><div class="ttname"><a href="classrfk_1_1_namespace_fragment.html">rfk::NamespaceFragment</a></div><div class="ttdef"><b>Definition:</b> NamespaceFragment.h:18</div></div>
 <div class="ttc" id="aclassrfk_1_1_namespace_html"><div class="ttname"><a href="classrfk_1_1_namespace.html">rfk::Namespace</a></div><div class="ttdef"><b>Definition:</b> Namespace.h:26</div></div>
-<div class="ttc" id="aclassrfk_1_1_struct_html"><div class="ttname"><a href="classrfk_1_1_struct.html">rfk::Struct</a></div><div class="ttdef"><b>Definition:</b> Struct.h:37</div></div>
+<div class="ttc" id="aclassrfk_1_1_struct_html"><div class="ttname"><a href="classrfk_1_1_struct.html">rfk::Struct</a></div><div class="ttdef"><b>Definition:</b> Struct.h:36</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html"><div class="ttname"><a href="classrfk_1_1_variable.html">rfk::Variable</a></div><div class="ttdef"><b>Definition:</b> Variable.h:16</div></div>
 <div class="ttc" id="anamespacerfk_html"><div class="ttname"><a href="namespacerfk.html">rfk</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:16</div></div>
 <div class="ttc" id="anamespacerfk_html_af958ab385009c79cc3a27e9b3183c5d5"><div class="ttname"><a href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5">rfk::EEntityKind</a></div><div class="ttdeci">EEntityKind</div><div class="ttdef"><b>Definition:</b> EEntityKind.h:20</div></div>

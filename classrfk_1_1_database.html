@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -110,60 +111,81 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8f1674fd652080b0d7c36741289bbb16"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a8f1674fd652080b0d7c36741289bbb16">getNamespaceByName</a> (char const *name) const</td></tr>
 <tr class="memdesc:a8f1674fd652080b0d7c36741289bbb16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a namespace by name. Can search nested namespaces directly using :: separator. Example: getNamespace("namespace1::namespace2") will get the namespace2 nested inside namespace1 if it exists.  <a href="classrfk_1_1_database.html#a8f1674fd652080b0d7c36741289bbb16">More...</a><br /></td></tr>
 <tr class="separator:a8f1674fd652080b0d7c36741289bbb16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7b38088ba40d6d76cbc70af300949da"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#af7b38088ba40d6d76cbc70af300949da">getNamespaceByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:af7b38088ba40d6d76cbc70af300949da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first file level namespace satisfying the provided predicate.  <a href="classrfk_1_1_database.html#af7b38088ba40d6d76cbc70af300949da">More...</a><br /></td></tr>
-<tr class="separator:af7b38088ba40d6d76cbc70af300949da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a396670face11266adaab50c64e6a9497"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a396670face11266adaab50c64e6a9497">getNamespacesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:a396670face11266adaab50c64e6a9497"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level namespaces satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a396670face11266adaab50c64e6a9497">More...</a><br /></td></tr>
-<tr class="separator:a396670face11266adaab50c64e6a9497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cca4682f8a0278a4da7f54b04dc38fa"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a1cca4682f8a0278a4da7f54b04dc38fa">getFileLevelNamespaceByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a1cca4682f8a0278a4da7f54b04dc38fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first file level namespace satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a1cca4682f8a0278a4da7f54b04dc38fa">More...</a><br /></td></tr>
+<tr class="separator:a1cca4682f8a0278a4da7f54b04dc38fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92cfb5a2f93ab0778cefb7918a4a1e36"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a92cfb5a2f93ab0778cefb7918a4a1e36">getFileLevelNamespacesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a92cfb5a2f93ab0778cefb7918a4a1e36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level namespaces satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a92cfb5a2f93ab0778cefb7918a4a1e36">More...</a><br /></td></tr>
+<tr class="separator:a92cfb5a2f93ab0778cefb7918a4a1e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cab3eaa732da99d38b639727d303b46"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a3cab3eaa732da99d38b639727d303b46">foreachFileLevelNamespace</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a3cab3eaa732da99d38b639727d303b46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all file level namespaces.  <a href="classrfk_1_1_database.html#a3cab3eaa732da99d38b639727d303b46">More...</a><br /></td></tr>
 <tr class="separator:a3cab3eaa732da99d38b639727d303b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa17bbadd16c253f8afe1839071bf41e"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#afa17bbadd16c253f8afe1839071bf41e">getFileLevelNamespacesCount</a> () const noexcept</td></tr>
+<tr class="memdesc:afa17bbadd16c253f8afe1839071bf41e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of reflected file level namespaces in the database.  <a href="classrfk_1_1_database.html#afa17bbadd16c253f8afe1839071bf41e">More...</a><br /></td></tr>
+<tr class="separator:afa17bbadd16c253f8afe1839071bf41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24d4af738f718921496c4451db37c093"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a24d4af738f718921496c4451db37c093">getArchetypeById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:a24d4af738f718921496c4451db37c093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve an archetype by id.  <a href="classrfk_1_1_database.html#a24d4af738f718921496c4451db37c093">More...</a><br /></td></tr>
 <tr class="separator:a24d4af738f718921496c4451db37c093"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad534ef0c094382fab4ce1f11f7225c3c"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ad534ef0c094382fab4ce1f11f7225c3c">getArchetypeByName</a> (char const *name) const noexcept</td></tr>
-<tr class="memdesc:ad534ef0c094382fab4ce1f11f7225c3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level archetype by name. This method costs heavier performance as it will basically call getClassByName, getStructByName, getEnumByName and then getFundamentalArchetypeByName to find the queried archetype.  <a href="classrfk_1_1_database.html#ad534ef0c094382fab4ce1f11f7225c3c">More...</a><br /></td></tr>
-<tr class="separator:ad534ef0c094382fab4ce1f11f7225c3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e91c360aea1b5d8943bb78229f27c33"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a5e91c360aea1b5d8943bb78229f27c33">getArchetypesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:a5e91c360aea1b5d8943bb78229f27c33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level archetypes satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a5e91c360aea1b5d8943bb78229f27c33">More...</a><br /></td></tr>
-<tr class="separator:a5e91c360aea1b5d8943bb78229f27c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fb1c8edb961bbdd8b1ad3228eae5888"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a4fb1c8edb961bbdd8b1ad3228eae5888">getFileLevelArchetypeByName</a> (char const *name) const noexcept</td></tr>
+<tr class="memdesc:a4fb1c8edb961bbdd8b1ad3228eae5888"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level archetype by name. This method costs heavier performance as it will basically call getClassByName, getStructByName, getEnumByName and then getFundamentalArchetypeByName to find the queried archetype.  <a href="classrfk_1_1_database.html#a4fb1c8edb961bbdd8b1ad3228eae5888">More...</a><br /></td></tr>
+<tr class="separator:a4fb1c8edb961bbdd8b1ad3228eae5888"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e71c8f447d095adbc946063ed4cabff"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a1e71c8f447d095adbc946063ed4cabff">getFileLevelArchetypesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a1e71c8f447d095adbc946063ed4cabff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level archetypes satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a1e71c8f447d095adbc946063ed4cabff">More...</a><br /></td></tr>
+<tr class="separator:a1e71c8f447d095adbc946063ed4cabff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa629f4d2f3300715c50d2b32cac382d5"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#aa629f4d2f3300715c50d2b32cac382d5">getStructById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:aa629f4d2f3300715c50d2b32cac382d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a struct by id.  <a href="classrfk_1_1_database.html#aa629f4d2f3300715c50d2b32cac382d5">More...</a><br /></td></tr>
 <tr class="separator:aa629f4d2f3300715c50d2b32cac382d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d41f20cf31b277cc338b4221647f295"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a9d41f20cf31b277cc338b4221647f295">getStructByName</a> (char const *name) const noexcept</td></tr>
-<tr class="memdesc:a9d41f20cf31b277cc338b4221647f295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level struct by name.  <a href="classrfk_1_1_database.html#a9d41f20cf31b277cc338b4221647f295">More...</a><br /></td></tr>
-<tr class="separator:a9d41f20cf31b277cc338b4221647f295"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab166c326e867f682397009a25fd6515f"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ab166c326e867f682397009a25fd6515f">getStructsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:ab166c326e867f682397009a25fd6515f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level structs satisfying the provided predicate.  <a href="classrfk_1_1_database.html#ab166c326e867f682397009a25fd6515f">More...</a><br /></td></tr>
-<tr class="separator:ab166c326e867f682397009a25fd6515f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ffae6f59a31cdcaad3959d6ef3f7c69"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a4ffae6f59a31cdcaad3959d6ef3f7c69">getFileLevelStructByName</a> (char const *name) const noexcept</td></tr>
+<tr class="memdesc:a4ffae6f59a31cdcaad3959d6ef3f7c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level struct by name.  <a href="classrfk_1_1_database.html#a4ffae6f59a31cdcaad3959d6ef3f7c69">More...</a><br /></td></tr>
+<tr class="separator:a4ffae6f59a31cdcaad3959d6ef3f7c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a952fe4bab1bfeb6e137c1d439df5a64b"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a952fe4bab1bfeb6e137c1d439df5a64b">getFileLevelStructByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a952fe4bab1bfeb6e137c1d439df5a64b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first level struct satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a952fe4bab1bfeb6e137c1d439df5a64b">More...</a><br /></td></tr>
+<tr class="separator:a952fe4bab1bfeb6e137c1d439df5a64b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9676308e296b4ccf070faa91f83036d3"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a9676308e296b4ccf070faa91f83036d3">getFileLevelStructsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a9676308e296b4ccf070faa91f83036d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level structs satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a9676308e296b4ccf070faa91f83036d3">More...</a><br /></td></tr>
+<tr class="separator:a9676308e296b4ccf070faa91f83036d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1eeb2966d7c343c2508e4ca692be033c"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a1eeb2966d7c343c2508e4ca692be033c">foreachFileLevelStruct</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a1eeb2966d7c343c2508e4ca692be033c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all file level structs.  <a href="classrfk_1_1_database.html#a1eeb2966d7c343c2508e4ca692be033c">More...</a><br /></td></tr>
 <tr class="separator:a1eeb2966d7c343c2508e4ca692be033c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f870157ac3aadddb25acd25314ffd34"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a3f870157ac3aadddb25acd25314ffd34">getFileLevelStructsCount</a> () const noexcept</td></tr>
+<tr class="memdesc:a3f870157ac3aadddb25acd25314ffd34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of reflected file level structs in the database.  <a href="classrfk_1_1_database.html#a3f870157ac3aadddb25acd25314ffd34">More...</a><br /></td></tr>
+<tr class="separator:a3f870157ac3aadddb25acd25314ffd34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace9b1b373883405e06989074f45ef937"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ace9b1b373883405e06989074f45ef937">getClassById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:ace9b1b373883405e06989074f45ef937"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a class by id.  <a href="classrfk_1_1_database.html#ace9b1b373883405e06989074f45ef937">More...</a><br /></td></tr>
 <tr class="separator:ace9b1b373883405e06989074f45ef937"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a087e03e4d3160223d1531ced06f27de0"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a087e03e4d3160223d1531ced06f27de0">getClassByName</a> (char const *name) const noexcept</td></tr>
-<tr class="memdesc:a087e03e4d3160223d1531ced06f27de0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level class by name.  <a href="classrfk_1_1_database.html#a087e03e4d3160223d1531ced06f27de0">More...</a><br /></td></tr>
-<tr class="separator:a087e03e4d3160223d1531ced06f27de0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa32283b74376f49ef3e6105653cfcf92"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#aa32283b74376f49ef3e6105653cfcf92">getClassesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:aa32283b74376f49ef3e6105653cfcf92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level classes satisfying the provided predicate.  <a href="classrfk_1_1_database.html#aa32283b74376f49ef3e6105653cfcf92">More...</a><br /></td></tr>
-<tr class="separator:aa32283b74376f49ef3e6105653cfcf92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6aafd498727b75b0806404ba6d0e6a7e"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a6aafd498727b75b0806404ba6d0e6a7e">getFileLevelClassByName</a> (char const *name) const noexcept</td></tr>
+<tr class="memdesc:a6aafd498727b75b0806404ba6d0e6a7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level class by name.  <a href="classrfk_1_1_database.html#a6aafd498727b75b0806404ba6d0e6a7e">More...</a><br /></td></tr>
+<tr class="separator:a6aafd498727b75b0806404ba6d0e6a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace6f8ecd8d94f4998017f2dd5b412d0a"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ace6f8ecd8d94f4998017f2dd5b412d0a">getFileLevelClassByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:ace6f8ecd8d94f4998017f2dd5b412d0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first level struct satisfying the provided predicate.  <a href="classrfk_1_1_database.html#ace6f8ecd8d94f4998017f2dd5b412d0a">More...</a><br /></td></tr>
+<tr class="separator:ace6f8ecd8d94f4998017f2dd5b412d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea38f59e66d7b0fbbf24c087a414f55c"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#aea38f59e66d7b0fbbf24c087a414f55c">getFileLevelClassesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:aea38f59e66d7b0fbbf24c087a414f55c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level classes satisfying the provided predicate.  <a href="classrfk_1_1_database.html#aea38f59e66d7b0fbbf24c087a414f55c">More...</a><br /></td></tr>
+<tr class="separator:aea38f59e66d7b0fbbf24c087a414f55c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6dda4badbcee694c4ed1a4700290740"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ac6dda4badbcee694c4ed1a4700290740">foreachFileLevelClass</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:ac6dda4badbcee694c4ed1a4700290740"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all file level classes.  <a href="classrfk_1_1_database.html#ac6dda4badbcee694c4ed1a4700290740">More...</a><br /></td></tr>
 <tr class="separator:ac6dda4badbcee694c4ed1a4700290740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e072c21ee4ec8911f94d9c673454098"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a2e072c21ee4ec8911f94d9c673454098">getFileLevelClassesCount</a> () const noexcept</td></tr>
+<tr class="memdesc:a2e072c21ee4ec8911f94d9c673454098"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of reflected file level classes in the database.  <a href="classrfk_1_1_database.html#a2e072c21ee4ec8911f94d9c673454098">More...</a><br /></td></tr>
+<tr class="separator:a2e072c21ee4ec8911f94d9c673454098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af33a6b63a2a329ed434921378a9fa071"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#af33a6b63a2a329ed434921378a9fa071">getEnumById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:af33a6b63a2a329ed434921378a9fa071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve an enum by id.  <a href="classrfk_1_1_database.html#af33a6b63a2a329ed434921378a9fa071">More...</a><br /></td></tr>
 <tr class="separator:af33a6b63a2a329ed434921378a9fa071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3bdbcc9f72d7d4fba4a81a146d67578"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ad3bdbcc9f72d7d4fba4a81a146d67578">getEnumByName</a> (char const *name) const noexcept</td></tr>
-<tr class="memdesc:ad3bdbcc9f72d7d4fba4a81a146d67578"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level enum by name.  <a href="classrfk_1_1_database.html#ad3bdbcc9f72d7d4fba4a81a146d67578">More...</a><br /></td></tr>
-<tr class="separator:ad3bdbcc9f72d7d4fba4a81a146d67578"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d4e49c925ae8646faa0f771cb1247c0"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a2d4e49c925ae8646faa0f771cb1247c0">getEnumsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:a2d4e49c925ae8646faa0f771cb1247c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level enums satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a2d4e49c925ae8646faa0f771cb1247c0">More...</a><br /></td></tr>
-<tr class="separator:a2d4e49c925ae8646faa0f771cb1247c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa33684f76301eb9a3c2a12438ec4a98"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#afa33684f76301eb9a3c2a12438ec4a98">getFileLevelEnumByName</a> (char const *name) const noexcept</td></tr>
+<tr class="memdesc:afa33684f76301eb9a3c2a12438ec4a98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level enum by name.  <a href="classrfk_1_1_database.html#afa33684f76301eb9a3c2a12438ec4a98">More...</a><br /></td></tr>
+<tr class="separator:afa33684f76301eb9a3c2a12438ec4a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41445d15a2e9e7673d9d7bb29e87351a"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a41445d15a2e9e7673d9d7bb29e87351a">getFileLevelEnumByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a41445d15a2e9e7673d9d7bb29e87351a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first file level enum satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a41445d15a2e9e7673d9d7bb29e87351a">More...</a><br /></td></tr>
+<tr class="separator:a41445d15a2e9e7673d9d7bb29e87351a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92e540e67ef99089358bd30baef0f1df"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a92e540e67ef99089358bd30baef0f1df">getFileLevelEnumsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a92e540e67ef99089358bd30baef0f1df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level enums satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a92e540e67ef99089358bd30baef0f1df">More...</a><br /></td></tr>
+<tr class="separator:a92e540e67ef99089358bd30baef0f1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2155762e8899ddd63ac84306696fab11"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a2155762e8899ddd63ac84306696fab11">foreachFileLevelEnum</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a2155762e8899ddd63ac84306696fab11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all file level enums.  <a href="classrfk_1_1_database.html#a2155762e8899ddd63ac84306696fab11">More...</a><br /></td></tr>
 <tr class="separator:a2155762e8899ddd63ac84306696fab11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e875fd5473cd5f9615a24257bac6dfa"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a7e875fd5473cd5f9615a24257bac6dfa">getFileLevelEnumsCount</a> () const noexcept</td></tr>
+<tr class="memdesc:a7e875fd5473cd5f9615a24257bac6dfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of reflected file level classes in the database.  <a href="classrfk_1_1_database.html#a7e875fd5473cd5f9615a24257bac6dfa">More...</a><br /></td></tr>
+<tr class="separator:a7e875fd5473cd5f9615a24257bac6dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbc27102fca3e0158c43005f262cca27"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_fundamental_archetype.html">FundamentalArchetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#acbc27102fca3e0158c43005f262cca27">getFundamentalArchetypeById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:acbc27102fca3e0158c43005f262cca27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a fundamental archetype by id.  <a href="classrfk_1_1_database.html#acbc27102fca3e0158c43005f262cca27">More...</a><br /></td></tr>
 <tr class="separator:acbc27102fca3e0158c43005f262cca27"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,34 +195,46 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0ff74394d03626cc7768a49662e04496"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a0ff74394d03626cc7768a49662e04496">getVariableById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:a0ff74394d03626cc7768a49662e04496"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a variable by id.  <a href="classrfk_1_1_database.html#a0ff74394d03626cc7768a49662e04496">More...</a><br /></td></tr>
 <tr class="separator:a0ff74394d03626cc7768a49662e04496"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2586df415c1ce62f74950c31a924b77"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ab2586df415c1ce62f74950c31a924b77">getVariableByName</a> (char const *name, <a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aec">EVarFlags</a> flags=<a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca7a1920d61156abc05a60135aefe8bc67">EVarFlags::Default</a>) const noexcept</td></tr>
-<tr class="memdesc:ab2586df415c1ce62f74950c31a924b77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level (non-member) variable by name.  <a href="classrfk_1_1_database.html#ab2586df415c1ce62f74950c31a924b77">More...</a><br /></td></tr>
-<tr class="separator:ab2586df415c1ce62f74950c31a924b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedecb8d3c7e85057900597205be8174c"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#aedecb8d3c7e85057900597205be8174c">getVariablesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:aedecb8d3c7e85057900597205be8174c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level variables satisfying the provided predicate.  <a href="classrfk_1_1_database.html#aedecb8d3c7e85057900597205be8174c">More...</a><br /></td></tr>
-<tr class="separator:aedecb8d3c7e85057900597205be8174c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abab7898f8c2f21323922d48d2778db3f"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#abab7898f8c2f21323922d48d2778db3f">getFileLevelVariableByName</a> (char const *name, <a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aec">EVarFlags</a> flags=<a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca7a1920d61156abc05a60135aefe8bc67">EVarFlags::Default</a>) const noexcept</td></tr>
+<tr class="memdesc:abab7898f8c2f21323922d48d2778db3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level (non-member) variable by name.  <a href="classrfk_1_1_database.html#abab7898f8c2f21323922d48d2778db3f">More...</a><br /></td></tr>
+<tr class="separator:abab7898f8c2f21323922d48d2778db3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab00a09f9b79cf707562ac139ea654eb8"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#ab00a09f9b79cf707562ac139ea654eb8">getFileLevelVariableByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:ab00a09f9b79cf707562ac139ea654eb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first file level variable satisfying the provided predicate.  <a href="classrfk_1_1_database.html#ab00a09f9b79cf707562ac139ea654eb8">More...</a><br /></td></tr>
+<tr class="separator:ab00a09f9b79cf707562ac139ea654eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a602709d267fc953b2b206e60ffcb1df6"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a602709d267fc953b2b206e60ffcb1df6">getFileLevelVariablesByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a602709d267fc953b2b206e60ffcb1df6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level variables satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a602709d267fc953b2b206e60ffcb1df6">More...</a><br /></td></tr>
+<tr class="separator:a602709d267fc953b2b206e60ffcb1df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fcba58ae9cd82eab798f1ccff9116ca"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a0fcba58ae9cd82eab798f1ccff9116ca">foreachFileLevelVariable</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a0fcba58ae9cd82eab798f1ccff9116ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all file level variables.  <a href="classrfk_1_1_database.html#a0fcba58ae9cd82eab798f1ccff9116ca">More...</a><br /></td></tr>
 <tr class="separator:a0fcba58ae9cd82eab798f1ccff9116ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb30265e14588412b7de36f8be8450f1"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#acb30265e14588412b7de36f8be8450f1">getFileLevelVariablesCount</a> () const noexcept</td></tr>
+<tr class="memdesc:acb30265e14588412b7de36f8be8450f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of reflected file level variables in the database.  <a href="classrfk_1_1_database.html#acb30265e14588412b7de36f8be8450f1">More...</a><br /></td></tr>
+<tr class="separator:acb30265e14588412b7de36f8be8450f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64ceb2b044bb400801eea45ee845b84f"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a64ceb2b044bb400801eea45ee845b84f">getFunctionById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:a64ceb2b044bb400801eea45ee845b84f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a function by id.  <a href="classrfk_1_1_database.html#a64ceb2b044bb400801eea45ee845b84f">More...</a><br /></td></tr>
 <tr class="separator:a64ceb2b044bb400801eea45ee845b84f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e74ab7f3d0865bca36da73a3f86fb62"><td class="memTemplParams" colspan="2">template&lt;typename FunctionSignature &gt; </td></tr>
-<tr class="memitem:a8e74ab7f3d0865bca36da73a3f86fb62"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a8e74ab7f3d0865bca36da73a3f86fb62">getFunctionByName</a> (char const *name, <a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee">EFunctionFlags</a> flags=<a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67">EFunctionFlags::Default</a>) const noexcept</td></tr>
-<tr class="memdesc:a8e74ab7f3d0865bca36da73a3f86fb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level function by name and signature.  <a href="classrfk_1_1_database.html#a8e74ab7f3d0865bca36da73a3f86fb62">More...</a><br /></td></tr>
-<tr class="separator:a8e74ab7f3d0865bca36da73a3f86fb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a717c8daa2c0f5e6797c712a43b0228ea"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a717c8daa2c0f5e6797c712a43b0228ea">getFunctionByName</a> (char const *name, <a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee">EFunctionFlags</a> flags=<a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67">EFunctionFlags::Default</a>) const noexcept</td></tr>
-<tr class="memdesc:a717c8daa2c0f5e6797c712a43b0228ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level function by name.  <a href="classrfk_1_1_database.html#a717c8daa2c0f5e6797c712a43b0228ea">More...</a><br /></td></tr>
-<tr class="separator:a717c8daa2c0f5e6797c712a43b0228ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27c1ae0805d49b1f0eb33fc289af3817"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a27c1ae0805d49b1f0eb33fc289af3817">getFunctionsByName</a> (char const *name, <a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee">EFunctionFlags</a> flags=<a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67">EFunctionFlags::Default</a>) const noexcept</td></tr>
-<tr class="memdesc:a27c1ae0805d49b1f0eb33fc289af3817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level functions by name.  <a href="classrfk_1_1_database.html#a27c1ae0805d49b1f0eb33fc289af3817">More...</a><br /></td></tr>
-<tr class="separator:a27c1ae0805d49b1f0eb33fc289af3817"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebafff8911fa540133859533ac7a8750"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#aebafff8911fa540133859533ac7a8750">getFunctionsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> &gt; predicate, void *userData) const</td></tr>
-<tr class="memdesc:aebafff8911fa540133859533ac7a8750"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level functions satisfying the provided predicate.  <a href="classrfk_1_1_database.html#aebafff8911fa540133859533ac7a8750">More...</a><br /></td></tr>
-<tr class="separator:aebafff8911fa540133859533ac7a8750"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a6909c7434c7fb2bbd75dc3d51c3342"><td class="memTemplParams" colspan="2">template&lt;typename FunctionSignature &gt; </td></tr>
+<tr class="memitem:a9a6909c7434c7fb2bbd75dc3d51c3342"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a9a6909c7434c7fb2bbd75dc3d51c3342">getFileLevelFunctionByName</a> (char const *name, <a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee">EFunctionFlags</a> flags=<a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67">EFunctionFlags::Default</a>) const noexcept</td></tr>
+<tr class="memdesc:a9a6909c7434c7fb2bbd75dc3d51c3342"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level function by name and signature.  <a href="classrfk_1_1_database.html#a9a6909c7434c7fb2bbd75dc3d51c3342">More...</a><br /></td></tr>
+<tr class="separator:a9a6909c7434c7fb2bbd75dc3d51c3342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23d2f8370232dae96a69f67fa8d8956f"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a23d2f8370232dae96a69f67fa8d8956f">getFileLevelFunctionByName</a> (char const *name, <a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee">EFunctionFlags</a> flags=<a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67">EFunctionFlags::Default</a>) const noexcept</td></tr>
+<tr class="memdesc:a23d2f8370232dae96a69f67fa8d8956f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a file level function by name.  <a href="classrfk_1_1_database.html#a23d2f8370232dae96a69f67fa8d8956f">More...</a><br /></td></tr>
+<tr class="separator:a23d2f8370232dae96a69f67fa8d8956f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54af13626b90452b1e60e59dac3e51fd"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a54af13626b90452b1e60e59dac3e51fd">getFileLevelFunctionsByName</a> (char const *name, <a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babee">EFunctionFlags</a> flags=<a class="el" href="namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea7a1920d61156abc05a60135aefe8bc67">EFunctionFlags::Default</a>) const noexcept</td></tr>
+<tr class="memdesc:a54af13626b90452b1e60e59dac3e51fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level functions by name.  <a href="classrfk_1_1_database.html#a54af13626b90452b1e60e59dac3e51fd">More...</a><br /></td></tr>
+<tr class="separator:a54af13626b90452b1e60e59dac3e51fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1101b1fc49204a2c43aa39a9fd18f238"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a1101b1fc49204a2c43aa39a9fd18f238">getFileLevelFunctionByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a1101b1fc49204a2c43aa39a9fd18f238"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first file level function satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a1101b1fc49204a2c43aa39a9fd18f238">More...</a><br /></td></tr>
+<tr class="separator:a1101b1fc49204a2c43aa39a9fd18f238"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cfc819a338e7d78a5d31f846a4b2829"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a3cfc819a338e7d78a5d31f846a4b2829">getFileLevelFunctionsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> &gt; predicate, void *userData) const</td></tr>
+<tr class="memdesc:a3cfc819a338e7d78a5d31f846a4b2829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all file level functions satisfying the provided predicate.  <a href="classrfk_1_1_database.html#a3cfc819a338e7d78a5d31f846a4b2829">More...</a><br /></td></tr>
+<tr class="separator:a3cfc819a338e7d78a5d31f846a4b2829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6be96ab7982c47c19e562e38169daa67"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a6be96ab7982c47c19e562e38169daa67">foreachFileLevelFunction</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> &gt; visitor, void *userData) const</td></tr>
 <tr class="memdesc:a6be96ab7982c47c19e562e38169daa67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all file level functions.  <a href="classrfk_1_1_database.html#a6be96ab7982c47c19e562e38169daa67">More...</a><br /></td></tr>
 <tr class="separator:a6be96ab7982c47c19e562e38169daa67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98c69c078aabd16bf6ae8250fbe8458d"><td class="memItemLeft" align="right" valign="top">REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a98c69c078aabd16bf6ae8250fbe8458d">getFileLevelFunctionsCount</a> () const noexcept</td></tr>
+<tr class="memdesc:a98c69c078aabd16bf6ae8250fbe8458d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of reflected file level functions in the database.  <a href="classrfk_1_1_database.html#a98c69c078aabd16bf6ae8250fbe8458d">More...</a><br /></td></tr>
+<tr class="separator:a98c69c078aabd16bf6ae8250fbe8458d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0afc3e3cd98a3f2bd8b66a7ecbf53344"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_method.html">Method</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_database.html#a0afc3e3cd98a3f2bd8b66a7ecbf53344">getMethodById</a> (std::size_t id) const noexcept</td></tr>
 <tr class="memdesc:a0afc3e3cd98a3f2bd8b66a7ecbf53344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a method by id.  <a href="classrfk_1_1_database.html#a0afc3e3cd98a3f2bd8b66a7ecbf53344">More...</a><br /></td></tr>
 <tr class="separator:a0afc3e3cd98a3f2bd8b66a7ecbf53344"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -523,85 +557,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ad534ef0c094382fab4ce1f11f7225c3c" name="ad534ef0c094382fab4ce1f11f7225c3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad534ef0c094382fab4ce1f11f7225c3c">&#9670;&nbsp;</a></span>getArchetypeByName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * rfk::Database::getArchetypeByName </td>
-          <td>(</td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieve a file level archetype by name. This method costs heavier performance as it will basically call getClassByName, getStructByName, getEnumByName and then getFundamentalArchetypeByName to find the queried archetype. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">archetypeName</td><td>Name of the archetype.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried archetype if it exists, else nullptr. </dd></dl>
-
-</div>
-</div>
-<a id="a5e91c360aea1b5d8943bb78229f27c33" name="a5e91c360aea1b5d8943bb78229f27c33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e91c360aea1b5d8943bb78229f27c33">&#9670;&nbsp;</a></span>getArchetypesByPredicate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * &gt; rfk::Database::getArchetypesByPredicate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> &gt;&#160;</td>
-          <td class="paramname"><em>predicate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieve all file level archetypes satisfying the provided predicate. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">predicate</td><td>Predicate defining a valid archetype. </td></tr>
-    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>All file level archetypes satisfying the predicate.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="ace9b1b373883405e06989074f45ef937" name="ace9b1b373883405e06989074f45ef937"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ace9b1b373883405e06989074f45ef937">&#9670;&nbsp;</a></span>getClassById()</h2>
 
@@ -634,85 +589,6 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried class if it exists, else nullptr. </dd></dl>
-
-</div>
-</div>
-<a id="a087e03e4d3160223d1531ced06f27de0" name="a087e03e4d3160223d1531ced06f27de0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a087e03e4d3160223d1531ced06f27de0">&#9670;&nbsp;</a></span>getClassByName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const  * rfk::Database::getClassByName </td>
-          <td>(</td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieve a file level class by name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the class.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried class if it exists, else nullptr. </dd></dl>
-
-</div>
-</div>
-<a id="aa32283b74376f49ef3e6105653cfcf92" name="aa32283b74376f49ef3e6105653cfcf92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa32283b74376f49ef3e6105653cfcf92">&#9670;&nbsp;</a></span>getClassesByPredicate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> const  * &gt; rfk::Database::getClassesByPredicate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt;&#160;</td>
-          <td class="paramname"><em>predicate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieve all file level classes satisfying the provided predicate. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">predicate</td><td>Predicate defining a valid class. </td></tr>
-    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>All file level classes satisfying the predicate.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -786,85 +662,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="ad3bdbcc9f72d7d4fba4a81a146d67578" name="ad3bdbcc9f72d7d4fba4a81a146d67578"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3bdbcc9f72d7d4fba4a81a146d67578">&#9670;&nbsp;</a></span>getEnumByName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const  * rfk::Database::getEnumByName </td>
-          <td>(</td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieve a file level enum by name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the enum.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried enum if it exists, else nullptr. </dd></dl>
-
-</div>
-</div>
-<a id="a2d4e49c925ae8646faa0f771cb1247c0" name="a2d4e49c925ae8646faa0f771cb1247c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d4e49c925ae8646faa0f771cb1247c0">&#9670;&nbsp;</a></span>getEnumsByPredicate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const  * &gt; rfk::Database::getEnumsByPredicate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt;&#160;</td>
-          <td class="paramname"><em>predicate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieve all file level enums satisfying the provided predicate. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">predicate</td><td>Predicate defining a valid enum. </td></tr>
-    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>All file level enums satisfying the predicate.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a96b7b121ce4722cc0be4ab02a06f53fc" name="a96b7b121ce4722cc0be4ab02a06f53fc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a96b7b121ce4722cc0be4ab02a06f53fc">&#9670;&nbsp;</a></span>getEnumValueById()</h2>
 
@@ -935,8 +732,8 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a64ceb2b044bb400801eea45ee845b84f" name="a64ceb2b044bb400801eea45ee845b84f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64ceb2b044bb400801eea45ee845b84f">&#9670;&nbsp;</a></span>getFunctionById()</h2>
+<a id="a4fb1c8edb961bbdd8b1ad3228eae5888" name="a4fb1c8edb961bbdd8b1ad3228eae5888"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fb1c8edb961bbdd8b1ad3228eae5888">&#9670;&nbsp;</a></span>getFileLevelArchetypeByName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -945,10 +742,10 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::Database::getFunctionById </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * rfk::Database::getFileLevelArchetypeByName </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -959,19 +756,365 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieve a function by id. </p>
+<p>Retrieve a file level archetype by name. This method costs heavier performance as it will basically call getClassByName, getStructByName, getEnumByName and then getFundamentalArchetypeByName to find the queried archetype. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>The id of the function.</td></tr>
+    <tr><td class="paramname">archetypeName</td><td>Name of the archetype.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried function if it exists, else nullptr. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried archetype if it exists, else nullptr. </dd></dl>
 
 </div>
 </div>
-<a id="a8e74ab7f3d0865bca36da73a3f86fb62" name="a8e74ab7f3d0865bca36da73a3f86fb62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e74ab7f3d0865bca36da73a3f86fb62">&#9670;&nbsp;</a></span>getFunctionByName() <span class="overload">[1/2]</span></h2>
+<a id="a1e71c8f447d095adbc946063ed4cabff" name="a1e71c8f447d095adbc946063ed4cabff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e71c8f447d095adbc946063ed4cabff">&#9670;&nbsp;</a></span>getFileLevelArchetypesByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * &gt; rfk::Database::getFileLevelArchetypesByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve all file level archetypes satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid archetype. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>All file level archetypes satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6aafd498727b75b0806404ba6d0e6a7e" name="a6aafd498727b75b0806404ba6d0e6a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6aafd498727b75b0806404ba6d0e6a7e">&#9670;&nbsp;</a></span>getFileLevelClassByName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const  * rfk::Database::getFileLevelClassByName </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve a file level class by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the class.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried class if it exists, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="ace6f8ecd8d94f4998017f2dd5b412d0a" name="ace6f8ecd8d94f4998017f2dd5b412d0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace6f8ecd8d94f4998017f2dd5b412d0a">&#9670;&nbsp;</a></span>getFileLevelClassByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Class</a> const  * rfk::Database::getFileLevelClassByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the first level struct satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid struct. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The first file level struct satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aea38f59e66d7b0fbbf24c087a414f55c" name="aea38f59e66d7b0fbbf24c087a414f55c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea38f59e66d7b0fbbf24c087a414f55c">&#9670;&nbsp;</a></span>getFileLevelClassesByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> const  * &gt; rfk::Database::getFileLevelClassesByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Class</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve all file level classes satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid class. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>All file level classes satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2e072c21ee4ec8911f94d9c673454098" name="a2e072c21ee4ec8911f94d9c673454098"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e072c21ee4ec8911f94d9c673454098">&#9670;&nbsp;</a></span>getFileLevelClassesCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Database::getFileLevelClassesCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of reflected file level classes in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of reflected file level classes in the database. </dd></dl>
+
+</div>
+</div>
+<a id="afa33684f76301eb9a3c2a12438ec4a98" name="afa33684f76301eb9a3c2a12438ec4a98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa33684f76301eb9a3c2a12438ec4a98">&#9670;&nbsp;</a></span>getFileLevelEnumByName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const  * rfk::Database::getFileLevelEnumByName </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve a file level enum by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the enum.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried enum if it exists, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a41445d15a2e9e7673d9d7bb29e87351a" name="a41445d15a2e9e7673d9d7bb29e87351a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41445d15a2e9e7673d9d7bb29e87351a">&#9670;&nbsp;</a></span>getFileLevelEnumByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_enum.html">Enum</a> const  * rfk::Database::getFileLevelEnumByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the first file level enum satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid enum. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The first file level enum satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a92e540e67ef99089358bd30baef0f1df" name="a92e540e67ef99089358bd30baef0f1df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92e540e67ef99089358bd30baef0f1df">&#9670;&nbsp;</a></span>getFileLevelEnumsByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> const  * &gt; rfk::Database::getFileLevelEnumsByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_enum.html">Enum</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve all file level enums satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid enum. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>All file level enums satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7e875fd5473cd5f9615a24257bac6dfa" name="a7e875fd5473cd5f9615a24257bac6dfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e875fd5473cd5f9615a24257bac6dfa">&#9670;&nbsp;</a></span>getFileLevelEnumsCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Database::getFileLevelEnumsCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of reflected file level classes in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of reflected file level classes in the database. </dd></dl>
+
+</div>
+</div>
+<a id="a9a6909c7434c7fb2bbd75dc3d51c3342" name="a9a6909c7434c7fb2bbd75dc3d51c3342"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a6909c7434c7fb2bbd75dc3d51c3342">&#9670;&nbsp;</a></span>getFileLevelFunctionByName() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -982,7 +1125,7 @@ template&lt;typename FunctionSignature &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::Database::getFunctionByName </td>
+          <td class="memname">RFK_NODISCARD <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::Database::getFileLevelFunctionByName </td>
           <td>(</td>
           <td class="paramtype">char const *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1018,8 +1161,8 @@ template&lt;typename FunctionSignature &gt; </div>
 
 </div>
 </div>
-<a id="a717c8daa2c0f5e6797c712a43b0228ea" name="a717c8daa2c0f5e6797c712a43b0228ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a717c8daa2c0f5e6797c712a43b0228ea">&#9670;&nbsp;</a></span>getFunctionByName() <span class="overload">[2/2]</span></h2>
+<a id="a23d2f8370232dae96a69f67fa8d8956f" name="a23d2f8370232dae96a69f67fa8d8956f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23d2f8370232dae96a69f67fa8d8956f">&#9670;&nbsp;</a></span>getFileLevelFunctionByName() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1028,7 +1171,7 @@ template&lt;typename FunctionSignature &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::Database::getFunctionByName </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::Database::getFileLevelFunctionByName </td>
           <td>(</td>
           <td class="paramtype">char const *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1064,8 +1207,52 @@ template&lt;typename FunctionSignature &gt; </div>
 
 </div>
 </div>
-<a id="a27c1ae0805d49b1f0eb33fc289af3817" name="a27c1ae0805d49b1f0eb33fc289af3817"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27c1ae0805d49b1f0eb33fc289af3817">&#9670;&nbsp;</a></span>getFunctionsByName()</h2>
+<a id="a1101b1fc49204a2c43aa39a9fd18f238" name="a1101b1fc49204a2c43aa39a9fd18f238"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1101b1fc49204a2c43aa39a9fd18f238">&#9670;&nbsp;</a></span>getFileLevelFunctionByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::Database::getFileLevelFunctionByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the first file level function satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid function. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The first file level function satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a54af13626b90452b1e60e59dac3e51fd" name="a54af13626b90452b1e60e59dac3e51fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54af13626b90452b1e60e59dac3e51fd">&#9670;&nbsp;</a></span>getFileLevelFunctionsByName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1074,7 +1261,7 @@ template&lt;typename FunctionSignature &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const  * &gt; rfk::Database::getFunctionsByName </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const  * &gt; rfk::Database::getFileLevelFunctionsByName </td>
           <td>(</td>
           <td class="paramtype">char const *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
@@ -1110,14 +1297,14 @@ template&lt;typename FunctionSignature &gt; </div>
 
 </div>
 </div>
-<a id="aebafff8911fa540133859533ac7a8750" name="aebafff8911fa540133859533ac7a8750"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aebafff8911fa540133859533ac7a8750">&#9670;&nbsp;</a></span>getFunctionsByPredicate()</h2>
+<a id="a3cfc819a338e7d78a5d31f846a4b2829" name="a3cfc819a338e7d78a5d31f846a4b2829"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cfc819a338e7d78a5d31f846a4b2829">&#9670;&nbsp;</a></span>getFileLevelFunctionsByPredicate()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const  * &gt; rfk::Database::getFunctionsByPredicate </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> const  * &gt; rfk::Database::getFileLevelFunctionsByPredicate </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_function.html">Function</a> &gt;&#160;</td>
           <td class="paramname"><em>predicate</em>, </td>
@@ -1151,6 +1338,498 @@ template&lt;typename FunctionSignature &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a98c69c078aabd16bf6ae8250fbe8458d" name="a98c69c078aabd16bf6ae8250fbe8458d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98c69c078aabd16bf6ae8250fbe8458d">&#9670;&nbsp;</a></span>getFileLevelFunctionsCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Database::getFileLevelFunctionsCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of reflected file level functions in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of reflected file level functions in the database. </dd></dl>
+
+</div>
+</div>
+<a id="a1cca4682f8a0278a4da7f54b04dc38fa" name="a1cca4682f8a0278a4da7f54b04dc38fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cca4682f8a0278a4da7f54b04dc38fa">&#9670;&nbsp;</a></span>getFileLevelNamespaceByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const  * rfk::Database::getFileLevelNamespaceByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the first file level namespace satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid namespace. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The first file level namespace satisfying the predicate if any, else nullptr.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a92cfb5a2f93ab0778cefb7918a4a1e36" name="a92cfb5a2f93ab0778cefb7918a4a1e36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92cfb5a2f93ab0778cefb7918a4a1e36">&#9670;&nbsp;</a></span>getFileLevelNamespacesByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const  * &gt; rfk::Database::getFileLevelNamespacesByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve all file level namespaces satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid namespace. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>All file level namespaces satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afa17bbadd16c253f8afe1839071bf41e" name="afa17bbadd16c253f8afe1839071bf41e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa17bbadd16c253f8afe1839071bf41e">&#9670;&nbsp;</a></span>getFileLevelNamespacesCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Database::getFileLevelNamespacesCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of reflected file level namespaces in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of reflected file level namespaces in the database. </dd></dl>
+
+</div>
+</div>
+<a id="a4ffae6f59a31cdcaad3959d6ef3f7c69" name="a4ffae6f59a31cdcaad3959d6ef3f7c69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ffae6f59a31cdcaad3959d6ef3f7c69">&#9670;&nbsp;</a></span>getFileLevelStructByName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const  * rfk::Database::getFileLevelStructByName </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve a file level struct by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the struct.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried struct if it exists, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="a952fe4bab1bfeb6e137c1d439df5a64b" name="a952fe4bab1bfeb6e137c1d439df5a64b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a952fe4bab1bfeb6e137c1d439df5a64b">&#9670;&nbsp;</a></span>getFileLevelStructByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const  * rfk::Database::getFileLevelStructByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the first level struct satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid struct. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The first file level struct satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9676308e296b4ccf070faa91f83036d3" name="a9676308e296b4ccf070faa91f83036d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9676308e296b4ccf070faa91f83036d3">&#9670;&nbsp;</a></span>getFileLevelStructsByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> const  * &gt; rfk::Database::getFileLevelStructsByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve all file level structs satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid struct. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>All file level structs satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3f870157ac3aadddb25acd25314ffd34" name="a3f870157ac3aadddb25acd25314ffd34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f870157ac3aadddb25acd25314ffd34">&#9670;&nbsp;</a></span>getFileLevelStructsCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Database::getFileLevelStructsCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of reflected file level structs in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of reflected file level structs in the database. </dd></dl>
+
+</div>
+</div>
+<a id="abab7898f8c2f21323922d48d2778db3f" name="abab7898f8c2f21323922d48d2778db3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abab7898f8c2f21323922d48d2778db3f">&#9670;&nbsp;</a></span>getFileLevelVariableByName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const  * rfk::Database::getFileLevelVariableByName </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aec">EVarFlags</a>&#160;</td>
+          <td class="paramname"><em>flags</em> = <code><a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca7a1920d61156abc05a60135aefe8bc67">EVarFlags::Default</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve a file level (non-member) variable by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
+    <tr><td class="paramname">flags</td><td>Flags describing the queried variable. The result variable will have at least the provided flags.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried variable if it exists, else nullptr. </dd></dl>
+
+</div>
+</div>
+<a id="ab00a09f9b79cf707562ac139ea654eb8" name="ab00a09f9b79cf707562ac139ea654eb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab00a09f9b79cf707562ac139ea654eb8">&#9670;&nbsp;</a></span>getFileLevelVariableByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const  * rfk::Database::getFileLevelVariableByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the first file level variable satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid variable. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The first file level variable satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a602709d267fc953b2b206e60ffcb1df6" name="a602709d267fc953b2b206e60ffcb1df6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a602709d267fc953b2b206e60ffcb1df6">&#9670;&nbsp;</a></span>getFileLevelVariablesByPredicate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> const  * &gt; rfk::Database::getFileLevelVariablesByPredicate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt;&#160;</td>
+          <td class="paramname"><em>predicate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve all file level variables satisfying the provided predicate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">predicate</td><td>Predicate defining a valid variable. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>All file level variables satisfying the predicate.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acb30265e14588412b7de36f8be8450f1" name="acb30265e14588412b7de36f8be8450f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb30265e14588412b7de36f8be8450f1">&#9670;&nbsp;</a></span>getFileLevelVariablesCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API std::size_t rfk::Database::getFileLevelVariablesCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the number of reflected file level variables in the database. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of reflected file level variables in the database. </dd></dl>
+
+</div>
+</div>
+<a id="a64ceb2b044bb400801eea45ee845b84f" name="a64ceb2b044bb400801eea45ee845b84f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64ceb2b044bb400801eea45ee845b84f">&#9670;&nbsp;</a></span>getFunctionById()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_function.html">Function</a> const  * rfk::Database::getFunctionById </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve a function by id. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>The id of the function.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried function if it exists, else nullptr. </dd></dl>
 
 </div>
 </div>
@@ -1320,95 +1999,7 @@ template&lt;typename FunctionSignature &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried namespace if it exists, else nullptr.</dd></dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname"><a class="el" href="classrfk_1_1_bad_namespace_format.html">BadNamespaceFormat</a></td><td>if the provided namespace name has : instead of :: as a separator, or ends with :. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="af7b38088ba40d6d76cbc70af300949da" name="af7b38088ba40d6d76cbc70af300949da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7b38088ba40d6d76cbc70af300949da">&#9670;&nbsp;</a></span>getNamespaceByPredicate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const  * rfk::Database::getNamespaceByPredicate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt;&#160;</td>
-          <td class="paramname"><em>predicate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieve the first file level namespace satisfying the provided predicate. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">predicate</td><td>Predicate defining a valid namespace. </td></tr>
-    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The first file level namespace satisfying the predicate if any, else nullptr.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a396670face11266adaab50c64e6a9497" name="a396670face11266adaab50c64e6a9497"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a396670face11266adaab50c64e6a9497">&#9670;&nbsp;</a></span>getNamespacesByPredicate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const  * &gt; rfk::Database::getNamespacesByPredicate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> &gt;&#160;</td>
-          <td class="paramname"><em>predicate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieve all file level namespaces satisfying the provided predicate. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">predicate</td><td>Predicate defining a valid namespace. </td></tr>
-    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>All file level namespaces satisfying the predicate.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_bad_namespace_format.html">BadNamespaceFormat</a></td><td>if the provided namespace name has : instead of :: as a separator, or starts/ends with :. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1520,85 +2111,6 @@ template&lt;typename FunctionSignature &gt; </div>
 
 </div>
 </div>
-<a id="a9d41f20cf31b277cc338b4221647f295" name="a9d41f20cf31b277cc338b4221647f295"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d41f20cf31b277cc338b4221647f295">&#9670;&nbsp;</a></span>getStructByName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_struct.html">Struct</a> const  * rfk::Database::getStructByName </td>
-          <td>(</td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieve a file level struct by name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the struct.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried struct if it exists, else nullptr. </dd></dl>
-
-</div>
-</div>
-<a id="ab166c326e867f682397009a25fd6515f" name="ab166c326e867f682397009a25fd6515f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab166c326e867f682397009a25fd6515f">&#9670;&nbsp;</a></span>getStructsByPredicate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> const  * &gt; rfk::Database::getStructsByPredicate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_struct.html">Struct</a> &gt;&#160;</td>
-          <td class="paramname"><em>predicate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieve all file level structs satisfying the provided predicate. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">predicate</td><td>Predicate defining a valid struct. </td></tr>
-    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>All file level structs satisfying the predicate.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a0ff74394d03626cc7768a49662e04496" name="a0ff74394d03626cc7768a49662e04496"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ff74394d03626cc7768a49662e04496">&#9670;&nbsp;</a></span>getVariableById()</h2>
 
@@ -1631,96 +2143,6 @@ template&lt;typename FunctionSignature &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried variable if it exists, else nullptr. </dd></dl>
-
-</div>
-</div>
-<a id="ab2586df415c1ce62f74950c31a924b77" name="ab2586df415c1ce62f74950c31a924b77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2586df415c1ce62f74950c31a924b77">&#9670;&nbsp;</a></span>getVariableByName()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_variable.html">Variable</a> const  * rfk::Database::getVariableByName </td>
-          <td>(</td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aec">EVarFlags</a>&#160;</td>
-          <td class="paramname"><em>flags</em> = <code><a class="el" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca7a1920d61156abc05a60135aefe8bc67">EVarFlags::Default</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieve a file level (non-member) variable by name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the variable. </td></tr>
-    <tr><td class="paramname">flags</td><td>Flags describing the queried variable. The result variable will have at least the provided flags.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A constant pointer to the queried variable if it exists, else nullptr. </dd></dl>
-
-</div>
-</div>
-<a id="aedecb8d3c7e85057900597205be8174c" name="aedecb8d3c7e85057900597205be8174c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedecb8d3c7e85057900597205be8174c">&#9670;&nbsp;</a></span>getVariablesByPredicate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> const  * &gt; rfk::Database::getVariablesByPredicate </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_variable.html">Variable</a> &gt;&#160;</td>
-          <td class="paramname"><em>predicate</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieve all file level variables satisfying the provided predicate. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">predicate</td><td>Predicate defining a valid variable. </td></tr>
-    <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>All file level variables satisfying the predicate.</dd></dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Any</td><td>exception potentially thrown from the provided predicate. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

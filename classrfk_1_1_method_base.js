@@ -2,6 +2,9 @@ var classrfk_1_1_method_base =
 [
     [ "getAccess", "classrfk_1_1_method_base.html#ac84db76bffdaac6ff5067515722f8075", null ],
     [ "getFlags", "classrfk_1_1_method_base.html#af1aa5961b3b7ed3ca6f6e05dace23fe0", null ],
+    [ "hasSameSignature", "classrfk_1_1_method_base.html#ad6ba1ac83a467c03ddb15a27dfddb4cd", null ],
+    [ "hasSameSignature", "classrfk_1_1_method_base.html#ab4cf4fc4651757271ca1722dff642593", null ],
+    [ "hasSameSignature", "classrfk_1_1_method_base.html#a15ac92b9bad254c23f81627d77da3fb1", null ],
     [ "isConst", "classrfk_1_1_method_base.html#a245d86d1b0f4589ff24fe1dfe2cb648e", null ],
     [ "isFinal", "classrfk_1_1_method_base.html#a75d16a60a86b48455589ef5b55951831", null ],
     [ "isInline", "classrfk_1_1_method_base.html#ab7ea5e396030299b528fde557ed88623", null ],

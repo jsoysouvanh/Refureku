@@ -9,7 +9,7 @@ var classrfk_1_1_function_base =
     [ "getParametersCount", "classrfk_1_1_function_base.html#ae407b16a382f88da360e50b71d3114d9", null ],
     [ "getReturnType", "classrfk_1_1_function_base.html#a6fea621303041e36e1a1ca6e49924be6", null ],
     [ "hasSameParameters", "classrfk_1_1_function_base.html#a5be119a00e22e0a5e2f9132f4f7c24b1", null ],
-    [ "hasSamePrototype", "classrfk_1_1_function_base.html#a05b5561f040c359825de77a03bb9508d", null ],
-    [ "hasSamePrototype", "classrfk_1_1_function_base.html#a2cbcf2ab51ef2cf8120325cf3ca19f78", null ],
+    [ "hasSameSignature", "classrfk_1_1_function_base.html#ad6ba1ac83a467c03ddb15a27dfddb4cd", null ],
+    [ "hasSameSignature", "classrfk_1_1_function_base.html#ab4cf4fc4651757271ca1722dff642593", null ],
     [ "setParametersCapacity", "classrfk_1_1_function_base.html#a7b474932498b2e847270b61c81eb4f9d", null ]
 ];

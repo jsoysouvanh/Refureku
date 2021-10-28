@@ -1,10 +1,11 @@
 var searchData=
 [
-  ['namespace_0',['Namespace',['../namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5ab3ba0fe968ce39dcfc6fe8cc0f1b02da',1,'rfk::Namespace()'],['../classrfk_1_1_namespace.html',1,'rfk::Namespace']]],
-  ['namespacefragment_1',['NamespaceFragment',['../classrfk_1_1_namespace_fragment.html',1,'rfk']]],
-  ['namespacefragmentregisterer_2',['NamespaceFragmentRegisterer',['../classrfk_1_1_namespace_fragment_registerer.html',1,'rfk']]],
-  ['nonmemberfunction_3',['NonMemberFunction',['../classrfk_1_1_non_member_function.html',1,'rfk']]],
-  ['nonmemberfunction_3c_20returntype_28argtypes_2e_2e_2e_29_3e_4',['NonMemberFunction&lt; ReturnType(ArgTypes...)&gt;',['../classrfk_1_1_non_member_function_3_01_return_type_07_arg_types_8_8_8_08_4.html',1,'rfk']]],
-  ['nontypetemplateargument_5',['NonTypeTemplateArgument',['../classrfk_1_1_non_type_template_argument.html',1,'rfk']]],
-  ['nontypetemplateparameter_6',['NonTypeTemplateParameter',['../namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436a37e15cb99940e3823cfd1021267f6442',1,'rfk::NonTypeTemplateParameter()'],['../classrfk_1_1_non_type_template_parameter.html',1,'rfk::NonTypeTemplateParameter']]]
+  ['object_0',['Object',['../classrfk_1_1_object.html',1,'rfk']]],
+  ['operator_28_29_1',['operator()',['../classrfk_1_1_member_function_3_01_caller_type_00_01_return_type_07_arg_types_8_8_8_08_4.html#af279d3c6596cc44e51dd42f90555f828',1,'rfk::MemberFunction&lt; CallerType, ReturnType(ArgTypes...)&gt;::operator()(CallerType &amp;caller, ArgTypes &amp;&amp;... args) const'],['../classrfk_1_1_member_function_3_01_caller_type_00_01_return_type_07_arg_types_8_8_8_08_4.html#a6c2e4855d57bc6eb07bc5064f531bfba',1,'rfk::MemberFunction&lt; CallerType, ReturnType(ArgTypes...)&gt;::operator()(CallerType const &amp;caller, ArgTypes &amp;&amp;... args) const'],['../classrfk_1_1_non_member_function_3_01_return_type_07_arg_types_8_8_8_08_4.html#ae480be339bd4d9ba371e4ebbf4310ee6',1,'rfk::NonMemberFunction&lt; ReturnType(ArgTypes...)&gt;::operator()()']]],
+  ['operator_2a_2',['operator*',['../classrfk_1_1_pimpl.html#a2ebc7d63be7c36f22e9f43394d38cc1e',1,'rfk::Pimpl::operator*() noexcept'],['../classrfk_1_1_pimpl.html#aa03698fdcd4305bb223c59a2eb3adac2',1,'rfk::Pimpl::operator*() const noexcept']]],
+  ['operator_2d_3e_3',['operator-&gt;',['../classrfk_1_1_pimpl.html#ac03f1c453d1380c64c91da6d4e3d01e6',1,'rfk::Pimpl::operator-&gt;() noexcept'],['../classrfk_1_1_pimpl.html#af6aa887db73ef61413c336b75ff24655',1,'rfk::Pimpl::operator-&gt;() const noexcept']]],
+  ['operator_3d_3d_4',['operator==',['../classrfk_1_1_non_type_template_argument.html#aa56e193495cc70e81274941a1f4131ed',1,'rfk::NonTypeTemplateArgument::operator==()'],['../classrfk_1_1_template_argument.html#ab44a2e8ad607f36d7a286eba5b633fd5',1,'rfk::TemplateArgument::operator==()'],['../classrfk_1_1_template_template_argument.html#af3a4b4747c910c88311102b017d2015c',1,'rfk::TemplateTemplateArgument::operator==()'],['../classrfk_1_1_type_template_argument.html#a17c8f71b6247d6d54b9e60948913c92a',1,'rfk::TypeTemplateArgument::operator==()']]],
+  ['operator_5b_5d_5',['operator[]',['../classrfk_1_1_vector.html#a15b44df72a4db5d98fa0754cb3acd7e4',1,'rfk::Vector']]],
+  ['optimizememory_6',['optimizeMemory',['../classrfk_1_1_type.html#a15565c34afb2d1b52e20e08895a261e7',1,'rfk::Type']]],
+  ['override_7',['Override',['../namespacerfk.html#aede2763da2d837a7ee63b105269d5f6ea6da8e67225fdcfa78c3ea5dc3154b849',1,'rfk']]]
 ];

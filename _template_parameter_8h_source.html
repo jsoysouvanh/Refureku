@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -92,37 +93,37 @@ $(document).ready(function(){initNavTree('_template_parameter_8h_source.html',''
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;Refureku/Config.h&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;Refureku/Utility/Pimpl.h&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/ETemplateParameterKind.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerfk.html">rfk</a></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classrfk_1_1_template_parameter.html">   16</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            <a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>(<a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>(<a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classrfk_1_1_template_parameter.html#a4741182146dec59a663d90fdd4ef5b14">   27</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">char</span> <span class="keyword">const</span>*              <a class="code hl_function" href="classrfk_1_1_template_parameter.html#a4741182146dec59a663d90fdd4ef5b14">getName</a>()   const   noexcept;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classrfk_1_1_template_parameter.html#a7b038707ee4b99f79952f6f20b84dba9">   37</a></span>            RFK_NODISCARD REFUREKU_API <a class="code hl_enumeration" href="namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436">ETemplateParameterKind</a>   <a class="code hl_function" href="classrfk_1_1_template_parameter.html#a7b038707ee4b99f79952f6f20b84dba9">getKind</a>()   const   noexcept;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        protected:</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <span class="comment">//Forward declaration</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            class TemplateParameterImpl;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>(TemplateParameterImpl* implementation)  noexcept;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            REFUREKU_INTERNAL ~<a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>()                                      noexcept;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classrfk_1_1_template_parameter.html#a1a390748b904ca58da8a49091b8d7f33">   51</a></span>            RFK_NODISCARD REFUREKU_INTERNAL TemplateParameterImpl*          <a class="code hl_function" href="classrfk_1_1_template_parameter.html#a1a390748b904ca58da8a49091b8d7f33">getPimpl</a>()          noexcept;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>            RFK_NODISCARD REFUREKU_INTERNAL TemplateParameterImpl const*    <a class="code hl_function" href="classrfk_1_1_template_parameter.html#a1a390748b904ca58da8a49091b8d7f33">getPimpl</a>()  const   noexcept;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        private:</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            Pimpl&lt;TemplateParameterImpl&gt; _pimpl;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    };</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>}</div>
-<div class="ttc" id="aclassrfk_1_1_template_parameter_html"><div class="ttname"><a href="classrfk_1_1_template_parameter.html">rfk::TemplateParameter</a></div><div class="ttdef"><b>Definition:</b> TemplateParameter.h:17</div></div>
-<div class="ttc" id="aclassrfk_1_1_template_parameter_html_a1a390748b904ca58da8a49091b8d7f33"><div class="ttname"><a href="classrfk_1_1_template_parameter.html#a1a390748b904ca58da8a49091b8d7f33">rfk::TemplateParameter::getPimpl</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_INTERNAL TemplateParameterImpl * getPimpl() noexcept</div><div class="ttdoc">Get the _pimpl internal pointer.</div></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;Refureku/Misc/Pimpl.h&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;Refureku/Misc/GetPimplMacro.h&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Template/ETemplateParameterKind.h&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerfk.html">rfk</a></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classrfk_1_1_template_parameter.html">   17</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>(<a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            <a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>(<a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classrfk_1_1_template_parameter.html#a4741182146dec59a663d90fdd4ef5b14">   28</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">char</span> <span class="keyword">const</span>*              <a class="code hl_function" href="classrfk_1_1_template_parameter.html#a4741182146dec59a663d90fdd4ef5b14">getName</a>()   const   noexcept;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classrfk_1_1_template_parameter.html#a7b038707ee4b99f79952f6f20b84dba9">   38</a></span>            RFK_NODISCARD REFUREKU_API <a class="code hl_enumeration" href="namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436">ETemplateParameterKind</a>   <a class="code hl_function" href="classrfk_1_1_template_parameter.html#a7b038707ee4b99f79952f6f20b84dba9">getKind</a>()   const   noexcept;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        protected:</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="comment">//Forward declaration</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            class TemplateParameterImpl;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>(TemplateParameterImpl* implementation)  noexcept;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            REFUREKU_INTERNAL ~<a class="code hl_class" href="classrfk_1_1_template_parameter.html">TemplateParameter</a>()                                      noexcept;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            RFK_GEN_GET_PIMPL(TemplateParameterImpl, _pimpl.get())</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        private:</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            <a class="code hl_class" href="classrfk_1_1_pimpl.html">Pimpl</a>&lt;TemplateParameterImpl&gt; _pimpl;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    };</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}</div>
+<div class="ttc" id="aclassrfk_1_1_pimpl_html"><div class="ttname"><a href="classrfk_1_1_pimpl.html">rfk::Pimpl</a></div><div class="ttdef"><b>Definition:</b> Pimpl.h:20</div></div>
+<div class="ttc" id="aclassrfk_1_1_template_parameter_html"><div class="ttname"><a href="classrfk_1_1_template_parameter.html">rfk::TemplateParameter</a></div><div class="ttdef"><b>Definition:</b> TemplateParameter.h:18</div></div>
 <div class="ttc" id="aclassrfk_1_1_template_parameter_html_a4741182146dec59a663d90fdd4ef5b14"><div class="ttname"><a href="classrfk_1_1_template_parameter.html#a4741182146dec59a663d90fdd4ef5b14">rfk::TemplateParameter::getName</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API char const * getName() const noexcept</div><div class="ttdoc">Get the name of the template parameter.</div></div>
 <div class="ttc" id="aclassrfk_1_1_template_parameter_html_a7b038707ee4b99f79952f6f20b84dba9"><div class="ttname"><a href="classrfk_1_1_template_parameter.html#a7b038707ee4b99f79952f6f20b84dba9">rfk::TemplateParameter::getKind</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API ETemplateParameterKind getKind() const noexcept</div><div class="ttdoc">Get the kind of this template parameter. Depending on the kind, the template parameter can safely be ...</div></div>
 <div class="ttc" id="anamespacerfk_html"><div class="ttname"><a href="namespacerfk.html">rfk</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:16</div></div>

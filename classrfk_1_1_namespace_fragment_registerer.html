@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -94,48 +95,16 @@ $(document).ready(function(){initNavTree('classrfk_1_1_namespace_fragment_regist
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aedc0be2bdb6ff9a1bf77356b513800e4"><td class="memItemLeft" align="right" valign="top"><a id="aedc0be2bdb6ff9a1bf77356b513800e4" name="aedc0be2bdb6ff9a1bf77356b513800e4"></a>
-REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>NamespaceFragmentRegisterer</b> (char const *name, std::size_t id, <a class="el" href="classrfk_1_1_namespace_fragment.html">NamespaceFragment</a> const &amp;namespaceFragment, bool isFileLevelNamespace) noexcept</td></tr>
-<tr class="separator:aedc0be2bdb6ff9a1bf77356b513800e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab063a5504f3284777fac5dd3a87bab27"><td class="memItemLeft" align="right" valign="top"><a id="ab063a5504f3284777fac5dd3a87bab27" name="ab063a5504f3284777fac5dd3a87bab27"></a>
+REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>NamespaceFragmentRegisterer</b> (<a class="el" href="classrfk_1_1_namespace_fragment.html">NamespaceFragment</a> const &amp;namespaceFragment) noexcept</td></tr>
+<tr class="separator:ab063a5504f3284777fac5dd3a87bab27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1df9cc46ef2a84ea484f2c1c2442958c"><td class="memItemLeft" align="right" valign="top"><a id="a1df9cc46ef2a84ea484f2c1c2442958c" name="a1df9cc46ef2a84ea484f2c1c2442958c"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>NamespaceFragmentRegisterer</b> (<a class="el" href="classrfk_1_1_namespace_fragment_registerer.html">NamespaceFragmentRegisterer</a> const &amp;)=delete</td></tr>
 <tr class="separator:a1df9cc46ef2a84ea484f2c1c2442958c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4229164cc5ce99b21df1ed268bcc4a8c"><td class="memItemLeft" align="right" valign="top"><a id="a4229164cc5ce99b21df1ed268bcc4a8c" name="a4229164cc5ce99b21df1ed268bcc4a8c"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>NamespaceFragmentRegisterer</b> (<a class="el" href="classrfk_1_1_namespace_fragment_registerer.html">NamespaceFragmentRegisterer</a> &amp;&amp;)=delete</td></tr>
 <tr class="separator:a4229164cc5ce99b21df1ed268bcc4a8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67b5fa745d3ca1caf4aba427e4779d36"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_namespace_fragment_registerer.html#a67b5fa745d3ca1caf4aba427e4779d36">getNamespaceInstance</a> () const noexcept</td></tr>
-<tr class="memdesc:a67b5fa745d3ca1caf4aba427e4779d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the namespace instance this fragment has been merged to.  <a href="classrfk_1_1_namespace_fragment_registerer.html#a67b5fa745d3ca1caf4aba427e4779d36">More...</a><br /></td></tr>
-<tr class="separator:a67b5fa745d3ca1caf4aba427e4779d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a67b5fa745d3ca1caf4aba427e4779d36" name="a67b5fa745d3ca1caf4aba427e4779d36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67b5fa745d3ca1caf4aba427e4779d36">&#9670;&nbsp;</a></span>getNamespaceInstance()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_namespace.html">Namespace</a> const  * rfk::NamespaceFragmentRegisterer::getNamespaceInstance </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the namespace instance this fragment has been merged to. </p>
-<dl class="section return"><dt>Returns</dt><dd>The namespace instance this fragment has been merged to. </dd></dl>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>Refureku/Library/Include/Public/Refureku/TypeInfo/Namespace/<a class="el" href="_namespace_fragment_registerer_8h_source.html">NamespaceFragmentRegisterer.h</a></li>
 </ul>

@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -96,21 +97,23 @@ $(document).ready(function(){initNavTree('_property_settings_8h_source.html','')
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;Refureku/Generated/PropertySettings.rfkh.h&quot;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">class </span>REFUREKU_API RFKClass(PropertySettings(<a class="code hl_namespace" href="namespacerfk.html">rfk</a>::EEntityKind::Struct | <a class="code hl_enumvalue" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a9bd81329febf6efe22788e03ddeaf0af">rfk::EEntityKind::Class</a>)) PropertySettings : <span class="keyword">public</span> <a class="code hl_class" href="classrfk_1_1_property.html">rfk::Property</a></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>{</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        PropertySettings(<a class="code hl_enumeration" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5">rfk::EEntityKind</a>   targetEntityKind_,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                         <span class="keywordtype">bool</span>               allowMultiple_ = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                         <span class="keywordtype">bool</span>               shouldInherit_ = <span class="keyword">true</span>)  noexcept;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    PropertySettings_GENERATED</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>};</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>File_PropertySettings_GENERATED</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerfk.html">rfk</a> RFKNamespace()</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keyword">class </span>REFUREKU_API RFKClass(<a class="code hl_namespace" href="namespacerfk.html">rfk</a>::PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class)) PropertySettings : <span class="keyword">public</span> <a class="code hl_class" href="classrfk_1_1_property.html">rfk::Property</a></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        PropertySettings(<a class="code hl_enumeration" href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5">rfk::EEntityKind</a>   targetEntityKind_,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                         <span class="keywordtype">bool</span>               allowMultiple_ = <span class="keyword">false</span>,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                         <span class="keywordtype">bool</span>               shouldInherit_ = <span class="keyword">true</span>)  noexcept;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        rfk_PropertySettings_GENERATED</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    };</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>File_PropertySettings_GENERATED</div>
 <div class="ttc" id="aclassrfk_1_1_property_html"><div class="ttname"><a href="classrfk_1_1_property.html">rfk::Property</a></div><div class="ttdoc">Base class to inherit from to define new properties.</div><div class="ttdef"><b>Definition:</b> Property.h:23</div></div>
 <div class="ttc" id="anamespacerfk_html"><div class="ttname"><a href="namespacerfk.html">rfk</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:16</div></div>
 <div class="ttc" id="anamespacerfk_html_af958ab385009c79cc3a27e9b3183c5d5"><div class="ttname"><a href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5">rfk::EEntityKind</a></div><div class="ttdeci">EEntityKind</div><div class="ttdef"><b>Definition:</b> EEntityKind.h:20</div></div>
-<div class="ttc" id="anamespacerfk_html_af958ab385009c79cc3a27e9b3183c5d5a9bd81329febf6efe22788e03ddeaf0af"><div class="ttname"><a href="namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a9bd81329febf6efe22788e03ddeaf0af">rfk::EEntityKind::Class</a></div><div class="ttdeci">@ Class</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

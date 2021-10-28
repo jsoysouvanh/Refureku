@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -125,29 +126,41 @@ $(document).ready(function(){initNavTree('_variable_8h_source.html',''); initRes
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="classrfk_1_1_variable.html#a6b69e1abfacfbe41e19bccaba2474862">   85</a></span>            RFK_NODISCARD REFUREKU_API <a class="code hl_enumeration" href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aec">EVarFlags</a>    <a class="code hl_function" href="classrfk_1_1_variable.html#a6b69e1abfacfbe41e19bccaba2474862">getFlags</a>()                      const   noexcept;</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="classrfk_1_1_variable.html#a9df621b0d60f04d98da87325ce536c7a">   93</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">void</span>*        <a class="code hl_function" href="classrfk_1_1_variable.html#a9df621b0d60f04d98da87325ce536c7a">getPtr</a>()                        const   noexcept;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classrfk_1_1_variable.html#a399d570bb235a29c776058182467bced">  100</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">void</span> const*  <a class="code hl_function" href="classrfk_1_1_variable.html#a399d570bb235a29c776058182467bced">getConstPtr</a>()                   const   noexcept;</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        protected:</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            <span class="comment">//Forward declaration</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>            class VariableImpl;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    };</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="preprocessor">#include &quot;Refureku/TypeInfo/Variables/Variable.inl&quot;</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>}</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="classrfk_1_1_variable.html#a4162f6d459ac93dc1fae68b901c41b9e">   95</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">void</span>*        <a class="code hl_function" href="classrfk_1_1_variable.html#a4162f6d459ac93dc1fae68b901c41b9e">getPtr</a>()                        const;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="classrfk_1_1_variable.html#a399d570bb235a29c776058182467bced">  102</a></span>            RFK_NODISCARD REFUREKU_API <span class="keywordtype">void</span> const*  <a class="code hl_function" href="classrfk_1_1_variable.html#a399d570bb235a29c776058182467bced">getConstPtr</a>()                   const   noexcept;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        protected:</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>            <span class="comment">//Forward declaration</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            class VariableImpl;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            RFK_GEN_GET_PIMPL(VariableImpl, <a class="code hl_class" href="classrfk_1_1_entity.html">Entity</a>::getPimpl())</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    };</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    template &lt;auto VarPtr&gt;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="namespacerfk.html#af55da8c89d51267742385f317f8074ee">  113</a></span>    <a class="code hl_class" href="classrfk_1_1_variable.html">Variable</a> const* <a class="code hl_function" href="namespacerfk.html#af55da8c89d51267742385f317f8074ee">getVariable</a>() noexcept;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    REFUREKU_TEMPLATE_API(<a class="code hl_namespace" href="namespacerfk.html">rfk</a>::<a class="code hl_class" href="classrfk_1_1_allocator.html">Allocator</a>&lt;<a class="code hl_class" href="classrfk_1_1_variable.html">Variable</a> const*&gt;);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    REFUREKU_TEMPLATE_API(<a class="code hl_namespace" href="namespacerfk.html">rfk</a>::<a class="code hl_class" href="classrfk_1_1_vector.html">Vector</a>&lt;<a class="code hl_class" href="classrfk_1_1_variable.html">Variable</a> const*, <a class="code hl_namespace" href="namespacerfk.html">rfk</a>::<a class="code hl_class" href="classrfk_1_1_allocator.html">Allocator</a>&lt;<a class="code hl_class" href="classrfk_1_1_variable.html">Variable</a> const*&gt;&gt;);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="preprocessor">#include &quot;Refureku/TypeInfo/Variables/Variable.inl&quot;</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>}</div>
+<div class="ttc" id="aclassrfk_1_1_allocator_html"><div class="ttname"><a href="classrfk_1_1_allocator.html">rfk::Allocator</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:19</div></div>
+<div class="ttc" id="aclassrfk_1_1_entity_html"><div class="ttname"><a href="classrfk_1_1_entity.html">rfk::Entity</a></div><div class="ttdef"><b>Definition:</b> Entity.h:29</div></div>
 <div class="ttc" id="aclassrfk_1_1_type_html"><div class="ttname"><a href="classrfk_1_1_type.html">rfk::Type</a></div><div class="ttdef"><b>Definition:</b> Type.h:20</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_base_html"><div class="ttname"><a href="classrfk_1_1_variable_base.html">rfk::VariableBase</a></div><div class="ttdef"><b>Definition:</b> VariableBase.h:20</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html"><div class="ttname"><a href="classrfk_1_1_variable.html">rfk::Variable</a></div><div class="ttdef"><b>Definition:</b> Variable.h:16</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html_a277c1b6b0fe516f99345e3076e2d2c64"><div class="ttname"><a href="classrfk_1_1_variable.html#a277c1b6b0fe516f99345e3076e2d2c64">rfk::Variable::get</a></div><div class="ttdeci">RFK_NODISCARD ValueType get() const</div><div class="ttdoc">Get the value stored in this variable. This method in not safe if you provide a wrong ValueType.</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html_a399d570bb235a29c776058182467bced"><div class="ttname"><a href="classrfk_1_1_variable.html#a399d570bb235a29c776058182467bced">rfk::Variable::getConstPtr</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API void const * getConstPtr() const noexcept</div><div class="ttdoc">Get a const pointer to this static field.</div></div>
+<div class="ttc" id="aclassrfk_1_1_variable_html_a4162f6d459ac93dc1fae68b901c41b9e"><div class="ttname"><a href="classrfk_1_1_variable.html#a4162f6d459ac93dc1fae68b901c41b9e">rfk::Variable::getPtr</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API void * getPtr() const</div><div class="ttdoc">Get a non-const pointer to this variable. Performing non-const operations with the pointer if the var...</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html_a6b67a809913a70f57cf7f89a29c5a848"><div class="ttname"><a href="classrfk_1_1_variable.html#a6b67a809913a70f57cf7f89a29c5a848">rfk::Variable::isStatic</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API bool isStatic() const noexcept</div><div class="ttdoc">Check if this variable is static.</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html_a6b69e1abfacfbe41e19bccaba2474862"><div class="ttname"><a href="classrfk_1_1_variable.html#a6b69e1abfacfbe41e19bccaba2474862">rfk::Variable::getFlags</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API EVarFlags getFlags() const noexcept</div><div class="ttdoc">Getter for the field _flags.</div></div>
-<div class="ttc" id="aclassrfk_1_1_variable_html_a9df621b0d60f04d98da87325ce536c7a"><div class="ttname"><a href="classrfk_1_1_variable.html#a9df621b0d60f04d98da87325ce536c7a">rfk::Variable::getPtr</a></div><div class="ttdeci">RFK_NODISCARD REFUREKU_API void * getPtr() const noexcept</div><div class="ttdoc">Get a non-const pointer to this variable. Performing non-const operations with the pointer if the var...</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html_ad896623c50b95b696bec33a45e0b8744"><div class="ttname"><a href="classrfk_1_1_variable.html#ad896623c50b95b696bec33a45e0b8744">rfk::Variable::set</a></div><div class="ttdeci">void set(ValueType &amp;&amp;value) const</div><div class="ttdoc">Set some value in this variable. This method is not safe if you provide a wrong ValueType.</div></div>
 <div class="ttc" id="aclassrfk_1_1_variable_html_aee8cc17c37e722063495b566be790633"><div class="ttname"><a href="classrfk_1_1_variable.html#aee8cc17c37e722063495b566be790633">rfk::Variable::set</a></div><div class="ttdeci">REFUREKU_API void set(void const *valuePtr, std::size_t valueSize) const</div><div class="ttdoc">Copy dataSize bytes starting from value into the variable.</div></div>
+<div class="ttc" id="aclassrfk_1_1_vector_html"><div class="ttname"><a href="classrfk_1_1_vector.html">rfk::Vector</a></div><div class="ttdef"><b>Definition:</b> Vector.h:19</div></div>
 <div class="ttc" id="anamespacerfk_html"><div class="ttname"><a href="namespacerfk.html">rfk</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:16</div></div>
 <div class="ttc" id="anamespacerfk_html_ad7021d9a638af321b6538f58856a0aec"><div class="ttname"><a href="namespacerfk.html#ad7021d9a638af321b6538f58856a0aec">rfk::EVarFlags</a></div><div class="ttdeci">EVarFlags</div><div class="ttdef"><b>Definition:</b> EVarFlags.h:16</div></div>
+<div class="ttc" id="anamespacerfk_html_af55da8c89d51267742385f317f8074ee"><div class="ttname"><a href="namespacerfk.html#af55da8c89d51267742385f317f8074ee">rfk::getVariable</a></div><div class="ttdeci">Variable const * getVariable() noexcept</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

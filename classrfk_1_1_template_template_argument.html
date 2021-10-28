@@ -26,10 +26,11 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;2.0.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.0</span>
    </div>
-   <div id="projectbrief">C++17 RTTI-free runtime reflection library.</div>
+   <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
  </tr>
  </tbody>
@@ -103,9 +104,9 @@ Inheritance diagram for rfk::TemplateTemplateArgument:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a948e481cf6967e2723641b5a91ccb9d5"><td class="memItemLeft" align="right" valign="top"><a id="a948e481cf6967e2723641b5a91ccb9d5" name="a948e481cf6967e2723641b5a91ccb9d5"></a>
-REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>TemplateTemplateArgument</b> (<a class="el" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> const &amp;boundParameter, <a class="el" href="classrfk_1_1_class_template.html">ClassTemplate</a> const *value) noexcept</td></tr>
-<tr class="separator:a948e481cf6967e2723641b5a91ccb9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcb122986f354faafa421bbed7d50e47"><td class="memItemLeft" align="right" valign="top"><a id="afcb122986f354faafa421bbed7d50e47" name="afcb122986f354faafa421bbed7d50e47"></a>
+REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>TemplateTemplateArgument</b> (<a class="el" href="classrfk_1_1_class_template.html">ClassTemplate</a> const *value) noexcept</td></tr>
+<tr class="separator:afcb122986f354faafa421bbed7d50e47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4b31a15efa8cdeb4445a8445d433e89"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_class_template.html">ClassTemplate</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_template_argument.html#ac4b31a15efa8cdeb4445a8445d433e89">getClassTemplate</a> () const noexcept</td></tr>
 <tr class="memdesc:ac4b31a15efa8cdeb4445a8445d433e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the class template provided as argument. It can be nullptr if the class template is not a reflected type.  <a href="classrfk_1_1_template_template_argument.html#ac4b31a15efa8cdeb4445a8445d433e89">More...</a><br /></td></tr>
 <tr class="separator:ac4b31a15efa8cdeb4445a8445d433e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -122,9 +123,9 @@ RFK_NODISCARD REFUREKU_API bool&#160;</td><td class="memItemRight" valign="botto
 <tr class="memitem:a9555caa0dbaa866e2714babdb8cae198 inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top"><a id="a9555caa0dbaa866e2714babdb8cae198" name="a9555caa0dbaa866e2714babdb8cae198"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TemplateArgument</b> (<a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> &amp;&amp;)=delete</td></tr>
 <tr class="separator:a9555caa0dbaa866e2714babdb8cae198 inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68688d5a305ca825665e03d60f2599aa inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_template_parameter.html">TemplateParameter</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#a68688d5a305ca825665e03d60f2599aa">getBoundParameter</a> () const noexcept</td></tr>
-<tr class="memdesc:a68688d5a305ca825665e03d60f2599aa inherit pub_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the field _boundParameter.  <a href="classrfk_1_1_template_argument.html#a68688d5a305ca825665e03d60f2599aa">More...</a><br /></td></tr>
-<tr class="separator:a68688d5a305ca825665e03d60f2599aa inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afffca726306ad503cfa718316ccfe87b inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="namespacerfk.html#a75fcf8efe3ec8979b52e19942b884436">ETemplateParameterKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#afffca726306ad503cfa718316ccfe87b">getKind</a> () const noexcept</td></tr>
+<tr class="memdesc:afffca726306ad503cfa718316ccfe87b inherit pub_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the kind of template parameter this argument is based on.  <a href="classrfk_1_1_template_argument.html#afffca726306ad503cfa718316ccfe87b">More...</a><br /></td></tr>
+<tr class="separator:afffca726306ad503cfa718316ccfe87b inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab44a2e8ad607f36d7a286eba5b633fd5 inherit pub_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#ab44a2e8ad607f36d7a286eba5b633fd5">operator==</a> (<a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> const &amp;other) const noexcept</td></tr>
 <tr class="memdesc:ab44a2e8ad607f36d7a286eba5b633fd5 inherit pub_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether 2 <a class="el" href="classrfk_1_1_template_argument.html">TemplateArgument</a> instances are equal or not.  <a href="classrfk_1_1_template_argument.html#ab44a2e8ad607f36d7a286eba5b633fd5">More...</a><br /></td></tr>
 <tr class="separator:ab44a2e8ad607f36d7a286eba5b633fd5 inherit pub_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,15 +139,6 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a6c4cbf826b97a72e0c8ef4058cdb9960 inherit pro_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top"><a id="a6c4cbf826b97a72e0c8ef4058cdb9960" name="a6c4cbf826b97a72e0c8ef4058cdb9960"></a>
 REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>TemplateArgument</b> (TemplateArgumentImpl *implementation) noexcept</td></tr>
 <tr class="separator:a6c4cbf826b97a72e0c8ef4058cdb9960 inherit pro_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf065679dd8baa99f8d8c4c8a6c25098 inherit pro_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#aaf065679dd8baa99f8d8c4c8a6c25098">getPimpl</a> () noexcept</td></tr>
-<tr class="memdesc:aaf065679dd8baa99f8d8c4c8a6c25098 inherit pro_methods_classrfk_1_1_template_argument"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the _pimpl internal pointer.  <a href="classrfk_1_1_template_argument.html#aaf065679dd8baa99f8d8c4c8a6c25098">More...</a><br /></td></tr>
-<tr class="separator:aaf065679dd8baa99f8d8c4c8a6c25098 inherit pro_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c723b788ff7009fe02468a72fa16028 inherit pro_methods_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top"><a id="a4c723b788ff7009fe02468a72fa16028" name="a4c723b788ff7009fe02468a72fa16028"></a>
-RFK_NODISCARD REFUREKU_INTERNAL TemplateArgumentImpl const *&#160;</td><td class="memItemRight" valign="bottom"><b>getPimpl</b> () const noexcept</td></tr>
-<tr class="separator:a4c723b788ff7009fe02468a72fa16028 inherit pro_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classrfk_1_1_template_argument"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrfk_1_1_template_argument')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrfk_1_1_template_argument.html">rfk::TemplateArgument</a></td></tr>
-<tr class="memitem:adb098e46bf2ddb5e25e4f2419de3e0dd inherit pro_attribs_classrfk_1_1_template_argument"><td class="memItemLeft" align="right" valign="top">Pimpl&lt; TemplateArgumentImpl &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_template_argument.html#adb098e46bf2ddb5e25e4f2419de3e0dd">_pimpl</a></td></tr>
-<tr class="separator:adb098e46bf2ddb5e25e4f2419de3e0dd inherit pro_attribs_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ac4b31a15efa8cdeb4445a8445d433e89" name="ac4b31a15efa8cdeb4445a8445d433e89"></a>
