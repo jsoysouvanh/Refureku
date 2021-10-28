@@ -38,13 +38,17 @@ bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::Pa
 	codeGenMgrSettings.addIgnoredDirectory(outputDirectory);
 
 	result &= codeGenUnitSettings.setOutputDirectory(outputDirectory);
+	codeGenUnitSettings.setGeneratedHeaderFileNamePattern("##FILENAME##.rfkh.h");
+	codeGenUnitSettings.setGeneratedSourceFileNamePattern("##FILENAME##.rfks.h");
+	codeGenUnitSettings.setClassFooterMacroPattern("##CLASSFULLNAME##_GENERATED");
+	codeGenUnitSettings.setHeaderFileFooterMacroPattern("File_##FILENAME##_GENERATED");
 	//codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
 	//codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
 
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 	parsingSettings.shouldParseAllEntities = false;
 	parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Public");
-	result &= parsingSettings.setCompilerExeName("msvc");
+	result &= parsingSettings.setCompilerExeName("clang++");
 
 	parsingSettings.propertyParsingSettings.namespaceMacroName	= "RFKNamespace";
 	parsingSettings.propertyParsingSettings.classMacroName		= "RFKClass";

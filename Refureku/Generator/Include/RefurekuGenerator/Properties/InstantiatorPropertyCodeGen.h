@@ -15,14 +15,34 @@ namespace rfk
 	class InstantiatorPropertyCodeGen : public kodgen::MacroPropertyCodeGen
 	{
 		protected:
-			virtual bool	generateClassFooterCodeForEntity(kodgen::EntityInfo const&	entity,
-															 kodgen::Property const&	property,
-															 kodgen::uint8				propertyIndex,
-															 kodgen::MacroCodeGenEnv&	env,
-															 std::string&				inout_result)	noexcept	override;
+			virtual bool generateClassFooterCodeForEntity(kodgen::EntityInfo const& entity, kodgen::Property const& /*property*/,
+														  kodgen::uint8 /*propertyIndex*/, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept override
+			{
+				kodgen::MethodInfo const&	method		= static_cast<kodgen::MethodInfo const&>(entity);
+				std::string					className	= method.outerEntity->getFullName();
+				std::string					parameters	= method.getParameterTypes();
+				std::string					methodPtr	= "&" + className + "::" + method.name;
+
+				if (parameters.empty())
+				{
+					//SharedInstantiator with no parameters
+					inout_result += "static_assert(std::is_invocable_r_v<rfk::SharedPtr<" + className + ">, decltype(" + methodPtr + ")>,"
+						"\"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "* .\");" + env.getSeparator();
+				}
+				else
+				{
+					inout_result += "static_assert(std::is_invocable_r_v<rfk::SharedPtr<" + className + ">, decltype(" + methodPtr + "), " + std::move(parameters) + ">,"
+						"\"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");" + env.getSeparator();
+				}
+
+				return true;
+			}
 
 		public:
-			InstantiatorPropertyCodeGen() noexcept;
+			InstantiatorPropertyCodeGen() noexcept:
+				kodgen::MacroPropertyCodeGen("rfk::Instantiator", kodgen::EEntityType::Method)
+			{
+			}
 
 			/**
 			*	@brief Generate code to add a custom instantiator to the generated class the method belongs to.
@@ -33,9 +53,10 @@ namespace rfk
 			*	@param generatedMethodVarName	Name of the rfk::StaticMethod variable in the generated code (the variable must be a pointer).
 			*	@param inout_result				String to append the generated code.
 			*/
-			void	addInstantiatorToClass(kodgen::Property const&	property,
-										   std::string const&		generatedClassVarName,
-										   std::string const&		generatedMethodVarName,
-										   std::string&				inout_result)				const	noexcept;
+			void addInstantiatorToClass(kodgen::Property const& /*property*/, std::string const& generatedClassVarName,
+										std::string const& generatedMethodVarName, std::string& inout_result) const noexcept
+			{
+				inout_result += generatedClassVarName + "addSharedInstantiator(*" + generatedMethodVarName + "); ";
+			}
 	};
 }

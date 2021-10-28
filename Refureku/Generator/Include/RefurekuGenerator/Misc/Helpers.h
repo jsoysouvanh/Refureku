@@ -29,7 +29,7 @@ namespace rfk
 			*	
 			*	@return The converted value.
 			*/
-			constexpr static kodgen::uint16 convertToEntityKind(kodgen::EEntityType entityType)			noexcept;
+			constexpr static kodgen::uint16 convertToEntityKind(kodgen::EEntityType entityType) noexcept;
 	};
 
 	#include "RefurekuGenerator/Misc/Helpers.inl"

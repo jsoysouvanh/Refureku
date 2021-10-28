@@ -5,37 +5,22 @@ project(RefurekuGenerator)
 # Build dependencies
 add_subdirectory(ThirdParty/Kodgen)
 
-# Add Refureku generator executable
-set(RefurekuGeneratorLibTarget RefurekuGeneratorLib)
-add_library(${RefurekuGeneratorLibTarget}
-				STATIC
-					Source/Properties/InstantiatorPropertyCodeGen.cpp
-					Source/Properties/PropertySettingsPropertyCodeGen.cpp
+set(RefurekuGeneratorExeTarget RefurekuGenerator)
+add_executable(${RefurekuGeneratorExeTarget} Source/main.cpp)
 
-					Source/Parsing/FileParser.cpp
-					
-					Source/CodeGen/ReflectionCodeGenModule.cpp
-				)
+# Setup compilation definitions
+if (RFK_DEV)
+	target_compile_definitions(${RefurekuGeneratorExeTarget} PUBLIC RFK_DEV=1)
+endif()
 
 # Warning level
 if (MSVC)
 	string(REGEX REPLACE " /W3" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Remove the default flag /W3 - get /W4 propagated from Kodgen
 endif()
 
-# Setup compilation definitions
-if (RFK_DEV)
-	target_compile_definitions(${RefurekuGeneratorLibTarget} PUBLIC RFK_DEV=1)
-endif()
+target_include_directories(${RefurekuGeneratorExeTarget} PUBLIC Include)
 
-target_include_directories(${RefurekuGeneratorLibTarget} PUBLIC Include)
-
-# Link to Kodgen library
-target_link_libraries(${RefurekuGeneratorLibTarget} PUBLIC Kodgen)
-
-set(RefurekuGeneratorExeTarget RefurekuGenerator)
-add_executable(${RefurekuGeneratorExeTarget} Source/main.cpp)
-
-target_link_libraries(${RefurekuGeneratorExeTarget} PRIVATE ${RefurekuGeneratorLibTarget})
+target_link_libraries(${RefurekuGeneratorExeTarget} PUBLIC Kodgen)
 
 # Copy the RefurekuSettings template file next to the generated binary
 add_custom_command(	TARGET ${RefurekuGeneratorExeTarget} PRE_BUILD
