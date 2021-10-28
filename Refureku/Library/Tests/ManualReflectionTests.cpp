@@ -5,6 +5,7 @@
 
 #include "ManualEnumReflection.h"
 #include "ManualClassReflection.h"
+#include "ManualClassTemplateReflection.h"
 
 //=========================================================
 //================ Enum manual reflection =================
@@ -61,6 +62,73 @@ TEST(Rfk_ManualReflection, ClassContent)
 	EXPECT_EQ(c->getMethodByName("getProtectedField")->invoke<int&>(instance), 0);
 	EXPECT_NO_THROW(c->getMethodByName("getProtectedField")->invoke<int&>(instance) = 42);
 	EXPECT_EQ(c->getMethodByName("getProtectedField")->invoke<int&>(instance), 42);
+}
+
+//=========================================================
+//============ Class template manual reflection ===========
+//=========================================================
+
+TEST(Rfk_ManualReflection, VectorDatabase)
+{
+	rfk::Class const* c = rfk::getDatabase().getFileLevelClassByName("Vector");
+
+	EXPECT_NE(c, nullptr);
+	EXPECT_NE(rfk::classTemplateCast(c), nullptr);
+}
+
+TEST(Rfk_ManualReflection, VectorInstantiation)
+{
+	VectorDerived<int> vec2;
+
+	rfk::ClassTemplate const* c = rfk::classTemplateCast(rfk::getDatabase().getFileLevelClassByName("Vector"));
+
+	EXPECT_EQ(c->getTemplateInstantiationsCount(), 1u);
+
+	rfk::TypeTemplateArgument arg1(rfk::getArchetype<int>());
+	rfk::TemplateArgument const* args[] = { &arg1 };
+
+	rfk::ClassTemplateInstantiation const* inst = c->getTemplateInstantiation(args);
+
+	EXPECT_NE(inst, nullptr);
+	EXPECT_NE(rfk::getDatabase().getClassById(inst->getId()), nullptr);
+}
+
+TEST(Rfk_ManualReflection, VectorMethods)
+{
+	rfk::ClassTemplateInstantiation const& c = VectorDerived<int>::staticGetArchetype();
+	rfk::Method const* push_backRefMethod = c.getMethodByName<void(int const&)>("push_back", rfk::EMethodFlags::Default, true);
+	rfk::Method const* push_backRValMethod = c.getMethodByName<void(int&&)>("push_back", rfk::EMethodFlags::Default, true);
+	rfk::Method const* resizeMethod = c.getMethodByName("resize", rfk::EMethodFlags::Default, true);
+	rfk::Method const* sizeMethod = c.getMethodByName("size", rfk::EMethodFlags::Default, true);
+	rfk::Method const* accessOperator = c.getMethodByName("operator[]", rfk::EMethodFlags::Default, true);
+
+	VectorDerived<int> vec2;
+
+	//size
+	EXPECT_EQ(vec2.size(), 0u);
+	EXPECT_EQ(vec2.size(), sizeMethod->invoke<std::size_t>(vec2));
+
+	//push_back
+	int toPushBack = 42;
+	EXPECT_NO_THROW(push_backRefMethod->invoke(vec2, toPushBack));
+	EXPECT_NO_THROW((push_backRValMethod->invoke<void, decltype(vec2), int&&>(vec2, 43)));
+
+	EXPECT_EQ(vec2.size(), 2u);
+	EXPECT_EQ(vec2.size(), sizeMethod->invoke<std::size_t>(vec2));
+	EXPECT_EQ(vec2[0], 42);
+	EXPECT_EQ(vec2[1], 43);
+
+	//resize
+	EXPECT_NO_THROW(resizeMethod->invoke(vec2, 42u));
+
+	EXPECT_EQ(vec2.size(), 42u);
+	EXPECT_EQ(vec2.size(), sizeMethod->invoke<std::size_t>(vec2));
+	EXPECT_EQ(vec2[0], 42);
+	EXPECT_EQ(vec2[1], 43);
+
+	//operator[]
+	EXPECT_NO_THROW((accessOperator->invoke<int&, decltype(vec2), std::size_t>(vec2, 0) = 1));
+	EXPECT_EQ(vec2[0], 1);
 }
 
 //=========================================================

@@ -33,6 +33,7 @@ add_executable(${RefurekuTestsTarget}
 					Src/TestDatabase.cpp
 					Src/ManualEnumReflection.cpp
 					Src/ManualClassReflection.cpp
+					Src/ManualClassTemplateReflection.cpp
 					Src/ManualVariableReflection.cpp
 					Src/ManualFunctionReflection.cpp
 					Src/ManualNamespaceReflection.cpp

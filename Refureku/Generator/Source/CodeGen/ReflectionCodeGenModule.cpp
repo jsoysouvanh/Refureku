@@ -573,18 +573,9 @@ void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& st
 
 		for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
 		{
-			if (parent.type.isTemplateType())
-			{
-				inout_result += generatedEntityVarName + "addDirectParent("
-					"rfk::getArchetype<" + parent.type.getName(true, false, true) + ">(), "
-					"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
-			}
-			else
-			{
-				inout_result += generatedEntityVarName + "addDirectParent("
-					"rfk::getArchetype<" + parent.type.getName(true) + ">(), "
-					"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
-			}
+			inout_result += generatedEntityVarName + "addDirectParent("
+				"rfk::getArchetype<" + parent.type.getName(true) + ">(), "
+				"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(parent.inheritanceAccess)) + "));" + env.getSeparator();
 		}
 	}
 }
@@ -973,7 +964,7 @@ void ReflectionCodeGenModule::defineClassTemplateGetArchetypeTemplateSpecializat
 	fillEntityProperties(structClass, env, "type.", inout_result);
 
 	//Class template has no fields / methods until it is instantiated (no memory address).
-	fillClassParents(structClass, env, "type.", inout_result);
+	//Likewise, the parent type can depend on the template params which are not accessible from this method, so omit them
 	fillClassTemplateParameters(structClass, "type.", env, inout_result);
 
 	//End init if
