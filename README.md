@@ -22,17 +22,27 @@ It is split in 2 parts:
 - Reflect namespaces, classes, (static) methods, (static) fields, variables, functions, enums and enum values
 - Support runtime loaded/unloaded dynamic library reflection
 - Support class template reflection, as well as multiple inheritance
+- Entities do not need to be included to be manipulated
 - Reflected entities can be retrieved by name, id or predicate
 - Read/write reflected fields/variables value
 - Call reflected functions/methods
-- Instantiate reflected class
+- Instantiate reflected classes without access to their static type
 - Access dynamic type of an object instance through a base pointer/reference
 - Powerful property system allowing to attach custom metadata to any entity
 - Reflection metadata is regenerated only when a file has changed
 - Customizable code generation
 
-# Examples
+## Design goals
+There are different approaches to add reflection to a C++ program:  
+1. Write the reflected entities inside a macro that will parse the entity declaration and expand to the reflection metadata. This option completely alter the way to write entities (classes for example), and quickly becomes unreadble.
+2. Declare entities first, and reflect each of them manually afterwards using macros. The code stays readable, however the user has to write everything twice, which is both time-consuming and error-prone.
 
+Refureku uses a third approach that solves most of the above problems: code generation. The user annotates the entities they want to reflect, and when the project is compiled, reflected entities are parsed and c++ code is generated in separate files. The user just has to include the generated files in their own files, write a few macros, and done.  
+This solution is not a pure win though. There is no simple and transparent way (yet) to add reflection to C++ and each approach comes with its own pros and cons.  
+
+Refureku was initially developed with game engine development in mind, which greatly influenced the global design and architecture. The ability to generate and inject custom generated code without changing the project source files might be a reason to choose Refureku over another library.
+
+# Examples
 ## Reflect a class
 
 ```cpp
@@ -119,10 +129,10 @@ int returnedValue = method->invoke<int>(instance, 1, 2, 3);
 ```cpp
 rfk::Class const* c = rfk::getDatabase().getFileLevelClassByName("TestClass");
 
-rfk::SharedPtr<TestClass> instance = c->makeInstance<TestClass>(); //Instantiate from default ctor
+rfk::SharedPtr<TestClass> instance = c->makeSharedInstance<TestClass>(); //Instantiate from default ctor
 
 //If TestClass has a base class, we can do
-rfk::SharedPtr<BaseClass> instance2 = c->makeInstance<BaseClass>();
+rfk::SharedPtr<BaseClass> instance2 = c->makeSharedInstance<BaseClass>();
 ```
 
 It is also possible to instantiate a class with parameters, by providing a custom instantiator when declaring the class:
@@ -136,7 +146,7 @@ It is also possible to instantiate a class with parameters, by providing a custo
 
 class CLASS() TestClass2 : public BaseClass
 {
-    METHOD(Instantiator)
+    METHOD(rfk::Instantiator)
     static rfk::SharedPtr<TestClass2> customInstantiator(int i)
     {
         //Use this if there is no custom deleter
@@ -163,7 +173,7 @@ File_TestClass2_GENERATED
 ```cpp
 rfk::Class const* c2 = rfk::getDatabase().getFileLevelClassByName("TestClass2");
 
-rfk::SharedPtr<BaseClass> instance3 = c2->makeInstance<BaseClass>(42); //Call customInstantiator
+rfk::SharedPtr<BaseClass> instance3 = c2->makeSharedInstance<BaseClass>(42); //Call customInstantiator
 ```
 
 ## Create custom properties
@@ -173,9 +183,10 @@ rfk::SharedPtr<BaseClass> instance3 = c2->makeInstance<BaseClass>(42); //Call cu
 #pragma once
 
 #include <Refureku/Properties/PropertySettings.h>
+
 #include "Generated/ExampleProperty.rfkh.h"
 
-class CLASS(PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class))
+class CLASS(rfk::PropertySettings(rfk::EEntityKind::Struct | rfk::EEntityKind::Class))
     ExampleProperty : public rfk::Property
 {
     public:
@@ -201,7 +212,7 @@ Then, we can attach ExampleProperty to any reflected struct or class, as specifi
 //TestClass3.h
 #pragma once
 
-#include "Slider.h" //Include the custom property first
+#include "ExampleProperty.h" //Include the custom property first
 #include "Generated/TestClass3.rfkh.h"
 
 class CLASS(ExampleProperty(42)) TestClass3
@@ -226,7 +237,7 @@ rfk::Class const* c = rfk::getDatabase().getFileLevelClassByName("TestClass3");
 rfk::Property const* prop = c->getPropertyByName("ExampleProperty");
 
 //From static type
-CustomProperty const* prop2 = c->getProperty<CustomProperty>();
+ExampleProperty const* prop2 = c->getProperty<ExampleProperty>();
 ```
 
 # Cross-platform compatibility
