@@ -30,12 +30,14 @@ jobs:
         if: startsWith(github.event.ref, 'refs/tags/v')
         uses: jacobtomlinson/gha-find-replace@v2
         with:
-          find: "PROJECT_NUMBER += v[0-9]+.[0-9]+.[0-9]+"
+          find: "PROJECT_NUMBER += v[0-9]+.[0-9]+.[0-9]+.?"
           replace: "PROJECT_NUMBER = ${{ steps.version.outputs.VERSION }}"
-          include: "./Doxyfile"
+          include: "./Docs/Doxyfile"
 
       - name: Run Doxygen
         uses: mattnotmitt/doxygen-action@v1.1.0
+        with:
+          doxyfile-path: "./Docs/Doxyfile"
 
       - name: Deploy Documentation
         uses: peaceiris/actions-gh-pages@v3
