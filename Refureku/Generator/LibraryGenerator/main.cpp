@@ -4,11 +4,11 @@
 #include <Kodgen/Misc/Filesystem.h>
 #include <Kodgen/Misc/DefaultLogger.h>
 #include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/CodeGen/CodeGenManager.h>
 #include <Kodgen/CodeGen/Macro/MacroCodeGenUnit.h>
+#include <Kodgen/CodeGen/Macro/MacroCodeGenUnitSettings.h>
 
 #include "RefurekuGenerator/Parsing/FileParser.h"
-#include "RefurekuGenerator/CodeGen/CodeGenManager.h"
-#include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
 
 #include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
 
@@ -72,8 +72,8 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const&
 	}
 }
 
-void runForInternalDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
-							kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
+void runForInternalDirectory(kodgen::ILogger& logger, kodgen::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
+							kodgen::MacroCodeGenUnit& codeGenUnit, kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings)
 {
 	logger.log("Run for Internal directory.");
 	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, getLibraryDirectoryPath() / "Include" / "Internal" / "Refureku" / "Generated"))
@@ -90,8 +90,8 @@ void runForInternalDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeG
 	}
 }
 
-void runForPublicDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
-						   kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
+void runForPublicDirectory(kodgen::ILogger& logger, kodgen::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
+						   kodgen::MacroCodeGenUnit& codeGenUnit, kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings)
 {
 	logger.log("Run for Public directory.");
 	
@@ -136,11 +136,11 @@ int main()
 	rfk::FileParser fileParser;
 	fileParser.logger = &logger;
 
-	rfk::CodeGenManager codeGenMgr;
+	kodgen::CodeGenManager codeGenMgr;
 	codeGenMgr.logger = &logger;
 
 	kodgen::MacroCodeGenUnit codeGenUnit;
-	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
+	kodgen::MacroCodeGenUnitSettings codeGenUnitSettings;
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
 	

@@ -14,8 +14,6 @@ add_library(${RefurekuGeneratorLibTarget}
 
 					Source/Parsing/FileParser.cpp
 					
-					Source/CodeGen/CodeGenManager.cpp
-					Source/CodeGen/MacroCodeGenUnitSettings.cpp
 					Source/CodeGen/ReflectionCodeGenModule.cpp
 				)
 

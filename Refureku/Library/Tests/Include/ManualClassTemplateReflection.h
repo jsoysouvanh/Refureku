@@ -8,9 +8,6 @@
 #pragma once
 
 #include <vector>
-#include <array>
-
-#include <Refureku/Object.h>
 
 #include "Generated/ManualClassTemplateReflection.rfkh.h"
 
