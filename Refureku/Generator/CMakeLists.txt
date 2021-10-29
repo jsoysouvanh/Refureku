@@ -8,19 +8,27 @@ add_subdirectory(ThirdParty/Kodgen)
 set(RefurekuGeneratorExeTarget RefurekuGenerator)
 add_executable(${RefurekuGeneratorExeTarget} Source/main.cpp)
 
-# Setup compilation definitions
-if (RFK_DEV)
-	target_compile_definitions(${RefurekuGeneratorExeTarget} PUBLIC RFK_DEV=1)
-endif()
-
-# Warning level
-if (MSVC)
-	string(REGEX REPLACE " /W3" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Remove the default flag /W3 - get /W4 propagated from Kodgen
-endif()
-
 target_include_directories(${RefurekuGeneratorExeTarget} PUBLIC Include)
 
 target_link_libraries(${RefurekuGeneratorExeTarget} PUBLIC Kodgen)
+
+if (RFK_DEV)
+	# Setup compilation definitions
+	target_compile_definitions(${RefurekuGeneratorExeTarget} PUBLIC RFK_DEV=1)
+endif()
+
+if (MSVC)
+
+	# Setup warning level
+	string(REGEX REPLACE " /W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Remove the default flag /W3
+	target_compile_options(${RefurekuGeneratorExeTarget} PRIVATE /W4 /MP)
+
+else ()	# Clang or GCC
+
+	target_compile_options(${RefurekuGeneratorExeTarget} PRIVATE -Wall -Wextra -Wpedantic)
+
+endif()
+
 
 # Copy the RefurekuSettings template file next to the generated binary
 add_custom_command(	TARGET ${RefurekuGeneratorExeTarget} PRE_BUILD

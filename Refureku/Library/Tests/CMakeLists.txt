@@ -40,11 +40,14 @@ add_executable(${RefurekuTestsTarget}
 
 					main.cpp)
 
+# Add include directories
+target_include_directories(${RefurekuTestsTarget} PRIVATE Include)
+
 # Link to RefurekuLibrary
 target_link_libraries(${RefurekuTestsTarget} PUBLIC ${RefurekuLibraryTarget} gtest)
 
 if (MSVC)
-	target_compile_options(${RefurekuTestsTarget} PRIVATE /bigobj)
+	target_compile_options(${RefurekuTestsTarget} PRIVATE /MP /bigobj)
 else()
 endif()
 
@@ -58,8 +61,5 @@ add_custom_target(${RunTestGeneratorTarget}
 
 # Run the RefurekuGenerator BEFORE building the project to refresh generated files
 add_dependencies(${RefurekuTestsTarget} ${RunTestGeneratorTarget})
-
-# Add include directories
-target_include_directories(${RefurekuTestsTarget} PRIVATE Include)
 
 add_test(NAME ${RefurekuTestsTarget} COMMAND ${RefurekuTestsTarget})

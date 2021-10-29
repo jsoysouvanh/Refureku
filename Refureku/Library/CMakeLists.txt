@@ -61,10 +61,19 @@ add_library(${RefurekuLibraryTarget}
 					Source/TypeInfo/Functions/FunctionParameter.cpp
 				)
 
+# Setup language requirements
+target_compile_features(${RefurekuLibraryTarget} PUBLIC cxx_std_17)
+
 target_compile_definitions(${RefurekuLibraryTarget} PRIVATE REFUREKU_EXPORT)
+
+target_include_directories(${RefurekuLibraryTarget}
+							PUBLIC	Include/Public
+							PRIVATE Include/Internal)
 
 # Setup compilation flags
 if (MSVC)
+
+	target_compile_options(${RefurekuLibraryTarget} PRIVATE /MP)	# Multithread compilation
 
 	string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
 
@@ -86,13 +95,6 @@ else()	# Clang or GCC
 	endif()
 	
 endif()
-
-# Setup language requirements
-target_compile_features(${RefurekuLibraryTarget} PUBLIC cxx_std_17)
-
-target_include_directories(${RefurekuLibraryTarget}
-							PUBLIC	Include/Public
-							PRIVATE Include/Internal)
 
 #Force GTest to link with shared CRT since Refureku links with shared CRT
 set(gtest_force_shared_crt ON CACHE BOOL "GTest use shared CRT (MD[d])" FORCE)
