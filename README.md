@@ -38,7 +38,7 @@ Refureku was initially developed with game engine development in mind, which gre
 
 The concept is simple: you write what you want to reflect once, include the generated files, and the code generator does the rest. Users don't have any extra step to care about. Reflected entities are automatically registered to the reflection system and available right away. Manual reflection was an absolute no-go because it is error prone and time-consuming.
 
-Another point addressed by this library is the reflection syntax. It is sometimes annoying to be tied to the macro syntax of a third party library, especially when it is heavily used accross a project. Using **Refureku** x **Kodgen**, The user has full control over the generated files / macros names to make the reflection integrate well in any project.
+Another point addressed by this library is the reflection syntax. It is sometimes annoying to be tied to the macro syntax of a third party library, especially when it is heavily used accross a project. Using **Refureku** x **Kodgen**, the user has full control over the generated files / macros names to make the reflection integrate well in any project.
 
 Another key point of Kodgen is that it is simple to insert and mix custom generated code to the reflection generated code. The **Refureku** code generator is a simple module added to the Kodgen generator. Users can create and add up as many code generation modules as they want to Kodgen, allowing custom generated code injection to the whole codebase without changing a single line of code in the target program.
 
@@ -96,7 +96,7 @@ This feature is only available to classes that publicly derive from rfk::Object 
 TestClass instance;
 rfk::Object const* instancePtr = &instance;
 
-rfk::Struct const& archetype = instancePtr->getArchetype();
+rfk::Class const& archetype = instancePtr->getArchetype();
 ```
 
 ## Manipulate fields
