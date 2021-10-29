@@ -3,9 +3,12 @@
 #include <cstring> //std::strcmp
 
 #include "Refureku/TypeInfo/Archetypes/EnumImpl.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
+
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Enum const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Enum const*, rfk::Allocator<Enum const*>>;
 
 Enum::Enum(char const* name, std::size_t id, Archetype const* underlyingArchetype, Entity const* outerEntity) noexcept:
 	Archetype(new EnumImpl(name, id, underlyingArchetype, outerEntity))
@@ -16,7 +19,7 @@ Enum::~Enum() noexcept = default;
 
 EnumValue* Enum::addEnumValue(char const* name, std::size_t id, int64 value) noexcept
 {
-	return &getPimpl()->addEnumValue(name, id, value, this);
+	return (name != nullptr) ? &getPimpl()->addEnumValue(name, id, value, this) : nullptr;
 }
 
 void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
@@ -26,71 +29,36 @@ void Enum::setEnumValuesCapacity(std::size_t capacity) noexcept
 
 EnumValue const* Enum::getEnumValueByName(char const* name) const noexcept
 {
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (std::strcmp(enumValue.getName(), name) == 0)
-		{
-			return &enumValue;
-		}
-	}
-
-	return nullptr;
+	return (name != nullptr) ? Algorithm::getItemByPredicate(getPimpl()->getEnumValues(), [name](EnumValue const& ev)
+											   {
+												   return std::strcmp(ev.getName(), name) == 0;
+											   }) : nullptr;
 }
 
 EnumValue const* Enum::getEnumValue(int64 value) const noexcept
 {
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (enumValue.getValue() == value)
-		{
-			return &enumValue;
-		}
-	}
-
-	return nullptr;
+	return Algorithm::getItemByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
+											   {
+												   return ev.getValue() == value;
+											   });
 }
 
 EnumValue const* Enum::getEnumValueByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (predicate(enumValue, userData))
-		{
-			return &enumValue;
-		}
-	}
-
-	return nullptr;
+	return Algorithm::getItemByPredicate(getPimpl()->getEnumValues(), predicate, userData);
 }
 
 Vector<EnumValue const*> Enum::getEnumValues(int64 value) const noexcept
 {
-	Vector<EnumValue const*> result;
-
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (enumValue.getValue() == value)
-		{
-			result.push_back(&enumValue);
-		}
-	}
-
-	return result;
+	return Algorithm::getItemsByPredicate(getPimpl()->getEnumValues(), [value](EnumValue const& ev)
+												 {
+													 return ev.getValue() == value;
+												 });
 }
 
 Vector<EnumValue const*> Enum::getEnumValuesByPredicate(Predicate<EnumValue> predicate, void* userData) const
 {
-	Vector<EnumValue const*> result;
-
-	for (EnumValue const& enumValue : getPimpl()->getEnumValues())
-	{
-		if (predicate(enumValue, userData))
-		{
-			result.push_back(&enumValue);
-		}
-	}
-
-	return result;
+	return Algorithm::getItemsByPredicate(getPimpl()->getEnumValues(), predicate, userData);
 }
 
 EnumValue const& Enum::getEnumValueAt(std::size_t valueIndex)	const noexcept
@@ -110,5 +78,5 @@ Archetype const& Enum::getUnderlyingArchetype() const noexcept
 
 bool Enum::foreachEnumValue(Predicate<EnumValue> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getEnumValues(), visitor, userData);
+	return Algorithm::foreach(getPimpl()->getEnumValues(), visitor, userData);
 }

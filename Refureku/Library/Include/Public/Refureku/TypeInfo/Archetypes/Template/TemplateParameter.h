@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -44,7 +44,7 @@ namespace rfk
 			REFUREKU_INTERNAL TemplateParameter(TemplateParameterImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ~TemplateParameter()										noexcept;
 
-			GEN_GET_PIMPL(TemplateParameterImpl, _pimpl.get())
+			RFK_GEN_GET_PIMPL(TemplateParameterImpl, _pimpl.get())
 
 		private:
 			/** Pointer to the TemplateParameter concrete implementation. */

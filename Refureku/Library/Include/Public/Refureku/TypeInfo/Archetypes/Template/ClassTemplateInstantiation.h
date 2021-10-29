@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -14,6 +14,10 @@ namespace rfk
 	//Forward declarations
 	class ClassTemplate;
 	class TemplateArgument;
+	class ClassTemplateInstantiation;
+
+	/* A struct template instantiation and a class template instantiation contain exactly the same data. Alias for convenience. */
+	using StructTemplateInstantiation = ClassTemplateInstantiation;
 
 	class ClassTemplateInstantiation final : public Struct
 	{
@@ -61,7 +65,7 @@ namespace rfk
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
 			REFUREKU_API bool									foreachTemplateArgument(Visitor<TemplateArgument> visitor,
-																						void*					  userData)	const	noexcept;
+																						void*					  userData)	const;
 
 			/**
 			*	@brief Add a template argument to this instantiation
@@ -74,6 +78,6 @@ namespace rfk
 			//Forward declaration
 			class ClassTemplateInstantiationImpl;
 
-			GEN_GET_PIMPL(ClassTemplateInstantiationImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(ClassTemplateInstantiationImpl, Entity::getPimpl())
 	};
 }

@@ -5,7 +5,7 @@ on:
     branches:
       - master
       - dev
-      - CI-setup
+  workflow_dispatch:
 
 jobs:
   gen_cov_report:
@@ -43,7 +43,7 @@ jobs:
           echo "CXX=g++-10" >> $GITHUB_ENV
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DRFK_GEN_PROPERTY_RTTI=1 -DRFK_GEN_CODECOV_REPORT=1 -G "Ninja"
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DRFK_GEN_CODECOV_REPORT=1 -G "Ninja"
 
       - name: Build Refureku
         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --target RefurekuTests --verbose

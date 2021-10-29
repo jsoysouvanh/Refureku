@@ -2,35 +2,34 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 template <typename ReturnType, typename... ArgTypes>
-ReturnType* Struct::makeInstance(ArgTypes&&... args) const
+rfk::SharedPtr<ReturnType> Struct::makeSharedInstance(ArgTypes&&... args) const
 {
-	static_assert(!std::is_void_v<ReturnType>, "Returning void* is forbidden since deleting a void* pointer is undefined.");
-	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>);
+	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>, "The return type of makeSharedInstance should not be a pointer or a reference.");
+	
+	StaticMethod const* result;
 
-	if constexpr (sizeof...(args) == 0u)
+	if (!foreachInstantiator(sizeof...(args), [](StaticMethod const& instantiator, void* data)
+		{
+			//Find an instantiator with the same parameters
+			if (instantiator.hasSameParameters<ArgTypes...>())
+			{
+				*reinterpret_cast<StaticMethod const**>(data) = &instantiator;
+				return false;
+			}
+
+			return true;
+		}, &result))
 	{
-		//No arguments, use default instantiator
-		return reinterpret_cast<ReturnType*>(makeInstanceFromDefaultInstantiator());
+		assert(result != nullptr);
+
+		return result->invoke<rfk::SharedPtr<ReturnType>>(std::forward<ArgTypes>(args)...);
 	}
 	else
 	{
-		StaticMethod const* instantiator;
-
-		for (std::size_t i = 0u; i < getInstantiatorsCount(); i++)
-		{
-			instantiator = getInstantiatorAt(i);
-
-			if (instantiator->hasSameParameters<ArgTypes...>())
-			{
-				//Custom instantiators are guaranteed to return void*
-				return reinterpret_cast<ReturnType*>(instantiator->invoke<void*>(std::forward<ArgTypes>(args)...));
-			}
-		}
-
 		return nullptr;
 	}
 }
@@ -38,40 +37,39 @@ ReturnType* Struct::makeInstance(ArgTypes&&... args) const
 template <typename MethodSignature>
 Method const* Struct::getMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	for (Method const* method : getMethodsByName(name, minFlags, shouldInspectInherited))
+	struct Data
 	{
-		if (internal::MethodHelper<MethodSignature>::hasSamePrototype(*method))
-		{
-			return method;
-		}
-	}
+		char const*		name;
+		EMethodFlags	flags;
+	} data{ name, minFlags };
 
-	return nullptr;
+	return (name != nullptr) ? getMethodByPredicate([](Method const& method, void* data)
+													  {
+														  MethodBase const&	methodBase = *reinterpret_cast<MethodBase const*>(&method);
+														  Data const&		userData = *reinterpret_cast<Data*>(data);
+
+														  return (userData.flags & methodBase.getFlags()) == userData.flags &&
+																	methodBase.hasSameName(userData.name) &&
+																	internal::MethodHelper<MethodSignature>::hasSameSignature(methodBase);
+													  }, &data, shouldInspectInherited) : nullptr;
 }
 
 template <typename StaticMethodSignature>
 StaticMethod const* Struct::getStaticMethodByName(char const* name, EMethodFlags minFlags, bool shouldInspectInherited) const noexcept
 {
-	for (StaticMethod const* staticMethod : getStaticMethodsByName(name, minFlags, shouldInspectInherited))
+	struct Data
 	{
-		if (internal::MethodHelper<StaticMethodSignature>::hasSamePrototype(*staticMethod))
-		{
-			return staticMethod;
-		}
-	}
+		char const*		name;
+		EMethodFlags	flags;
+	} data{ name, minFlags };
 
-	return nullptr;
-}
+	return (name != nullptr) ? getStaticMethodByPredicate([](StaticMethod const& method, void* data)
+													{
+														MethodBase const&	methodBase = *reinterpret_cast<MethodBase const*>(&method);
+														Data const&			userData = *reinterpret_cast<Data*>(data);
 
-template <typename T>
-void* internal::defaultInstantiator()
-{
-	if constexpr (std::is_default_constructible_v<T>)
-	{
-		return new T();
-	}
-	else
-	{
-		return nullptr;
-	}
+														return (userData.flags & methodBase.getFlags()) == userData.flags &&
+																methodBase.hasSameName(userData.name) &&
+																internal::MethodHelper<StaticMethodSignature>::hasSameSignature(methodBase);
+													}, &data, shouldInspectInherited) : nullptr;
 }

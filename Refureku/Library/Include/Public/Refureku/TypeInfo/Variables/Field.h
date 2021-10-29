@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -29,7 +29,7 @@ namespace rfk
 			*		   This method in not safe if you provide a wrong ValueType.
 			*
 			*	@tparam ValueType Type to retrieve from the field.
-			*		If ValueType is an rvalue reference, the value is moved into the return value (so the class value is no longer safe to use).
+			*		If ValueType is an rvalue reference, the field value is moved into the return value (so the field value is no longer safe to use).
 			*		If ValueType is an lvalue reference, return a reference to the field.
 			*		If ValueType is a value type, the value is copied. If it is a class, ValueType must be copy-constructible.
 			*
@@ -41,8 +41,8 @@ namespace rfk
 			*
 			*	@return The queried value in the instance.
 			*/
-			template <typename ValueType>
-			RFK_NODISCARD ValueType					get(void* instance)					const;
+			template <typename ValueType, typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
+			RFK_NODISCARD ValueType		get(OwnerStructType& instance)					const;
 
 			/**
 			*	@brief Get the value corresponding to this field in the provided instance.
@@ -59,9 +59,8 @@ namespace rfk
 			*
 			*	@return The queried value in the instance.
 			*/
-			template <typename ValueType>
-			RFK_NODISCARD ValueType const			get(void const* instance)			const	noexcept;
-
+			template <typename ValueType, typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
+			RFK_NODISCARD ValueType		get(OwnerStructType const& instance)			const;
 
 			/**
 			*	@brief Set the value corresponding to this field in the provided instance.
@@ -76,12 +75,12 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
 			*/
-			template <typename ValueType>
-			void									set(void*		instance,
-														ValueType&&	value)				const;
+			template <typename ValueType, typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
+			void						set(OwnerStructType&	instance,
+											ValueType&&			value)					const;
 
 			/**
-			*	@brief Copy dataSize bytes starting from valuePtr into this field's address in instance.
+			*	@brief Copy valueSize bytes starting from valuePtr into this field's address in instance.
 			*
 			*	@param instance		Instance we write the bytes in.
 			*	@param valuePtr		Pointer to the value to copy.
@@ -89,19 +88,22 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
 			*/
-			REFUREKU_API void						set(void*		instance,
-														void const* valuePtr,
-														std::size_t	valueSize)			const;
+			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
+			void						set(OwnerStructType&	instance,
+											void const*			valuePtr,
+											std::size_t			valueSize)				const;
 
 			/**
 			*	@brief	Get a pointer to this field in the provided instance.
-			*			Performing non-const operations on the pointer if the field is const is undefined behaviour.
 			*
 			*	@param instance Instance we get the field from.
 			*
 			*	@return Pointer to this field in the provided instance.
+			* 
+			*	@exception ConstViolation if the field is actually const.
 			*/
-			RFK_NODISCARD REFUREKU_API void*		getPtr(void* instance)				const	noexcept;
+			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
+			RFK_NODISCARD void*			getPtr(OwnerStructType& instance)				const;
 
 			/**
 			*	@brief Get a const pointer to this field in the provided instance.
@@ -110,14 +112,37 @@ namespace rfk
 			*
 			*	@return Const pointer to this field in the provided instance.
 			*/
-			RFK_NODISCARD REFUREKU_API void const*	getConstPtr(void const* instance)	const	noexcept;
+			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
+			RFK_NODISCARD void const*	getConstPtr(OwnerStructType const& instance)	const	noexcept;
 
 		protected:
 			//Forward declaration
 			class FieldImpl;
 
-			GEN_GET_PIMPL(FieldImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(FieldImpl, Entity::getPimpl())
+
+		private:
+			template <typename ValueType>
+			RFK_NODISCARD ValueType					getInternal(void* instance)					const;
+
+			template <typename ValueType>
+			RFK_NODISCARD ValueType const			getInternal(void const* instance)			const	noexcept;
+
+			template <typename ValueType>
+			void									setInternal(void*		instance,
+																ValueType&&	value)				const;
+
+			REFUREKU_API void						setInternal(void*		instance,
+																void const* valuePtr,
+																std::size_t	valueSize)			const;
+
+			RFK_NODISCARD REFUREKU_API void*		getPtrInternal(void* instance)				const;
+
+			RFK_NODISCARD REFUREKU_API void const*	getConstPtrInternal(void const* instance)	const	noexcept;
 	};
+
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Field const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Field const*, rfk::Allocator<Field const*>>);
 
 	#include "Refureku/TypeInfo/Variables/Field.inl"
 }

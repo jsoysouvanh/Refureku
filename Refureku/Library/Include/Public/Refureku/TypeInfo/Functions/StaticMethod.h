@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -15,14 +15,14 @@ namespace rfk
 	class StaticMethod final : public MethodBase
 	{
 		public:
-			REFUREKU_INTERNAL StaticMethod(char const*		name,
-											  std::size_t	id,
-											  Type const&	returnType,
-											  ICallable*	internalMethod,
-											  EMethodFlags	flags,
-											  Entity const*	outerEntity)	noexcept;
+			REFUREKU_API	  StaticMethod(char const*		name,
+										   std::size_t		id,
+										   Type const&		returnType,
+										   ICallable*		internalMethod,
+										   EMethodFlags		flags,
+										   Entity const*	outerEntity)	noexcept;
 			REFUREKU_INTERNAL StaticMethod(StaticMethod&&)					noexcept;
-			REFUREKU_INTERNAL ~StaticMethod()								noexcept;
+			REFUREKU_API	  ~StaticMethod()								noexcept;
 
 			/**
 			*	@brief	Call the function with the forwarded argument(s) if any, and return the result.
@@ -83,8 +83,11 @@ namespace rfk
 			*	@return The result of the underlying static method call.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
-			ReturnType	internalInvoke(ArgTypes&&... args) const noexcept;
+			ReturnType	internalInvoke(ArgTypes&&... args) const;
 	};
+
+	REFUREKU_TEMPLATE_API(rfk::Allocator<StaticMethod const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<StaticMethod const*, rfk::Allocator<StaticMethod const*>>);
 
 	#include "Refureku/TypeInfo/Functions/StaticMethod.inl"
 }

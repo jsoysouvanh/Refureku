@@ -85,8 +85,7 @@ uint32 Type::getCArraySize() const noexcept
 
 bool Type::match(Type const& other) const noexcept
 {
-	return	(this == &other) ||																	//Types have the same address, don't need any further check
-			(*this == other) ||																	//Strictly the same type
+	return	(*this == other) ||																	//Strictly the same type
 			((isPointer() && other.getArchetype() == rfk::getArchetype<std::nullptr_t>()) ||	//Pointer - nullptr_t correspondance
 			(getArchetype() == rfk::getArchetype<std::nullptr_t>() && other.isPointer()));
 }

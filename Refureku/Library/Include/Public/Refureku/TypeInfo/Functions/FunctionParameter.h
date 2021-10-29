@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -34,6 +34,6 @@ namespace rfk
 			//Forward declaration
 			class FunctionParameterImpl;
 
-			GEN_GET_PIMPL(FunctionParameterImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(FunctionParameterImpl, Entity::getPimpl())
 	};
 }

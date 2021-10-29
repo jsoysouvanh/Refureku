@@ -6,6 +6,9 @@
 
 using namespace rfk;
 
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Archetype const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Archetype const*, rfk::Allocator<Archetype const*>>;
+
 Archetype::Archetype(ArchetypeImpl* implementation) noexcept:
 	Entity(implementation)
 {

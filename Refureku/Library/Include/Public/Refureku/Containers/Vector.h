@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -194,7 +194,7 @@ namespace rfk
 			void		push_back(T&& value);
 
 			/**
-			*	@brief	Add all elements from a vector at the end of this vector.
+			*	@brief Add all elements from a vector at the end of this vector.
 			* 
 			*	@param other The vector which elements must be copied.
 			*/

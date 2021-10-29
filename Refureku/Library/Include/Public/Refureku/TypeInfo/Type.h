@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -43,49 +43,49 @@ namespace rfk
 
 			/**
 			*	@return true if this type is a pointer type (*), else false.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API bool					isPointer()							const	noexcept;
 
 			/**
 			*	@return true if this type is a left value reference type (&), else false.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API bool					isLValueReference()					const	noexcept;
 
 			/**
 			*	@return true if this type is a right value reference type (&&), else false.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API bool					isRValueReference()					const	noexcept;
 
 			/**
 			*	@return true if this type is a c-style array ([]), else false.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API bool					isCArray()							const	noexcept;
 
 			/**
 			*	@return true if this type is a value type (not a pointer, lvalue ref, rvalue ref, c-style array), else false.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API bool					isValue()							const	noexcept;
 
 			/**
 			*	@return true if this type is const qualified, else false.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API bool					isConst()							const	noexcept;
 
 			/**
 			*	@return true if this type is volatile qualified, else false.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API bool					isVolatile()						const	noexcept;
 
 			/**
 			*	@return The size of the array if isCArray() is true, else 0.
-			*			The behaviour is undefined if type parts count is 0.
+			*			The behaviour is undefined if getTypePartsCount() returns 0.
 			*/
 			REFUREKU_API uint32					getCArraySize()						const	noexcept;
 

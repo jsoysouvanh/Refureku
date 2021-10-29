@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 template <typename ReturnType>
@@ -49,7 +49,7 @@ bool FunctionBase::hasSameParameters() const noexcept
 }
 
 template <typename ReturnType, typename... ArgTypes>
-bool FunctionBase::hasSamePrototype() const noexcept
+bool FunctionBase::hasSameSignature() const noexcept
 {
 	if constexpr (sizeof...(ArgTypes) == 0u)
 	{

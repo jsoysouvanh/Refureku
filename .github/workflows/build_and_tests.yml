@@ -1,16 +1,14 @@
-name: Build & Tests
+name: Tests
 
 on:
   push:
     branches:
       - master
       - dev
-      - CI-setup
-      - rework
   workflow_dispatch:
 
 jobs:
-  build_windows_msvc:
+  windows_msvc:
     name: Windows | MSVC
     runs-on: windows-latest
 
@@ -26,7 +24,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DRFK_GEN_PROPERTY_RTTI=1 -G "Visual Studio 16 2019" -A x64
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -G "Visual Studio 16 2019" -A x64
 
       - name: Build Refureku
         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
@@ -35,7 +33,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Windows/
@@ -44,20 +42,20 @@ jobs:
 
           mv Build/Release/Bin/Release/RefurekuGenerator.exe RefurekuBinaries/Windows/Bin/
           mv Build/Release/Bin/Release/Refureku.dll RefurekuBinaries/Windows/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dll RefurekuBinaries/Windows/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Bin/vswhere.exe RefurekuBinaries/Windows/Bin/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dll RefurekuBinaries/Windows/Bin/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Bin/vswhere.exe RefurekuBinaries/Windows/Bin/
 
           mv Build/Release/Lib/Release/Refureku.lib RefurekuBinaries/Windows/Lib/
 
       - name: Upload Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
           path: ./RefurekuBinaries
           retention-days: 7
 
-  build_linux_gcc_clang:
+  linux_gcc_clang:
     name: Linux | Clang/GCC
     runs-on: ubuntu-latest
 
@@ -101,7 +99,7 @@ jobs:
           echo "CXX=${{ matrix.compiler }}" >> $GITHUB_ENV
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DRFK_GEN_PROPERTY_RTTI=1 -G "Ninja"
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -G "Ninja"
 
       - name: Build Refureku
         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
@@ -112,12 +110,13 @@ jobs:
           cat ./Testing/Temporary/MemoryChecker.*.log
   
       - name: Setup Binaries Artifact
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Linux/
           mkdir RefurekuBinaries/Linux/Bin
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.10 RefurekuBinaries/Linux/Bin/libclang.so
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so RefurekuBinaries/Linux/Bin/libclang.so
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.so.12 RefurekuBinaries/Linux/Bin/libclang.so.12
           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Linux/Bin/
           mv Build/Release/Bin/libRefureku.so RefurekuBinaries/Linux/Bin/
 
@@ -126,17 +125,17 @@ jobs:
           mv README.md RefurekuBinaries/
           
           mv LICENSE.md RefurekuBinaries/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
 
       - name: Upload Binaries Artifact
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
           path: ./RefurekuBinaries
           retention-days: 7
 
-  build_macos:
+  macos:
     name: MacOS | Clang
     runs-on: macos-latest
 
@@ -160,7 +159,7 @@ jobs:
           cmake-version: '3.15.0'
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -DRFK_GEN_PROPERTY_RTTI=1 -G "Ninja"
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -G "Ninja"
 
       - name: Build Refureku
         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
@@ -169,17 +168,17 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Mac/
           mkdir RefurekuBinaries/Mac/Bin
           mv Build/Release/Bin/RefurekuGenerator RefurekuBinaries/Mac/Bin/
           mv Build/Release/Bin/libRefureku.dylib RefurekuBinaries/Mac/Bin/
-          mv Refureku/Generator/Submodules/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
+          mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
 
       - name: Upload Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || (github.ref == 'refs/heads/master' && github.event_name == 'workflow_dispatch'))
+        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -190,7 +189,7 @@ jobs:
   deploy_release_binaries:
     name: Deploy Binaries
     runs-on: ubuntu-latest
-    needs: [build_windows_msvc, build_linux_gcc_clang, build_macos]
+    needs: [windows_msvc, linux_gcc_clang, macos]
     if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:

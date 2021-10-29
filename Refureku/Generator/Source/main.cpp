@@ -2,11 +2,10 @@
 
 #include <Kodgen/Misc/DefaultLogger.h>
 #include <Kodgen/CodeGen/Macro/MacroCodeGenUnit.h>
+#include <Kodgen/CodeGen/CodeGenManager.h>
+#include <Kodgen/CodeGen/Macro/MacroCodeGenUnitSettings.h>
 
 #include "RefurekuGenerator/Parsing/FileParser.h"
-#include "RefurekuGenerator/CodeGen/CodeGenManager.h"
-#include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
-
 #include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
 
 void printGenerationSetup(kodgen::ILogger& logger, kodgen::CodeGenManagerSettings const& codeGenMgrSettings, kodgen::ParsingSettings const& parsingSettings,
@@ -117,10 +116,10 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 	rfk::FileParser fileParser;
 	fileParser.logger = &logger;
 
-	rfk::CodeGenManager codeGenMgr;
+	kodgen::CodeGenManager codeGenMgr;
 	codeGenMgr.logger = &logger;
 
-	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
+	kodgen::MacroCodeGenUnitSettings codeGenUnitSettings;
 	kodgen::MacroCodeGenUnit codeGenUnit;
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);

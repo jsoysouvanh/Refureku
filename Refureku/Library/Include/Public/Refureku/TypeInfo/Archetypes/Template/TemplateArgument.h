@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -13,8 +13,7 @@
 
 namespace rfk
 {
-	//Forward declaration
-	class TemplateParameter;
+	enum class ETemplateParameterKind;
 
 	class TemplateArgument
 	{
@@ -23,11 +22,11 @@ namespace rfk
 			TemplateArgument(TemplateArgument&&)		= delete;
 
 			/**
-			*	@brief Getter for the field _boundParameter.
+			*	@brief Get the kind of template parameter this argument is based on.
 			* 
-			*	@return _boundParameter.
+			*	@return The kind of template parameter this argument is based on.
 			*/
-			RFK_NODISCARD REFUREKU_API TemplateParameter const&	getBoundParameter()		const	noexcept;
+			RFK_NODISCARD REFUREKU_API ETemplateParameterKind	getKind()	const	noexcept;
 
 			/**
 			*	@brief Check whether 2 TemplateArgument instances are equal or not.
@@ -46,7 +45,7 @@ namespace rfk
 			REFUREKU_INTERNAL TemplateArgument(TemplateArgumentImpl* implementation)	noexcept;
 			REFUREKU_INTERNAL ~TemplateArgument()										noexcept;
 
-			GEN_GET_PIMPL(TemplateArgumentImpl, _pimpl.get())
+			RFK_GEN_GET_PIMPL(TemplateArgumentImpl, _pimpl.get())
 
 		private:
 			/** Pointer to the concrete TemplateParameter implementation. */

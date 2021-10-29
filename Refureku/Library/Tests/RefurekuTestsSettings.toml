@@ -23,6 +23,11 @@ ignoredFiles = []
 # Generated files will be located here
 outputDirectory = '''Include/Generated'''
 
+generatedHeaderFileNamePattern = "##FILENAME##.rfkh.h"
+generatedSourceFileNamePattern = "##FILENAME##.rfks.h"
+classFooterMacroPattern = "##CLASSFULLNAME##_GENERATED"
+headerFileFooterMacroPattern = "File_##FILENAME##_GENERATED"
+
 
 [ParsingSettings]
 # Abort parsing on first encountered error
@@ -39,13 +44,3 @@ projectIncludeDirectories = [
 
 # Must be one of "msvc", "clang++", "g++"
 compilerExeName = "clang++"
-
-namespaceMacroName = "RFKNamespace"
-classMacroName = "RFKClass"
-structMacroName = "RFKStruct"
-variableMacroName = "RFKVariable"
-fieldMacroName = "RFKField"
-functionMacroName = "RFKFunction"
-methodMacroName = "RFKMethod"
-enumMacroName = "RFKEnum"
-enumValueMacroName = "RFKEnumVal"

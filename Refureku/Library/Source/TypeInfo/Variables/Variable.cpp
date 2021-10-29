@@ -1,8 +1,12 @@
 #include "Refureku/TypeInfo/Variables/Variable.h"
 
 #include "Refureku/TypeInfo/Variables/VariableImpl.h"
+#include "Refureku/Exceptions/ConstViolation.h"
 
 using namespace rfk;
+
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Variable const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Variable const*, rfk::Allocator<Variable const*>>;
 
 Variable::Variable(char const* name, std::size_t id, Type const& type, void* ptr, EVarFlags flags) noexcept:
 	VariableBase(new VariableImpl(name, id, type, ptr, flags))
@@ -35,8 +39,13 @@ EVarFlags Variable::getFlags() const noexcept
 	return getPimpl()->getFlags();
 }
 
-void* Variable::getPtr() const noexcept
+void* Variable::getPtr() const
 {
+	if (getType().isConst())
+	{
+		throwConstViolationException("Can't get a non-const ptr from a const variable.");
+	}
+
 	return getPimpl()->getPtr();
 }
 

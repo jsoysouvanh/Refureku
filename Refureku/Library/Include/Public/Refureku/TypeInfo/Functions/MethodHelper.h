@@ -2,7 +2,7 @@
 *	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -20,7 +20,7 @@ namespace rfk::internal
 	class MethodHelper<ReturnType(ArgTypes...)>
 	{
 		public:
-			static bool hasSamePrototype(MethodBase const& method) noexcept;
+			static bool hasSameSignature(MethodBase const& method) noexcept;
 	};
 
 	/** Overload for noexcept methods. */
@@ -28,7 +28,7 @@ namespace rfk::internal
 	class MethodHelper<ReturnType(ArgTypes...) noexcept>
 	{
 		public:
-			static bool hasSamePrototype(MethodBase const& method) noexcept;
+			static bool hasSameSignature(MethodBase const& method) noexcept;
 	};
 
 	/** Overload for const methods. */
@@ -36,7 +36,7 @@ namespace rfk::internal
 	class MethodHelper<ReturnType(ArgTypes...) const>
 	{
 		public:
-			static bool hasSamePrototype(MethodBase const& method) noexcept;
+			static bool hasSameSignature(MethodBase const& method) noexcept;
 	};
 
 	/** Overload for const noexcept methods. */
@@ -44,7 +44,7 @@ namespace rfk::internal
 	class MethodHelper<ReturnType(ArgTypes...) const noexcept>
 	{
 		public:
-			static bool hasSamePrototype(MethodBase const& method) noexcept;
+			static bool hasSameSignature(MethodBase const& method) noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/MethodHelper.inl"

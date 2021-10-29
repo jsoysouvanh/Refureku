@@ -1,6 +1,6 @@
 [CodeGenManagerSettings]
 # List of supported extensions
-supportedExtensions = [".h", ".hpp"]
+supportedFileExtensions = [".h", ".hpp"]
 
 # Files contained in the directories of this list will be parsed
 toProcessDirectories = [
@@ -12,8 +12,7 @@ toProcessFiles = []
 
 # Files contained in the directories of this list will be ignored
 ignoredDirectories = [
-#	'''Path/To/Output/Dir''',
-#	'''Path/To/Directory/To/Ignore'''
+#	'''Path/To/Output/Dir'''
 ]
 
 # Files not to parse which are not included in any directory of ignoredDirectories
@@ -23,6 +22,11 @@ ignoredFiles = []
 [CodeGenUnitSettings]
 # Generated files will be located here
 outputDirectory = '''Path/To/Output/Dir'''
+
+generatedHeaderFileNamePattern = "##FILENAME##.rfkh.h"
+generatedSourceFileNamePattern = "##FILENAME##.rfks.h"
+classFooterMacroPattern = "##CLASSFULLNAME##_GENERATED"
+headerFileFooterMacroPattern = "File_##FILENAME##_GENERATED"
 
 
 [ParsingSettings]
@@ -48,12 +52,12 @@ subPropertySeparator = ","
 subPropertyStartEncloser = "("
 subPropertyEndEncloser = ")"
 
-namespaceMacroName = "Namespace"
-classMacroName = "Class"
-structMacroName = "Struct"
-variableMacroName = "Variable"
-fieldMacroName = "Field"
-functionMacroName = "Function"
-methodMacroName = "Method"
-enumMacroName = "Enum"
-enumValueMacroName = "EnumValue"
+namespaceMacroName = "NAMESPACE"
+classMacroName = "CLASS"
+structMacroName = "STRUCT"
+variableMacroName = "VARIABLE"
+fieldMacroName = "FIELD"
+functionMacroName = "FUNCTION"
+methodMacroName = "METHOD"
+enumMacroName = "ENUM"
+enumValueMacroName = "ENUMVALUE"

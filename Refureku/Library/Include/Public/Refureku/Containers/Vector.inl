@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 template <typename T, typename Allocator>
@@ -117,7 +117,7 @@ void Vector<T, Allocator>::reallocateIfNecessary(std::size_t minCapacity)
 template <typename T, typename Allocator>
 std::size_t	Vector<T, Allocator>::computeNewCapacity(std::size_t minCapacity) const noexcept
 {
-	//TODO: Should maybe handle the case when _capacity * _growthFactor > std::size_t max value
+	//TODO: Should handle the case when _capacity * _growthFactor > std::size_t max value
 	std::size_t newCapacity = static_cast<std::size_t>(_capacity * _growthFactor);
 
 	return (newCapacity > minCapacity) ? newCapacity : minCapacity;
@@ -268,6 +268,7 @@ void Vector<T, Allocator>::push_back(Vector const& other)
 		reallocateIfNecessary(size() + other.size());
 
 		copyElements(other.cbegin(), end(), other.size());
+		_size += other.size();
 	}
 }
 
@@ -279,6 +280,7 @@ void Vector<T, Allocator>::push_back(Vector&& other)
 		reallocateIfNecessary(size() + other.size());
 
 		moveElements(other.begin(), end(), other.size());
+		_size += other.size();
 	}
 }
 

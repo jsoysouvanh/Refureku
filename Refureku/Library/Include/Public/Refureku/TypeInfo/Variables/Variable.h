@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -36,12 +36,12 @@ namespace rfk
 			*			If ValueType is an rvalue reference, the value is moved into the return value (so the variable is no longer safe to get).
 			*			If ValueType is an lvalue reference, return a reference to the variable.
 			*			If ValueType is a value type, the value is copied. If it is a struct/class, ValueType must be copy-constructible.
-			*
+			* 
+			*	@return The value stored in the variable.
+			* 
 			*	@exception ConstViolation if:
 			*		- the field is const and ValueType is an RValue type (can't move a const field content);
 			*		- the field is const and ValueType is a non-const reference;
-			* 
-			*	@return The value stored in the variable.
 			*/
 			template <typename ValueType>
 			RFK_NODISCARD ValueType					get()							const;
@@ -89,8 +89,10 @@ namespace rfk
 			*			Performing non-const operations with the pointer if the variable is const is undefined behaviour.
 			* 
 			*	@return A pointer to this static field.
+			* 
+			*	@exception ConstViolation if the variable is actually const.
 			*/
-			RFK_NODISCARD REFUREKU_API void*		getPtr()						const	noexcept;
+			RFK_NODISCARD REFUREKU_API void*		getPtr()						const;
 
 			/**
 			*	@brief	Get a const pointer to this static field.
@@ -103,8 +105,15 @@ namespace rfk
 			//Forward declaration
 			class VariableImpl;
 
-			GEN_GET_PIMPL(VariableImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(VariableImpl, Entity::getPimpl())
 	};
+
+	/** Base implementation of getVariable, specialized for each reflected variable. */
+	template <auto VarPtr>
+	Variable const* getVariable() noexcept;
+
+	REFUREKU_TEMPLATE_API(rfk::Allocator<Variable const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<Variable const*, rfk::Allocator<Variable const*>>);
 
 	#include "Refureku/TypeInfo/Variables/Variable.inl"
 }

@@ -1,7 +1,9 @@
 
-[submodule "Refureku/Generator/Submodules/Kodgen"]
-	path = Refureku/Generator/Submodules/Kodgen
+[submodule "Kodgen"]
+	path = Refureku/Generator/ThirdParty/Kodgen
 	url = https://github.com/jsoysouvanh/Kodgen
-[submodule "Refureku/Library/ThirdParty/GoogleTests"]
+	branch = dev
+[submodule "GoogleTests"]
 	path = Refureku/Library/ThirdParty/GoogleTests
 	url = https://github.com/google/googletest.git
+	branch = master

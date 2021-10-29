@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -17,9 +17,8 @@ namespace rfk
 	class TemplateTemplateArgument : public TemplateArgument
 	{
 		public:
-			REFUREKU_API TemplateTemplateArgument(TemplateParameter const&	boundParameter,
-												  ClassTemplate const*		value)			noexcept;
-			REFUREKU_API ~TemplateTemplateArgument()										noexcept;
+			REFUREKU_API TemplateTemplateArgument(ClassTemplate const* value)	noexcept;
+			REFUREKU_API ~TemplateTemplateArgument()							noexcept;
 
 			/**
 			*	@brief	Get the class template provided as argument.
@@ -44,6 +43,6 @@ namespace rfk
 			//Forward declaration
 			class TemplateTemplateArgumentImpl;
 
-			GEN_GET_PIMPL(TemplateTemplateArgumentImpl, TemplateArgument::getPimpl())
+			RFK_GEN_GET_PIMPL(TemplateTemplateArgumentImpl, TemplateArgument::getPimpl())
 	};
 }

@@ -1,17 +1,24 @@
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiation.h"
 
 #include "Refureku/TypeInfo/Archetypes/Template/ClassTemplateInstantiationImpl.h"
-#include "Refureku/TypeInfo/Entity/EntityUtility.h"
+#include "Refureku/Misc/Algorithm.h"
 
 using namespace rfk;
 
 ClassTemplateInstantiation::ClassTemplateInstantiation(char const* name, std::size_t id, std::size_t memorySize, bool isClass, Archetype const& classTemplate) noexcept:
-	Struct(new ClassTemplateInstantiationImpl(name, id, memorySize, isClass, classTemplate, *this))
+	Struct(new ClassTemplateInstantiationImpl(name, id, memorySize, isClass, classTemplate))
 {
+	//A getArchetype specialization should be generated for each template specialization, so instantiatedFrom should contain a ClassTemplate
+	assert(classTemplate.getKind() == rfk::EEntityKind::Class || classTemplate.getKind() == rfk::EEntityKind::Struct);
+	assert(static_cast<Class const&>(classTemplate).getClassKind() == EClassKind::Template);
+
+	const_cast<ClassTemplate&>(getPimpl()->getClassTemplate()).registerTemplateInstantiation(*this);
 }
 
-ClassTemplateInstantiation::~ClassTemplateInstantiation() noexcept = default;
-
+ClassTemplateInstantiation::~ClassTemplateInstantiation() noexcept
+{
+	const_cast<ClassTemplate&>(getPimpl()->getClassTemplate()).unregisterTemplateInstantiation(*this);
+}
 
 ClassTemplate const& ClassTemplateInstantiation::getClassTemplate() const noexcept
 {
@@ -23,11 +30,9 @@ TemplateArgument const& ClassTemplateInstantiation::getTemplateArgumentAt(std::s
 	return *getPimpl()->getTemplateArguments()[index];
 }
 
-bool ClassTemplateInstantiation::foreachTemplateArgument(Visitor<TemplateArgument> visitor, void* userData) const noexcept
+bool ClassTemplateInstantiation::foreachTemplateArgument(Visitor<TemplateArgument> visitor, void* userData) const
 {
-	return EntityUtility::foreachEntity(getPimpl()->getTemplateArguments(),
-										visitor,
-										userData);
+	return Algorithm::foreach(getPimpl()->getTemplateArguments(), visitor, userData);
 }
 
 std::size_t ClassTemplateInstantiation::getTemplateArgumentsCount() const noexcept

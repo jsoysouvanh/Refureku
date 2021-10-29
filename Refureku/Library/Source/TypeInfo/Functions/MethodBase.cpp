@@ -17,6 +17,11 @@ MethodBase::MethodBase(MethodBase&&) noexcept = default;
 
 MethodBase::~MethodBase() noexcept = default;
 
+bool MethodBase::hasSameSignature(MethodBase const& other) const noexcept
+{
+	return isConst() == other.isConst() && FunctionBase::hasSameSignature(other);
+}
+
 bool MethodBase::isStatic() const noexcept
 {
 	return static_cast<EMethodFlagsUnderlyingType>(getFlags() & EMethodFlags::Static) != static_cast<EMethodFlagsUnderlyingType>(0);

@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -44,7 +44,7 @@ namespace rfk
 	template <template <auto...> typename T>
 	Archetype const*				getArchetype()						noexcept;	//Variadic non-type template parameters
 
-#if !defined(_MSC_VER) || defined(__clang__)
+#if RFK_TEMPLATE_TEMPLATE_SUPPORT
 	template <template <template <typename...> typename...> typename T>
 	Archetype const*				getArchetype()						noexcept;	//Variadic template template type parameters
 #endif

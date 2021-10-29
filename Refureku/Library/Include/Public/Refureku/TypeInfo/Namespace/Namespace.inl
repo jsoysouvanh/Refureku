@@ -2,20 +2,25 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 
 template <typename FunctionSignature>
 Function const* Namespace::getFunctionByName(char const* name, EFunctionFlags flags) const noexcept
 {
-	for (Function const* function : getFunctionsByName(name, flags))
+	struct Data
 	{
-		if (internal::FunctionHelper<FunctionSignature>::hasSamePrototype(*function))
-		{
-			return function;
-		}
-	}
+		char const*		name;
+		EFunctionFlags	flags;
+	} data{ name, flags };
 
-	return nullptr;
+	return (name != nullptr) ? getFunctionByPredicate([](Function const& func, void* data)
+													  {
+														  Data const& userData = *reinterpret_cast<Data*>(data);
+
+														  return (userData.flags & func.getFlags()) == userData.flags &&
+															  func.hasSameName(userData.name) &&
+															  internal::FunctionHelper<FunctionSignature>::hasSameSignature(func);
+													  }, &data) : nullptr;
 }

@@ -5,4 +5,6 @@ project(LibraryGenerator)
 set(LibraryGeneratorTarget LibraryGenerator)
 add_executable(${LibraryGeneratorTarget} main.cpp)
 
-target_link_libraries(${LibraryGeneratorTarget} PRIVATE RefurekuGeneratorLib)
+target_link_libraries(${LibraryGeneratorTarget} PRIVATE Kodgen)
+
+target_include_directories(${LibraryGeneratorTarget} PUBLIC ../Include)

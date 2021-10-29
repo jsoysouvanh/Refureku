@@ -4,11 +4,11 @@
 #include <Kodgen/Misc/Filesystem.h>
 #include <Kodgen/Misc/DefaultLogger.h>
 #include <Kodgen/Parsing/FileParser.h>
+#include <Kodgen/CodeGen/CodeGenManager.h>
 #include <Kodgen/CodeGen/Macro/MacroCodeGenUnit.h>
+#include <Kodgen/CodeGen/Macro/MacroCodeGenUnitSettings.h>
 
 #include "RefurekuGenerator/Parsing/FileParser.h"
-#include "RefurekuGenerator/CodeGen/CodeGenManager.h"
-#include "RefurekuGenerator/CodeGen/MacroCodeGenUnitSettings.h"
 
 #include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
 
@@ -38,13 +38,17 @@ bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::Pa
 	codeGenMgrSettings.addIgnoredDirectory(outputDirectory);
 
 	result &= codeGenUnitSettings.setOutputDirectory(outputDirectory);
+	codeGenUnitSettings.setGeneratedHeaderFileNamePattern("##FILENAME##.rfkh.h");
+	codeGenUnitSettings.setGeneratedSourceFileNamePattern("##FILENAME##.rfks.h");
+	codeGenUnitSettings.setClassFooterMacroPattern("##CLASSFULLNAME##_GENERATED");
+	codeGenUnitSettings.setHeaderFileFooterMacroPattern("File_##FILENAME##_GENERATED");
 	//codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
 	//codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
 
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 	parsingSettings.shouldParseAllEntities = false;
 	parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Public");
-	result &= parsingSettings.setCompilerExeName("msvc");
+	result &= parsingSettings.setCompilerExeName("clang++");
 
 	parsingSettings.propertyParsingSettings.namespaceMacroName	= "RFKNamespace";
 	parsingSettings.propertyParsingSettings.classMacroName		= "RFKClass";
@@ -72,11 +76,11 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const&
 	}
 }
 
-void runForPrivateDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
-							kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
+void runForInternalDirectory(kodgen::ILogger& logger, kodgen::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
+							kodgen::MacroCodeGenUnit& codeGenUnit, kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings)
 {
-	logger.log("Run for private directory.");
-	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, getLibraryDirectoryPath() / "Include" / "Private" / "Refureku" / "Generated"))
+	logger.log("Run for Internal directory.");
+	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, getLibraryDirectoryPath() / "Include" / "Internal" / "Refureku" / "Generated"))
 	{
 		//Parse
 		kodgen::CodeGenResult genResult = codeGenMgr.run(fileParser, codeGenUnit, true);
@@ -90,10 +94,10 @@ void runForPrivateDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGe
 	}
 }
 
-void runForPublicDirectory(kodgen::ILogger& logger, rfk::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
-						   kodgen::MacroCodeGenUnit& codeGenUnit, rfk::MacroCodeGenUnitSettings& codeGenUnitSettings)
+void runForPublicDirectory(kodgen::ILogger& logger, kodgen::CodeGenManager& codeGenMgr, rfk::FileParser& fileParser,
+						   kodgen::MacroCodeGenUnit& codeGenUnit, kodgen::MacroCodeGenUnitSettings& codeGenUnitSettings)
 {
-	logger.log("Run for public directory.");
+	logger.log("Run for Public directory.");
 	
 	fs::path outputDirectory = getLibraryDirectoryPath() / "Include" / "Public" / "Refureku" / "Generated";
 	if (loadSettings(codeGenMgr.settings, fileParser.getSettings(), codeGenUnitSettings, outputDirectory))
@@ -136,11 +140,11 @@ int main()
 	rfk::FileParser fileParser;
 	fileParser.logger = &logger;
 
-	rfk::CodeGenManager codeGenMgr;
+	kodgen::CodeGenManager codeGenMgr;
 	codeGenMgr.logger = &logger;
 
 	kodgen::MacroCodeGenUnit codeGenUnit;
-	rfk::MacroCodeGenUnitSettings codeGenUnitSettings;
+	kodgen::MacroCodeGenUnitSettings codeGenUnitSettings;
 	codeGenUnit.logger = &logger;
 	codeGenUnit.setSettings(codeGenUnitSettings);
 	
@@ -150,7 +154,7 @@ int main()
 	//Load settings
 	logger.log("Working Directory: " + fs::current_path().string(), kodgen::ILogger::ELogSeverity::Info);
 
-	runForPrivateDirectory(logger, codeGenMgr, fileParser, codeGenUnit, codeGenUnitSettings);
+	runForInternalDirectory(logger, codeGenMgr, fileParser, codeGenUnit, codeGenUnitSettings);
 	runForPublicDirectory(logger, codeGenMgr, fileParser, codeGenUnit, codeGenUnitSettings);
 
 	return EXIT_SUCCESS;

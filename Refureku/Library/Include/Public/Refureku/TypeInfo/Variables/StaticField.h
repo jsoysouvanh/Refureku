@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -86,7 +86,7 @@ namespace rfk
 			* 
 			*	@return A pointer to this static field.
 			*/
-			RFK_NODISCARD REFUREKU_API	void*		getPtr()					const	noexcept;
+			RFK_NODISCARD REFUREKU_API	void*		getPtr()					const;
 
 			/**
 			*	@brief	Get a const pointer to this static field.
@@ -99,8 +99,11 @@ namespace rfk
 			//Forward declaration
 			class StaticFieldImpl;
 
-			GEN_GET_PIMPL(StaticFieldImpl, Entity::getPimpl())
+			RFK_GEN_GET_PIMPL(StaticFieldImpl, Entity::getPimpl())
 	};
+
+	REFUREKU_TEMPLATE_API(rfk::Allocator<StaticField const*>);
+	REFUREKU_TEMPLATE_API(rfk::Vector<StaticField const*, rfk::Allocator<StaticField const*>>);
 
 	#include "Refureku/TypeInfo/Variables/StaticField.inl"
 }

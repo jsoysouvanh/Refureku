@@ -8,12 +8,17 @@
 
 using namespace rfk;
 
-NonTypeTemplateArgument::NonTypeTemplateArgument(TemplateParameter const& boundParameter, void const* valuePtr) noexcept:
-	TemplateArgument(new NonTypeTemplateArgumentImpl(boundParameter, valuePtr))
+NonTypeTemplateArgument::NonTypeTemplateArgument(Archetype const* valueArchetype, void const* valuePtr) noexcept:
+	TemplateArgument(new NonTypeTemplateArgumentImpl(valueArchetype, valuePtr))
 {
 }
 
 NonTypeTemplateArgument::~NonTypeTemplateArgument() noexcept = default;
+
+Archetype const* NonTypeTemplateArgument::getArchetype() const noexcept
+{
+	return getPimpl()->getArchetype();
+}
 
 void const* NonTypeTemplateArgument::getValuePtr() const noexcept
 {
@@ -22,11 +27,11 @@ void const* NonTypeTemplateArgument::getValuePtr() const noexcept
 
 bool NonTypeTemplateArgument::operator==(NonTypeTemplateArgument const& other) const noexcept
 {
-	Archetype const* paramArchetype = static_cast<NonTypeTemplateParameter const&>(getBoundParameter()).getArchetype();
+	Archetype const* const valueArchetype = getPimpl()->getArchetype();
 
-	return	paramArchetype != nullptr &&
-			paramArchetype == static_cast<NonTypeTemplateParameter const&>(other.getBoundParameter()).getArchetype() &&
-			std::memcmp(getValuePtr(), other.getValuePtr(), paramArchetype->getMemorySize()) == 0;
+	return	valueArchetype != nullptr &&
+			valueArchetype == other.getPimpl()->getArchetype() &&
+			std::memcmp(getPimpl()->getValuePtr(), other.getPimpl()->getValuePtr(), valueArchetype->getMemorySize()) == 0;
 }
 
 bool NonTypeTemplateArgument::operator!=(NonTypeTemplateArgument const& other) const noexcept

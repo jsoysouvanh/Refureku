@@ -3,9 +3,14 @@
 #include <cassert>
 
 #include "Refureku/TypeInfo/Functions/MethodImpl.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/TypeInfo/Archetypes/ParentStruct.h"
 #include "Refureku/Exceptions/ConstViolation.h"
 
 using namespace rfk;
+
+template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Method const*>;
+template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Method const*, rfk::Allocator<Method const*>>;
 
 Method::Method(char const* name, std::size_t id, Type const& returnType,
 					 ICallable* internalMethod, EMethodFlags flags, Entity const* outerEntity) noexcept:
@@ -19,32 +24,41 @@ Method::~Method() noexcept = default;
 
 void Method::inheritBaseMethodProperties() noexcept
 {
-	//TODOOOOOOO
-
 	//Make sure outerEntity is set and is a class or a struct
 	assert(getOuterEntity() != nullptr && (getOuterEntity()->getKind() == EEntityKind::Struct || getOuterEntity()->getKind() == EEntityKind::Class));
 
-	//Struct const* ownerStruct = reinterpret_cast<Struct const*>(getOuterEntity());
+	Struct const* ownerStruct = reinterpret_cast<Struct const*>(getOuterEntity());
 
-	////Check inherited properties if this method is an override
-	//std::size_t directParentsCount = ownerStruct->getDirectParentsCount();
-	//if ((getFlags() & EMethodFlags::Override) == EMethodFlags::Override && directParentsCount != 0u)
-	//{
-	//	Method const* parentMethod = nullptr;
+	//Check inherited properties if this method is an override
+	std::size_t directParentsCount = ownerStruct->getDirectParentsCount();
+	if ((getFlags() & EMethodFlags::Override) == EMethodFlags::Override && directParentsCount != 0u)
+	{
+		struct Data
+		{
+			Method const& self;
+			Method const* parentMethod;
+		} data{ *this, nullptr };
 
-	//	for (std::size_t i = 0; i < directParentsCount; i++)
-	//	{
-	//		parentMethod = ownerStruct->getDirectParentAt(i).getArchetype().getMethod([this](Method const& other){ return getName() == other.getName() && hasSamePrototype(other) && isConst() == other.isConst(); }, true);
+		if (!ownerStruct->foreachDirectParent([](rfk::ParentStruct const& parent, void* userData)
+			{
+				Data& data = *reinterpret_cast<Data*>(userData);
 
-	//		if (parentMethod != nullptr)
-	//		{
-	//			//Found the parent method
-	//			inheritProperties(*parentMethod);
+				data.parentMethod = parent.getArchetype().getMethodByPredicate([](Method const& method, void* userData)
+																			   {
+																				   Method const& method2 = reinterpret_cast<Data*>(userData)->self;
 
-	//			break;
-	//		}
-	//	}
-	//}
+																				   return	method.hasSameName(method2.getName()) &&
+																							method.hasSameSignature(method2);
+																			   }, userData, true);
+
+				//Continue until we find a parent method
+				return data.parentMethod == nullptr;
+			}, &data))
+		{
+			//Found the parent method
+			getPimpl()->inheritProperties(*data.parentMethod->getPimpl());
+		}
+	}
 }
 
 void Method::throwConstViolationException(char const* message) const

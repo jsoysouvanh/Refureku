@@ -2,7 +2,7 @@
 *	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
@@ -20,7 +20,7 @@ namespace rfk::internal
 	class FunctionHelper<ReturnType(ArgTypes...)>
 	{
 		public:
-			static bool hasSamePrototype(Function const& function) noexcept;
+			static bool hasSameSignature(Function const& function) noexcept;
 	};
 
 	/** Overload for noexcept functions. */
@@ -28,7 +28,7 @@ namespace rfk::internal
 	class FunctionHelper<ReturnType(ArgTypes...) noexcept>
 	{
 		public:
-			static bool hasSamePrototype(Function const& function) noexcept;
+			static bool hasSameSignature(Function const& function) noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionHelper.inl"

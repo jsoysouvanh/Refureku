@@ -2,15 +2,24 @@
 *	Copyright (c) 2020-2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 #pragma once
 
+//Version
 #define REFUREKU_VERSION_MAJOR 2
 #define REFUREKU_VERSION_MINOR 0
 #define REFUREKU_VERSION_PATCH 0
 
+//Features
+#if !defined(_MSC_VER) || defined(__clang__)
+	#define RFK_TEMPLATE_TEMPLATE_SUPPORT 1
+#else
+	#define RFK_TEMPLATE_TEMPLATE_SUPPORT 0
+#endif
+
+//Debug / Release flags
 #ifndef NDEBUG
 
 	#define RFK_DEBUG	1
@@ -23,12 +32,11 @@
 
 #endif
 
-//Attributes macro
+//Attributes
 #define RFK_NODISCARD	[[nodiscard]]
 #define RFK_NORETURN	[[noreturn]]
-#define RFK_FALLTHROUGH	[[fallthrough]]
 
-//Dynamic library import/export macros
+//Dynamic library import/export
 #if defined(KODGEN_PARSING)
 
 	#define REFUREKU_API

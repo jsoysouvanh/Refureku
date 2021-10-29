@@ -2,7 +2,7 @@
 *	Copyright (c) 2021 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
-*	See the README.md file for full license details.
+*	See the LICENSE.md file for full license details.
 */
 
 template <typename ReturnType, typename CallerType, typename... ArgTypes>
@@ -17,7 +17,7 @@ ReturnType Method::internalInvoke(CallerType const& caller, ArgTypes&&... args) 
 	return reinterpret_cast<MemberFunction<CallerType, ReturnType(ArgTypes...)>*>(getInternalFunction())->operator()(caller, std::forward<ArgTypes>(args)...);
 }
 
-template <typename ReturnType, typename CallerType, typename... ArgTypes>
+template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
 ReturnType Method::invoke(CallerType& caller, ArgTypes&&... args) const
 {
 	return internalInvoke<ReturnType, CallerType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
@@ -34,7 +34,7 @@ ReturnType Method::invoke(CallerType const& caller, ArgTypes&&... args) const
 	return internalInvoke<ReturnType, CallerType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
 }
 
-template <typename ReturnType, typename CallerType, typename... ArgTypes>
+template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
 ReturnType Method::checkedInvoke(CallerType& caller, ArgTypes&&... args) const
 {
 	checkReturnType<ReturnType>();

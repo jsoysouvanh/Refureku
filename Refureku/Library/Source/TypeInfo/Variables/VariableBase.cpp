@@ -23,10 +23,7 @@ Type const& VariableBase::getType() const noexcept
 
 void VariableBase::set(void* target, void const* source, std::size_t dataSize) const
 {
-	if (getType().isConst())
-	{
-		throw ConstViolation("Can't use VariableBase::set on a const variable.");
-	}
+	assert(!getType().isConst());
 
 	std::memcpy(target, source, dataSize);
 }
