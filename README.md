@@ -13,8 +13,8 @@
 # Overview
 Refureku is a powerful C++17 runtime reflection dynamic library.  
 It is split in 2 parts:
-- The code generator is an executable, based on [Kodgen](https://github.com/jsoysouvanh/Kodgen). It handles the reflection code generation.
-- The actual dynamic library that is linked to the target program using reflection.
+- The code generator is a [Kodgen](https://github.com/jsoysouvanh/Kodgen) generation module. It handles the reflection code generation.
+- The actual dynamic library containing the reflection API that is linked to the target program.
 
 **Check [the Wiki](https://github.com/jsoysouvanh/Refureku/wiki) to get started!**
 
@@ -28,21 +28,27 @@ It is split in 2 parts:
 - Call reflected functions/methods
 - Instantiate reflected classes without access to their static type
 - Access dynamic type of an object instance through a base pointer/reference
-- Powerful property system allowing to attach custom metadata to any entity
+- Powerful property system allowing to attach custom metadata to any entity (C# attributes)
 - Reflection metadata is regenerated only when a file has changed
-- Customizable code generation
+- The library doesn't impose its own macro syntax: the user is free to define it
+- Highly flexible and customizable code generation
 
 ## Design goals
-There are different approaches to add reflection to a C++ program:  
-1. Write the reflected entities inside a macro that will parse the entity declaration and expand to the reflection metadata. This option completely alter the way to write entities (classes for example), and quickly becomes unreadble.
-2. Declare entities first, and reflect each of them manually afterwards using macros. The code stays readable, however the user has to write everything twice, which is both time-consuming and error-prone.
+Refureku was initially developed with game engine development in mind, which greatly influenced the global design and architecture. The usage was mostly inspired by UE4, and the API by the C# native reflection system.  
 
-Refureku uses a third approach that solves most of the above problems: code generation. The user annotates the entities they want to reflect, and when the project is compiled, reflected entities are parsed and c++ code is generated in separate files. The user just has to include the generated files in their own files, write a few macros, and done.  
-This solution is not a pure win though. There is no simple and transparent way (yet) to add reflection to C++ and each approach comes with its own pros and cons.  
+The concept is simple: you write what you want to reflect once, include the generated files, and the code generator does the rest. Users don't have any extra step to care about. Reflected entities are automatically registered to the reflection system and available right away. Manual reflection was an absolute no-go because it is error prone and time-consuming.
 
-Refureku was initially developed with game engine development in mind, which greatly influenced the global design and architecture. The ability to generate and inject custom generated code without changing the project source files might be a reason to choose Refureku over another library.
+Another point addressed by this library is the reflection syntax. It is sometimes annoying to be tied to the macro syntax of a third party library, especially when it is heavily used accross a project. Using **Refureku** x **Kodgen**, The user has full control over the generated files / macros names to make the reflection integrate well in any project.
+
+Another key point of Kodgen is that it is simple to insert and mix custom generated code to the reflection generated code. The **Refureku** code generator is a simple module added to the Kodgen generator. Users can create and add up as many code generation modules as they want to Kodgen, allowing custom generated code injection to the whole codebase without changing a single line of code in the target program.
 
 # Examples
+## All features in a single header file
+
+```cpp
+#include <Refureku/Refureku.h>
+```
+
 ## Reflect a class
 
 ```cpp
@@ -116,8 +122,7 @@ rfk::Method const* method = TestClass::staticGetArchetype().getMethodByName("tes
 
 TestClass instance;
 
-//Call method
-//Without arguments
+//Call method without arguments
 method->invoke(instance);
 
 //With arguments and returned value
@@ -129,7 +134,8 @@ int returnedValue = method->invoke<int>(instance, 1, 2, 3);
 ```cpp
 rfk::Class const* c = rfk::getDatabase().getFileLevelClassByName("TestClass");
 
-rfk::SharedPtr<TestClass> instance = c->makeSharedInstance<TestClass>(); //Instantiate from default ctor
+//Instantiate from default ctor
+rfk::SharedPtr<TestClass> instance = c->makeSharedInstance<TestClass>();
 
 //If TestClass has a base class, we can do
 rfk::SharedPtr<BaseClass> instance2 = c->makeSharedInstance<BaseClass>();
@@ -149,7 +155,7 @@ class CLASS() TestClass2 : public BaseClass
     METHOD(rfk::Instantiator)
     static rfk::SharedPtr<TestClass2> customInstantiator(int i)
     {
-        //Use this if there is no custom deleter
+        //Use this if you don't need custom deleter
         //return rfk::makeShared<TestClass2>();
 
         //Use this if you want to provide a custom deleter
@@ -173,7 +179,8 @@ File_TestClass2_GENERATED
 ```cpp
 rfk::Class const* c2 = rfk::getDatabase().getFileLevelClassByName("TestClass2");
 
-rfk::SharedPtr<BaseClass> instance3 = c2->makeSharedInstance<BaseClass>(42); //Call customInstantiator
+//Call customInstantiator
+rfk::SharedPtr<BaseClass> instance3 = c2->makeSharedInstance<BaseClass>(42);
 ```
 
 ## Create custom properties
@@ -207,7 +214,8 @@ File_ExampleProperty_GENERATED
 #include "Generated/ExampleProperty.rfks.h"
 ```
 
-Then, we can attach ExampleProperty to any reflected struct or class, as specified with the first argument of PropertySettings. Attaching the property to any other entity will trigger a compilation error with an explicit error message.
+Then, we can attach ExampleProperty to any reflected struct or class, as specified by the first argument of PropertySettings. Attaching the property to any other entity will trigger a compilation error with an explicit error message.
+
 ```cpp
 //TestClass3.h
 #pragma once
@@ -250,4 +258,4 @@ This library has been tested and is stable on the following configurations:
 # Known issues
 - _(MSVC only)_ Issues when reflecting class templates with only template template parameters, see [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
 - Compilation error when reflect protected/private nested class template
-- If a reflected namespace is shared among different modules, this namespace properties are not removed when one of the modules is unloaded.
+- If a reflected namespace is shared among different dynamic libraries, specific properties bound to each of those libraries are not removed when they are unloaded.
