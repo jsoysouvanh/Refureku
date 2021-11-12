@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="placeholder" width=400>
+<img src="Docs/rfk-logo.svg" width=300>
 
 [![License: MIT](https://img.shields.io/github/license/jsoysouvanh/Refureku)](https://github.com/jsoysouvanh/Refureku/blob/master/LICENSE.md)
 [![Latest Release](https://img.shields.io/github/v/tag/jsoysouvanh/refureku?label=release)](https://github.com/jsoysouvanh/Refureku/releases/latest)

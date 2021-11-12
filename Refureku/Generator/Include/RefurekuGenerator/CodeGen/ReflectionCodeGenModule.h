@@ -625,5 +625,5 @@ namespace rfk
 			ReflectionCodeGenModule(ReflectionCodeGenModule const&)	noexcept;
 	};
 
-#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.inl"
+	#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.inl"
 }
