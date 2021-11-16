@@ -86,7 +86,7 @@ rfk::Class const* c = rfk::getDatabase().getFileLevelClassByName("TestClass");
 rfk::Class const& c2 = TestClass::staticGetArchetype();
 
 //From reflected/unreflected type
-rfk::Class const* c3 = rfk::getArchetype<TestClass>(); //nullptr if not reflected
+rfk::Archetype const* c3 = rfk::getArchetype<TestClass>(); //nullptr if not reflected
 ```
 
 ## Get class metadata from base pointer
