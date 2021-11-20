@@ -46,7 +46,16 @@ bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::Pa
 	//codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
 
 	parsingSettings.shouldAbortParsingOnFirstError = true;
-	parsingSettings.shouldParseAllEntities = false;
+	parsingSettings.shouldParseAllNamespaces = false;
+	parsingSettings.shouldParseAllClasses = false;
+	parsingSettings.shouldParseAllStructs = false;
+	parsingSettings.shouldParseAllVariables = false;
+	parsingSettings.shouldParseAllFields = false;
+	parsingSettings.shouldParseAllFunctions = false;
+	parsingSettings.shouldParseAllMethods = false;
+	parsingSettings.shouldParseAllEnums = false;
+	parsingSettings.shouldParseAllEnumValues = true;
+
 	parsingSettings.addProjectIncludeDirectory(libraryDirectoryPath / "Include" / "Public");
 	result &= parsingSettings.setCompilerExeName("clang++");
 
