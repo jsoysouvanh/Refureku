@@ -42,8 +42,16 @@ compilerExeName = "clang++"
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError = true
 
-# Should all entities be parsed whether they are tagged with the macro or not
-shouldParseAllEntities = false
+# Should all entities be parsed whether they are annotated or not
+shouldParseAllNamespaces = false
+shouldParseAllClasses = false
+shouldParseAllStructs = false
+shouldParseAllVariables = false
+shouldParseAllFields = false
+shouldParseAllFunctions = false
+shouldParseAllMethods = false
+shouldParseAllEnums = false
+shouldParseAllEnumValues = true
 
 shouldLogDiagnostic = false
 
