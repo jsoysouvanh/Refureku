@@ -13,8 +13,15 @@ target_include_directories(${RefurekuGeneratorExeTarget} PUBLIC Include)
 target_link_libraries(${RefurekuGeneratorExeTarget} PUBLIC Kodgen)
 
 if (RFK_DEV)
+
 	# Setup compilation definitions
 	target_compile_definitions(${RefurekuGeneratorExeTarget} PUBLIC RFK_DEV=1)
+
+	if (NOT MSVC) # Clang or GCC
+		target_compile_options(${RefurekuGeneratorExeTarget} PUBLIC -fsanitize=address -fno-omit-frame-pointer)
+		target_link_options(${RefurekuGeneratorExeTarget} PUBLIC -fsanitize=address -fno-omit-frame-pointer)
+	endif()
+
 endif()
 
 if (MSVC)
