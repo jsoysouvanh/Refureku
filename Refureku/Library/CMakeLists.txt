@@ -108,7 +108,4 @@ if (RFK_DEV)
 
 endif()
 
-#Force GTest to link with shared CRT since Refureku links with shared CRT
-set(gtest_force_shared_crt ON CACHE BOOL "GTest use shared CRT (MD[d])" FORCE)
-add_subdirectory(ThirdParty/GoogleTests)
 add_subdirectory(Tests)
