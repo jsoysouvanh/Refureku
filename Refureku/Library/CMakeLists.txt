@@ -108,4 +108,6 @@ if (RFK_DEV)
 
 endif()
 
-add_subdirectory(Tests)
+if (BUILD_TESTING)
+	add_subdirectory(Tests)
+endif()
