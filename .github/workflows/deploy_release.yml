@@ -1,10 +1,7 @@
-name: Tests
+name: Deploy Release
 
 on:
   push:
-    branches:
-      - master
-      - dev
     tags:
       - 'v*.*.*'
   workflow_dispatch:
@@ -16,9 +13,7 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        build_config: [Release, Debug]
-
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -26,16 +21,15 @@ jobs:
           submodules: 'recursive'
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -G "Visual Studio 16 2019" -A x64
+        run: cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 16 2019" -A x64
 
       - name: Build Refureku
-        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+        run: cmake --build Build/Release --config Release --verbose
 
       - name: Run Tests
-        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+        run: cd Build/Release && ctest -C Release -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Windows/
@@ -50,7 +44,6 @@ jobs:
           mv Build/Release/Lib/Release/Refureku.lib RefurekuBinaries/Windows/Lib/
 
       - name: Upload Binaries Artifact
-        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -58,14 +51,13 @@ jobs:
           retention-days: 7
 
   linux_gcc_clang:
-    name: Linux | Clang/GCC
+    name: Linux | Clang
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        build_config: [Release, Debug]
-        compiler: [clang++-7, clang++-8, clang++-9, clang++-10, clang++-11, g++-8, g++-9, g++-10, g++-11]
+        compiler: [clang++-11]
 
     steps:
       - name: Checkout repository
@@ -84,9 +76,6 @@ jobs:
         with:
           cmake-version: '3.15.0'
 
-      - name: Install Valgrind
-        run: sudo apt-get install valgrind
-
       - name: Substitute Compiler Name
         uses: bluwy/substitute-string-action@v1
         id: replace_compiler
@@ -101,18 +90,16 @@ jobs:
           echo "CXX=${{ matrix.compiler }}" >> $GITHUB_ENV
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -G "Ninja"
+        run: cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja"
 
       - name: Build Refureku
-        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+        run: cmake --build Build/Release --config Release --verbose
 
       - name: Run Tests
         run: |
-          cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -T memcheck -V
-          cat ./Testing/Temporary/MemoryChecker.*.log
+          cd Build/Release && ctest -C Release -V
   
       - name: Setup Binaries Artifact
-        if: matrix.compiler == 'clang++-11' && matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Linux/
@@ -130,7 +117,6 @@ jobs:
           mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/Licenses RefurekuBinaries/
 
       - name: Upload Binaries Artifact
-        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -143,8 +129,6 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        build_config: [Release, Debug]
 
     steps:
       - name: Checkout repository
@@ -161,16 +145,15 @@ jobs:
           cmake-version: '3.15.0'
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DRFK_DEV=1 -G "Ninja"
+        run: cmake -B Build/Release -DCMAKE_BUILD_TYPE=Release -G "Ninja"
 
       - name: Build Refureku
-        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+        run: cmake --build Build/Release --config Release --verbose
 
       - name: Run Tests
-        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+        run: cd Build/Release && ctest -C Release -V
 
       - name: Setup Binaries Artifact
-        if: matrix.build_config == 'Release' && (startsWith(github.event.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
         run: |
           mkdir RefurekuBinaries
           mkdir RefurekuBinaries/Mac/
@@ -180,7 +163,6 @@ jobs:
           mv Refureku/Generator/ThirdParty/Kodgen/Kodgen/ThirdParty/x64/Shared/libclang.dylib RefurekuBinaries/Mac/Bin/
 
       - name: Upload Binaries Artifact
-        if: success()
         uses: actions/upload-artifact@v2
         with:
           name: RefurekuBinaries
@@ -192,7 +174,6 @@ jobs:
     name: Deploy Binaries
     runs-on: ubuntu-latest
     needs: [windows_msvc, linux_gcc_clang, macos]
-    if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
       - name: Install zip

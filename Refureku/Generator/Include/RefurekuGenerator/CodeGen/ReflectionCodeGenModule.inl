@@ -858,7 +858,7 @@ void ReflectionCodeGenModule::declareAndDefineClassRegistererVariable(kodgen::St
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_" + getEntityId(structClass) + " = " +
+		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer const registerer_" + getEntityId(structClass) + " = " +
 			structClass.getFullName() + "::staticGetArchetype(); }" + env.getSeparator() + env.getSeparator();
 	}
 }
@@ -908,7 +908,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererField(kodge
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "private: static inline rfk::ClassTemplateInstantiationRegisterer _rfk_registerer = staticGetArchetype(); rfk::internal::ForceGenerateSymbol<&_rfk_registerer> _rfk_forceRegister() = delete;" + env.getSeparator() + env.getSeparator();
+		inout_result += "private: static inline rfk::ClassTemplateInstantiationRegisterer const _rfk_registerer = staticGetArchetype(); rfk::internal::ForceGenerateSymbol<&_rfk_registerer> _rfk_forceRegister() = delete;" + env.getSeparator() + env.getSeparator();
 	}
 }
 
@@ -1025,7 +1025,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateRegistererVariable(ko
 	//If there is an outer entity, it will register its nested entities to the database itself.
 	if (structClass.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer register_" + getEntityId(structClass) +
+		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer const register_" + getEntityId(structClass) +
 			" = *rfk::getArchetype<::" + structClass.type.getName(false, false, true) + ">(); }" + env.getSeparator() + env.getSeparator();
 	}
 }
@@ -1234,7 +1234,7 @@ void ReflectionCodeGenModule::declareAndDefineEnumRegistererVariable(kodgen::Enu
 {
 	if (enum_.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer registerer_" + getEntityId(enum_) + " = *rfk::getEnum<" + enum_.type.getCanonicalName() + ">(); }" + env.getSeparator();
+		inout_result += "namespace rfk::generated { static rfk::ArchetypeRegisterer const registerer_" + getEntityId(enum_) + " = *rfk::getEnum<" + enum_.type.getCanonicalName() + ">(); }" + env.getSeparator();
 	}
 }
 
@@ -1276,7 +1276,7 @@ void ReflectionCodeGenModule::declareAndDefineVariableRegistererVariable(kodgen:
 {
 	if (variable.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer_" + getEntityId(variable) +
+		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer const registerer_" + getEntityId(variable) +
 			" = *rfk::getVariable<&" + variable.getFullName() + ">(); }" + env.getSeparator();
 	}
 }
@@ -1342,7 +1342,7 @@ void ReflectionCodeGenModule::declareAndDefineFunctionRegistererVariable(kodgen:
 {
 	if (function.outerEntity == nullptr)
 	{
-		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer registerer" + getEntityId(function) +
+		inout_result += "namespace rfk::generated { static rfk::DefaultEntityRegisterer const registerer" + getEntityId(function) +
 			" = *rfk::getFunction<static_cast<" + computeFunctionPtrType(function) + ">(&" + function.getFullName() + ")>(); }" + env.getSeparator();
 	}
 }
@@ -1438,7 +1438,7 @@ void ReflectionCodeGenModule::declareAndDefineNamespaceFragmentRegistererVariabl
 {
 	assert(namespace_.outerEntity == nullptr);
 
-	inout_result += "static rfk::NamespaceFragmentRegisterer " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) +
+	inout_result += "static rfk::NamespaceFragmentRegisterer const " + computeNamespaceFragmentRegistererName(namespace_, env.getFileParsingResult()->parsedFile) +
 		"(rfk::generated::" + computeGetNamespaceFragmentFunctionName(namespace_, env.getFileParsingResult()->parsedFile) + "());" + env.getSeparator();
 }
 
