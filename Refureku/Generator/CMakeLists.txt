@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.5)
+cmake_minimum_required(VERSION 3.14.0)
 
 project(RefurekuGenerator)
 
@@ -8,9 +8,9 @@ add_subdirectory(ThirdParty/Kodgen)
 set(RefurekuGeneratorExeTarget RefurekuGenerator)
 add_executable(${RefurekuGeneratorExeTarget} Source/main.cpp)
 
-target_include_directories(${RefurekuGeneratorExeTarget} PUBLIC Include)
+target_include_directories(${RefurekuGeneratorExeTarget} PRIVATE Include)
 
-target_link_libraries(${RefurekuGeneratorExeTarget} PUBLIC Kodgen)
+target_link_libraries(${RefurekuGeneratorExeTarget} PRIVATE Kodgen)
 
 if (RFK_DEV)
 
@@ -33,7 +33,7 @@ if (MSVC)
 else ()	# Clang or GCC
 
 	target_compile_options(${RefurekuGeneratorExeTarget} PRIVATE -Wall -Wextra -Wpedantic)
-
+	
 endif()
 
 
