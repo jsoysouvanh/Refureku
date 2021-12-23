@@ -102,7 +102,7 @@ jobs:
       - name: Install patchelf
         run: sudo apt-get install patchelf
 
-      - name: Update ELF RUNPATH
+      - name: Patch ELF RUNPATH
         run: patchelf --set-rpath "\$ORIGIN" Build/Release/Bin/RefurekuGenerator
   
       - name: Setup Binaries Artifact
@@ -157,6 +157,12 @@ jobs:
 
       - name: Run Tests
         run: cd Build/Release && ctest -C Release -V
+
+        # The 2nd command (install_name_tool -change) is probably wrong since the first argument (libclang.dylib) is not a valid path in the exe
+      - name: Patch RPATH
+        run: |
+          install_name_tool -add_rpath @executable_path Build/Release/Bin/RefurekuGenerator
+          install_name_tool -change libclang.dylib @rpath/libclang.dylib Build/Release/Bin/RefurekuGenerator
 
       - name: Setup Binaries Artifact
         run: |
