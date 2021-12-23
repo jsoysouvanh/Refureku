@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.5)
+cmake_minimum_required(VERSION 3.14.0)
 
 project(RefurekuGenerator)
 
@@ -8,9 +8,22 @@ add_subdirectory(ThirdParty/Kodgen)
 set(RefurekuGeneratorExeTarget RefurekuGenerator)
 add_executable(${RefurekuGeneratorExeTarget} Source/main.cpp)
 
-target_include_directories(${RefurekuGeneratorExeTarget} PUBLIC Include)
+target_include_directories(${RefurekuGeneratorExeTarget} PRIVATE Include)
 
-target_link_libraries(${RefurekuGeneratorExeTarget} PUBLIC Kodgen)
+target_link_libraries(${RefurekuGeneratorExeTarget} PRIVATE Kodgen)
+
+set_target_properties(${RefurekuGeneratorExeTarget} PROPERTIES
+						BUILD_RPATH_USE_ORIGIN TRUE
+						SKIP_BUILD_RPATH FALSE)
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	set_target_properties(${RefurekuGeneratorExeTarget} PROPERTIES
+							MACOSX_RPATH TRUE
+							BUILD_RPATH "@executable_path")
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	set_target_properties(${RefurekuGeneratorExeTarget} PROPERTIES
+							BUILD_RPATH "\$ORIGIN")
+endif()
 
 if (RFK_DEV)
 
@@ -33,11 +46,7 @@ if (MSVC)
 else ()	# Clang or GCC
 
 	target_compile_options(${RefurekuGeneratorExeTarget} PRIVATE -Wall -Wextra -Wpedantic)
-
-	if (NOT WIN32)
-		target_link_options(${RefurekuGeneratorExeTarget} PRIVATE -Wl,--enable-new-dtags,-rpath,$ORIGIN)
-	endif()
-
+	
 endif()
 
 
