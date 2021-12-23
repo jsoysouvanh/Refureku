@@ -12,19 +12,6 @@ target_include_directories(${RefurekuGeneratorExeTarget} PRIVATE Include)
 
 target_link_libraries(${RefurekuGeneratorExeTarget} PRIVATE Kodgen)
 
-set_target_properties(${RefurekuGeneratorExeTarget} PROPERTIES
-						BUILD_RPATH_USE_ORIGIN TRUE
-						SKIP_BUILD_RPATH FALSE)
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	set_target_properties(${RefurekuGeneratorExeTarget} PROPERTIES
-							MACOSX_RPATH TRUE
-							BUILD_RPATH "@executable_path")
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	set_target_properties(${RefurekuGeneratorExeTarget} PROPERTIES
-							BUILD_RPATH "\$ORIGIN")
-endif()
-
 if (RFK_DEV)
 
 	# Setup compilation definitions

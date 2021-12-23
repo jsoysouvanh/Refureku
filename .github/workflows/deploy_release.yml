@@ -98,6 +98,12 @@ jobs:
       - name: Run Tests
         run: |
           cd Build/Release && ctest -C Release -V
+
+      - name: Install patchelf
+        run: sudo apt-get install patchelf
+
+      - name: Update ELF RUNPATH
+        run: patchelf --set-rpath "\$ORIGIN" Build/Release/Bin/RefurekuGenerator
   
       - name: Setup Binaries Artifact
         run: |
