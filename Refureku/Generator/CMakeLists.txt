@@ -34,6 +34,10 @@ else ()	# Clang or GCC
 
 	target_compile_options(${RefurekuGeneratorExeTarget} PRIVATE -Wall -Wextra -Wpedantic)
 
+	if (NOT WIN32)
+		target_link_options(${RefurekuGeneratorExeTarget} PRIVATE -Wl,--enable-new-dtags,-rpath,$ORIGIN)
+	endif()
+
 endif()
 
 
