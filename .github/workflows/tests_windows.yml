@@ -10,7 +10,7 @@ on:
 jobs:
   windows_msvc:
     name: Windows | MSVC
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     strategy:
       fail-fast: false
