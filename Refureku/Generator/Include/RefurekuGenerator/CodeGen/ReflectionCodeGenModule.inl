@@ -1258,7 +1258,7 @@ void ReflectionCodeGenModule::declareGetVariableFunction(kodgen::VariableInfo co
 {
 	beginHiddenGeneratedCode(env, inout_result);
 
-	inout_result += "template <> rfk::Variable const* rfk::getVariable<&" + variable.getFullName() + ">() noexcept; " + env.getSeparator();
+	inout_result += "template <> " + env.getExportSymbolMacro() + " rfk::Variable const* rfk::getVariable<&" + variable.getFullName() + ">() noexcept; " + env.getSeparator();
 
 	endHiddenGeneratedCode(env, inout_result);
 }
@@ -1313,7 +1313,7 @@ void ReflectionCodeGenModule::declareGetFunctionFunction(kodgen::FunctionInfo co
 {
 	beginHiddenGeneratedCode(env, inout_result);
 
-	inout_result += "template <> rfk::Function const* rfk::getFunction<static_cast<" + computeFunctionPtrType(function) + ">(&" + function.getFullName() + ")>() noexcept; ";
+	inout_result += "template <> " + env.getExportSymbolMacro() + " rfk::Function const* rfk::getFunction<static_cast<" + computeFunctionPtrType(function) + ">(&" + function.getFullName() + ")>() noexcept; ";
 
 	endHiddenGeneratedCode(env, inout_result);
 }
