@@ -43,6 +43,6 @@ public:  virtual rfk::Class const& getArchetype() const noexcept override;\
 
 
 #define File_PropertySettings_GENERATED	\
-template <>  rfk::Archetype const* rfk::getArchetype<rfk::PropertySettings>() noexcept;\
+template <> REFUREKU_API rfk::Archetype const* rfk::getArchetype<rfk::PropertySettings>() noexcept;\
 
 

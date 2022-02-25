@@ -40,7 +40,7 @@
 //Dynamic library import/export
 #if defined(KODGEN_PARSING)
 
-	#define REFUREKU_API
+	#define REFUREKU_API				__attribute__((dllexport))
 	#define REFUREKU_INTERNAL
 	#define REFUREKU_TEMPLATE_API(...)
 

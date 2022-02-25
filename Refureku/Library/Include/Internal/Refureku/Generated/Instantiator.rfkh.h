@@ -43,6 +43,6 @@ public:  virtual rfk::Class const& getArchetype() const noexcept override;\
 
 
 #define File_Instantiator_GENERATED	\
-template <>  rfk::Archetype const* rfk::getArchetype<rfk::Instantiator>() noexcept;\
+template <> REFUREKU_API rfk::Archetype const* rfk::getArchetype<rfk::Instantiator>() noexcept;\
 
 

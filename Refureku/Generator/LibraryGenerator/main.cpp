@@ -42,7 +42,7 @@ bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::Pa
 	codeGenUnitSettings.setGeneratedSourceFileNamePattern("##FILENAME##.rfks.h");
 	codeGenUnitSettings.setClassFooterMacroPattern("##CLASSFULLNAME##_GENERATED");
 	codeGenUnitSettings.setHeaderFileFooterMacroPattern("File_##FILENAME##_GENERATED");
-	//codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
+	codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
 	//codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
 
 	parsingSettings.shouldAbortParsingOnFirstError = true;

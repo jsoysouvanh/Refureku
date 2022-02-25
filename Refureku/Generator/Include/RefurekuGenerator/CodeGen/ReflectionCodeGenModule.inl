@@ -367,7 +367,15 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "public: " + env.getExportSymbolMacro() + " static ";
+	inout_result += "public: ";
+	
+	//This is injected inside the class, so don't redeclare export symbol if the class already declares it (because it causes compil errors on MSVC)
+	if (!structClass.isImportExport)
+	{
+		inout_result += env.getExportSymbolMacro();
+	}
+	
+	inout_result += " static ";
 	inout_result += (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
 	inout_result += " const& staticGetArchetype() noexcept;" + env.getSeparator() + env.getSeparator();
 }
@@ -376,7 +384,15 @@ void ReflectionCodeGenModule::declareGetArchetypeMethodIfInheritFromObject(kodge
 {
 	if (env.getFileParsingResult()->structClassTree.isBaseOf("rfk::Object", structClass.getFullName()))
 	{
-		inout_result += "public: " + env.getExportSymbolMacro() + " virtual ";
+		inout_result += "public: ";
+
+		//This is injected inside the class, so don't redeclare export symbol if the class already declares it (because it causes compil errors on MSVC)
+		if (!structClass.isImportExport)
+		{
+			inout_result += env.getExportSymbolMacro();
+		}
+
+		inout_result += " virtual ";
 		inout_result += (structClass.isClass()) ? "rfk::Class" : "rfk::Struct";
 		inout_result += " const& getArchetype() const noexcept override;" + env.getSeparator() + env.getSeparator();
 	}
