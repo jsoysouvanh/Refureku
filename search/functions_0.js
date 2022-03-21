@@ -20,6 +20,6 @@ var searchData=
   ['addtemplateparameter_17',['addTemplateParameter',['../classrfk_1_1_class_template.html#a8acf06ebace9ac83842283799dc667ce',1,'rfk::ClassTemplate::addTemplateParameter()'],['../classrfk_1_1_template_template_parameter.html#aa683e4e7619c78ae6f10ab7f6f56c30e',1,'rfk::TemplateTemplateParameter::addTemplateParameter()']]],
   ['addtypepart_18',['addTypePart',['../classrfk_1_1_type.html#a12074104cacf20c4251681e0177c47b1',1,'rfk::Type']]],
   ['addvariable_19',['addVariable',['../classrfk_1_1_namespace.html#a058b7d0c63fc70827d20cc52d35a46f0',1,'rfk::Namespace']]],
-  ['allocate_20',['allocate',['../classrfk_1_1_allocator.html#a164010834550c469a5dcc5ce74089996',1,'rfk::Allocator']]],
+  ['allocate_20',['allocate',['../classrfk_1_1_allocator.html#a4c58561b5cc039eecdef18ece747e452',1,'rfk::Allocator']]],
   ['archetypecast_21',['archetypeCast',['../namespacerfk.html#a71b75583f8bc8e2fb071b8d26046dd8d',1,'rfk']]]
 ];

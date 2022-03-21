@@ -20,7 +20,7 @@ var searchData=
   ['addtemplateparameter_17',['addTemplateParameter',['../classrfk_1_1_class_template.html#a8acf06ebace9ac83842283799dc667ce',1,'rfk::ClassTemplate::addTemplateParameter()'],['../classrfk_1_1_template_template_parameter.html#aa683e4e7619c78ae6f10ab7f6f56c30e',1,'rfk::TemplateTemplateParameter::addTemplateParameter()']]],
   ['addtypepart_18',['addTypePart',['../classrfk_1_1_type.html#a12074104cacf20c4251681e0177c47b1',1,'rfk::Type']]],
   ['addvariable_19',['addVariable',['../classrfk_1_1_namespace.html#a058b7d0c63fc70827d20cc52d35a46f0',1,'rfk::Namespace']]],
-  ['allocate_20',['allocate',['../classrfk_1_1_allocator.html#a164010834550c469a5dcc5ce74089996',1,'rfk::Allocator']]],
+  ['allocate_20',['allocate',['../classrfk_1_1_allocator.html#a4c58561b5cc039eecdef18ece747e452',1,'rfk::Allocator']]],
   ['allocator_21',['Allocator',['../classrfk_1_1_allocator.html',1,'rfk']]],
   ['allowmultiple_22',['allowMultiple',['../classrfk_1_1_property.html#a489f95106616553acc46a1bd1b10135b',1,'rfk::Property']]],
   ['archetype_23',['Archetype',['../classrfk_1_1_archetype.html',1,'rfk']]],
