@@ -262,3 +262,4 @@ This library has been tested and is stable on the following configurations:
 - _(MSVC only)_ Issues when reflecting class templates with only template template parameters, see [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
 - Compilation error when reflect protected/private nested class template
 - If a reflected namespace is shared among different dynamic libraries, specific properties bound to each of those libraries are not removed when they are unloaded.
+- Calling a parent class virtual reflected method on a child instance when the parent is not the first inherited class (offset is not 0) doesn't work. A dynamic casting system needs to be implemented to adjust the instance address before calling the method.
