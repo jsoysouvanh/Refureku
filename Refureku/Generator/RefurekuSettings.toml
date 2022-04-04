@@ -28,6 +28,10 @@ generatedSourceFileNamePattern = "##FILENAME##.rfks.h"
 classFooterMacroPattern = "##CLASSFULLNAME##_GENERATED"
 headerFileFooterMacroPattern = "File_##FILENAME##_GENERATED"
 
+# Uncomment if you use Refureku on a dynamic library (.dll/.so/.dylib)
+# Define the export macro so that Refureku can export relevant generated code
+# exportSymbolMacroName = "EXAMPLE_IMPORT_EXPORT_MACRO"
+
 
 [ParsingSettings]
 # Used c++ version (supported values are: 17, 20)
