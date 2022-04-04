@@ -30,6 +30,9 @@ headerFileFooterMacroPattern = "File_##FILENAME##_GENERATED"
 
 
 [ParsingSettings]
+# Used c++ version (supported values are: 17, 20)
+cppVersion = 17
+
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError = true
 

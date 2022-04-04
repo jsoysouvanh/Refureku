@@ -45,6 +45,7 @@ bool loadSettings(kodgen::CodeGenManagerSettings& codeGenMgrSettings, kodgen::Pa
 	codeGenUnitSettings.setExportSymbolMacroName("REFUREKU_API");
 	//codeGenUnitSettings.setInternalSymbolMacroName("REFUREKU_INTERNAL");
 
+	parsingSettings.cppVersion = kodgen::ECppVersion::Cpp17;
 	parsingSettings.shouldAbortParsingOnFirstError = true;
 	parsingSettings.shouldParseAllNamespaces = false;
 	parsingSettings.shouldParseAllClasses = false;
