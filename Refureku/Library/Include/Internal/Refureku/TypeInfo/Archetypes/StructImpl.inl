@@ -84,38 +84,73 @@ inline StaticMethod* Struct::StructImpl::addStaticMethod(char const* name, std::
 	return const_cast<StaticMethod*>(&*_staticMethods.emplace(name, id, returnType, internalMethod, flags, outerEntity));
 }
 
-inline void Struct::StructImpl::addInstantiator(StaticMethod const& instantiator) noexcept
+inline void Struct::StructImpl::addSharedInstantiator(StaticMethod const& instantiator) noexcept
 {
 	std::size_t parametersCount = instantiator.getParametersCount();
 
 	//If it is a parameterless instantiator, use it as the (unique) default instantiator
 	if (parametersCount == 0u)
 	{
-		if (!_instantiators.empty() && _instantiators[0]->getParametersCount() == 0u)
+		if (!_sharedInstantiators.empty() && _sharedInstantiators[0]->getParametersCount() == 0u)
 		{
 			//There is already a default instantiator, so replace it
-			_instantiators[0] = &instantiator;
+			_sharedInstantiators[0] = &instantiator;
 		}
 		else
 		{
 			//No default instantiator, add a new one
-			_instantiators.insert(_instantiators.cbegin(), &instantiator);
+			_sharedInstantiators.insert(_sharedInstantiators.cbegin(), &instantiator);
 		}
 	}
 	else
 	{
 		//Insert instantiators by ascendent parameters count
-		for (auto it = _instantiators.cbegin(); it != _instantiators.cend(); it++)
+		for (auto it = _sharedInstantiators.cbegin(); it != _sharedInstantiators.cend(); it++)
 		{
 			if ((*it)->getParametersCount() >= parametersCount)
 			{
-				_instantiators.insert(it, &instantiator);
+				_sharedInstantiators.insert(it, &instantiator);
 				return;
 			}
 		}
 
 		//Couldn't insert the instantiator in-between elements, so add it at the end
-		_instantiators.push_back(&instantiator);
+		_sharedInstantiators.push_back(&instantiator);
+	}
+}
+
+inline void Struct::StructImpl::addUniqueInstantiator(StaticMethod const& instantiator) noexcept
+{
+	std::size_t parametersCount = instantiator.getParametersCount();
+
+	//If it is a parameterless instantiator, use it as the (unique) default instantiator
+	if (parametersCount == 0u)
+	{
+		if (!_uniqueInstantiators.empty() && _uniqueInstantiators[0]->getParametersCount() == 0u)
+		{
+			//There is already a default instantiator, so replace it
+			_uniqueInstantiators[0] = &instantiator;
+		}
+		else
+		{
+			//No default instantiator, add a new one
+			_uniqueInstantiators.insert(_uniqueInstantiators.cbegin(), &instantiator);
+		}
+	}
+	else
+	{
+		//Insert instantiators by ascendent parameters count
+		for (auto it = _uniqueInstantiators.cbegin(); it != _uniqueInstantiators.cend(); it++)
+		{
+			if ((*it)->getParametersCount() >= parametersCount)
+			{
+				_uniqueInstantiators.insert(it, &instantiator);
+				return;
+			}
+		}
+
+		//Couldn't insert the instantiator in-between elements, so add it at the end
+		_uniqueInstantiators.push_back(&instantiator);
 	}
 }
 
@@ -193,9 +228,14 @@ inline Struct::StructImpl::StaticMethods const& Struct::StructImpl::getStaticMet
 	return _staticMethods;
 }
 
-inline Struct::StructImpl::Instantiators const& Struct::StructImpl::getInstantiators() const noexcept
+inline Struct::StructImpl::Instantiators const& Struct::StructImpl::getSharedInstantiators() const noexcept
 {
-	return _instantiators;
+	return _sharedInstantiators;
+}
+
+inline Struct::StructImpl::Instantiators const& Struct::StructImpl::getUniqueInstantiators() const noexcept
+{
+	return _uniqueInstantiators;
 }
 
 inline EClassKind Struct::StructImpl::getClassKind() const noexcept

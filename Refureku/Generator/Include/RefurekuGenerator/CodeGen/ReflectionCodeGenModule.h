@@ -293,10 +293,10 @@ namespace rfk
 			*	@param generatedClassVarName	Name of the variable holding the class metadata in the generated code.
 			*	@param inout_result				String to append the generated code.
 			*/
-			void	setClassDefaultInstantiator(kodgen::StructClassInfo const&	structClass,
-												kodgen::MacroCodeGenEnv&		env,
-												std::string const&				generatedClassVarName,
-												std::string&					inout_result)							noexcept;
+			void	setClassDefaultInstantiators(kodgen::StructClassInfo const&	structClass,
+												 kodgen::MacroCodeGenEnv&		env,
+												 std::string const&				generatedClassVarName,
+												 std::string&					inout_result)							noexcept;
 
 			/**
 			*	TODO

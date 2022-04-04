@@ -36,6 +36,8 @@ class CLASS() TestMethodBaseClass
 		virtual void pureVirtualMethod2() noexcept = 0;
 
 	public:
+		virtual ~TestMethodBaseClass() = default;
+
 		METHOD()
 		inline void inlineMethodInHeader() noexcept { }
 

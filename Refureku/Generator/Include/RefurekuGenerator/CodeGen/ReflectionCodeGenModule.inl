@@ -418,7 +418,7 @@ void ReflectionCodeGenModule::defineStaticGetArchetypeMethod(kodgen::StructClass
 	fillClassFields(structClass, env, "type", inout_result);
 
 	//Set the default instantiator BEFORE filling the class methods since methods can overwrite the custom instantiator
-	setClassDefaultInstantiator(structClass, env, "type.", inout_result);
+	setClassDefaultInstantiators(structClass, env, "type.", inout_result);
 	fillClassMethods(structClass, env, "type.", inout_result);
 	fillClassNestedArchetypes(structClass, env, "type.", inout_result);
 
@@ -574,7 +574,7 @@ void ReflectionCodeGenModule::fillEntityProperties(kodgen::EntityInfo const& ent
 	}
 }
 
-void ReflectionCodeGenModule::setClassDefaultInstantiator(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env,
+void ReflectionCodeGenModule::setClassDefaultInstantiators(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env,
 														  std::string const& generatedClassVarName, std::string& inout_result) noexcept
 {
 	inout_result += "static rfk::StaticMethod defaultSharedInstantiator(\"\", 0u, rfk::getType<rfk::SharedPtr<" + structClass.name +">>(),"
@@ -582,6 +582,12 @@ void ReflectionCodeGenModule::setClassDefaultInstantiator(kodgen::StructClassInf
 		"rfk::EMethodFlags::Default, nullptr);" + env.getSeparator();
 
 	inout_result += generatedClassVarName + "addSharedInstantiator(defaultSharedInstantiator);" + env.getSeparator();
+
+	inout_result += "static rfk::StaticMethod defaultUniqueInstantiator(\"\", 0u, rfk::getType<rfk::UniquePtr<" + structClass.name +">>(),"
+		"new rfk::NonMemberFunction<rfk::UniquePtr<" + structClass.name + ">()>(&rfk::internal::CodeGenerationHelpers::defaultUniqueInstantiator<" + structClass.name + ">),"
+		"rfk::EMethodFlags::Default, nullptr);" + env.getSeparator();
+
+	inout_result += generatedClassVarName + "addUniqueInstantiator(defaultUniqueInstantiator);" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::fillClassParents(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env,
@@ -671,7 +677,7 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 			{
 				if (_instantiatorProperty.shouldGenerateCodeForEntity(method, method.properties[i], i))
 				{
-					_instantiatorProperty.addInstantiatorToClass(method.properties[i], generatedEntityVarName, "staticMethod", inout_result);
+					_instantiatorProperty.addInstantiatorToClass(method, method.properties[i], generatedEntityVarName, "staticMethod", inout_result);
 					break;
 				}
 			}
@@ -952,7 +958,7 @@ void ReflectionCodeGenModule::declareAndDefineClassTemplateStaticGetArchetypeMet
 	fillClassFields(structClass, env, "type", inout_result);
 
 	//Set the default instantiator BEFORE filling the class methods since methods can overwrite the custom instantiator
-	setClassDefaultInstantiator(structClass, env, "type.", inout_result);
+	setClassDefaultInstantiators(structClass, env, "type.", inout_result);
 	fillClassMethods(structClass, env, "type.", inout_result);
 	fillClassNestedArchetypes(structClass, env, "type.", inout_result);
 

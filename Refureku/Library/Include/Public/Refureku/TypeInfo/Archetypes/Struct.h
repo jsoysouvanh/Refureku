@@ -16,6 +16,7 @@
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
 #include "Refureku/TypeInfo/Functions/MethodHelper.h"
 #include "Refureku/Misc/SharedPtr.h"
+#include "Refureku/Misc/UniquePtr.h"
 
 namespace rfk
 {
@@ -46,12 +47,28 @@ namespace rfk
 			*			One can add new instantiators to any class by using the Instantiator method property.
 			*
 			*	@return An instance of this struct if a suitable instantiator was found, else nullptr.
+			*			This method can use both instantiators returning rfk::SharedPtr and rfk::UniquePtr.
+			*			However, make a shared instance through a unique instantiator has a slightly higher performance impact
+			*			since a unique ptr is created and then moved to construct the returned shared ptr.
 			* 
 			*	@exception Any exception potentially thrown by the used instantiator.
 			*/
 			template <typename ReturnType, typename... ArgTypes>
 			RFK_NODISCARD 
 				rfk::SharedPtr<ReturnType>			makeSharedInstance(ArgTypes&&... args)												const;
+
+			/**
+			*	@brief	Make an instance of the class represented by this archetype with the matching instantiator.
+			*			One can add new instantiators to any class by using the Instantiator method property.
+			*
+			*	@return An instance of this struct if a suitable instantiator was found, else nullptr.
+			*			This method can only use instantiators returning rfk::UniquePtr.
+			* 
+			*	@exception Any exception potentially thrown by the used instantiator.
+			*/
+			template <typename ReturnType, typename... ArgTypes>
+			RFK_NODISCARD 
+				rfk::UniquePtr<ReturnType>			makeUniqueInstance(ArgTypes&&... args)												const;
 
 			/**
 			*	@brief	Compute the list of all direct reflected subclasses of this struct.
@@ -789,6 +806,15 @@ namespace rfk
 			*/
 			REFUREKU_API void						addSharedInstantiator(StaticMethod const& instantiator)										noexcept;
 
+			/**
+			*	@brief	Add a new way to instantiate this struct through the makeUniqueInstance method.
+			*			The passed static method MUST return a rfk::UniquePtr<StructType>. Otherwise, the behaviour is undefined
+			*			when calling Struct::makeUniqueInstance.
+			*	
+			*	@param instantiator Pointer to the static method.
+			*/
+			REFUREKU_API void						addUniqueInstantiator(StaticMethod const& instantiator)										noexcept;
+
 		protected:
 			//Forward declaration
 			class StructImpl;
@@ -804,7 +830,7 @@ namespace rfk
 
 		private:
 			/**
-			*	@brief Execute the given visitor on all instantiators taking a given number of parameters in this struct.
+			*	@brief Execute the given visitor on all shared instantiators taking a given number of parameters in this struct.
 			* 
 			*	@param argCount	Number of arguments the instantiator takes.
 			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
@@ -815,9 +841,25 @@ namespace rfk
 			* 
 			*	@exception Any exception potentially thrown from the provided visitor.
 			*/
-			REFUREKU_API bool	foreachInstantiator(std::size_t				argCount,
-													Visitor<StaticMethod>	visitor,
-													void*					userData)	const;
+			REFUREKU_API bool	foreachSharedInstantiator(std::size_t			argCount,
+														  Visitor<StaticMethod>	visitor,
+														  void*					userData)	const;
+
+			/**
+			*	@brief Execute the given visitor on all unique instantiators taking a given number of parameters in this struct.
+			* 
+			*	@param argCount	Number of arguments the instantiator takes.
+			*	@param visitor	Visitor function to call. Return false to abort the foreach loop.
+			*	@param userData	Optional user data forwarded to the visitor.
+			* 
+			*	@return	The last visitor result before exiting the loop.
+			*			If the visitor is nullptr, return false.
+			* 
+			*	@exception Any exception potentially thrown from the provided visitor.
+			*/
+			REFUREKU_API bool	foreachUniqueInstantiator(std::size_t			argCount,
+														  Visitor<StaticMethod>	visitor,
+														  void*					userData)	const;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Struct const*>);

@@ -54,3 +54,19 @@ rfk::SharedPtr<T> CodeGenerationHelpers::defaultSharedInstantiator()
 		return nullptr;
 	}
 }
+
+template <typename T>
+rfk::UniquePtr<T> CodeGenerationHelpers::defaultUniqueInstantiator()
+#if !defined(__GNUC__) || defined (__clang__) || __GNUC__ > 9
+noexcept(!std::is_default_constructible_v<T> || std::is_nothrow_constructible_v<T>)
+#endif
+{
+	if constexpr (std::is_default_constructible_v<T>)
+	{
+		return rfk::makeUnique<T>();
+	}
+	else
+	{
+		return nullptr;
+	}
+}

@@ -56,8 +56,11 @@ namespace rfk
 			/** All reflected static methods declared in this struct. */
 			StaticMethods		_staticMethods;
 
-			/** List of all custom instantiators for this archetype. */
-			Instantiators		_instantiators;
+			/** List of all custom instantiators returning rfk::SharedPtr for this archetype. */
+			Instantiators		_sharedInstantiators;
+
+			/** List of all custom instantiators returning rfk::UniquePtr for this archetype. */
+			Instantiators		_uniqueInstantiators;
 
 			/** Kind of a rfk::Struct or rfk::Class instance. */
 			EClassKind			_classKind;
@@ -234,12 +237,20 @@ namespace rfk
 																		Struct const*	outerEntity)					noexcept;
 
 			/**
-			*	@brief	Add a new way to instantiate this struct through the makeInstance method.
-			*			If the provided static method takes no parameter, it will override the default instantiator.
+			*	@brief	Add a new way to instantiate this struct through the makeSharedInstance method.
+			*			If the provided static method takes no parameter, it will override the default shared instantiator.
 			*	
 			*	@param instantiator Pointer to the static method.
 			*/
-			inline void									addInstantiator(StaticMethod const& instantiator)				noexcept;
+			inline void									addSharedInstantiator(StaticMethod const& instantiator)			noexcept;
+
+			/**
+			*	@brief	Add a new way to instantiate this struct through the makeUniqueInstance (and makeSharedInstance) method.
+			*			If the provided static method takes no parameter, it will override the default unique instantiator.
+			*	
+			*	@param instantiator Pointer to the static method.
+			*/
+			inline void									addUniqueInstantiator(StaticMethod const& instantiator)			noexcept;
 
 			/**
 			*	@brief Get a nested archetype by name / access specifier.
@@ -302,11 +313,18 @@ namespace rfk
 			RFK_NODISCARD inline StaticMethods const&		getStaticMethods()									const	noexcept;
 
 			/**
-			*	@brief Getter for the field _instantiators.
+			*	@brief Getter for the field _sharedInstantiators.
 			* 
-			*	@return _instantiators.
+			*	@return _sharedInstantiators.
 			*/
-			RFK_NODISCARD inline Instantiators const&		getInstantiators()									const	noexcept;
+			RFK_NODISCARD inline Instantiators const&		getSharedInstantiators()							const	noexcept;
+
+			/**
+			*	@brief Getter for the field _uniqueInstantiators.
+			* 
+			*	@return _uniqueInstantiators.
+			*/
+			RFK_NODISCARD inline Instantiators const&		getUniqueInstantiators()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _classKind.
