@@ -48,6 +48,26 @@ namespace rfk::internal
 			static constexpr void					registerChildClass(rfk::Struct& childClass)	noexcept;
 
 			/**
+			*	@brief	Retrieve the number of reflected fields of the provided class.
+			* 
+			*	@tparam ClassType Type of the class.
+			* 
+			*	@return The number of reflected fields in the class when the method is called. If the class is not reflected, return 0.
+			*/
+			template <typename ClassType>
+			static std::size_t						getReflectedFieldsCount()					noexcept;
+
+			/**
+			*	@brief	Retrieve the number of reflected static fields of the provided class.
+			* 
+			*	@tparam ClassType Type of the class.
+			* 
+			*	@return The number of reflected static fields in the class when the method is called. If the class is not reflected, return 0.
+			*/
+			template <typename ClassType>
+			static std::size_t						getReflectedStaticFieldsCount()				noexcept;
+
+			/**
 			*	@brief	Instantiate a class if it is default constructible.
 			*			This is the default method used to instantiate classes through Struct::makeSharedInstance.
 			*	

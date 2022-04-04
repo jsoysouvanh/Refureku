@@ -612,12 +612,18 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		inout_result += "[[maybe_unused]] rfk::Method* method = nullptr; [[maybe_unused]] rfk::StaticMethod* staticMethod = nullptr;" + env.getSeparator();
 	}
 
+	std::size_t setMethodsCountInsertionOffset = inout_result.size();
+	std::size_t methodsCount = 0u;
+	std::size_t staticMethodsCount = 0u;
+
 	std::string generatedCode;
 	std::string currentMethodVariable;
 	for (kodgen::MethodInfo const& method : structClass.methods)
 	{
 		if (method.isStatic)
 		{
+			staticMethodsCount++;
+
 			inout_result += "staticMethod = " + generatedEntityVarName + "addStaticMethod(\"" + method.name + "\", " +
 				(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
 				"rfk::getType<" + method.returnType.getName() + ">(), "
@@ -628,6 +634,8 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 		}
 		else
 		{
+			methodsCount++;
+
 			inout_result += "method = " + generatedEntityVarName + "addMethod(\"" + method.name + "\", " +
 				(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, method) : std::to_string(_stringHasher(method.id)) + "u") + ", "
 				"rfk::getType<" + method.returnType.getName() + ">(), "
@@ -679,6 +687,12 @@ void ReflectionCodeGenModule::fillClassMethods(kodgen::StructClassInfo const& st
 			}
 		}
 	}
+
+	//Generate code to reserve right amount of memory for methods and static methods
+	std::string setMethodsCapacityGeneratedCode = generatedEntityVarName + "setMethodsCapacity(" + std::to_string(methodsCount) + "u); ";
+	inout_result.insert(setMethodsCountInsertionOffset, setMethodsCapacityGeneratedCode); //methods
+	inout_result.insert(setMethodsCountInsertionOffset + setMethodsCapacityGeneratedCode.size(),
+						generatedEntityVarName + "setStaticMethodsCapacity(" + std::to_string(staticMethodsCount) + "u); " + env.getSeparator()); //static methods
 }
 
 void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string const& generatedEntityVarName, std::string& inout_result) noexcept
@@ -755,16 +769,20 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 
 	inout_result += "private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {" + env.getSeparator();
 
-	//Propagate the child class registration to parent classes too
-	for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
-	{
-		inout_result += "rfk::internal::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass);" + env.getSeparator();
-	}
-
 	inout_result += "rfk::Struct const& thisClass = staticGetArchetype();" + env.getSeparator();
 
 	//Register the child to the subclasses list
 	inout_result += "if constexpr (!std::is_same_v<ChildClass, " + structClass.name + ">) const_cast<rfk::Struct&>(thisClass).addSubclass(childClass);" + env.getSeparator();
+	inout_result += "else" + env.getSeparator() + 
+		"{" + env.getSeparator();
+
+	//Insert code here to reserve the correct amount of memory for fields and static fields
+	//The code is generated at the end of this method
+	std::size_t setFieldsCountInsertionOffset = inout_result.size();
+	std::size_t fieldsCount = 0u;
+	std::size_t staticFieldsCount = 0u;
+
+	inout_result += "}" + env.getSeparator();
 
 	//Make the child class inherit from the parents class fields
 	if (!structClass.fields.empty())
@@ -791,6 +809,8 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 		{
 			if (field.isStatic)
 			{
+				staticFieldsCount++;
+
 				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
 					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : computeClassNestedEntityId("ChildClass", field)) + ", " +
 					"rfk::getType<" + field.type.getName() + ">(), "
@@ -802,6 +822,8 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 			}
 			else
 			{
+				fieldsCount++;
+
 				inout_result += "field = childClass.addField(\"" + field.name + "\", " +
 					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : computeClassNestedEntityId("ChildClass", field)) + ", " +
 					"rfk::getType<" + field.type.getName() + ">(), "
@@ -830,6 +852,36 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 		}
 	}
 
+	//Propagate the child class registration to parent classes too
+	std::string inheritedFieldsCountExpression;
+	std::string inheritedStaticFieldsCountExpression;
+
+	if (!structClass.parents.empty())
+	{
+		for (kodgen::StructClassInfo::ParentInfo const& parent : structClass.parents)
+		{
+			inheritedFieldsCountExpression += "rfk::internal::CodeGenerationHelpers::getReflectedFieldsCount< " + parent.type.getName(true) + ">()+";
+			inheritedStaticFieldsCountExpression += "rfk::internal::CodeGenerationHelpers::getReflectedStaticFieldsCount< " + parent.type.getName(true) + ">()+";
+
+			inout_result += "rfk::internal::CodeGenerationHelpers::registerChildClass<" + parent.type.getName(true) + ", ChildClass>(childClass);" + env.getSeparator();
+		}
+
+		//Remove last + character
+		inheritedFieldsCountExpression.pop_back();
+		inheritedStaticFieldsCountExpression.pop_back();
+	}
+	else
+	{
+		inheritedFieldsCountExpression = "0";
+		inheritedStaticFieldsCountExpression = "0";
+	}
+
+	//Generate code to reserve right amount of memory for fields and static fields
+	std::string setFieldsCapacityGeneratedCode = "childClass.setFieldsCapacity(" + std::to_string(fieldsCount) + "u + " + inheritedFieldsCountExpression + "); ";
+	inout_result.insert(setFieldsCountInsertionOffset, setFieldsCapacityGeneratedCode); //fields
+	inout_result.insert(setFieldsCountInsertionOffset + setFieldsCapacityGeneratedCode.size(),
+						"childClass.setStaticFieldsCapacity(" + std::to_string(staticFieldsCount) + "u + " + inheritedStaticFieldsCountExpression + "); " + env.getSeparator()); //static fields
+	
 	inout_result += "}" + env.getSeparator() + env.getSeparator();
 }
 

@@ -19,6 +19,26 @@ constexpr void CodeGenerationHelpers::registerChildClass(rfk::Struct& childClass
 	}
 }
 
+template <typename ClassType>
+std::size_t CodeGenerationHelpers::getReflectedFieldsCount() noexcept
+{
+	static_assert(std::is_class_v<ClassType>, "getReflectedFieldsCount template argument must be a class.");
+
+	rfk::Struct const* archetype = reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<ClassType>());
+
+	return (archetype != nullptr) ? archetype->getFieldsCount() : 0u;
+}
+
+template <typename ClassType>
+std::size_t CodeGenerationHelpers::getReflectedStaticFieldsCount() noexcept
+{
+	static_assert(std::is_class_v<ClassType>, "getReflectedStaticFieldsCount template argument must be a class.");
+
+	rfk::Struct const* archetype = reinterpret_cast<rfk::Struct const*>(rfk::getArchetype<ClassType>());
+
+	return (archetype != nullptr) ? archetype->getStaticFieldsCount() : 0u;
+}
+
 template <typename T>
 rfk::SharedPtr<T> CodeGenerationHelpers::defaultSharedInstantiator()
 #if !defined(__GNUC__) || defined (__clang__) || __GNUC__ > 9
