@@ -17,7 +17,7 @@ namespace rfk RFKNamespace()
 {
 	/**
 	*	@brief	Property used to add a new instantiator to a struct or class through the rfk::Struct::makeSharedInstance method.
-	*			This property can only be attached to static methods returning a pointer to the class.
+	*			This property can only be attached to static methods returning a shared pointer to the class (rfk::SharedPtr<YourClass>).
 	*/
 	class REFUREKU_API RFKClass(rfk::PropertySettings(rfk::EEntityKind::Method)) Instantiator : public rfk::Property
 	{

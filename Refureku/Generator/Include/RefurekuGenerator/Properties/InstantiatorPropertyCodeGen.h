@@ -23,17 +23,26 @@ namespace rfk
 				std::string					parameters	= method.getParameterTypes();
 				std::string					methodPtr	= "&" + className + "::" + method.name;
 
+				std::string					condition1;
+				std::string					condition2;
+
 				if (parameters.empty())
 				{
-					//SharedInstantiator with no parameters
-					inout_result += "static_assert(std::is_invocable_r_v<rfk::SharedPtr<" + className + ">, decltype(" + methodPtr + ")>,"
-						"\"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "* .\");" + env.getSeparator();
+					condition1	= "std::is_invocable_r_v<rfk::SharedPtr<" + className + ">, decltype(" + methodPtr + ")>";
+					condition2	= "std::is_same_v<"
+									"rfk::SharedPtr<" + className + ">, "
+									"std::invoke_result_t<decltype(" + methodPtr + ")>>";
 				}
 				else
 				{
-					inout_result += "static_assert(std::is_invocable_r_v<rfk::SharedPtr<" + className + ">, decltype(" + methodPtr + "), " + std::move(parameters) + ">,"
-						"\"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning " + className + "*.\");" + env.getSeparator();
+					condition1	= "std::is_invocable_r_v<rfk::SharedPtr<" + className + ">, decltype(" + methodPtr + "), " + parameters + ">";
+					condition2	= "std::is_same_v<"
+									"rfk::SharedPtr<" + className + ">, "
+									"std::invoke_result_t<decltype(" + methodPtr + "), " + std::move(parameters) + ">>";
 				}
+
+				inout_result += "static_assert(" + std::move(condition1) + " && " + std::move(condition2) +
+					", \"[Refureku] Instantiator requires " + methodPtr + " to be a static method returning rfk::SharedPtr<" + className + "> .\");" + env.getSeparator();
 
 				return true;
 			}
@@ -56,6 +65,8 @@ namespace rfk
 			void addInstantiatorToClass(kodgen::Property const& /*property*/, std::string const& generatedClassVarName,
 										std::string const& generatedMethodVarName, std::string& inout_result) const noexcept
 			{
+				//TODO: Check whether it is a UniqueInstantiator or SharedInstantiator
+
 				inout_result += generatedClassVarName + "addSharedInstantiator(*" + generatedMethodVarName + "); ";
 			}
 	};
