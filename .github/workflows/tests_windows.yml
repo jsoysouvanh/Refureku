@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - dev
+      - fix-virtual-method-calls
   workflow_dispatch:
 
 jobs:
