@@ -139,6 +139,106 @@ TEST(Rfk_Method_invoke, CallSelfIntroducedVirtualMethodOnMultiplePInheritancePCl
 	);
 }
 
+//Call an inherited virtual method from child class instance
+
+//1. The virtual method is introduced by the first inherited class
+TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnSinglePInheritancePClass)
+{
+	SinglePInheritancePClass instance;
+
+	EXPECT_EQ(
+		SinglePInheritancePClass::staticGetArchetype().getMethodByName("methodSingleNPInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::SingleNPInheritancePClass
+	);
+}
+
+//2. The virtual method is introduced by the first inherited class and overriden in the calling instance
+TEST(Rfk_Method_invoke, CallParentIntroducedOverridenVirtualMethodOnSinglePInheritancePClass)
+{
+	SinglePInheritancePClass instance;
+
+	EXPECT_EQ(
+		SinglePInheritancePClass::staticGetArchetype().getMethodByName("methodSingleNPInheritancePClass2", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::SinglePInheritancePClass
+	);
+}
+
+//3. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic)
+//TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnMultiplePInheritancePClass)
+//{
+//	MultiplePInheritancePClassMethodOverride instance;
+//
+//	EXPECT_EQ(
+//		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass2", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+//		EMethodTestCallResult::NoInheritancePClass
+//	);
+//}
+
+//4. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic) and overriden by instance
+//TEST(Rfk_Method_invoke, CallParentIntroducedOverridenVirtualMethodOnMultiplePInheritancePClass)
+//{
+//	MultiplePInheritancePClassMethodOverride instance;
+//
+//	EXPECT_EQ(
+//		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+//		EMethodTestCallResult::MultiplePInheritancePClassMethodOverride
+//	);
+//}
+
+//5. The virtual method is introduced by a grandparent class (but in the first inheritance branch: virtual table offset = 0)
+//   A<vmethod    B
+//   ^            ^
+//   |------------|
+//		   |
+//         C
+//		   ^
+//         D<instance
+TEST(Rfk_Method_invoke, CallGrandParentIntroducedVirtualMethodFirstInheritanceBranch)
+{
+	SinglePInheritancePClassLevel2 instance;
+
+	EXPECT_EQ(
+		SinglePInheritancePClassLevel2::staticGetArchetype().getMethodByName("methodSinglePInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::SinglePInheritancePClass
+	);
+}
+
+//6. The virtual method is introduced by a grandparent class (but NOT in the first inheritance branch: virtual table offset != 0)
+//   A            B<vmethod
+//   ^            ^
+//   |------------|
+//		   |
+//         C
+//		   ^
+//         D<instance
+//TEST(Rfk_Method_invoke, CallGrandParentIntroducedVirtualMethodNotFirstInheritanceBranch)
+//{
+//	SinglePInheritancePClassLevel2 instance;
+//
+//	EXPECT_EQ(
+//		SinglePInheritancePClassLevel2::staticGetArchetype().getMethodByName("methodNoInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+//		EMethodTestCallResult::NoInheritancePClass
+//	);
+//}
+
+//7. The virtual method is introduced by a grandparent class (but NOT in the first inheritance branch: virtual table offset != 0)
+//   A            B<non-vmethod
+//   ^            ^
+//   |------------|
+//		   |
+//         C
+//		   ^
+//         D<instance
+TEST(Rfk_Method_invoke, CallGrandParentIntroducedNonVirtualMethodNotFirstInheritanceBranch)
+{
+	SinglePInheritancePClassLevel2 instance;
+
+	EXPECT_EQ(
+		SinglePInheritancePClassLevel2::staticGetArchetype().getMethodByName("methodNoInheritancePClass3", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::NoInheritancePClass
+	);
+}
+
 //=========================================================
 //================ Method::checkedInvoke ==================
 //=========================================================
