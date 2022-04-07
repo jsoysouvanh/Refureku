@@ -181,14 +181,6 @@ TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnMultiplePInheritanceP
 {
 	MultiplePInheritancePClassMethodOverride instance;
 
-	//NoInheritancePClass& cast = instance;
-
-	//MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass4", rfk::EMethodFlags::Default, true)
-	//	->invoke<EMethodTestCallResult>(cast);
-
-	//MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass4", rfk::EMethodFlags::Default, true)
-	//	->invoke<EMethodTestCallResult>(instance);
-
 	EXPECT_EQ(
 		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass4", rfk::EMethodFlags::Default, true)
 			->invoke<EMethodTestCallResult>(instance),
@@ -290,71 +282,71 @@ TEST(Rfk_Method_invoke, CallGrandParentIntroducedNonVirtualMethodNotFirstInherit
 //=========================================================
 //================ Method::checkedInvoke ==================
 //=========================================================
-//
-//TEST(Rfk_Method_checkedInvoke, SuccessfullCall)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->checkedInvoke<int>(instance), 0);
-//	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 42), 42);
-//}
-//
-//TEST(Rfk_Method_checkedInvoke, ThrowReturnTypeMismatch)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->checkedInvoke<float>(instance), rfk::ReturnTypeMismatch);
-//}
-//
-//TEST(Rfk_Method_checkedInvoke, ReturnNonReflectedType)
-//{
-//	TestMethodClass instance;
-//	NonReflectedClass nrc;
-//
-//	//Calling with a different non-reflected type is not catched by the checked call
-//	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnNonReflectedNoParam")->checkedInvoke<NonReflectedClass2&>(instance, nrc));
-//	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnNonReflectedNoParam")->checkedInvoke<NonReflectedClass&>(instance, nrc));
-//}
-//
-//TEST(Rfk_Method_checkedInvoke, ThrowArgCountMismatch)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1, 2), rfk::ArgCountMismatch);	//2 instead of 1
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance, 1), rfk::ArgCountMismatch);		//1 instead of 0
-//	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance));
-//}
-//
-//TEST(Rfk_Method_checkedInvoke, ThrowArgTypeMismatch)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1.0f), rfk::ArgTypeMismatch);	//float instead of int
-//}
-//
-//TEST(Rfk_Method_checkedInvoke, CatchForwardDeclaredTypeMismatch)
-//{
-//	TestMethodClass instance;
-//	ForwardDeclaredClass fdc;
-//	float value;
-//
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnFwdClassParamFwdClass")->checkedInvoke<int&>(instance, &fdc), rfk::ReturnTypeMismatch);
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnFwdClassParamFwdClass")->checkedInvoke<ForwardDeclaredClass*>(instance, value), rfk::ArgTypeMismatch);
-//	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnFwdClassParamFwdClass")->checkedInvoke<ForwardDeclaredClass*>(instance, &fdc), &fdc);	//Normal call
-//}
-//
-//TEST(Rfk_Method_checkedInvoke, NonReflectedTypeBypassArgTypeMismatch)
-//{
-//	TestMethodClass instance;
-//	NonReflectedClass nrc;
-//
-//	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnNonReflectedNoParam")->checkedInvoke<NonReflectedClass&>(instance, nrc));
-//	EXPECT_EQ(nrc.i, 42);
-//}
-//
-//TEST(Rfk_Method_checkedInvoke, ThrowingCall)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("throwing")->checkedInvoke(instance), std::logic_error);
-//}
+
+TEST(Rfk_Method_checkedInvoke, SuccessfullCall)
+{
+	TestMethodClass instance;
+
+	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->checkedInvoke<int>(instance), 0);
+	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 42), 42);
+}
+
+TEST(Rfk_Method_checkedInvoke, ThrowReturnTypeMismatch)
+{
+	TestMethodClass instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->checkedInvoke<float>(instance), rfk::ReturnTypeMismatch);
+}
+
+TEST(Rfk_Method_checkedInvoke, ReturnNonReflectedType)
+{
+	TestMethodClass instance;
+	NonReflectedClass nrc;
+
+	//Calling with a different non-reflected type is not catched by the checked call
+	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnNonReflectedNoParam")->checkedInvoke<NonReflectedClass2&>(instance, nrc));
+	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnNonReflectedNoParam")->checkedInvoke<NonReflectedClass&>(instance, nrc));
+}
+
+TEST(Rfk_Method_checkedInvoke, ThrowArgCountMismatch)
+{
+	TestMethodClass instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1, 2), rfk::ArgCountMismatch);	//2 instead of 1
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance, 1), rfk::ArgCountMismatch);		//1 instead of 0
+	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance));
+}
+
+TEST(Rfk_Method_checkedInvoke, ThrowArgTypeMismatch)
+{
+	TestMethodClass instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1.0f), rfk::ArgTypeMismatch);	//float instead of int
+}
+
+TEST(Rfk_Method_checkedInvoke, CatchForwardDeclaredTypeMismatch)
+{
+	TestMethodClass instance;
+	ForwardDeclaredClass fdc;
+	float value;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnFwdClassParamFwdClass")->checkedInvoke<int&>(instance, &fdc), rfk::ReturnTypeMismatch);
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnFwdClassParamFwdClass")->checkedInvoke<ForwardDeclaredClass*>(instance, value), rfk::ArgTypeMismatch);
+	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnFwdClassParamFwdClass")->checkedInvoke<ForwardDeclaredClass*>(instance, &fdc), &fdc);	//Normal call
+}
+
+TEST(Rfk_Method_checkedInvoke, NonReflectedTypeBypassArgTypeMismatch)
+{
+	TestMethodClass instance;
+	NonReflectedClass nrc;
+
+	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnNonReflectedNoParam")->checkedInvoke<NonReflectedClass&>(instance, nrc));
+	EXPECT_EQ(nrc.i, 42);
+}
+
+TEST(Rfk_Method_checkedInvoke, ThrowingCall)
+{
+	TestMethodClass instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("throwing")->checkedInvoke(instance), std::logic_error);
+}
