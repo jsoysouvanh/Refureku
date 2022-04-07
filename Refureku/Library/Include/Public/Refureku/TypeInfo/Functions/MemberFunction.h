@@ -26,6 +26,9 @@ namespace rfk
 			using FunctionPrototype			= ReturnType (CallerType::*)(ArgTypes...);
 			using ConstFunctionPrototype	= ReturnType (CallerType::*)(ArgTypes...) const;
 
+			//TODO: Delete this
+			std::size_t _storedFunctionSize = 0u;
+
 			/** Pointer to the underlying method. */
 			union
 			{

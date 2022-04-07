@@ -88,7 +88,7 @@ namespace rfk
 			//Forward declaration
 			class MethodImpl;
 
-			//TODO: Delete this: class UniversalCallerClass {};
+			//TODO: Delete this class UniversalCallerClass {};
 
 			/**
 			*	@brief Call the underlying method with the forwarded args.

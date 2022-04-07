@@ -34,6 +34,26 @@ namespace rfk
 	}
 
 	template <typename TargetClassType>
+	RFK_NODISCARD TargetClassType const* dynamicCast(void const* instance, Struct const& fromArchetype, Struct const& toArchetype)
+	{
+		//If both both source and target types have the same archetype, there's no offset to perform
+		if (fromArchetype == toArchetype)
+		{
+			return reinterpret_cast<TargetClassType const*>(instance);
+		}
+
+		std::ptrdiff_t pointerOffset;
+
+		//Get the memory offset
+		if (instance != nullptr && fromArchetype.getPointerOffset(toArchetype, pointerOffset))
+		{
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8 const*>(instance) - pointerOffset);
+		}
+
+		return nullptr;
+	}
+
+	template <typename TargetClassType>
 	RFK_NODISCARD TargetClassType* dynamicUpCast(void* instance, Struct const& fromArchetype, Struct const& toArchetype)
 	{
 		std::ptrdiff_t pointerOffset;
@@ -42,6 +62,20 @@ namespace rfk
 		if (instance != nullptr && toArchetype.getSubclassPointerOffset(fromArchetype, pointerOffset))
 		{
 			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8*>(instance) + pointerOffset);
+		}
+
+		return nullptr;
+	}
+
+	template <typename TargetClassType>
+	RFK_NODISCARD TargetClassType const* dynamicUpCast(void const* instance, Struct const& fromArchetype, Struct const& toArchetype)
+	{
+		std::ptrdiff_t pointerOffset;
+
+		//Get the memory offset
+		if (instance != nullptr && toArchetype.getSubclassPointerOffset(fromArchetype, pointerOffset))
+		{
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8 const*>(instance) + pointerOffset);
 		}
 
 		return nullptr;
@@ -57,6 +91,21 @@ namespace rfk
 		if (instance != nullptr && fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset))
 		{
 			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8*>(instance) - pointerOffset);
+		}
+
+		return nullptr;
+	}
+
+	template <typename TargetClassType>
+	RFK_NODISCARD TargetClassType const* dynamicDownCast(void const* instance, Struct const& fromArchetype, Struct const& toArchetype)
+	{
+		std::ptrdiff_t pointerOffset;
+
+		//Get the memory offset
+		//Since we only consider down casts, 
+		if (instance != nullptr && fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset))
+		{
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8 const*>(instance) - pointerOffset);
 		}
 
 		return nullptr;

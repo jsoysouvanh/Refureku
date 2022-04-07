@@ -10,42 +10,42 @@
 //=================== Method::invoke ======================
 //=========================================================
 
-//TEST(Rfk_Method_invoke, CallNonConstMethodOnNonConstInstance)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->invoke<int>(instance), 0);
-//	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->invoke<int>(instance, 42), 42);
-//}
-//
-//TEST(Rfk_Method_invoke, CallNonConstMethodOnConstInstance)
-//{
-//	TestMethodClass const instance;
-//
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->invoke<int>(instance), rfk::ConstViolation);
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->invoke<int>(instance, 42), rfk::ConstViolation);
-//}
-//
-//TEST(Rfk_Method_invoke, CallConstMethodOnNonConstInstance)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("constNoReturnNoParam")->invoke(instance));
-//}
-//
-//TEST(Rfk_Method_invoke, CallConstMethodOnConstInstance)
-//{
-//	TestMethodClass const instance;
-//
-//	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("constNoReturnNoParam")->invoke(instance));
-//}
-//
-//TEST(Rfk_Method_invoke, ThrowingCall)
-//{
-//	TestMethodClass instance;
-//
-//	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("throwing")->invoke(instance), std::logic_error);
-//}
+TEST(Rfk_Method_invoke, CallNonConstMethodOnNonConstInstance)
+{
+	TestMethodClass instance;
+
+	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->invoke<int>(instance), 0);
+	EXPECT_EQ(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->invoke<int>(instance, 42), 42);
+}
+
+TEST(Rfk_Method_invoke, CallNonConstMethodOnConstInstance)
+{
+	TestMethodClass const instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntNoParam")->invoke<int>(instance), rfk::ConstViolation);
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->invoke<int>(instance, 42), rfk::ConstViolation);
+}
+
+TEST(Rfk_Method_invoke, CallConstMethodOnNonConstInstance)
+{
+	TestMethodClass instance;
+
+	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("constNoReturnNoParam")->invoke(instance));
+}
+
+TEST(Rfk_Method_invoke, CallConstMethodOnConstInstance)
+{
+	TestMethodClass const instance;
+
+	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("constNoReturnNoParam")->invoke(instance));
+}
+
+TEST(Rfk_Method_invoke, ThrowingCall)
+{
+	TestMethodClass instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("throwing")->invoke(instance), std::logic_error);
+}
 
 //Call a non-virtual method from self class
 
@@ -290,7 +290,7 @@ TEST(Rfk_Method_invoke, CallGrandParentIntroducedNonVirtualMethodNotFirstInherit
 //=========================================================
 //================ Method::checkedInvoke ==================
 //=========================================================
-
+//
 //TEST(Rfk_Method_checkedInvoke, SuccessfullCall)
 //{
 //	TestMethodClass instance;

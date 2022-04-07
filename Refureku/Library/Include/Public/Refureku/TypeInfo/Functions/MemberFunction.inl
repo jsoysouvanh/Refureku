@@ -8,19 +8,21 @@
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(FunctionPrototype function) noexcept:
 	_function{function},
-	_isConst{false}
+	_isConst{false},
+	_storedFunctionSize{sizeof(FunctionPrototype)}
 {}
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(ConstFunctionPrototype function) noexcept:
 	_constFunction{function},
-	_isConst{true}
+	_isConst{true},
+	_storedFunctionSize{sizeof(ConstFunctionPrototype)}
 {}
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 ReturnType MemberFunction<CallerType, ReturnType(ArgTypes...)>::operator()(CallerType& caller, ArgTypes&&... args) const
 {
-	std::cout << sizeof(_function) << std::endl;
+	std::cout << _storedFunctionSize << " > " << sizeof(_function) << std::endl;
 
 	return _isConst ?	(caller.*_constFunction)(std::forward<ArgTypes>(args)...) :
 						(caller.*_function)(std::forward<ArgTypes>(args)...);
