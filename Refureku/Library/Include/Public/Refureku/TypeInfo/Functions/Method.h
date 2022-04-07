@@ -88,7 +88,45 @@ namespace rfk
 			//Forward declaration
 			class MethodImpl;
 
-			//TODO: Delete this class UniversalCallerClass {};
+			template <typename Source, typename Target>
+			struct CopyConstness
+			{
+				using Type = Target;
+			};
+
+			template <typename Source, typename Target>
+			struct CopyConstness<Source const, Target>
+			{
+				using Type = Target const;
+			};
+
+			template <typename CallerType, typename FunctionPrototype>
+			class MemberFunctionSafeCallWrapper;
+
+			template <typename CallerType, typename ReturnType, typename... ArgTypes>
+			class MemberFunctionSafeCallWrapper<CallerType, ReturnType(ArgTypes...)>
+			{
+				private:
+					template <typename T>
+					using PointerToMemberMethod = ReturnType (T::*)(ArgTypes...);
+
+				public:
+					MemberFunctionSafeCallWrapper() = delete;
+
+					/**
+					*	@brief	Invoke the provided member function.
+					*			This wrapper method performs intermediate compiler-dependant checks to safely cast the provided function.
+					* 
+					*	@param function MemberFunction to call.
+					*	@param caller	Instance calling the member function.
+					*	@param args...	Arguments forwarded to the function call.
+					* 
+					*	@return The result of the function call.
+					* 
+					*	@exception Any exception thrown by the underlying member function call.
+					*/
+					static ReturnType invoke(MemberFunction<std::remove_const_t<CallerType>, ReturnType(ArgTypes...)> const& function, CallerType& caller, ArgTypes&&... args);
+			};
 
 			/**
 			*	@brief Call the underlying method with the forwarded args.
@@ -104,8 +142,6 @@ namespace rfk
 			*/
 			template <typename ReturnType, typename CallerType, typename... ArgTypes>
 			ReturnType						internalInvoke(CallerType& caller, ArgTypes&&... args)			const;
-			template <typename ReturnType, typename CallerType, typename... ArgTypes>
-			ReturnType						internalInvoke(CallerType const& caller, ArgTypes&&... args)	const;
 
 			/**
 			*	@brief	Adjust the memory address of the caller so that the right method is called.

@@ -10,8 +10,6 @@
 #include <utility>	//std::forward
 #include <cassert>
 
-#include <iostream> //TODO: DELETE THIS
-
 #include "Refureku/TypeInfo/Functions/ICallable.h"
 
 namespace rfk
@@ -26,8 +24,9 @@ namespace rfk
 			using FunctionPrototype			= ReturnType (CallerType::*)(ArgTypes...);
 			using ConstFunctionPrototype	= ReturnType (CallerType::*)(ArgTypes...) const;
 
-			//TODO: Delete this
-			std::size_t _storedFunctionSize = 0u;
+#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+			std::size_t _originalFunctionSize = 0u;
+#endif
 
 			/** Pointer to the underlying method. */
 			union
@@ -42,6 +41,10 @@ namespace rfk
 		public:
 			MemberFunction(FunctionPrototype function)		noexcept;
 			MemberFunction(ConstFunctionPrototype function)	noexcept;
+
+#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+			std::size_t getOriginalFunctionSize() const noexcept;
+#endif
 
 			/**
 			*	@brief Call the underlying function with on the provided caller forwarding the provided arguments.
