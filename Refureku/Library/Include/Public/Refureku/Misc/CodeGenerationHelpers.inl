@@ -19,6 +19,17 @@ constexpr void CodeGenerationHelpers::registerChildClass(rfk::Struct& childClass
 	}
 }
 
+template <typename Derived, typename Base>
+constexpr std::ptrdiff_t CodeGenerationHelpers::computeClassPointerOffset() noexcept
+{
+	static_assert(std::is_base_of_v<Base, Derived>, "Derived must be in Base inheritance tree (or must be Base itself).");
+
+	Derived* derivedPtr = reinterpret_cast<Derived*>(1);
+	Base* basePtr = static_cast<Base*>(derivedPtr);
+
+	return reinterpret_cast<std::intptr_t>(basePtr) - reinterpret_cast<std::intptr_t>(derivedPtr);
+}
+
 template <typename ClassType>
 std::size_t CodeGenerationHelpers::getReflectedFieldsCount() noexcept
 {

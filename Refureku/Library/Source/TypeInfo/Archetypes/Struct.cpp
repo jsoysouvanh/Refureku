@@ -30,7 +30,7 @@ rfk::Vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 {
 	rfk::Vector<Struct const*> result;
 
-	for (Struct const* subclass : getPimpl()->getSubclasses())
+	for (auto [subclass, subclassData] : getPimpl()->getSubclasses())
 	{
 		//Search this struct in subclasses's parents
 		for (ParentStruct const& subclassParent : subclass->getPimpl()->getDirectParents())
@@ -61,6 +61,41 @@ bool Struct::isBaseOf(Struct const& archetype) const noexcept
 EClassKind Struct::getClassKind() const noexcept
 {
 	return getPimpl()->getClassKind();
+}
+
+bool Struct::getPointerOffset(Struct const& to, std::ptrdiff_t& out_pointerOffset) const noexcept
+{
+	//This method is used for downcast in most cases, so search in the parent first.
+	//In the case of a downcast, this is likely the parent struct and to the child one
+	if (getPimpl()->getPointerOffset(to, out_pointerOffset))
+	{
+		return true;
+	}
+	//Try the other way around
+	else if (to.getPimpl()->getPointerOffset(*this, out_pointerOffset))
+	{
+		//Invert the offset to switch from
+		//to -> this offset
+		//to
+		//this -> to offset
+		out_pointerOffset = -out_pointerOffset;
+
+		return true;
+	}
+	
+	//this Struct and to Struct do not belong to the same inheritance tree
+	return false;
+}
+
+bool Struct::getSubclassPointerOffset(Struct const& to, std::ptrdiff_t& out_pointerOffset) const noexcept
+{
+	if (getPimpl()->getPointerOffset(to, out_pointerOffset))
+	{
+		return true;
+	}
+
+	//this Struct is not a parent of to Struct or do not belong to the same inheritance tree
+	return false;
 }
 
 ParentStruct const& Struct::getDirectParentAt(std::size_t index) const noexcept
@@ -646,9 +681,9 @@ void Struct::setDirectParentsCapacity(std::size_t capacity) noexcept
 	getPimpl()->setDirectParentsCapacity(capacity);
 }
 
-void Struct::addSubclass(Struct const& subclass) noexcept
+void Struct::addSubclass(Struct const& subclass, std::ptrdiff_t subclassPointerOffset) noexcept
 {
-	getPimpl()->addSubclass(subclass);
+	getPimpl()->addSubclass(subclass, subclassPointerOffset);
 }
 
 void Struct::addNestedArchetype(Archetype const* nestedArchetype, EAccessSpecifier accessSpecifier) noexcept

@@ -19,12 +19,12 @@ namespace rfk
 			EMethodFlags	_flags	= EMethodFlags::Default;
 
 		public:
-			inline MethodBaseImpl(char const*		name, 
-								  std::size_t		id,
+			inline MethodBaseImpl(char const*	name, 
+								  std::size_t	id,
 								  Type const&	returnType,
-								  ICallable*		internalMethod,
-								  EMethodFlags		flags,
-								  Entity const*	outerEntity)	noexcept;
+								  ICallable*	internalMethod,
+								  EMethodFlags	flags,
+								  Entity const*	outerEntity)		noexcept;
 
 			RFK_NODISCARD inline EMethodFlags getFlags()	const	noexcept;
 	};

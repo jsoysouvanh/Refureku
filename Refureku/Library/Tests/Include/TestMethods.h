@@ -140,6 +140,12 @@ class CLASS() NoInheritancePClass
 		return EMethodTestCallResult::NoInheritancePClass;
 	}
 
+	METHOD()
+	virtual EMethodTestCallResult methodNoInheritancePClass4()
+	{
+		return EMethodTestCallResult::NoInheritancePClass;
+	}
+
 	NoInheritancePClass_GENERATED
 };
 
@@ -163,6 +169,12 @@ class CLASS() MultiplePInheritancePClassMethodOverride : public SinglePInheritan
 	}
 
 	virtual EMethodTestCallResult methodNoInheritancePClass() override
+	{
+		return EMethodTestCallResult::MultiplePInheritancePClassMethodOverride;
+	}
+
+	METHOD()
+	virtual EMethodTestCallResult methodNoInheritancePClass2() override
 	{
 		return EMethodTestCallResult::MultiplePInheritancePClassMethodOverride;
 	}

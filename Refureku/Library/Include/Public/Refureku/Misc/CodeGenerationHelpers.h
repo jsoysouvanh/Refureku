@@ -8,7 +8,7 @@
 #pragma once
 
 #include <array>
-#include <cstddef>	//std::size_t
+#include <cstddef>	//std::size_t, std::ptrdiff_t
 
 #include "Refureku/Config.h"
 #include "Refureku/Misc/TypeTraitsMacros.h"
@@ -45,7 +45,16 @@ namespace rfk::internal
 			*	@param	childClass The child class to register.
 			*/
 			template <typename ParentClass, typename ChildClass>
-			static constexpr void					registerChildClass(rfk::Struct& childClass)	noexcept;
+			static constexpr void							registerChildClass(rfk::Struct& childClass)	noexcept;
+
+			/**
+			*	@brief	Compute the pointer difference to transform a Derived pointer into a Base pointer.
+			* 
+			*	@tparam	Derived The derived class.
+			*	@tparam Base	The base class.
+			*/
+			template <typename Derived, typename Base>
+			RFK_NODISCARD static constexpr std::ptrdiff_t	computeClassPointerOffset()					noexcept;
 
 			/**
 			*	@brief	Retrieve the number of reflected fields of the provided class.
@@ -55,7 +64,7 @@ namespace rfk::internal
 			*	@return The number of reflected fields in the class when the method is called. If the class is not reflected, return 0.
 			*/
 			template <typename ClassType>
-			static std::size_t						getReflectedFieldsCount()					noexcept;
+			RFK_NODISCARD static std::size_t				getReflectedFieldsCount()					noexcept;
 
 			/**
 			*	@brief	Retrieve the number of reflected static fields of the provided class.
@@ -65,7 +74,7 @@ namespace rfk::internal
 			*	@return The number of reflected static fields in the class when the method is called. If the class is not reflected, return 0.
 			*/
 			template <typename ClassType>
-			static std::size_t						getReflectedStaticFieldsCount()				noexcept;
+			RFK_NODISCARD static std::size_t				getReflectedStaticFieldsCount()				noexcept;
 
 			/**
 			*	@brief	Instantiate a class if it is default constructible.

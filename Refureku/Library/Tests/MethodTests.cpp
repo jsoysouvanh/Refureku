@@ -139,12 +139,14 @@ TEST(Rfk_Method_invoke, CallSelfIntroducedVirtualMethodOnMultiplePInheritancePCl
 	);
 }
 
-//Call an inherited virtual method from child class instance
+//Call an inherited method from child class instance
 
 //1. The virtual method is introduced by the first inherited class
 TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnSinglePInheritancePClass)
 {
 	SinglePInheritancePClass instance;
+
+	SinglePInheritancePClass::staticGetArchetype().getMethodByName("methodSingleNPInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance);
 
 	EXPECT_EQ(
 		SinglePInheritancePClass::staticGetArchetype().getMethodByName("methodSingleNPInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
@@ -152,7 +154,18 @@ TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnSinglePInheritancePCl
 	);
 }
 
-//2. The virtual method is introduced by the first inherited class and overriden in the calling instance
+//2. The non-virtual method is introduced by the first inherited class
+TEST(Rfk_Method_invoke, CallParentIntroducedNonVirtualMethodOnMultipleNPInheritanceNPClass)
+{
+	MultipleNPInheritanceNPClass instance;
+
+	EXPECT_EQ(
+		MultipleNPInheritanceNPClass::staticGetArchetype().getMethodByName("methodNoInheritanceNPClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::NoInheritanceNPClass
+	);
+}
+
+//3. The virtual method is introduced by the first inherited class and overriden in the calling instance
 TEST(Rfk_Method_invoke, CallParentIntroducedOverridenVirtualMethodOnSinglePInheritancePClass)
 {
 	SinglePInheritancePClass instance;
@@ -163,29 +176,64 @@ TEST(Rfk_Method_invoke, CallParentIntroducedOverridenVirtualMethodOnSinglePInher
 	);
 }
 
-//3. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic)
-//TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnMultiplePInheritancePClass)
-//{
-//	MultiplePInheritancePClassMethodOverride instance;
-//
-//	EXPECT_EQ(
-//		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass2", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
-//		EMethodTestCallResult::NoInheritancePClass
-//	);
-//}
+//4. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic)
+TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnMultiplePInheritancePClass)
+{
+	MultiplePInheritancePClassMethodOverride instance;
 
-//4. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic) and overriden by instance
-//TEST(Rfk_Method_invoke, CallParentIntroducedOverridenVirtualMethodOnMultiplePInheritancePClass)
-//{
-//	MultiplePInheritancePClassMethodOverride instance;
-//
-//	EXPECT_EQ(
-//		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
-//		EMethodTestCallResult::MultiplePInheritancePClassMethodOverride
-//	);
-//}
+	//NoInheritancePClass& cast = instance;
 
-//5. The virtual method is introduced by a grandparent class (but in the first inheritance branch: virtual table offset = 0)
+	//MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass4", rfk::EMethodFlags::Default, true)
+	//	->invoke<EMethodTestCallResult>(cast);
+
+	//MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass4", rfk::EMethodFlags::Default, true)
+	//	->invoke<EMethodTestCallResult>(instance);
+
+	EXPECT_EQ(
+		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass4", rfk::EMethodFlags::Default, true)
+			->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::NoInheritancePClass
+	);
+}
+
+
+
+//5. The non-virtual method is introduced by the second inherited class
+TEST(Rfk_Method_invoke, CallParent2IntroducedNonVirtualMethodOnMultipleNPInheritanceNPClass)
+{
+	MultipleNPInheritanceNPClass instance;
+
+	EXPECT_EQ(
+		MultipleNPInheritanceNPClass::staticGetArchetype().getMethodByName("methodNoInheritanceNPClass2", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::NoInheritanceNPClass2
+	);
+}
+
+//6. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic) and overriden by instance
+//   AND the overriden version in instance is NOT reflected
+TEST(Rfk_Method_invoke, CallParentIntroducedOverridenVirtualMethodOnMultiplePInheritancePClass)
+{
+	MultiplePInheritancePClassMethodOverride instance;
+
+	EXPECT_EQ(
+		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::MultiplePInheritancePClassMethodOverride
+	);
+}
+
+//6.2 The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic) and overriden by instance
+//    AND the overriden version in instance is reflected
+TEST(Rfk_Method_invoke, CallParentIntroducedNonReflectedOverridenVirtualMethodOnMultiplePInheritancePClass)
+{
+	MultiplePInheritancePClassMethodOverride instance;
+
+	EXPECT_EQ(
+		MultiplePInheritancePClassMethodOverride::staticGetArchetype().getMethodByName("methodNoInheritancePClass2")->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::MultiplePInheritancePClassMethodOverride
+	);
+}
+
+//7. The virtual method is introduced by a grandparent class (but in the first inheritance branch: virtual table offset = 0)
 //   A<vmethod    B
 //   ^            ^
 //   |------------|
@@ -203,7 +251,7 @@ TEST(Rfk_Method_invoke, CallGrandParentIntroducedVirtualMethodFirstInheritanceBr
 	);
 }
 
-//6. The virtual method is introduced by a grandparent class (but NOT in the first inheritance branch: virtual table offset != 0)
+//8. The virtual method is introduced by a grandparent class (but NOT in the first inheritance branch: virtual table offset != 0)
 //   A            B<vmethod
 //   ^            ^
 //   |------------|
@@ -211,17 +259,17 @@ TEST(Rfk_Method_invoke, CallGrandParentIntroducedVirtualMethodFirstInheritanceBr
 //         C
 //		   ^
 //         D<instance
-//TEST(Rfk_Method_invoke, CallGrandParentIntroducedVirtualMethodNotFirstInheritanceBranch)
-//{
-//	SinglePInheritancePClassLevel2 instance;
-//
-//	EXPECT_EQ(
-//		SinglePInheritancePClassLevel2::staticGetArchetype().getMethodByName("methodNoInheritancePClass", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
-//		EMethodTestCallResult::NoInheritancePClass
-//	);
-//}
+TEST(Rfk_Method_invoke, CallGrandParentIntroducedVirtualMethodNotFirstInheritanceBranch)
+{
+	SinglePInheritancePClassLevel2 instance;
 
-//7. The virtual method is introduced by a grandparent class (but NOT in the first inheritance branch: virtual table offset != 0)
+	EXPECT_EQ(
+		SinglePInheritancePClassLevel2::staticGetArchetype().getMethodByName("methodNoInheritancePClass4", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instance),
+		EMethodTestCallResult::NoInheritancePClass
+	);
+}
+
+//9. The non-virtual method is introduced by a grandparent class (but NOT in the first inheritance branch: virtual table offset != 0)
 //   A            B<non-vmethod
 //   ^            ^
 //   |------------|

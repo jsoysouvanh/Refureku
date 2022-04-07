@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <cstddef> //std::ptrdiff_t
 #include <type_traits> //std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
 
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
@@ -640,6 +641,28 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API EClassKind	getClassKind()																		const	noexcept;
 
 			/**
+			*	@brief	Get the pointer offset to transform an instance of this Struct pointer to a pointer of the provided Struct.
+			*			Search in both directions (whether to is a parent class or a child class).
+			* 
+			*	@param to				 Struct metadata of the target struct.
+			*	@param out_pointerOffset The resulting pointer offset if found.
+			* 
+			*	@return true if the pointer offset was found (out_pointerOffset contains the result), else false.
+			*/
+			RFK_NODISCARD REFUREKU_API bool			getPointerOffset(Struct const& to, std::ptrdiff_t& out_pointerOffset)				const	noexcept;
+
+			/**
+			*	@brief	Get the pointer offset to transform an instance of this Struct pointer to a pointer of the provided Struct.
+			*			Only search the offset in this struct subclasses. If to is a parent of this struct, false will be returned.
+			* 
+			*	@param to				 Struct metadata of the target struct.
+			*	@param out_pointerOffset The resulting pointer offset if found.
+			* 
+			*	@return true if the pointer offset was found (out_pointerOffset contains the result), else false.
+			*/
+			RFK_NODISCARD REFUREKU_API bool			getSubclassPointerOffset(Struct const& to, std::ptrdiff_t& out_pointerOffset)		const	noexcept;
+
+			/**
 			*	@brief Add a parent to this struct if the provided archetype is a valid struct/class.
 			* 
 			*	@param archetype			Archetype of the parent struct/class.
@@ -660,9 +683,11 @@ namespace rfk
 			/**
 			*	@brief Add a subclass to this struct.
 			* 
-			*	@param subclass The subclass to add.
+			*	@param subclass					The subclass to add.
+			*	@param subclassPointerOffset	Memory offset to add to a subclass instance pointer to obtain a valid pointer to this base struct.
 			*/
-			REFUREKU_API void						addSubclass(Struct const& subclass)															noexcept;
+			REFUREKU_API void						addSubclass(Struct const&  subclass,
+																std::ptrdiff_t subclassPointerOffset)											noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.

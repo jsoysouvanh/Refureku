@@ -21,7 +21,7 @@ namespace rfk
 			Type const&						_returnType;
 
 			/** Handle pointing to the actual function in memory. */
-			std::unique_ptr<ICallable>			_internalFunction;
+			std::unique_ptr<ICallable>		_internalFunction;
 
 			/** Parameters of this function. */
 			std::vector<FunctionParameter>	_parameters;
@@ -31,7 +31,7 @@ namespace rfk
 									std::size_t		id,
 									EEntityKind		kind,
 									Type const&		returnType,
-									ICallable*			internalFunction,
+									ICallable*		internalFunction,
 									Entity const*	outerEntity)		noexcept;
 
 			/**
@@ -44,7 +44,7 @@ namespace rfk
 			*	
 			*	@return The added function parameter.
 			*/
-			inline FunctionParameter&									addParameter(char const*			name,
+			inline FunctionParameter&									addParameter(char const*				name,
 																						 std::size_t			id,
 																						 Type const&			type,
 																						 FunctionBase const*	outerEntity)	noexcept;
@@ -54,28 +54,28 @@ namespace rfk
 			* 
 			*	@return _returnType.
 			*/
-			RFK_NODISCARD inline Type const&								getReturnType()								const	noexcept;
+			RFK_NODISCARD inline Type const&							getReturnType()									const	noexcept;
 
 			/**
 			*	@brief Getter for the field _internalFunction.
 			* 
 			*	@return _internalFunction.
 			*/
-			RFK_NODISCARD inline ICallable*									getInternalFunction()						const	noexcept;
+			RFK_NODISCARD inline ICallable*								getInternalFunction()							const	noexcept;
 
 			/**
 			*	@brief Getter for the field _parameters.
 			* 
 			*	@return _parameters.
 			*/
-			RFK_NODISCARD inline std::vector<FunctionParameter> const&	getParameters()								const	noexcept;
+			RFK_NODISCARD inline std::vector<FunctionParameter> const&	getParameters()									const	noexcept;
 
 			/**
 			*	@brief Set the _parameters vector capacity.
 			* 
 			*	@param capacity New capacity.
 			*/
-			inline void														setParametersCapacity(std::size_t capacity)			noexcept;
+			inline void													setParametersCapacity(std::size_t capacity)				noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Functions/FunctionBaseImpl.inl"

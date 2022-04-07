@@ -8,9 +8,12 @@
 #pragma once
 
 #include <unordered_set>
+#include <unordered_map>
+#include <cstddef> //std::ptrdiff_t
 #include <cassert>
 
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/TypeInfo/Archetypes/SubclassData.h"
 #include "Refureku/TypeInfo/Archetypes/ParentStruct.h"
 #include "Refureku/TypeInfo/Archetypes/ArchetypeImpl.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
@@ -26,7 +29,7 @@ namespace rfk
 	{
 		public:
 			using ParentStructs		= std::vector<ParentStruct>;
-			using Subclasses		= std::unordered_set<Struct const*>;
+			using Subclasses		= std::unordered_map<Struct const*, SubclassData>;
 			using NestedArchetypes	= std::unordered_set<Archetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using Fields			= std::unordered_multiset<Field, EntityNameHash, EntityNameEqual>;
 			using StaticFields		= std::unordered_multiset<StaticField, EntityNameHash, EntityNameEqual>;
@@ -127,15 +130,17 @@ namespace rfk
 			*	@param archetype			Archetype of the parent struct/class.
 			*	@param inheritanceAccess	The inheritance access for the provided parent.
 			*/
-			inline void									addDirectParent(Struct const& archetype,
+			inline void									addDirectParent(Struct const&	 archetype,
 																		EAccessSpecifier inheritanceAccess)				noexcept;
 
 			/**
 			*	@brief Add a subclass to this struct.
 			* 
-			*	@param subclass The subclass to add.
+			*	@param subclass				 The subclass to add.
+			*	@param subclassPointerOffset Memory offset to add to a subclass instance pointer to obtain a valid pointer to this base struct.
 			*/
-			inline void									addSubclass(Struct const& subclass)								noexcept;
+			inline void									addSubclass(Struct const&  subclass, 
+																	std::ptrdiff_t subclassPointerOffset)				noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.
@@ -262,6 +267,18 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline Archetype const*		getNestedArchetype(char const*		name,
 																		   EAccessSpecifier	access)				const	noexcept;
+
+			/**
+			*	@brief	Get the pointer offset to transform an instance pointer of this Struct to a to instance pointer.
+			*			This method only looks in its own subclasses metadata, so if to is not a subclass of this, false is returned.
+			* 
+			*	@param to				 Struct metadata of the target struct.
+			*	@param out_pointerOffset The resulting pointer offset if found.
+			* 
+			*	@return true if the pointer offset was found (out_pointerOffset contains the result), else false.
+			*/
+			RFK_NODISCARD inline bool					getPointerOffset(Struct const&	 to,
+																		 std::ptrdiff_t& out_pointerOffset)		const	noexcept;
 
 			/**
 			*	@brief Getter for the field _directParents.

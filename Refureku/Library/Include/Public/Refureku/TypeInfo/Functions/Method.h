@@ -11,6 +11,7 @@
 
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
+#include "Refureku/TypeInfo/Cast.h"
 
 namespace rfk
 {
@@ -87,6 +88,8 @@ namespace rfk
 			//Forward declaration
 			class MethodImpl;
 
+			//TODO: Delete this: class UniversalCallerClass {};
+
 			/**
 			*	@brief Call the underlying method with the forwarded args.
 			* 
@@ -103,6 +106,61 @@ namespace rfk
 			ReturnType						internalInvoke(CallerType& caller, ArgTypes&&... args)			const;
 			template <typename ReturnType, typename CallerType, typename... ArgTypes>
 			ReturnType						internalInvoke(CallerType const& caller, ArgTypes&&... args)	const;
+
+			/**
+			*	@brief	Adjust the memory address of the caller so that the right method is called.
+			*			In most cases no adjustment is required, but it is necessary when the called method is virtual
+			*			and the virtual table containing the method is not at a 0 offset of the caller address.
+			* 
+			*	@tparam CallerType Type of the calling struct/class.
+			* 
+			*	@param caller A pointer to the caller.
+			* 
+			*	@return The adjusted caller address.
+			*/
+			template <typename CallerType>
+			RFK_NODISCARD CallerType&		adjustCallerAddress(CallerType& caller)							const	noexcept
+			{
+				rfk::Struct const* callerStruct = static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>());
+				rfk::Struct const* methodOuterStruct = static_cast<rfk::Struct const*>(getOuterEntity());
+
+				//TODO: Move lib call to private impl (so that only 1 call to the dynamic library is performed
+				if (isVirtual() && callerStruct != nullptr && callerStruct != methodOuterStruct)
+				{
+					//Try to adjust the caller address to the method outer class
+					return *rfk::dynamicCast<CallerType>(&caller, *callerStruct, *methodOuterStruct);
+
+					//return rfk::dynamicUpCast(&caller, callerStruct, methodOuterStruct);
+					//TODO: Search in the outer entity's offset container for the offset of callerStruct
+					//TODO: Perform pointer arithmetic with the result and return
+					//TODO: If not found, don't touch the pointer
+				}
+
+				//TEMP
+				return caller;
+			}
+
+			/**
+			*	@brief	Adjust the memory address of the caller so that the right method is called.
+			*			In most cases no adjustment is required, but it is necessary when the called method is virtual
+			*			and the virtual table containing the method is not at a 0 offset of the caller address.
+			* 
+			*	@tparam CallerType Type of the calling struct/class.
+			* 
+			*	@param caller A pointer to the caller.
+			* 
+			*	@return The adjusted caller address.
+			* 
+			*	@exception	*TODO CREATE EXCEPTION* if the caller struct is not reflected.
+			*	@exception	*TODO CREATE EXCEPTION* if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy).
+			*/
+			template <typename CallerType>
+			RFK_NODISCARD CallerType&		checkedAdjustCallerAddress(CallerType& caller)					const
+			{
+				//TODO: Throw an exception if the caller class is not reflected or if the pointer adjustment is not possible (offset not found > means it is not a child class)
+				//TEMP
+				return caller;
+			}
 
 			/**
 			*	@brief Throw a const violation exception with the provided message.

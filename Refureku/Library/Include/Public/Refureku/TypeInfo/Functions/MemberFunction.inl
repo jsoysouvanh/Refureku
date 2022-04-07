@@ -20,6 +20,8 @@ MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(ConstFunctio
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 ReturnType MemberFunction<CallerType, ReturnType(ArgTypes...)>::operator()(CallerType& caller, ArgTypes&&... args) const
 {
+	std::cout << sizeof(_function) << std::endl;
+
 	return _isConst ?	(caller.*_constFunction)(std::forward<ArgTypes>(args)...) :
 						(caller.*_function)(std::forward<ArgTypes>(args)...);
 }

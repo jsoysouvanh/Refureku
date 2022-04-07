@@ -19,9 +19,9 @@ inline void Struct::StructImpl::addDirectParent(Struct const& archetype, EAccess
 	inheritProperties(*archetype.getPimpl());
 }
 
-inline void Struct::StructImpl::addSubclass(Struct const& subclass) noexcept
+inline void Struct::StructImpl::addSubclass(Struct const& subclass, std::ptrdiff_t subclassPointerOffset) noexcept
 {
-	_subclasses.insert(&subclass);
+	_subclasses.emplace(&subclass, subclassPointerOffset);
 }
 
 inline void Struct::StructImpl::addNestedArchetype(Archetype const* nestedArchetype,
@@ -191,6 +191,19 @@ inline Archetype const* Struct::StructImpl::getNestedArchetype(char const* name,
 													  {
 														  return access == EAccessSpecifier::Undefined || access == archetype.getAccessSpecifier();
 													  });
+}
+
+inline bool Struct::StructImpl::getPointerOffset(Struct const& to, std::ptrdiff_t& out_pointerOffset) const noexcept
+{
+	auto it = _subclasses.find(&to);
+
+	if (it != _subclasses.cend())
+	{
+		out_pointerOffset = it->second.pointerOffset;
+		return true;
+	}
+	
+	return false;
 }
 
 inline Struct::StructImpl::ParentStructs const& Struct::StructImpl::getDirectParents() const noexcept

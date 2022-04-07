@@ -38,6 +38,9 @@ type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAcces
 PropertySettings::_rfk_registerChildClass<PropertySettings>(type);
 static rfk::StaticMethod defaultSharedInstantiator("", 0u, rfk::getType<rfk::SharedPtr<PropertySettings>>(),new rfk::NonMemberFunction<rfk::SharedPtr<PropertySettings>()>(&rfk::internal::CodeGenerationHelpers::defaultSharedInstantiator<PropertySettings>),rfk::EMethodFlags::Default, nullptr);
 type.addSharedInstantiator(defaultSharedInstantiator);
+static rfk::StaticMethod defaultUniqueInstantiator("", 0u, rfk::getType<rfk::UniquePtr<PropertySettings>>(),new rfk::NonMemberFunction<rfk::UniquePtr<PropertySettings>()>(&rfk::internal::CodeGenerationHelpers::defaultUniqueInstantiator<PropertySettings>),rfk::EMethodFlags::Default, nullptr);
+type.addUniqueInstantiator(defaultUniqueInstantiator);
+type.setMethodsCapacity(0u); type.setStaticMethodsCapacity(0u); 
 }
 return type; }
 

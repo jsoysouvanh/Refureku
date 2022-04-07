@@ -21,6 +21,8 @@ class CLASS(UniqueInheritedProperty(0),
 			MultipleNonInheritedProperty(0)) PropertyInheritanceTestClass
 {
 	public:
+		virtual ~PropertyInheritanceTestClass() = default;
+
 		METHOD(UniqueInheritedProperty(0),
 			   MultipleInheritedProperty(0),
 			   UniqueNonInheritedProperty(0),

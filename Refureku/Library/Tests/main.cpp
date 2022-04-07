@@ -36,14 +36,21 @@ int main(int argc, char** argv)
 
 	return RUN_ALL_TESTS();
 
-	/*SinglePInheritancePClass c;
-
-	std::cout << "SinglePInheritancePClass address: " << &c << std::endl;
-	std::cout << "SingleNPInheritancePClass address from SinglePInheritancePClass: " << (SingleNPInheritancePClass*)&c << std::endl;
-
-	NoInheritanceNPClass instance;
+	//MultiplePInheritancePClassMethodOverride instance;
 	
-	std::cout << (int)NoInheritanceNPClass::staticGetArchetype().getMethodByName("methodNoInheritanceNPClass")->invoke<EMethodTestCallResult>(instance) << std::endl;
+	/*std::cout << "S1: " << &instance << std::endl;
+	
+	std::cout << "P1: " << (SinglePInheritancePClass*)&instance << std::endl;
+	std::cout << "Cast: " << rfk::dynamicUpCast<SinglePInheritancePClass>(&instance,
+																		  MultiplePInheritancePClassMethodOverride::staticGetArchetype(),
+																		  SinglePInheritancePClass::staticGetArchetype()) << std::endl;
 
-	return EXIT_SUCCESS;*/
+	std::cout << "P2: " << (NoInheritancePClass*)&instance << std::endl;
+	std::cout << "Cast: " << rfk::dynamicUpCast<NoInheritancePClass>(&instance,
+																	 MultiplePInheritancePClassMethodOverride::staticGetArchetype(),
+																	 NoInheritancePClass::staticGetArchetype()) << std::endl;*/
+
+
+
+	return EXIT_SUCCESS;
 }

@@ -38,6 +38,9 @@ type.addDirectParent(rfk::getArchetype<rfk::Property>(), static_cast<rfk::EAcces
 ParseAllNested::_rfk_registerChildClass<ParseAllNested>(type);
 static rfk::StaticMethod defaultSharedInstantiator("", 0u, rfk::getType<rfk::SharedPtr<ParseAllNested>>(),new rfk::NonMemberFunction<rfk::SharedPtr<ParseAllNested>()>(&rfk::internal::CodeGenerationHelpers::defaultSharedInstantiator<ParseAllNested>),rfk::EMethodFlags::Default, nullptr);
 type.addSharedInstantiator(defaultSharedInstantiator);
+static rfk::StaticMethod defaultUniqueInstantiator("", 0u, rfk::getType<rfk::UniquePtr<ParseAllNested>>(),new rfk::NonMemberFunction<rfk::UniquePtr<ParseAllNested>()>(&rfk::internal::CodeGenerationHelpers::defaultUniqueInstantiator<ParseAllNested>),rfk::EMethodFlags::Default, nullptr);
+type.addUniqueInstantiator(defaultUniqueInstantiator);
+type.setMethodsCapacity(0u); type.setStaticMethodsCapacity(0u); 
 }
 return type; }
 
