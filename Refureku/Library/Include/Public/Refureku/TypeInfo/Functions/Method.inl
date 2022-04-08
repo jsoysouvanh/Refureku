@@ -37,6 +37,10 @@ ReturnType Method::MemberFunctionSafeCallWrapper<CallerType, ReturnType(ArgTypes
 
 		default:
 			assert(false);
+
+			//Fake a return to avoid warnings
+			//Should never reach this point anyway
+			return reinterpret_cast<ReturnType (*)()>(nullptr)();
 	}
 #else
 	//No trick required, pointer to member function size do not vary with class inheritance on GCC / Clang
