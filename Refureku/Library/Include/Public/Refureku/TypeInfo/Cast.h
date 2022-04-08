@@ -10,11 +10,12 @@
 #include <type_traits> //std::is_class_v
 
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
+#include "Refureku/Misc/CopyConstness.h"
 
 namespace rfk
 {
 	template <typename TargetClassType>
-	RFK_NODISCARD TargetClassType* dynamicCast(void* instance, Struct const& fromArchetype, Struct const& toArchetype)
+	RFK_NODISCARD TargetClassType* dynamicCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& fromArchetype, Struct const& toArchetype)
 	{
 		//If both both source and target types have the same archetype, there's no offset to perform
 		if (fromArchetype == toArchetype)
@@ -25,87 +26,40 @@ namespace rfk
 		std::ptrdiff_t pointerOffset;
 
 		//Get the memory offset
-		if (instance != nullptr && fromArchetype.getPointerOffset(toArchetype, pointerOffset))
+		//instance != nullptr is check in 2nd because it is not likely to happen a lot
+		if (fromArchetype.getPointerOffset(toArchetype, pointerOffset) && instance != nullptr)
 		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8*>(instance) - pointerOffset);
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
 		}
 
 		return nullptr;
 	}
 
 	template <typename TargetClassType>
-	RFK_NODISCARD TargetClassType const* dynamicCast(void const* instance, Struct const& fromArchetype, Struct const& toArchetype)
+	RFK_NODISCARD TargetClassType* dynamicUpCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& fromArchetype, Struct const& toArchetype)
 	{
-		//If both both source and target types have the same archetype, there's no offset to perform
-		if (fromArchetype == toArchetype)
-		{
-			return reinterpret_cast<TargetClassType const*>(instance);
-		}
-
 		std::ptrdiff_t pointerOffset;
 
 		//Get the memory offset
-		if (instance != nullptr && fromArchetype.getPointerOffset(toArchetype, pointerOffset))
+		//instance != nullptr is check in 2nd because it is not likely to happen a lot
+		if (toArchetype.getSubclassPointerOffset(fromArchetype, pointerOffset) && instance != nullptr)
 		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8 const*>(instance) - pointerOffset);
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<CopyConstness<TargetClassType, uint8>::Type*>(instance) + pointerOffset);
 		}
 
 		return nullptr;
 	}
 
 	template <typename TargetClassType>
-	RFK_NODISCARD TargetClassType* dynamicUpCast(void* instance, Struct const& fromArchetype, Struct const& toArchetype)
+	RFK_NODISCARD TargetClassType* dynamicDownCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& fromArchetype, Struct const& toArchetype)
 	{
 		std::ptrdiff_t pointerOffset;
 
 		//Get the memory offset
-		if (instance != nullptr && toArchetype.getSubclassPointerOffset(fromArchetype, pointerOffset))
+		//instance != nullptr is check in 2nd because it is not likely to happen a lot
+		if (fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset) && instance != nullptr)
 		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8*>(instance) + pointerOffset);
-		}
-
-		return nullptr;
-	}
-
-	template <typename TargetClassType>
-	RFK_NODISCARD TargetClassType const* dynamicUpCast(void const* instance, Struct const& fromArchetype, Struct const& toArchetype)
-	{
-		std::ptrdiff_t pointerOffset;
-
-		//Get the memory offset
-		if (instance != nullptr && toArchetype.getSubclassPointerOffset(fromArchetype, pointerOffset))
-		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8 const*>(instance) + pointerOffset);
-		}
-
-		return nullptr;
-	}
-
-	template <typename TargetClassType>
-	RFK_NODISCARD TargetClassType* dynamicDownCast(void* instance, Struct const& fromArchetype, Struct const& toArchetype)
-	{
-		std::ptrdiff_t pointerOffset;
-
-		//Get the memory offset
-		//Since we only consider down casts, 
-		if (instance != nullptr && fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset))
-		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8*>(instance) - pointerOffset);
-		}
-
-		return nullptr;
-	}
-
-	template <typename TargetClassType>
-	RFK_NODISCARD TargetClassType const* dynamicDownCast(void const* instance, Struct const& fromArchetype, Struct const& toArchetype)
-	{
-		std::ptrdiff_t pointerOffset;
-
-		//Get the memory offset
-		//Since we only consider down casts, 
-		if (instance != nullptr && fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset))
-		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<uint8 const*>(instance) - pointerOffset);
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
 		}
 
 		return nullptr;

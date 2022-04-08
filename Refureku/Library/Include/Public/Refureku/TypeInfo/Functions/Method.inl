@@ -60,6 +60,40 @@ ReturnType Method::internalInvoke(CallerType& caller, ArgTypes&&... args) const
 	);
 }
 
+template <typename CallerType>
+CallerType& Method::adjustCallerAddress(CallerType& caller) const noexcept
+{
+	rfk::Struct const* callerStruct = static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>());
+	rfk::Struct const* methodOuterStruct = static_cast<rfk::Struct const*>(getOuterEntity());
+
+	//No adjustment required if the method is not virtual
+	//The adjustment is required for virtual methods to point to the correct vtable
+	if (isVirtual() && callerStruct != nullptr)
+	{
+		CallerType* adjustedCallerPointer = rfk::dynamicCast<CallerType>(&caller, *callerStruct, *methodOuterStruct);
+
+		if (adjustedCallerPointer != nullptr)
+		{
+			return *adjustedCallerPointer;
+		}
+		else
+		{
+			//At this point, the cast can only fail if caller is not in the same inheritance hierarchy as the method's owner struct
+			//TODO: Throw an exception to indicate that the caller class can't call the method since it has no relationship with the method original struct.
+		}
+	}
+
+	return caller;
+}
+
+template <typename CallerType>
+CallerType& Method::checkedAdjustCallerAddress(CallerType& caller) const
+{
+	//TODO: Throw an exception if the caller class is not reflected or if the pointer adjustment is not possible (offset not found > means it is not a child class)
+	//TEMP
+	return caller;
+}
+
 template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
 ReturnType Method::invoke(CallerType& caller, ArgTypes&&... args) const
 {
