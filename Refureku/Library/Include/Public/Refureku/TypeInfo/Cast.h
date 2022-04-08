@@ -130,7 +130,7 @@ namespace rfk
 	RFK_NODISCARD TargetClassType* dynamicCast(SourceClassType* instance)
 	{
 		static_assert(std::is_class_v<SourceClassType> && std::is_class_v<TargetClassType>, "[Refureku] Can't use dynamicCast with non-class types.");
-		static_assert(std::is_base_of_v<SourceClassType, TargetClassType>, "[Refureku] Don't use dynamicCast to perform a simple upcast.");
+		static_assert(!std::is_base_of_v<TargetClassType, SourceClassType>, "[Refureku] Don't use dynamicCast to perform a simple upcast. Use implicit conversion or static_cast instead.");
 		static_assert(!std::is_same_v<SourceClassType, TargetClassType>, "[Refureku] Don't use dynamicCast to cast to the source type itself.");
 		static_assert(std::is_base_of_v<rfk::Object, SourceClassType>, "[Refureku] Can't use dynamicCast if instance doesn't inherit from rfk::Object.");
 
@@ -158,6 +158,8 @@ namespace rfk
 		// --------------------------------------------------------------------
 
 		//Try to upcast the concrete type of instance to TargetClassType
-		return dynamicUpCast<TargetClassType>(intermediatePtr, instanceConcreteType, TargetClassType::staticGetArchetype());
+		return (intermediatePtr != nullptr) ?
+			dynamicUpCast<TargetClassType>(intermediatePtr, instanceConcreteType, TargetClassType::staticGetArchetype()) :
+			nullptr;
 	}
 }
