@@ -29,7 +29,7 @@ namespace rfk
 		//instance != nullptr is check in 2nd because it is not likely to happen a lot
 		if (fromArchetype.getPointerOffset(toArchetype, pointerOffset) && instance != nullptr)
 		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
 		}
 
 		return nullptr;
@@ -44,7 +44,7 @@ namespace rfk
 		//instance != nullptr is check in 2nd because it is not likely to happen a lot
 		if (toArchetype.getSubclassPointerOffset(fromArchetype, pointerOffset) && instance != nullptr)
 		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<CopyConstness<TargetClassType, uint8>::Type*>(instance) + pointerOffset);
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) + pointerOffset);
 		}
 
 		return nullptr;
@@ -59,7 +59,7 @@ namespace rfk
 		//instance != nullptr is check in 2nd because it is not likely to happen a lot
 		if (fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset) && instance != nullptr)
 		{
-			return reinterpret_cast<TargetClassType*>(reinterpret_cast<CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
+			return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
 		}
 
 		return nullptr;
