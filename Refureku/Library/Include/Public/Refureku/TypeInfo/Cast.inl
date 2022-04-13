@@ -10,8 +10,6 @@ TargetClassType* dynamicCast(SourceClassType* instance) noexcept
 {
 	static_assert(std::is_class_v<SourceClassType> && std::is_class_v<TargetClassType>, "[Refureku] Can't use dynamicCast with non-class types.");
 	static_assert(!std::is_base_of_v<TargetClassType, SourceClassType>, "[Refureku] Don't use dynamicCast to perform a simple upcast. Use implicit conversion or static_cast instead.");
-	static_assert(!std::is_same_v<SourceClassType, TargetClassType>, "[Refureku] Don't use dynamicCast to cast to the source type itself.");
-	static_assert(std::is_base_of_v<rfk::Object, SourceClassType>, "[Refureku] Can't use dynamicCast if instance doesn't inherit from rfk::Object.");
 	static_assert(internal::implements_getArchetype<SourceClassType, Struct const&()>::value, "[Refureku] Can't use dynamicCast if instance doesn't implement the getArchetype method."
 																							 " Inherit from rfk::Object for automatic implementation generation, or implement it manually.");
 
@@ -47,7 +45,7 @@ template <typename TargetClassType>
 TargetClassType* dynamicUpCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& fromArchetype, Struct const& toArchetype) noexcept
 {
 	//If both both source and target types have the same archetype or instance is nullptr, there's no offset to perform
-	if (fromArchetype == toArchetype || instance == nullptr)
+	if (instance == nullptr || fromArchetype == toArchetype)
 	{
 		return reinterpret_cast<TargetClassType*>(instance);
 	}
@@ -68,7 +66,7 @@ template <typename TargetClassType>
 TargetClassType* dynamicDownCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& fromArchetype, Struct const& toArchetype) noexcept
 {
 	//If both both source and target types have the same archetype, there's no offset to perform
-	if (fromArchetype == toArchetype)
+	if (instance == nullptr || fromArchetype == toArchetype)
 	{
 		return reinterpret_cast<TargetClassType*>(instance);
 	}
@@ -77,7 +75,7 @@ TargetClassType* dynamicDownCast(typename CopyConstness<TargetClassType, void>::
 
 	//Get the memory offset
 	//instance != nullptr is check in 2nd because it is not likely to happen a lot
-	if (fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset) && instance != nullptr)
+	if (fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset))
 	{
 		return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
 	}

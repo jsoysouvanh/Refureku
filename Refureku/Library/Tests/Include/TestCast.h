@@ -19,6 +19,11 @@ class CLASS() Base : public rfk::Object
 	Base_GENERATED
 };
 
+class CLASS() NonVirtualBase
+{
+	NonVirtualBase_GENERATED
+};
+
 class CLASS() Child1 : public Base
 {
 	Child1_GENERATED
@@ -51,6 +56,28 @@ class CLASS() Child3 : public Child1, public Base2
 {
 	Child3_GENERATED
 };
+
+class CLASS() Child4 : public Child1, public NonVirtualBase
+{
+	Child4_GENERATED
+};
+
+//======================================
+
+class CLASS() NotObjectBase
+{
+	public:
+		virtual ~NotObjectBase() = default;
+
+	NotObjectBase_GENERATED
+};
+
+class CLASS() NotObjectChild1 : public NotObjectBase
+{
+	NotObjectChild1_GENERATED
+};
+
+//======================================
 
 /**
 * /!\ VIRTUAL INHERITANCE IS NOT SUPPORTED /!\

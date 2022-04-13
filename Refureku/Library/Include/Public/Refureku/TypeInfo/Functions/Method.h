@@ -41,7 +41,10 @@ namespace rfk
 			*	@tparam CallerType	Type of the calling struct/class.
 			*	@tparam... ArgTypes	Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
-			*	@param args Arguments forwarded to the function call.
+			*	@param caller	Object instance calling the method. Caller is not required to implement the getArchetype method, but the invoke method will
+			*					likely crash if the memory offset between the CallerType static archetype and its actual dynamic archetype is different from 0.
+			*					If CallerType implements the getArchetype method (rfk::Object), no such error will ever happen.
+			*	@param args		Arguments forwarded to the function call.
 			* 
 			*	@return The result of the function call.
 			* 
@@ -66,7 +69,8 @@ namespace rfk
 			*	@tparam CallerType	Type of the calling struct/class.
 			*	@tparam... ArgTypes	Type of all arguments. This can in some cases be omitted thanks to template deduction.
 			*
-			*	@param args Arguments forwarded to the function call.
+			*	@param caller	Object instance calling the method. It MUST implement the getArchetype method (rfk::Object) for all safety checks to be performed properly.
+			*	@param args		Arguments forwarded to the function call.
 			*
 			*	@return The result of the function call.
 			* 
