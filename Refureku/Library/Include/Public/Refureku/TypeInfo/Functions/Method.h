@@ -13,6 +13,8 @@
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
 #include "Refureku/TypeInfo/Cast.h"
 #include "Refureku/Misc/CopyConstness.h"
+#include "Refureku/Exceptions/NotReflectedClass.h"
+#include "Refureku/Exceptions/InvalidCaller.h"
 
 namespace rfk
 {
@@ -114,7 +116,9 @@ namespace rfk
 					* 
 					*	@exception Any exception thrown by the underlying member function call.
 					*/
-					static ReturnType invoke(MemberFunction<std::remove_const_t<CallerType>, ReturnType(ArgTypes...)> const& function, CallerType& caller, ArgTypes&&... args);
+					static ReturnType invoke(MemberFunction<std::remove_const_t<CallerType>, ReturnType(ArgTypes...)> const& function,
+											 CallerType&																	 caller,
+											 ArgTypes&&...																	 args);
 			};
 
 			/**
@@ -130,14 +134,14 @@ namespace rfk
 			*	@return The result of the underlying method call.
 			*/
 			template <typename ReturnType, typename CallerType, typename... ArgTypes>
-			ReturnType						internalInvoke(CallerType& caller, ArgTypes&&... args)			const;
+			ReturnType						internalInvoke(CallerType& caller, ArgTypes&&... args)				const;
 
 			/**
 			*	@brief	Adjust the memory address of the caller so that the right method is called.
 			*			In most cases no adjustment is required, but it is necessary when the called method is virtual
 			*			and the virtual table containing the method is not at a 0 offset of the caller address.
 			*			If the address could not be adjusted (because of unreflected types for example),
-			the provided caller is returned as is and no error is thrown.
+			*			the provided caller is returned as is and no error is thrown.
 			* 
 			*	@tparam CallerType Type of the calling struct/class.
 			* 
@@ -146,7 +150,25 @@ namespace rfk
 			*	@return The adjusted caller address.
 			*/
 			template <typename CallerType>
-			RFK_NODISCARD CallerType&		adjustCallerAddress(CallerType& caller)							const	noexcept;
+			RFK_NODISCARD CallerType&		adjustCallerAddress(CallerType& caller)								const	noexcept;
+
+			/**
+			*	@brief	Adjust the memory address of the caller so that the right method is called.
+			*			In most cases no adjustment is required, but it is necessary when the called method is virtual
+			*			and the virtual table containing the method is not at a 0 offset of the caller address.
+			*			If the address could not be adjusted (because of unreflected types for example),
+			*			the provided caller is returned as is and no error is thrown.
+			* 
+			*	@tparam CallerType Type of the calling struct/class.
+			* 
+			*	@param caller					A pointer to the caller.
+			*	@param callerDynamicArchetype	Dynamic archetype of the caller.
+			* 
+			*	@return The adjusted caller address.
+			*/
+			template <typename CallerType>
+			RFK_NODISCARD CallerType&		adjustCallerAddress(CallerType&	  caller,
+																Struct const& callerDynamicArchetype)			const	noexcept;
 
 			/**
 			*	@brief	Adjust the memory address of the caller so that the right method is called.
@@ -159,18 +181,51 @@ namespace rfk
 			* 
 			*	@return The adjusted caller address.
 			* 
-			*	@exception	*TODO CREATE EXCEPTION* if the caller struct is not reflected.
-			*	@exception	*TODO CREATE EXCEPTION* if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy).
+			*	@exception NotReflectedClass if the caller struct is not reflected (rfk::getArchetype<CallerType>() == nullptr).
+			*	@exception InvalidCaller	 if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy).
 			*/
 			template <typename CallerType>
-			RFK_NODISCARD CallerType&		checkedAdjustCallerAddress(CallerType& caller)					const;
+			RFK_NODISCARD CallerType&		checkedAdjustCallerAddress(CallerType& caller)						const;
 
 			/**
-			*	@brief Throw a const violation exception with the provided message.
+			*	@brief	Adjust the memory address of the caller so that the right method is called.
+			*			In most cases no adjustment is required, but it is necessary when the called method is virtual
+			*			and the virtual table containing the method is not at a 0 offset of the caller address.
+			* 
+			*	@tparam CallerType Type of the calling struct/class.
+			* 
+			*	@param caller					A pointer to the caller.
+			*	@param callerDynamicArchetype	Dynamic archetype of the caller.
+			* 
+			*	@return The adjusted caller address.
+			* 
+			*	@exception NotReflectedClass if the caller struct is not reflected (rfk::getArchetype<CallerType>() == nullptr).
+			*	@exception InvalidCaller	 if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy).
+			*/
+			template <typename CallerType>
+			RFK_NODISCARD CallerType&		checkedAdjustCallerAddress(CallerType&	 caller,
+																	   Struct const& callerDynamicArchetype)	const;
+
+			/**
+			*	@brief Throw a ConstViolation exception with the provided message.
 			* 
 			*	@param message Message forwarded to the exception.
 			*/
-			RFK_NORETURN REFUREKU_API void	throwConstViolationException(char const* message)				const;
+			RFK_NORETURN REFUREKU_API void	throwConstViolationException()										const;
+
+			/**
+			*	@brief Throw an InvalidCaller exception with the provided message.
+			* 
+			*	@param message Message forwarded to the exception.
+			*/
+			RFK_NORETURN REFUREKU_API void	throwInvalidCallerException()										const;
+
+			/**
+			*	@brief Throw a NotReflectedClass exception with the provided message.
+			* 
+			*	@param message Message forwarded to the exception.
+			*/
+			RFK_NORETURN REFUREKU_API void	throwNotReflectedClassException()									const;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Method const*>);

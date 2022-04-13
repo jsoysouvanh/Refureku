@@ -61,7 +61,18 @@ void Method::inheritBaseMethodProperties() noexcept
 	}
 }
 
-void Method::throwConstViolationException(char const* message) const
+void Method::throwConstViolationException() const
 {
-	throw ConstViolation(message);
+	throw ConstViolation("Can't call a non-const member function on a const caller instance.");
+}
+
+void Method::throwInvalidCallerException() const
+{
+	throw InvalidCaller("The caller instance has no relationship with this method hence it can't be called.");
+}
+
+void Method::throwNotReflectedClassException() const
+{
+	throw NotReflectedClass("The caller class must be reflected for all safety checks to be performed properly."
+							" rfk::getArchetype<CallerType>() must be specialized to return CallerType archetype.");
 }

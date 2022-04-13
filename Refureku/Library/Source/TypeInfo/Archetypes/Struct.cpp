@@ -89,13 +89,7 @@ bool Struct::getPointerOffset(Struct const& to, std::ptrdiff_t& out_pointerOffse
 
 bool Struct::getSubclassPointerOffset(Struct const& to, std::ptrdiff_t& out_pointerOffset) const noexcept
 {
-	if (getPimpl()->getPointerOffset(to, out_pointerOffset))
-	{
-		return true;
-	}
-
-	//this Struct is not a parent of to Struct or do not belong to the same inheritance tree
-	return false;
+	return getPimpl()->getPointerOffset(to, out_pointerOffset);
 }
 
 ParentStruct const& Struct::getDirectParentAt(std::size_t index) const noexcept

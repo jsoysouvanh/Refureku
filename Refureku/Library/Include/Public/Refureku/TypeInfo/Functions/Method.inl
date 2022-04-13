@@ -63,23 +63,44 @@ ReturnType Method::internalInvoke(CallerType& caller, ArgTypes&&... args) const
 template <typename CallerType>
 CallerType& Method::adjustCallerAddress(CallerType& caller) const noexcept
 {
-	rfk::Struct const* callerStruct = static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>());
-	rfk::Struct const* methodOuterStruct = static_cast<rfk::Struct const*>(getOuterEntity());
+	if constexpr (internal::implements_getArchetype<CallerType, Struct const& ()>::value)
+	{
+		return adjustCallerAddress(caller, caller.getArchetype());
+	}
+	else
+	{
+		//Can't retrieve the dynamic archetype through a virtual getArchetype call, so use the caller static archetype.
+		// /!\ If a memory offset exists between the caller static and dynamic archetypes, the returned result is INCORRECT /!\ 
+		return adjustCallerAddress(caller, *static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>()));
+	}
+}
 
+template <typename CallerType>
+CallerType& Method::adjustCallerAddress(CallerType& caller, Struct const& callerDynamicArchetype) const noexcept
+{
 	//No adjustment required if the method is not virtual
 	//The adjustment is required for virtual methods to point to the correct vtable
-	if (isVirtual() && callerStruct != nullptr)
+	if (isVirtual())
 	{
-		CallerType* adjustedCallerPointer = rfk::dynamicCast<CallerType>(&caller, *callerStruct, *methodOuterStruct);
+		rfk::Struct const* callerStaticArchetype = static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>());
 
-		if (adjustedCallerPointer != nullptr)
+		if (callerStaticArchetype != nullptr)
 		{
-			return *adjustedCallerPointer;
-		}
-		else
-		{
-			//At this point, the cast can only fail if caller is not in the same inheritance hierarchy as the method's owner struct
-			//TODO: Throw an exception to indicate that the caller class can't call the method since it has no relationship with the method original struct.
+			CallerType* adjustedCallerPointer = rfk::dynamicCast<CallerType>(&caller,
+																			 *callerStaticArchetype,
+																			 callerDynamicArchetype,
+																			 *static_cast<rfk::Struct const*>(getOuterEntity())
+																			);
+
+			if (adjustedCallerPointer != nullptr)
+			{
+				return *adjustedCallerPointer;
+			}
+			else
+			{
+				//adjustCallerAddress doesn't fail if the dynamicCast fails, and the original caller is return as provided
+				//The invoke call using this caller is UB.
+			}
 		}
 	}
 
@@ -89,8 +110,46 @@ CallerType& Method::adjustCallerAddress(CallerType& caller) const noexcept
 template <typename CallerType>
 CallerType& Method::checkedAdjustCallerAddress(CallerType& caller) const
 {
-	//TODO: Throw an exception if the caller class is not reflected or if the pointer adjustment is not possible (offset not found > means it is not a child class)
-	//TEMP
+	static_assert(internal::implements_getArchetype<CallerType, Struct const& ()>::value,
+				  "[Refureku] To perform all the safety checks, the caller must implement the getArchetype() method inherited from rfk::Object.");
+
+	return adjustCallerAddress(caller, caller.getArchetype());
+}
+
+template <typename CallerType>
+CallerType& Method::checkedAdjustCallerAddress(CallerType& caller, Struct const& callerDynamicArchetype) const
+{
+	//No adjustment required if the method is not virtual
+	//The adjustment is required for virtual methods to point to the correct vtable
+	if (isVirtual())
+	{
+		rfk::Struct const* callerStaticArchetype = static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>());
+
+		if (callerStaticArchetype != nullptr)
+		{
+			CallerType* adjustedCallerPointer = rfk::dynamicCast<CallerType>(&caller,
+																			 *callerStaticArchetype,
+																			 callerDynamicArchetype,
+																			 *static_cast<rfk::Struct const*>(getOuterEntity())
+																			);
+
+			if (adjustedCallerPointer != nullptr)
+			{
+				return *adjustedCallerPointer;
+			}
+			else
+			{
+				//At this point, the cast can only fail if caller is not in the same inheritance hierarchy as the method's owner struct
+				throwInvalidCallerException();
+			}
+		}
+		else
+		{
+			//Throw an exception if the caller class is not reflected
+			throwNotReflectedClassException();
+		}
+	}
+
 	return caller;
 }
 
@@ -105,7 +164,7 @@ ReturnType Method::invoke(CallerType const& caller, ArgTypes&&... args) const
 {
 	if (!isConst())
 	{
-		throwConstViolationException("Can't call a non-const member function on a const caller instance.");
+		throwConstViolationException();
 	}
 
 	return internalInvoke<ReturnType, CallerType const, ArgTypes...>(adjustCallerAddress(caller), std::forward<ArgTypes>(args)...);

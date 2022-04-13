@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <Refureku/Object.h>
+
 #include "TestClass.h"
 #include "NonReflectedClass.h"
 
@@ -14,7 +16,7 @@
 
 class ForwardDeclaredClass;
 
-class CLASS() TestMethodClass
+class CLASS() TestMethodClass : public rfk::Object
 {
 	METHOD()
 	void					noReturnNoParam();

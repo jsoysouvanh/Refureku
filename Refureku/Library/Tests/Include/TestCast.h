@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "Generated/TestCast.rfkh.h"
-
 #include "Refureku/Object.h"
+
+#include "Generated/TestCast.rfkh.h"
 
 class CLASS() Base : public rfk::Object
 {
@@ -52,19 +52,24 @@ class CLASS() Child3 : public Child1, public Base2
 	Child3_GENERATED
 };
 
-//class CLASS() Child1Virtual : public virtual Base
-//{
-//	Child1Virtual_GENERATED
-//};
-//
-//class CLASS() Child2Virtual : public virtual Base
-//{
-//	Child2Virtual_GENERATED
-//};
-//
-//class CLASS() GrandChildVirtual : public Child1Virtual, public Child2Virtual
-//{
-//	GrandChildVirtual_GENERATED
-//};
+/**
+* /!\ VIRTUAL INHERITANCE IS NOT SUPPORTED /!\
+
+class CLASS() Child1Virtual : public Base
+{
+	Child1Virtual_GENERATED
+};
+
+class CLASS() Child2Virtual : public Base
+{
+	Child2Virtual_GENERATED
+};
+
+class CLASS() GrandChildVirtual : public Child1Virtual, public Child2Virtual
+{
+	GrandChildVirtual_GENERATED
+};
+
+*/
 
 File_TestCast_GENERATED
