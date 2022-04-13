@@ -42,10 +42,10 @@ TargetClassType* dynamicCast(typename CopyConstness<TargetClassType, void>::Type
 }
 
 template <typename TargetClassType>
-TargetClassType* dynamicUpCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& fromArchetype, Struct const& toArchetype) noexcept
+TargetClassType* dynamicUpCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& instanceStaticArchetype, Struct const& targetArchetype) noexcept
 {
 	//If both both source and target types have the same archetype or instance is nullptr, there's no offset to perform
-	if (instance == nullptr || fromArchetype == toArchetype)
+	if (instance == nullptr || instanceStaticArchetype == targetArchetype)
 	{
 		return reinterpret_cast<TargetClassType*>(instance);
 	}
@@ -54,7 +54,7 @@ TargetClassType* dynamicUpCast(typename CopyConstness<TargetClassType, void>::Ty
 
 	//Get the memory offset
 	//instance != nullptr is check in 2nd because it is not likely to happen a lot
-	if (toArchetype.getSubclassPointerOffset(fromArchetype, pointerOffset))
+	if (targetArchetype.getSubclassPointerOffset(instanceStaticArchetype, pointerOffset))
 	{
 		return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) + pointerOffset);
 	}
@@ -63,10 +63,10 @@ TargetClassType* dynamicUpCast(typename CopyConstness<TargetClassType, void>::Ty
 }
 
 template <typename TargetClassType>
-TargetClassType* dynamicDownCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& fromArchetype, Struct const& toArchetype) noexcept
+TargetClassType* dynamicDownCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& instanceStaticArchetype, Struct const& targetArchetype) noexcept
 {
 	//If both both source and target types have the same archetype, there's no offset to perform
-	if (instance == nullptr || fromArchetype == toArchetype)
+	if (instance == nullptr || instanceStaticArchetype == targetArchetype)
 	{
 		return reinterpret_cast<TargetClassType*>(instance);
 	}
@@ -75,7 +75,7 @@ TargetClassType* dynamicDownCast(typename CopyConstness<TargetClassType, void>::
 
 	//Get the memory offset
 	//instance != nullptr is check in 2nd because it is not likely to happen a lot
-	if (fromArchetype.getSubclassPointerOffset(toArchetype, pointerOffset))
+	if (instanceStaticArchetype.getSubclassPointerOffset(targetArchetype, pointerOffset))
 	{
 		return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
 	}

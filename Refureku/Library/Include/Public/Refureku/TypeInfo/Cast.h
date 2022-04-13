@@ -50,45 +50,41 @@ namespace rfk
 												Struct const&											targetArchetype)				noexcept;
 
 	/**
-	*	@brief	Adjust the pointer of the provided instance of type instanceDynamicArchetype to a pointer to a targetArchetype.
-	*			This method only works for upcast, which means that if instanceDynamicArchetype is a parent class of targetArchetype, nullptr is returned.
+	*	@brief	Adjust the pointer of the provided instance of type instanceStaticArchetype to a pointer to a targetArchetype.
+	*			This method only works for upcast, which means that if instanceStaticArchetype is a parent class of targetArchetype, nullptr is returned.
 	*			Since the method checks only for upcast, it is theoritically faster than dynamicCast.
 	*	
 	*	@tparam TargetClassType Type of pointer the result should be cast to. To get a void*, call dynamicCast<void>(...).
 	* 
 	*	@param instance					Pointer to the instance to cast.
-	*	@param instanceDynamicArchetype	Dynamic archetype of the instance. If the static and dynamic archetypes of instance are different,
-											they must have no memory offset in instance for this method to be valid.
-											This means that using static_cast between StaticArchetype <-> DynamicArchetype implies no pointer adjustment.
-											If instanceArchetype is not the archetype of instance (), the result of this method is UB.
-	*	@param targetArchetype		Archetype to cast instance to.
+	*	@param instanceStaticArchetype	Static archetype of the instance.
+											If instanceStaticArchetype is not the static archetype of instance, the result of this method is UB.
+	*	@param targetArchetype			Archetype to cast instance to.
 	* 
 	*	@return A pointer to the adjusted instance if the upcast was successful, else nullptr.
 	*/
 	template <typename TargetClassType>
 	RFK_NODISCARD TargetClassType*	dynamicUpCast(typename CopyConstness<TargetClassType, void>::Type*	instance,
-												  Struct const&											instanceDynamicArchetype,
+												  Struct const&											instanceStaticArchetype,
 												  Struct const&											targetArchetype)				noexcept;
 
 	/**
-	*	@brief	Adjust the pointer of the provided instance of type instanceDynamicArchetype to a pointer to a targetArchetype.
-	*			This method only works for downcast, which means that if targetArchetype is a parent class of instanceDynamicArchetype, nullptr is returned.
+	*	@brief	Adjust the pointer of the provided instance of type instanceStaticArchetype to a pointer to a targetArchetype.
+	*			This method only works for downcast, which means that if targetArchetype is a parent class of instanceStaticArchetype, nullptr is returned.
 	*			Since the method checks only for downcast, it is theoritically faster than dynamicCast.
 	*	
 	*	@tparam TargetClassType Type of pointer the result should be cast to. To get a void*, call dynamicCast<void>(...).
 	* 
 	*	@param instance					Pointer to the instance to cast.
-	*	@param instanceDynamicArchetype	Dynamic archetype of the instance. If the static and dynamic archetypes of instance are different,
-											they must have no memory offset in instance for this method to be valid.
-											This means that using static_cast between StaticArchetype <-> DynamicArchetype implies no pointer adjustment.
-											If instanceArchetype is not the archetype of instance (), the result of this method is UB.
+	*	@param instanceStaticArchetype	Static archetype of the instance. 
+	*										If instanceStaticArchetype is not the static archetype of instance, the result of this method is UB.
 	*	@param targetArchetype			Archetype to cast instance to.
 	* 
 	*	@return A pointer to the adjusted instance if the downcast was successful, else nullptr.
 	*/
 	template <typename TargetClassType>
 	RFK_NODISCARD TargetClassType*	dynamicDownCast(typename CopyConstness<TargetClassType, void>::Type*	instance,
-													Struct const&											instanceDynamicArchetype,
+													Struct const&											instanceStaticArchetype,
 													Struct const&											targetArchetype)			noexcept;
 
 	#include "Refureku/TypeInfo/Cast.inl"

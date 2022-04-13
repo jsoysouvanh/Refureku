@@ -173,7 +173,6 @@ TEST(Rfk_dynamicCast_Target, FailedDownUpCastDuringDownCast)
 	Child4 child4;
 
 	NonVirtualBase* child4AsNonVirtualBase = &child4;
-	Base* child4AsBase = &child4;
 
 	EXPECT_EQ(rfk::dynamicCast<void>(child4AsNonVirtualBase, NonVirtualBase::staticGetArchetype(), Child3::staticGetArchetype(), Base::staticGetArchetype()), nullptr);
 }
@@ -183,7 +182,86 @@ TEST(Rfk_dynamicCast_Target, FailedDownUpCastDuringUpCast)
 	Child4 child4;
 
 	NonVirtualBase* child4AsNonVirtualBase = &child4;
-	Base* child4AsBase = &child4;
 
 	EXPECT_EQ(rfk::dynamicCast<void>(child4AsNonVirtualBase, NonVirtualBase::staticGetArchetype(), Child4::staticGetArchetype(), Base2::staticGetArchetype()), nullptr);
+}
+
+//======================================================================================
+//========= rfk::dynamicUpCast<Target>(void*, Struct const&, Struct const&) ============
+//======================================================================================
+
+TEST(Rfk_dynamicUpCast_Target, NullptrUpCast)
+{
+	EXPECT_EQ(rfk::dynamicUpCast<void>(nullptr, Child3::staticGetArchetype(), Base::staticGetArchetype()), nullptr);
+}
+
+TEST(Rfk_dynamicUpCast_Target, SameArchetype)
+{
+	Child1 child1;
+
+	EXPECT_EQ(rfk::dynamicUpCast<void>(&child1, Child1::staticGetArchetype(), Child1::staticGetArchetype()), &child1);
+}
+
+TEST(Rfk_dynamicUpCast_Target, SuccessfulUpCast)
+{
+	Child1 child1;
+
+	Base* child1AsBase = &child1;
+
+	EXPECT_EQ(rfk::dynamicUpCast<void>(&child1, Child1::staticGetArchetype(), Base::staticGetArchetype()), child1AsBase);
+}
+
+TEST(Rfk_dynamicUpCast_Target, FailedUpCastBecauseOfUnrelatedClass)
+{
+	GrandChild1 grandChild1;
+
+	EXPECT_EQ(rfk::dynamicUpCast<void>(&grandChild1, GrandChild1::staticGetArchetype(), Child2::staticGetArchetype()), nullptr);
+}
+
+TEST(Rfk_dynamicUpCast_Target, FailedUpCastBecauseDownCast)
+{
+	GrandChild1 grandChild1;
+
+	Base* grandChild1AsBase = &grandChild1;
+
+	EXPECT_EQ(rfk::dynamicUpCast<void>(grandChild1AsBase, Base::staticGetArchetype(), GrandChild1::staticGetArchetype()), nullptr);
+}
+
+//======================================================================================
+//========= rfk::dynamicDownCast<Target>(void*, Struct const&, Struct const&) ==========
+//======================================================================================
+
+TEST(Rfk_dynamicDownCast_Target, NullptrDownCast)
+{
+	EXPECT_EQ(rfk::dynamicDownCast<void>(nullptr, Base::staticGetArchetype(), Child3::staticGetArchetype()), nullptr);
+}
+
+TEST(Rfk_dynamicDownCast_Target, SameArchetype)
+{
+	Child1 child1;
+
+	EXPECT_EQ(rfk::dynamicDownCast<void>(&child1, Child1::staticGetArchetype(), Child1::staticGetArchetype()), &child1);
+}
+
+TEST(Rfk_dynamicDownCast_Target, SuccessfulDownCast)
+{
+	Child1 child1;
+
+	Base* child1AsBase = &child1;
+
+	EXPECT_EQ(rfk::dynamicDownCast<void>(child1AsBase, Base::staticGetArchetype(), Child1::staticGetArchetype()), &child1);
+}
+
+TEST(Rfk_dynamicDownCast_Target, FailedDownCastBecauseOfUnrelatedClass)
+{
+	GrandChild1 grandChild1;
+
+	EXPECT_EQ(rfk::dynamicDownCast<void>(&grandChild1, GrandChild1::staticGetArchetype(), Child2::staticGetArchetype()), nullptr);
+}
+
+TEST(Rfk_dynamicDownCast_Target, FailedDownCastBecauseUpCast)
+{
+	GrandChild1 grandChild1;
+
+	EXPECT_EQ(rfk::dynamicDownCast<void>(&grandChild1, GrandChild1::staticGetArchetype(), Base::staticGetArchetype()), nullptr);
 }
