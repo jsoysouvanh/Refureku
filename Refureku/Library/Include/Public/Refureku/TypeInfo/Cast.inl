@@ -12,6 +12,8 @@ TargetClassType* dynamicCast(SourceClassType* instance) noexcept
 	static_assert(!std::is_base_of_v<TargetClassType, SourceClassType>, "[Refureku] Don't use dynamicCast to perform a simple upcast. Use implicit conversion or static_cast instead.");
 	static_assert(!std::is_same_v<SourceClassType, TargetClassType>, "[Refureku] Don't use dynamicCast to cast to the source type itself.");
 	static_assert(std::is_base_of_v<rfk::Object, SourceClassType>, "[Refureku] Can't use dynamicCast if instance doesn't inherit from rfk::Object.");
+	static_assert(internal::implements_getArchetype<SourceClassType, Struct const&()>::value, "[Refureku] Can't use dynamicCast if instance doesn't implement the getArchetype method."
+																							 " Inherit from rfk::Object for automatic implementation generation, or implement it manually.");
 
 	/**
 	*	dynamicCast requires TargetClassType to implement the staticGetArchetype method, so
@@ -24,22 +26,7 @@ TargetClassType* dynamicCast(SourceClassType* instance) noexcept
 	*/
 	static_assert(internal::implements_staticGetArchetype<TargetClassType, Struct const&()>::value, "[Refureku] The target class must implement the staticGetArchetype method.");
 
-	rfk::Struct const& instanceConcreteType = instance->getArchetype();
-
-	//TODO: Optimization if the concrete type has a single branch inheritance tree: don't perform this intermediate computation
-
-	auto intermediatePtr = dynamicDownCast<typename CopyConstness<SourceClassType, void>::Type>(
-		reinterpret_cast<typename CopyConstness<SourceClassType, void>::Type*>(instance),
-		SourceClassType::staticGetArchetype(),
-		instanceConcreteType
-		);
-
-	// --------------------------------------------------------------------
-
-	//Try to upcast the concrete type of instance to TargetClassType
-	return (intermediatePtr != nullptr) ?
-		dynamicUpCast<TargetClassType>(intermediatePtr, instanceConcreteType, TargetClassType::staticGetArchetype()) :
-		nullptr;
+	return dynamicCast<TargetClassType>(instance, SourceClassType::staticGetArchetype(), instance->getArchetype(), TargetClassType::staticGetArchetype());
 }
 
 template <typename TargetClassType>

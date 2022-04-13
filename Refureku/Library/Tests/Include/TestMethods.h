@@ -92,6 +92,9 @@ class CLASS() SingleNPInheritancePClass : public NoInheritanceNPClass
 		return EMethodTestCallResult::SingleNPInheritancePClass;
 	}
 
+	public:
+		virtual ~SingleNPInheritancePClass() = default;
+
 	SingleNPInheritancePClass_GENERATED
 };
 
@@ -147,6 +150,9 @@ class CLASS() NoInheritancePClass
 	{
 		return EMethodTestCallResult::NoInheritancePClass;
 	}
+
+	public:
+		virtual ~NoInheritancePClass() = default;
 
 	NoInheritancePClass_GENERATED
 };

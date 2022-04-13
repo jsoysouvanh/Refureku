@@ -25,14 +25,14 @@ ReturnType Method::MemberFunctionSafeCallWrapper<CallerType, ReturnType(ArgTypes
 	switch (function.getOriginalFunctionSize())
 	{
 		case (sizeof(PointerToMemberMethod<NoInheritanceClass>)):
-			return reinterpret_cast<MemberFunction<NoInheritanceClass, ReturnType(ArgTypes...)> const&>(function).operator()(reinterpret_cast<CopyConstness<CallerType, NoInheritanceClass>::Type&>(caller), std::forward<ArgTypes>(args)...);
+			return reinterpret_cast<MemberFunction<NoInheritanceClass, ReturnType(ArgTypes...)> const&>(function).operator()(reinterpret_cast<typename CopyConstness<CallerType, NoInheritanceClass>::Type&>(caller), std::forward<ArgTypes>(args)...);
 
 		case (sizeof(PointerToMemberMethod<MultipleInheritanceClass>)):
-			return reinterpret_cast<MemberFunction<MultipleInheritanceClass, ReturnType(ArgTypes...)> const&>(function).operator()(reinterpret_cast<CopyConstness<CallerType, MultipleInheritanceClass>::Type&>(caller), std::forward<ArgTypes>(args)...);
+			return reinterpret_cast<MemberFunction<MultipleInheritanceClass, ReturnType(ArgTypes...)> const&>(function).operator()(reinterpret_cast<typename CopyConstness<CallerType, MultipleInheritanceClass>::Type&>(caller), std::forward<ArgTypes>(args)...);
 
 #if !defined(_WIN64) //_WIN32
 		case (sizeof(PointerToMemberMethod<VirtualInheritanceClass>)):
-			return reinterpret_cast<MemberFunction<VirtualInheritanceClass, ReturnType(ArgTypes...)> const&>(function).operator()(reinterpret_cast<CopyConstness<CallerType, VirtualInheritanceClass>::Type&>(caller), std::forward<ArgTypes>(args)...);
+			return reinterpret_cast<MemberFunction<VirtualInheritanceClass, ReturnType(ArgTypes...)> const&>(function).operator()(reinterpret_cast<typename CopyConstness<CallerType, VirtualInheritanceClass>::Type&>(caller), std::forward<ArgTypes>(args)...);
 #endif
 
 		default:
@@ -40,7 +40,7 @@ ReturnType Method::MemberFunctionSafeCallWrapper<CallerType, ReturnType(ArgTypes
 
 			//Fake a return to avoid warnings
 			//Should never reach this point anyway
-			return reinterpret_cast<ReturnType (*)()>(nullptr)();
+			return reinterpret_cast<ReturnType (*)()>(0)();
 	}
 #else
 	//No trick required, pointer to member function size do not vary with class inheritance on GCC / Clang
@@ -70,7 +70,7 @@ CallerType& Method::adjustCallerAddress(CallerType& caller) const noexcept
 	else
 	{
 		//Can't retrieve the dynamic archetype through a virtual getArchetype call, so use the caller static archetype.
-		// /!\ If a memory offset exists between the caller static and dynamic archetypes, the returned result is INCORRECT /!\ 
+		// !!! If a memory offset exists between the caller static and dynamic archetypes, the returned result is INCORRECT !!!
 		return adjustCallerAddress(caller, *static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>()));
 	}
 }

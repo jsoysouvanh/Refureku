@@ -7,20 +7,20 @@
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(FunctionPrototype function) noexcept:
+#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+	_originalFunctionSize{sizeof(FunctionPrototype)},
+#endif
 	_function{function},
 	_isConst{false}
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
-	, _originalFunctionSize{sizeof(FunctionPrototype)}
-#endif
 {}
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(ConstFunctionPrototype function) noexcept:
+#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+	_originalFunctionSize{sizeof(ConstFunctionPrototype)},
+#endif
 	_constFunction{function},
 	_isConst{true}
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
-	, _originalFunctionSize{sizeof(ConstFunctionPrototype)}
-#endif
 {}
 
 #if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
