@@ -42,7 +42,7 @@ namespace rfk
 			inline EntityImpl(char const*		name,
 							  std::size_t		id,
 							  EEntityKind		kind = EEntityKind::Undefined,
-							  Entity const*	outerEntity = nullptr)			noexcept;
+							  Entity const*	outerEntity = nullptr)				noexcept;
 			virtual ~EntityImpl()												= default;
 
 			/**

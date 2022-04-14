@@ -19,9 +19,24 @@ inline void Struct::StructImpl::addDirectParent(Struct const& archetype, EAccess
 	inheritProperties(*archetype.getPimpl());
 }
 
+inline void Struct::StructImpl::removeDirectParentAt(std::size_t parentIndex) noexcept
+{
+	_directParents.erase(_directParents.begin() + parentIndex);
+}
+
 inline void Struct::StructImpl::addSubclass(Struct const& subclass, std::ptrdiff_t subclassPointerOffset) noexcept
 {
 	_subclasses.emplace(&subclass, subclassPointerOffset);
+}
+
+inline void Struct::StructImpl::removeSubclassRecursive(rfk::Struct const& subclass) noexcept
+{
+	for (ParentStruct const& parent : _directParents)
+	{
+		const_cast<rfk::Struct&>(parent.getArchetype()).getPimpl()->removeSubclassRecursive(subclass);
+	}
+
+	_subclasses.erase(&subclass);
 }
 
 inline void Struct::StructImpl::addNestedArchetype(Archetype const* nestedArchetype,

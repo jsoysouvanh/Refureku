@@ -100,8 +100,8 @@ TEST(Rfk_dynamicCast_Target_Source, SuccessfulDynamicCastWithMultipleInheritance
 
 TEST(Rfk_dynamicCast_Target_Source, CastInstanceWithoutGetArchetype)
 {
-	NotObjectChild1 child1;
-	NotObjectBase* child1AsBase = &child1;
+	//NotObjectChild1 child1;
+	//NotObjectBase* child1AsBase = &child1;
 
 	//Doesn't compile as expected since NotObjectBase doesn't implement virtual getArchetype
 	//EXPECT_EQ(rfk::dynamicCast<NotObjectChild1>(child1AsBase), &child1);

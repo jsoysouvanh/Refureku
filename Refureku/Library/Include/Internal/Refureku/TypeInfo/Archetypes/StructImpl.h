@@ -134,6 +134,13 @@ namespace rfk
 																		EAccessSpecifier inheritanceAccess)				noexcept;
 
 			/**
+			*	@brief Remove an archetype from the directParent collection at the provided index.
+			* 
+			*	@param parentIndex The index of the parent to remove in the directParents collection.
+			*/
+			inline void									removeDirectParentAt(std::size_t parentIndex)					noexcept;
+
+			/**
 			*	@brief Add a subclass to this struct.
 			* 
 			*	@param subclass				 The subclass to add.
@@ -141,6 +148,13 @@ namespace rfk
 			*/
 			inline void									addSubclass(Struct const&  subclass, 
 																	std::ptrdiff_t subclassPointerOffset)				noexcept;
+
+			/**
+			*	@brief Remove a subclass from this Struct.
+			* 
+			*	@param subclass The subclass to remove.
+			*/
+			inline void									removeSubclassRecursive(rfk::Struct const& subclass)			noexcept;
 
 			/**
 			*	@brief Add a nested archetype to the struct.

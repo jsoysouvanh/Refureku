@@ -24,7 +24,44 @@ Struct::Struct(StructImpl* implementation) noexcept:
 {
 }
 
-Struct::~Struct() noexcept = default;
+Struct::~Struct() noexcept
+{
+	//Unregister this class from subclasses direct parents
+	std::size_t i = 0u;
+	for (auto [subclass, subclassData] : getPimpl()->getSubclasses())
+	{
+		//Search this struct in subclasses's parents
+		i = 0u;
+		for (ParentStruct const& subclassParent : subclass->getPimpl()->getDirectParents())
+		{
+			if (&subclassParent.getArchetype() == this)
+			{
+				//Found a subclass that has this Struct as a direct parent
+				const_cast<Struct*>(subclass)->getPimpl()->removeDirectParentAt(i);
+				break;
+			}
+
+			i++;
+		}
+
+		//Unregister this struct subclasses from upper class hierarchy
+		Struct const* subclassLValue = subclass;
+		Algorithm::foreach(getPimpl()->getDirectParents(), [subclassLValue](ParentStruct const& parent)
+						   {
+							   const_cast<Struct&>(parent.getArchetype()).getPimpl()->removeSubclassRecursive(*subclassLValue);
+
+							   return true;
+						   });
+	}
+
+	//Unregister this class from upper class hierarchy subclasses
+	Algorithm::foreach(getPimpl()->getDirectParents(), [this](ParentStruct const& parent)
+					   {
+						   const_cast<Struct&>(parent.getArchetype()).getPimpl()->removeSubclassRecursive(*this);
+
+						   return true;
+					   });
+}
 
 rfk::Vector<Struct const*> Struct::getDirectSubclasses() const noexcept
 {

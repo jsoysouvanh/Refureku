@@ -12,6 +12,7 @@ namespace rfk
 	class ICallable
 	{
 		public:
+			//Must be virtual because MemberFunction and NonMemberFunction instances are stored and deleted as SharedPtr<ICallable>
 			virtual	~ICallable() = default;
 
 		protected:

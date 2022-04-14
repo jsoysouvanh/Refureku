@@ -38,9 +38,12 @@ namespace rfk
 			*/
 			RFK_NODISCARD REFUREKU_API EAccessSpecifier	getInheritanceAccessSpecifier()	const	noexcept;
 
+			REFUREKU_INTERNAL ParentStruct&				operator=(ParentStruct const&)			= delete;
+			REFUREKU_INTERNAL ParentStruct&				operator=(ParentStruct&&)				noexcept;
+
 		private:
 			/** Archetype of the parent struct. */
-			Struct const&		_archetype;
+			Struct const*		_archetype;
 
 			/** Inheritance access specifier. */
 			EAccessSpecifier	_inheritanceAccessSpecifier;
