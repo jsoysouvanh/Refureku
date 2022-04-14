@@ -1,5 +1,5 @@
 /**
-*	Copyright (c) 2020-2021 Julien SOYSOUVANH - All Rights Reserved
+*	Copyright (c) 2020-2022 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
 *	See the LICENSE.md file for full license details.
@@ -9,8 +9,8 @@
 
 //Version
 #define REFUREKU_VERSION_MAJOR 2
-#define REFUREKU_VERSION_MINOR 0
-#define REFUREKU_VERSION_PATCH 3
+#define REFUREKU_VERSION_MINOR 1
+#define REFUREKU_VERSION_PATCH 0
 #define REFUREKU_VERSION (REFUREKU_VERSION_MAJOR * 10000 + REFUREKU_VERSION_MINOR * 100 + REFUREKU_VERSION_PATCH)
 
 //Features
