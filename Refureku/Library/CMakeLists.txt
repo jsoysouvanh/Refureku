@@ -16,6 +16,7 @@ add_library(${RefurekuLibraryTarget}
 					"Source/TypeInfo/TypePart.cpp"
 					"Source/TypeInfo/Type.cpp"
 					"Source/TypeInfo/Database.cpp"
+					"Source/TypeInfo/Cast.cpp"
 
 					"Source/TypeInfo/Entity/Entity.cpp"
 					"Source/TypeInfo/Entity/EntityHash.cpp"

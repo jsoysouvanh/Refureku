@@ -16,12 +16,6 @@
 
 namespace rfk
 {
-	namespace internal
-	{
-		RFK_GENERATE_IMPLEMENTS_METHOD_TRAITS(staticGetArchetype);
-		RFK_GENERATE_IMPLEMENTS_METHOD_TRAITS(getArchetype);
-	}
-
 	/**
 	*	@brief	Cast the provided class instance to another class type if possible.
 	*			The provided instance must inherit from rfk::Object in order to retrieve its dynamic archetype.
@@ -86,6 +80,38 @@ namespace rfk
 	RFK_NODISCARD TargetClassType*	dynamicDownCast(typename CopyConstness<TargetClassType, void>::Type*	instance,
 													Struct const&											instanceStaticArchetype,
 													Struct const&											targetArchetype)			noexcept;
+
+	namespace internal
+	{
+		RFK_GENERATE_IMPLEMENTS_METHOD_TRAITS(staticGetArchetype);
+		RFK_GENERATE_IMPLEMENTS_METHOD_TRAITS(getArchetype);
+
+		RFK_NODISCARD REFUREKU_API void*		dynamicCast(void*		  instance,
+															Struct const& instanceStaticArchetype,
+															Struct const& instanceDynamicArchetype,
+															Struct const& targetArchetype)				noexcept;
+
+		RFK_NODISCARD REFUREKU_API void const*	dynamicCast(void const*	  instance,
+															Struct const& instanceStaticArchetype,
+															Struct const& instanceDynamicArchetype,
+															Struct const& targetArchetype)				noexcept;
+
+		RFK_NODISCARD REFUREKU_API void*		dynamicUpCast(void*			instance,
+															  Struct const& instanceStaticArchetype,
+															  Struct const&	targetArchetype)			noexcept;
+
+		RFK_NODISCARD REFUREKU_API void const*	dynamicUpCast(void const*	instance,
+															  Struct const& instanceStaticArchetype,
+															  Struct const&	targetArchetype)			noexcept;
+
+		RFK_NODISCARD REFUREKU_API void*		dynamicDownCast(void*		  instance,
+																Struct const& instanceStaticArchetype,
+																Struct const& targetArchetype)			noexcept;
+
+		RFK_NODISCARD REFUREKU_API void const*	dynamicDownCast(void const*	  instance,
+																Struct const& instanceStaticArchetype,
+																Struct const& targetArchetype)			noexcept;
+	}
 
 	#include "Refureku/TypeInfo/Cast.inl"
 }
