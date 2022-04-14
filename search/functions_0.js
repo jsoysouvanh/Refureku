@@ -15,11 +15,12 @@ var searchData=
   ['addsharedinstantiator_12',['addSharedInstantiator',['../classrfk_1_1_struct.html#adf58b026e051572a14a44e715e758ef3',1,'rfk::Struct']]],
   ['addstaticfield_13',['addStaticField',['../classrfk_1_1_struct.html#ac5f04c2037d93f0789267ac1fbe8bb66',1,'rfk::Struct']]],
   ['addstaticmethod_14',['addStaticMethod',['../classrfk_1_1_struct.html#a06977f66df71b4bd124bd486bec18416',1,'rfk::Struct']]],
-  ['addsubclass_15',['addSubclass',['../classrfk_1_1_struct.html#a425ec1e687bfcc8cfa245b156deeddfb',1,'rfk::Struct']]],
+  ['addsubclass_15',['addSubclass',['../classrfk_1_1_struct.html#a839b0f1e96986bc9a6f7b1defcd3e41f',1,'rfk::Struct']]],
   ['addtemplateargument_16',['addTemplateArgument',['../classrfk_1_1_class_template_instantiation.html#a7cd6971033c1b5f96c5f33e070e61aad',1,'rfk::ClassTemplateInstantiation']]],
   ['addtemplateparameter_17',['addTemplateParameter',['../classrfk_1_1_class_template.html#a8acf06ebace9ac83842283799dc667ce',1,'rfk::ClassTemplate::addTemplateParameter()'],['../classrfk_1_1_template_template_parameter.html#aa683e4e7619c78ae6f10ab7f6f56c30e',1,'rfk::TemplateTemplateParameter::addTemplateParameter()']]],
   ['addtypepart_18',['addTypePart',['../classrfk_1_1_type.html#a12074104cacf20c4251681e0177c47b1',1,'rfk::Type']]],
-  ['addvariable_19',['addVariable',['../classrfk_1_1_namespace.html#a058b7d0c63fc70827d20cc52d35a46f0',1,'rfk::Namespace']]],
-  ['allocate_20',['allocate',['../classrfk_1_1_allocator.html#a4c58561b5cc039eecdef18ece747e452',1,'rfk::Allocator']]],
-  ['archetypecast_21',['archetypeCast',['../namespacerfk.html#a71b75583f8bc8e2fb071b8d26046dd8d',1,'rfk']]]
+  ['adduniqueinstantiator_19',['addUniqueInstantiator',['../classrfk_1_1_struct.html#a5a813010c0e0c00fb7eeb507eac6fed2',1,'rfk::Struct']]],
+  ['addvariable_20',['addVariable',['../classrfk_1_1_namespace.html#a058b7d0c63fc70827d20cc52d35a46f0',1,'rfk::Namespace']]],
+  ['allocate_21',['allocate',['../classrfk_1_1_allocator.html#a4c58561b5cc039eecdef18ece747e452',1,'rfk::Allocator']]],
+  ['archetypecast_22',['archetypeCast',['../namespacerfk.html#a71b75583f8bc8e2fb071b8d26046dd8d',1,'rfk']]]
 ];

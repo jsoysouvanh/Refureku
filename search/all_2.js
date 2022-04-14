@@ -14,5 +14,7 @@ var searchData=
   ['classtemplateinstantiationregisterer_11',['ClassTemplateInstantiationRegisterer',['../classrfk_1_1_class_template_instantiation_registerer.html',1,'rfk']]],
   ['clear_12',['clear',['../classrfk_1_1_vector.html#a720e35f3c9c7d7a13f6bb8eb7c2de80e',1,'rfk::Vector']]],
   ['const_13',['Const',['../namespacerfk.html#ad0623ac99f46f519038709b5428a6567a79ceee9f8e3c1f0cc74223e05d2448bf',1,'rfk::Const()'],['../namespacerfk.html#aede2763da2d837a7ee63b105269d5f6ea79ceee9f8e3c1f0cc74223e05d2448bf',1,'rfk::Const()']]],
-  ['constviolation_14',['ConstViolation',['../classrfk_1_1_const_violation.html',1,'rfk']]]
+  ['constviolation_14',['ConstViolation',['../classrfk_1_1_const_violation.html',1,'rfk']]],
+  ['copyconstness_15',['CopyConstness',['../structrfk_1_1_copy_constness.html',1,'rfk']]],
+  ['copyconstness_3c_20source_20const_2c_20target_20_3e_16',['CopyConstness&lt; Source const, Target &gt;',['../structrfk_1_1_copy_constness_3_01_source_01const_00_01_target_01_4.html',1,'rfk']]]
 ];

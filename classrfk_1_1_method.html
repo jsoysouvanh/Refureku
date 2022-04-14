@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.0.3</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.0</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -87,6 +87,7 @@ $(document).ready(function(){initNavTree('classrfk_1_1_method.html',''); initRes
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classrfk_1_1_method-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">rfk::Method Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div></div>
@@ -355,6 +356,7 @@ template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTy
 <p>.. ArgTypes <a class="el" href="classrfk_1_1_type.html">Type</a> of all arguments. This can in some cases be omitted thanks to template deduction.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">caller</td><td><a class="el" href="classrfk_1_1_object.html">Object</a> instance calling the method. It MUST implement the getArchetype method (<a class="el" href="classrfk_1_1_object.html">rfk::Object</a>) for all safety checks to be performed properly. </td></tr>
     <tr><td class="paramname">args</td><td>Arguments forwarded to the function call.</td></tr>
   </table>
   </dd>
@@ -412,6 +414,7 @@ template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTy
 <p>.. ArgTypes <a class="el" href="classrfk_1_1_type.html">Type</a> of all arguments. This can in some cases be omitted thanks to template deduction.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">caller</td><td><a class="el" href="classrfk_1_1_object.html">Object</a> instance calling the method. Caller is not required to implement the getArchetype method, but the invoke method will likely crash if the memory offset between the CallerType static archetype and its actual dynamic archetype is different from 0. If CallerType implements the getArchetype method (<a class="el" href="classrfk_1_1_object.html">rfk::Object</a>), no such error will ever happen. </td></tr>
     <tr><td class="paramname">args</td><td>Arguments forwarded to the function call.</td></tr>
   </table>
   </dd>

@@ -3,6 +3,8 @@ var hierarchy =
     [ "rfk::Allocator< T >", "classrfk_1_1_allocator.html", null ],
     [ "rfk::ArchetypeRegisterer", "classrfk_1_1_archetype_registerer.html", null ],
     [ "rfk::ClassTemplateInstantiationRegisterer", "classrfk_1_1_class_template_instantiation_registerer.html", null ],
+    [ "rfk::CopyConstness< Source, Target >", "structrfk_1_1_copy_constness.html", null ],
+    [ "rfk::CopyConstness< Source const, Target >", "structrfk_1_1_copy_constness_3_01_source_01const_00_01_target_01_4.html", null ],
     [ "rfk::Database", "classrfk_1_1_database.html", null ],
     [ "rfk::DefaultEntityRegisterer", "classrfk_1_1_default_entity_registerer.html", null ],
     [ "rfk::Entity", "classrfk_1_1_entity.html", [
@@ -43,6 +45,8 @@ var hierarchy =
     [ "std::logic_error", null, [
       [ "rfk::ArgCountMismatch", "classrfk_1_1_arg_count_mismatch.html", null ],
       [ "rfk::ConstViolation", "classrfk_1_1_const_violation.html", null ],
+      [ "rfk::InvalidCaller", "classrfk_1_1_invalid_caller.html", null ],
+      [ "rfk::NotReflectedClass", "classrfk_1_1_not_reflected_class.html", null ],
       [ "rfk::TypeMismatch", "classrfk_1_1_type_mismatch.html", [
         [ "rfk::ArgTypeMismatch", "classrfk_1_1_arg_type_mismatch.html", null ],
         [ "rfk::ReturnTypeMismatch", "classrfk_1_1_return_type_mismatch.html", null ]
