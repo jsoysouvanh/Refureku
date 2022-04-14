@@ -23,8 +23,8 @@ namespace rfk
 	}
 
 	/**
-	*	@brief	Downcast the provided class instance to a more concrete class type if possible.
-	*			The provided instance must inherit from rfk::Object in order to retrieve its concrete archetype.
+	*	@brief	Cast the provided class instance to another class type if possible.
+	*			The provided instance must inherit from rfk::Object in order to retrieve its dynamic archetype.
 	* 
 	*	@param instance The instance to cast. It must inherit from rfk::Object.
 	* 

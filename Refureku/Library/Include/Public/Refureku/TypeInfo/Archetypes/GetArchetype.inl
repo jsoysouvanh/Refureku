@@ -28,7 +28,7 @@ Archetype const* getArchetype() noexcept
 			{
 				return getArchetype<RawType>();
 			}
-			else if constexpr (isCallable_staticGetArchetype<T, Archetype const&()>::value)
+			else if constexpr (internal::isCallable_staticGetArchetype<T, Archetype const&()>::value)
 			{
 				return &T::staticGetArchetype();
 			}

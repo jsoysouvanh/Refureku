@@ -74,10 +74,12 @@ namespace rfk
 			*
 			*	@return The result of the function call.
 			* 
-			*	@exception	ArgCountMismatch if sizeof...(ArgTypes) is not the same as the value returned by getParametersCount().
-			*	@exception	ArgTypeMismatch if ArgTypes... are not strictly the same as this function parameter types.
+			*	@exception	ArgCountMismatch	if sizeof...(ArgTypes) is not the same as the value returned by getParametersCount().
+			*	@exception	ArgTypeMismatch		if ArgTypes... are not strictly the same as this function parameter types.
 			*				**WARNING**: Be careful to template deduction.
-			*	@exception	ReturnTypeMismatch if ReturnType is not strictly the same as this function return type.
+			*	@exception	ReturnTypeMismatch	if ReturnType is not strictly the same as this function return type.
+			*	@exception	NotReflectedClass	if the caller struct is not reflected (rfk::getArchetype<CallerType>() == nullptr).
+			*	@exception	InvalidCaller		if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy).
 			*	@exception	Any exception potentially thrown from the underlying function.
 			*/
 			template <typename ReturnType = void, typename CallerType, typename... ArgTypes, typename = std::enable_if_t<!std::is_const_v<CallerType>>>

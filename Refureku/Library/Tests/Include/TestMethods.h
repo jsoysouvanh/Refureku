@@ -22,6 +22,9 @@ class CLASS() TestMethodClass : public rfk::Object
 	void					noReturnNoParam();
 
 	METHOD()
+	virtual void			virtualNoReturnNoParam();
+
+	METHOD()
 	int						returnIntNoParam();
 
 	METHOD()
@@ -40,6 +43,17 @@ class CLASS() TestMethodClass : public rfk::Object
 	void					constNoReturnNoParam() const;
 
 	TestMethodClass_GENERATED 
+};
+
+class NotReflectedBaseClass
+{
+	public:
+		rfk::Struct const& getArchetype() const noexcept;
+};
+
+class CLASS() TestMethodClass2 : public rfk::Object
+{
+	TestMethodClass2_GENERATED
 };
 
 enum class EMethodTestCallResult

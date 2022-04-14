@@ -201,6 +201,19 @@ TEST(Rfk_Method_invoke, CallParent2IntroducedNonVirtualMethodOnMultipleNPInherit
 	);
 }
 
+//5.2. The non-virtual method is introduced by the second inherited class and called from a base
+TEST(Rfk_Method_invoke, CallParent2IntroducedNonVirtualMethodOnMultipleNPInheritanceNPClassBase)
+{
+	MultipleNPInheritanceNPClass instance;
+
+	NoInheritanceNPClass& instanceBase = instance;
+
+	EXPECT_EQ(
+		MultipleNPInheritanceNPClass::staticGetArchetype().getMethodByName("methodNoInheritanceNPClass2", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instanceBase),
+		EMethodTestCallResult::NoInheritanceNPClass2
+	);
+}
+
 //6. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic) and overriden by instance
 //   AND the overriden version in instance is NOT reflected
 TEST(Rfk_Method_invoke, CallParentIntroducedOverridenVirtualMethodOnMultiplePInheritancePClass)
@@ -279,6 +292,27 @@ TEST(Rfk_Method_invoke, CallGrandParentIntroducedNonVirtualMethodNotFirstInherit
 	);
 }
 
+//9.2. The non-virtual method is introduced by a grandparent class (but NOT in the first inheritance branch: virtual table offset != 0)
+//	   AND called from a base of the class
+//   A<instanceBase   B<non-vmethod
+//   ^                ^
+//   |----------------|
+//		      |
+//            C
+//		      ^
+//            D<instance
+TEST(Rfk_Method_invoke, CallGrandParentIntroducedNonVirtualMethodNotFirstInheritanceBranchBase)
+{
+	SinglePInheritancePClassLevel2 instance;
+
+	NoInheritanceNPClass& instanceBase = instance;
+
+	EXPECT_EQ(
+		SinglePInheritancePClassLevel2::staticGetArchetype().getMethodByName("methodNoInheritancePClass3", rfk::EMethodFlags::Default, true)->invoke<EMethodTestCallResult>(instanceBase),
+		EMethodTestCallResult::NoInheritancePClass
+	);
+}
+
 //=========================================================
 //================ Method::checkedInvoke ==================
 //=========================================================
@@ -312,8 +346,8 @@ TEST(Rfk_Method_checkedInvoke, ThrowArgCountMismatch)
 {
 	TestMethodClass instance;
 
-	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1, 2), rfk::ArgCountMismatch);	//2 instead of 1
-	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance, 1), rfk::ArgCountMismatch);		//1 instead of 0
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1, 2), rfk::ArgCountMismatch); //2 instead of 1
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance, 1), rfk::ArgCountMismatch);			 //1 instead of 0
 	EXPECT_NO_THROW(TestMethodClass::staticGetArchetype().getMethodByName("noReturnNoParam")->checkedInvoke(instance));
 }
 
@@ -322,6 +356,20 @@ TEST(Rfk_Method_checkedInvoke, ThrowArgTypeMismatch)
 	TestMethodClass instance;
 
 	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1.0f), rfk::ArgTypeMismatch);	//float instead of int
+}
+
+TEST(Rfk_Method_checkedInvoke, ThrowNotReflectedClass)
+{
+	NotReflectedBaseClass instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("virtualNoReturnNoParam")->checkedInvoke(instance), rfk::NotReflectedClass);
+}
+
+TEST(Rfk_Method_checkedInvoke, ThrowInvalidCaller)
+{
+	TestMethodClass2 instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("virtualNoReturnNoParam")->checkedInvoke(instance), rfk::InvalidCaller);
 }
 
 TEST(Rfk_Method_checkedInvoke, CatchForwardDeclaredTypeMismatch)

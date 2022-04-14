@@ -113,7 +113,7 @@ CallerType& Method::checkedAdjustCallerAddress(CallerType& caller) const
 	static_assert(internal::implements_getArchetype<CallerType, Struct const& ()>::value,
 				  "[Refureku] To perform all the safety checks, the caller must implement the getArchetype() method inherited from rfk::Object.");
 
-	return adjustCallerAddress(caller, caller.getArchetype());
+	return checkedAdjustCallerAddress(caller, caller.getArchetype());
 }
 
 template <typename CallerType>
