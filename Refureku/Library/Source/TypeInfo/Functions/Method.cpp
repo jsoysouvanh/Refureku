@@ -70,9 +70,3 @@ void Method::throwInvalidCallerException() const
 {
 	throw InvalidCaller("The caller instance has no relationship with this method hence it can't be called.");
 }
-
-void Method::throwNotReflectedClassException() const
-{
-	throw NotReflectedClass("The caller class must be reflected for all safety checks to be performed properly."
-							" rfk::getArchetype<CallerType>() must be specialized to return CallerType archetype.");
-}

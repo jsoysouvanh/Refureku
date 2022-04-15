@@ -358,13 +358,6 @@ TEST(Rfk_Method_checkedInvoke, ThrowArgTypeMismatch)
 	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("returnIntParamInt")->checkedInvoke<int>(instance, 1.0f), rfk::ArgTypeMismatch);	//float instead of int
 }
 
-TEST(Rfk_Method_checkedInvoke, ThrowNotReflectedClass)
-{
-	NotReflectedBaseClass instance;
-
-	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("virtualNoReturnNoParam")->checkedInvoke(instance), rfk::NotReflectedClass);
-}
-
 TEST(Rfk_Method_checkedInvoke, ThrowInvalidCaller)
 {
 	TestMethodClass2 instance;

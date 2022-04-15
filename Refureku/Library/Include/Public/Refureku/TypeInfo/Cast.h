@@ -8,32 +8,39 @@
 #pragma once
 
 #include <type_traits> //std::is_class_v, is_base_of_v
+#include <cassert>
 
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/Misc/CopyConstness.h"
-#include "Refureku/Misc/TypeTraitsMacros.h"
 #include "Refureku/Object.h"
 
 namespace rfk
 {
 	/**
-	*	@brief	Cast the provided class instance to another class type if possible.
-	*			The provided instance must inherit from rfk::Object in order to retrieve its dynamic archetype.
+	*	@brief	Adjust the provided pointer to another class pointer if possible.
 	* 
-	*	@param instance The instance to cast. It must inherit from rfk::Object.
+	*	@tparam TargetClassType Type to cast to. It must be a reflected type (rfk::getArchetype<TargetClassType>() must be non-nullptr).
+	*	@tparam SourceClassType Static type of the provided instance to cast.
 	* 
-	*	@return The casted instance if successful, else nullptr.
+	*	@param instance					A pointer to the instance to cast.
+	*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
+	*	@param instanceDynamicArchetype	Dynamic archetype of the instance pointer before it was casted to void*.
+	*	@param targetArchetype			Archetype of the result pointer.
+	* 
+	*	@return The pointer to instance as targetArchetype if successful, else nullptr.
 	*/
 	template <typename TargetClassType, typename SourceClassType>
 	RFK_NODISCARD TargetClassType*	dynamicCast(SourceClassType* instance)																noexcept;
 
 	/**
-	*	@brief	Adjust the pointer of the provided instance of a given static/dynamic type to a pointer to another target type if possible.
+	*	@brief Adjust the pointer of the provided instance of a given static/dynamic type to a pointer to another type if possible.
+	* 
+	*	@tparam TargetClassType Type to cast to.
 	* 
 	*	@param instance					Pointer to the instance to cast.
-	*	@param instanceStaticArchetype	The static archetype of the instance (the result of rfk::getArchetype<decltype(instance)>() before it was casted to void).
-	*	@param instanceDynamicArchetype	The dynamic archetype of the instance (the result of instance->getArchetype(), overriden from rfk::Object).
-	*	@param targetArchetype			The archetype of the target type.
+	*	@param instanceStaticArchetype	The static archetype of instance (the result of rfk::getArchetype<decltype(instance)>() before it was casted to void).
+	*	@param instanceDynamicArchetype	The dynamic archetype of instance (the result of instance->getArchetype(), overriden from rfk::Object).
+	*	@param targetArchetype			The archetype of TargetClassType.
 	* 
 	*	@return A pointer to the adjusted instance if the cast was successful, else nullptr.
 	*/
@@ -59,7 +66,6 @@ namespace rfk
 	*/
 	template <typename TargetClassType>
 	RFK_NODISCARD TargetClassType*	dynamicUpCast(typename CopyConstness<TargetClassType, void>::Type*	instance,
-												  Struct const&											instanceStaticArchetype,
 												  Struct const&											targetArchetype)				noexcept;
 
 	/**
@@ -83,31 +89,95 @@ namespace rfk
 
 	namespace internal
 	{
-		RFK_GENERATE_IMPLEMENTS_METHOD_TRAITS(staticGetArchetype);
-		RFK_GENERATE_IMPLEMENTS_METHOD_TRAITS(getArchetype);
-
+		/**
+		*	@brief	Adjust the provided pointer to another class pointer if possible.
+		* 
+		*	@param instance					A pointer to the instance to cast.
+		*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
+		*	@param instanceDynamicArchetype	Dynamic archetype of the instance pointer before it was casted to void*.
+		*	@param targetArchetype			Archetype of the result pointer.
+		* 
+		*	@return The pointer to instance as targetArchetype if successful, else nullptr.
+		*/
 		RFK_NODISCARD REFUREKU_API void*		dynamicCast(void*		  instance,
 															Struct const& instanceStaticArchetype,
 															Struct const& instanceDynamicArchetype,
 															Struct const& targetArchetype)				noexcept;
 
+		/**
+		*	@brief	Adjust the provided pointer to another class pointer if possible.
+		*			Overload for const pointers.
+		* 
+		*	@param instance					A pointer to the instance to cast.
+		*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
+		*	@param instanceDynamicArchetype	Dynamic archetype of the instance pointer before it was casted to void*.
+		*	@param targetArchetype			Archetype of the result pointer.
+		* 
+		*	@return The pointer to instance as targetArchetype if successful, else nullptr.
+		*/
 		RFK_NODISCARD REFUREKU_API void const*	dynamicCast(void const*	  instance,
 															Struct const& instanceStaticArchetype,
 															Struct const& instanceDynamicArchetype,
 															Struct const& targetArchetype)				noexcept;
 
+		/**
+		*	@brief	Adjust the provided pointer to a parent class pointer if possible.
+		*			This method will return non-nullptr results only if targetArchetype is a reflected parent class of instanceStaticArchetype,
+		*			or is the instanceStaticArchetype itself.
+		* 
+		*	@param instance					A pointer to the instance to cast.
+		*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
+		*	@param targetArchetype			Archetype of the result pointer.
+		* 
+		*	@return The pointer to instance as targetArchetype if successful, else nullptr.
+		*/
 		RFK_NODISCARD REFUREKU_API void*		dynamicUpCast(void*			instance,
 															  Struct const& instanceStaticArchetype,
 															  Struct const&	targetArchetype)			noexcept;
 
+		/**
+		*	@brief	Adjust the provided pointer to a parent class pointer if possible.
+		*			This method will return non-nullptr results only if targetArchetype is a reflected parent class of instanceStaticArchetype,
+		*			or is the instanceStaticArchetype itself.
+		*			Overload for const pointers.
+		* 
+		*	@param instance					A pointer to the instance to cast.
+		*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
+		*	@param targetArchetype			Archetype of the result pointer.
+		* 
+		*	@return The pointer to instance as targetArchetype if successful, else nullptr.
+		*/
 		RFK_NODISCARD REFUREKU_API void const*	dynamicUpCast(void const*	instance,
 															  Struct const& instanceStaticArchetype,
 															  Struct const&	targetArchetype)			noexcept;
 
+		/**
+		*	@brief	Adjust the provided pointer to a child class pointer if possible.
+		*			This method will return non-nullptr results only if targetArchetype is a reflected subclass of instanceStaticArchetype,
+		*			or is the instanceStaticArchetype itself.
+		* 
+		*	@param instance					A pointer to the instance to cast.
+		*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
+		*	@param targetArchetype			Archetype of the result pointer.
+		* 
+		*	@return The pointer to instance as targetArchetype if successful, else nullptr.
+		*/
 		RFK_NODISCARD REFUREKU_API void*		dynamicDownCast(void*		  instance,
 																Struct const& instanceStaticArchetype,
 																Struct const& targetArchetype)			noexcept;
 
+		/**
+		*	@brief	Adjust the provided pointer to a child class pointer if possible.
+		*			This method will return non-nullptr results only if targetArchetype is a reflected subclass of instanceStaticArchetype,
+		*			or is the instanceStaticArchetype itself.
+		*			Overload for const pointers.
+		* 
+		*	@param instance					A pointer to the instance to cast.
+		*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
+		*	@param targetArchetype			Archetype of the result pointer.
+		* 
+		*	@return The pointer to instance as targetArchetype if successful, else nullptr.
+		*/
 		RFK_NODISCARD REFUREKU_API void const*	dynamicDownCast(void const*	  instance,
 																Struct const& instanceStaticArchetype,
 																Struct const& targetArchetype)			noexcept;

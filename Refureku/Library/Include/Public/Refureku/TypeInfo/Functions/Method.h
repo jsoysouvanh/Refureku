@@ -8,12 +8,12 @@
 #pragma once
 
 #include <type_traits>	//std::enable_if_v, std::is_const_v
+#include <cassert>
 
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
 #include "Refureku/TypeInfo/Cast.h"
 #include "Refureku/Misc/CopyConstness.h"
-#include "Refureku/Exceptions/NotReflectedClass.h"
 #include "Refureku/Exceptions/InvalidCaller.h"
 
 namespace rfk
@@ -225,13 +225,6 @@ namespace rfk
 			*	@param message Message forwarded to the exception.
 			*/
 			RFK_NORETURN REFUREKU_API void	throwInvalidCallerException()										const;
-
-			/**
-			*	@brief Throw a NotReflectedClass exception with the provided message.
-			* 
-			*	@param message Message forwarded to the exception.
-			*/
-			RFK_NORETURN REFUREKU_API void	throwNotReflectedClassException()									const;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Method const*>);

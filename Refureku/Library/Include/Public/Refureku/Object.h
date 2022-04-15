@@ -13,7 +13,6 @@ namespace rfk
 {
 	//Forward declaration
 	class Struct;
-	class Struct;
 
 	/**
 	*	Base class which implements the virtual getArchetype method.
