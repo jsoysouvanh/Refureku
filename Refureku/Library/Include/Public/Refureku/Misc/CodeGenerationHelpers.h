@@ -16,8 +16,6 @@
 #include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/Misc/SharedPtr.h"
 
-RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass)
-
 #ifndef _RFK_UNPACK_IF_NOT_PARSING
 
 //This macro "KODGEN_PARSING" must match the name defined by the kodgen parser when parsing source files
@@ -32,6 +30,8 @@ RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass)
 
 namespace rfk::internal
 {
+	RFK_GENERATE_IMPLEMENTS_TEMPLATE1_METHOD_TRAITS(_rfk_registerChildClass);
+
 	class CodeGenerationHelpers
 	{
 		public:

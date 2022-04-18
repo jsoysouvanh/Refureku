@@ -5,10 +5,10 @@
 *	See the LICENSE.md file for full license details.
 */
 
-inline NamespaceFragment::NamespaceFragmentImpl::NamespaceFragmentImpl(char const* name, std::size_t id, std::shared_ptr<Namespace>&& mergedNamespace) noexcept:
+inline NamespaceFragment::NamespaceFragmentImpl::NamespaceFragmentImpl(char const* name, std::size_t id, SharedPtr<Namespace>&& mergedNamespace) noexcept:
 	EntityImpl(name, id, EEntityKind::NamespaceFragment),
 	_nestedEntities(),
-	_mergedNamespace(std::forward<std::shared_ptr<Namespace>>(mergedNamespace))
+	_mergedNamespace(std::forward<SharedPtr<Namespace>>(mergedNamespace))
 {
 }
 

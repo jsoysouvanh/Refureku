@@ -10,75 +10,31 @@ TargetClassType* dynamicCast(SourceClassType* instance) noexcept
 {
 	static_assert(std::is_class_v<SourceClassType> && std::is_class_v<TargetClassType>, "[Refureku] Can't use dynamicCast with non-class types.");
 	static_assert(!std::is_base_of_v<TargetClassType, SourceClassType>, "[Refureku] Don't use dynamicCast to perform a simple upcast. Use implicit conversion or static_cast instead.");
-	static_assert(internal::implements_getArchetype<SourceClassType, Struct const&()>::value, "[Refureku] Can't use dynamicCast if instance doesn't implement the getArchetype method."
-																							 " Inherit from rfk::Object for automatic implementation generation, or implement it manually.");
+	static_assert(std::is_base_of_v<Object, SourceClassType>, "[Refureku] Can't use dynamicCast if instance doesn't inherit from rfk::Object and implement the getArchetype method.");
 
-	/**
-	*	dynamicCast requires TargetClassType to implement the staticGetArchetype method, so
-	*	TargetClassType must be reflected by rfk generator system for this dynamicCast to work.
-	*	By the assumptions we made beforehand, there are no real valid reason not to reflect TargetClassType with Refureku since:
-	*		1. SourceClassType must inherit from rfk::Object (and therefore is likely reflected using Refureku)
-	*		2. SourceClassType is a base class of TargetClassType (since we perform a downcast... for an upcast an implicit compile-time static_cast does the job)
-	* 
-	*	To generate comprehensible errors, we still check at compile-time that TargetClassType indeed implements staticGetArchetype:
-	*/
-	static_assert(internal::implements_staticGetArchetype<TargetClassType, Struct const&()>::value, "[Refureku] The target class must implement the staticGetArchetype method.");
+	Struct const* targetArchetype = static_cast<Struct const*>(getArchetype<TargetClassType>());
 
-	return dynamicCast<TargetClassType>(instance, SourceClassType::staticGetArchetype(), instance->getArchetype(), TargetClassType::staticGetArchetype());
+	//Can't dynamic cast to classes that are not reflected.
+	assert(targetArchetype != nullptr);
+
+	return dynamicCast<TargetClassType>(instance, SourceClassType::staticGetArchetype(), instance->getArchetype(), *targetArchetype);
 }
 
 template <typename TargetClassType>
 TargetClassType* dynamicCast(typename CopyConstness<TargetClassType, void>::Type* instance,
-										   Struct const& instanceStaticArchetype, Struct const& instanceDynamicArchetype, Struct const& targetArchetype) noexcept
+							 Struct const& instanceStaticArchetype, Struct const& instanceDynamicArchetype, Struct const& targetArchetype) noexcept
 {
-	//TODO: Optimization if the concrete type has a single branch inheritance tree: don't perform this intermediate computation
-
-	auto adjustedStaticToDynamicInstancePointer = dynamicDownCast<TargetClassType>(instance, instanceStaticArchetype, instanceDynamicArchetype);
-
-	// --------------------------------------------------------------------
-
-	//Try to upcast the concrete type of instance to TargetClassType
-	return dynamicUpCast<TargetClassType>(adjustedStaticToDynamicInstancePointer, instanceDynamicArchetype, targetArchetype);
+	return reinterpret_cast<TargetClassType*>(internal::dynamicCast(instance, instanceStaticArchetype, instanceDynamicArchetype, targetArchetype));
 }
 
 template <typename TargetClassType>
 TargetClassType* dynamicUpCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& instanceStaticArchetype, Struct const& targetArchetype) noexcept
 {
-	//If both both source and target types have the same archetype or instance is nullptr, there's no offset to perform
-	if (instance == nullptr || instanceStaticArchetype == targetArchetype)
-	{
-		return reinterpret_cast<TargetClassType*>(instance);
-	}
-
-	std::ptrdiff_t pointerOffset;
-
-	//Get the memory offset
-	//instance != nullptr is check in 2nd because it is not likely to happen a lot
-	if (targetArchetype.getSubclassPointerOffset(instanceStaticArchetype, pointerOffset))
-	{
-		return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) + pointerOffset);
-	}
-
-	return nullptr;
+	return reinterpret_cast<TargetClassType*>(internal::dynamicUpCast(instance, instanceStaticArchetype, targetArchetype));
 }
 
 template <typename TargetClassType>
 TargetClassType* dynamicDownCast(typename CopyConstness<TargetClassType, void>::Type* instance, Struct const& instanceStaticArchetype, Struct const& targetArchetype) noexcept
 {
-	//If both both source and target types have the same archetype, there's no offset to perform
-	if (instance == nullptr || instanceStaticArchetype == targetArchetype)
-	{
-		return reinterpret_cast<TargetClassType*>(instance);
-	}
-
-	std::ptrdiff_t pointerOffset;
-
-	//Get the memory offset
-	//instance != nullptr is check in 2nd because it is not likely to happen a lot
-	if (instanceStaticArchetype.getSubclassPointerOffset(targetArchetype, pointerOffset))
-	{
-		return reinterpret_cast<TargetClassType*>(reinterpret_cast<typename CopyConstness<TargetClassType, uint8>::Type*>(instance) - pointerOffset);
-	}
-
-	return nullptr;
+	return reinterpret_cast<TargetClassType*>(internal::dynamicDownCast(instance, instanceStaticArchetype, targetArchetype));
 }

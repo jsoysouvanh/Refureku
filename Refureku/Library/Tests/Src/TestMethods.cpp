@@ -8,6 +8,10 @@ void TestMethodClass::noReturnNoParam()
 {
 }
 
+void TestMethodClass::virtualNoReturnNoParam()
+{
+}
+
 int TestMethodClass::returnIntNoParam()
 {
 	return 0; 
@@ -38,4 +42,15 @@ void TestMethodClass::throwing()
 void TestMethodClass::constNoReturnNoParam() const
 {
 
+}
+
+
+//=====================
+
+
+rfk::Struct const& NotReflectedBaseClass::getArchetype() const noexcept
+{
+	static rfk::Struct archetype("NotReflectedBaseClass", 0u, sizeof(NotReflectedBaseClass), true);
+
+	return archetype;
 }

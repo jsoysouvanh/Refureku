@@ -10,8 +10,9 @@
 #include <cstddef> //std::ptrdiff_t
 #include <type_traits> //std::is_default_constructible_v, std::is_pointer_v, std::is_reference_v
 
+#include "Refureku/TypeInfo/Cast.h"
 #include "Refureku/TypeInfo/Archetypes/Archetype.h"
-#include "Refureku/TypeInfo/Functions/StaticMethod.h"	//makeInstance<> uses StaticMethod wrapper so must include
+#include "Refureku/TypeInfo/Functions/StaticMethod.h"	//make[Unique/Shared]Instance<> uses StaticMethod wrapper so must include
 #include "Refureku/TypeInfo/Archetypes/EClassKind.h"
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"

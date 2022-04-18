@@ -365,7 +365,7 @@ inline void Database::DatabaseImpl::unregisterEnumSubEntities(Enum const& e) noe
 					   }, this);
 }
 
-inline void Database::DatabaseImpl::releaseNamespaceIfUnreferenced(std::shared_ptr<Namespace> const& npPtr) noexcept
+inline void Database::DatabaseImpl::releaseNamespaceIfUnreferenced(SharedPtr<Namespace> const& npPtr) noexcept
 {
 	assert(npPtr.use_count() >= 2);
 
@@ -379,7 +379,7 @@ inline void Database::DatabaseImpl::releaseNamespaceIfUnreferenced(std::shared_p
 	}
 }
 
-inline std::shared_ptr<Namespace> Database::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id) noexcept
+inline SharedPtr<Namespace> Database::DatabaseImpl::getOrCreateNamespace(char const* name, std::size_t id) noexcept
 {
 	auto it = _generatedNamespaces.find(id);
 
@@ -390,11 +390,11 @@ inline std::shared_ptr<Namespace> Database::DatabaseImpl::getOrCreateNamespace(c
 	else
 	{
 		//Generate a namespace
-		auto generatedNamespaceIt = _generatedNamespaces.emplace(id, std::make_shared<Namespace>(name, id));
+		auto generatedNamespaceIt = _generatedNamespaces.emplace(id, rfk::makeShared<Namespace>(name, id));
 
 		assert(generatedNamespaceIt.second);
 
-		std::shared_ptr<Namespace> const& generatedNamespace = generatedNamespaceIt.first->second;
+		SharedPtr<Namespace> const& generatedNamespace = generatedNamespaceIt.first->second;
 
 		//Register the namespace by ID
 		registerEntityId(*generatedNamespace.get());

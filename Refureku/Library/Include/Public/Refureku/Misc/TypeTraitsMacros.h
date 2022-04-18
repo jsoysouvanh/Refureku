@@ -37,7 +37,7 @@ struct implements_##MethodName<Class, Ret(Args...)>																						\
 																																		\
 	public:																																\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;															\
-};
+}
 
 /**
 *	This macro generates a traits which allows to know at compile-time if a method named MethodName
@@ -67,7 +67,7 @@ struct isCallable_##MethodName<Class, Ret(Args...)>																								\
 																																				\
 	public:																																		\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;																	\
-};
+}
 
 /**
 *	This macro generates a traits which allows to know at compile-time if a class owns a template method with a 
@@ -97,7 +97,7 @@ struct implements_template1_##MethodName<Class, TemplateType1, Ret(Args...)>				
 																																								\
 	public:																																						\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;																					\
-};
+}
 
 /**
 *	This macro generates a traits which allows to know at compile-time if a class has a field with a given type named fieldName.
@@ -125,5 +125,5 @@ struct hasField_##fieldName																														\
 																																				\
 	public:																																		\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;																	\
-};
+}
 

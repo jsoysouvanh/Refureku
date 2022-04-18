@@ -8,12 +8,13 @@
 #pragma once
 
 #include <type_traits>	//std::enable_if_v, std::is_const_v
+#include <cassert>
 
+#include "Refureku/TypeInfo/Cast.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
-#include "Refureku/TypeInfo/Cast.h"
 #include "Refureku/Misc/CopyConstness.h"
-#include "Refureku/Exceptions/NotReflectedClass.h"
 #include "Refureku/Exceptions/InvalidCaller.h"
 
 namespace rfk
@@ -74,10 +75,12 @@ namespace rfk
 			*
 			*	@return The result of the function call.
 			* 
-			*	@exception	ArgCountMismatch if sizeof...(ArgTypes) is not the same as the value returned by getParametersCount().
-			*	@exception	ArgTypeMismatch if ArgTypes... are not strictly the same as this function parameter types.
+			*	@exception	ArgCountMismatch	if sizeof...(ArgTypes) is not the same as the value returned by getParametersCount().
+			*	@exception	ArgTypeMismatch		if ArgTypes... are not strictly the same as this function parameter types.
 			*				**WARNING**: Be careful to template deduction.
-			*	@exception	ReturnTypeMismatch if ReturnType is not strictly the same as this function return type.
+			*	@exception	ReturnTypeMismatch	if ReturnType is not strictly the same as this function return type.
+			*	@exception	NotReflectedClass	if the caller struct is not reflected (rfk::getArchetype<CallerType>() == nullptr).
+			*	@exception	InvalidCaller		if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy).
 			*	@exception	Any exception potentially thrown from the underlying function.
 			*/
 			template <typename ReturnType = void, typename CallerType, typename... ArgTypes, typename = std::enable_if_t<!std::is_const_v<CallerType>>>
@@ -223,13 +226,6 @@ namespace rfk
 			*	@param message Message forwarded to the exception.
 			*/
 			RFK_NORETURN REFUREKU_API void	throwInvalidCallerException()										const;
-
-			/**
-			*	@brief Throw a NotReflectedClass exception with the provided message.
-			* 
-			*	@param message Message forwarded to the exception.
-			*/
-			RFK_NORETURN REFUREKU_API void	throwNotReflectedClassException()									const;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Method const*>);

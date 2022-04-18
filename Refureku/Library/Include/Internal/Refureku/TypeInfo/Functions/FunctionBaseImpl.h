@@ -7,10 +7,9 @@
 
 #pragma once
 
-#include <memory>	//std::unique_ptr
-
 #include "Refureku/TypeInfo/Functions/FunctionBase.h"
 #include "Refureku/TypeInfo/Entity/EntityImpl.h"
+#include "Refureku/Misc/UniquePtr.h"
 
 namespace rfk
 {
@@ -21,7 +20,7 @@ namespace rfk
 			Type const&						_returnType;
 
 			/** Handle pointing to the actual function in memory. */
-			std::unique_ptr<ICallable>		_internalFunction;
+			UniquePtr<ICallable>			_internalFunction;
 
 			/** Parameters of this function. */
 			std::vector<FunctionParameter>	_parameters;

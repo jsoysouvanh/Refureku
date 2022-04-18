@@ -118,3 +118,35 @@ TEST(Rfk_Instantiators, sharedInstantiatorNoFallback)
 
 	EXPECT_EQ(ptr, nullptr);
 }
+
+//=========================================================
+//============ Unaligned class instantiation ==============
+//=========================================================
+
+TEST(Rfk_Instantiators, AlignedClassSharedInstantiation)
+{
+	rfk::SharedPtr<VirtualClass1> ptr = rfk::getDatabase().getFileLevelClassByName("MultipleInheritanceInstantiator")->makeSharedInstance<VirtualClass1>();
+
+	EXPECT_EQ(ptr->method11(), 3); //OK since VirtualClass1 is the first inherited class -> VirtualClass1 / MultipleInheritanceInstantiator memory offset is 0
+}
+
+TEST(Rfk_Instantiators, UnalignedClassSharedInstantiation)
+{
+	rfk::SharedPtr<VirtualClass2> ptr = rfk::getDatabase().getFileLevelClassByName("MultipleInheritanceInstantiator")->makeSharedInstance<VirtualClass2>();
+
+	EXPECT_EQ(ptr->method22(), 3);
+}
+
+TEST(Rfk_Instantiators, AlignedClassUniqueInstantiation)
+{
+	rfk::UniquePtr<VirtualClass1> ptr = rfk::getDatabase().getFileLevelClassByName("MultipleInheritanceInstantiator")->makeUniqueInstance<VirtualClass1>();
+
+	EXPECT_EQ(ptr->method11(), 3); //OK since VirtualClass1 is the first inherited class -> VirtualClass1 / MultipleInheritanceInstantiator memory offset is 0
+}
+
+TEST(Rfk_Instantiators, UnalignedClassUniqueInstantiation)
+{
+	rfk::UniquePtr<VirtualClass2> ptr = rfk::getDatabase().getFileLevelClassByName("MultipleInheritanceInstantiator")->makeUniqueInstance<VirtualClass2>();
+
+	EXPECT_EQ(ptr->method22(), 3);
+}

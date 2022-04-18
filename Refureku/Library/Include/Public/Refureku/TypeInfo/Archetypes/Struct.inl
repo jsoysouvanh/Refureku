@@ -10,7 +10,7 @@ rfk::SharedPtr<ReturnType> Struct::makeSharedInstance(ArgTypes&&... args) const
 {
 	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>, "The return type of makeSharedInstance should not be a pointer or a reference.");
 	
-	StaticMethod const* result;
+	StaticMethod const* instantiator;
 
 	if (!foreachSharedInstantiator(sizeof...(args), [](StaticMethod const& instantiator, void* data)
 		{
@@ -22,11 +22,28 @@ rfk::SharedPtr<ReturnType> Struct::makeSharedInstance(ArgTypes&&... args) const
 			}
 
 			return true;
-		}, &result))
+		}, &instantiator))
 	{
-		assert(result != nullptr);
+		assert(instantiator != nullptr);
 
-		return result->invoke<rfk::SharedPtr<ReturnType>>(std::forward<ArgTypes>(args)...);
+		SharedPtr<ReturnType> result = instantiator->invoke<SharedPtr<ReturnType>>(std::forward<ArgTypes>(args)...);
+
+		Struct const* returnTypeArchetype = static_cast<Struct const*>(getArchetype<ReturnType>());
+
+		if (returnTypeArchetype != nullptr)
+		{
+			//Check if pointer needs to be adjusted here
+			ReturnType* ptr = result.get();
+			ReturnType* adjustedPtr = rfk::dynamicUpCast<ReturnType>(ptr, *this, *returnTypeArchetype);
+
+			if (ptr != adjustedPtr)
+			{
+				//Alias construct another shared pointer with the adjusted memory
+				return SharedPtr<ReturnType>(result, adjustedPtr);
+			}
+		}
+
+		return result;
 	}
 	else
 	{
@@ -44,7 +61,7 @@ rfk::UniquePtr<ReturnType> Struct::makeUniqueInstance(ArgTypes&&... args) const
 {
 	static_assert(!std::is_pointer_v<ReturnType> && !std::is_reference_v<ReturnType>, "The return type of makeUniqueInstance should not be a pointer or a reference.");
 
-	StaticMethod const* result;
+	StaticMethod const* instantiator;
 
 	if (!foreachUniqueInstantiator(sizeof...(args), [](StaticMethod const& instantiator, void* data)
 		{
@@ -56,11 +73,29 @@ rfk::UniquePtr<ReturnType> Struct::makeUniqueInstance(ArgTypes&&... args) const
 			}
 
 			return true;
-		}, &result))
+		}, &instantiator))
 	{
-		assert(result != nullptr);
+		assert(instantiator != nullptr);
 
-		return result->invoke<rfk::UniquePtr<ReturnType>>(std::forward<ArgTypes>(args)...);
+		UniquePtr<ReturnType> result = instantiator->invoke<UniquePtr<ReturnType>>(std::forward<ArgTypes>(args)...);
+
+		Struct const* returnTypeArchetype = static_cast<Struct const*>(getArchetype<ReturnType>());
+
+		if (returnTypeArchetype != nullptr)
+		{
+			//Check if pointer needs to be adjusted here
+			ReturnType* ptr = result.get();
+			ReturnType* adjustedPtr = rfk::dynamicUpCast<ReturnType>(ptr, *this, *returnTypeArchetype);
+
+			if (ptr != adjustedPtr)
+			{
+				//Release previous pointer and feed the new adjusted one
+				result.release();
+				result.reset(adjustedPtr);
+			}
+		}
+
+		return result;
 	}
 	else
 	{
