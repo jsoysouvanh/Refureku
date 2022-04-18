@@ -110,4 +110,52 @@ class CLASS() TestSharedInstantiatorFallsbackToUniqueInstantiator : public TestI
 	TestSharedInstantiatorFallsbackToUniqueInstantiator_GENERATED
 };
 
+class CLASS() VirtualClass1
+{
+	public:
+		virtual ~VirtualClass1() = default;
+
+		virtual int method11() const
+		{
+			return 1;
+		}
+
+	VirtualClass1_GENERATED
+};
+
+class CLASS() VirtualClass2
+{
+	public:
+		virtual ~VirtualClass2() = default;
+
+		virtual void virtualMethod21(){}
+
+		virtual int method22() const
+		{
+			return 2;
+		}
+
+	VirtualClass2_GENERATED
+};
+
+class CLASS() MultipleInheritanceInstantiator : public VirtualClass1, public VirtualClass2
+{
+	public:
+		virtual int method11() const override
+		{
+			return 3;
+		}
+
+		virtual void virtualMethod21() override
+		{
+		}
+
+		virtual int method22() const override
+		{
+			return 3;
+		}
+
+	MultipleInheritanceInstantiator_GENERATED
+};
+
 File_TestInstantiator_GENERATED
