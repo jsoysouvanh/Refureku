@@ -37,7 +37,6 @@ var annotated_dup =
       [ "NonMemberFunction< ReturnType(ArgTypes...)>", "classrfk_1_1_non_member_function_3_01_return_type_07_arg_types_8_8_8_08_4.html", "classrfk_1_1_non_member_function_3_01_return_type_07_arg_types_8_8_8_08_4" ],
       [ "NonTypeTemplateArgument", "classrfk_1_1_non_type_template_argument.html", "classrfk_1_1_non_type_template_argument" ],
       [ "NonTypeTemplateParameter", "classrfk_1_1_non_type_template_parameter.html", "classrfk_1_1_non_type_template_parameter" ],
-      [ "NotReflectedClass", "classrfk_1_1_not_reflected_class.html", null ],
       [ "Object", "classrfk_1_1_object.html", null ],
       [ "ParentStruct", "classrfk_1_1_parent_struct.html", "classrfk_1_1_parent_struct" ],
       [ "Pimpl", "classrfk_1_1_pimpl.html", "classrfk_1_1_pimpl" ],

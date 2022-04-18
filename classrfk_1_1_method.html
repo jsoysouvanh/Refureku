@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.1</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -367,6 +367,8 @@ template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTy
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a></td><td>if sizeof...(ArgTypes) is not the same as the value returned by <a class="el" href="classrfk_1_1_function_base.html#ae407b16a382f88da360e50b71d3114d9" title="Get the number of parameters of this function.">getParametersCount()</a>. </td></tr>
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a></td><td>if ArgTypes... are not strictly the same as this function parameter types. <b>WARNING</b>: Be careful to template deduction. </td></tr>
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a></td><td>if ReturnType is not strictly the same as this function return type. </td></tr>
+    <tr><td class="paramname">NotReflectedClass</td><td>if the caller struct is not reflected (<a class="el" href="namespacerfk.html#ad271284a71f8ca43f34686e4f9740393" title="Get the archetype of any type if it exists. Note that this method will always return nullptr on prote...">rfk::getArchetype&lt;CallerType&gt;()</a> == nullptr). </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_caller.html">InvalidCaller</a></td><td>if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy). </td></tr>
     <tr><td class="paramname">Any</td><td>exception potentially thrown from the underlying function. </td></tr>
   </table>
   </dd>

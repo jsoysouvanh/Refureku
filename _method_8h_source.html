@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.1</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -93,101 +93,100 @@ $(document).ready(function(){initNavTree('_method_8h_source.html',''); initResiz
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;type_traits&gt;</span>  <span class="comment">//std::enable_if_v, std::is_const_v</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Functions/MethodBase.h&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Functions/MemberFunction.h&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Cast.h&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;Refureku/Misc/CopyConstness.h&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;Refureku/Exceptions/NotReflectedClass.h&quot;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;Refureku/Exceptions/InvalidCaller.h&quot;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerfk.html">rfk</a></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>{</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html">   21</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classrfk_1_1_method.html">Method</a> final : <span class="keyword">public</span> <a class="code hl_class" href="classrfk_1_1_method_base.html">MethodBase</a></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_method.html">Method</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>*        name,</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                                        std::size_t     <span class="keywordtype">id</span>,</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                                        <a class="code hl_class" href="classrfk_1_1_type.html">Type</a> <span class="keyword">const</span>&amp;     returnType,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                                        <a class="code hl_class" href="classrfk_1_1_i_callable.html">ICallable</a>*      internalMethod,</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                                        <a class="code hl_enumeration" href="namespacerfk.html#aede2763da2d837a7ee63b105269d5f6e">EMethodFlags</a>    flags,</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                                        <a class="code hl_class" href="classrfk_1_1_entity.html">Entity</a> <span class="keyword">const</span>*   outerEntity)    <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_method.html">Method</a>(<a class="code hl_class" href="classrfk_1_1_method.html">Method</a>&amp;&amp;)                          <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_method.html">~Method</a>()                                 <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes, <span class="keyword">typename</span> = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">   55</a></span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">invoke</a>(CallerType&amp; caller, ArgTypes&amp;&amp;... args)              <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes&gt;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">invoke</a>(CallerType <span class="keyword">const</span>&amp; caller, ArgTypes&amp;&amp;... args)        <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes, <span class="keyword">typename</span> = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">   84</a></span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">checkedInvoke</a>(CallerType&amp; caller, ArgTypes&amp;&amp;... args)       <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes&gt;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">checkedInvoke</a>(CallerType <span class="keyword">const</span>&amp; caller, ArgTypes&amp;&amp;... args) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html#ab2547ee0b4c068970059c9192ec50933">   92</a></span>            REFUREKU_API <span class="keywordtype">void</span>   <a class="code hl_function" href="classrfk_1_1_method.html#ab2547ee0b4c068970059c9192ec50933">inheritBaseMethodProperties</a>()                                       noexcept;</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        private:</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            <span class="comment">//Forward declaration</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            class MethodImpl;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            template &lt;typename CallerType, typename FunctionPrototype&gt;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            class MemberFunctionSafeCallWrapper;</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;cassert&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Cast.h&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Archetypes/Struct.h&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Functions/MethodBase.h&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;Refureku/TypeInfo/Functions/MemberFunction.h&quot;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;Refureku/Misc/CopyConstness.h&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;Refureku/Exceptions/InvalidCaller.h&quot;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerfk.html">rfk</a></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>{</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html">   22</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classrfk_1_1_method.html">Method</a> final : <span class="keyword">public</span> <a class="code hl_class" href="classrfk_1_1_method_base.html">MethodBase</a></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_method.html">Method</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>*        name,</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                                        std::size_t     <span class="keywordtype">id</span>,</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                                        <a class="code hl_class" href="classrfk_1_1_type.html">Type</a> <span class="keyword">const</span>&amp;     returnType,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                                        <a class="code hl_class" href="classrfk_1_1_i_callable.html">ICallable</a>*      internalMethod,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                                        <a class="code hl_enumeration" href="namespacerfk.html#aede2763da2d837a7ee63b105269d5f6e">EMethodFlags</a>    flags,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                                        <a class="code hl_class" href="classrfk_1_1_entity.html">Entity</a> <span class="keyword">const</span>*   outerEntity)    <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_method.html">Method</a>(<a class="code hl_class" href="classrfk_1_1_method.html">Method</a>&amp;&amp;)                          <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            REFUREKU_INTERNAL <a class="code hl_class" href="classrfk_1_1_method.html">~Method</a>()                                 <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes, <span class="keyword">typename</span> = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">   56</a></span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">invoke</a>(CallerType&amp; caller, ArgTypes&amp;&amp;... args)              <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes&gt;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">invoke</a>(CallerType <span class="keyword">const</span>&amp; caller, ArgTypes&amp;&amp;... args)        <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes, <span class="keyword">typename</span> = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">   87</a></span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">checkedInvoke</a>(CallerType&amp; caller, ArgTypes&amp;&amp;... args)       <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType = void, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes&gt;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            ReturnType          <a class="code hl_function" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">checkedInvoke</a>(CallerType <span class="keyword">const</span>&amp; caller, ArgTypes&amp;&amp;... args) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="classrfk_1_1_method.html#ab2547ee0b4c068970059c9192ec50933">   95</a></span>            REFUREKU_API <span class="keywordtype">void</span>   <a class="code hl_function" href="classrfk_1_1_method.html#ab2547ee0b4c068970059c9192ec50933">inheritBaseMethodProperties</a>()                                       noexcept;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        private:</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <span class="comment">//Forward declaration</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            class MethodImpl;</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            template &lt;typename CallerType, typename ReturnType, typename... ArgTypes&gt;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            class MemberFunctionSafeCallWrapper&lt;CallerType, ReturnType(ArgTypes...)&gt;</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            {</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>                <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>                    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>                    <span class="keyword">using</span> PointerToMemberMethod = ReturnType (T::*)(ArgTypes...);</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>                <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                    MemberFunctionSafeCallWrapper() = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>            template &lt;typename CallerType, typename FunctionPrototype&gt;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            class MemberFunctionSafeCallWrapper;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>            template &lt;typename CallerType, typename ReturnType, typename... ArgTypes&gt;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>            class MemberFunctionSafeCallWrapper&lt;CallerType, ReturnType(ArgTypes...)&gt;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            {</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>                <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>                    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                    <span class="keyword">using</span> PointerToMemberMethod = ReturnType (T::*)(ArgTypes...);</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>                    <span class="keyword">static</span> ReturnType <a class="code hl_function" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">invoke</a>(<a class="code hl_class" href="classrfk_1_1_member_function.html">MemberFunction</a>&lt;std::remove_const_t&lt;CallerType&gt;, ReturnType(ArgTypes...)&gt; <span class="keyword">const</span>&amp; function,</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>                                             CallerType&amp;                                                                     caller,</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                                             ArgTypes&amp;&amp;...                                                                   args);</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>            };</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes&gt;</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            ReturnType                      internalInvoke(CallerType&amp; caller, ArgTypes&amp;&amp;... args)              <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            RFK_NODISCARD CallerType&amp;       adjustCallerAddress(CallerType&amp; caller)                             <span class="keyword">const</span>   <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            RFK_NODISCARD CallerType&amp;       adjustCallerAddress(CallerType&amp;   caller,</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                                                                <a class="code hl_class" href="classrfk_1_1_struct.html">Struct</a> <span class="keyword">const</span>&amp; callerDynamicArchetype)           <span class="keyword">const</span>   <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>            RFK_NODISCARD CallerType&amp;       checkedAdjustCallerAddress(CallerType&amp; caller)                      <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>            RFK_NODISCARD CallerType&amp;       checkedAdjustCallerAddress(CallerType&amp;   caller,</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>                                                                       <a class="code hl_class" href="classrfk_1_1_struct.html">Struct</a> <span class="keyword">const</span>&amp; callerDynamicArchetype)    <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>            RFK_NORETURN REFUREKU_API <span class="keywordtype">void</span>  throwConstViolationException()                                      <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            RFK_NORETURN REFUREKU_API <span class="keywordtype">void</span>  throwInvalidCallerException()                                       <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            RFK_NORETURN REFUREKU_API <span class="keywordtype">void</span>  throwNotReflectedClassException()                                   <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    };</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    REFUREKU_TEMPLATE_API(<a class="code hl_class" href="classrfk_1_1_allocator.html">rfk::Allocator&lt;Method const*&gt;</a>);</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    REFUREKU_TEMPLATE_API(<a class="code hl_class" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt;Method <span class="keyword">const</span>*, <a class="code hl_class" href="classrfk_1_1_allocator.html">rfk::Allocator&lt;Method const*&gt;</a>&gt;);</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="preprocessor">    #include &quot;Refureku/TypeInfo/Functions/Method.inl&quot;</span></div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>}</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>                <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>                    MemberFunctionSafeCallWrapper() = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>                    <span class="keyword">static</span> ReturnType <a class="code hl_function" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">invoke</a>(<a class="code hl_class" href="classrfk_1_1_member_function.html">MemberFunction</a>&lt;std::remove_const_t&lt;CallerType&gt;, ReturnType(ArgTypes...)&gt; <span class="keyword">const</span>&amp; function,</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                                             CallerType&amp;                                                                     caller,</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                                             ArgTypes&amp;&amp;...                                                                   args);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>            };</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ReturnType, <span class="keyword">typename</span> CallerType, <span class="keyword">typename</span>... ArgTypes&gt;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            ReturnType                      internalInvoke(CallerType&amp; caller, ArgTypes&amp;&amp;... args)              <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            RFK_NODISCARD CallerType&amp;       adjustCallerAddress(CallerType&amp; caller)                             <span class="keyword">const</span>   <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>            RFK_NODISCARD CallerType&amp;       adjustCallerAddress(CallerType&amp;   caller,</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                                                                <a class="code hl_class" href="classrfk_1_1_struct.html">Struct</a> <span class="keyword">const</span>&amp; callerDynamicArchetype)           <span class="keyword">const</span>   <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>            RFK_NODISCARD CallerType&amp;       checkedAdjustCallerAddress(CallerType&amp; caller)                      <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CallerType&gt;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            RFK_NODISCARD CallerType&amp;       checkedAdjustCallerAddress(CallerType&amp;   caller,</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>                                                                       <a class="code hl_class" href="classrfk_1_1_struct.html">Struct</a> <span class="keyword">const</span>&amp; callerDynamicArchetype)    <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>            RFK_NORETURN REFUREKU_API <span class="keywordtype">void</span>  throwConstViolationException()                                      <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            RFK_NORETURN REFUREKU_API <span class="keywordtype">void</span>  throwInvalidCallerException()                                       <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    };</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    REFUREKU_TEMPLATE_API(<a class="code hl_class" href="classrfk_1_1_allocator.html">rfk::Allocator&lt;Method const*&gt;</a>);</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    REFUREKU_TEMPLATE_API(<a class="code hl_class" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt;Method <span class="keyword">const</span>*, <a class="code hl_class" href="classrfk_1_1_allocator.html">rfk::Allocator&lt;Method const*&gt;</a>&gt;);</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><span class="preprocessor">    #include &quot;Refureku/TypeInfo/Functions/Method.inl&quot;</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>}</div>
 <div class="ttc" id="aclassrfk_1_1_allocator_html"><div class="ttname"><a href="classrfk_1_1_allocator.html">rfk::Allocator</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:19</div></div>
 <div class="ttc" id="aclassrfk_1_1_entity_html"><div class="ttname"><a href="classrfk_1_1_entity.html">rfk::Entity</a></div><div class="ttdef"><b>Definition:</b> Entity.h:29</div></div>
 <div class="ttc" id="aclassrfk_1_1_i_callable_html"><div class="ttname"><a href="classrfk_1_1_i_callable.html">rfk::ICallable</a></div><div class="ttdef"><b>Definition:</b> ICallable.h:13</div></div>
 <div class="ttc" id="aclassrfk_1_1_member_function_html"><div class="ttname"><a href="classrfk_1_1_member_function.html">rfk::MemberFunction</a></div><div class="ttdef"><b>Definition:</b> MemberFunction.h:18</div></div>
 <div class="ttc" id="aclassrfk_1_1_method_base_html"><div class="ttname"><a href="classrfk_1_1_method_base.html">rfk::MethodBase</a></div><div class="ttdef"><b>Definition:</b> MethodBase.h:16</div></div>
-<div class="ttc" id="aclassrfk_1_1_method_html"><div class="ttname"><a href="classrfk_1_1_method.html">rfk::Method</a></div><div class="ttdef"><b>Definition:</b> Method.h:22</div></div>
+<div class="ttc" id="aclassrfk_1_1_method_html"><div class="ttname"><a href="classrfk_1_1_method.html">rfk::Method</a></div><div class="ttdef"><b>Definition:</b> Method.h:23</div></div>
 <div class="ttc" id="aclassrfk_1_1_method_html_a1fccea5413d86d922fb65fd42f3ca5c4"><div class="ttname"><a href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">rfk::Method::invoke</a></div><div class="ttdeci">ReturnType invoke(CallerType &amp;caller, ArgTypes &amp;&amp;... args) const</div><div class="ttdoc">Call the function with the forwarded argument(s) if any, and return the result. Providing bad return ...</div></div>
 <div class="ttc" id="aclassrfk_1_1_method_html_a777fa1a63dabef8f7a7276c254246a46"><div class="ttname"><a href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">rfk::Method::checkedInvoke</a></div><div class="ttdeci">ReturnType checkedInvoke(CallerType &amp;caller, ArgTypes &amp;&amp;... args) const</div><div class="ttdoc">Call the function with the forwarded argument(s) if any, and return the result. The return type and a...</div></div>
 <div class="ttc" id="aclassrfk_1_1_method_html_ab2547ee0b4c068970059c9192ec50933"><div class="ttname"><a href="classrfk_1_1_method.html#ab2547ee0b4c068970059c9192ec50933">rfk::Method::inheritBaseMethodProperties</a></div><div class="ttdeci">REFUREKU_API void inheritBaseMethodProperties() noexcept</div><div class="ttdoc">Inherit from the properties this method overrides. If the method is not an override,...</div></div>
-<div class="ttc" id="aclassrfk_1_1_struct_html"><div class="ttname"><a href="classrfk_1_1_struct.html">rfk::Struct</a></div><div class="ttdef"><b>Definition:</b> Struct.h:38</div></div>
+<div class="ttc" id="aclassrfk_1_1_struct_html"><div class="ttname"><a href="classrfk_1_1_struct.html">rfk::Struct</a></div><div class="ttdef"><b>Definition:</b> Struct.h:39</div></div>
 <div class="ttc" id="aclassrfk_1_1_type_html"><div class="ttname"><a href="classrfk_1_1_type.html">rfk::Type</a></div><div class="ttdef"><b>Definition:</b> Type.h:20</div></div>
 <div class="ttc" id="aclassrfk_1_1_vector_html"><div class="ttname"><a href="classrfk_1_1_vector.html">rfk::Vector</a></div><div class="ttdef"><b>Definition:</b> Vector.h:19</div></div>
 <div class="ttc" id="anamespacerfk_html"><div class="ttname"><a href="namespacerfk.html">rfk</a></div><div class="ttdef"><b>Definition:</b> Allocator.h:16</div></div>

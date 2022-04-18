@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.0</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.1</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -169,8 +169,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_non_type_template_argument.html">NonTypeTemplateArgument</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_non_type_template_parameter.html">NonTypeTemplateParameter</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_not_reflected_class.html">NotReflectedClass</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_object.html">Object</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -483,16 +481,16 @@ template&lt;&gt; </td></tr>
 <tr class="separator:a609dae004a2c050a0639f3d23cb9ccd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afaf2711e2524d399b9da1db46937de35"><td class="memTemplParams" colspan="2">template&lt;typename TargetClassType , typename SourceClassType &gt; </td></tr>
 <tr class="memitem:afaf2711e2524d399b9da1db46937de35"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD TargetClassType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#afaf2711e2524d399b9da1db46937de35">dynamicCast</a> (SourceClassType *instance) noexcept</td></tr>
-<tr class="memdesc:afaf2711e2524d399b9da1db46937de35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Downcast the provided class instance to a more concrete class type if possible. The provided instance must inherit from <a class="el" href="classrfk_1_1_object.html">rfk::Object</a> in order to retrieve its concrete archetype.  <a href="namespacerfk.html#afaf2711e2524d399b9da1db46937de35">More...</a><br /></td></tr>
+<tr class="memdesc:afaf2711e2524d399b9da1db46937de35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the provided pointer to another class pointer if possible.  <a href="namespacerfk.html#afaf2711e2524d399b9da1db46937de35">More...</a><br /></td></tr>
 <tr class="separator:afaf2711e2524d399b9da1db46937de35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5ae1e2392eadefc9ac40cd5bf90682e"><td class="memTemplParams" colspan="2">template&lt;typename TargetClassType &gt; </td></tr>
 <tr class="memitem:ac5ae1e2392eadefc9ac40cd5bf90682e"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD TargetClassType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#ac5ae1e2392eadefc9ac40cd5bf90682e">dynamicCast</a> (typename <a class="el" href="structrfk_1_1_copy_constness.html">CopyConstness</a>&lt; TargetClassType, void &gt;::Type *instance, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;instanceStaticArchetype, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;instanceDynamicArchetype, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;targetArchetype) noexcept</td></tr>
-<tr class="memdesc:ac5ae1e2392eadefc9ac40cd5bf90682e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the pointer of the provided instance of a given static/dynamic type to a pointer to another target type if possible.  <a href="namespacerfk.html#ac5ae1e2392eadefc9ac40cd5bf90682e">More...</a><br /></td></tr>
+<tr class="memdesc:ac5ae1e2392eadefc9ac40cd5bf90682e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the pointer of the provided instance of a given static/dynamic type to a pointer to another type if possible.  <a href="namespacerfk.html#ac5ae1e2392eadefc9ac40cd5bf90682e">More...</a><br /></td></tr>
 <tr class="separator:ac5ae1e2392eadefc9ac40cd5bf90682e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb7093c95b607ed5baf689aff078ed5c"><td class="memTemplParams" colspan="2">template&lt;typename TargetClassType &gt; </td></tr>
-<tr class="memitem:abb7093c95b607ed5baf689aff078ed5c"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD TargetClassType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#abb7093c95b607ed5baf689aff078ed5c">dynamicUpCast</a> (typename <a class="el" href="structrfk_1_1_copy_constness.html">CopyConstness</a>&lt; TargetClassType, void &gt;::Type *instance, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;instanceStaticArchetype, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;targetArchetype) noexcept</td></tr>
-<tr class="memdesc:abb7093c95b607ed5baf689aff078ed5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the pointer of the provided instance of type instanceStaticArchetype to a pointer to a targetArchetype. This method only works for upcast, which means that if instanceStaticArchetype is a parent class of targetArchetype, nullptr is returned. Since the method checks only for upcast, it is theoritically faster than dynamicCast.  <a href="namespacerfk.html#abb7093c95b607ed5baf689aff078ed5c">More...</a><br /></td></tr>
-<tr class="separator:abb7093c95b607ed5baf689aff078ed5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefdfb8e1aac76f037196393e1951703b"><td class="memTemplParams" colspan="2">template&lt;typename TargetClassType &gt; </td></tr>
+<tr class="memitem:aefdfb8e1aac76f037196393e1951703b"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD TargetClassType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#aefdfb8e1aac76f037196393e1951703b">dynamicUpCast</a> (typename <a class="el" href="structrfk_1_1_copy_constness.html">CopyConstness</a>&lt; TargetClassType, void &gt;::Type *instance, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;targetArchetype) noexcept</td></tr>
+<tr class="memdesc:aefdfb8e1aac76f037196393e1951703b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the pointer of the provided instance of type instanceStaticArchetype to a pointer to a targetArchetype. This method only works for upcast, which means that if instanceStaticArchetype is a parent class of targetArchetype, nullptr is returned. Since the method checks only for upcast, it is theoritically faster than dynamicCast.  <a href="namespacerfk.html#aefdfb8e1aac76f037196393e1951703b">More...</a><br /></td></tr>
+<tr class="separator:aefdfb8e1aac76f037196393e1951703b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a5e99abbde6ae0d3914d7800a4b8ea1"><td class="memTemplParams" colspan="2">template&lt;typename TargetClassType &gt; </td></tr>
 <tr class="memitem:a5a5e99abbde6ae0d3914d7800a4b8ea1"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD TargetClassType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerfk.html#a5a5e99abbde6ae0d3914d7800a4b8ea1">dynamicDownCast</a> (typename <a class="el" href="structrfk_1_1_copy_constness.html">CopyConstness</a>&lt; TargetClassType, void &gt;::Type *instance, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;instanceStaticArchetype, <a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;targetArchetype) noexcept</td></tr>
 <tr class="memdesc:a5a5e99abbde6ae0d3914d7800a4b8ea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the pointer of the provided instance of type instanceStaticArchetype to a pointer to a targetArchetype. This method only works for downcast, which means that if targetArchetype is a parent class of instanceStaticArchetype, nullptr is returned. Since the method checks only for downcast, it is theoritically faster than dynamicCast.  <a href="namespacerfk.html#a5a5e99abbde6ae0d3914d7800a4b8ea1">More...</a><br /></td></tr>
@@ -1164,14 +1162,24 @@ template&lt;typename TargetClassType , typename SourceClassType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Downcast the provided class instance to a more concrete class type if possible. The provided instance must inherit from <a class="el" href="classrfk_1_1_object.html">rfk::Object</a> in order to retrieve its concrete archetype. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">instance</td><td>The instance to cast. It must inherit from <a class="el" href="classrfk_1_1_object.html">rfk::Object</a>.</td></tr>
+<p>Adjust the provided pointer to another class pointer if possible. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">TargetClassType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to cast to. It must be a reflected type (<a class="el" href="namespacerfk.html#ad271284a71f8ca43f34686e4f9740393" title="Get the archetype of any type if it exists. Note that this method will always return nullptr on prote...">rfk::getArchetype&lt;TargetClassType&gt;()</a> must be non-nullptr). </td></tr>
+    <tr><td class="paramname">SourceClassType</td><td>Static type of the provided instance to cast.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The casted instance if successful, else nullptr. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td>A pointer to the instance to cast. </td></tr>
+    <tr><td class="paramname">instanceStaticArchetype</td><td>Static archetype of the instance pointer before it was casted to void*. </td></tr>
+    <tr><td class="paramname">instanceDynamicArchetype</td><td>Dynamic archetype of the instance pointer before it was casted to void*. </td></tr>
+    <tr><td class="paramname">targetArchetype</td><td><a class="el" href="classrfk_1_1_archetype.html">Archetype</a> of the result pointer.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pointer to instance as targetArchetype if successful, else nullptr. </dd></dl>
 
 </div>
 </div>
@@ -1223,13 +1231,19 @@ template&lt;typename TargetClassType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Adjust the pointer of the provided instance of a given static/dynamic type to a pointer to another target type if possible. </p>
+<p>Adjust the pointer of the provided instance of a given static/dynamic type to a pointer to another type if possible. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">TargetClassType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to cast to.</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">instance</td><td>Pointer to the instance to cast. </td></tr>
-    <tr><td class="paramname">instanceStaticArchetype</td><td>The static archetype of the instance (the result of rfk::getArchetype&lt;decltype(instance)&gt;() before it was casted to void). </td></tr>
-    <tr><td class="paramname">instanceDynamicArchetype</td><td>The dynamic archetype of the instance (the result of instance-&gt;<a class="el" href="namespacerfk.html#ad271284a71f8ca43f34686e4f9740393" title="Get the archetype of any type if it exists. Note that this method will always return nullptr on prote...">getArchetype()</a>, overriden from <a class="el" href="classrfk_1_1_object.html">rfk::Object</a>). </td></tr>
-    <tr><td class="paramname">targetArchetype</td><td>The archetype of the target type.</td></tr>
+    <tr><td class="paramname">instanceStaticArchetype</td><td>The static archetype of instance (the result of rfk::getArchetype&lt;decltype(instance)&gt;() before it was casted to void). </td></tr>
+    <tr><td class="paramname">instanceDynamicArchetype</td><td>The dynamic archetype of instance (the result of instance-&gt;<a class="el" href="namespacerfk.html#ad271284a71f8ca43f34686e4f9740393" title="Get the archetype of any type if it exists. Note that this method will always return nullptr on prote...">getArchetype()</a>, overriden from <a class="el" href="classrfk_1_1_object.html">rfk::Object</a>). </td></tr>
+    <tr><td class="paramname">targetArchetype</td><td>The archetype of TargetClassType.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1298,8 +1312,8 @@ template&lt;typename TargetClassType &gt; </div>
 
 </div>
 </div>
-<a id="abb7093c95b607ed5baf689aff078ed5c" name="abb7093c95b607ed5baf689aff078ed5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb7093c95b607ed5baf689aff078ed5c">&#9670;&nbsp;</a></span>dynamicUpCast()</h2>
+<a id="aefdfb8e1aac76f037196393e1951703b" name="aefdfb8e1aac76f037196393e1951703b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefdfb8e1aac76f037196393e1951703b">&#9670;&nbsp;</a></span>dynamicUpCast()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1314,12 +1328,6 @@ template&lt;typename TargetClassType &gt; </div>
           <td>(</td>
           <td class="paramtype">typename <a class="el" href="structrfk_1_1_copy_constness.html">CopyConstness</a>&lt; TargetClassType, void &gt;::Type *&#160;</td>
           <td class="paramname"><em>instance</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classrfk_1_1_struct.html">Struct</a> const &amp;&#160;</td>
-          <td class="paramname"><em>instanceStaticArchetype</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

@@ -7,5 +7,5 @@ var searchData=
   ['defaultentityregisterer_4',['DefaultEntityRegisterer',['../classrfk_1_1_default_entity_registerer.html',1,'rfk']]],
   ['dynamiccast_5',['dynamicCast',['../namespacerfk.html#afaf2711e2524d399b9da1db46937de35',1,'rfk::dynamicCast(SourceClassType *instance) noexcept'],['../namespacerfk.html#ac5ae1e2392eadefc9ac40cd5bf90682e',1,'rfk::dynamicCast(typename CopyConstness&lt; TargetClassType, void &gt;::Type *instance, Struct const &amp;instanceStaticArchetype, Struct const &amp;instanceDynamicArchetype, Struct const &amp;targetArchetype) noexcept']]],
   ['dynamicdowncast_6',['dynamicDownCast',['../namespacerfk.html#a5a5e99abbde6ae0d3914d7800a4b8ea1',1,'rfk']]],
-  ['dynamicupcast_7',['dynamicUpCast',['../namespacerfk.html#abb7093c95b607ed5baf689aff078ed5c',1,'rfk']]]
+  ['dynamicupcast_7',['dynamicUpCast',['../namespacerfk.html#aefdfb8e1aac76f037196393e1951703b',1,'rfk']]]
 ];
