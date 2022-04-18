@@ -1,5 +1,7 @@
 #include "Refureku/TypeInfo/Cast.h"
 
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
+
 using namespace rfk;
 
 void* internal::dynamicCast(void* instance, Struct const& instanceStaticArchetype,

@@ -10,12 +10,15 @@
 #include <type_traits> //std::is_class_v, is_base_of_v
 #include <cassert>
 
-#include "Refureku/TypeInfo/Archetypes/Struct.h"
-#include "Refureku/Misc/CopyConstness.h"
 #include "Refureku/Object.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
+#include "Refureku/Misc/CopyConstness.h"
 
 namespace rfk
 {
+	//Forward declaration
+	class Struct;
+
 	/**
 	*	@brief	Adjust the provided pointer to another class pointer if possible.
 	* 

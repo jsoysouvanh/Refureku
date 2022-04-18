@@ -34,7 +34,7 @@ rfk::SharedPtr<ReturnType> Struct::makeSharedInstance(ArgTypes&&... args) const
 		{
 			//Check if pointer needs to be adjusted here
 			ReturnType* ptr = result.get();
-			ReturnType* adjustedPtr = dynamicUpCast<ReturnType>(ptr, *this, *returnTypeArchetype);
+			ReturnType* adjustedPtr = rfk::dynamicUpCast<ReturnType>(ptr, *this, *returnTypeArchetype);
 
 			if (ptr != adjustedPtr)
 			{
@@ -85,7 +85,7 @@ rfk::UniquePtr<ReturnType> Struct::makeUniqueInstance(ArgTypes&&... args) const
 		{
 			//Check if pointer needs to be adjusted here
 			ReturnType* ptr = result.get();
-			ReturnType* adjustedPtr = dynamicUpCast<ReturnType>(ptr, *this, *returnTypeArchetype);
+			ReturnType* adjustedPtr = rfk::dynamicUpCast<ReturnType>(ptr, *this, *returnTypeArchetype);
 
 			if (ptr != adjustedPtr)
 			{

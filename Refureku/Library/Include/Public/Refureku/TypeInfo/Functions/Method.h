@@ -10,9 +10,10 @@
 #include <type_traits>	//std::enable_if_v, std::is_const_v
 #include <cassert>
 
+#include "Refureku/TypeInfo/Cast.h"
+#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
-#include "Refureku/TypeInfo/Cast.h"
 #include "Refureku/Misc/CopyConstness.h"
 #include "Refureku/Exceptions/InvalidCaller.h"
 

@@ -23,12 +23,12 @@ namespace rfk
 			std::vector<Entity const*>	_nestedEntities;
 
 			/** Pointer to the namespace this fragment merged to. */
-			std::shared_ptr<Namespace>	_mergedNamespace;
+			SharedPtr<Namespace>		_mergedNamespace;
 
 		public:
-			inline NamespaceFragmentImpl(char const*					name,
-										 std::size_t					id,
-										 std::shared_ptr<Namespace>&&	mergedNamespace)	noexcept;
+			inline NamespaceFragmentImpl(char const*			name,
+										 std::size_t			id,
+										 SharedPtr<Namespace>&&	mergedNamespace)	noexcept;
 
 			/**
 			*	@brief Add a nested entity to the fragment as well as the merged namespace.

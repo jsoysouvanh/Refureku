@@ -26,7 +26,7 @@
 public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::Namespace | rfk::EEntityKind::Class | rfk::EEntityKind::Struct;\
  virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 RFK_UNPACK_IF_NOT_PARSING(friend rfk::internal::CodeGenerationHelpers;\
-friend implements_template1__rfk_registerChildClass<ParseAllNested, void, void(rfk::Struct&)>; \
+friend rfk::internal::implements_template1__rfk_registerChildClass<ParseAllNested, void, void(rfk::Struct&)>; \
 \
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::Struct const& thisClass = staticGetArchetype();\

@@ -10,10 +10,10 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
-#include <memory>	//std::shared_ptr
 #include <cassert>
 #include <iostream>
 
+#include "Refureku/Misc/SharedPtr.h"
 #include "Refureku/TypeInfo/Database.h"
 #include "Refureku/TypeInfo/Entity/EntityHash.h"
 #include "Refureku/TypeInfo/Namespace/Namespace.h"
@@ -42,7 +42,7 @@ namespace rfk
 			using VariablesByName				= std::unordered_set<Variable const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FunctionsByName				= std::unordered_multiset<Function const*, EntityPtrNameHash, EntityPtrNameEqual>;
 			using FundamentalArchetypesByName	= std::unordered_set<FundamentalArchetype const*, EntityPtrNameHash, EntityPtrNameEqual>;
-			using GenNamespaces					= std::unordered_map<std::size_t, std::shared_ptr<Namespace>>;
+			using GenNamespaces					= std::unordered_map<std::size_t, SharedPtr<Namespace>>;
 			
 		private:
 			/** Collection of all registered entities hashed by Id.  */
@@ -167,7 +167,7 @@ namespace rfk
 			*
 			*	@param npPtr Pointer to the namespace to check.
 			*/
-			inline void							releaseNamespaceIfUnreferenced(std::shared_ptr<Namespace> const& npPtr)	noexcept;
+			inline void							releaseNamespaceIfUnreferenced(SharedPtr<Namespace> const& npPtr)		noexcept;
 
 			/**
 			*	@brief Get the namespace with the given name and id. If it doesn't exist yet, create and register it right away.
@@ -175,10 +175,10 @@ namespace rfk
 			*	@param name Name of the searched namespace.
 			*	@param id	Id of the namespace.
 			* 
-			*	@return A shared_ptr to the retrieved namespace.
+			*	@return A shared pointer to the retrieved namespace.
 			*/
 			RFK_NODISCARD inline 
-				std::shared_ptr<Namespace>		getOrCreateNamespace(char const*	name,
+				SharedPtr<Namespace>			getOrCreateNamespace(char const*	name,
 																	 std::size_t	id)									noexcept;
 
 			/**
