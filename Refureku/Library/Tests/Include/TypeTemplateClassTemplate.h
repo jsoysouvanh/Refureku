@@ -61,18 +61,18 @@ namespace template_namespace NAMESPACE()
 class CLASS() ClassWithNestedClassTemplate
 {
 	private:
-		/*template <typename T>
+		template <typename T>
 		class CLASS() PrivateClassTemplateInClass
 		{
 			ClassWithNestedClassTemplate_PrivateClassTemplateInClass_GENERATED
-		};*/
+		};
 
 	protected:
-		/*template <typename T>
+		template <typename T>
 		class CLASS() ProtectedClassTemplateInClass
 		{
 			ClassWithNestedClassTemplate_ProtectedClassTemplateInClass_GENERATED
-		};*/
+		};
 		
 	public:
 		template <typename T>

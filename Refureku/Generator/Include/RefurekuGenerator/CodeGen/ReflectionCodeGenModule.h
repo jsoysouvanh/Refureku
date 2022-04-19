@@ -192,6 +192,15 @@ namespace rfk
 																   kodgen::EntityInfo const&	entity)						noexcept;
 
 			/**
+			*	@brief	Compute the signature of the rfk::getArchetype<> template specialization function.
+			* 
+			*	@param structClass Class the getArchetype template specialization is generated for.
+			* 
+			*	@return The signature of the rfk::getArchetype<> function.
+			*/
+			static std::string			computeGetArchetypeFunctionSignature(kodgen::StructClassInfo const&	structClass)	noexcept;
+
+			/**
 			*	@brief	All code generated from this point will be hidden to the parser.
 			*			This means the generated code can't be reflected.
 			* 
