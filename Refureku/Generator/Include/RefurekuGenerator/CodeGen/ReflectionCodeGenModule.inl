@@ -363,8 +363,8 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 {
 	inout_result += "friend rfk::internal::CodeGenerationHelpers;" + env.getSeparator();
 	inout_result += "friend rfk::internal::implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator();
-	inout_result += "template <typename T> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
-	//inout_result += "template <typename T> friend rfk::Enum const* rfk::getEnum() const;" + env.getSeparator() + env.getSeparator();
+	inout_result += "template <typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
+	//inout_result += "template <typename _RFK_TEMPLATE_PARAM> friend rfk::Enum const* rfk::getEnum() const;" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -760,7 +760,7 @@ void ReflectionCodeGenModule::defineGetArchetypeMethodIfInheritFromObject(kodgen
 
 void ReflectionCodeGenModule::declareGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
-	inout_result += "template <> " + env.getExportSymbolMacro() + computeGetArchetypeFunctionSignature(structClass) + ";" + env.getSeparator();
+	inout_result += "template <> " + env.getExportSymbolMacro() + " " + computeGetArchetypeFunctionSignature(structClass) + ";" + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::defineGetArchetypeTemplateSpecialization(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
