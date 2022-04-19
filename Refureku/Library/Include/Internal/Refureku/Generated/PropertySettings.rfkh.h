@@ -30,6 +30,8 @@ friend rfk::internal::implements_template1__rfk_registerChildClass<PropertySetti
 template <typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
 template <template <typename...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
 template <template <auto...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
+template <typename _RFK_TEMPLATE_PARAM> friend rfk::Enum const* rfk::getEnum() noexcept;\
+\
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::Struct const& thisClass = staticGetArchetype();\
 if constexpr (!std::is_same_v<ChildClass, PropertySettings>)const_cast<rfk::Struct&>(thisClass).addSubclass(childClass, rfk::internal::CodeGenerationHelpers::computeClassPointerOffset<ChildClass, PropertySettings>());\

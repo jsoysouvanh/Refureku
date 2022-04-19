@@ -29,6 +29,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "ManualReflectionTests.cpp"
 #include "InstantiatorTests.cpp"
 #include "NestedClassTests.cpp"
+#include "NestedEnumTests.cpp"
 
 __RFK_DISABLE_WARNING_POP
 
