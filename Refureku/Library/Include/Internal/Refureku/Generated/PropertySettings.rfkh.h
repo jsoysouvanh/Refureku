@@ -28,6 +28,8 @@ public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::S
 RFK_UNPACK_IF_NOT_PARSING(friend rfk::internal::CodeGenerationHelpers;\
 friend rfk::internal::implements_template1__rfk_registerChildClass<PropertySettings, void, void(rfk::Struct&)>; \
 template <typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
+template <template <typename...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
+template <template <auto...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::Struct const& thisClass = staticGetArchetype();\
 if constexpr (!std::is_same_v<ChildClass, PropertySettings>)const_cast<rfk::Struct&>(thisClass).addSubclass(childClass, rfk::internal::CodeGenerationHelpers::computeClassPointerOffset<ChildClass, PropertySettings>());\

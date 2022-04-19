@@ -363,7 +363,12 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 {
 	inout_result += "friend rfk::internal::CodeGenerationHelpers;" + env.getSeparator();
 	inout_result += "friend rfk::internal::implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator();
+	
+	//friend rfk::getArchetype
 	inout_result += "template <typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
+	inout_result += "template <template <typename...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
+	inout_result += "template <template <auto...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
+
 	//inout_result += "template <typename _RFK_TEMPLATE_PARAM> friend rfk::Enum const* rfk::getEnum() const;" + env.getSeparator() + env.getSeparator();
 }
 
