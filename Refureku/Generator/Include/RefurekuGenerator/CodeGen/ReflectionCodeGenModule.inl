@@ -362,26 +362,9 @@ void ReflectionCodeGenModule::includeSourceFileHeaders(kodgen::MacroCodeGenEnv& 
 void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
 {
 	inout_result += "friend rfk::internal::CodeGenerationHelpers;" + env.getSeparator();
-	inout_result += "friend rfk::internal::implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator() + env.getSeparator();
-
-	auto generateGetArchetypeFriendForNonPublicNested = [&inout_result, &env](kodgen::NestedStructClassInfo const& nestedStructClass)
-	{
-		if (nestedStructClass.accessSpecifier != kodgen::EAccessSpecifier::Public)
-		{
-			inout_result += "friend " + ReflectionCodeGenModule::computeGetArchetypeFunctionSignature(nestedStructClass) + ";" + env.getSeparator();
-		}
-	};
-
-	//Friend rfk::getArchetype template specialization for all nested non-public structs / classes
-	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStruct : structClass.nestedStructs)
-	{
-		generateGetArchetypeFriendForNonPublicNested(*nestedStruct);
-	}
-
-	for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedClass : structClass.nestedClasses)
-	{
-		generateGetArchetypeFriendForNonPublicNested(*nestedClass);
-	}
+	inout_result += "friend rfk::internal::implements_template1__rfk_registerChildClass<" + structClass.name + ", void, void(rfk::Struct&)>; " + env.getSeparator();
+	inout_result += "template <typename T> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
+	//inout_result += "template <typename T> friend rfk::Enum const* rfk::getEnum() const;" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept

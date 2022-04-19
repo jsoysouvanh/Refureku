@@ -28,6 +28,7 @@ __RFK_DISABLE_WARNING_UNUSED_RESULT
 #include "DatabaseTests.cpp"
 #include "ManualReflectionTests.cpp"
 #include "InstantiatorTests.cpp"
+#include "NestedClassTests.cpp"
 
 __RFK_DISABLE_WARNING_POP
 
