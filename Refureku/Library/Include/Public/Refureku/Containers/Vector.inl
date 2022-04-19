@@ -75,6 +75,17 @@ void Vector<T, Allocator>::copyElements(T const* from, T* to, std::size_t count)
 }
 
 template <typename T, typename Allocator>
+void Vector<T, Allocator>::copyElementsReverse(T const* from, T* to, std::size_t count)
+{
+	static_assert(std::is_copy_constructible_v<T>, "Can't call copyElements on a non-copyable type T.");
+
+	for (std::size_t i = 1; i <= count; i++)
+	{
+		AllocTraits::construct(_allocator, to + count - i, *(from + count - i));
+	}
+}
+
+template <typename T, typename Allocator>
 void Vector<T, Allocator>::moveElements(T* from, T* to, std::size_t count)
 {
 	static_assert(std::is_move_constructible_v<T>, "Can't call moveElements on a non-moveable type T.");
@@ -82,6 +93,17 @@ void Vector<T, Allocator>::moveElements(T* from, T* to, std::size_t count)
 	for (std::size_t i = 0u; i < count; i++)
 	{
 		AllocTraits::construct(_allocator, to + i, std::move(*(from + i)));
+	}
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::moveElementsReverse(T* from, T* to, std::size_t count)
+{
+	static_assert(std::is_move_constructible_v<T>, "Can't call moveElements on a non-moveable type T.");
+
+	for (std::size_t i = 1; i <= count; i++)
+	{
+		AllocTraits::construct(_allocator, to + count - i, std::move(*(from + count - i)));
 	}
 }
 
@@ -111,6 +133,62 @@ void Vector<T, Allocator>::reallocateIfNecessary(std::size_t minCapacity)
 	if (minCapacity > _capacity)
 	{
 		reserve(computeNewCapacity(minCapacity));
+	}
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::makeFreeSpaceForXElements(std::size_t index, std::size_t count)
+{
+	std::size_t newSize = size() + count;
+
+	if (newSize > _capacity)
+	{
+		//Reallocate manually so that we don't remove elements avec reallocation
+		std::size_t newCapacity = computeNewCapacity(newSize);
+		T* newData = reinterpret_cast<T*>(_allocator.allocate(newCapacity));
+
+		if (_data != nullptr)
+		{
+			//Move elements if possible
+			if constexpr (std::is_move_constructible_v<T>)
+			{
+				//Move elements before the free space
+				moveElements(data(), newData, index);
+
+				//Move elements after the free space
+				moveElements(data() + index, newData + index + count, _size - index);
+			}
+			else //Copy elements otherwise
+			{
+				copyElements(data(), newData, index);
+				copyElements(data() + index, newData + index + count, _size - index);
+			}
+
+			destroyElements(data(), _size);
+
+			//Release previously allocated memory
+			_allocator.deallocate(_data, _capacity);
+		}
+
+		_data		= newData;
+		_capacity	= newCapacity;
+	}
+	//Don't do anything if there's enough capacity to handle new elements and they are appended to the end of the vector
+	else if (index != _size)
+	{
+		//Move elements if possible
+		//Elements are moved/copied in reverse order to avoid memory overwrite in case the free space (count)
+		//	is smaller than the number of elements to copy
+		if constexpr (std::is_move_constructible_v<T>)
+		{
+			moveElementsReverse(data() + index, data() + index + count, _size - index);
+		}
+		else
+		{
+			copyElementsReverse(data() + index, data() + index + count, _size - index);
+		}
+
+		destroyElements(data() + index, count);
 	}
 }
 
@@ -282,6 +360,24 @@ void Vector<T, Allocator>::push_back(Vector&& other)
 		moveElements(other.begin(), end(), other.size());
 		_size += other.size();
 	}
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::insert(std::size_t index, T const& element)
+{
+	makeFreeSpaceForXElements(index, 1u);
+
+	AllocTraits::construct(_allocator, begin() + index, element);
+	_size++;
+}
+
+template <typename T, typename Allocator>
+void Vector<T, Allocator>::insert(std::size_t index, T&& element)
+{
+	makeFreeSpaceForXElements(index, 1u);
+
+	AllocTraits::construct(_allocator, begin() + index, std::forward<T>(element));
+	_size++;
 }
 
 template <typename T, typename Allocator>

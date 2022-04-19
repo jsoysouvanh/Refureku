@@ -115,6 +115,14 @@ namespace rfk
 			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
 			RFK_NODISCARD void const*	getConstPtr(OwnerStructType const& instance)	const	noexcept;
 
+			/**
+			*	@brief Get the memory offset of this field in an instance of its owner class (Field::getOwner()).
+			* 
+			*	@return The memory offset in bytes.
+			*/
+			RFK_NODISCARD REFUREKU_API std::size_t
+										getMemoryOffset()								const	noexcept;
+
 		protected:
 			//Forward declaration
 			class FieldImpl;

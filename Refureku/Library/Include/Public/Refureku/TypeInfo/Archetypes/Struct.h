@@ -17,6 +17,7 @@
 #include "Refureku/TypeInfo/Variables/EFieldFlags.h"
 #include "Refureku/TypeInfo/Functions/EMethodFlags.h"
 #include "Refureku/TypeInfo/Functions/MethodHelper.h"
+#include "Refureku/Containers/Vector.h"
 #include "Refureku/Misc/SharedPtr.h"
 #include "Refureku/Misc/UniquePtr.h"
 
@@ -317,6 +318,16 @@ namespace rfk
 				Vector<Field const*>				getFieldsByPredicate(Predicate<Field>	predicate,
 																		 void*				userData,
 																		 bool				shouldInspectInherited = false)				const;
+
+			/**
+			*	@brief Retrieve all fields ordered by declaration order.
+			* 
+			*	@param includeInherited Should all inherited fields be included in the result?
+			* 
+			*	@return All fields of this struct ordered by declaration order.
+			*/
+			RFK_NODISCARD REFUREKU_API
+				Vector<Field const*>				getOrderedFields(bool includeInherited = false)										const	noexcept;
 
 			/**
 			*	@brief Execute the given visitor on all fields in this struct.

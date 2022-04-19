@@ -17,6 +17,11 @@ Field::Field(Field&&) noexcept = default;
 
 Field::~Field() noexcept = default;
 
+std::size_t	Field::getMemoryOffset() const noexcept
+{
+	return getPimpl()->getMemoryOffset();
+}
+
 void Field::setInternal(void* instance, void const* valuePtr, std::size_t valueSize) const
 {
 	FieldBase::set(getPtrInternal(instance), valuePtr, valueSize);
@@ -29,10 +34,10 @@ void* Field::getPtrInternal(void* instance) const
 		throwConstViolationException("Can't get a non-const ptr from a const field.");
 	}
 
-	return reinterpret_cast<uint8_t*>(instance) + getPimpl()->getMemoryOffset();
+	return reinterpret_cast<uint8_t*>(instance) + getMemoryOffset();
 }
 
 void const* Field::getConstPtrInternal(void const* instance) const noexcept
 {
-	return reinterpret_cast<uint8_t const*>(instance) + getPimpl()->getMemoryOffset();
+	return reinterpret_cast<uint8_t const*>(instance) + getMemoryOffset();
 }

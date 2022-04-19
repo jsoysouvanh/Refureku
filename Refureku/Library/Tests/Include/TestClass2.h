@@ -32,4 +32,87 @@ class CLASS(MultipleInheritedPropertyChild(5), UniqueInheritedProperty(6)) TestC
 	TestClass3_GENERATED
 };
 
+class CLASS() TestGetOrderedFieldsBase
+{
+	public:
+		FIELD()
+		int i;
+
+	protected:
+		FIELD()
+		int j;
+
+	private:
+		FIELD()
+		int k;
+
+	public:
+		FIELD()
+		int l;
+
+	protected:
+		FIELD()
+		int m;
+
+	private:
+		FIELD()
+		int n;
+
+	public:
+		virtual ~TestGetOrderedFieldsBase() = default;
+
+	TestGetOrderedFieldsBase_GENERATED
+};
+
+class CLASS() TestGetOrderedFieldsBase2
+{
+	public:
+		FIELD()
+		int o;
+
+	protected:
+		FIELD()
+		int p;
+
+	private:
+		FIELD()
+		int q;
+
+	TestGetOrderedFieldsBase2_GENERATED
+};
+
+class CLASS() TestGetOrderedFieldsSingleInheritanceChild : public TestGetOrderedFieldsBase
+{
+	public:
+		FIELD()
+		int r;
+
+	protected:
+		FIELD()
+		int s;
+
+	private:
+		FIELD()
+		int t;
+
+	TestGetOrderedFieldsSingleInheritanceChild_GENERATED
+};
+
+class CLASS() TestGetOrderedFieldsMultipleInheritanceChild : public TestGetOrderedFieldsBase, public TestGetOrderedFieldsBase2
+{
+	public:
+		FIELD()
+		int r;
+
+	protected:
+		FIELD()
+		int s;
+
+	private:
+		FIELD()
+		int t;
+
+	TestGetOrderedFieldsMultipleInheritanceChild_GENERATED
+};
+
 File_TestClass2_GENERATED

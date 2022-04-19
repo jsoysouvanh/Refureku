@@ -74,7 +74,7 @@ TEST(Rfk_Vector_ctor, MoveDifferentElementTypeCtor)
 }
 
 //=========================================================
-//============== Vector::push_back (copy) =================
+//================== Vector::push_back ====================
 //=========================================================
 
 TEST(Rfk_Vector_push_back, PushBackElementByCopy)
@@ -139,6 +139,94 @@ TEST(Rfk_Vector_push_back, PushBackVectorByMove)
 	EXPECT_TRUE(vec2[0].getMoveConstructed());
 	EXPECT_TRUE(vec2[1].getMoveConstructed());
 	EXPECT_TRUE(vec2[2].getMoveConstructed());
+}
+
+//=========================================================
+//==================== Vector::insert =====================
+//=========================================================
+
+TEST(Rfk_Vector_insert, InsertElementByCopy)
+{
+	rfk::Vector<ConstructionTrackedClass> vec;
+
+	ConstructionTrackedClass ctc1(1);
+	ConstructionTrackedClass ctc2(2);
+	ConstructionTrackedClass ctc3(3);
+	ConstructionTrackedClass ctc4(4);
+	ConstructionTrackedClass ctc5(5);
+
+	// [1]
+	vec.insert(0, ctc1);
+	EXPECT_TRUE(vec[0].getCopyConstructed());
+	EXPECT_EQ(vec.size(), 1u);
+
+	// [1, 2]
+	vec.insert(1, ctc2);
+	EXPECT_TRUE(vec[1].getCopyConstructed());
+	EXPECT_EQ(vec.size(), 2u);
+
+	// [3, 1, 2]
+	vec.insert(0, ctc3);
+	EXPECT_TRUE(vec[0].getCopyConstructed());
+	EXPECT_EQ(vec.size(), 3u);
+
+	// [3, 1, 4, 2]
+	vec.insert(2, ctc4);
+	EXPECT_TRUE(vec[2].getCopyConstructed());
+	EXPECT_EQ(vec.size(), 4u);
+
+	// [3, 1, 4, 2, 5]
+	vec.insert(4, ctc5);
+	EXPECT_TRUE(vec[4].getCopyConstructed());
+	EXPECT_EQ(vec.size(), 5u);
+
+	EXPECT_EQ(vec[0].getValue(), 3);
+	EXPECT_EQ(vec[1].getValue(), 1);
+	EXPECT_EQ(vec[2].getValue(), 4);
+	EXPECT_EQ(vec[3].getValue(), 2);
+	EXPECT_EQ(vec[4].getValue(), 5);
+}
+
+TEST(Rfk_Vector_insert, InsertElementByMove)
+{
+	rfk::Vector<ConstructionTrackedClass> vec;
+
+	ConstructionTrackedClass ctc1(1);
+	ConstructionTrackedClass ctc2(2);
+	ConstructionTrackedClass ctc3(3);
+	ConstructionTrackedClass ctc4(4);
+	ConstructionTrackedClass ctc5(5);
+
+	// [1]
+	vec.insert(0, std::move(ctc1));
+	EXPECT_TRUE(vec[0].getMoveConstructed());
+	EXPECT_EQ(vec.size(), 1u);
+
+	// [1, 2]
+	vec.insert(1, std::move(ctc2));
+	EXPECT_TRUE(vec[1].getMoveConstructed());
+	EXPECT_EQ(vec.size(), 2u);
+
+	// [3, 1, 2]
+	vec.insert(0, std::move(ctc3));
+	EXPECT_TRUE(vec[0].getMoveConstructed());
+	EXPECT_EQ(vec.size(), 3u);
+
+	// [3, 1, 4, 2]
+	vec.insert(2, std::move(ctc4));
+	EXPECT_TRUE(vec[2].getMoveConstructed());
+	EXPECT_EQ(vec.size(), 4u);
+
+	// [3, 1, 4, 2, 5]
+	vec.insert(4, std::move(ctc5));
+	EXPECT_TRUE(vec[4].getMoveConstructed());
+	EXPECT_EQ(vec.size(), 5u);
+
+	EXPECT_EQ(vec[0].getValue(), 3);
+	EXPECT_EQ(vec[1].getValue(), 1);
+	EXPECT_EQ(vec[2].getValue(), 4);
+	EXPECT_EQ(vec[3].getValue(), 2);
+	EXPECT_EQ(vec[4].getValue(), 5);
 }
 
 //=========================================================

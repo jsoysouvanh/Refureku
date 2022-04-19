@@ -36,16 +36,6 @@ ValueType const Field::getInternal(void const* instance) const noexcept
 	static_assert(!std::is_rvalue_reference_v<ValueType>, "Can't call Field::get with an rvalue reference ValueType from a const instance.");
 
 	return FieldBase::get<ValueType>(getConstPtrInternal(instance));
-
-	/*if constexpr (VariableBase::is_value_v<ValueType> || std::is_const_v<std::remove_reference_t<ValueType>>)
-	{
-		
-	}
-	else
-	{
-
-	}
-	return FieldBase::get<ValueType>(const_cast<void*>(getConstPtrInternal(instance)));*/
 }
 
 template <typename ValueType, typename OwnerStructType, typename>

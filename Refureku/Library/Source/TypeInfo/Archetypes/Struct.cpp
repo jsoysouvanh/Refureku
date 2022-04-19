@@ -320,6 +320,42 @@ Vector<Field const*> Struct::getFieldsByPredicate(Predicate<Field> predicate, vo
 	}
 }
 
+Vector<Field const*> Struct::getOrderedFields(bool includeInherited) const noexcept
+{
+	Struct::StructImpl::Fields const& fields = getPimpl()->getFields();
+
+	//Allocate the max number of fields right away to avoid reallocations
+	Vector<Field const*> result(fields.size());
+
+	auto insertAtRightPositionLambda = [&result](Field const& field)
+	{
+		//Insert the field according to its memory offset
+		std::size_t memoryOffset = field.getMemoryOffset();
+
+		for (std::size_t i = 0; i < result.size(); i++)
+		{
+			if (memoryOffset < result[i]->getMemoryOffset())
+			{
+				result.insert(i, &field);
+				return;
+			}
+		}
+
+		result.push_back(&field);
+	};
+
+	for (Field const& field : fields)
+	{
+		//Include inherited field only if requested
+		if (includeInherited || field.getOuterEntity() == this)
+		{
+			insertAtRightPositionLambda(field);
+		}
+	}
+
+	return result;
+}
+
 bool Struct::foreachField(Visitor<Field> visitor, void* userData, bool shouldInspectInherited) const
 {
 	return (visitor != nullptr) ? Algorithm::foreach(getPimpl()->getFields(),
