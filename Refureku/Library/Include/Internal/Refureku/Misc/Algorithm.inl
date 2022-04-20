@@ -114,6 +114,36 @@ Vector<ItemType const*> Algorithm::getItemsByPredicate(ContainerType const& cont
 	}
 }
 
+template <typename ContainerType, typename Predicate, typename Compare>
+auto Algorithm::getSortedItemsByPredicate(ContainerType const& container, Predicate predicate, Compare compare) -> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>
+{
+	//When calling this method, we expect to have at least 2 results, so preallocate memory to avoid reallocations.
+	Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*> result(2);
+
+	if constexpr (std::is_pointer_v<typename ContainerType::value_type>)
+	{
+		for (auto item : container)
+		{
+			if (predicate(*item))
+			{
+				result.insert(Algorithm::getFirstGreaterElementIndex(result, item, compare), item);
+			}
+		}
+	}
+	else
+	{
+		for (auto const& item : container)
+		{
+			if (predicate(item))
+			{
+				result.insert(Algorithm::getFirstGreaterElementIndex(result, &item, compare), &item);
+			}
+		}
+	}
+
+	return result;
+}
+
 template <typename ContainerType>
 auto Algorithm::getEntityByName(ContainerType const& container, char const* name) noexcept -> typename std::remove_pointer_t<typename ContainerType::value_type> const*
 {
@@ -254,4 +284,16 @@ typename ContainerType::value_type Algorithm::getEntityPtrById(ContainerType con
 	searchedEntity._pimpl.uncheckedSet(nullptr);
 
 	return (it != container.cend()) ? *it : nullptr;
+}
+
+template <typename ContainerType, typename Compare, typename ElementType, typename>
+std::size_t Algorithm::getFirstGreaterElementIndex(ContainerType const& container, ElementType element, Compare compare) noexcept(noexcept(compare))
+{
+	for (std::size_t i = 0u; i < container.size(); i++)
+	{
+		if (compare(element, container[i]))
+			return i;
+	}
+
+	return container.size();
 }

@@ -309,6 +309,7 @@ namespace rfk
 			*	@param userData					User data forwarded to the predicate calls.
 			*	@param shouldInspectInherited	Should inherited fields be considered as well in the search process?
 			*										If false, only fields introduced by this struct will be considered.
+			*	@param orderedByDeclaration		Should fields be ordered by declaration order in the result collection?
 			* 
 			*	@return All fields satisfying the predicate.
 			* 
@@ -317,17 +318,8 @@ namespace rfk
 			RFK_NODISCARD REFUREKU_API 
 				Vector<Field const*>				getFieldsByPredicate(Predicate<Field>	predicate,
 																		 void*				userData,
-																		 bool				shouldInspectInherited = false)				const;
-
-			/**
-			*	@brief Retrieve all fields ordered by declaration order.
-			* 
-			*	@param includeInherited Should all inherited fields be included in the result?
-			* 
-			*	@return All fields of this struct ordered by declaration order.
-			*/
-			RFK_NODISCARD REFUREKU_API
-				Vector<Field const*>				getOrderedFields(bool includeInherited = false)										const	noexcept;
+																		 bool				shouldInspectInherited = false,
+																		 bool				orderedByDeclaration = false)				const;
 
 			/**
 			*	@brief Execute the given visitor on all fields in this struct.

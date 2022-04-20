@@ -715,6 +715,120 @@ TEST(Rfk_Struct_getFieldsByPredicate, NonFindingPredicate)
 	EXPECT_EQ(TestClass::staticGetArchetype().getFieldsByPredicate(predicate, &name).size(), 0u);
 }
 
+TEST(Rfk_Struct_getFieldsByPredicate, FindingPredicateOrderedFieldsNoParentsVirtualClass)
+{
+	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsBase::staticGetArchetype().getFieldsByPredicate([](rfk::Field const&, void*)
+																												{
+																													return true;
+																												},
+																												nullptr,
+																												false,
+																												true);
+
+	EXPECT_EQ(fields.size(), 6u);
+	EXPECT_STREQ(fields[0]->getName(), "i");
+	EXPECT_STREQ(fields[1]->getName(), "j");
+	EXPECT_STREQ(fields[2]->getName(), "k");
+	EXPECT_STREQ(fields[3]->getName(), "l");
+	EXPECT_STREQ(fields[4]->getName(), "m");
+	EXPECT_STREQ(fields[5]->getName(), "n");
+}
+
+TEST(Rfk_Struct_getFieldsByPredicate, FindingPredicateOrderedFieldsNoParentsNonVirtualClass)
+{
+	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsBase2::staticGetArchetype().getFieldsByPredicate([](rfk::Field const&, void*)
+																												 {
+																													 return true;
+																												 },
+																												 nullptr,
+																												 false,
+																												 true);
+
+	EXPECT_EQ(fields.size(), 3u);
+	EXPECT_STREQ(fields[0]->getName(), "o");
+	EXPECT_STREQ(fields[1]->getName(), "p");
+	EXPECT_STREQ(fields[2]->getName(), "q");
+}
+
+TEST(Rfk_Struct_getFieldsByPredicate, FindingPredicateOrderedFieldsSingleInheritanceClassExcludeInheritedFields)
+{
+	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsSingleInheritanceChild::staticGetArchetype().getFieldsByPredicate([](rfk::Field const&, void*)
+																																  {
+																																	  return true;
+																																  },
+																																  nullptr,
+																																  false,
+																																  true);
+
+	EXPECT_EQ(fields.size(), 3u);
+	EXPECT_STREQ(fields[0]->getName(), "r");
+	EXPECT_STREQ(fields[1]->getName(), "s");
+	EXPECT_STREQ(fields[2]->getName(), "t");
+}
+
+TEST(Rfk_Struct_getFieldsByPredicate, FindingPredicateOrderedFieldsSingleInheritanceClassIncludeInheritedFields)
+{
+	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsSingleInheritanceChild::staticGetArchetype().getFieldsByPredicate([](rfk::Field const&, void*)
+																																  {
+																																	  return true;
+																																  },
+																																  nullptr,
+																																  true,
+																																  true);
+
+	EXPECT_EQ(fields.size(), 9u);
+	EXPECT_STREQ(fields[0]->getName(), "i");
+	EXPECT_STREQ(fields[1]->getName(), "j");
+	EXPECT_STREQ(fields[2]->getName(), "k");
+	EXPECT_STREQ(fields[3]->getName(), "l");
+	EXPECT_STREQ(fields[4]->getName(), "m");
+	EXPECT_STREQ(fields[5]->getName(), "n");
+	EXPECT_STREQ(fields[6]->getName(), "r");
+	EXPECT_STREQ(fields[7]->getName(), "s");
+	EXPECT_STREQ(fields[8]->getName(), "t");
+}
+
+TEST(Rfk_Struct_getFieldsByPredicate, FindingPredicateOrderedFieldsMultipleInheritanceClassExcludeInheritedFields)
+{
+	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsMultipleInheritanceChild::staticGetArchetype().getFieldsByPredicate([](rfk::Field const&, void*)
+																																	{
+																																		return true;
+																																	},
+																																	nullptr,
+																																	false,
+																																	true);
+
+	EXPECT_EQ(fields.size(), 3u);
+	EXPECT_STREQ(fields[0]->getName(), "r");
+	EXPECT_STREQ(fields[1]->getName(), "s");
+	EXPECT_STREQ(fields[2]->getName(), "t");
+}
+
+TEST(Rfk_Struct_getFieldsByPredicate, FindingPredicateOrderedFieldsMultipleInheritanceClassIncludeInheritedFields)
+{
+	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsMultipleInheritanceChild::staticGetArchetype().getFieldsByPredicate([](rfk::Field const&, void*)
+																																	{
+																																		return true;
+																																	},
+																																	nullptr,
+																																	true,
+																																	true);
+
+	EXPECT_EQ(fields.size(), 12u);
+	EXPECT_STREQ(fields[0]->getName(), "i");
+	EXPECT_STREQ(fields[1]->getName(), "j");
+	EXPECT_STREQ(fields[2]->getName(), "k");
+	EXPECT_STREQ(fields[3]->getName(), "l");
+	EXPECT_STREQ(fields[4]->getName(), "m");
+	EXPECT_STREQ(fields[5]->getName(), "n");
+	EXPECT_STREQ(fields[6]->getName(), "o");
+	EXPECT_STREQ(fields[7]->getName(), "p");
+	EXPECT_STREQ(fields[8]->getName(), "q");
+	EXPECT_STREQ(fields[9]->getName(), "r");
+	EXPECT_STREQ(fields[10]->getName(), "s");
+	EXPECT_STREQ(fields[11]->getName(), "t");
+}
+
 //=========================================================
 //================= Struct::foreachField ==================
 //=========================================================
@@ -1470,86 +1584,4 @@ TEST(Rfk_Struct_getClassKind, ClassTemplate)
 TEST(Rfk_Struct_getClassKind, ClassTemplateInstantiation)
 {
 	EXPECT_EQ(SingleTypeTemplateClassTemplate<int>::staticGetArchetype().getClassKind(), rfk::EClassKind::TemplateInstantiation);
-}
-
-//=========================================================
-//============== Struct::getOrderedFields =================
-//=========================================================
-
-TEST(Rfk_Struct_getOrderedFields, NoParentsVirtualClass)
-{
-	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsBase::staticGetArchetype().getOrderedFields();
-
-	EXPECT_EQ(fields.size(), 6u);
-	EXPECT_STREQ(fields[0]->getName(), "i");
-	EXPECT_STREQ(fields[1]->getName(), "j");
-	EXPECT_STREQ(fields[2]->getName(), "k");
-	EXPECT_STREQ(fields[3]->getName(), "l");
-	EXPECT_STREQ(fields[4]->getName(), "m");
-	EXPECT_STREQ(fields[5]->getName(), "n");
-}
-
-TEST(Rfk_Struct_getOrderedFields, NoParentsNonVirtualClass)
-{
-	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsBase2::staticGetArchetype().getOrderedFields();
-
-	EXPECT_EQ(fields.size(), 3u);
-	EXPECT_STREQ(fields[0]->getName(), "o");
-	EXPECT_STREQ(fields[1]->getName(), "p");
-	EXPECT_STREQ(fields[2]->getName(), "q");
-}
-
-TEST(Rfk_Struct_getOrderedFields, SingleInheritanceClassExcludeInheritedFields)
-{
-	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsSingleInheritanceChild::staticGetArchetype().getOrderedFields(false);
-
-	EXPECT_EQ(fields.size(), 3u);
-	EXPECT_STREQ(fields[0]->getName(), "r");
-	EXPECT_STREQ(fields[1]->getName(), "s");
-	EXPECT_STREQ(fields[2]->getName(), "t");
-}
-
-TEST(Rfk_Struct_getOrderedFields, SingleInheritanceClassIncludeInheritedFields)
-{
-	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsSingleInheritanceChild::staticGetArchetype().getOrderedFields(true);
-
-	EXPECT_EQ(fields.size(), 9u);
-	EXPECT_STREQ(fields[0]->getName(), "i");
-	EXPECT_STREQ(fields[1]->getName(), "j");
-	EXPECT_STREQ(fields[2]->getName(), "k");
-	EXPECT_STREQ(fields[3]->getName(), "l");
-	EXPECT_STREQ(fields[4]->getName(), "m");
-	EXPECT_STREQ(fields[5]->getName(), "n");
-	EXPECT_STREQ(fields[6]->getName(), "r");
-	EXPECT_STREQ(fields[7]->getName(), "s");
-	EXPECT_STREQ(fields[8]->getName(), "t");
-}
-
-TEST(Rfk_Struct_getOrderedFields, MultipleInheritanceClassExcludeInheritedFields)
-{
-	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsMultipleInheritanceChild::staticGetArchetype().getOrderedFields(false);
-
-	EXPECT_EQ(fields.size(), 3u);
-	EXPECT_STREQ(fields[0]->getName(), "r");
-	EXPECT_STREQ(fields[1]->getName(), "s");
-	EXPECT_STREQ(fields[2]->getName(), "t");
-}
-
-TEST(Rfk_Struct_getOrderedFields, MultipleInheritanceClassIncludeInheritedFields)
-{
-	rfk::Vector<rfk::Field const*> fields = TestGetOrderedFieldsMultipleInheritanceChild::staticGetArchetype().getOrderedFields(true);
-
-	EXPECT_EQ(fields.size(), 12u);
-	EXPECT_STREQ(fields[0]->getName(), "i");
-	EXPECT_STREQ(fields[1]->getName(), "j");
-	EXPECT_STREQ(fields[2]->getName(), "k");
-	EXPECT_STREQ(fields[3]->getName(), "l");
-	EXPECT_STREQ(fields[4]->getName(), "m");
-	EXPECT_STREQ(fields[5]->getName(), "n");
-	EXPECT_STREQ(fields[6]->getName(), "o");
-	EXPECT_STREQ(fields[7]->getName(), "p");
-	EXPECT_STREQ(fields[8]->getName(), "q");
-	EXPECT_STREQ(fields[9]->getName(), "r");
-	EXPECT_STREQ(fields[10]->getName(), "s");
-	EXPECT_STREQ(fields[11]->getName(), "t");
 }

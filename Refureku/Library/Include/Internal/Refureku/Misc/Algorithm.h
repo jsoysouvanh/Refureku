@@ -66,7 +66,7 @@ namespace rfk
 			/**
 			*	@brief Get a list of all items satisfying the given predicate.
 			* 
-			*	@param container Container containing items (can by ptr or value).
+			*	@param container Container containing items (can be ptr or value).
 			*	@param predicate Predicate defining valid items.
 			* 
 			*	@return A list of all items satisfying the given predicate.
@@ -81,6 +81,23 @@ namespace rfk
 			RFK_NODISCARD static Vector<ItemType const*>			getItemsByPredicate(ContainerType const&	container,
 																						Predicate<ItemType>		predicate,
 																						void*					userData);
+
+			/**
+			*	@brief Get a sorted (ascending) list of all items satisfying the given predicate.
+			* 
+			*	@param container Container containing items (can be ptr or value).
+			*	@param predicate Predicate defining valid items.
+			*	@param compare	 Method used to compare elements. It must have the following signature: bool (*)(Item const& a, Item const& b);
+			*					 The compare method must return true when a < b (ordered before b in the result).
+			* 
+			*	@return A sorted list of all items satisfying the given predicate.
+			* 
+			*	@exception Any exception potentially thrown from the provided predicate.
+			*/
+			template <typename ContainerType, typename Predicate, typename Compare>
+			RFK_NODISCARD static auto								getSortedItemsByPredicate(ContainerType const&	container,
+																							  Predicate				predicate,
+																							  Compare				compare)	-> Vector<typename std::remove_pointer_t<typename ContainerType::value_type> const*>;
 
 			/**
 			*	@brief Retrieve an entity with the given name.
@@ -147,6 +164,25 @@ namespace rfk
 			template <typename ContainerType>
 			RFK_NODISCARD static typename ContainerType::value_type	getEntityPtrById(ContainerType const&	container,
 																					 std::size_t			id)							noexcept;
+
+			/**
+			*	@brief Return the index of the first element that is greater than the provided element in the container.
+			* 
+			*	@param container	Container containing the elements. It must be accessible by index (operator[index]) and implement the size() method.
+			*	@param element		Element to compare with.
+			*	@param compare		Method used to compare elements. It must have the following signature: bool (*)(Item const& a, Item const& b);
+			*						The compare method must return true when a < b (ordered before b in the result).
+			* 
+			*	@return The index of the first element greater than the provided element, or container.size() if no element is greater than the provided element.
+			* 
+			*	@exception Any exception potentially thrown by the Compare 
+			*/
+			template <typename ContainerType, typename Compare,
+					  typename ElementType = typename ContainerType::const_reference,
+					  typename = std::enable_if_t<std::is_invocable_r_v<bool, Compare, typename ContainerType::const_reference, typename ContainerType::const_reference>>>
+			RFK_NODISCARD static std::size_t						getFirstGreaterElementIndex(ContainerType const&	container,
+																								ElementType				element,
+																								Compare					compare)		noexcept(noexcept(compare));
 	};
 
 	#include "Refureku/Misc/Algorithm.inl"

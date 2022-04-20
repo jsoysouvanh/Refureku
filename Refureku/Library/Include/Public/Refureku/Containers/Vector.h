@@ -135,6 +135,11 @@ namespace rfk
 			std::size_t	computeNewCapacity(std::size_t minCapacity)	const noexcept;
 
 		public:
+			using value_type = T;
+			using allocator_type = Allocator;
+			using reference = value_type&;
+			using const_reference = value_type const&;
+			
 			Vector(std::size_t initialCapacity = 0u)	noexcept;
 
 			/** Retrieve data from another type U. NOT SAFE UNLESS YOU EXACTLY KNOW WHAT YOU DO. */

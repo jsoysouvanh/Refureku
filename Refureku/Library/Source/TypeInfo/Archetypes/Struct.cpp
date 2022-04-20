@@ -302,58 +302,42 @@ Field const* Struct::getFieldByPredicate(Predicate<Field> predicate, void* userD
 		}) : nullptr;
 }
 
-Vector<Field const*> Struct::getFieldsByPredicate(Predicate<Field> predicate, void* userData, bool shouldInspectInherited) const
+Vector<Field const*> Struct::getFieldsByPredicate(Predicate<Field> predicate, void* userData, bool shouldInspectInherited, bool orderedByDeclaration) const
 {
 	if (predicate != nullptr)
 	{
-		return Algorithm::getItemsByPredicate(getPimpl()->getFields(),
-													 [this, predicate, userData, shouldInspectInherited](Field const& field)
-													 {
-														 return	field.getKind() == EEntityKind::Field &&
+		if (orderedByDeclaration)
+		{
+			return Algorithm::getSortedItemsByPredicate(getPimpl()->getFields(),
+														[this, predicate, userData, shouldInspectInherited](Field const& field)
+														{
+															return	field.getKind() == EEntityKind::Field &&
 																(shouldInspectInherited || field.getOuterEntity() == this) &&
 																predicate(static_cast<Field const&>(field), userData);
-													 });
+														},
+														[](Field const* a, Field const* b)
+														{
+															//Two fields contained in the same struct should never have the same memory offset
+															assert(a->getMemoryOffset() != b->getMemoryOffset());
+
+															return a->getMemoryOffset() < b->getMemoryOffset();
+														});
+		}
+		else
+		{
+			return Algorithm::getItemsByPredicate(getPimpl()->getFields(),
+												  [this, predicate, userData, shouldInspectInherited](Field const& field)
+												  {
+													  return	field.getKind() == EEntityKind::Field &&
+														  (shouldInspectInherited || field.getOuterEntity() == this) &&
+														  predicate(static_cast<Field const&>(field), userData);
+												  });
+		}
 	}
 	else
 	{
 		return Vector<Field const*>(0);
 	}
-}
-
-Vector<Field const*> Struct::getOrderedFields(bool includeInherited) const noexcept
-{
-	Struct::StructImpl::Fields const& fields = getPimpl()->getFields();
-
-	//Allocate the max number of fields right away to avoid reallocations
-	Vector<Field const*> result(fields.size());
-
-	auto insertAtRightPositionLambda = [&result](Field const& field)
-	{
-		//Insert the field according to its memory offset
-		std::size_t memoryOffset = field.getMemoryOffset();
-
-		for (std::size_t i = 0; i < result.size(); i++)
-		{
-			if (memoryOffset < result[i]->getMemoryOffset())
-			{
-				result.insert(i, &field);
-				return;
-			}
-		}
-
-		result.push_back(&field);
-	};
-
-	for (Field const& field : fields)
-	{
-		//Include inherited field only if requested
-		if (includeInherited || field.getOuterEntity() == this)
-		{
-			insertAtRightPositionLambda(field);
-		}
-	}
-
-	return result;
 }
 
 bool Struct::foreachField(Visitor<Field> visitor, void* userData, bool shouldInspectInherited) const
