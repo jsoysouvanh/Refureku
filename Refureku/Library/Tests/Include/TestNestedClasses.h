@@ -69,6 +69,33 @@ class CLASS() NonNestedClass
 	NonNestedClass_GENERATED 
 };
 
+namespace rfk
+{
+	template <template <typename, int> typename T>
+	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
+}
+
+class CLASS() NonNestedNonTemplateClass
+{
+	private:
+		template <typename T>
+		class CLASS() Lvl1NestedTypeTemplateParamClass
+		{
+			NonNestedNonTemplateClass_Lvl1NestedTypeTemplateParamClass_GENERATED
+		};
+
+		template <typename T, int Value>
+		class CLASS() Lvl1NestedTypeTemplateParamNonTypeTemplateParamClass
+		{
+			NonNestedNonTemplateClass_Lvl1NestedTypeTemplateParamNonTypeTemplateParamClass_GENERATED
+		};
+
+	template <template <typename, int> typename T>
+	friend rfk::Archetype const* rfk::getArchetype() noexcept;
+
+	NonNestedNonTemplateClass_GENERATED
+};
+
 File_TestNestedClasses_GENERATED
 
 class NestedClassInspector
