@@ -11,6 +11,7 @@
 #include <functional>	//std::hash
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>	//std::all_of
 
 #include <Kodgen/CodeGen/Macro/MacroCodeGenModule.h>
 #include "Kodgen/InfoStructures/EnumInfo.h"

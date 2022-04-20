@@ -27,10 +27,6 @@ public: static constexpr rfk::EEntityKind targetEntityKind = rfk::EEntityKind::S
  virtual rfk::EEntityKind getTargetEntityKind() const noexcept override;\
 RFK_UNPACK_IF_NOT_PARSING(friend rfk::internal::CodeGenerationHelpers;\
 friend rfk::internal::implements_template1__rfk_registerChildClass<PropertySettings, void, void(rfk::Struct&)>; \
-template <typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
-template <template <typename...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
-template <template <auto...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;\
-template <typename _RFK_TEMPLATE_PARAM> friend rfk::Enum const* rfk::getEnum() noexcept;\
 \
 private: template <typename ChildClass> static void _rfk_registerChildClass(rfk::Struct& childClass) noexcept {\
 rfk::Struct const& thisClass = staticGetArchetype();\

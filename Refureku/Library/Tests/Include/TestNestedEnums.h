@@ -34,7 +34,7 @@ class CLASS() NonNestedEnum
 					Value2
 				};
 
-				NonNestedEnum_PrivateClassNestedLvl1_GENERATED
+			NonNestedEnum_PrivateClassNestedLvl1_GENERATED
 		};
 
 	protected:
@@ -51,7 +51,7 @@ class CLASS() NonNestedEnum
 			Value2
 		};
 
-		NonNestedEnum_GENERATED 
+	NonNestedEnum_GENERATED 
 };
 
 File_TestNestedEnums_GENERATED

@@ -71,7 +71,19 @@ class CLASS() NonNestedClass
 
 namespace rfk
 {
-	template <template <typename, int> typename T>
+	template <template <typename, int> typename>
+	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
+
+	template <template <typename T, typename U, int Value> typename>
+	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
+
+	template <template <typename, typename, std::size_t> typename>
+	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
+
+	template <template <typename, typename, char> typename>
+	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
+
+	template <template <typename, typename, bool> typename>
 	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
 }
 
@@ -90,8 +102,44 @@ class CLASS() NonNestedNonTemplateClass
 			NonNestedNonTemplateClass_Lvl1NestedTypeTemplateParamNonTypeTemplateParamClass_GENERATED
 		};
 
-	template <template <typename, int> typename T>
-	friend rfk::Archetype const* rfk::getArchetype() noexcept;
+		class CLASS() Lvl1NestedNonTemplatePrivateClass
+		{
+			private:
+				template <typename A, typename C, int Value>
+				class CLASS() Lvl2NestedTemplatePrivateClass
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_Lvl2NestedTemplatePrivateClass_GENERATED
+				};
+
+			public:
+				template <typename A, typename C, std::size_t Value>
+				class CLASS() Lvl2NestedTemplatePublicClass
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_Lvl2NestedTemplatePublicClass_GENERATED
+				};
+
+			NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_GENERATED
+		};
+
+	public:
+		class CLASS() Lvl1NestedNonTemplatePublicClass
+		{
+			private:
+				template <typename A, typename C, char Value>
+				class CLASS() Lvl2NestedTemplatePrivateClass2
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_Lvl2NestedTemplatePrivateClass2_GENERATED
+				};
+
+			public:
+				template <typename A, typename C, bool Value>
+				class CLASS() Lvl2NestedTemplatePublicClass2
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_Lvl2NestedTemplatePublicClass2_GENERATED
+				};
+
+			NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_GENERATED
+		};
 
 	NonNestedNonTemplateClass_GENERATED
 };

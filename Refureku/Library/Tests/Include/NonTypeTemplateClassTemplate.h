@@ -27,7 +27,7 @@ class CLASS() SingleNonTypeTemplateClassTemplate
 namespace rfk
 {
 	template <template <TestEnumClass, std::size_t> typename T>
-	rfk::Archetype const* getArchetype()
+	rfk::Archetype const* getArchetype() noexcept
 	{
 		return nullptr;
 	}
