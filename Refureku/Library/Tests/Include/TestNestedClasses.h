@@ -71,19 +71,10 @@ class CLASS() NonNestedClass
 
 namespace rfk
 {
-	template <template <typename, int> typename>
+	template <template <typename, auto> typename>
 	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
 
-	template <template <typename T, typename U, int Value> typename>
-	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
-
-	template <template <typename, typename, std::size_t> typename>
-	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
-
-	template <template <typename, typename, char> typename>
-	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
-
-	template <template <typename, typename, bool> typename>
+	template <template <typename, typename, auto> typename>
 	rfk::Archetype const* getArchetype() noexcept { return nullptr; }
 }
 

@@ -375,7 +375,7 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 								   &generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
 								   (kodgen::StructClassInfo const& structClass, auto const& thisLambda, std::size_t nestingLevel) -> void
 		{
-			auto generateFriendStatementsForNestedArchetypesInternal = [&generatedNonTemplateNestedClassGetArchetypeFriendStatement, &generatedGetEnumFriendStatement,
+			auto generateFriendStatementsForNestedArchetypesInternal = [&generatedNonTemplateNestedClassGetArchetypeFriendStatement, /*&generatedGetEnumFriendStatement,*/
 																		&generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
 																	   (std::vector<std::shared_ptr<kodgen::NestedStructClassInfo>> const& nestedStructClasses,
 																		auto const& recurseLambda, std::size_t nestingLevel) -> void
@@ -444,11 +444,15 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 									break;
 
 								case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:
-									inout_result += templateParam.type->getName();
+									inout_result += "auto"; //templateParam.type->getName();
 									break;
 
 								case kodgen::ETemplateParameterKind::TemplateTemplateParameter:
 									//TODO
+									break;
+
+								default:
+									assert(false);
 									break;
 							}
 
