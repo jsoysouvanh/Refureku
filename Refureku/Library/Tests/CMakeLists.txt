@@ -35,6 +35,7 @@ add_executable(${RefurekuTestsTarget}
 					"Src/TestInstantiator.cpp"
 					"Src/TestCast.cpp"
 					"Src/TestNestedClasses.cpp"
+					"Src/TestNestedClassTemplates.cpp"
 					"Src/TestNestedEnums.cpp"
 					"Src/ManualEnumReflection.cpp"
 					"Src/ManualClassReflection.cpp"

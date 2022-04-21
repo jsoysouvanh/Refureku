@@ -14,10 +14,17 @@
 #define REFUREKU_VERSION (REFUREKU_VERSION_MAJOR * 10000 + REFUREKU_VERSION_MINOR * 100 + REFUREKU_VERSION_PATCH)
 
 //Features
+/**
+*	RFK_TEMPLATE_TEMPLATE_SUPPORT: Can reflect class templates using template template parameters
+* 
+*	RFK_NON_PUBLIC_NESTED_CLASS_TEMPLATE_SUPPORT: Can reflect non-public class templates nested in structs/classes.
+*/
 #if !defined(_MSC_VER) || defined(__clang__)
-	#define RFK_TEMPLATE_TEMPLATE_SUPPORT 1
+	#define RFK_TEMPLATE_TEMPLATE_SUPPORT					1
+	#define RFK_NON_PUBLIC_NESTED_CLASS_TEMPLATE_SUPPORT	1
 #else
 	#define RFK_TEMPLATE_TEMPLATE_SUPPORT 0
+	#define RFK_NON_PUBLIC_NESTED_CLASS_TEMPLATE_SUPPORT 0
 #endif
 
 //Debug / Release flags
