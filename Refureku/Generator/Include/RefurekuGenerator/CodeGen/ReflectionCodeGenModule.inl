@@ -375,10 +375,10 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 								   &generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
 								   (kodgen::StructClassInfo const& structClass, auto const& thisLambda, std::size_t nestingLevel) -> void
 		{
-			auto generateFriendStatementsForNestedArchetypesInternal = [&generatedNonTemplateNestedClassGetArchetypeFriendStatement, /*&generatedGetEnumFriendStatement,*/
-																		&generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
-																	   (std::vector<std::shared_ptr<kodgen::NestedStructClassInfo>> const& nestedStructClasses,
-																		auto const& recurseLambda, std::size_t nestingLevel) -> void
+			auto generateFriendStatementsForNestedArcheteypesInternal = [&generatedNonTemplateNestedClassGetArchetypeFriendStatement, &generatedVariadicTypeTemplateGetArchetype,
+																		 &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
+																		 (std::vector<std::shared_ptr<kodgen::NestedStructClassInfo>> const& nestedStructClasses,
+																		  auto const& recurseLambda, std::size_t nestingLevel) -> void
 			{
 				auto classTemplateCodeGeneration = [&generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
 													(std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStructClass)
@@ -495,16 +495,20 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 				}
 			};
 
-			generateFriendStatementsForNestedArchetypesInternal(structClass.nestedStructs, thisLambda, nestingLevel);
-			generateFriendStatementsForNestedArchetypesInternal(structClass.nestedClasses, thisLambda, nestingLevel);
+			generateFriendStatementsForNestedArcheteypesInternal(structClass.nestedStructs, thisLambda, nestingLevel);
+			generateFriendStatementsForNestedArcheteypesInternal(structClass.nestedClasses, thisLambda, nestingLevel);
 
-			//Generate rfk::getEnum friend statement if there's at least 1 non-public nested enum at any nesting level
-			for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
+			//Generate rfk::getEnum friend statement if necessary
+			if (!generatedGetEnumFriendStatement)
 			{
-				if (!generatedGetEnumFriendStatement && nestedEnum.accessSpecifier != kodgen::EAccessSpecifier::Public)
+				for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
 				{
-					generatedGetEnumFriendStatement = true;
-					inout_result += "template <typename> friend rfk::Enum const* rfk::getEnum() noexcept;" + env.getSeparator();
+					if (nestingLevel != 1u || nestedEnum.accessSpecifier != kodgen::EAccessSpecifier::Public)
+					{
+						generatedGetEnumFriendStatement = true;
+						inout_result += "template <typename> friend rfk::Enum const* rfk::getEnum() noexcept;" + env.getSeparator();
+						break;
+					}
 				}
 			}
 		};
@@ -515,27 +519,6 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 	generateFriendStatementsForNestedArchetypes();
 
 	inout_result += env.getSeparator();
-
-	//friend rfk::getArchetype
-	//NOTE: Should be generated only if there is at least 1 non-public reflected non-template class in direct nested entities
-	
-
-	//NOTE: Can lighten code generation by iterating over all nested classes / structs / enums first and generate only necessary statements
-	//For example, 99.999% of the time, both
-	//	template <template <auto...> typename _RFK_TEMPLATE_PARAM> is not relevant
-	//and
-	//	template <template <typename...> typename _RFK_TEMPLATE_PARAM>
-	//are not relevant
-	
-
-	//****************************** REPLACED BY GENERATED CODE
-	//inout_result += "template <template <typename...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
-	//inout_result += "template <template <auto...> typename _RFK_TEMPLATE_PARAM> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
-	//******************************
-
-	//friend rfk::getEnum
-	//NOTE: Should be generated only if there is at least 1 non-public enum in direct nested entities
-	//inout_result += "template <typename _RFK_TEMPLATE_PARAM> friend rfk::Enum const* rfk::getEnum() noexcept;" + env.getSeparator() + env.getSeparator();
 }
 
 void ReflectionCodeGenModule::declareStaticGetArchetypeMethod(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
