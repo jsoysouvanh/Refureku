@@ -373,103 +373,109 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 
 		auto intermediateLambda = [&generatedNonTemplateNestedClassGetArchetypeFriendStatement, &generatedGetEnumFriendStatement,
 								   &generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
-								   (kodgen::StructClassInfo const& structClass, auto const& thisLambda) -> void
+								   (kodgen::StructClassInfo const& structClass, auto const& thisLambda, std::size_t nestingLevel) -> void
 		{
 			auto generateFriendStatementsForNestedArchetypesInternal = [&generatedNonTemplateNestedClassGetArchetypeFriendStatement, &generatedGetEnumFriendStatement,
 																		&generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
 																	   (std::vector<std::shared_ptr<kodgen::NestedStructClassInfo>> const& nestedStructClasses,
-																		auto const& recurseLambda) -> void
+																		auto const& recurseLambda, std::size_t nestingLevel) -> void
 			{
+				auto classTemplateCodeGeneration = [&generatedVariadicTypeTemplateGetArchetype, &generatedVariadicNonTypeTemplateGetArchetype, &env, &inout_result]
+													(std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStructClass)
+				{
+					//Case all template params are type template params
+					if (std::all_of(nestedStructClass->type.getTemplateParameters().cbegin(),
+						nestedStructClass->type.getTemplateParameters().cend(),
+						[](kodgen::TemplateParamInfo const& templateParam)
+						{
+							return templateParam.kind == kodgen::ETemplateParameterKind::TypeTemplateParameter;
+						}))
+					{
+						if (generatedVariadicTypeTemplateGetArchetype)
+						{
+							return;
+						}
+
+						generatedVariadicTypeTemplateGetArchetype = true;
+						inout_result += "template <template <typename...> typename>";
+					}
+					//Case there's a single non-type template parameter
+					//This condition is dumb since we could generate this for any class template taking only non-type template parameters
+					//But this generates a compilation error on MSVC compiler...
+					//Classes taking multiple non-type template parameters are generated individually in the next else statement
+					//else if (nestedStructClass->type.getTemplateParameters().size() == 1u &&
+					//		 nestedStructClass->type.getTemplateParameters()[0].kind == kodgen::ETemplateParameterKind::NonTypeTemplateParameter)
+					//{
+					//	if (generatedVariadicNonTypeTemplateGetArchetype)
+					//	{
+					//		continue;
+					//	}
+					//	
+					//	generatedVariadicNonTypeTemplateGetArchetype = true;
+					//	inout_result += "template <template <auto...> typename>";
+					//}
+					else if (std::all_of(nestedStructClass->type.getTemplateParameters().cbegin(),
+							 nestedStructClass->type.getTemplateParameters().cend(),
+							 [](kodgen::TemplateParamInfo const& templateParam)
+							 {
+								 return templateParam.kind == kodgen::ETemplateParameterKind::NonTypeTemplateParameter;
+							 }))
+					{
+						if (generatedVariadicNonTypeTemplateGetArchetype)
+						{
+							return;
+						}
+
+						generatedVariadicNonTypeTemplateGetArchetype = true;
+						inout_result += "template <template <auto...> typename>";
+					}
+					//Other cases
+					else
+					{
+						inout_result += "template <template <";
+
+						//TODO: generate for each template params
+						for (kodgen::TemplateParamInfo const& templateParam : nestedStructClass->type.getTemplateParameters())
+						{
+							switch (templateParam.kind)
+							{
+								case kodgen::ETemplateParameterKind::TypeTemplateParameter:
+									inout_result += "typename";
+									break;
+
+								case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:
+									inout_result += templateParam.type->getName();
+									break;
+
+								case kodgen::ETemplateParameterKind::TemplateTemplateParameter:
+									//TODO
+									break;
+							}
+
+							inout_result += ",";
+						}
+
+						//Remove last ,
+						inout_result.pop_back();
+
+						inout_result += "> typename>";
+					}
+
+					inout_result += " friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
+
+					//Reflect class template nested archetypes is not supported for now, so no recursion from here.
+				};
+
 				for (std::shared_ptr<kodgen::NestedStructClassInfo> const& nestedStructClass : nestedStructClasses)
 				{
-					if (nestedStructClass->accessSpecifier == kodgen::EAccessSpecifier::Public)
+					if (nestedStructClass->accessSpecifier == kodgen::EAccessSpecifier::Public && nestingLevel == 1u)
 					{
 						//If the first nesting level is public, then it is normally accessible, no friend statement needed
 						continue;
 					}
 					else if (nestedStructClass->type.isTemplateType())
 					{
-						//Case all template params are type template params
-						if (std::all_of(nestedStructClass->type.getTemplateParameters().cbegin(),
-										nestedStructClass->type.getTemplateParameters().cend(),
-										[](kodgen::TemplateParamInfo const& templateParam)
-										{
-											return templateParam.kind == kodgen::ETemplateParameterKind::TypeTemplateParameter;
-										}))
-						{
-							if (generatedVariadicTypeTemplateGetArchetype)
-							{
-								continue;
-							}
-
-							generatedVariadicTypeTemplateGetArchetype = true;
-							inout_result += "template <template <typename...> typename>";
-						}
-						//Case there's a single non-type template parameter
-						//This condition is dumb since we could generate this for any class template taking only non-type template parameters
-						//But this generates a compilation error on MSVC compiler...
-						//Classes taking multiple non-type template parameters are generated individually in the next else statement
-						//else if (nestedStructClass->type.getTemplateParameters().size() == 1u &&
-						//		 nestedStructClass->type.getTemplateParameters()[0].kind == kodgen::ETemplateParameterKind::NonTypeTemplateParameter)
-						//{
-						//	if (generatedVariadicNonTypeTemplateGetArchetype)
-						//	{
-						//		continue;
-						//	}
-						//	
-						//	generatedVariadicNonTypeTemplateGetArchetype = true;
-						//	inout_result += "template <template <auto...> typename>";
-						//}
-						else if (std::all_of(nestedStructClass->type.getTemplateParameters().cbegin(),
-											 nestedStructClass->type.getTemplateParameters().cend(),
-												[](kodgen::TemplateParamInfo const& templateParam)
-												{
-													return templateParam.kind == kodgen::ETemplateParameterKind::NonTypeTemplateParameter;
-												}))
-						{
-							if (generatedVariadicNonTypeTemplateGetArchetype)
-							{
-								continue;
-							}
-
-							generatedVariadicNonTypeTemplateGetArchetype = true;
-							inout_result += "template <template <auto...> typename>";
-						}
-						////Other cases
-						else
-						{
-							inout_result += "template <template <";
-
-							//TODO: generate for each template params
-							for (kodgen::TemplateParamInfo const& templateParam : nestedStructClass->type.getTemplateParameters())
-							{
-								switch (templateParam.kind)
-								{
-									case kodgen::ETemplateParameterKind::TypeTemplateParameter:
-										inout_result += "typename";
-										break;
-
-									case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:
-										inout_result += templateParam.type->getName();
-										break;
-
-									case kodgen::ETemplateParameterKind::TemplateTemplateParameter:
-										//TODO
-										break;
-								}
-
-								inout_result += ",";
-							}
-
-							//Remove last ,
-							inout_result.pop_back();
-
-							inout_result += "> typename>";
-						}
-
-						inout_result += " friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
-
-						//Reflect class template nested archetypes is not supported for now, so no recursion from here.
+						classTemplateCodeGeneration(nestedStructClass);
 					}
 					else //Non-public non-template class
 					{
@@ -480,13 +486,13 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 							inout_result += "template <typename> friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
 						}
 
-						recurseLambda(*nestedStructClass, recurseLambda);
+						recurseLambda(*nestedStructClass, recurseLambda, nestingLevel + 1u);
 					}
 				}
 			};
 
-			generateFriendStatementsForNestedArchetypesInternal(structClass.nestedStructs, thisLambda);
-			generateFriendStatementsForNestedArchetypesInternal(structClass.nestedClasses, thisLambda);
+			generateFriendStatementsForNestedArchetypesInternal(structClass.nestedStructs, thisLambda, nestingLevel);
+			generateFriendStatementsForNestedArchetypesInternal(structClass.nestedClasses, thisLambda, nestingLevel);
 
 			//Generate rfk::getEnum friend statement if there's at least 1 non-public nested enum at any nesting level
 			for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
@@ -499,7 +505,7 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 			}
 		};
 
-		intermediateLambda(structClass, intermediateLambda);
+		intermediateLambda(structClass, intermediateLambda, 1u);
 	};
 
 	generateFriendStatementsForNestedArchetypes();
