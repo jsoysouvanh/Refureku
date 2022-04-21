@@ -9,6 +9,20 @@ class CLASS() NonNestedEnum
 	friend NestedEnumInspector;
 
 	private:
+		enum class ENUM() PrivateEnumNestedLvl1
+		{
+			Value1,
+			Value2
+		};
+
+	NonNestedEnum_GENERATED 
+};
+
+class CLASS() NonNestedEnum1
+{
+	friend NestedEnumInspector;
+
+	private:
 		class CLASS() PrivateClassNestedLvl1
 		{
 			friend NestedEnumInspector;
@@ -20,12 +34,20 @@ class CLASS() NonNestedEnum
 					Value2
 				};
 
-			protected:
-				enum class ENUM() ProtectedEnumNestedLvl2
-				{
-					Value1,
-					Value2
-				};
+			NonNestedEnum1_PrivateClassNestedLvl1_GENERATED
+		};
+
+	NonNestedEnum1_GENERATED 
+};
+
+class CLASS() NonNestedEnum2
+{
+	friend NestedEnumInspector;
+
+	private:
+		class CLASS() PrivateClassNestedLvl1
+		{
+			friend NestedEnumInspector;
 
 			public:
 				enum class ENUM() PublicEnumNestedLvl2
@@ -34,15 +56,15 @@ class CLASS() NonNestedEnum
 					Value2
 				};
 
-			NonNestedEnum_PrivateClassNestedLvl1_GENERATED
+			NonNestedEnum2_PrivateClassNestedLvl1_GENERATED
 		};
 
-	protected:
-		enum class ENUM() ProtectedEnumNestedLvl1
-		{
-			Value1,
-			Value2
-		};
+	NonNestedEnum2_GENERATED 
+};
+
+class CLASS() NonNestedEnum3
+{
+	friend NestedEnumInspector;
 
 	public:
 		enum class ENUM() PublicEnumNestedLvl1
@@ -51,8 +73,8 @@ class CLASS() NonNestedEnum
 			Value2
 		};
 
-	NonNestedEnum_GENERATED 
-};
+	NonNestedEnum3_GENERATED 
+}; 
 
 File_TestNestedEnums_GENERATED
 
@@ -62,86 +84,42 @@ class NestedEnumInspector
 		//NonNestedEnum nested enums
 		static rfk::Archetype const* getPublicEnumNestedLvl1Archetype() noexcept
 		{
-			return rfk::getArchetype<NonNestedEnum::PublicEnumNestedLvl1>();
+			return rfk::getArchetype<NonNestedEnum3::PublicEnumNestedLvl1>();
 		}
 
 		static rfk::Enum const* getPublicEnumNestedLvl1Enum() noexcept
 		{
-			return rfk::getEnum<NonNestedEnum::PublicEnumNestedLvl1>();
+			return rfk::getEnum<NonNestedEnum3::PublicEnumNestedLvl1>();
 		}
 
-		static rfk::Archetype const* getProtectedEnumNestedLvl1Archetype() noexcept
+		static rfk::Archetype const* getPrivateEnumNestedLvl1Archetype() noexcept
 		{
-			return rfk::getArchetype<NonNestedEnum::ProtectedEnumNestedLvl1>();
+			return rfk::getArchetype<NonNestedEnum::PrivateEnumNestedLvl1>();
 		}
 
 		static rfk::Enum const* getProtectedEnumNestedLvl1Enum() noexcept
 		{
-			return rfk::getEnum<NonNestedEnum::ProtectedEnumNestedLvl1>();
+			return rfk::getEnum<NonNestedEnum::PrivateEnumNestedLvl1>();
 		}
 
 		//NonNestedClass::PrivateClassNestedLvl1 nested enums
 		static rfk::Archetype const* getPrivateClassNestedLvl1_PrivateEnumNestedLvl2_Archetype() noexcept
 		{
-			return rfk::getArchetype<NonNestedEnum::PrivateClassNestedLvl1::PrivateEnumNestedLvl2>();
+			return rfk::getArchetype<NonNestedEnum1::PrivateClassNestedLvl1::PrivateEnumNestedLvl2>();
 		}
 
 		static rfk::Enum const* getPrivateClassNestedLvl1_PrivateEnumNestedLvl2_Enum() noexcept
 		{
-			return rfk::getEnum<NonNestedEnum::PrivateClassNestedLvl1::PrivateEnumNestedLvl2>();
-		}
-
-		static rfk::Archetype const* getPrivateClassNestedLvl1_ProtectedEnumNestedLvl2_Archetype() noexcept
-		{
-			return rfk::getArchetype<NonNestedEnum::PrivateClassNestedLvl1::ProtectedEnumNestedLvl2>();
-		}
-
-		static rfk::Enum const* getPrivateClassNestedLvl1_ProtectedEnumNestedLvl2_Enum() noexcept
-		{
-			return rfk::getEnum<NonNestedEnum::PrivateClassNestedLvl1::ProtectedEnumNestedLvl2>();
+			return rfk::getEnum<NonNestedEnum1::PrivateClassNestedLvl1::PrivateEnumNestedLvl2>();
 		}
 
 		static rfk::Archetype const* getPrivateClassNestedLvl1_PublicEnumNestedLvl2_Archetype() noexcept
 		{
-			return rfk::getArchetype<NonNestedEnum::PrivateClassNestedLvl1::PublicEnumNestedLvl2>();
+			return rfk::getArchetype<NonNestedEnum2::PrivateClassNestedLvl1::PublicEnumNestedLvl2>();
 		}
 
 		static rfk::Enum const* getPrivateClassNestedLvl1_PublicEnumNestedLvl2_Enum() noexcept
 		{
-			return rfk::getEnum<NonNestedEnum::PrivateClassNestedLvl1::PublicEnumNestedLvl2>();
+			return rfk::getEnum<NonNestedEnum2::PrivateClassNestedLvl1::PublicEnumNestedLvl2>();
 		}
-
-	/*
-		//NonNestedClass::PrivateClassNestedLvl1 nested classes
-		static rfk::Archetype const* getPrivateClassNestedLvl1_PrivateClassNestedLvl2_Archetype() noexcept
-		{
-			return rfk::getArchetype<NonNestedClass::PrivateClassNestedLvl1::PrivateClassNestedLvl2>();
-		}
-		
-		static rfk::Archetype const* getPrivateClassNestedLvl1_ProtectedClassNestedLvl2_Archetype() noexcept
-		{
-			return rfk::getArchetype<NonNestedClass::PrivateClassNestedLvl1::ProtectedClassNestedLvl2>();
-		}
-
-		static rfk::Archetype const* getPrivateClassNestedLvl1_PublicClassNestedLvl2_Archetype() noexcept
-		{
-			return rfk::getArchetype<NonNestedClass::PrivateClassNestedLvl1::PublicClassNestedLvl2>();
-		}
-
-		//NonNestedClass::ProtectedClassNestedLvl1 nested classes
-		static rfk::Archetype const* getProtectedClassNestedLvl1_PrivateClassNestedLvl2_Archetype() noexcept
-		{
-			return rfk::getArchetype<NonNestedClass::ProtectedClassNestedLvl1::PrivateClassNestedLvl2>();
-		}
-
-		static rfk::Archetype const* getProtectedClassNestedLvl1_ProtectedClassNestedLvl2_Archetype() noexcept
-		{
-			return rfk::getArchetype<NonNestedClass::ProtectedClassNestedLvl1::ProtectedClassNestedLvl2>();
-		}
-
-		static rfk::Archetype const* getProtectedClassNestedLvl1_PublicClassNestedLvl2_Archetype() noexcept
-		{
-			return rfk::getArchetype<NonNestedClass::ProtectedClassNestedLvl1::PublicClassNestedLvl2>();
-		}
-	*/
 };
