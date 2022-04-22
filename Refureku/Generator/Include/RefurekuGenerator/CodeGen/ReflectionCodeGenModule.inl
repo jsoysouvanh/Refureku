@@ -399,21 +399,7 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 						generatedVariadicTypeTemplateGetArchetype = true;
 						inout_result += "template <template <typename...> typename>";
 					}
-					//Case there's a single non-type template parameter
-					//This condition is dumb since we could generate this for any class template taking only non-type template parameters
-					//But this generates a compilation error on MSVC compiler...
-					//Classes taking multiple non-type template parameters are generated individually in the next else statement
-					//else if (nestedStructClass->type.getTemplateParameters().size() == 1u &&
-					//		 nestedStructClass->type.getTemplateParameters()[0].kind == kodgen::ETemplateParameterKind::NonTypeTemplateParameter)
-					//{
-					//	if (generatedVariadicNonTypeTemplateGetArchetype)
-					//	{
-					//		continue;
-					//	}
-					//	
-					//	generatedVariadicNonTypeTemplateGetArchetype = true;
-					//	inout_result += "template <template <auto...> typename>";
-					//}
+					//Case all template params are non-type template params
 					else if (std::all_of(nestedStructClass->type.getTemplateParameters().cbegin(),
 							 nestedStructClass->type.getTemplateParameters().cend(),
 							 [](kodgen::TemplateParamInfo const& templateParam)
@@ -432,37 +418,7 @@ void ReflectionCodeGenModule::declareFriendClasses(kodgen::StructClassInfo const
 					//Other cases
 					else
 					{
-						inout_result += "template <template <";
-
-						//TODO: generate for each template params
-						for (kodgen::TemplateParamInfo const& templateParam : nestedStructClass->type.getTemplateParameters())
-						{
-							switch (templateParam.kind)
-							{
-								case kodgen::ETemplateParameterKind::TypeTemplateParameter:
-									inout_result += "typename";
-									break;
-
-								case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:
-									inout_result += "auto"; //templateParam.type->getName();
-									break;
-
-								case kodgen::ETemplateParameterKind::TemplateTemplateParameter:
-									//TODO
-									break;
-
-								default:
-									assert(false);
-									break;
-							}
-
-							inout_result += ",";
-						}
-
-						//Remove last ,
-						inout_result.pop_back();
-
-						inout_result += "> typename>";
+						inout_result += "template <template <" + nestedStructClass->type.computeTemplateSignature(true) + "> typename>";
 					}
 
 					inout_result += " friend rfk::Archetype const* rfk::getArchetype() noexcept;" + env.getSeparator();
