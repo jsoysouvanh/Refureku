@@ -96,7 +96,6 @@ kodgen::ETraversalBehaviour	ReflectionCodeGenModule::generateClassFooterCodeForE
 			declareFriendClasses(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 
 			declareAndDefineRegisterChildClassMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-			declareGetNestedEnumMethods(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 
 			if (static_cast<kodgen::StructClassInfo const&>(entity).type.isTemplateType())
 			{
@@ -260,7 +259,6 @@ kodgen::ETraversalBehaviour ReflectionCodeGenModule::generateSourceFileHeaderCod
 				defineStaticGetArchetypeMethod(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 				defineGetArchetypeMethodIfInheritFromObject(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 				defineGetArchetypeTemplateSpecialization(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
-				defineGetNestedEnumMethods(static_cast<kodgen::StructClassInfo const&>(entity), env, inout_result);
 			}
 
 			result = kodgen::ETraversalBehaviour::Recurse;
@@ -546,11 +544,6 @@ std::string ReflectionCodeGenModule::computePropertyVariableName(kodgen::EntityI
 	return "property_" + getEntityId(entity) + "_" + std::to_string(propertyIndex);
 }
 
-std::string ReflectionCodeGenModule::computeGetNestedEnumMethodName(kodgen::NestedEnumInfo const& nestedEnum) noexcept
-{
-	return "_rfk_getNestedEnum_" + nestedEnum.name;
-}
-
 bool ReflectionCodeGenModule::isPublicClass(kodgen::StructClassInfo const& class_) noexcept
 {
 	if (class_.outerEntity == nullptr)
@@ -612,7 +605,6 @@ void ReflectionCodeGenModule::endHiddenGeneratedCode(kodgen::MacroCodeGenEnv& en
 void ReflectionCodeGenModule::reset() noexcept
 {
 	_isGeneratingHiddenCode = false;
-	_nonPublicEnums.clear();
 }
 
 void ReflectionCodeGenModule::checkHiddenGeneratedCodeState() const noexcept
@@ -853,7 +845,7 @@ void ReflectionCodeGenModule::fillClassNestedArchetypes(kodgen::StructClassInfo 
 	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
 	{
 		inout_result += generatedEntityVarName + "addNestedArchetype(" + 
-			(isRegisteredNonPublicEnum(nestedEnum) ? computeGetNestedEnumMethodName(nestedEnum) : "rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">") + "(), "
+			"rfk::getEnum<" + nestedEnum.type.getCanonicalName() + ">(), "
 			"static_cast<rfk::EAccessSpecifier>(" + std::to_string(static_cast<kodgen::uint8>(nestedEnum.accessSpecifier)) + "));" + env.getSeparator();
 	}
 }
@@ -1000,41 +992,6 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 						"childClass.setStaticFieldsCapacity(" + std::to_string(staticFieldsCount) + "u + " + inheritedStaticFieldsCountExpression + "); " + env.getSeparator()); //static fields
 	
 	inout_result += "}" + env.getSeparator() + env.getSeparator();
-}
-
-void ReflectionCodeGenModule::declareGetNestedEnumMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
-{
-	bool publicClass = isPublicClass(structClass);
-
-	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
-	{
-		//Generate a method on non-public enums
-		//Public nested enums generated code is handled like non-nested enums
-		if (!publicClass || nestedEnum.accessSpecifier != kodgen::EAccessSpecifier::Public)
-		{
-			_nonPublicEnums.emplace(&nestedEnum);
-
-			beginHiddenGeneratedCode(env, inout_result);
-
-			inout_result += "private: static rfk::Enum const* " + computeGetNestedEnumMethodName(nestedEnum) + "() noexcept;" + env.getSeparator();
-
-			endHiddenGeneratedCode(env, inout_result);
-		}
-	}
-
-	inout_result += env.getSeparator();
-}
-
-void ReflectionCodeGenModule::defineGetNestedEnumMethods(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) noexcept
-{
-	for (kodgen::NestedEnumInfo const& nestedEnum : structClass.nestedEnums)
-	{
-		if (isRegisteredNonPublicEnum(nestedEnum))
-		{
-			inout_result += "rfk::Enum const* " + structClass.getFullName() + "::" + computeGetNestedEnumMethodName(nestedEnum) + "() noexcept" + env.getSeparator();
-			defineGetEnumContent(nestedEnum, env, inout_result);
-		}
-	}
 }
 
 void ReflectionCodeGenModule::declareAndDefineClassRegistererVariable(kodgen::StructClassInfo const& structClass, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept
@@ -1350,11 +1307,6 @@ std::string ReflectionCodeGenModule::computeFullMethodPointerType(kodgen::Struct
 	}
 
 	return result;
-}
-
-bool ReflectionCodeGenModule::isRegisteredNonPublicEnum(kodgen::EnumInfo const& nestedEnum) const noexcept
-{
-	return _nonPublicEnums.find(&nestedEnum) != _nonPublicEnums.cend();
 }
 
 void ReflectionCodeGenModule::declareGetEnumTemplateSpecialization(kodgen::EnumInfo const& enum_, kodgen::MacroCodeGenEnv& env, std::string& inout_result) const noexcept

@@ -10,7 +10,6 @@
 #include <string>
 #include <functional>	//std::hash
 #include <unordered_map>
-#include <unordered_set>
 #include <algorithm>	//std::all_of
 
 #include <Kodgen/CodeGen/Macro/MacroCodeGenModule.h>
@@ -39,9 +38,6 @@ namespace rfk
 
 			/** Flag that determines whether the currently generated code is hidden from the parser or not. */
 			bool										_isGeneratingHiddenCode;
-
-			/** List of non-public enums. */
-			std::unordered_set<kodgen::EnumInfo const*>	_nonPublicEnums;
 
 			/**
 			*	@brief Compute the unique id of an entity. The returned string contains an unsigned integer.
@@ -150,15 +146,6 @@ namespace rfk
 			*/
 			static std::string			computePropertyVariableName(kodgen::EntityInfo const&	entity,
 																	kodgen::uint8				propertyIndex)				noexcept;
-
-			/**
-			*	@brief Compute the name of the generated method to get a non-public nested enum.
-			* 
-			*	@param nestedEnum The target nested enum.
-			* 
-			*	@return The name of the generated method.
-			*/
-			static std::string			computeGetNestedEnumMethodName(kodgen::NestedEnumInfo const& nestedEnum)			noexcept;
 
 			/**
 			*	@brief Check if the provided class is accessible from anywhere in the program.
@@ -386,20 +373,6 @@ namespace rfk
 			/**
 			*	TODO
 			*/
-			void	declareGetNestedEnumMethods(kodgen::StructClassInfo const&	structClass,
-												kodgen::MacroCodeGenEnv&		env,
-												std::string&					inout_result)							noexcept;
-
-			/**
-			*	TODO
-			*/
-			void	defineGetNestedEnumMethods(kodgen::StructClassInfo const&	structClass,
-											   kodgen::MacroCodeGenEnv&		env,
-											   std::string&					inout_result)							noexcept;
-
-			/**
-			*	TODO
-			*/
 			void	declareAndDefineClassRegistererVariable(kodgen::StructClassInfo const&	structClass,
 															kodgen::MacroCodeGenEnv&		env,
 															std::string&					inout_result)		const	noexcept;
@@ -476,15 +449,6 @@ namespace rfk
 																	std::string&					inout_result)						const	noexcept;
 
 			//Enums code generation
-			/**
-			*	@brief Check whether the target enum has been registered to the _nonPublicEnum set or not.
-			* 
-			*	@param nestedEnum the target enum.
-			* 
-			*	@return true if the nestedEnum is non-public, else false.
-			*/
-			bool	isRegisteredNonPublicEnum(kodgen::EnumInfo const& nestedEnum)					const	noexcept;
-
 			/**
 			*	TODO
 			*/
