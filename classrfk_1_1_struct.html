@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.1</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.2</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -172,9 +172,9 @@ REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>Struct</b> (c
 <tr class="memitem:ae7aecfdf75afefda0a9488cda8089ea7"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_field.html">Field</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_struct.html#ae7aecfdf75afefda0a9488cda8089ea7">getFieldByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> &gt; predicate, void *userData, bool shouldInspectInherited=false) const</td></tr>
 <tr class="memdesc:ae7aecfdf75afefda0a9488cda8089ea7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the first field satisfying the provided predicate.  <a href="classrfk_1_1_struct.html#ae7aecfdf75afefda0a9488cda8089ea7">More...</a><br /></td></tr>
 <tr class="separator:ae7aecfdf75afefda0a9488cda8089ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e53bfc49248cba1ed673756e37b6a3e"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_struct.html#a7e53bfc49248cba1ed673756e37b6a3e">getFieldsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> &gt; predicate, void *userData, bool shouldInspectInherited=false) const</td></tr>
-<tr class="memdesc:a7e53bfc49248cba1ed673756e37b6a3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all fields satisfying the provided predicate.  <a href="classrfk_1_1_struct.html#a7e53bfc49248cba1ed673756e37b6a3e">More...</a><br /></td></tr>
-<tr class="separator:a7e53bfc49248cba1ed673756e37b6a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a371fd48da6263aced7a6bc9faca19616"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_vector.html">Vector</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> const * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_struct.html#a371fd48da6263aced7a6bc9faca19616">getFieldsByPredicate</a> (<a class="el" href="namespacerfk.html#a4c980dac02221ca3abbd01cb8f98c2de">Predicate</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> &gt; predicate, void *userData, bool shouldInspectInherited=false, bool orderedByDeclaration=false) const</td></tr>
+<tr class="memdesc:a371fd48da6263aced7a6bc9faca19616"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve all fields satisfying the provided predicate.  <a href="classrfk_1_1_struct.html#a371fd48da6263aced7a6bc9faca19616">More...</a><br /></td></tr>
+<tr class="separator:a371fd48da6263aced7a6bc9faca19616"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a5f438c74046b36801b7a0eea1da22e"><td class="memItemLeft" align="right" valign="top">REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_struct.html#a3a5f438c74046b36801b7a0eea1da22e">foreachField</a> (<a class="el" href="namespacerfk.html#aa71b489feb1ea31e5077d0807dc11535">Visitor</a>&lt; <a class="el" href="classrfk_1_1_field.html">Field</a> &gt; visitor, void *userData, bool shouldInspectInherited=false) const</td></tr>
 <tr class="memdesc:a3a5f438c74046b36801b7a0eea1da22e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the given visitor on all fields in this struct.  <a href="classrfk_1_1_struct.html#a3a5f438c74046b36801b7a0eea1da22e">More...</a><br /></td></tr>
 <tr class="separator:a3a5f438c74046b36801b7a0eea1da22e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1393,8 +1393,8 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Entity</
 
 </div>
 </div>
-<a id="a7e53bfc49248cba1ed673756e37b6a3e" name="a7e53bfc49248cba1ed673756e37b6a3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e53bfc49248cba1ed673756e37b6a3e">&#9670;&nbsp;</a></span>getFieldsByPredicate()</h2>
+<a id="a371fd48da6263aced7a6bc9faca19616" name="a371fd48da6263aced7a6bc9faca19616"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a371fd48da6263aced7a6bc9faca19616">&#9670;&nbsp;</a></span>getFieldsByPredicate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1415,7 +1415,13 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Entity</
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>shouldInspectInherited</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>shouldInspectInherited</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>orderedByDeclaration</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1430,7 +1436,8 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Entity</
   <table class="params">
     <tr><td class="paramname">predicate</td><td>Predicate defining a valid field. </td></tr>
     <tr><td class="paramname">userData</td><td>User data forwarded to the predicate calls. </td></tr>
-    <tr><td class="paramname">shouldInspectInherited</td><td>Should inherited fields be considered as well in the search process? If false, only fields introduced by this struct will be considered.</td></tr>
+    <tr><td class="paramname">shouldInspectInherited</td><td>Should inherited fields be considered as well in the search process? If false, only fields introduced by this struct will be considered. </td></tr>
+    <tr><td class="paramname">orderedByDeclaration</td><td>Should fields be ordered by declaration order in the result collection?</td></tr>
   </table>
   </dd>
 </dl>

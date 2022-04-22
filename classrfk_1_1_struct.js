@@ -21,7 +21,7 @@ var classrfk_1_1_struct =
     [ "getDirectSubclasses", "classrfk_1_1_struct.html#a65287e5a98b114a31dd001e17aeb579d", null ],
     [ "getFieldByName", "classrfk_1_1_struct.html#aab92f4772fa2f26d6d80c9b3d65bc5eb", null ],
     [ "getFieldByPredicate", "classrfk_1_1_struct.html#ae7aecfdf75afefda0a9488cda8089ea7", null ],
-    [ "getFieldsByPredicate", "classrfk_1_1_struct.html#a7e53bfc49248cba1ed673756e37b6a3e", null ],
+    [ "getFieldsByPredicate", "classrfk_1_1_struct.html#a371fd48da6263aced7a6bc9faca19616", null ],
     [ "getFieldsCount", "classrfk_1_1_struct.html#af8490ee4fa52687d80cb989723f9b56c", null ],
     [ "getMethodByName", "classrfk_1_1_struct.html#aa7ef4a368ca570b4cf744b83e0c58d83", null ],
     [ "getMethodByName", "classrfk_1_1_struct.html#a2b363160c455b739d48e3978616f50ba", null ],

@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.1</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.2</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -136,6 +136,9 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Field</b
 <tr class="memitem:aef16af9bacf54b7b9190ad18cfbcb640"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD void const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#aef16af9bacf54b7b9190ad18cfbcb640">getConstPtr</a> (OwnerStructType const &amp;instance) const noexcept</td></tr>
 <tr class="memdesc:aef16af9bacf54b7b9190ad18cfbcb640"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a const pointer to this field in the provided instance.  <a href="classrfk_1_1_field.html#aef16af9bacf54b7b9190ad18cfbcb640">More...</a><br /></td></tr>
 <tr class="separator:aef16af9bacf54b7b9190ad18cfbcb640"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2fd5d3074e818d73d2f458caeec78ae"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#ad2fd5d3074e818d73d2f458caeec78ae">getMemoryOffset</a> () const noexcept</td></tr>
+<tr class="memdesc:ad2fd5d3074e818d73d2f458caeec78ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the memory offset of this field in an instance of its owner class (<a class="el" href="classrfk_1_1_field_base.html#aa784130ce76323e20e7585b8bbdeab80" title="Get the struct owning this field.">Field::getOwner()</a>).  <a href="classrfk_1_1_field.html#ad2fd5d3074e818d73d2f458caeec78ae">More...</a><br /></td></tr>
+<tr class="separator:ad2fd5d3074e818d73d2f458caeec78ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrfk_1_1_field_base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrfk_1_1_field_base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrfk_1_1_field_base.html">rfk::FieldBase</a></td></tr>
 <tr class="memitem:a7c8655b2b7f0aba9a97dff62977c46d1 inherit pub_methods_classrfk_1_1_field_base"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API EAccessSpecifier&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field_base.html#a7c8655b2b7f0aba9a97dff62977c46d1">getAccess</a> () const noexcept</td></tr>
 <tr class="memdesc:a7c8655b2b7f0aba9a97dff62977c46d1 inherit pub_methods_classrfk_1_1_field_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the access specifier of this field in its owner struct/class.  <a href="classrfk_1_1_field_base.html#a7c8655b2b7f0aba9a97dff62977c46d1">More...</a><br /></td></tr>
@@ -396,6 +399,34 @@ template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Const pointer to this field in the provided instance. </dd></dl>
+
+</div>
+</div>
+<a id="ad2fd5d3074e818d73d2f458caeec78ae" name="ad2fd5d3074e818d73d2f458caeec78ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2fd5d3074e818d73d2f458caeec78ae">&#9670;&nbsp;</a></span>getMemoryOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API std::size_t rfk::Field::getMemoryOffset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the memory offset of this field in an instance of its owner class (<a class="el" href="classrfk_1_1_field_base.html#aa784130ce76323e20e7585b8bbdeab80" title="Get the struct owning this field.">Field::getOwner()</a>). </p>
+<dl class="section return"><dt>Returns</dt><dd>The memory offset in bytes. </dd></dl>
 
 </div>
 </div>

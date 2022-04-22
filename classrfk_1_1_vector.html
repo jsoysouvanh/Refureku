@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.1</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.2</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -87,12 +87,28 @@ $(document).ready(function(){initNavTree('classrfk_1_1_vector.html',''); initRes
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classrfk_1_1_vector-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">rfk::Vector&lt; T, Allocator &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a8d80cb080a58ba16b64234f947f8cbb9"><td class="memItemLeft" align="right" valign="top"><a id="a8d80cb080a58ba16b64234f947f8cbb9" name="a8d80cb080a58ba16b64234f947f8cbb9"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = T</td></tr>
+<tr class="separator:a8d80cb080a58ba16b64234f947f8cbb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9b4e2e3de6f23cf01a872c3ba00d042"><td class="memItemLeft" align="right" valign="top"><a id="ae9b4e2e3de6f23cf01a872c3ba00d042" name="ae9b4e2e3de6f23cf01a872c3ba00d042"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>allocator_type</b> = <a class="el" href="classrfk_1_1_allocator.html">Allocator</a></td></tr>
+<tr class="separator:ae9b4e2e3de6f23cf01a872c3ba00d042"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2171d1e3609ee43115adabfda2638da"><td class="memItemLeft" align="right" valign="top"><a id="ae2171d1e3609ee43115adabfda2638da" name="ae2171d1e3609ee43115adabfda2638da"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:ae2171d1e3609ee43115adabfda2638da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a209d45ccd36092fca36e7451898e88c7"><td class="memItemLeft" align="right" valign="top"><a id="a209d45ccd36092fca36e7451898e88c7" name="a209d45ccd36092fca36e7451898e88c7"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b> = value_type const  &amp;</td></tr>
+<tr class="separator:a209d45ccd36092fca36e7451898e88c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2cd2e5945d9d2454dee16d8fcab3ca16"><td class="memItemLeft" align="right" valign="top"><a id="a2cd2e5945d9d2454dee16d8fcab3ca16" name="a2cd2e5945d9d2454dee16d8fcab3ca16"></a>
@@ -156,6 +172,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr
 <tr class="memitem:a25c2988270d04205258a5a7536ee89b2"><td class="memItemLeft" align="right" valign="top"><a id="a25c2988270d04205258a5a7536ee89b2" name="a25c2988270d04205258a5a7536ee89b2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>push_back</b> (<a class="el" href="classrfk_1_1_vector.html">Vector</a> &amp;&amp;other)</td></tr>
 <tr class="separator:a25c2988270d04205258a5a7536ee89b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02926626fea667caa4ee8be08dccb815"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_vector.html#a02926626fea667caa4ee8be08dccb815">insert</a> (std::size_t index, T const &amp;element)</td></tr>
+<tr class="memdesc:a02926626fea667caa4ee8be08dccb815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert an element at a specified index.  <a href="classrfk_1_1_vector.html#a02926626fea667caa4ee8be08dccb815">More...</a><br /></td></tr>
+<tr class="separator:a02926626fea667caa4ee8be08dccb815"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add4eeaeb302c0f1d52049a12ec39befd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_vector.html#add4eeaeb302c0f1d52049a12ec39befd">insert</a> (std::size_t index, T &amp;&amp;element)</td></tr>
+<tr class="memdesc:add4eeaeb302c0f1d52049a12ec39befd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert an element at a specified index.  <a href="classrfk_1_1_vector.html#add4eeaeb302c0f1d52049a12ec39befd">More...</a><br /></td></tr>
+<tr class="separator:add4eeaeb302c0f1d52049a12ec39befd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9264ba6f56db8f66682bc207f1073ea"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:ae9264ba6f56db8f66682bc207f1073ea"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_vector.html#ae9264ba6f56db8f66682bc207f1073ea">emplace_back</a> (Args &amp;&amp;... args)</td></tr>
 <tr class="memdesc:ae9264ba6f56db8f66682bc207f1073ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct in place an element at the end of the vector with the provided arguments.  <a href="classrfk_1_1_vector.html#ae9264ba6f56db8f66682bc207f1073ea">More...</a><br /></td></tr>
@@ -462,6 +484,84 @@ template&lt;typename T , typename <a class="el" href="classrfk_1_1_allocator.htm
 
 <p>Get a reference to the first element of the vector. The behaviour is undefined if the vector is empty. </p>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the first element of the vector. </dd></dl>
+
+</div>
+</div>
+<a id="add4eeaeb302c0f1d52049a12ec39befd" name="add4eeaeb302c0f1d52049a12ec39befd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add4eeaeb302c0f1d52049a12ec39befd">&#9670;&nbsp;</a></span>insert() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename <a class="el" href="classrfk_1_1_allocator.html">Allocator</a>  = rfk::Allocator&lt;T&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; T, <a class="el" href="classrfk_1_1_allocator.html">Allocator</a> &gt;::insert </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramname"><em>element</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Insert an element at a specified index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index of the element in the vector. </td></tr>
+    <tr><td class="paramname">element</td><td>Element to insert. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a02926626fea667caa4ee8be08dccb815" name="a02926626fea667caa4ee8be08dccb815"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02926626fea667caa4ee8be08dccb815">&#9670;&nbsp;</a></span>insert() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename <a class="el" href="classrfk_1_1_allocator.html">Allocator</a>  = rfk::Allocator&lt;T&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classrfk_1_1_vector.html">rfk::Vector</a>&lt; T, <a class="el" href="classrfk_1_1_allocator.html">Allocator</a> &gt;::insert </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramname"><em>element</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Insert an element at a specified index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>Index of the element in the vector. </td></tr>
+    <tr><td class="paramname">element</td><td>Element to insert. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

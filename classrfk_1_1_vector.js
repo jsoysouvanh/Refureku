@@ -10,6 +10,8 @@ var classrfk_1_1_vector =
     [ "empty", "classrfk_1_1_vector.html#aa063726c4f24b0a100c82a8573e81baf", null ],
     [ "end", "classrfk_1_1_vector.html#a0045fa518853a58f34a915e17ca4e6e6", null ],
     [ "front", "classrfk_1_1_vector.html#a536fa4274f42515d050771fbf5c8a8e1", null ],
+    [ "insert", "classrfk_1_1_vector.html#add4eeaeb302c0f1d52049a12ec39befd", null ],
+    [ "insert", "classrfk_1_1_vector.html#a02926626fea667caa4ee8be08dccb815", null ],
     [ "operator[]", "classrfk_1_1_vector.html#a15b44df72a4db5d98fa0754cb3acd7e4", null ],
     [ "push_back", "classrfk_1_1_vector.html#ad8b87a6d04d6462a1c98f114850b0cc4", null ],
     [ "push_back", "classrfk_1_1_vector.html#ac99efd9663e626c0da1bcf417d7b34dc", null ],
