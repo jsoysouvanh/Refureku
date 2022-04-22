@@ -38,7 +38,6 @@ childClass.setFieldsCapacity(0u + rfk::internal::CodeGenerationHelpers::getRefle
 rfk::internal::CodeGenerationHelpers::registerChildClass<rfk::Property, ChildClass>(childClass);\
 }\
 \
-\
 public:  static rfk::Class const& staticGetArchetype() noexcept;\
 \
 public:  virtual rfk::Class const& getArchetype() const noexcept override;\
