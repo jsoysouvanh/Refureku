@@ -1069,7 +1069,7 @@ void ReflectionCodeGenModule::fillClassTemplateArguments(kodgen::StructClassInfo
 		switch (templateParameters[i].kind)
 		{
 			case kodgen::ETemplateParameterKind::TypeTemplateParameter:
-				inout_result += "static rfk::TypeTemplateArgument " + argVarName + "(rfk::getArchetype<" + templateParameters[i].name + ">());" + env.getSeparator();
+				inout_result += "static rfk::TypeTemplateArgument " + argVarName + "(rfk::getType<" + templateParameters[i].name + ">());" + env.getSeparator();
 				break;
 
 			case kodgen::ETemplateParameterKind::NonTypeTemplateParameter:

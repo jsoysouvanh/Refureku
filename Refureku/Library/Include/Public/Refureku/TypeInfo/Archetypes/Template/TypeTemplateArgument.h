@@ -12,28 +12,27 @@
 namespace rfk
 {
 	//Forward declaration
-	class Archetype;
+	class Type;
 
 	class TypeTemplateArgument : public TemplateArgument
 	{
 		public:
-			REFUREKU_API TypeTemplateArgument(Archetype const*	archetype)	noexcept;
-			REFUREKU_API ~TypeTemplateArgument()							noexcept;
+			REFUREKU_API TypeTemplateArgument(Type const&	archetype)	noexcept;
+			REFUREKU_API ~TypeTemplateArgument()						noexcept;
 
 			/**
-			*	@brief Get the archetype of this argument. Can be nullptr if the type is not reflected.
+			*	@brief Get the type of this argument.
 			* 
-			*	@return The archetype of this argument.
+			*	@return The type of this argument.
 			*/
-			RFK_NODISCARD REFUREKU_API Archetype const* getArchetype() const noexcept;
+			RFK_NODISCARD REFUREKU_API Type const& getType() const noexcept;
 
 			/**
 			*	@brief Check whether 2 TypeTemplateArgument instances are equal or not.
 			* 
 			*	@param other The TypeTemplateArgument to compare to.
 			* 
-			*	@return true if the 2 type template arguments have the same archetype, else false.
-			*			Returns false if the archetype is nullptr, since the equality can't be guaranteed.
+			*	@return true if the 2 type template arguments have the same type, else false.
 			*/
 			RFK_NODISCARD REFUREKU_API bool	operator==(TypeTemplateArgument const& other)	const	noexcept;
 			RFK_NODISCARD REFUREKU_API bool	operator!=(TypeTemplateArgument const& other)	const	noexcept;

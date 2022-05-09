@@ -5,13 +5,13 @@
 *	See the LICENSE.md file for full license details.
 */
 
-inline TypeTemplateArgument::TypeTemplateArgumentImpl::TypeTemplateArgumentImpl(Archetype const* archetype) noexcept:
+inline TypeTemplateArgument::TypeTemplateArgumentImpl::TypeTemplateArgumentImpl(Type const& type) noexcept:
 	TemplateArgumentImpl(ETemplateParameterKind::TypeTemplateParameter),
-	_archetype{archetype}
+	_type{type}
 {
 }
 
-inline Archetype const* TypeTemplateArgument::TypeTemplateArgumentImpl::getArchetype() const noexcept
+inline Type const& TypeTemplateArgument::TypeTemplateArgumentImpl::getType() const noexcept
 {
-	return _archetype;
+	return _type;
 }

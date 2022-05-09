@@ -9,6 +9,7 @@
 
 #include "Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgument.h"
 #include "Refureku/TypeInfo/Archetypes/Template/TemplateArgumentImpl.h"
+#include "Refureku/TypeInfo/Type.h"
 
 namespace rfk
 {
@@ -16,17 +17,17 @@ namespace rfk
 	{
 		private:
 			/** Archetype of the template argument. */
-			Archetype const* _archetype;
+			Type const& _type;
 
 		public:
-			inline TypeTemplateArgumentImpl(Archetype const* archetype) noexcept;
+			inline TypeTemplateArgumentImpl(Type const& type) noexcept;
 
 			/**
 			*	@brief Getter for the field _archetype.
 			* 
 			*	@return _archetype.
 			*/
-			RFK_NODISCARD inline Archetype const* getArchetype() const noexcept;
+			RFK_NODISCARD inline Type const& getType() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Archetypes/Template/TypeTemplateArgumentImpl.inl"

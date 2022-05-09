@@ -4,21 +4,21 @@
 
 using namespace rfk;
 
-TypeTemplateArgument::TypeTemplateArgument(Archetype const* archetype) noexcept:
-	TemplateArgument(new TypeTemplateArgumentImpl(archetype))
+TypeTemplateArgument::TypeTemplateArgument(Type const& type) noexcept:
+	TemplateArgument(new TypeTemplateArgumentImpl(type))
 {
 }
 
 TypeTemplateArgument::~TypeTemplateArgument() noexcept = default;
 
-Archetype const* TypeTemplateArgument::getArchetype() const noexcept
+Type const& TypeTemplateArgument::getType() const noexcept
 {
-	return getPimpl()->getArchetype();
+	return getPimpl()->getType();
 }
 
 bool TypeTemplateArgument::operator==(TypeTemplateArgument const& other) const noexcept
 {
-	return getPimpl()->getArchetype() != nullptr && getPimpl()->getArchetype() == other.getPimpl()->getArchetype();
+	return getPimpl()->getType() == other.getPimpl()->getType();
 }
 
 bool TypeTemplateArgument::operator!=(TypeTemplateArgument const& other) const noexcept

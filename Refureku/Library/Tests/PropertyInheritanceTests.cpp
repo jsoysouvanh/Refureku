@@ -157,7 +157,7 @@ TEST(Rfk_ClassTemplate_inheritProperties, PropagePropertiesToClassInstantiations
 
 	EXPECT_NE(classTemplate, nullptr);
 
-	rfk::TypeTemplateArgument arg1(rfk::getArchetype<int>());
+	rfk::TypeTemplateArgument arg1(rfk::getType<int>());
 	rfk::TemplateArgument const* templateArgs[] = { &arg1 };
 
 	rfk::ClassTemplateInstantiation const* inst = classTemplate->getTemplateInstantiation(templateArgs);

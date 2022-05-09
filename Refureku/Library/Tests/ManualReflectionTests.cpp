@@ -84,7 +84,7 @@ TEST(Rfk_ManualReflection, VectorInstantiation)
 
 	EXPECT_EQ(c->getTemplateInstantiationsCount(), 1u);
 
-	rfk::TypeTemplateArgument arg1(rfk::getArchetype<int>());
+	rfk::TypeTemplateArgument arg1(rfk::getType<int>());
 	rfk::TemplateArgument const* args[] = { &arg1 };
 
 	rfk::ClassTemplateInstantiation const* inst = c->getTemplateInstantiation(args);

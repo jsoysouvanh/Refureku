@@ -128,9 +128,9 @@ TEST(Rfk_ClassTemplate_getTemplateParameterAt, MixedTemplateParameters)
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, ExistingTypeTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getDatabase().getFundamentalArchetypeByName("int"));
-	rfk::TypeTemplateArgument arg2(rfk::getDatabase().getFundamentalArchetypeByName("float"));
-	rfk::TypeTemplateArgument arg3(rfk::getDatabase().getFundamentalArchetypeByName("double"));
+	rfk::TypeTemplateArgument arg1(rfk::getType<int>());
+	rfk::TypeTemplateArgument arg2(rfk::getType<float>());
+	rfk::TypeTemplateArgument arg3(rfk::getType<double>());
 	rfk::TemplateArgument const* templateArgs[] = { &arg1, &arg2, &arg3 };
 
 	EXPECT_NE(multTypeClass->getTemplateInstantiation(templateArgs), nullptr);
@@ -138,9 +138,9 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, ExistingTypeTemplateIns
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, NonExistingTypeTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getDatabase().getFundamentalArchetypeByName("int"));
-	rfk::TypeTemplateArgument arg2(rfk::getDatabase().getFundamentalArchetypeByName("float"));
-	rfk::TypeTemplateArgument arg3(rfk::getDatabase().getFundamentalArchetypeByName("long double"));
+	rfk::TypeTemplateArgument arg1(rfk::getType<int>());
+	rfk::TypeTemplateArgument arg2(rfk::getType<float>());
+	rfk::TypeTemplateArgument arg3(rfk::getType<long double>());
 	rfk::TemplateArgument const* templateArgs[] = { &arg1, &arg2, &arg3 };
 
 	EXPECT_EQ(multTypeClass->getTemplateInstantiation(templateArgs), nullptr);
@@ -188,7 +188,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, NonExistingTemplateTemp
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, ExistingMixedTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getArchetype<int>());
+	rfk::TypeTemplateArgument arg1(rfk::getType<int>());
 
 	std::size_t arg2Value = 1u;
 	rfk::NonTypeTemplateArgument arg2(arg2Value);
@@ -200,7 +200,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, ExistingMixedTemplateIn
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, NonExistingMixedTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getArchetype<float>());
+	rfk::TypeTemplateArgument arg1(rfk::getType<float>());
 
 	std::size_t arg2Value = 1u;
 	rfk::NonTypeTemplateArgument arg2(arg2Value);
@@ -216,7 +216,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiationTemplate, NonExistingMixedTemplat
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiation, ExistingTypeTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getDatabase().getFundamentalArchetypeByName("int"));
+	rfk::TypeTemplateArgument arg1(rfk::getType<int>());
 	std::vector<rfk::TemplateArgument const*> templateArgs{ &arg1 };
 
 	EXPECT_NE(singleTypeClass->getTemplateInstantiation(templateArgs.data(), templateArgs.size()), nullptr);
@@ -224,7 +224,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiation, ExistingTypeTemplateInstantiati
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiation, NonExistingTypeTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getDatabase().getFundamentalArchetypeByName("long double"));
+	rfk::TypeTemplateArgument arg1(rfk::getType<long double>());
 	std::vector<rfk::TemplateArgument const*> templateArgs{ &arg1 };
 
 	EXPECT_EQ(singleTypeClass->getTemplateInstantiation(templateArgs.data(), templateArgs.size()), nullptr);
@@ -282,7 +282,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiation, NonExistingTemplateTemplateInst
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiation, ExistingMixedTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getArchetype<float>());
+	rfk::TypeTemplateArgument arg1(rfk::getType<float>());
 
 	constexpr std::size_t const arg2Value = 2u;
 	rfk::NonTypeTemplateArgument arg2(arg2Value);
@@ -296,7 +296,7 @@ TEST(Rfk_ClassTemplate_getTemplateInstantiation, ExistingMixedTemplateInstantiat
 
 TEST(Rfk_ClassTemplate_getTemplateInstantiation, NonExistingMixedTemplateInstantiation)
 {
-	rfk::TypeTemplateArgument arg1(rfk::getArchetype<float>());
+	rfk::TypeTemplateArgument arg1(rfk::getType<float>());
 
 	constexpr std::size_t const arg2Value = 3u;	//Non existing value here
 	rfk::NonTypeTemplateArgument arg2(arg2Value);
