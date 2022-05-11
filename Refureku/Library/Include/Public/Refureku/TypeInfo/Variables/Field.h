@@ -190,6 +190,21 @@ namespace rfk
 			RFK_NODISCARD void*			getPtr(OwnerStructType& instance)				const;
 
 			/**
+			*	@brief Get a pointer to this field in the provided instance.
+			*		   This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance
+			*		   is not a valid pointer to an object of the field's owner archetype.
+			*		   Prefer using Field::getPtr for safety if you know the static type of your instance in the calling context.
+			*
+			*	@param instance Instance we get the field from.
+			*
+			*	@return Pointer to this field in the provided instance.
+			* 
+			*	@exception ConstViolation if the field is actually const.
+			*/
+			RFK_NODISCARD REFUREKU_API 
+				void*					getPtrUnsafe(void* instance)					const;
+
+			/**
 			*	@brief Get a const pointer to this field in the provided instance.
 			*
 			*	@param instance Instance we get the field from.
@@ -198,6 +213,19 @@ namespace rfk
 			*/
 			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
 			RFK_NODISCARD void const*	getConstPtr(OwnerStructType const& instance)	const	noexcept;
+
+			/**
+			*	@brief Get a const pointer to this field in the provided instance.
+			*		   This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance
+			*		   is not a valid pointer to an object of the field's owner archetype.
+			*		   Prefer using Field::getConstPtr for safety if you know the static type of your instance in the calling context.
+			*
+			*	@param instance Instance we get the field from.
+			*
+			*	@return Const pointer to this field in the provided instance.
+			*/
+			RFK_NODISCARD REFUREKU_API
+				void const*				getConstPtrUnsafe(void const* instance)			const	noexcept;
 
 			/**
 			*	@brief Get the memory offset of this field in an instance of its owner class (Field::getOwner()).
@@ -212,25 +240,6 @@ namespace rfk
 			class FieldImpl;
 
 			RFK_GEN_GET_PIMPL(FieldImpl, Entity::getPimpl())
-
-		private:
-			template <typename ValueType>
-			RFK_NODISCARD ValueType					getInternal(void* instance)					const;
-
-			template <typename ValueType>
-			RFK_NODISCARD ValueType const			getInternal(void const* instance)			const	noexcept;
-
-			template <typename ValueType>
-			void									setInternal(void*		instance,
-																ValueType&&	value)				const;
-
-			REFUREKU_API void						setInternal(void*		instance,
-																void const* valuePtr,
-																std::size_t	valueSize)			const;
-
-			RFK_NODISCARD REFUREKU_API void*		getPtrInternal(void* instance)				const;
-
-			RFK_NODISCARD REFUREKU_API void const*	getConstPtrInternal(void const* instance)	const	noexcept;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Field const*>);
