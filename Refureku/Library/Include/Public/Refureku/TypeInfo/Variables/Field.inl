@@ -8,7 +8,14 @@
 template <typename ValueType, typename OwnerStructType, typename>
 ValueType Field::get(OwnerStructType& instance) const
 {
+	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
 	return getInternal<ValueType>(&instance);
+}
+
+template <typename ValueType>
+ValueType Field::getUnsafe(void* instance) const
+{
+	return getInternal<ValueType>(instance);
 }
 
 template <typename ValueType>
@@ -27,7 +34,14 @@ ValueType Field::getInternal(void* instance) const
 template <typename ValueType, typename OwnerStructType, typename>
 ValueType Field::get(OwnerStructType const& instance) const
 {
+	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
 	return getInternal<ValueType>(&instance);
+}
+
+template <typename ValueType>
+ValueType Field::getUnsafe(void const* instance) const
+{
+	return getInternal<ValueType>(instance);
 }
 
 template <typename ValueType>
@@ -41,7 +55,14 @@ ValueType const Field::getInternal(void const* instance) const noexcept
 template <typename ValueType, typename OwnerStructType, typename>
 void Field::set(OwnerStructType& instance, ValueType&& value) const
 {
+	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
 	setInternal<ValueType>(&instance, std::forward<ValueType>(value));
+}
+
+template <typename ValueType>
+void Field::setUnsafe(void* instance, ValueType&& value) const
+{
+	setInternal<ValueType>(instance, std::forward<ValueType>(value));
 }
 
 template <typename ValueType>
@@ -53,6 +74,7 @@ void Field::setInternal(void* instance, ValueType&& value) const
 template <typename OwnerStructType, typename>
 void Field::set(OwnerStructType& instance, void const* valuePtr, std::size_t valueSize) const
 {
+	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
 	setInternal(&instance, valuePtr, valueSize);
 }
 

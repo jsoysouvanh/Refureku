@@ -22,6 +22,11 @@ std::size_t	Field::getMemoryOffset() const noexcept
 	return getPimpl()->getMemoryOffset();
 }
 
+void Field::setUnsafe(void* instance, void const* valuePtr, std::size_t valueSize) const
+{
+	setInternal(instance, valuePtr, valueSize);
+}
+
 void Field::setInternal(void* instance, void const* valuePtr, std::size_t valueSize) const
 {
 	FieldBase::set(getPtrInternal(instance), valuePtr, valueSize);

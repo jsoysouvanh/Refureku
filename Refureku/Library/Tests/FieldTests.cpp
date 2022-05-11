@@ -61,7 +61,7 @@ TEST(Rfk_Field_getConstPtr, ConstVariable)
 }
 
 //=========================================================
-//================== Field::get<> ======================
+//==================== Field::get<> =======================
 //=========================================================
 
 TEST(Rfk_Field_getTemplate, GetConstIntByValue)
@@ -136,7 +136,74 @@ TEST(Rfk_Field_getTemplate, GetTestClassByConstLVRef)
 }
 
 //=========================================================
-//=================== Field::set<> ======================
+//================= Field::getUnsafe<> ====================
+//=========================================================
+
+TEST(Rfk_Field_getUnsafeTemplate, GetConstIntByValue)
+{
+	TestFieldsClass instance;
+
+	EXPECT_EQ(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getUnsafe<int>(&instance), 314);
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetConstIntByConstLVRef)
+{
+	TestFieldsClass instance;
+
+	EXPECT_EQ(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getUnsafe<int const&>(&instance), 314);
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetConstIntByNonConstLVRef)
+{
+	TestFieldsClass instance;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getUnsafe<int&>(&instance), rfk::ConstViolation);
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetConstIntByNonConstRVRef)
+{
+	TestFieldsClass instance;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getUnsafe<int&&>(&instance), rfk::ConstViolation);
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetIntByRVRef)
+{
+	TestFieldsClass instance;
+
+	EXPECT_EQ(TestFieldsClass::staticGetArchetype().getFieldByName("intField")->getUnsafe<int&&>(&instance), instance.intField);	//True for int, not true for movable classes
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetTestClassByValue)
+{
+	TestFieldsClass instance;
+
+	EXPECT_EQ(TestFieldsClass::staticGetArchetype().getFieldByName("testClassField")->getUnsafe<TestClass>(&instance), TestClass());
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetTestClassByConstValue)
+{
+	TestFieldsClass instance;
+
+	EXPECT_EQ(TestFieldsClass::staticGetArchetype().getFieldByName("testClassField")->getUnsafe<TestClass const>(&instance), TestClass());
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetTestClassByLVRef)
+{
+	TestFieldsClass instance;
+
+	EXPECT_EQ(&TestFieldsClass::staticGetArchetype().getFieldByName("testClassField")->getUnsafe<TestClass&>(&instance), &instance.testClassField);
+}
+
+TEST(Rfk_Field_getUnsafeTemplate, GetTestClassByConstLVRef)
+{
+	TestFieldsClass instance;
+
+	EXPECT_EQ(&TestFieldsClass::staticGetArchetype().getFieldByName("testClassField")->getUnsafe<TestClass const&>(&instance), &instance.testClassField);
+}
+
+//=========================================================
+//==================== Field::set<> =======================
 //=========================================================
 
 TEST(Rfk_Field_setTemplate, SetNonConstClassByConstLVRef)
@@ -191,7 +258,62 @@ TEST(Rfk_Field_setTemplate, SetConstClassByRValue)
 }
 
 //=========================================================
-//================= Field::set ======================
+//================= Field::setUnsafe<> ====================
+//=========================================================
+
+TEST(Rfk_Field_setUnsafeTemplate, SetNonConstClassByConstLVRef)
+{
+	TestFieldsClass instance;
+	ConstructionTrackedClass const c;
+
+	TestFieldsClass::staticGetArchetype().getFieldByName("ctorTrackedClassField")->setUnsafe(&instance, c);
+
+	EXPECT_TRUE(instance.ctorTrackedClassField.getCopyConstructed());
+}
+
+TEST(Rfk_Field_setUnsafeTemplate, SetNonConstClassByNonConstLVRef)
+{
+	TestFieldsClass instance;
+	ConstructionTrackedClass c;
+
+	TestFieldsClass::staticGetArchetype().getFieldByName("ctorTrackedClassField")->setUnsafe(&instance, c);
+
+	EXPECT_TRUE(instance.ctorTrackedClassField.getCopyConstructed());
+}
+
+TEST(Rfk_Field_setUnsafeTemplate, SetNonConstClassByRValue)
+{
+	TestFieldsClass instance;
+	TestFieldsClass::staticGetArchetype().getFieldByName("ctorTrackedClassField")->setUnsafe(&instance, ConstructionTrackedClass());
+
+	EXPECT_TRUE(instance.ctorTrackedClassField.getMoveConstructed());
+}
+
+TEST(Rfk_Field_setUnsafeTemplate, SetConstClassByConstLVRef)
+{
+	TestFieldsClass instance;
+	ConstructionTrackedClass const c;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constCtorTrackedClassField")->setUnsafe(&instance, c), rfk::ConstViolation);
+}
+
+TEST(Rfk_Field_setUnsafeTemplate, SetConstClassByNonConstLVRef)
+{
+	TestFieldsClass instance;
+	ConstructionTrackedClass c;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constCtorTrackedClassField")->setUnsafe(&instance, c), rfk::ConstViolation);
+}
+
+TEST(Rfk_Field_setUnsafeTemplate, SetConstClassByRValue)
+{
+	TestFieldsClass instance;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constCtorTrackedClassField")->setUnsafe(&instance, ConstructionTrackedClass()), rfk::ConstViolation);
+}
+
+//=========================================================
+//==================== Field::set =========================
 //=========================================================
 
 TEST(Rfk_Field_set, SetNonConstInt)
@@ -216,4 +338,32 @@ TEST(Rfk_Field_set, SetConstInt)
 	EXPECT_NE(field->get<int>(instance), newValue);
 
 	EXPECT_THROW(field->set(instance, &newValue, sizeof(int)), rfk::ConstViolation);
+}
+
+//=========================================================
+//================= Field::setUnsafe ======================
+//=========================================================
+
+TEST(Rfk_Field_setUnsafe, SetNonConstInt)
+{
+	rfk::Field const* field = TestFieldsClass::staticGetArchetype().getFieldByName("intField");
+	int newValue = 2;
+
+	TestFieldsClass instance;
+	EXPECT_NE(field->get<int>(instance), newValue);
+
+	field->setUnsafe(&instance, &newValue, sizeof(int));
+
+	EXPECT_EQ(field->get<int>(instance), newValue);
+}
+
+TEST(Rfk_Field_setUnsafe, SetConstInt)
+{
+	rfk::Field const* field = TestFieldsClass::staticGetArchetype().getFieldByName("constIntField");
+	int newValue = 2;
+
+	TestFieldsClass instance;
+	EXPECT_NE(field->get<int>(instance), newValue);
+
+	EXPECT_THROW(field->setUnsafe(&instance, &newValue, sizeof(int)), rfk::ConstViolation);
 }
