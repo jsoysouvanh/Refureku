@@ -24,7 +24,7 @@ namespace rfk
 			using FunctionPrototype			= ReturnType (CallerType::*)(ArgTypes...);
 			using ConstFunctionPrototype	= ReturnType (CallerType::*)(ArgTypes...) const;
 
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+#if (defined(_WIN32) || defined(_WIN64))
 			std::size_t _originalFunctionSize = 0u;
 #endif
 
@@ -42,7 +42,7 @@ namespace rfk
 			MemberFunction(FunctionPrototype function)		noexcept;
 			MemberFunction(ConstFunctionPrototype function)	noexcept;
 
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+#if (defined(_WIN32) || defined(_WIN64))
 			std::size_t getOriginalFunctionSize() const noexcept;
 #endif
 

@@ -13,13 +13,12 @@ ReturnType Method::MemberFunctionSafeCallWrapper<ReturnType(ArgTypes...)>::invok
 {
 	//Some hacky implementation for MSVC to handle the fact that
 	//pointer to member functions can have different sizes based on the class inheritance
-	//In release mode, eventhough the size doesn't match, the method call seems to work...
-	//Might remove the RFK_DEBUG check if problems are encountered
-	class NoInheritanceClass {};	//No inheritance / Single inheritance -> x32: 4 / x64: 8
+	class NoInheritanceClass {};
 
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+#if (defined(_WIN32) || defined(_WIN64))
 
 	//Define all cases that generate different pointer to member function sizes
+	//class NoInheritanceClass {};	//No inheritance / Single inheritance -> x32: 4 / x64: 8
 	class NoInheritanceClass2 {};
 	class MultipleInheritanceClass : public NoInheritanceClass, public NoInheritanceClass2 {};	//Multiple inheritance -> x32: 8 / x64: 16
 	class VirtualInheritanceClass : public virtual NoInheritanceClass {}; //Virtual inheritance -> x32: 16 / x64: 16

@@ -7,7 +7,7 @@
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(FunctionPrototype function) noexcept:
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+#if (defined(_WIN32) || defined(_WIN64))
 	_originalFunctionSize{sizeof(FunctionPrototype)},
 #endif
 	_function{function},
@@ -16,14 +16,14 @@ MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(FunctionProt
 
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 MemberFunction<CallerType, ReturnType(ArgTypes...)>::MemberFunction(ConstFunctionPrototype function) noexcept:
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+#if (defined(_WIN32) || defined(_WIN64))
 	_originalFunctionSize{sizeof(ConstFunctionPrototype)},
 #endif
 	_constFunction{function},
 	_isConst{true}
 {}
 
-#if (defined(_WIN32) || defined(_WIN64)) && RFK_DEBUG
+#if (defined(_WIN32) || defined(_WIN64))
 template <typename CallerType, typename ReturnType, typename... ArgTypes>
 std::size_t MemberFunction<CallerType, ReturnType(ArgTypes...)>::getOriginalFunctionSize() const noexcept
 {
