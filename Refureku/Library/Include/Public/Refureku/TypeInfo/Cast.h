@@ -10,9 +10,9 @@
 #include <type_traits> //std::is_class_v, is_base_of_v
 #include <cassert>
 
-#include "Refureku/Object.h"
 #include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Refureku/Misc/CopyConstness.h"
+#include "Refureku/Misc/TypeTraits.h"	//isCallable_static_staticGetArchetype, isCallable_getArchetype
 
 namespace rfk
 {
@@ -22,13 +22,10 @@ namespace rfk
 	/**
 	*	@brief	Adjust the provided pointer to another class pointer if possible.
 	* 
-	*	@tparam TargetClassType Type to cast to. It must be a reflected type (rfk::getArchetype<TargetClassType>() must be non-nullptr).
+	*	@tparam TargetClassType Type to cast to.
 	*	@tparam SourceClassType Static type of the provided instance to cast.
 	* 
-	*	@param instance					A pointer to the instance to cast.
-	*	@param instanceStaticArchetype	Static archetype of the instance pointer before it was casted to void*.
-	*	@param instanceDynamicArchetype	Dynamic archetype of the instance pointer before it was casted to void*.
-	*	@param targetArchetype			Archetype of the result pointer.
+	*	@param instance A pointer to the instance to cast.
 	* 
 	*	@return The pointer to instance as targetArchetype if successful, else nullptr.
 	*/

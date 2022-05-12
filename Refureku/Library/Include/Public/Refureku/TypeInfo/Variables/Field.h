@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Refureku/TypeInfo/Variables/FieldBase.h"
+#include "Refureku/TypeInfo/Cast.h"
 #include "Refureku/TypeInfo/MethodFieldHelpers.h"
 #include "Refureku/Exceptions/InvalidArchetype.h"
 

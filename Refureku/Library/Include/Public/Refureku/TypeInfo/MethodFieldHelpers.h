@@ -8,8 +8,6 @@
 #pragma once
 
 #include "Refureku/Config.h"
-
-#include "Refureku/TypeInfo/Archetypes/Struct.h"
 #include "Refureku/Misc/TypeTraits.h"
 
 namespace rfk::internal

@@ -10,14 +10,12 @@ TargetClassType* dynamicCast(SourceClassType* instance) noexcept
 {
 	static_assert(std::is_class_v<SourceClassType> && std::is_class_v<TargetClassType>, "[Refureku] Can't use dynamicCast with non-class types.");
 	static_assert(!std::is_base_of_v<TargetClassType, SourceClassType>, "[Refureku] Don't use dynamicCast to perform a simple upcast. Use implicit conversion or static_cast instead.");
-	static_assert(std::is_base_of_v<Object, SourceClassType>, "[Refureku] Can't use dynamicCast if instance doesn't inherit from rfk::Object and implement the getArchetype method.");
+	static_assert(internal::isCallable_static_staticGetArchetype<SourceClassType, Struct const&()>::value, "[Refureku] The instance to cast must implement the staticGetArchetype static method.");
+	static_assert(internal::isCallable_getArchetype<SourceClassType, Struct const&()>::value, "[Refureku] The instance to cast must override the virtual getArchetype method.");
 
 	Struct const* targetArchetype = static_cast<Struct const*>(getArchetype<TargetClassType>());
 
-	//Can't dynamic cast to classes that are not reflected.
-	assert(targetArchetype != nullptr);
-
-	return dynamicCast<TargetClassType>(instance, SourceClassType::staticGetArchetype(), instance->getArchetype(), *targetArchetype);
+	return (targetArchetype != nullptr) ? dynamicCast<TargetClassType>(instance, SourceClassType::staticGetArchetype(), instance->getArchetype(), *targetArchetype) : nullptr;
 }
 
 template <typename TargetClassType>
