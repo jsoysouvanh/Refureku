@@ -11,7 +11,7 @@
 
 namespace rfk
 {
-	class InvalidCaller : public std::logic_error
+	class InvalidArchetype : public std::logic_error
 	{
 		public:
 			using std::logic_error::logic_error;

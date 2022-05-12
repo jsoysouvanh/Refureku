@@ -182,7 +182,7 @@ class CLASS() MultiplePInheritanceNPClass : public SinglePInheritancePClass, pub
 	MultiplePInheritanceNPClass_GENERATED
 };
 
-class CLASS() MultiplePInheritancePClassMethodOverride : public SinglePInheritancePClass, public NoInheritancePClass
+class CLASS() MultiplePInheritancePClassMethodOverride : public SinglePInheritancePClass, public NoInheritancePClass, public rfk::Object
 {
 	METHOD()
 	virtual EMethodTestCallResult methodMultiplePInheritancePClassMethodOverride()

@@ -1,5 +1,5 @@
 /**
-*	Copyright (c) 2020 Julien SOYSOUVANH - All Rights Reserved
+*	Copyright (c) 2020-2022 Julien SOYSOUVANH - All Rights Reserved
 *
 *	This file is part of the Refureku library project which is released under the MIT License.
 *	See the LICENSE.md file for full license details.
@@ -40,6 +40,36 @@ struct implements_##MethodName<Class, Ret(Args...)>																						\
 }
 
 /**
+*	This macro generates a traits which allows to know at compile-time if a class owns a static method with a 
+*	given prototype named MethodName.
+*
+*	/!\ It works only for public methods
+*
+*	For example, if you use GENERATE_IMPLEMENTS_METHOD_TRAITS(MyCustomMethod), you will be able to write:
+*		if constexpr (implements_static_MyCustomMethod<MyCustomClass, void(int, float)>::value)
+*		{
+*			//Do something
+*		}
+*		
+*		(replacing void(int, float) by the prototype you want)
+*/
+#define RFK_GENERATE_IMPLEMENTS_STATIC_METHOD_TRAITS(MethodName)															\
+template<typename Class, typename T>	struct implements_static_##MethodName {};											\
+template <typename Class, typename Ret, typename... Args>																	\
+struct implements_static_##MethodName<Class, Ret(Args...)>																	\
+{																															\
+	private:																												\
+		template<typename T>																								\
+		static constexpr auto check(T*) -> typename std::is_same<decltype(T::MethodName(std::declval<Args>()...)), Ret>;	\
+																															\
+		template<typename>																									\
+		static constexpr std::false_type check(...);																		\
+																															\
+	public:																													\
+		static constexpr bool value = decltype(check<Class>(nullptr))::value;												\
+}
+
+/**
 *	This macro generates a traits which allows to know at compile-time if a method named MethodName
 *	with the given prototype is callable on a class.
 *
@@ -67,6 +97,36 @@ struct isCallable_##MethodName<Class, Ret(Args...)>																								\
 																																				\
 	public:																																		\
 		static constexpr bool value = decltype(check<Class>(nullptr))::value;																	\
+}
+
+/**
+*	This macro generates a traits which allows to know at compile-time if a method named MethodName
+*	with the given prototype is callable on a class.
+*
+*	/!\ It works only for public methods
+*
+*	For example, if you use GENERATE_IMPLEMENTS_METHOD_TRAITS(MyCustomMethod), you will be able to write:
+*		if constexpr (isCallable_MyCustomMethod<MyCustomClass, void(int, float)>::value)
+*		{
+*			//Do something
+*		}
+*		
+*		(replacing void(int, float) by the prototype you want)
+*/
+#define RFK_GENERATE_IS_CALLABLE_STATIC_METHOD_TRAITS(MethodName)																\
+template<typename Class, typename T>	struct isCallable_static_##MethodName {};												\
+template <typename Class, typename Ret, typename... Args>																		\
+struct isCallable_static_##MethodName<Class, Ret(Args...)>																		\
+{																																\
+	private:																													\
+		template<typename T>																									\
+		static constexpr auto check(T*) -> typename std::is_convertible<decltype(T::MethodName(std::declval<Args>()...)), Ret>;	\
+																																\
+		template<typename>																										\
+		static constexpr std::false_type check(...);																			\
+																																\
+	public:																														\
+		static constexpr bool value = decltype(check<Class>(nullptr))::value;													\
 }
 
 /**

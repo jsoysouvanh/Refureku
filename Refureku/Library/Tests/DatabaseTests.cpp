@@ -20,7 +20,7 @@ TEST(DatabaseTests, CodeCoverage)
 	EXPECT_NO_THROW(fileLevelFunc());
 
 	FileLevelClass flc;
-	EXPECT_NO_THROW(FileLevelClass::staticGetArchetype().getMethodByName("method")->invoke(flc));
+	EXPECT_NO_THROW(FileLevelClass::staticGetArchetype().getMethodByName("method")->invokeUnsafe(&flc));
 	EXPECT_NO_THROW(FileLevelClass::staticGetArchetype().getStaticMethodByName("staticMethod")->invoke());
 
 	EXPECT_NO_THROW(fileLevelFunc());

@@ -57,11 +57,11 @@ TEST(Rfk_ManualReflection, ClassContent)
 	EXPECT_NE(c->getMethodByName("protectedMethod"), nullptr);
 
 	ThirdPartyClassWrapper instance;
-	EXPECT_NO_THROW(c->getMethodByName("protectedMethod")->invoke(instance));
+	EXPECT_NO_THROW(c->getMethodByName("protectedMethod")->invokeUnsafe(&instance));
 
-	EXPECT_EQ(c->getMethodByName("getProtectedField")->invoke<int&>(instance), 0);
-	EXPECT_NO_THROW(c->getMethodByName("getProtectedField")->invoke<int&>(instance) = 42);
-	EXPECT_EQ(c->getMethodByName("getProtectedField")->invoke<int&>(instance), 42);
+	EXPECT_EQ(c->getMethodByName("getProtectedField")->invokeUnsafe<int&>(&instance), 0);
+	EXPECT_NO_THROW(c->getMethodByName("getProtectedField")->invokeUnsafe<int&>(&instance) = 42);
+	EXPECT_EQ(c->getMethodByName("getProtectedField")->invokeUnsafe<int&>(&instance), 42);
 }
 
 //=========================================================
@@ -106,28 +106,28 @@ TEST(Rfk_ManualReflection, VectorMethods)
 
 	//size
 	EXPECT_EQ(vec2.size(), 0u);
-	EXPECT_EQ(vec2.size(), sizeMethod->invoke<std::size_t>(vec2));
+	EXPECT_EQ(vec2.size(), sizeMethod->invokeUnsafe<std::size_t>(&vec2));
 
 	//push_back
 	int toPushBack = 42;
-	EXPECT_NO_THROW(push_backRefMethod->invoke(vec2, toPushBack));
-	EXPECT_NO_THROW((push_backRValMethod->invoke<void, decltype(vec2), int&&>(vec2, 43)));
+	EXPECT_NO_THROW(push_backRefMethod->invokeUnsafe(&vec2, toPushBack));
+	EXPECT_NO_THROW((push_backRValMethod->invokeUnsafe<void, int&&>(&vec2, 43)));
 
 	EXPECT_EQ(vec2.size(), 2u);
-	EXPECT_EQ(vec2.size(), sizeMethod->invoke<std::size_t>(vec2));
+	EXPECT_EQ(vec2.size(), sizeMethod->invokeUnsafe<std::size_t>(&vec2));
 	EXPECT_EQ(vec2[0], 42);
 	EXPECT_EQ(vec2[1], 43);
 
 	//resize
-	EXPECT_NO_THROW(resizeMethod->invoke(vec2, 42u));
+	EXPECT_NO_THROW(resizeMethod->invokeUnsafe(&vec2, 42u));
 
 	EXPECT_EQ(vec2.size(), 42u);
-	EXPECT_EQ(vec2.size(), sizeMethod->invoke<std::size_t>(vec2));
+	EXPECT_EQ(vec2.size(), sizeMethod->invokeUnsafe<std::size_t>(&vec2));
 	EXPECT_EQ(vec2[0], 42);
 	EXPECT_EQ(vec2[1], 43);
 
 	//operator[]
-	EXPECT_NO_THROW((accessOperator->invoke<int&, decltype(vec2), std::size_t>(vec2, 0) = 1));
+	EXPECT_NO_THROW((accessOperator->invokeUnsafe<int&, std::size_t>(&vec2, 0) = 1));
 	EXPECT_EQ(vec2[0], 1);
 }
 

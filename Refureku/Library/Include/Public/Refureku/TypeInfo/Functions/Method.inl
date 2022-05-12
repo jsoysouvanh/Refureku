@@ -64,98 +64,12 @@ ReturnType Method::internalInvoke(void const* caller, ArgTypes&&... args) const
 	return MemberFunctionSafeCallWrapper<ReturnType(ArgTypes...)>::invoke(*getInternalFunction(), caller, std::forward<ArgTypes>(args)...);
 }
 
-template <typename CallerType>
-CallerType* Method::adjustCallerAddress(CallerType& caller) const noexcept
-{
-	if constexpr (std::is_base_of_v<Object, CallerType>)
-	{
-		return adjustCallerAddress(caller, caller.getArchetype());
-	}
-	else
-	{
-		//Can't retrieve the dynamic archetype through a virtual getArchetype call, so use the caller static archetype.
-		// !!! If a memory offset exists between the caller static and dynamic archetypes, the returned result is INCORRECT !!!
-		return adjustCallerAddress(caller, *static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>()));
-	}
-}
-
-template <typename CallerType>
-CallerType* Method::adjustCallerAddress(CallerType& caller, Struct const& callerDynamicArchetype) const noexcept
-{
-	//No adjustment required if the method is not virtual
-	//The adjustment is required for virtual methods to point to the correct vtable
-	if (isVirtual())
-	{
-		rfk::Struct const* callerStaticArchetype = static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>());
-
-		if (callerStaticArchetype != nullptr)
-		{
-			CallerType* adjustedCallerPointer = rfk::dynamicCast<CallerType>(&caller,
-																			 *callerStaticArchetype,
-																			 callerDynamicArchetype,
-																			 *static_cast<rfk::Struct const*>(getOuterEntity())
-																			);
-
-			if (adjustedCallerPointer != nullptr)
-			{
-				return adjustedCallerPointer;
-			}
-			else
-			{
-				//adjustCallerAddress doesn't fail if the dynamicCast fails, and the original caller is returned as provided
-				//The invoke call using this caller is UB.
-			}
-		}
-	}
-
-	return &caller;
-}
-
-template <typename CallerType>
-CallerType* Method::checkedAdjustCallerAddress(CallerType& caller) const
-{
-	static_assert(std::is_base_of_v<Object, CallerType>,
-				  "[Refureku] To perform all the safety checks, the caller must implement the getArchetype() method inherited from rfk::Object.");
-
-	return checkedAdjustCallerAddress(caller, caller.getArchetype());
-}
-
-template <typename CallerType>
-CallerType* Method::checkedAdjustCallerAddress(CallerType& caller, Struct const& callerDynamicArchetype) const
-{
-	//No adjustment required if the method is not virtual
-	//The adjustment is required for virtual methods to point to the correct vtable
-	if (isVirtual())
-	{
-		rfk::Struct const* callerStaticArchetype = static_cast<rfk::Struct const*>(rfk::getArchetype<CallerType>());
-
-		//Should not be able to be nullptr since the caller inherits from rfk::Object
-		assert(callerStaticArchetype != nullptr);
-
-		CallerType* adjustedCallerPointer = rfk::dynamicCast<CallerType>(&caller,
-																		 *callerStaticArchetype,
-																		 callerDynamicArchetype,
-																		 *static_cast<rfk::Struct const*>(getOuterEntity())
-																		 );
-
-		if (adjustedCallerPointer != nullptr)
-		{
-			return adjustedCallerPointer;
-		}
-		else
-		{
-			//At this point, the cast can only fail if caller is not in the same inheritance hierarchy as the method's owner struct
-			throwInvalidCallerException();
-		}
-	}
-
-	return &caller;
-}
-
-template <typename ReturnType, typename CallerType, typename... ArgTypes>
+template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
 ReturnType Method::invoke(CallerType& caller, ArgTypes&&... args) const
 {
-	return invokeUnsafe<ReturnType, ArgTypes...>(adjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
+	return invokeUnsafe<ReturnType, ArgTypes...>(isVirtual() ? internal::adjustInstancePointerAddress(&caller, *static_cast<rfk::Struct const*>(getOuterEntity())) : &caller,
+												 std::forward<ArgTypes>(args)...
+												 );
 }
 
 template <typename ReturnType, typename... ArgTypes>
@@ -175,10 +89,12 @@ ReturnType Method::invokeUnsafe(void const* caller, ArgTypes&&... args) const
 	return internalInvoke<ReturnType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
 }
 
-template <typename ReturnType, typename CallerType, typename... ArgTypes>
+template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
 ReturnType Method::checkedInvoke(CallerType& caller, ArgTypes&&... args) const
 {
-	return checkedInvokeUnsafe<ReturnType, ArgTypes...>(checkedAdjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
+	return checkedInvokeUnsafe<ReturnType, ArgTypes...>(isVirtual() ? internal::adjustInstancePointerAddress(&caller, *static_cast<rfk::Struct const*>(getOuterEntity())) : &caller,
+														std::forward<ArgTypes>(args)...
+														);
 }
 
 template <typename ReturnType, typename... ArgTypes>

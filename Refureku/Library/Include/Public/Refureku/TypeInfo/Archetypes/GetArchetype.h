@@ -11,17 +11,12 @@
 
 #include "Refureku/Config.h"
 #include "Refureku/TypeInfo/Archetypes/Enum.h"	//rfk::getEnum
-#include "Refureku/Misc/TypeTraitsMacros.h"
+#include "Refureku/Misc/TypeTraits.h"
 
 #define RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(...) namespace rfk { template <template <__VA_ARGS__> typename> Archetype const* getArchetype() noexcept { return nullptr; } }
 
 namespace rfk
 {
-	namespace internal
-	{
-		RFK_GENERATE_IS_CALLABLE_METHOD_TRAITS(staticGetArchetype);
-	}
-
 	/**
 	*	@brief	Get the archetype of any type if it exists.
 	*			Note that this method will always return nullptr on protected/private nested archetypes.
