@@ -152,42 +152,54 @@ CallerType* Method::checkedAdjustCallerAddress(CallerType& caller, Struct const&
 	return &caller;
 }
 
-template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
+template <typename ReturnType, typename CallerType, typename... ArgTypes>
 ReturnType Method::invoke(CallerType& caller, ArgTypes&&... args) const
 {
-	return internalInvoke<ReturnType, ArgTypes...>(adjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
+	return invokeUnsafe<ReturnType, ArgTypes...>(adjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
 }
 
-template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType Method::invoke(CallerType const& caller, ArgTypes&&... args) const
+template <typename ReturnType, typename... ArgTypes>
+ReturnType Method::invokeUnsafe(void* caller, ArgTypes&&... args) const
+{
+	return internalInvoke<ReturnType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
+}
+
+template <typename ReturnType, typename... ArgTypes>
+ReturnType Method::invokeUnsafe(void const* caller, ArgTypes&&... args) const
 {
 	if (!isConst())
 	{
 		throwConstViolationException();
 	}
 
-	return internalInvoke<ReturnType, ArgTypes...>(adjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
+	return internalInvoke<ReturnType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
 }
 
-template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
+template <typename ReturnType, typename CallerType, typename... ArgTypes>
 ReturnType Method::checkedInvoke(CallerType& caller, ArgTypes&&... args) const
 {
-	checkReturnType<ReturnType>();
-	checkParameterTypes<ArgTypes...>();
-
-	return internalInvoke<ReturnType, ArgTypes...>(checkedAdjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
+	return checkedInvokeUnsafe<ReturnType, ArgTypes...>(checkedAdjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
 }
 
-template <typename ReturnType, typename CallerType, typename... ArgTypes>
-ReturnType Method::checkedInvoke(CallerType const& caller, ArgTypes&&... args) const
+template <typename ReturnType, typename... ArgTypes>
+ReturnType Method::checkedInvokeUnsafe(void* caller, ArgTypes&&... args) const
 {
 	checkReturnType<ReturnType>();
 	checkParameterTypes<ArgTypes...>();
 
+	return internalInvoke<ReturnType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
+}
+
+template <typename ReturnType, typename... ArgTypes>
+ReturnType Method::checkedInvokeUnsafe(void const* caller, ArgTypes&&... args) const
+{
 	if (!isConst())
 	{
 		throwConstViolationException();
 	}
 
-	return internalInvoke<ReturnType, ArgTypes...>(checkedAdjustCallerAddress(caller), std::forward<ArgTypes>(args)...);
+	checkReturnType<ReturnType>();
+	checkParameterTypes<ArgTypes...>();
+
+	return internalInvoke<ReturnType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
 }
