@@ -5,11 +5,10 @@
 *	See the LICENSE.md file for full license details.
 */
 
-template <typename ValueType, typename OwnerStructType, typename>
-ValueType Field::get(OwnerStructType& instance) const
+template <typename ValueType, typename InstanceType, typename>
+ValueType Field::get(InstanceType& instance) const
 {
-	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
-	return getUnsafe<ValueType>(&instance);
+	return getUnsafe<ValueType>(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())));
 }
 
 template <typename ValueType>
@@ -25,13 +24,6 @@ ValueType Field::getUnsafe(void* instance) const
 	}
 }
 
-template <typename ValueType, typename OwnerStructType, typename>
-ValueType Field::get(OwnerStructType const& instance) const
-{
-	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
-	return getUnsafe<ValueType>(&instance);
-}
-
 template <typename ValueType>
 ValueType Field::getUnsafe(void const* instance) const
 {
@@ -40,11 +32,10 @@ ValueType Field::getUnsafe(void const* instance) const
 	return FieldBase::get<ValueType>(getConstPtrUnsafe(instance));
 }
 
-template <typename ValueType, typename OwnerStructType, typename>
-void Field::set(OwnerStructType& instance, ValueType&& value) const
+template <typename ValueType, typename InstanceType, typename>
+void Field::set(InstanceType& instance, ValueType&& value) const
 {
-	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
-	setUnsafe<ValueType>(&instance, std::forward<ValueType>(value));
+	setUnsafe<ValueType>(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())), std::forward<ValueType>(value));
 }
 
 template <typename ValueType>
@@ -53,23 +44,20 @@ void Field::setUnsafe(void* instance, ValueType&& value) const
 	FieldBase::set(getPtrUnsafe(instance), std::forward<ValueType>(value));
 }
 
-template <typename OwnerStructType, typename>
-void Field::set(OwnerStructType& instance, void const* valuePtr, std::size_t valueSize) const
+template <typename InstanceType, typename>
+void Field::set(InstanceType& instance, void const* valuePtr, std::size_t valueSize) const
 {
-	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
-	setUnsafe(&instance, valuePtr, valueSize);
+	setUnsafe(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())), valuePtr, valueSize);
 }
 
-template <typename OwnerStructType, typename>
-void* Field::getPtr(OwnerStructType& instance) const
+template <typename InstanceType, typename>
+void* Field::getPtr(InstanceType& instance) const
 {
-	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
-	return getPtrUnsafe(&instance);
+	return getPtrUnsafe(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())));
 }
 
-template <typename OwnerStructType, typename>
-void const* Field::getConstPtr(OwnerStructType const& instance) const noexcept
+template <typename InstanceType, typename>
+void const* Field::getConstPtr(InstanceType const& instance) const noexcept
 {
-	//TODO: Add pointer adjustment and forward the adjusted pointer to getInternal
-	return getConstPtrUnsafe(&instance);
+	return getConstPtrUnsafe(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())));
 }

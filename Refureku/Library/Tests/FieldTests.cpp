@@ -322,11 +322,11 @@ TEST(Rfk_Field_set, SetNonConstInt)
 	int newValue = 2;
 
 	TestFieldsClass instance;
-	EXPECT_NE(field->get<int>(instance), newValue);
+	EXPECT_NE(field->getUnsafe<int>(&instance), newValue);
 
 	field->set(instance, &newValue, sizeof(int));
 
-	EXPECT_EQ(field->get<int>(instance), newValue);
+	EXPECT_EQ(field->getUnsafe<int>(&instance), newValue);
 }
 
 TEST(Rfk_Field_set, SetConstInt)
@@ -335,7 +335,7 @@ TEST(Rfk_Field_set, SetConstInt)
 	int newValue = 2;
 
 	TestFieldsClass instance;
-	EXPECT_NE(field->get<int>(instance), newValue);
+	EXPECT_NE(field->getUnsafe<int>(&instance), newValue);
 
 	EXPECT_THROW(field->set(instance, &newValue, sizeof(int)), rfk::ConstViolation);
 }
@@ -350,11 +350,11 @@ TEST(Rfk_Field_setUnsafe, SetNonConstInt)
 	int newValue = 2;
 
 	TestFieldsClass instance;
-	EXPECT_NE(field->get<int>(instance), newValue);
+	EXPECT_NE(field->getUnsafe<int>(&instance), newValue);
 
 	field->setUnsafe(&instance, &newValue, sizeof(int));
 
-	EXPECT_EQ(field->get<int>(instance), newValue);
+	EXPECT_EQ(field->getUnsafe<int>(&instance), newValue);
 }
 
 TEST(Rfk_Field_setUnsafe, SetConstInt)
@@ -363,7 +363,7 @@ TEST(Rfk_Field_setUnsafe, SetConstInt)
 	int newValue = 2;
 
 	TestFieldsClass instance;
-	EXPECT_NE(field->get<int>(instance), newValue);
+	EXPECT_NE(field->getUnsafe<int>(&instance), newValue);
 
 	EXPECT_THROW(field->setUnsafe(&instance, &newValue, sizeof(int)), rfk::ConstViolation);
 }

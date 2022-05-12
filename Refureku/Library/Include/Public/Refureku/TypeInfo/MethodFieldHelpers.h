@@ -15,11 +15,15 @@
 namespace rfk::internal
 {
 	template <typename T>
-	using IsAdjustableInstance = std::enable_if_t<	internal::isCallable_static_staticGetArchetype<T, Struct const&()>::value &&
-													internal::isCallable_getArchetype<T, Struct const&()>::value>;
+	constexpr bool IsAdjustableInstanceValue = internal::isCallable_static_staticGetArchetype<T, Struct const&()>::value &&
+												internal::isCallable_getArchetype<T, Struct const&()>::value;
+
+	template <typename T>
+	using IsAdjustableInstance = std::enable_if_t<IsAdjustableInstanceValue<T>>;
 
 	/**
-	*	@brief Adjust the pointer address of the provided instance to another archetype.
+	*	@brief	Adjust the pointer address of the provided instance to another archetype.
+	*			The provided instance type must implement both the staticGetArchetype static method and override the virtual getArchetype method.
 	* 
 	*	@tparam InstanceType Static type of the provided instance. It must implement the staticGetArchetype static method and override the virtual getArchetype method.
 	* 

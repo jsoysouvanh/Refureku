@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Object.h"
 #include "TestClass.h"
 #include "NonReflectedClass.h"
 #include "ConstructionTrackedClass.h"
@@ -15,7 +16,7 @@
 
 class ForwardDeclaredClass;
 
-class CLASS() TestFieldsClass
+class CLASS() TestFieldsClass : public rfk::Object
 {
 	public:
 		FIELD()

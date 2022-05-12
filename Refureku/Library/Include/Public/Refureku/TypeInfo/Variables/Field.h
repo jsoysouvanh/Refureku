@@ -42,26 +42,8 @@ namespace rfk
 			*
 			*	@return The queried value in the instance.
 			*/
-			template <typename ValueType, typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
-			RFK_NODISCARD ValueType		get(OwnerStructType& instance)					const;
-
-			/**
-			*	@brief Get the value corresponding to this field in the provided instance.
-			*		   This method in not safe if you provide a wrong ValueType.
-
-			*	@note This is only an overload of the same method with a const instance.
-			*
-			*	@tparam ValueType Type to retrieve from the field.
-			*		If ValueType is an rvalue reference, the value is moved into the return value (so the class value is no longer safe to use).
-			*		If ValueType is an lvalue reference, return a reference to the field.
-			*		If ValueType is a value type, the value is copied. If it is a class, ValueType must be copy-constructible.
-			*
-			*	@param instance Instance we retrieve the value from.
-			*
-			*	@return The queried value in the instance.
-			*/
-			template <typename ValueType, typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
-			RFK_NODISCARD ValueType		get(OwnerStructType const& instance)			const;
+			template <typename ValueType, typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
+			RFK_NODISCARD ValueType		get(InstanceType& instance)						const;
 
 			/**
 			*	@brief Get the value corresponding to this field in the provided instance.
@@ -127,9 +109,9 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
 			*/
-			template <typename ValueType, typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
-			void						set(OwnerStructType&	instance,
-											ValueType&&			value)					const;
+			template <typename ValueType, typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
+			void						set(InstanceType&	instance,
+											ValueType&&		value)						const;
 
 			/**
 			*	@brief Copy valueSize bytes starting from valuePtr into this field's address in instance.
@@ -140,10 +122,10 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
 			*/
-			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
-			void						set(OwnerStructType&	instance,
-											void const*			valuePtr,
-											std::size_t			valueSize)				const;
+			template <typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
+			void						set(InstanceType&	instance,
+											void const*		valuePtr,
+											std::size_t		valueSize)					const;
 
 			/**
 			*	@brief Set the value corresponding to this field in the provided instance.
@@ -187,8 +169,8 @@ namespace rfk
 			* 
 			*	@exception ConstViolation if the field is actually const.
 			*/
-			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
-			RFK_NODISCARD void*			getPtr(OwnerStructType& instance)				const;
+			template <typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
+			RFK_NODISCARD void*			getPtr(InstanceType& instance)					const;
 
 			/**
 			*	@brief Get a pointer to this field in the provided instance.
@@ -212,8 +194,8 @@ namespace rfk
 			*
 			*	@return Const pointer to this field in the provided instance.
 			*/
-			template <typename OwnerStructType, typename = std::enable_if_t<is_value_v<OwnerStructType>>>
-			RFK_NODISCARD void const*	getConstPtr(OwnerStructType const& instance)	const	noexcept;
+			template <typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
+			RFK_NODISCARD void const*	getConstPtr(InstanceType const& instance)		const	noexcept;
 
 			/**
 			*	@brief Get a const pointer to this field in the provided instance.
