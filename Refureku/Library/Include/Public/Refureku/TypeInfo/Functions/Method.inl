@@ -67,7 +67,7 @@ ReturnType Method::internalInvoke(void const* caller, ArgTypes&&... args) const
 template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
 ReturnType Method::invoke(CallerType& caller, ArgTypes&&... args) const
 {
-	return invokeUnsafe<ReturnType, ArgTypes...>(isVirtual() ? internal::adjustInstancePointerAddress(&caller, *static_cast<rfk::Struct const*>(getOuterEntity())) : &caller,
+	return invokeUnsafe<ReturnType, ArgTypes...>(adjustCallerPointerAddress(&caller),
 												 std::forward<ArgTypes>(args)...
 												 );
 }
@@ -92,7 +92,7 @@ ReturnType Method::invokeUnsafe(void const* caller, ArgTypes&&... args) const
 template <typename ReturnType, typename CallerType, typename... ArgTypes, typename>
 ReturnType Method::checkedInvoke(CallerType& caller, ArgTypes&&... args) const
 {
-	return checkedInvokeUnsafe<ReturnType, ArgTypes...>(isVirtual() ? internal::adjustInstancePointerAddress(&caller, *static_cast<rfk::Struct const*>(getOuterEntity())) : &caller,
+	return checkedInvokeUnsafe<ReturnType, ArgTypes...>(adjustCallerPointerAddress(&caller),
 														std::forward<ArgTypes>(args)...
 														);
 }
@@ -118,4 +118,25 @@ ReturnType Method::checkedInvokeUnsafe(void const* caller, ArgTypes&&... args) c
 	checkParameterTypes<ArgTypes...>();
 
 	return internalInvoke<ReturnType, ArgTypes...>(caller, std::forward<ArgTypes>(args)...);
+}
+
+template <typename CallerType>
+CallerType* Method::adjustCallerPointerAddress(CallerType* caller) const
+{
+	//Non-virtual methods can be called with non-adjusted instances (doesn't use virtual table)
+	if (!isVirtual())
+	{
+		return caller;
+	}
+
+	CallerType* adjustedCallerPointer = rfk::dynamicCast<CallerType>(caller, CallerType::staticGetArchetype(), caller->getArchetype(), *static_cast<rfk::Struct const*>(getOuterEntity()));
+
+	if (adjustedCallerPointer != nullptr)
+	{
+		return adjustedCallerPointer;
+	}
+	else
+	{
+		throw InvalidArchetype("Failed to adjust the caller pointer since it has no relationship with the method's outer struct.");
+	}
 }

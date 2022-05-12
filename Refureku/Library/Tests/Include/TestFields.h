@@ -43,4 +43,27 @@ class CLASS() TestFieldsClass : public rfk::Object
 	TestFieldsClass_GENERATED
 };
 
+class CLASS() TestFieldsClass2 : public rfk::Object
+{
+	public:
+		FIELD()
+		int	intField2 = 2;
+
+	TestFieldsClass2_GENERATED
+};
+
+class CLASS() TestFieldsClassChild : public TestFieldsClass, public TestFieldsClass2
+{
+	public:
+		FIELD()
+		int	intField3 = 3;
+
+	TestFieldsClassChild_GENERATED
+};
+
+class CLASS() TestFieldsUnrelatedClass : public rfk::Object
+{
+	TestFieldsUnrelatedClass_GENERATED
+};
+
 File_TestFields_GENERATED

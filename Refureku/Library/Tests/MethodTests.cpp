@@ -47,6 +47,13 @@ TEST(Rfk_Method_invoke, ThrowingCall)
 	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("throwing")->invoke(instance), std::logic_error);
 }
 
+TEST(Rfk_Method_invoke, ThrowInvalidCaller)
+{
+	TestMethodClass2 instance;
+
+	EXPECT_THROW(TestMethodClass::staticGetArchetype().getMethodByName("virtualNoReturnNoParam")->invoke(instance), rfk::InvalidArchetype);
+}
+
 //4. The virtual method is introduced by the second inherited class (and the first inherited class is polymorphic)
 TEST(Rfk_Method_invoke, CallParentIntroducedVirtualMethodOnMultiplePInheritancePClass)
 {

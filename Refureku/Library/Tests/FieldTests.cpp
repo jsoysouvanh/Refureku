@@ -22,7 +22,7 @@ TEST(Rfk_Field, NonReflectedTypeArchetype)
 }
 
 //=========================================================
-//================ Field::getPtr ====================
+//=================== Field::getPtr =======================
 //=========================================================
 
 TEST(Rfk_Field_getPtr, NonConstVariable)
@@ -40,8 +40,37 @@ TEST(Rfk_Field_getPtr, ConstVariable)
 	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getPtr(instance), rfk::ConstViolation);
 }
 
+TEST(Rfk_Field_getPtr, ThrowInvalidArchetype)
+{
+	TestFieldsUnrelatedClass instance;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getPtr(instance), rfk::InvalidArchetype);
+}
+
+TEST(Rfk_Field_getPtr, PointerFirstParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->getPtr(static_cast<TestFieldsClass&>(instance)), &instance.intField);
+}
+
+TEST(Rfk_Field_getPtr, PointerSecondParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->getPtr(static_cast<TestFieldsClass2&>(instance)), &instance.intField2);
+}
+
+TEST(Rfk_Field_getPtr, PointerDownUpCast)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->getPtr(static_cast<TestFieldsClass2&>(instance)), &instance.intField);
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->getPtr(static_cast<TestFieldsClass&>(instance)), &instance.intField2);
+}
+
 //=========================================================
-//============== Field::getConstPtr =================
+//================= Field::getConstPtr ====================
 //=========================================================
 
 TEST(Rfk_Field_getConstPtr, NonConstVariable)
@@ -58,6 +87,35 @@ TEST(Rfk_Field_getConstPtr, ConstVariable)
 
 	EXPECT_NO_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getConstPtr(instance));
 	EXPECT_NE(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getConstPtr(instance), nullptr);
+}
+
+TEST(Rfk_Field_getConstPtr, ThrowInvalidArchetype)
+{
+	TestFieldsUnrelatedClass instance;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->getConstPtr(instance), rfk::InvalidArchetype);
+}
+
+TEST(Rfk_Field_getConstPtr, PointerFirstParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->getConstPtr(static_cast<TestFieldsClass&>(instance)), &instance.intField);
+}
+
+TEST(Rfk_Field_getConstPtr, PointerSecondParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->getConstPtr(static_cast<TestFieldsClass2&>(instance)), &instance.intField2);
+}
+
+TEST(Rfk_Field_getConstPtr, PointerDownUpCast)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->getConstPtr(static_cast<TestFieldsClass2&>(instance)), &instance.intField);
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->getConstPtr(static_cast<TestFieldsClass&>(instance)), &instance.intField2);
 }
 
 //=========================================================
@@ -133,6 +191,35 @@ TEST(Rfk_Field_getTemplate, GetTestClassByConstLVRef)
 	TestFieldsClass instance;
 
 	EXPECT_EQ(&TestFieldsClass::staticGetArchetype().getFieldByName("testClassField")->get<TestClass const&>(instance), &instance.testClassField);
+}
+
+TEST(Rfk_Field_getTemplate, ThrowInvalidArchetype)
+{
+	TestFieldsUnrelatedClass instance;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->get<int>(instance), rfk::InvalidArchetype);
+}
+
+TEST(Rfk_Field_getTemplate, PointerFirstParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->get<int>(static_cast<TestFieldsClass&>(instance)), instance.intField);
+}
+
+TEST(Rfk_Field_getTemplate, PointerSecondParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->get<int>(static_cast<TestFieldsClass2&>(instance)), instance.intField2);
+}
+
+TEST(Rfk_Field_getTemplate, PointerDownUpCast)
+{
+	TestFieldsClassChild instance;
+
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->get<int>(static_cast<TestFieldsClass2&>(instance)), instance.intField);
+	EXPECT_EQ(TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->get<int>(static_cast<TestFieldsClass&>(instance)), instance.intField2);
 }
 
 //=========================================================
@@ -257,6 +344,42 @@ TEST(Rfk_Field_setTemplate, SetConstClassByRValue)
 	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constCtorTrackedClassField")->set(instance, ConstructionTrackedClass()), rfk::ConstViolation);
 }
 
+TEST(Rfk_Field_setTemplate, ThrowInvalidArchetype)
+{
+	TestFieldsUnrelatedClass instance;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->set<int>(instance, 100), rfk::InvalidArchetype);
+}
+
+TEST(Rfk_Field_setTemplate, PointerFirstParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->set<int>(static_cast<TestFieldsClass&>(instance), 100);
+
+	EXPECT_EQ(instance.intField, 100);
+}
+
+TEST(Rfk_Field_setTemplate, PointerSecondParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->set<int>(static_cast<TestFieldsClass2&>(instance), 100);
+
+	EXPECT_EQ(instance.intField2, 100);
+}
+
+TEST(Rfk_Field_setTemplate, PointerDownUpCast)
+{
+	TestFieldsClassChild instance;
+
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->set<int>(static_cast<TestFieldsClass2&>(instance), 100);
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->set<int>(static_cast<TestFieldsClass&>(instance), 101);
+
+	EXPECT_EQ(instance.intField, 100);
+	EXPECT_EQ(instance.intField2, 101);
+}
+
 //=========================================================
 //================= Field::setUnsafe<> ====================
 //=========================================================
@@ -338,6 +461,47 @@ TEST(Rfk_Field_set, SetConstInt)
 	EXPECT_NE(field->getUnsafe<int>(&instance), newValue);
 
 	EXPECT_THROW(field->set(instance, &newValue, sizeof(int)), rfk::ConstViolation);
+}
+
+TEST(Rfk_Field_set, ThrowInvalidArchetype)
+{
+	TestFieldsUnrelatedClass instance;
+	int newValue = 100;
+
+	EXPECT_THROW(TestFieldsClass::staticGetArchetype().getFieldByName("constIntField")->set(instance, &newValue, sizeof(int)), rfk::InvalidArchetype);
+}
+
+TEST(Rfk_Field_set, PointerFirstParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+	int newValue = 100;
+
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->set(static_cast<TestFieldsClass&>(instance), &newValue, sizeof(int));
+
+	EXPECT_EQ(instance.intField, 100);
+}
+
+TEST(Rfk_Field_set, PointerSecondParentDownCastOnly)
+{
+	TestFieldsClassChild instance;
+	int newValue = 100;
+
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->set(static_cast<TestFieldsClass2&>(instance), &newValue, sizeof(int));
+
+	EXPECT_EQ(instance.intField2, 100);
+}
+
+TEST(Rfk_Field_set, PointerDownUpCast)
+{
+	TestFieldsClassChild instance;
+	int newValue = 100;
+	int newValue2 = 101;
+
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField", rfk::EFieldFlags::Default, true)->set(static_cast<TestFieldsClass2&>(instance), &newValue, sizeof(int));
+	TestFieldsClassChild::staticGetArchetype().getFieldByName("intField2", rfk::EFieldFlags::Default, true)->set(static_cast<TestFieldsClass&>(instance), &newValue2, sizeof(int));
+
+	EXPECT_EQ(instance.intField, 100);
+	EXPECT_EQ(instance.intField2, 101);
 }
 
 //=========================================================

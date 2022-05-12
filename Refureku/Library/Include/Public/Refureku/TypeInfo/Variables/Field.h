@@ -9,6 +9,7 @@
 
 #include "Refureku/TypeInfo/Variables/FieldBase.h"
 #include "Refureku/TypeInfo/MethodFieldHelpers.h"
+#include "Refureku/Exceptions/InvalidArchetype.h"
 
 namespace rfk
 {
@@ -39,6 +40,7 @@ namespace rfk
 			*	@exception ConstViolation if:
 			*		- the field is const and ValueType is an RValue type (can't move a const field content);
 			*		- the field is const and ValueType is a non-const reference;
+			*	@exception InvalidArchetype if the field can't be accessed from the provided instance.
 			*
 			*	@return The queried value in the instance.
 			*/
@@ -108,6 +110,7 @@ namespace rfk
 			*	@param value Data to set in the instance.
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
+			*	@exception InvalidArchetype if the field can't be accessed from the provided instance.
 			*/
 			template <typename ValueType, typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
 			void						set(InstanceType&	instance,
@@ -121,6 +124,7 @@ namespace rfk
 			*	@param valueSize	Number of bytes to copy into the field.
 			* 
 			*	@exception ConstViolation if the field is actually const and therefore readonly.
+			*	@exception InvalidArchetype if the field can't be accessed from the provided instance.
 			*/
 			template <typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
 			void						set(InstanceType&	instance,
@@ -168,6 +172,7 @@ namespace rfk
 			*	@return Pointer to this field in the provided instance.
 			* 
 			*	@exception ConstViolation if the field is actually const.
+			*	@exception InvalidArchetype if the field can't be accessed from the provided instance.
 			*/
 			template <typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
 			RFK_NODISCARD void*			getPtr(InstanceType& instance)					const;
@@ -183,6 +188,7 @@ namespace rfk
 			*	@return Pointer to this field in the provided instance.
 			* 
 			*	@exception ConstViolation if the field is actually const.
+			*	@exception InvalidArchetype if the field can't be accessed from the provided instance.
 			*/
 			RFK_NODISCARD REFUREKU_API 
 				void*					getPtrUnsafe(void* instance)					const;
@@ -193,9 +199,11 @@ namespace rfk
 			*	@param instance Instance we get the field from.
 			*
 			*	@return Const pointer to this field in the provided instance.
+			* 
+			*	@exception InvalidArchetype if the field can't be accessed from the provided instance.
 			*/
 			template <typename InstanceType, typename = std::enable_if_t<is_value_v<InstanceType> && internal::IsAdjustableInstanceValue<InstanceType>>>
-			RFK_NODISCARD void const*	getConstPtr(InstanceType const& instance)		const	noexcept;
+			RFK_NODISCARD void const*	getConstPtr(InstanceType const& instance)		const;
 
 			/**
 			*	@brief Get a const pointer to this field in the provided instance.
@@ -223,6 +231,21 @@ namespace rfk
 			class FieldImpl;
 
 			RFK_GEN_GET_PIMPL(FieldImpl, Entity::getPimpl())
+
+		private:
+			/**
+			*	@brief Adjust the instance pointer to a pointer to this field's owner struct.
+			* 
+			*	@tparam InstanceType The static type of the provided instance.
+			* 
+			*	@param instance The instance to adjust.
+			* 
+			*	@return The adjusted instance pointer.
+			* 
+			*	@exception InvalidArchetype if the instance dynamic archetype is different from the field's owner struct.
+			*/
+			template <typename InstanceType>
+			RFK_NODISCARD InstanceType*	adjustInstancePointerAddress(InstanceType* instance) const;
 	};
 
 	REFUREKU_TEMPLATE_API(rfk::Allocator<Field const*>);

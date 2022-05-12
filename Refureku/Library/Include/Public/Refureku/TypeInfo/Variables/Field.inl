@@ -8,7 +8,7 @@
 template <typename ValueType, typename InstanceType, typename>
 ValueType Field::get(InstanceType& instance) const
 {
-	return getUnsafe<ValueType>(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())));
+	return getUnsafe<ValueType>(adjustInstancePointerAddress(&instance));
 }
 
 template <typename ValueType>
@@ -35,7 +35,7 @@ ValueType Field::getUnsafe(void const* instance) const
 template <typename ValueType, typename InstanceType, typename>
 void Field::set(InstanceType& instance, ValueType&& value) const
 {
-	setUnsafe<ValueType>(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())), std::forward<ValueType>(value));
+	setUnsafe<ValueType>(adjustInstancePointerAddress(&instance), std::forward<ValueType>(value));
 }
 
 template <typename ValueType>
@@ -47,17 +47,33 @@ void Field::setUnsafe(void* instance, ValueType&& value) const
 template <typename InstanceType, typename>
 void Field::set(InstanceType& instance, void const* valuePtr, std::size_t valueSize) const
 {
-	setUnsafe(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())), valuePtr, valueSize);
+	setUnsafe(adjustInstancePointerAddress(&instance), valuePtr, valueSize);
 }
 
 template <typename InstanceType, typename>
 void* Field::getPtr(InstanceType& instance) const
 {
-	return getPtrUnsafe(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())));
+	return getPtrUnsafe(adjustInstancePointerAddress(&instance));
 }
 
 template <typename InstanceType, typename>
-void const* Field::getConstPtr(InstanceType const& instance) const noexcept
+void const* Field::getConstPtr(InstanceType const& instance) const
 {
-	return getConstPtrUnsafe(internal::adjustInstancePointerAddress(&instance, *static_cast<rfk::Struct const*>(getOuterEntity())));
+	return getConstPtrUnsafe(adjustInstancePointerAddress(&instance));
+}
+
+template <typename InstanceType>
+InstanceType* Field::adjustInstancePointerAddress(InstanceType* instance) const
+{
+	Struct const& ownerStruct = *getOwner();
+
+	if (ownerStruct != instance->getArchetype())
+	{
+		throw InvalidArchetype("The instance dynamic archetype must match the field's owner.");
+	}
+
+	//We are sure at this point that the targetArchetype is the instance dynamic archetype.
+	//so we know InstanceType is a parent class of targetArchetype or targetArchetype itself.
+	//In this situation, a single down cast should be enough.
+	return rfk::dynamicDownCast<InstanceType>(instance, InstanceType::staticGetArchetype(), ownerStruct);
 }

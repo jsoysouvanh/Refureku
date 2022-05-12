@@ -16,6 +16,7 @@
 #include "Refureku/TypeInfo/Functions/MethodBase.h"
 #include "Refureku/TypeInfo/Functions/MemberFunction.h"
 #include "Refureku/Misc/CopyConstness.h"
+#include "Refureku/Exceptions/InvalidArchetype.h"
 
 namespace rfk
 {
@@ -260,6 +261,20 @@ namespace rfk
 			template <typename ReturnType, typename... ArgTypes>
 			ReturnType						internalInvoke(void const*	 caller,
 														   ArgTypes&&... args)									const;
+
+			/**
+			*	@brief Adjust the caller pointer to a pointer to this method's outer struct.
+			* 
+			*	@tparam CallerType The static type of the provided caller.
+			* 
+			*	@param caller The caller pointer to adjust.
+			* 
+			*	@return The adjusted caller pointer.
+			* 
+			*	@exception InvalidArchetype if the caller dynamic archetype couldn't be casted to the method outer struct's archetype.
+			*/
+			template <typename CallerType>
+			RFK_NODISCARD CallerType*		adjustCallerPointerAddress(CallerType* caller)						const;
 
 			/**
 			*	@brief Throw a ConstViolation exception with the provided message.
