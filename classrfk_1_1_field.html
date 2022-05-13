@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.2</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.2.0</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -112,30 +112,47 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Field</b
 <tr class="memitem:a3e198f0362b36268cd170ac4b2c200a9"><td class="memItemLeft" align="right" valign="top"><a id="a3e198f0362b36268cd170ac4b2c200a9" name="a3e198f0362b36268cd170ac4b2c200a9"></a>
 REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Field</b> (<a class="el" href="classrfk_1_1_field.html">Field</a> &amp;&amp;) noexcept</td></tr>
 <tr class="separator:a3e198f0362b36268cd170ac4b2c200a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3556e2d14d361964456d58162f118b7"><td class="memTemplParams" colspan="2">template&lt;typename ValueType , typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </td></tr>
-<tr class="memitem:ac3556e2d14d361964456d58162f118b7"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD ValueType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#ac3556e2d14d361964456d58162f118b7">get</a> (OwnerStructType &amp;instance) const</td></tr>
-<tr class="memdesc:ac3556e2d14d361964456d58162f118b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType.  <a href="classrfk_1_1_field.html#ac3556e2d14d361964456d58162f118b7">More...</a><br /></td></tr>
-<tr class="separator:ac3556e2d14d361964456d58162f118b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3640084f8c870f5fba3ab275228e5aee"><td class="memTemplParams" colspan="2">template&lt;typename ValueType , typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a3640084f8c870f5fba3ab275228e5aee"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD ValueType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a3640084f8c870f5fba3ab275228e5aee">get</a> (OwnerStructType const &amp;instance) const</td></tr>
-<tr class="memdesc:a3640084f8c870f5fba3ab275228e5aee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType.  <a href="classrfk_1_1_field.html#a3640084f8c870f5fba3ab275228e5aee">More...</a><br /></td></tr>
-<tr class="separator:a3640084f8c870f5fba3ab275228e5aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8548fd9b2c94aee9f9ed8979f72e4dd5"><td class="memTemplParams" colspan="2">template&lt;typename ValueType , typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a8548fd9b2c94aee9f9ed8979f72e4dd5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a8548fd9b2c94aee9f9ed8979f72e4dd5">set</a> (OwnerStructType &amp;instance, ValueType &amp;&amp;value) const</td></tr>
-<tr class="memdesc:a8548fd9b2c94aee9f9ed8979f72e4dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the value corresponding to this field in the provided instance. This method is not safe if you provide a wrong ValueType.  <a href="classrfk_1_1_field.html#a8548fd9b2c94aee9f9ed8979f72e4dd5">More...</a><br /></td></tr>
-<tr class="separator:a8548fd9b2c94aee9f9ed8979f72e4dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a135538024c8f1d7c5d4fb4e5951f4991"><td class="memTemplParams" colspan="2">template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a135538024c8f1d7c5d4fb4e5951f4991"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a135538024c8f1d7c5d4fb4e5951f4991">set</a> (OwnerStructType &amp;instance, void const *valuePtr, std::size_t valueSize) const</td></tr>
-<tr class="memdesc:a135538024c8f1d7c5d4fb4e5951f4991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy valueSize bytes starting from valuePtr into this field's address in instance.  <a href="classrfk_1_1_field.html#a135538024c8f1d7c5d4fb4e5951f4991">More...</a><br /></td></tr>
-<tr class="separator:a135538024c8f1d7c5d4fb4e5951f4991"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b59713e49552525b654526c7898f77a"><td class="memTemplParams" colspan="2">template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a9b59713e49552525b654526c7898f77a"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD void *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a9b59713e49552525b654526c7898f77a">getPtr</a> (OwnerStructType &amp;instance) const</td></tr>
-<tr class="memdesc:a9b59713e49552525b654526c7898f77a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to this field in the provided instance.  <a href="classrfk_1_1_field.html#a9b59713e49552525b654526c7898f77a">More...</a><br /></td></tr>
-<tr class="separator:a9b59713e49552525b654526c7898f77a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef16af9bacf54b7b9190ad18cfbcb640"><td class="memTemplParams" colspan="2">template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </td></tr>
-<tr class="memitem:aef16af9bacf54b7b9190ad18cfbcb640"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD void const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#aef16af9bacf54b7b9190ad18cfbcb640">getConstPtr</a> (OwnerStructType const &amp;instance) const noexcept</td></tr>
-<tr class="memdesc:aef16af9bacf54b7b9190ad18cfbcb640"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a const pointer to this field in the provided instance.  <a href="classrfk_1_1_field.html#aef16af9bacf54b7b9190ad18cfbcb640">More...</a><br /></td></tr>
-<tr class="separator:aef16af9bacf54b7b9190ad18cfbcb640"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a985da6fc03517fb4a67da2f5dd87cb72"><td class="memTemplParams" colspan="2">template&lt;typename ValueType , typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a985da6fc03517fb4a67da2f5dd87cb72"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD ValueType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72">get</a> (InstanceType &amp;instance) const</td></tr>
+<tr class="memdesc:a985da6fc03517fb4a67da2f5dd87cb72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType.  <a href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72">More...</a><br /></td></tr>
+<tr class="separator:a985da6fc03517fb4a67da2f5dd87cb72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a554728e8a99550c5d91de7861e08015d"><td class="memTemplParams" colspan="2">template&lt;typename ValueType &gt; </td></tr>
+<tr class="memitem:a554728e8a99550c5d91de7861e08015d"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD ValueType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a554728e8a99550c5d91de7861e08015d">getUnsafe</a> (void *instance) const</td></tr>
+<tr class="memdesc:a554728e8a99550c5d91de7861e08015d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72" title="Get the value corresponding to this field in the provided instance. This method in not safe if you pr...">Field::get</a> for safety if you know the static type of your instance in the calling context.  <a href="classrfk_1_1_field.html#a554728e8a99550c5d91de7861e08015d">More...</a><br /></td></tr>
+<tr class="separator:a554728e8a99550c5d91de7861e08015d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af68f57e7fd571a34d378941f68aee237"><td class="memTemplParams" colspan="2">template&lt;typename ValueType &gt; </td></tr>
+<tr class="memitem:af68f57e7fd571a34d378941f68aee237"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD ValueType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#af68f57e7fd571a34d378941f68aee237">getUnsafe</a> (void const *instance) const</td></tr>
+<tr class="memdesc:af68f57e7fd571a34d378941f68aee237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72" title="Get the value corresponding to this field in the provided instance. This method in not safe if you pr...">Field::get</a> for safety if you know the static type of your instance in the calling context.  <a href="classrfk_1_1_field.html#af68f57e7fd571a34d378941f68aee237">More...</a><br /></td></tr>
+<tr class="separator:af68f57e7fd571a34d378941f68aee237"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d398c692a5647118dbba3507153b0e1"><td class="memTemplParams" colspan="2">template&lt;typename ValueType , typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a8d398c692a5647118dbba3507153b0e1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a8d398c692a5647118dbba3507153b0e1">set</a> (InstanceType &amp;instance, ValueType &amp;&amp;value) const</td></tr>
+<tr class="memdesc:a8d398c692a5647118dbba3507153b0e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the value corresponding to this field in the provided instance. This method is not safe if you provide a wrong ValueType.  <a href="classrfk_1_1_field.html#a8d398c692a5647118dbba3507153b0e1">More...</a><br /></td></tr>
+<tr class="separator:a8d398c692a5647118dbba3507153b0e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1e630ab9c3a6c638fcba1919f143f99"><td class="memTemplParams" colspan="2">template&lt;typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:aa1e630ab9c3a6c638fcba1919f143f99"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#aa1e630ab9c3a6c638fcba1919f143f99">set</a> (InstanceType &amp;instance, void const *valuePtr, std::size_t valueSize) const</td></tr>
+<tr class="memdesc:aa1e630ab9c3a6c638fcba1919f143f99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy valueSize bytes starting from valuePtr into this field's address in instance.  <a href="classrfk_1_1_field.html#aa1e630ab9c3a6c638fcba1919f143f99">More...</a><br /></td></tr>
+<tr class="separator:aa1e630ab9c3a6c638fcba1919f143f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9bd9ccf0da0e3fd5e830bba8a696294"><td class="memTemplParams" colspan="2">template&lt;typename ValueType &gt; </td></tr>
+<tr class="memitem:ab9bd9ccf0da0e3fd5e830bba8a696294"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#ab9bd9ccf0da0e3fd5e830bba8a696294">setUnsafe</a> (void *instance, ValueType &amp;&amp;value) const</td></tr>
+<tr class="memdesc:ab9bd9ccf0da0e3fd5e830bba8a696294"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the value corresponding to this field in the provided instance. This method is not safe if you provide a wrong ValueType. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a8d398c692a5647118dbba3507153b0e1" title="Set the value corresponding to this field in the provided instance. This method is not safe if you pr...">Field::set</a> for safety if you know the static type of your instance in the calling context.  <a href="classrfk_1_1_field.html#ab9bd9ccf0da0e3fd5e830bba8a696294">More...</a><br /></td></tr>
+<tr class="separator:ab9bd9ccf0da0e3fd5e830bba8a696294"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51adce67a3c3867e5763c1787616441d"><td class="memItemLeft" align="right" valign="top">REFUREKU_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a51adce67a3c3867e5763c1787616441d">setUnsafe</a> (void *instance, void const *valuePtr, std::size_t valueSize) const</td></tr>
+<tr class="memdesc:a51adce67a3c3867e5763c1787616441d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy valueSize bytes starting from valuePtr into this field's address in instance.  <a href="classrfk_1_1_field.html#a51adce67a3c3867e5763c1787616441d">More...</a><br /></td></tr>
+<tr class="separator:a51adce67a3c3867e5763c1787616441d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ce7460699dca17a227e4750ce06098f"><td class="memTemplParams" colspan="2">template&lt;typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a9ce7460699dca17a227e4750ce06098f"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD void *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a9ce7460699dca17a227e4750ce06098f">getPtr</a> (InstanceType &amp;instance) const</td></tr>
+<tr class="memdesc:a9ce7460699dca17a227e4750ce06098f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to this field in the provided instance.  <a href="classrfk_1_1_field.html#a9ce7460699dca17a227e4750ce06098f">More...</a><br /></td></tr>
+<tr class="separator:a9ce7460699dca17a227e4750ce06098f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d74e50b768369ffc4bb6659c76fb486"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#a4d74e50b768369ffc4bb6659c76fb486">getPtrUnsafe</a> (void *instance) const</td></tr>
+<tr class="memdesc:a4d74e50b768369ffc4bb6659c76fb486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to this field in the provided instance. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a9ce7460699dca17a227e4750ce06098f" title="Get a pointer to this field in the provided instance.">Field::getPtr</a> for safety if you know the static type of your instance in the calling context.  <a href="classrfk_1_1_field.html#a4d74e50b768369ffc4bb6659c76fb486">More...</a><br /></td></tr>
+<tr class="separator:a4d74e50b768369ffc4bb6659c76fb486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84177f52c67c28321ccee224ef64c1d"><td class="memTemplParams" colspan="2">template&lt;typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:ac84177f52c67c28321ccee224ef64c1d"><td class="memTemplItemLeft" align="right" valign="top">RFK_NODISCARD void const *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#ac84177f52c67c28321ccee224ef64c1d">getConstPtr</a> (InstanceType const &amp;instance) const</td></tr>
+<tr class="memdesc:ac84177f52c67c28321ccee224ef64c1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a const pointer to this field in the provided instance.  <a href="classrfk_1_1_field.html#ac84177f52c67c28321ccee224ef64c1d">More...</a><br /></td></tr>
+<tr class="separator:ac84177f52c67c28321ccee224ef64c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7f103e44b30187aad043a58d6e70893"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API void const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#ac7f103e44b30187aad043a58d6e70893">getConstPtrUnsafe</a> (void const *instance) const noexcept</td></tr>
+<tr class="memdesc:ac7f103e44b30187aad043a58d6e70893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a const pointer to this field in the provided instance. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#ac84177f52c67c28321ccee224ef64c1d" title="Get a const pointer to this field in the provided instance.">Field::getConstPtr</a> for safety if you know the static type of your instance in the calling context.  <a href="classrfk_1_1_field.html#ac7f103e44b30187aad043a58d6e70893">More...</a><br /></td></tr>
+<tr class="separator:ac7f103e44b30187aad043a58d6e70893"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2fd5d3074e818d73d2f458caeec78ae"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_field.html#ad2fd5d3074e818d73d2f458caeec78ae">getMemoryOffset</a> () const noexcept</td></tr>
 <tr class="memdesc:ad2fd5d3074e818d73d2f458caeec78ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the memory offset of this field in an instance of its owner class (<a class="el" href="classrfk_1_1_field_base.html#aa784130ce76323e20e7585b8bbdeab80" title="Get the struct owning this field.">Field::getOwner()</a>).  <a href="classrfk_1_1_field.html#ad2fd5d3074e818d73d2f458caeec78ae">More...</a><br /></td></tr>
 <tr class="separator:ad2fd5d3074e818d73d2f458caeec78ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -284,18 +301,18 @@ template&lt;typename T &gt; </td></tr>
 <tr class="separator:ac812e7801abbdf25b7414cd1ce0a8724 inherit pro_static_attribs_classrfk_1_1_variable_base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac3556e2d14d361964456d58162f118b7" name="ac3556e2d14d361964456d58162f118b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3556e2d14d361964456d58162f118b7">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
+<a id="a985da6fc03517fb4a67da2f5dd87cb72" name="a985da6fc03517fb4a67da2f5dd87cb72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a985da6fc03517fb4a67da2f5dd87cb72">&#9670;&nbsp;</a></span>get()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ValueType , typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </div>
+template&lt;typename ValueType , typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">RFK_NODISCARD ValueType rfk::Field::get </td>
           <td>(</td>
-          <td class="paramtype">OwnerStructType &amp;&#160;</td>
+          <td class="paramtype">InstanceType &amp;&#160;</td>
           <td class="paramname"><em>instance</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -319,9 +336,10 @@ template&lt;typename ValueType , typename OwnerStructType , typename  = std::ena
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if:<ul>
 <li>the field is const and ValueType is an RValue type (can't move a const field content);</li>
-<li>the field is const and ValueType is a non-const reference;</li>
+<li>the field is const and ValueType is a non-const reference; </li>
 </ul>
 </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_archetype.html">InvalidArchetype</a></td><td>if the field can't be accessed from the provided instance.</td></tr>
   </table>
   </dd>
 </dl>
@@ -329,57 +347,54 @@ template&lt;typename ValueType , typename OwnerStructType , typename  = std::ena
 
 </div>
 </div>
-<a id="a3640084f8c870f5fba3ab275228e5aee" name="a3640084f8c870f5fba3ab275228e5aee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3640084f8c870f5fba3ab275228e5aee">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
+<a id="ac84177f52c67c28321ccee224ef64c1d" name="ac84177f52c67c28321ccee224ef64c1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84177f52c67c28321ccee224ef64c1d">&#9670;&nbsp;</a></span>getConstPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ValueType , typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </div>
+template&lt;typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD ValueType rfk::Field::get </td>
+          <td class="memname">RFK_NODISCARD void const  * rfk::Field::getConstPtr </td>
           <td>(</td>
-          <td class="paramtype">OwnerStructType const &amp;&#160;</td>
+          <td class="paramtype">InstanceType const &amp;&#160;</td>
           <td class="paramname"><em>instance</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType. </p>
-<dl class="section note"><dt>Note</dt><dd>This is only an overload of the same method with a const instance.</dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">ValueType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to retrieve from the field. If ValueType is an rvalue reference, the value is moved into the return value (so the class value is no longer safe to use). If ValueType is an lvalue reference, return a reference to the field. If ValueType is a value type, the value is copied. If it is a class, ValueType must be copy-constructible.</td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Get a const pointer to this field in the provided instance. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">instance</td><td>Instance we retrieve the value from.</td></tr>
+    <tr><td class="paramname">instance</td><td>Instance we get the field from.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The queried value in the instance. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Const pointer to this field in the provided instance.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_archetype.html">InvalidArchetype</a></td><td>if the field can't be accessed from the provided instance. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="aef16af9bacf54b7b9190ad18cfbcb640" name="aef16af9bacf54b7b9190ad18cfbcb640"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef16af9bacf54b7b9190ad18cfbcb640">&#9670;&nbsp;</a></span>getConstPtr()</h2>
+<a id="ac7f103e44b30187aad043a58d6e70893" name="ac7f103e44b30187aad043a58d6e70893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7f103e44b30187aad043a58d6e70893">&#9670;&nbsp;</a></span>getConstPtrUnsafe()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD void const  * rfk::Field::getConstPtr </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API void const  * rfk::Field::getConstPtrUnsafe </td>
           <td>(</td>
-          <td class="paramtype">OwnerStructType const &amp;&#160;</td>
+          <td class="paramtype">void const *&#160;</td>
           <td class="paramname"><em>instance</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -391,7 +406,7 @@ template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_
 </table>
 </div><div class="memdoc">
 
-<p>Get a const pointer to this field in the provided instance. </p>
+<p>Get a const pointer to this field in the provided instance. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#ac84177f52c67c28321ccee224ef64c1d" title="Get a const pointer to this field in the provided instance.">Field::getConstPtr</a> for safety if you know the static type of your instance in the calling context. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">instance</td><td>Instance we get the field from.</td></tr>
@@ -430,18 +445,18 @@ template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_
 
 </div>
 </div>
-<a id="a9b59713e49552525b654526c7898f77a" name="a9b59713e49552525b654526c7898f77a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b59713e49552525b654526c7898f77a">&#9670;&nbsp;</a></span>getPtr()</h2>
+<a id="a9ce7460699dca17a227e4750ce06098f" name="a9ce7460699dca17a227e4750ce06098f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ce7460699dca17a227e4750ce06098f">&#9670;&nbsp;</a></span>getPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </div>
+template&lt;typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">RFK_NODISCARD void * rfk::Field::getPtr </td>
           <td>(</td>
-          <td class="paramtype">OwnerStructType &amp;&#160;</td>
+          <td class="paramtype">InstanceType &amp;&#160;</td>
           <td class="paramname"><em>instance</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -459,24 +474,151 @@ template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the field is actually const. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_archetype.html">InvalidArchetype</a></td><td>if the field can't be accessed from the provided instance. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a8548fd9b2c94aee9f9ed8979f72e4dd5" name="a8548fd9b2c94aee9f9ed8979f72e4dd5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8548fd9b2c94aee9f9ed8979f72e4dd5">&#9670;&nbsp;</a></span>set() <span class="overload">[1/2]</span></h2>
+<a id="a4d74e50b768369ffc4bb6659c76fb486" name="a4d74e50b768369ffc4bb6659c76fb486"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d74e50b768369ffc4bb6659c76fb486">&#9670;&nbsp;</a></span>getPtrUnsafe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD REFUREKU_API void * rfk::Field::getPtrUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get a pointer to this field in the provided instance. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a9ce7460699dca17a227e4750ce06098f" title="Get a pointer to this field in the provided instance.">Field::getPtr</a> for safety if you know the static type of your instance in the calling context. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td>Instance we get the field from.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to this field in the provided instance.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the field is actually const. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_archetype.html">InvalidArchetype</a></td><td>if the field can't be accessed from the provided instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a554728e8a99550c5d91de7861e08015d" name="a554728e8a99550c5d91de7861e08015d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a554728e8a99550c5d91de7861e08015d">&#9670;&nbsp;</a></span>getUnsafe() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ValueType , typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </div>
+template&lt;typename ValueType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD ValueType rfk::Field::getUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72" title="Get the value corresponding to this field in the provided instance. This method in not safe if you pr...">Field::get</a> for safety if you know the static type of your instance in the calling context. </p>
+<dl class="section note"><dt>Note</dt><dd>Since this method doesn't perform any pointer adjustment, it is slightly faster than <a class="el" href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72" title="Get the value corresponding to this field in the provided instance. This method in not safe if you pr...">Field::get</a>.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ValueType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to retrieve from the field. If ValueType is an rvalue reference, the field value is moved into the return value (so the field value is no longer safe to use). If ValueType is an lvalue reference, return a reference to the field. If ValueType is a value type, the value is copied. If it is a class, ValueType must be copy-constructible.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td>Instance we retrieve the value from.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if:<ul>
+<li>the field is const and ValueType is an RValue type (can't move a const field content);</li>
+<li>the field is const and ValueType is a non-const reference;</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The queried value in the instance. </dd></dl>
+
+</div>
+</div>
+<a id="af68f57e7fd571a34d378941f68aee237" name="af68f57e7fd571a34d378941f68aee237"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af68f57e7fd571a34d378941f68aee237">&#9670;&nbsp;</a></span>getUnsafe() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ValueType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">RFK_NODISCARD ValueType rfk::Field::getUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void const *&#160;</td>
+          <td class="paramname"><em>instance</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the value corresponding to this field in the provided instance. This method in not safe if you provide a wrong ValueType. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72" title="Get the value corresponding to this field in the provided instance. This method in not safe if you pr...">Field::get</a> for safety if you know the static type of your instance in the calling context. </p>
+<dl class="section note"><dt>Note</dt><dd>This is only an overload of the same method with a const instance. Since this method doesn't perform any pointer adjustment, it is slightly faster than <a class="el" href="classrfk_1_1_field.html#a985da6fc03517fb4a67da2f5dd87cb72" title="Get the value corresponding to this field in the provided instance. This method in not safe if you pr...">Field::get</a>.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ValueType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to retrieve from the field. If ValueType is an rvalue reference, the field value is moved into the return value (so the field value is no longer safe to use). If ValueType is an lvalue reference, return a reference to the field. If ValueType is a value type, the value is copied. If it is a class, ValueType must be copy-constructible.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td>Instance we retrieve the value from.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if:<ul>
+<li>the field is const and ValueType is an RValue type (can't move a const field content);</li>
+<li>the field is const and ValueType is a non-const reference;</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The queried value in the instance. </dd></dl>
+
+</div>
+</div>
+<a id="a8d398c692a5647118dbba3507153b0e1" name="a8d398c692a5647118dbba3507153b0e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d398c692a5647118dbba3507153b0e1">&#9670;&nbsp;</a></span>set() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ValueType , typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void rfk::Field::set </td>
           <td>(</td>
-          <td class="paramtype">OwnerStructType &amp;&#160;</td>
+          <td class="paramtype">InstanceType &amp;&#160;</td>
           <td class="paramname"><em>instance</em>, </td>
         </tr>
         <tr>
@@ -510,24 +652,127 @@ template&lt;typename ValueType , typename OwnerStructType , typename  = std::ena
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the field is actually const and therefore readonly. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_archetype.html">InvalidArchetype</a></td><td>if the field can't be accessed from the provided instance. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a135538024c8f1d7c5d4fb4e5951f4991" name="a135538024c8f1d7c5d4fb4e5951f4991"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a135538024c8f1d7c5d4fb4e5951f4991">&#9670;&nbsp;</a></span>set() <span class="overload">[2/2]</span></h2>
+<a id="aa1e630ab9c3a6c638fcba1919f143f99" name="aa1e630ab9c3a6c638fcba1919f143f99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1e630ab9c3a6c638fcba1919f143f99">&#9670;&nbsp;</a></span>set() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename OwnerStructType , typename  = std::enable_if_t&lt;is_value_v&lt;OwnerStructType&gt;&gt;&gt; </div>
+template&lt;typename InstanceType , typename  = std::enable_if_t&lt;is_value_v&lt;InstanceType&gt; &amp;&amp; internal::IsAdjustableInstanceValue&lt;InstanceType&gt;&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void rfk::Field::set </td>
           <td>(</td>
-          <td class="paramtype">OwnerStructType &amp;&#160;</td>
+          <td class="paramtype">InstanceType &amp;&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void const *&#160;</td>
+          <td class="paramname"><em>valuePtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>valueSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy valueSize bytes starting from valuePtr into this field's address in instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td>Instance we write the bytes in. </td></tr>
+    <tr><td class="paramname">valuePtr</td><td>Pointer to the value to copy. </td></tr>
+    <tr><td class="paramname">valueSize</td><td>Number of bytes to copy into the field.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the field is actually const and therefore readonly. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_archetype.html">InvalidArchetype</a></td><td>if the field can't be accessed from the provided instance. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab9bd9ccf0da0e3fd5e830bba8a696294" name="ab9bd9ccf0da0e3fd5e830bba8a696294"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9bd9ccf0da0e3fd5e830bba8a696294">&#9670;&nbsp;</a></span>setUnsafe() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ValueType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void rfk::Field::setUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ValueType &amp;&amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the value corresponding to this field in the provided instance. This method is not safe if you provide a wrong ValueType. This method DOES NOT perform any pointer adjustment on the provided instance so it is unsafe if instance is not a valid pointer to an object of the field's owner archetype. Prefer using <a class="el" href="classrfk_1_1_field.html#a8d398c692a5647118dbba3507153b0e1" title="Set the value corresponding to this field in the provided instance. This method is not safe if you pr...">Field::set</a> for safety if you know the static type of your instance in the calling context. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ValueType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to write into the field. If ValueType is an rvalue reference, the value is forwarded into the instance. If ValueType is an lvalue reference, the value is copied into the instance.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">instance</td><td>Instance we set the value in. </td></tr>
+    <tr><td class="paramname">value</td><td>Data to set in the instance.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the field is actually const and therefore readonly. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a51adce67a3c3867e5763c1787616441d" name="a51adce67a3c3867e5763c1787616441d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51adce67a3c3867e5763c1787616441d">&#9670;&nbsp;</a></span>setUnsafe() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">REFUREKU_API void rfk::Field::setUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>instance</em>, </td>
         </tr>
         <tr>

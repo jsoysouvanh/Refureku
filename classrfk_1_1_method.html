@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.2</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.2.0</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -113,22 +113,30 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Method</
 <tr class="memitem:abb061a46d94ef462ae698afbf3698315"><td class="memItemLeft" align="right" valign="top"><a id="abb061a46d94ef462ae698afbf3698315" name="abb061a46d94ef462ae698afbf3698315"></a>
 REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Method</b> (<a class="el" href="classrfk_1_1_method.html">Method</a> &amp;&amp;) noexcept</td></tr>
 <tr class="separator:abb061a46d94ef462ae698afbf3698315"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fccea5413d86d922fb65fd42f3ca5c4"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a1fccea5413d86d922fb65fd42f3ca5c4"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = internal::IsAdjustableInstance&lt;CallerType&gt;&gt; </td></tr>
 <tr class="memitem:a1fccea5413d86d922fb65fd42f3ca5c4"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">invoke</a> (CallerType &amp;caller, ArgTypes &amp;&amp;... args) const</td></tr>
 <tr class="memdesc:a1fccea5413d86d922fb65fd42f3ca5c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call the function with the forwarded argument(s) if any, and return the result. Providing bad return type / parameters is undefined behaviour. <b>WARNING</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function.  <a href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4">More...</a><br /></td></tr>
 <tr class="separator:a1fccea5413d86d922fb65fd42f3ca5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41c5732e1d8aa4f284448d5727b15fe2"><td class="memTemplParams" colspan="2"><a id="a41c5732e1d8aa4f284448d5727b15fe2" name="a41c5732e1d8aa4f284448d5727b15fe2"></a>
-template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes&gt; </td></tr>
-<tr class="memitem:a41c5732e1d8aa4f284448d5727b15fe2"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><b>invoke</b> (CallerType const &amp;caller, ArgTypes &amp;&amp;... args) const</td></tr>
-<tr class="separator:a41c5732e1d8aa4f284448d5727b15fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a777fa1a63dabef8f7a7276c254246a46"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:ae6b1f0e2e1b7a0c3c7005ada2e7f8576"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:ae6b1f0e2e1b7a0c3c7005ada2e7f8576"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_method.html#ae6b1f0e2e1b7a0c3c7005ada2e7f8576">invokeUnsafe</a> (void *caller, ArgTypes &amp;&amp;... args) const</td></tr>
+<tr class="memdesc:ae6b1f0e2e1b7a0c3c7005ada2e7f8576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call the function with the forwarded argument(s) if any, and return the result. Providing bad return type / parameters is undefined behaviour. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4" title="Call the function with the forwarded argument(s) if any, and return the result. Providing bad return ...">Method::invoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function.  <a href="classrfk_1_1_method.html#ae6b1f0e2e1b7a0c3c7005ada2e7f8576">More...</a><br /></td></tr>
+<tr class="separator:ae6b1f0e2e1b7a0c3c7005ada2e7f8576"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b24d9c4608d00823aae30d86b18630b"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:a9b24d9c4608d00823aae30d86b18630b"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_method.html#a9b24d9c4608d00823aae30d86b18630b">invokeUnsafe</a> (void const *caller, ArgTypes &amp;&amp;... args) const</td></tr>
+<tr class="memdesc:a9b24d9c4608d00823aae30d86b18630b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call the function with the forwarded argument(s) if any, and return the result. Providing bad return type / parameters is undefined behaviour. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4" title="Call the function with the forwarded argument(s) if any, and return the result. Providing bad return ...">Method::invoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function.  <a href="classrfk_1_1_method.html#a9b24d9c4608d00823aae30d86b18630b">More...</a><br /></td></tr>
+<tr class="separator:a9b24d9c4608d00823aae30d86b18630b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a777fa1a63dabef8f7a7276c254246a46"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = internal::IsAdjustableInstance&lt;CallerType&gt;&gt; </td></tr>
 <tr class="memitem:a777fa1a63dabef8f7a7276c254246a46"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">checkedInvoke</a> (CallerType &amp;caller, ArgTypes &amp;&amp;... args) const</td></tr>
 <tr class="memdesc:a777fa1a63dabef8f7a7276c254246a46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call the function with the forwarded argument(s) if any, and return the result. The return type and arguments types will be strictly checked before calling the function. If there is any mismatch, <a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a>, <a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a> or <a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a> will be thrown. <b>WARNING 1</b>: Unreflected archetypes can't be compared, so they will pass through the type checks. <b>WARNING 2</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function.  <a href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46">More...</a><br /></td></tr>
 <tr class="separator:a777fa1a63dabef8f7a7276c254246a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f1f56410e3afa4ece6b7f0ca5a1d209"><td class="memTemplParams" colspan="2"><a id="a1f1f56410e3afa4ece6b7f0ca5a1d209" name="a1f1f56410e3afa4ece6b7f0ca5a1d209"></a>
-template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes&gt; </td></tr>
-<tr class="memitem:a1f1f56410e3afa4ece6b7f0ca5a1d209"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><b>checkedInvoke</b> (CallerType const &amp;caller, ArgTypes &amp;&amp;... args) const</td></tr>
-<tr class="separator:a1f1f56410e3afa4ece6b7f0ca5a1d209"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e3e5afc73d9fd179285f06b40976008"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:a2e3e5afc73d9fd179285f06b40976008"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_method.html#a2e3e5afc73d9fd179285f06b40976008">checkedInvokeUnsafe</a> (void *caller, ArgTypes &amp;&amp;... args) const</td></tr>
+<tr class="memdesc:a2e3e5afc73d9fd179285f06b40976008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call the function with the forwarded argument(s) if any, and return the result. The return type and arguments types will be strictly checked before calling the function. If there is any mismatch, <a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a>, <a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a> or <a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a> will be thrown. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46" title="Call the function with the forwarded argument(s) if any, and return the result. The return type and a...">Method::checkedInvoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING 1</b>: Unreflected archetypes can't be compared, so they will pass through the type checks. <b>WARNING 2</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function.  <a href="classrfk_1_1_method.html#a2e3e5afc73d9fd179285f06b40976008">More...</a><br /></td></tr>
+<tr class="separator:a2e3e5afc73d9fd179285f06b40976008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af87a10e07d3472dc6a82074e775ed6b2"><td class="memTemplParams" colspan="2">template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </td></tr>
+<tr class="memitem:af87a10e07d3472dc6a82074e775ed6b2"><td class="memTemplItemLeft" align="right" valign="top">ReturnType&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrfk_1_1_method.html#af87a10e07d3472dc6a82074e775ed6b2">checkedInvokeUnsafe</a> (void const *caller, ArgTypes &amp;&amp;... args) const</td></tr>
+<tr class="memdesc:af87a10e07d3472dc6a82074e775ed6b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call the function with the forwarded argument(s) if any, and return the result. The return type and arguments types will be strictly checked before calling the function. If there is any mismatch, <a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a>, <a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a> or <a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a> will be thrown. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46" title="Call the function with the forwarded argument(s) if any, and return the result. The return type and a...">Method::checkedInvoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING 1</b>: Unreflected archetypes can't be compared, so they will pass through the type checks. <b>WARNING 2</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function.  <a href="classrfk_1_1_method.html#af87a10e07d3472dc6a82074e775ed6b2">More...</a><br /></td></tr>
+<tr class="separator:af87a10e07d3472dc6a82074e775ed6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2547ee0b4c068970059c9192ec50933"><td class="memItemLeft" align="right" valign="top"><a id="ab2547ee0b4c068970059c9192ec50933" name="ab2547ee0b4c068970059c9192ec50933"></a>
 REFUREKU_API void&#160;</td><td class="memItemRight" valign="bottom"><b>inheritBaseMethodProperties</b> () noexcept</td></tr>
 <tr class="memdesc:ab2547ee0b4c068970059c9192ec50933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inherit from the properties this method overrides. If the method is not an override, this method does nothing. <br /></td></tr>
@@ -322,7 +330,7 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Entity</
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt; </div>
+template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = internal::IsAdjustableInstance&lt;CallerType&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">ReturnType rfk::Method::checkedInvoke </td>
@@ -367,8 +375,127 @@ template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTy
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a></td><td>if sizeof...(ArgTypes) is not the same as the value returned by <a class="el" href="classrfk_1_1_function_base.html#ae407b16a382f88da360e50b71d3114d9" title="Get the number of parameters of this function.">getParametersCount()</a>. </td></tr>
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a></td><td>if ArgTypes... are not strictly the same as this function parameter types. <b>WARNING</b>: Be careful to template deduction. </td></tr>
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a></td><td>if ReturnType is not strictly the same as this function return type. </td></tr>
-    <tr><td class="paramname">NotReflectedClass</td><td>if the caller struct is not reflected (<a class="el" href="namespacerfk.html#ad271284a71f8ca43f34686e4f9740393" title="Get the archetype of any type if it exists. Note that this method will always return nullptr on prote...">rfk::getArchetype&lt;CallerType&gt;()</a> == nullptr). </td></tr>
-    <tr><td class="paramname"><a class="el" href="classrfk_1_1_invalid_caller.html">InvalidCaller</a></td><td>if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy). </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the caller is const but the method is non-const. </td></tr>
+    <tr><td class="paramname">InvalidCaller</td><td>if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy). </td></tr>
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the underlying function. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2e3e5afc73d9fd179285f06b40976008" name="a2e3e5afc73d9fd179285f06b40976008"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e3e5afc73d9fd179285f06b40976008">&#9670;&nbsp;</a></span>checkedInvokeUnsafe() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">ReturnType rfk::Method::checkedInvokeUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>caller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ArgTypes &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Call the function with the forwarded argument(s) if any, and return the result. The return type and arguments types will be strictly checked before calling the function. If there is any mismatch, <a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a>, <a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a> or <a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a> will be thrown. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46" title="Call the function with the forwarded argument(s) if any, and return the result. The return type and a...">Method::checkedInvoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING 1</b>: Unreflected archetypes can't be compared, so they will pass through the type checks. <b>WARNING 2</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function. </p>
+<dl class="section note"><dt>Note</dt><dd>Since this method doesn't perform any pointer adjustment, it is slightly faster than <a class="el" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46" title="Call the function with the forwarded argument(s) if any, and return the result. The return type and a...">Method::checkedInvoke</a>.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ReturnType</td><td>Return type of the function. </td></tr>
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>.. ArgTypes <a class="el" href="classrfk_1_1_type.html">Type</a> of all arguments. This can in some cases be omitted thanks to template deduction.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">caller</td><td><a class="el" href="classrfk_1_1_object.html">Object</a> instance calling the method. </td></tr>
+    <tr><td class="paramname">args</td><td>Arguments forwarded to the function call.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the function call.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a></td><td>if sizeof...(ArgTypes) is not the same as the value returned by <a class="el" href="classrfk_1_1_function_base.html#ae407b16a382f88da360e50b71d3114d9" title="Get the number of parameters of this function.">getParametersCount()</a>. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a></td><td>if ArgTypes... are not strictly the same as this function parameter types. <b>WARNING</b>: Be careful to template deduction. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a></td><td>if ReturnType is not strictly the same as this function return type. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the caller is const but the method is non-const. </td></tr>
+    <tr><td class="paramname">InvalidCaller</td><td>if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy). </td></tr>
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the underlying function. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af87a10e07d3472dc6a82074e775ed6b2" name="af87a10e07d3472dc6a82074e775ed6b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af87a10e07d3472dc6a82074e775ed6b2">&#9670;&nbsp;</a></span>checkedInvokeUnsafe() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">ReturnType rfk::Method::checkedInvokeUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void const *&#160;</td>
+          <td class="paramname"><em>caller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ArgTypes &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Call the function with the forwarded argument(s) if any, and return the result. The return type and arguments types will be strictly checked before calling the function. If there is any mismatch, <a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a>, <a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a> or <a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a> will be thrown. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46" title="Call the function with the forwarded argument(s) if any, and return the result. The return type and a...">Method::checkedInvoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING 1</b>: Unreflected archetypes can't be compared, so they will pass through the type checks. <b>WARNING 2</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function. </p>
+<dl class="section note"><dt>Note</dt><dd>This is only an overload of the same method with a const caller. Since this method doesn't perform any pointer adjustment, it is slightly faster than <a class="el" href="classrfk_1_1_method.html#a777fa1a63dabef8f7a7276c254246a46" title="Call the function with the forwarded argument(s) if any, and return the result. The return type and a...">Method::checkedInvoke</a>.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ReturnType</td><td>Return type of the function. </td></tr>
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>.. ArgTypes <a class="el" href="classrfk_1_1_type.html">Type</a> of all arguments. This can in some cases be omitted thanks to template deduction.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">caller</td><td><a class="el" href="classrfk_1_1_object.html">Object</a> instance calling the method. </td></tr>
+    <tr><td class="paramname">args</td><td>Arguments forwarded to the function call.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the function call.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_count_mismatch.html">ArgCountMismatch</a></td><td>if sizeof...(ArgTypes) is not the same as the value returned by <a class="el" href="classrfk_1_1_function_base.html#ae407b16a382f88da360e50b71d3114d9" title="Get the number of parameters of this function.">getParametersCount()</a>. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_arg_type_mismatch.html">ArgTypeMismatch</a></td><td>if ArgTypes... are not strictly the same as this function parameter types. <b>WARNING</b>: Be careful to template deduction. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_return_type_mismatch.html">ReturnTypeMismatch</a></td><td>if ReturnType is not strictly the same as this function return type. </td></tr>
+    <tr><td class="paramname">InvalidCaller</td><td>if the caller struct can't call the method (struct that introduced this method is not in the caller parent's hierarchy). </td></tr>
     <tr><td class="paramname">Any</td><td>exception potentially thrown from the underlying function. </td></tr>
   </table>
   </dd>
@@ -382,7 +509,7 @@ template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTy
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = std::enable_if_t&lt;!std::is_const_v&lt;CallerType&gt;&gt;&gt; </div>
+template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTypes, typename  = internal::IsAdjustableInstance&lt;CallerType&gt;&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">ReturnType rfk::Method::invoke </td>
@@ -426,6 +553,117 @@ template&lt;typename ReturnType  = void, typename CallerType , typename... ArgTy
   <table class="exception">
     <tr><td class="paramname">Any</td><td>exception potentially thrown from the underlying function. </td></tr>
     <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the caller is const but the method is non-const. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae6b1f0e2e1b7a0c3c7005ada2e7f8576" name="ae6b1f0e2e1b7a0c3c7005ada2e7f8576"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6b1f0e2e1b7a0c3c7005ada2e7f8576">&#9670;&nbsp;</a></span>invokeUnsafe() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">ReturnType rfk::Method::invokeUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>caller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ArgTypes &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Call the function with the forwarded argument(s) if any, and return the result. Providing bad return type / parameters is undefined behaviour. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4" title="Call the function with the forwarded argument(s) if any, and return the result. Providing bad return ...">Method::invoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function. </p>
+<dl class="section note"><dt>Note</dt><dd>Since this method doesn't perform any pointer adjustment, it is slightly faster than <a class="el" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4" title="Call the function with the forwarded argument(s) if any, and return the result. Providing bad return ...">Method::invoke</a>.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ReturnType</td><td>Return type of the function. </td></tr>
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>.. ArgTypes <a class="el" href="classrfk_1_1_type.html">Type</a> of all arguments. This can in some cases be omitted thanks to template deduction.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">caller</td><td><a class="el" href="classrfk_1_1_object.html">Object</a> instance calling the method. </td></tr>
+    <tr><td class="paramname">args</td><td>Arguments forwarded to the function call.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the function call.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the underlying function. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classrfk_1_1_const_violation.html">ConstViolation</a></td><td>if the caller is const but the method is non-const. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9b24d9c4608d00823aae30d86b18630b" name="a9b24d9c4608d00823aae30d86b18630b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b24d9c4608d00823aae30d86b18630b">&#9670;&nbsp;</a></span>invokeUnsafe() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ReturnType  = void, typename... ArgTypes&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">ReturnType rfk::Method::invokeUnsafe </td>
+          <td>(</td>
+          <td class="paramtype">void const *&#160;</td>
+          <td class="paramname"><em>caller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ArgTypes &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Call the function with the forwarded argument(s) if any, and return the result. Providing bad return type / parameters is undefined behaviour. This method DOES NOT perform any pointer adjustment on the provided caller so it has an undefined behaviour if caller is not a valid pointer to an object of the method's owner archetype. Prefer using <a class="el" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4" title="Call the function with the forwarded argument(s) if any, and return the result. Providing bad return ...">Method::invoke</a> for safety if you know the static type of your caller in the calling context. <b>WARNING</b>: Template type deduction might forward wrong types to the function (int instead of int8_t or char* instead of std::string for example), so it is recommended to explicitly specify all template types when calling the function. </p>
+<dl class="section note"><dt>Note</dt><dd>This is only an overload of the same method with a const caller. Since this method doesn't perform any pointer adjustment, it is slightly faster than <a class="el" href="classrfk_1_1_method.html#a1fccea5413d86d922fb65fd42f3ca5c4" title="Call the function with the forwarded argument(s) if any, and return the result. Providing bad return ...">Method::invoke</a>.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ReturnType</td><td>Return type of the function. </td></tr>
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>.. ArgTypes <a class="el" href="classrfk_1_1_type.html">Type</a> of all arguments. This can in some cases be omitted thanks to template deduction.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">caller</td><td><a class="el" href="classrfk_1_1_object.html">Object</a> instance calling the method. </td></tr>
+    <tr><td class="paramname">args</td><td>Arguments forwarded to the function call.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the function call.</dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Any</td><td>exception potentially thrown from the underlying function. </td></tr>
   </table>
   </dd>
 </dl>

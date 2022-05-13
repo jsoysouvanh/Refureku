@@ -45,7 +45,7 @@ var hierarchy =
     [ "std::logic_error", null, [
       [ "rfk::ArgCountMismatch", "classrfk_1_1_arg_count_mismatch.html", null ],
       [ "rfk::ConstViolation", "classrfk_1_1_const_violation.html", null ],
-      [ "rfk::InvalidCaller", "classrfk_1_1_invalid_caller.html", null ],
+      [ "rfk::InvalidArchetype", "classrfk_1_1_invalid_archetype.html", null ],
       [ "rfk::TypeMismatch", "classrfk_1_1_type_mismatch.html", [
         [ "rfk::ArgTypeMismatch", "classrfk_1_1_arg_type_mismatch.html", null ],
         [ "rfk::ReturnTypeMismatch", "classrfk_1_1_return_type_mismatch.html", null ]

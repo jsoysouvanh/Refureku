@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.2</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.2.0</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -104,12 +104,12 @@ Inheritance diagram for rfk::TypeTemplateArgument:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad3661dedd3b6450fb15d29c943e06972"><td class="memItemLeft" align="right" valign="top"><a id="ad3661dedd3b6450fb15d29c943e06972" name="ad3661dedd3b6450fb15d29c943e06972"></a>
-REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>TypeTemplateArgument</b> (<a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *archetype) noexcept</td></tr>
-<tr class="separator:ad3661dedd3b6450fb15d29c943e06972"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40632233f6524736f7d68924a2fe6ed8"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_type_template_argument.html#a40632233f6524736f7d68924a2fe6ed8">getArchetype</a> () const noexcept</td></tr>
-<tr class="memdesc:a40632233f6524736f7d68924a2fe6ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the archetype of this argument. Can be nullptr if the type is not reflected.  <a href="classrfk_1_1_type_template_argument.html#a40632233f6524736f7d68924a2fe6ed8">More...</a><br /></td></tr>
-<tr class="separator:a40632233f6524736f7d68924a2fe6ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab018c75982debcafa7dba31793cfb201"><td class="memItemLeft" align="right" valign="top"><a id="ab018c75982debcafa7dba31793cfb201" name="ab018c75982debcafa7dba31793cfb201"></a>
+REFUREKU_API&#160;</td><td class="memItemRight" valign="bottom"><b>TypeTemplateArgument</b> (<a class="el" href="classrfk_1_1_type.html">Type</a> const &amp;archetype) noexcept</td></tr>
+<tr class="separator:ab018c75982debcafa7dba31793cfb201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8790bf153f3eb781b0f62a3f33ab4ac1"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_type.html">Type</a> const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_type_template_argument.html#a8790bf153f3eb781b0f62a3f33ab4ac1">getType</a> () const noexcept</td></tr>
+<tr class="memdesc:a8790bf153f3eb781b0f62a3f33ab4ac1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the type of this argument.  <a href="classrfk_1_1_type_template_argument.html#a8790bf153f3eb781b0f62a3f33ab4ac1">More...</a><br /></td></tr>
+<tr class="separator:a8790bf153f3eb781b0f62a3f33ab4ac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17c8f71b6247d6d54b9e60948913c92a"><td class="memItemLeft" align="right" valign="top">RFK_NODISCARD REFUREKU_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_type_template_argument.html#a17c8f71b6247d6d54b9e60948913c92a">operator==</a> (<a class="el" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a> const &amp;other) const noexcept</td></tr>
 <tr class="memdesc:a17c8f71b6247d6d54b9e60948913c92a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether 2 <a class="el" href="classrfk_1_1_type_template_argument.html">TypeTemplateArgument</a> instances are equal or not.  <a href="classrfk_1_1_type_template_argument.html#a17c8f71b6247d6d54b9e60948913c92a">More...</a><br /></td></tr>
 <tr class="separator:a17c8f71b6247d6d54b9e60948913c92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,8 +141,8 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Template
 <tr class="separator:a6c4cbf826b97a72e0c8ef4058cdb9960 inherit pro_methods_classrfk_1_1_template_argument"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a40632233f6524736f7d68924a2fe6ed8" name="a40632233f6524736f7d68924a2fe6ed8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40632233f6524736f7d68924a2fe6ed8">&#9670;&nbsp;</a></span>getArchetype()</h2>
+<a id="a8790bf153f3eb781b0f62a3f33ab4ac1" name="a8790bf153f3eb781b0f62a3f33ab4ac1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8790bf153f3eb781b0f62a3f33ab4ac1">&#9670;&nbsp;</a></span>getType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,7 +151,7 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Template
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_archetype.html">Archetype</a> const  * rfk::TypeTemplateArgument::getArchetype </td>
+          <td class="memname">RFK_NODISCARD REFUREKU_API <a class="el" href="classrfk_1_1_type.html">Type</a> const  &amp; rfk::TypeTemplateArgument::getType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -164,8 +164,8 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Template
 </table>
 </div><div class="memdoc">
 
-<p>Get the archetype of this argument. Can be nullptr if the type is not reflected. </p>
-<dl class="section return"><dt>Returns</dt><dd>The archetype of this argument. </dd></dl>
+<p>Get the type of this argument. </p>
+<dl class="section return"><dt>Returns</dt><dd>The type of this argument. </dd></dl>
 
 </div>
 </div>
@@ -200,7 +200,7 @@ REFUREKU_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>Template
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the 2 type template arguments have the same archetype, else false. Returns false if the archetype is nullptr, since the equality can't be guaranteed. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the 2 type template arguments have the same type, else false. </dd></dl>
 
 </div>
 </div>

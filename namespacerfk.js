@@ -24,7 +24,7 @@ var namespacerfk =
     [ "FunctionParameter", "classrfk_1_1_function_parameter.html", "classrfk_1_1_function_parameter" ],
     [ "FundamentalArchetype", "classrfk_1_1_fundamental_archetype.html", null ],
     [ "ICallable", "classrfk_1_1_i_callable.html", null ],
-    [ "InvalidCaller", "classrfk_1_1_invalid_caller.html", null ],
+    [ "InvalidArchetype", "classrfk_1_1_invalid_archetype.html", null ],
     [ "MemberFunction", "classrfk_1_1_member_function.html", null ],
     [ "MemberFunction< CallerType, ReturnType(ArgTypes...)>", "classrfk_1_1_member_function_3_01_caller_type_00_01_return_type_07_arg_types_8_8_8_08_4.html", "classrfk_1_1_member_function_3_01_caller_type_00_01_return_type_07_arg_types_8_8_8_08_4" ],
     [ "Method", "classrfk_1_1_method.html", "classrfk_1_1_method" ],

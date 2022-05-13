@@ -9,6 +9,7 @@ var dir_4f84a37d38721b9b45fa324a6acbeaa7 =
     [ "Database.h", "_database_8h_source.html", null ],
     [ "EAccessSpecifier.h", "_e_access_specifier_8h_source.html", null ],
     [ "ETypePartDescriptor.h", "_e_type_part_descriptor_8h_source.html", null ],
+    [ "MethodFieldHelpers.h", "_method_field_helpers_8h_source.html", null ],
     [ "Type.h", "_type_8h_source.html", null ],
     [ "TypePart.h", "_type_part_8h_source.html", null ]
 ];

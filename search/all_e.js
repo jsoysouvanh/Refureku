@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['set_0',['set',['../classrfk_1_1_field.html#a8548fd9b2c94aee9f9ed8979f72e4dd5',1,'rfk::Field::set(OwnerStructType &amp;instance, ValueType &amp;&amp;value) const'],['../classrfk_1_1_field.html#a135538024c8f1d7c5d4fb4e5951f4991',1,'rfk::Field::set(OwnerStructType &amp;instance, void const *valuePtr, std::size_t valueSize) const'],['../classrfk_1_1_static_field.html#ab9daec0f5a078f39a3c78906dd3903a8',1,'rfk::StaticField::set(ValueType &amp;&amp;value) const'],['../classrfk_1_1_static_field.html#a9bb2482eb2e0193a176e1416f44431b9',1,'rfk::StaticField::set(void const *valuePtr, std::size_t valueSize) const'],['../classrfk_1_1_variable.html#ad896623c50b95b696bec33a45e0b8744',1,'rfk::Variable::set(ValueType &amp;&amp;value) const'],['../classrfk_1_1_variable.html#aee8cc17c37e722063495b566be790633',1,'rfk::Variable::set(void const *valuePtr, std::size_t valueSize) const'],['../classrfk_1_1_variable_base.html#ab7f5b2617be52bec76af718760895c11',1,'rfk::VariableBase::set(void *ptr, ValueType &amp;&amp;value) const'],['../classrfk_1_1_variable_base.html#a2c8e5124ca1c93940d50ca4fe1811a66',1,'rfk::VariableBase::set(void *target, void const *source, std::size_t bytesCount) const']]],
+  ['set_0',['set',['../classrfk_1_1_field.html#a8d398c692a5647118dbba3507153b0e1',1,'rfk::Field::set(InstanceType &amp;instance, ValueType &amp;&amp;value) const'],['../classrfk_1_1_field.html#aa1e630ab9c3a6c638fcba1919f143f99',1,'rfk::Field::set(InstanceType &amp;instance, void const *valuePtr, std::size_t valueSize) const'],['../classrfk_1_1_static_field.html#ab9daec0f5a078f39a3c78906dd3903a8',1,'rfk::StaticField::set(ValueType &amp;&amp;value) const'],['../classrfk_1_1_static_field.html#a9bb2482eb2e0193a176e1416f44431b9',1,'rfk::StaticField::set(void const *valuePtr, std::size_t valueSize) const'],['../classrfk_1_1_variable.html#ad896623c50b95b696bec33a45e0b8744',1,'rfk::Variable::set(ValueType &amp;&amp;value) const'],['../classrfk_1_1_variable.html#aee8cc17c37e722063495b566be790633',1,'rfk::Variable::set(void const *valuePtr, std::size_t valueSize) const'],['../classrfk_1_1_variable_base.html#ab7f5b2617be52bec76af718760895c11',1,'rfk::VariableBase::set(void *ptr, ValueType &amp;&amp;value) const'],['../classrfk_1_1_variable_base.html#a2c8e5124ca1c93940d50ca4fe1811a66',1,'rfk::VariableBase::set(void *target, void const *source, std::size_t bytesCount) const']]],
   ['setaccessspecifier_1',['setAccessSpecifier',['../classrfk_1_1_archetype.html#a7331b5d3888ea5d3e19e9d950425dc4c',1,'rfk::Archetype']]],
   ['setadditionaldata_2',['setAdditionalData',['../classrfk_1_1_type_part.html#a8bf57167bcb1c923b2a3c01e2e3696d4',1,'rfk::TypePart']]],
   ['setarchetype_3',['setArchetype',['../classrfk_1_1_type.html#abc2661e09b120db527a0fc50e2b1b453',1,'rfk::Type']]],
@@ -15,15 +15,16 @@ var searchData=
   ['setpropertiescapacity_12',['setPropertiesCapacity',['../classrfk_1_1_entity.html#ac48595d14a255dd9d76f1f6c14acb0a0',1,'rfk::Entity']]],
   ['setstaticfieldscapacity_13',['setStaticFieldsCapacity',['../classrfk_1_1_struct.html#a1015cc505c08f8103ae2949ba43ec260',1,'rfk::Struct']]],
   ['setstaticmethodscapacity_14',['setStaticMethodsCapacity',['../classrfk_1_1_struct.html#ab45d85ed3274f122e97c7faea38c7b0f',1,'rfk::Struct']]],
-  ['shouldinherit_15',['shouldInherit',['../classrfk_1_1_property.html#a75fcafb3dae2e59be71eb83ed1d9adaa',1,'rfk::Property']]],
-  ['size_16',['size',['../classrfk_1_1_vector.html#a1efec2c5878512b4037a7ca128acfb82',1,'rfk::Vector']]],
-  ['static_17',['Static',['../namespacerfk.html#aede2763da2d837a7ee63b105269d5f6ea84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()'],['../namespacerfk.html#a4e4ebc12533da5542afa59de6d305a7aa84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()'],['../namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()'],['../namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()']]],
-  ['staticfield_18',['StaticField',['../classrfk_1_1_static_field.html',1,'rfk']]],
-  ['staticfieldcast_19',['staticFieldCast',['../namespacerfk.html#a32387c73c68a5ff38d091f52825a7d29',1,'rfk']]],
-  ['staticmethod_20',['StaticMethod',['../classrfk_1_1_static_method.html',1,'rfk']]],
-  ['staticmethodcast_21',['staticMethodCast',['../namespacerfk.html#aa94c85fcb8ebcbbf4118e43fd47ae3ea',1,'rfk']]],
-  ['struct_22',['Struct',['../classrfk_1_1_struct.html',1,'rfk::Struct'],['../namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a886ef5dbd655a6c97726d7091c6b173e',1,'rfk::Struct()']]],
-  ['structcast_23',['structCast',['../namespacerfk.html#a4652df3118fde2acef4dff12e0d9e2d9',1,'rfk']]],
-  ['structtemplatecast_24',['structTemplateCast',['../namespacerfk.html#a1f70b1161beb556fc98f28186966dd34',1,'rfk']]],
-  ['structtemplateinstantiationcast_25',['structTemplateInstantiationCast',['../namespacerfk.html#a9cf14cdcd4b8f29182188107bddff34d',1,'rfk']]]
+  ['setunsafe_15',['setUnsafe',['../classrfk_1_1_field.html#ab9bd9ccf0da0e3fd5e830bba8a696294',1,'rfk::Field::setUnsafe(void *instance, ValueType &amp;&amp;value) const'],['../classrfk_1_1_field.html#a51adce67a3c3867e5763c1787616441d',1,'rfk::Field::setUnsafe(void *instance, void const *valuePtr, std::size_t valueSize) const']]],
+  ['shouldinherit_16',['shouldInherit',['../classrfk_1_1_property.html#a75fcafb3dae2e59be71eb83ed1d9adaa',1,'rfk::Property']]],
+  ['size_17',['size',['../classrfk_1_1_vector.html#a1efec2c5878512b4037a7ca128acfb82',1,'rfk::Vector']]],
+  ['static_18',['Static',['../namespacerfk.html#aede2763da2d837a7ee63b105269d5f6ea84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()'],['../namespacerfk.html#a4e4ebc12533da5542afa59de6d305a7aa84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()'],['../namespacerfk.html#ad7021d9a638af321b6538f58856a0aeca84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()'],['../namespacerfk.html#a5d0ec80a9d18a6fca18286db630babeea84a8921b25f505d0d2077aeb5db4bc16',1,'rfk::Static()']]],
+  ['staticfield_19',['StaticField',['../classrfk_1_1_static_field.html',1,'rfk']]],
+  ['staticfieldcast_20',['staticFieldCast',['../namespacerfk.html#a32387c73c68a5ff38d091f52825a7d29',1,'rfk']]],
+  ['staticmethod_21',['StaticMethod',['../classrfk_1_1_static_method.html',1,'rfk']]],
+  ['staticmethodcast_22',['staticMethodCast',['../namespacerfk.html#aa94c85fcb8ebcbbf4118e43fd47ae3ea',1,'rfk']]],
+  ['struct_23',['Struct',['../classrfk_1_1_struct.html',1,'rfk::Struct'],['../namespacerfk.html#af958ab385009c79cc3a27e9b3183c5d5a886ef5dbd655a6c97726d7091c6b173e',1,'rfk::Struct()']]],
+  ['structcast_24',['structCast',['../namespacerfk.html#a4652df3118fde2acef4dff12e0d9e2d9',1,'rfk']]],
+  ['structtemplatecast_25',['structTemplateCast',['../namespacerfk.html#a1f70b1161beb556fc98f28186966dd34',1,'rfk']]],
+  ['structtemplateinstantiationcast_26',['structTemplateInstantiationCast',['../namespacerfk.html#a9cf14cdcd4b8f29182188107bddff34d',1,'rfk']]]
 ];

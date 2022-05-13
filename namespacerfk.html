@@ -28,7 +28,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="rfk-compact-logo.svg"/></td>
   <td id="projectalign">
-   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.1.2</span>
+   <div id="projectname">Refureku<span id="projectnumber">&#160;v2.2.0</span>
    </div>
    <div id="projectbrief">C++17 runtime reflection library.</div>
   </td>
@@ -146,7 +146,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_i_callable.html">ICallable</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_invalid_caller.html">InvalidCaller</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_invalid_archetype.html">InvalidArchetype</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrfk_1_1_member_function.html">MemberFunction</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1165,17 +1165,14 @@ template&lt;typename TargetClassType , typename SourceClassType &gt; </div>
 <p>Adjust the provided pointer to another class pointer if possible. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">TargetClassType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to cast to. It must be a reflected type (<a class="el" href="namespacerfk.html#ad271284a71f8ca43f34686e4f9740393" title="Get the archetype of any type if it exists. Note that this method will always return nullptr on prote...">rfk::getArchetype&lt;TargetClassType&gt;()</a> must be non-nullptr). </td></tr>
+    <tr><td class="paramname">TargetClassType</td><td><a class="el" href="classrfk_1_1_type.html">Type</a> to cast to. </td></tr>
     <tr><td class="paramname">SourceClassType</td><td>Static type of the provided instance to cast.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">instance</td><td>A pointer to the instance to cast. </td></tr>
-    <tr><td class="paramname">instanceStaticArchetype</td><td>Static archetype of the instance pointer before it was casted to void*. </td></tr>
-    <tr><td class="paramname">instanceDynamicArchetype</td><td>Dynamic archetype of the instance pointer before it was casted to void*. </td></tr>
-    <tr><td class="paramname">targetArchetype</td><td><a class="el" href="classrfk_1_1_archetype.html">Archetype</a> of the result pointer.</td></tr>
+    <tr><td class="paramname">instance</td><td>A pointer to the instance to cast.</td></tr>
   </table>
   </dd>
 </dl>
