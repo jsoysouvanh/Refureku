@@ -9,8 +9,6 @@
 
 #include "Generated/TestNestedClassTemplates.rfkh.h"
 
-#if RFK_NON_PUBLIC_NESTED_CLASS_TEMPLATE_SUPPORT
-
 RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(typename, auto)
 RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(typename, typename, auto)
 RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(template <typename, auto> typename)
@@ -39,18 +37,18 @@ class CLASS() NonNestedNonTemplateClass
 		class CLASS() Lvl1NestedNonTemplatePrivateClass
 		{
 			private:
-			template <typename A, typename C, int Value>
-			class CLASS() Lvl2NestedTemplatePrivateClass
-			{
-				NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_Lvl2NestedTemplatePrivateClass_GENERATED
-			};
+				template <typename A, typename C, int Value>
+				class CLASS() Lvl2NestedTemplatePrivateClass
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_Lvl2NestedTemplatePrivateClass_GENERATED
+				};
 
 			public:
-			template <typename A, typename C, std::size_t Value>
-			class CLASS() Lvl2NestedTemplatePublicClass
-			{
-				NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_Lvl2NestedTemplatePublicClass_GENERATED
-			};
+				template <typename A, typename C, std::size_t Value>
+				class CLASS() Lvl2NestedTemplatePublicClass
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_Lvl2NestedTemplatePublicClass_GENERATED
+				};
 
 			NonNestedNonTemplateClass_Lvl1NestedNonTemplatePrivateClass_GENERATED
 		};
@@ -59,18 +57,18 @@ class CLASS() NonNestedNonTemplateClass
 		class CLASS() Lvl1NestedNonTemplatePublicClass
 		{
 			private:
-			template <typename A, typename C, char Value>
-			class CLASS() Lvl2NestedTemplatePrivateClass2
-			{
-				NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_Lvl2NestedTemplatePrivateClass2_GENERATED
-			};
+				template <typename A, typename C, char Value>
+				class CLASS() Lvl2NestedTemplatePrivateClass2
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_Lvl2NestedTemplatePrivateClass2_GENERATED
+				};
 
 			public:
-			template <typename A, typename C, bool Value>
-			class CLASS() Lvl2NestedTemplatePublicClass2
-			{
-				NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_Lvl2NestedTemplatePublicClass2_GENERATED
-			};
+				template <typename A, typename C, bool Value>
+				class CLASS() Lvl2NestedTemplatePublicClass2
+				{
+					NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_Lvl2NestedTemplatePublicClass2_GENERATED
+				};
 
 			NonNestedNonTemplateClass_Lvl1NestedNonTemplatePublicClass_GENERATED
 		};
@@ -79,5 +77,3 @@ class CLASS() NonNestedNonTemplateClass
 };
 
 File_TestNestedClassTemplates_GENERATED
-
-#endif

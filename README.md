@@ -260,5 +260,5 @@ This library has been tested and is stable on the following configurations:
 
 # Known issues
 - _(MSVC only)_ Issues when reflecting class templates with only template template parameters, see [this issue](https://developercommunity.visualstudio.com/t/Type-template-parameter-can-erroneously/1548997).
-- Compilation error when reflect protected/private nested class template
+- _(MSVC only)_ Compilation error when reflect protected/private nested class templates
 - If a reflected namespace is shared among different dynamic libraries, specific properties bound to each of those libraries are not removed when they are unloaded.
