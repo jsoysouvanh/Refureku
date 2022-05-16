@@ -9,4 +9,7 @@ message("Compiler:	${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 # Enable tests
 include(CTest)
 
+# Include Refureku CMake helper functions
+include(CMake/RefurekuHelpers.cmake)
+
 add_subdirectory(Refureku)

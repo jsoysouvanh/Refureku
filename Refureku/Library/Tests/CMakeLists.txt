@@ -59,25 +59,18 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # Link libraries
-target_link_libraries(${RefurekuTestsTarget} PUBLIC ${RefurekuLibraryTarget} gtest)
+target_link_libraries(${RefurekuTestsTarget} PUBLIC gtest)
 
 # Add include directories
 target_include_directories(${RefurekuTestsTarget} PRIVATE Include)
 
+refureku_setup_target(
+	TARGET ${RefurekuTestsTarget}
+	RFK_SETTINGS_FILENAME "RefurekuTestsSettings.toml"
+)
+
 if (MSVC)
 	target_compile_options(${RefurekuTestsTarget} PRIVATE /MP /bigobj)
-else()
 endif()
-
-# Create the command to run RefurekuGenerator
-set(RefurekuGeneratorExeName RefurekuGenerator)
-set(RunTestGeneratorTarget RunRefurekuTestGenerator)
-
-add_custom_target(${RunTestGeneratorTarget}
-					WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-					COMMAND "${RefurekuGeneratorExeName}" "${PROJECT_SOURCE_DIR}/RefurekuTestsSettings.toml") 
-
-# Run the RefurekuGenerator BEFORE building the project to refresh generated files
-add_dependencies(${RefurekuTestsTarget} ${RunTestGeneratorTarget})
 
 add_test(NAME ${RefurekuTestsTarget} COMMAND ${RefurekuTestsTarget})
