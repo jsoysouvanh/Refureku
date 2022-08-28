@@ -5,9 +5,9 @@
 *	See the LICENSE.md file for full license details.
 */
 
-inline Field::FieldImpl::FieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+inline Field::FieldImpl::FieldImpl(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type, EFieldFlags flags,
 									  Struct const* owner, std::size_t memoryOffset, Entity const* outerEntity) noexcept:
-	FieldBaseImpl(name, id, type, flags, owner, outerEntity),
+	FieldBaseImpl(name, id, canonicalTypeName, type, flags, owner, outerEntity),
 	_memoryOffset{memoryOffset}
 {
 }

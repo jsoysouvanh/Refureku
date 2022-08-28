@@ -922,6 +922,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 
 				inout_result += "staticField = childClass.addStaticField(\"" + field.name + "\", " +
 					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : computeClassNestedEntityId("ChildClass", field)) + ", " +
+					"\"" + field.type.getCanonicalName(true, true) + "\", " +
 					"rfk::getType<" + field.type.getName() + ">(), "
 					"static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 					"&" + structClass.name + "::" + field.name + ", "
@@ -935,6 +936,7 @@ void ReflectionCodeGenModule::declareAndDefineRegisterChildClassMethod(kodgen::S
 
 				inout_result += "field = childClass.addField(\"" + field.name + "\", " +
 					(structClass.type.isTemplateType() ? computeClassTemplateEntityId(structClass, field) : computeClassNestedEntityId("ChildClass", field)) + ", " +
+					"\"" + field.type.getCanonicalName(true, true) + "\", " +
 					"rfk::getType<" + field.type.getName() + ">(), "
 					"static_cast<rfk::EFieldFlags>(" + std::to_string(computeRefurekuFieldFlags(field)) + "), "
 					"offsetof(ChildClass, " + field.name + "), "
@@ -1385,7 +1387,8 @@ void ReflectionCodeGenModule::defineGetVariableFunction(kodgen::VariableInfo con
 	inout_result += "template <> rfk::Variable const* rfk::getVariable<&" + variable.getFullName() + ">() noexcept {" + env.getSeparator() +
 		"static bool initialized = false;" + env.getSeparator() + 
 		"static rfk::Variable variable(\"" + variable.name + "\", " +
-		getEntityId(variable) + ", "
+		getEntityId(variable) + ", " +
+		"\"" + variable.type.getCanonicalName(true, true) + "\", " + 
 		"rfk::getType<decltype(" + fullName + ")>(), "
 		"&" + fullName + ", "
 		"static_cast<rfk::EVarFlags>(" + std::to_string(computeRefurekuVariableFlags(variable)) + ")"

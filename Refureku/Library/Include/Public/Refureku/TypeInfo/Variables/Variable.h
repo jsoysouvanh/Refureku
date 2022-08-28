@@ -17,11 +17,13 @@ namespace rfk
 		public:
 			REFUREKU_API		Variable(char const*	name,
 										 std::size_t	id,
+										 char const*    canonicalTypeName,
 										 Type const&	type,
 										 void*			ptr,
 										 EVarFlags		flags)		noexcept;
 			REFUREKU_API		Variable(char const*	name,
 										 std::size_t	id,
+										 char const*    canonicalTypeName,
 										 Type const&	type,
 										 void const*	constPtr,
 										 EVarFlags		flags)		noexcept;

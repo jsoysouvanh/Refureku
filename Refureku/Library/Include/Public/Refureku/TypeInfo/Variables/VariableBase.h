@@ -26,6 +26,13 @@ namespace rfk
 			*/
 			REFUREKU_API Type const& getType() const noexcept;
 
+			/**
+			 *	@brief Get name of this variable's type simplified by unwinding all aliases, typedefs.
+			 *
+			 *	@return The name of the variable's type simplified by unwinding all aliases, typedefs.
+			 */
+			REFUREKU_API char const* getCanonicalTypeName() const noexcept;
+
 		protected:
 			//Forward declaration
 			class VariableBaseImpl;

@@ -713,12 +713,13 @@ namespace rfk
 			/**
 			*	@brief Add a field to the struct.
 			*	
-			*	@param name			Name of the field.
-			*	@param id			Unique entity id of the field.
-			*	@param type			Type of the field.
-			*	@param flags		Field flags.
-			*	@param memoryOffset	Offset in bytes of the field in the owner struct (obtained from offsetof).
-			*	@param outerEntity	Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
+			*	@param name				 Name of the field.
+			*	@param id				 Unique entity id of the field.
+			*	@param canonicalTypeName Name of this variable's type simplified by unwinding all aliases, typedefs.
+			*	@param type				 Type of the field.
+			*	@param flags			 Field flags.
+			*	@param memoryOffset		 Offset in bytes of the field in the owner struct (obtained from offsetof).
+			*	@param outerEntity		 Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
 			*	
 			*	@return A pointer to the added field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
@@ -726,6 +727,7 @@ namespace rfk
 			*/
 			REFUREKU_API Field*						addField(char const*	name,
 															 std::size_t	id,
+															 char const*    canonicalTypeName,
 															 Type const&	type,
 															 EFieldFlags	flags,
 															 std::size_t	memoryOffset,
@@ -742,12 +744,13 @@ namespace rfk
 			/**
 			*	@brief Add a static field to the struct.
 			*	
-			*	@param name			Name of the static field.
-			*	@param id			Unique entity id of the static field.
-			*	@param type			Type of the static field.
-			*	@param flags		Field flags.
-			*	@param fieldPtr		Pointer to the static field.
-			*	@param outerEntity	Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
+			*	@param name				 Name of the static field.
+			*	@param id				 Unique entity id of the static field.
+			*	@param canonicalTypeName Name of this variable's type simplified by unwinding all aliases, typedefs.
+			*	@param type				 Type of the static field.
+			*	@param flags			 Field flags.
+			*	@param fieldPtr			 Pointer to the static field.
+			*	@param outerEntity		 Struct the field was first declared in (in case of inherited field, outerEntity is the parent struct).
 			*	
 			*	@return A pointer to the added static field.
 			*			The pointer is made from the iterator, so is unvalidated as soon as the iterator is unvalidated.
@@ -755,12 +758,14 @@ namespace rfk
 			*/
 			REFUREKU_API StaticField*				addStaticField(char const*		name,
 																   std::size_t		id,
+																   char const*      canonicalTypeName,
 																   Type const&		type,
 																   EFieldFlags		flags,
 																   void*			fieldPtr,
 																   Struct const*	outerEntity)												noexcept;
 			REFUREKU_API StaticField*				addStaticField(char const*		name,
 																   std::size_t		id,
+																   char const*      canonicalTypeName,
 																   Type const&		type,
 																   EFieldFlags		flags,
 																   void const*		fieldPtr,

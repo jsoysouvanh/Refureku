@@ -25,14 +25,16 @@ namespace rfk
 		public:
 			inline StaticFieldImpl(char const*		name,
 								   std::size_t		id,
-								   Type const&	type,
+								   char const*      canonicalTypeName,
+								   Type const&	    type,
 								   EFieldFlags		flags,
 								   Struct const*	owner,
 								   void*			ptr,
 								   Entity const*	outerEntity)	noexcept;
 			inline StaticFieldImpl(char const*		name,
 								   std::size_t		id,
-								   Type const&	type,
+								   char const*      canonicalTypeName,
+								   Type const&	    type,
 								   EFieldFlags		flags,
 								   Struct const*	owner,
 								   void const*		constPtr,

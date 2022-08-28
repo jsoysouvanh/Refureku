@@ -8,13 +8,13 @@ using namespace rfk;
 template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Variable const*>;
 template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Variable const*, rfk::Allocator<Variable const*>>;
 
-Variable::Variable(char const* name, std::size_t id, Type const& type, void* ptr, EVarFlags flags) noexcept:
-	VariableBase(new VariableImpl(name, id, type, ptr, flags))
+Variable::Variable(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type, void* ptr, EVarFlags flags) noexcept:
+	VariableBase(new VariableImpl(name, id, canonicalTypeName, type, ptr, flags))
 {
 }
 
-Variable::Variable(char const* name, std::size_t id, Type const& type, void const* constPtr, EVarFlags flags) noexcept:
-	VariableBase(new VariableImpl(name, id, type, constPtr, flags))
+Variable::Variable(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type, void const* constPtr, EVarFlags flags) noexcept:
+	VariableBase(new VariableImpl(name, id, canonicalTypeName, type, constPtr, flags))
 {
 }
 

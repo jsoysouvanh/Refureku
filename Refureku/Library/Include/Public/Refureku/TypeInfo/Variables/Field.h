@@ -19,6 +19,7 @@ namespace rfk
 		public:
 			REFUREKU_INTERNAL Field(char const*		name,
 									std::size_t		id,
+									char const*     canonicalTypeName,
 									Type const&		type,
 									EFieldFlags		flags,
 									Struct const*	owner,
