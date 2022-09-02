@@ -173,7 +173,7 @@ namespace rfk
 			*	@param name				 Name of the field.
 			*	@param id				 Unique entity id of the field.
 			*	@param canonicalTypeName Name of this variable's type simplified by unwinding all aliases, typedefs,
-			* without qualifiers, namespaces and nested classes.
+			*								without qualifiers, namespaces and nested classes.
 			*	@param type				 Type of the field.
 			*	@param flags			 Field flags.
 			*	@param owner			 Struct the field is belonging to.
@@ -184,7 +184,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline Field*					addField(char const*	name,
 																 std::size_t	id,
-																 const char*    canonicalTypeName,
+																 char const*    canonicalTypeName,
 																 Type const&	type,
 																 EFieldFlags	flags,
 																 Struct const*	owner,
@@ -197,7 +197,7 @@ namespace rfk
 			*	@param name				 Name of the static field.
 			*	@param id				 Unique entity id of the static field.
 			*	@param canonicalTypeName Name of this variable's type simplified by unwinding all aliases, typedefs,
-			* without qualifiers, namespaces and nested classes.
+			*								without qualifiers, namespaces and nested classes.
 			*	@param type				 Type of the static field.
 			*	@param flags			 Field flags.
 			*	@param owner			 Struct the static field is belonging to.
@@ -209,7 +209,7 @@ namespace rfk
 			*/
 			RFK_NODISCARD inline StaticField*			addStaticField(char const*		name,
 																	   std::size_t		id,
-																	   const char*      canonicalTypeName,
+																	   char const*      canonicalTypeName,
 																	   Type const&		type,
 																	   EFieldFlags		flags,
 																	   Struct const*	owner,
@@ -217,7 +217,7 @@ namespace rfk
 																	   Struct const*	outerEntity)					noexcept;
 			RFK_NODISCARD inline StaticField*			addStaticField(char const*		name,
 																	   std::size_t		id,
-																	   const char*      canonicalTypeName,
+																	   char const*      canonicalTypeName,
 																	   Type const&		type,
 																	   EFieldFlags		flags,
 																	   Struct const*	owner,

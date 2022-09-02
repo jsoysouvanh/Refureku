@@ -36,14 +36,14 @@ namespace rfk
 			* 
 			*	@return _type.
 			*/
-			inline Type const& getType() const noexcept;
+			inline Type const& getType()			  const noexcept;
 
 			/**
 			*	@brief Getter for the field _canonicalTypeName.
 			* 
 			*	@return _canonicalTypeName.
 			*/
-			inline const char* getCanonicalTypeName() const noexcept;
+			inline char const* getCanonicalTypeName() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/VariableBaseImpl.inl"

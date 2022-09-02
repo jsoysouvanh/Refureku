@@ -7,7 +7,8 @@
 
 inline VariableBase::VariableBaseImpl::VariableBaseImpl(char const* name, std::size_t id, EEntityKind kind, char const* canonicalTypeName, Type const& type, Entity const* outerEntity) noexcept:
 	EntityImpl(name, id, kind, outerEntity),
-	_type{type}, _canonicalTypeName{canonicalTypeName}
+	_type{type},
+	_canonicalTypeName{canonicalTypeName}
 {
 }
 
@@ -16,7 +17,7 @@ inline Type const& VariableBase::VariableBaseImpl::getType() const noexcept
 	return _type;
 }
 
-inline const char* VariableBase::VariableBaseImpl::getCanonicalTypeName() const noexcept
+inline char const* VariableBase::VariableBaseImpl::getCanonicalTypeName() const noexcept
 {
 	return _canonicalTypeName.data();
 }

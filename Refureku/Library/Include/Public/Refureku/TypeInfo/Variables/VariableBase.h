@@ -24,7 +24,7 @@ namespace rfk
 			* 
 			*	@return The type of the variable.
 			*/
-			REFUREKU_API Type const& getType() const noexcept;
+			REFUREKU_API Type const& getType()				const noexcept;
 
 			/**
 			 *	@brief Get name of this variable's type simplified by unwinding all aliases, typedefs.

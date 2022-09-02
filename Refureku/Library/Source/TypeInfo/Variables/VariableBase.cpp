@@ -21,7 +21,7 @@ Type const& VariableBase::getType() const noexcept
 	return getPimpl()->getType();
 }
 
-const char* VariableBase::getCanonicalTypeName() const noexcept
+char const* VariableBase::getCanonicalTypeName() const noexcept
 {
 	return getPimpl()->getCanonicalTypeName();
 }
