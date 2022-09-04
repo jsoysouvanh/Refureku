@@ -8,6 +8,7 @@
 #pragma once
 
 #include <Refureku/Properties/PropertySettings.h>
+#include <Refureku/TypeInfo/Entity/EEntityKind.h>
 
 #include "Generated/TestProperties.rfkh.h"
 

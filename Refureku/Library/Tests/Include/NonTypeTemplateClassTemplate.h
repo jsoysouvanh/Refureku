@@ -7,7 +7,10 @@
 
 #pragma once
 
+#include <cstddef>
 #include "TestEnum.h"
+#include "Refureku/Config.h"
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 
 #include "Generated/NonTypeTemplateClassTemplate.rfkh.h"
 

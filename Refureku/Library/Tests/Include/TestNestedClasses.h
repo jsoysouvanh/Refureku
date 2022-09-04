@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
 #include "Generated/TestNestedClasses.rfkh.h"
 
 class NestedClassInspector;
