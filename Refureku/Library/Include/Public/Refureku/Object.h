@@ -25,7 +25,7 @@ namespace rfk
 			Object(Object&&)		= default;
 			virtual ~Object()		= default;
 
-			virtual Struct const& getArchetype() const noexcept = 0;
+			virtual Struct const& getArchetype() const noexcept;
 			
 			Object& operator=(Object const&)	= default;
 			Object& operator=(Object&&)			= default;
