@@ -43,7 +43,7 @@ class CLASS() TestInstantiator : public TestInstantiatorBase
 		}
 
 		METHOD(rfk::Instantiator)
-		RFK_NORETURN static rfk::UniquePtr<TestInstantiator> throwingUniqueInstantiator(int)
+		/**RFK_NORETURN*/ static rfk::UniquePtr<TestInstantiator> throwingUniqueInstantiator(int)
 		{
 			throw std::logic_error("Aww :(");
 		}
