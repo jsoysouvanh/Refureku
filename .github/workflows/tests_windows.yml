@@ -9,7 +9,7 @@ on:
 
 jobs:
   windows_msvc_2019:
-    name: Windows | MSVC
+    name: Windows | MSVC 2019
     runs-on: windows-2019
 
     strategy:
@@ -33,7 +33,7 @@ jobs:
         run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
   windows_msvc_2022:
-    name: Windows | MSVC
+    name: Windows | MSVC 2022
     runs-on: windows-2022
 
     strategy:

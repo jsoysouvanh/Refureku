@@ -13,7 +13,11 @@
 #include "Refureku/TypeInfo/Archetypes/Enum.h"	//rfk::getEnum
 #include "Refureku/Misc/TypeTraits.h"
 
-#define RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(...) namespace rfk { template <template <__VA_ARGS__> typename> Archetype const* getArchetype() noexcept { return nullptr; } }
+#if defined(_MSC_VER) && _MSC_VER >= 1930
+	#define RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(...)
+#else
+	#define RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(...) namespace rfk { template <template <__VA_ARGS__> typename> Archetype const* getArchetype() noexcept { return nullptr; } }
+#endif
 
 namespace rfk
 {
