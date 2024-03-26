@@ -20,6 +20,7 @@ namespace rfk
 		public:
 			REFUREKU_INTERNAL StaticField(char const*	name,
 										  std::size_t	id,
+										  char const*   canonicalTypeName,
 										  Type const&	type,
 										  EFieldFlags	flags,
 										  Struct const*	owner,
@@ -27,6 +28,7 @@ namespace rfk
 										  Entity const*	outerEntity = nullptr)	noexcept;
 			REFUREKU_INTERNAL StaticField(char const*	name,
 										  std::size_t	id,
+										  char const*   canonicalTypeName,
 										  Type const&	type,
 										  EFieldFlags	flags,
 										  Struct const*	owner,

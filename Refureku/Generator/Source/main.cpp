@@ -109,7 +109,7 @@ void printGenerationResult(kodgen::ILogger& logger, kodgen::CodeGenResult const&
 	}
 }
 
-void parseAndGenerate(fs::path&& settingsFilePath)
+bool parseAndGenerate(fs::path&& settingsFilePath)
 {
 	kodgen::DefaultLogger logger;
 
@@ -138,12 +138,12 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 
 	//Result
 	printGenerationResult(logger, genResult);
+
+	return genResult.completed;
 }
 
 /** Can provide the path to the settings file as 1st parameter */
 int main(int argc, char** argv)
 {
-	parseAndGenerate((argc > 1) ? fs::path(argv[1]) : fs::path());
-
-	return EXIT_SUCCESS;
+	return !parseAndGenerate((argc > 1) ? fs::path(argv[1]) : fs::path());
 }

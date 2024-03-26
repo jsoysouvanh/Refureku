@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/Misc/DisableWarningMacros.h"
 #include "Generated/TestMethodBase.rfkh.h"
 
 __RFK_DISABLE_WARNING_PUSH

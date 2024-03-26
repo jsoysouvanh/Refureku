@@ -750,10 +750,10 @@ void Struct::setNestedArchetypesCapacity(std::size_t capacity) noexcept
 	getPimpl()->setNestedArchetypesCapacity(capacity);
 }
 
-Field* Struct::addField(char const* name, std::size_t id, Type const& type,
+Field* Struct::addField(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type,
 							  EFieldFlags flags, std::size_t memoryOffset, Struct const* outerEntity) noexcept
 {
-	return (name != nullptr) ? getPimpl()->addField(name, id, type, flags, this, memoryOffset, outerEntity) : nullptr;
+	return (name != nullptr) ? getPimpl()->addField(name, id, canonicalTypeName, type, flags, this, memoryOffset, outerEntity) : nullptr;
 }
 
 void Struct::setFieldsCapacity(std::size_t capacity) noexcept
@@ -761,16 +761,16 @@ void Struct::setFieldsCapacity(std::size_t capacity) noexcept
 	return getPimpl()->setFieldsCapacity(capacity);
 }
 
-StaticField* Struct::addStaticField(char const* name, std::size_t id, Type const& type,
+StaticField* Struct::addStaticField(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type,
 									EFieldFlags flags, void* fieldPtr, Struct const* outerEntity) noexcept
 {
-	return (name != nullptr) ? getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity) : nullptr;
+	return (name != nullptr) ? getPimpl()->addStaticField(name, id, canonicalTypeName, type, flags, this, fieldPtr, outerEntity) : nullptr;
 }
 
-StaticField* Struct::addStaticField(char const* name, std::size_t id, Type const& type,
+StaticField* Struct::addStaticField(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type,
 									EFieldFlags flags, void const* fieldPtr, Struct const* outerEntity) noexcept
 {
-	return (name != nullptr) ? getPimpl()->addStaticField(name, id, type, flags, this, fieldPtr, outerEntity) : nullptr;
+	return (name != nullptr) ? getPimpl()->addStaticField(name, id, canonicalTypeName, type, flags, this, fieldPtr, outerEntity) : nullptr;
 }
 
 void Struct::setStaticFieldsCapacity(std::size_t capacity) noexcept

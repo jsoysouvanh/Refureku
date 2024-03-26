@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Refureku/TypeInfo/Archetypes/Archetype.h"
+#include "Refureku/TypeInfo/Archetypes/Enum.h"
 #include "Generated/TestNestedEnums.rfkh.h"
 
 class NestedEnumInspector;

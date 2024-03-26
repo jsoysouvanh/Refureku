@@ -33,7 +33,7 @@ class CLASS() BaseObject : public rfk::Object
 		}
 
 		METHOD(rfk::Instantiator)
-		RFK_NORETURN static rfk::SharedPtr<BaseObject> customInstantiator2Params(int, int)
+		/**RFK_NORETURN*/ static rfk::SharedPtr<BaseObject> customInstantiator2Params(int, int)
 		{
 			throw std::logic_error("Error");
 		}

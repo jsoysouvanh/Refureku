@@ -6,16 +6,16 @@
 */
 
 
-inline StaticField::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+inline StaticField::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type, EFieldFlags flags,
 														Struct const* owner, void* ptr, Entity const* outerEntity) noexcept:
-	FieldBaseImpl(name, id, type, flags, owner, outerEntity),
+	FieldBaseImpl(name, id, canonicalTypeName, type, flags, owner, outerEntity),
 	_ptr{ptr}
 {
 }
 
-inline StaticField::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+inline StaticField::StaticFieldImpl::StaticFieldImpl(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type, EFieldFlags flags,
 														Struct const* owner, void const* constPtr, Entity const* outerEntity) noexcept:
-	FieldBaseImpl(name, id, type, flags, owner, outerEntity),
+	FieldBaseImpl(name, id, canonicalTypeName, type, flags, owner, outerEntity),
 	_constPtr{constPtr}
 {
 }

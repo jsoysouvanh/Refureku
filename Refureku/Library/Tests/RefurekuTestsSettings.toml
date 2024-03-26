@@ -36,6 +36,9 @@ cppVersion = 17
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError = true
 
+# Ignores parsing errors, may lead to incorrect type information for non-reflected types.
+shouldFailCodeGenerationOnClangErrors = false
+
 # Should all entities be parsed whether they are annotated or not
 shouldParseAllNamespaces = false
 shouldParseAllClasses = false

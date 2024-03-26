@@ -18,10 +18,16 @@ namespace rfk
 			/** Type of this variable. */
 			Type const&	_type;
 
+			/**
+			 * Name of this variable's type simplified by unwinding all aliases, typedefs.
+			 */
+			std::string _canonicalTypeName;
+
 		public:
 			inline VariableBaseImpl(char const*			name,
 									std::size_t			id,
 									EEntityKind			kind,
+									char const*         canonicalTypeName,
 									Type const&		type,
 									Entity const*	outerEntity)	noexcept;
 
@@ -30,7 +36,14 @@ namespace rfk
 			* 
 			*	@return _type.
 			*/
-			inline Type const& getType() const noexcept;
+			inline Type const& getType()			  const noexcept;
+
+			/**
+			*	@brief Getter for the field _canonicalTypeName.
+			* 
+			*	@return _canonicalTypeName.
+			*/
+			inline char const* getCanonicalTypeName() const noexcept;
 	};
 
 	#include "Refureku/TypeInfo/Variables/VariableBaseImpl.inl"

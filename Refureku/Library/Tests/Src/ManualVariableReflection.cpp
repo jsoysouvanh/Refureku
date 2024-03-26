@@ -11,6 +11,7 @@ static rfk::Variable const& getVariable_manuallyReflectedVariable() noexcept
 {
 	static rfk::Variable var("manuallyReflectedVariable",
 							 std::hash<std::string_view>()("manuallyReflectedVariable"),
+							 "std::string_view",
 							 rfk::getType<decltype(manuallyReflectedVariable)>(),
 							 &manuallyReflectedVariable,
 							 rfk::EVarFlags::Default);

@@ -21,6 +21,11 @@ Type const& VariableBase::getType() const noexcept
 	return getPimpl()->getType();
 }
 
+char const* VariableBase::getCanonicalTypeName() const noexcept
+{
+	return getPimpl()->getCanonicalTypeName();
+}
+
 void VariableBase::set(void* target, void const* source, std::size_t dataSize) const
 {
 	assert(!getType().isConst());

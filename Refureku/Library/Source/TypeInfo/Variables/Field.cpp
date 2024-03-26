@@ -7,9 +7,9 @@ using namespace rfk;
 template class REFUREKU_TEMPLATE_API_DEF rfk::Allocator<Field const*>;
 template class REFUREKU_TEMPLATE_API_DEF rfk::Vector<Field const*, rfk::Allocator<Field const*>>;
 
-Field::Field(char const* name, std::size_t id, Type const& type, EFieldFlags flags,
+Field::Field(char const* name, std::size_t id, char const* canonicalTypeName, Type const& type, EFieldFlags flags,
 				   Struct const* owner, std::size_t memoryOffset, Entity const* outerEntity) noexcept:
-	FieldBase(new FieldImpl(name, id, type, flags, owner, memoryOffset, outerEntity))
+	FieldBase(new FieldImpl(name, id, canonicalTypeName, type, flags, owner, memoryOffset, outerEntity))
 {
 }
 

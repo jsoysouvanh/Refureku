@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "Refureku/TypeInfo/Archetypes/GetArchetype.h"
 #include "Generated/TestNestedClassTemplates.rfkh.h"
 
 RFK_DEFINE_GET_ARCHETYPE_TEMPLATE(typename, auto)

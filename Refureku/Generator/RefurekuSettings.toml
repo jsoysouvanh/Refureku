@@ -46,6 +46,9 @@ projectIncludeDirectories = [
 # Must be one of "msvc", "clang++", "g++"
 compilerExeName = "clang++"
 
+# Ignores parsing errors, may lead to incorrect type information for non-reflected types.
+shouldFailCodeGenerationOnClangErrors = false
+
 # Abort parsing on first encountered error
 shouldAbortParsingOnFirstError = true
 
